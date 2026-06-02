@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import HowItWorks from "@/components/HowItWorks";
 import QRCard from "@/components/QRCard";
+import CardDesigner from "@/components/CardDesigner";
 import Footer from "@/components/Footer";
 
 export default function Page() {
@@ -12,6 +13,7 @@ export default function Page() {
         <Hero />
         <HowItWorks />
         <QRCard />
+        <CardDesigner />
       </main>
       <Footer />
     </>

@@ -6,51 +6,39 @@ const features = [
   {
     icon: "🎯",
     tint: "bg-[var(--color-tint-blue)]",
-    title: "Spécialité garantie",
-    desc: "Notre intake intelligent vous oriente vers le notaire vraiment spécialisé dans votre cas — fini les \"ce n'est pas mon domaine, voyez mon confrère\" après 45 min de RDV.",
+    title: "Le bon notaire, du premier coup",
+    desc: "Vous êtes orienté vers le notaire vraiment spécialisé dans votre situation.",
   },
   {
-    icon: "🤖",
+    icon: "⏱️",
     tint: "bg-[var(--color-tint-purple)]",
-    title: "Pré-dossier IA",
-    desc: "Vos réponses génèrent un brief structuré envoyé au notaire avant le RDV. Il prépare votre dossier, vous gagnez 30 min sur place.",
+    title: "Un rendez-vous préparé",
+    desc: "Vous arrivez avec l'essentiel déjà transmis : moins d'attente, plus d'efficacité.",
   },
   {
     icon: "💰",
     tint: "bg-[var(--color-tint-green)]",
-    title: "Estimation honoraires",
-    desc: "Tarifs notariés (émoluments) calculés automatiquement selon votre situation — transparence avant le RDV, fini les surprises.",
-  },
-  {
-    icon: "🎥",
-    tint: "bg-[var(--color-tint-warm)]",
-    title: "Visio native intégrée",
-    desc: "Lien visio Notaires.io auto-généré à la réservation, ou connexion au Zoom / Google Meet du notaire (au choix). Aucune app à installer.",
+    title: "Des honoraires clairs",
+    desc: "Une estimation avant le rendez-vous, sans mauvaise surprise.",
   },
   {
     icon: "🔒",
     tint: "bg-[var(--color-tint-rose)]",
-    title: "Coffre-fort RGPD",
-    desc: "Upload sécurisé de vos documents (titre de propriété, livret de famille…). Chiffrement bout-en-bout, hébergé en France.",
-  },
-  {
-    icon: "⚡",
-    tint: "bg-[var(--color-tint-mint)]",
-    title: "RDV en 72 h",
-    desc: "Délai moyen de prise de RDV : 72 heures contre 3 semaines en moyenne par téléphone. Les notaires inscrits libèrent des créneaux dédiés.",
+    title: "Vos documents en sécurité",
+    desc: "Pièces sensibles protégées et hébergées en France.",
   },
 ];
 
 export default function Features() {
   return (
-    <section id="features" className="py-20">
+    <section id="features" className="py-16 sm:py-20 lg:py-28">
       <div className="max-w-[1200px] mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-14"
+          className="text-center mb-16"
         >
           <div className="text-[var(--color-accent)] text-[13px] font-bold tracking-[1.5px] uppercase mb-3">
             Pourquoi Notaires.io
@@ -64,7 +52,7 @@ export default function Features() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-2 gap-7 max-w-[920px] mx-auto">
           {features.map((f, i) => (
             <motion.div
               key={f.title}
@@ -73,21 +61,49 @@ export default function Features() {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
               whileHover={{ y: -3 }}
-              className="bg-white border border-[var(--color-border-soft)] rounded-2xl p-7 hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-card)] transition-all"
+              className="bg-white border border-[var(--color-border-soft)] rounded-2xl p-8 hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-card)] transition-all"
             >
               <div
-                className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 text-[22px] ${f.tint}`}
+                className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-[22px] ${f.tint}`}
               >
                 {f.icon}
               </div>
-              <h3 className="font-bold text-[17px] text-[var(--color-text-strong)] mb-2">
+              <h3 className="font-bold text-[18px] text-[var(--color-text-strong)] mb-2">
                 {f.title}
               </h3>
-              <p className="text-[var(--color-muted)] text-[14px] leading-relaxed text-justify hyphens-auto">
+              <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">
                 {f.desc}
               </p>
             </motion.div>
           ))}
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            whileHover={{ y: -3 }}
+            className="md:col-span-2 bg-[var(--color-accent-soft)] border border-[var(--color-border-soft)] rounded-2xl p-8 flex flex-col sm:flex-row sm:items-center gap-5 hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-card)] transition-all"
+          >
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center text-[22px] bg-[var(--color-tint-warm)] shrink-0">
+              🔑
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-[18px] text-[var(--color-text-strong)] mb-2">
+                Vous êtes notaire ?
+              </h3>
+              <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">
+                Vos outils dédiés vous attendent dans votre espace. Accès
+                réservé aux études référencées.
+              </p>
+            </div>
+            <a
+              href="#"
+              className="bg-gradient-cta text-white px-5 py-3 rounded-xl text-sm font-semibold shadow-[var(--shadow-cta)] whitespace-nowrap shrink-0 text-center"
+            >
+              Accéder à mon espace
+            </a>
+          </motion.div>
         </div>
       </div>
     </section>

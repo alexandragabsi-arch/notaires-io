@@ -18,7 +18,7 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "Notaires.io — Trouvez le bon notaire en 3 questions",
   description:
-    "La plateforme intelligente pour trouver le bon notaire selon votre situation précise. Sans appel, sans se tromper de spécialité, avec pré-dossier IA envoyé au notaire avant le RDV.",
+    "La plateforme intelligente pour trouver le bon notaire selon votre situation précise. Sans appel, sans se tromper de spécialité, avec un rendez-vous préparé à l'avance.",
   metadataBase: new URL("https://notaires.io"),
   openGraph: {
     title: "Notaires.io — Trouvez le bon notaire en 3 questions",

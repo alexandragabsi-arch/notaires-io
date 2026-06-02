@@ -7,7 +7,7 @@ export default function Footer() {
             <div className="text-[26px] font-extrabold mb-3.5 inline-block tracking-tight text-white">
               Notaires<span className="text-[#B0C4F1]">.io</span>
             </div>
-            <p className="text-sm max-w-[320px] leading-relaxed text-justify hyphens-auto">
+            <p className="text-sm max-w-[320px] leading-relaxed">
               La plateforme de prise de RDV intelligente pour particuliers et
               notaires. Pensée pour faire gagner du temps aux deux côtés.
             </p>

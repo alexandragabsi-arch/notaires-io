@@ -30,7 +30,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative py-20 lg:py-24 overflow-hidden"
+      className="relative py-14 sm:py-20 lg:py-28 overflow-hidden"
     >
       {/* Dotted background pattern */}
       <div
@@ -70,7 +70,7 @@ export default function Hero() {
 
             <motion.p
               variants={item}
-              className="text-[17px] lg:text-[19px] text-[var(--color-muted)] mb-8 max-w-[540px] leading-relaxed text-justify hyphens-auto"
+              className="text-[17px] lg:text-[19px] text-[var(--color-muted)] mb-8 max-w-[520px] leading-relaxed"
             >
               Sans appel, sans se tromper de spécialité, sans perdre 1h en RDV.
               Notaires.io vous oriente vers le notaire spécialisé dans votre
@@ -96,7 +96,7 @@ export default function Hero() {
 
             <motion.div
               variants={item}
-              className="flex gap-8 items-center flex-wrap"
+              className="grid grid-cols-3 gap-4 max-w-[420px]"
             >
               {trust.map(([num, label]) => (
                 <div key={label} className="text-[13px] text-[var(--color-muted)]">

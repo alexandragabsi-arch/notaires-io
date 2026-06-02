@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Video,
@@ -7,7 +8,12 @@ import {
   ListChecks,
   ScrollText,
   ArrowRight,
+  Play,
 } from "lucide-react";
+
+// Quand la vidéo sera prête, colle ici l'URL d'intégration
+// (YouTube : https://www.youtube-nocookie.com/embed/XXXX  •  Vimeo : https://player.vimeo.com/video/XXXX)
+const DEMO_VIDEO_URL = "";
 
 const reasons = [
   {
@@ -31,6 +37,8 @@ const reasons = [
 ];
 
 export default function NotairePitch() {
+  const [playing, setPlaying] = useState(false);
+
   return (
     <>
       {/* Hero notaires */}
@@ -77,11 +85,67 @@ export default function NotairePitch() {
                 <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
               </a>
               <a
-                href="#contact"
+                href="#demo"
                 className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-6 py-3 rounded-[10px] text-[15px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
               >
-                Réserver une démo en visio
+                <Play className="w-[17px] h-[17px]" strokeWidth={2.5} />
+                Voir la vidéo
               </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Vidéo explicative */}
+      <section id="demo" className="pb-4 sm:pb-8 lg:pb-12 bg-white">
+        <div className="max-w-[860px] mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="relative aspect-video rounded-3xl overflow-hidden border border-[var(--color-border-soft)] shadow-[var(--shadow-card)] bg-[var(--color-tint-blue)]">
+              {playing && DEMO_VIDEO_URL ? (
+                <iframe
+                  src={`${DEMO_VIDEO_URL}?autoplay=1`}
+                  title="Démo Notaires.io"
+                  className="absolute inset-0 w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => DEMO_VIDEO_URL && setPlaying(true)}
+                  className="group absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-4"
+                  aria-label="Lire la vidéo de démonstration"
+                >
+                  <span
+                    className="absolute inset-0 pointer-events-none opacity-60"
+                    style={{
+                      backgroundImage:
+                        "radial-gradient(circle, rgba(73,128,230,0.10) 1px, transparent 1px)",
+                      backgroundSize: "26px 26px",
+                    }}
+                  />
+                  <span className="relative w-[72px] h-[72px] rounded-full bg-white shadow-[var(--shadow-strong)] flex items-center justify-center transition-transform group-hover:scale-105">
+                    <Play
+                      className="w-7 h-7 text-[var(--color-accent)] translate-x-[2px]"
+                      strokeWidth={2}
+                      fill="currentColor"
+                    />
+                  </span>
+                  <span className="relative serif text-[20px] sm:text-[24px] font-bold text-[var(--color-text-strong)]">
+                    Notaires<span className="text-[var(--color-accent)]">.io</span> en 90 secondes
+                  </span>
+                  {!DEMO_VIDEO_URL && (
+                    <span className="relative text-[13px] text-[var(--color-muted)]">
+                      Vidéo en préparation — disponible très bientôt
+                    </span>
+                  )}
+                </button>
+              )}
             </div>
           </motion.div>
         </div>

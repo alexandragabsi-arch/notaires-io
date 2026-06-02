@@ -12,17 +12,17 @@ export default function Header() {
     >
       <div className="max-w-[1200px] mx-auto px-6 flex items-center justify-between py-4">
         <a
-          href="#"
+          href="/"
           className="text-[19px] sm:text-[22px] font-extrabold tracking-tight text-[var(--color-primary)] shrink-0"
         >
           Notaires<span className="text-[var(--color-accent)]">.io</span>
         </a>
         <nav className="hidden md:flex gap-8 text-sm">
           {[
-            ["Comment ça marche", "#how"],
-            ["Fonctionnalités", "#features"],
-            ["Tarifs notaires", "#pricing"],
-            ["FAQ", "#faq"],
+            ["Comment ça marche", "/#how"],
+            ["Espace notaires", "/notaires"],
+            ["Tarifs notaires", "/notaires#contact"],
+            ["FAQ", "/#faq"],
           ].map(([label, href]) => (
             <a
               key={href}
@@ -38,7 +38,7 @@ export default function Header() {
             Connexion
           </button>
           <motion.a
-            href="#hero"
+            href="/#hero"
             whileHover={{ y: -1, filter: "brightness(1.05)" }}
             whileTap={{ scale: 0.97 }}
             className="bg-gradient-cta text-white px-5 py-2.5 rounded-[10px] text-sm font-semibold shadow-[var(--shadow-cta)]"

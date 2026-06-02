@@ -16,19 +16,19 @@ export default function Footer() {
             {
               h: "Produit",
               links: [
-                ["Comment ça marche", "#how"],
-                ["Fonctionnalités", "#features"],
-                ["Tarifs notaires", "#pricing"],
-                ["FAQ", "#faq"],
+                ["Comment ça marche", "/#how"],
+                ["Espace notaires", "/notaires"],
+                ["Tarifs notaires", "/notaires#contact"],
+                ["FAQ", "/#faq"],
               ],
             },
             {
               h: "Notaires",
               links: [
-                ["Référencer mon étude", "#"],
-                ["Démo en visio", "#"],
-                ["Centre d'aide", "#"],
-                ["Témoignages confrères", "#"],
+                ["Pourquoi nous choisir", "/notaires"],
+                ["Référencer mon étude", "/notaires#contact"],
+                ["Démo en visio", "/notaires#contact"],
+                ["Témoignages confrères", "/notaires"],
               ],
             },
             {

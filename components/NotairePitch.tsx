@@ -1,0 +1,196 @@
+"use client";
+
+import { motion } from "framer-motion";
+import {
+  Video,
+  QrCode,
+  ListChecks,
+  ScrollText,
+  ArrowRight,
+} from "lucide-react";
+
+const reasons = [
+  {
+    icon: Video,
+    tint: "bg-[var(--color-tint-blue)]",
+    title: "Le rendez-vous en visio",
+    desc: "Recevez vos clients à distance comme au cabinet. Créneau confirmé et lien de visioconférence générés automatiquement — sans appel ni allers-retours.",
+  },
+  {
+    icon: QrCode,
+    tint: "bg-[var(--color-tint-green)]",
+    title: "Un QR code et un lien à partager",
+    desc: "Votre QR code sur la carte de visite, votre lien dans les mails et sur WhatsApp. Vos clients prennent rendez-vous en un scan, où qu'ils soient.",
+  },
+  {
+    icon: ListChecks,
+    tint: "bg-[var(--color-tint-purple)]",
+    title: "Les bonnes questions, posées en amont",
+    desc: "Le client précise sa situation avant le rendez-vous. Vous recevez un dossier déjà cadré, sur la bonne spécialité — et vous gagnez du temps à chaque RDV.",
+  },
+];
+
+export default function NotairePitch() {
+  return (
+    <>
+      {/* Hero notaires */}
+      <section className="relative py-16 sm:py-20 lg:py-28 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none opacity-50"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, rgba(73,128,230,0.08) 1px, transparent 1px)",
+            backgroundSize: "28px 28px",
+            maskImage:
+              "radial-gradient(ellipse at top, rgba(0,0,0,0.3), transparent 70%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse at top, rgba(0,0,0,0.3), transparent 70%)",
+          }}
+        />
+        <div className="max-w-[820px] mx-auto px-6 relative text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="inline-flex items-center gap-2 bg-[var(--color-accent-soft)] text-[var(--color-accent)] px-4 py-2 rounded-full text-[13px] font-semibold mb-6">
+              Espace notaires
+            </div>
+            <h1 className="serif text-[32px] sm:text-[44px] lg:text-[56px] font-bold leading-[1.1] tracking-[-0.5px] sm:tracking-[-1.5px] text-balance text-[var(--color-text-strong)] mb-5">
+              Pourquoi choisir{" "}
+              <span className="serif-accent">Notaires.io</span> ?
+            </h1>
+            <p className="text-[17px] lg:text-[19px] text-[var(--color-muted)] max-w-[620px] mx-auto leading-relaxed mb-4">
+              Une plateforme qui vous amène des rendez-vous déjà préparés, sur la
+              bonne spécialité — et qui vous fait gagner du temps à chaque
+              dossier.
+            </p>
+            <p className="serif text-[18px] sm:text-[20px] italic text-[var(--color-primary)] mb-9">
+              Créé par un notaire, au service des notaires.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+              >
+                Référencer mon étude
+                <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+              </a>
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-6 py-3 rounded-[10px] text-[15px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+              >
+                Réserver une démo en visio
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Pourquoi nous choisir */}
+      <section className="py-16 sm:py-20 lg:py-24 bg-white">
+        <div className="max-w-[1200px] mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-14"
+          >
+            <div className="text-[var(--color-accent)] text-[13px] font-bold tracking-[1.5px] uppercase mb-3">
+              Pourquoi nous choisir
+            </div>
+            <h2 className="serif text-[28px] sm:text-[34px] lg:text-[40px] font-bold leading-[1.15] text-[var(--color-text-strong)] tracking-tight text-balance">
+              Pensé pour le quotidien de l'étude.
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-7 max-w-[1000px] mx-auto">
+            {reasons.map((r, i) => {
+              const Icon = r.icon;
+              return (
+                <motion.div
+                  key={r.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  className="bg-white border border-[var(--color-border-soft)] rounded-2xl p-8 shadow-[var(--shadow-card)]"
+                >
+                  <div
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 text-[var(--color-primary)] ${r.tint}`}
+                  >
+                    <Icon className="w-6 h-6" strokeWidth={2} />
+                  </div>
+                  <h3 className="font-bold text-[18px] text-[var(--color-text-strong)] mb-2">
+                    {r.title}
+                  </h3>
+                  <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">
+                    {r.desc}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Créé par un notaire */}
+      <section className="py-16 sm:py-20 lg:py-24 bg-white">
+        <div className="max-w-[920px] mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.45 }}
+            className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-8 sm:p-12 flex flex-col sm:flex-row items-start gap-7"
+          >
+            <div className="w-14 h-14 shrink-0 rounded-2xl bg-[var(--color-tint-warm)] flex items-center justify-center text-[var(--color-primary)]">
+              <ScrollText className="w-7 h-7" strokeWidth={2} />
+            </div>
+            <div>
+              <h2 className="serif text-[24px] sm:text-[30px] font-bold text-[var(--color-text-strong)] mb-3 leading-tight">
+                Une plateforme pensée par la profession.
+              </h2>
+              <p className="text-[var(--color-muted)] text-[16px] leading-relaxed">
+                Notaires.io est conçu par un notaire en exercice. On connaît vos
+                contraintes : déontologie, organisation de l'étude, relation
+                client. Chaque fonctionnalité est faite pour vous faire gagner du
+                temps, jamais pour vous en faire perdre — et pour vous présenter
+                des clients qui savent déjà pourquoi ils viennent.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA final */}
+      <section id="contact" className="py-16 sm:py-20 lg:py-28 bg-white">
+        <div className="max-w-[720px] mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="serif text-[28px] sm:text-[36px] lg:text-[40px] font-bold leading-[1.15] text-[var(--color-text-strong)] tracking-tight text-balance mb-4">
+              Recevez des rendez-vous{" "}
+              <span className="serif-accent">mieux préparés</span>.
+            </h2>
+            <p className="text-[var(--color-muted)] text-[17px] max-w-[520px] mx-auto mb-8">
+              Référencez votre étude ou réservez une démo en visio. On vous montre
+              tout en 20 minutes.
+            </p>
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-2 bg-gradient-cta text-white px-7 py-3.5 rounded-[10px] text-[16px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+            >
+              Référencer mon étude
+              <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+            </a>
+          </motion.div>
+        </div>
+      </section>
+    </>
+  );
+}

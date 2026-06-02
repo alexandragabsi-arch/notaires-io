@@ -1,15 +1,31 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Download, Check } from "lucide-react";
+import { Download, Check, Mail, MessageCircle, Copy } from "lucide-react";
+
+const SITE_URL = "https://notaires.io";
+const SHARE_TEXT = `Prenez rendez-vous avec votre notaire en ligne, en quelques clics : ${SITE_URL}`;
 
 const perks = [
   "Vos clients prennent RDV en un scan",
   "À imprimer sur cartes, plaquettes et vitrine",
-  "Format vectoriel (SVG) — net à toutes les tailles",
+  "À envoyer aussi par mail ou WhatsApp",
 ];
 
 export default function QRCard() {
+  const [copied, setCopied] = useState(false);
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(SITE_URL);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // clipboard indisponible — on ignore
+    }
+  };
+
   return (
     <section id="qr-card" className="py-16 sm:py-20 lg:py-28 bg-white">
       <div className="max-w-[1200px] mx-auto px-6">
@@ -76,6 +92,44 @@ export default function QRCard() {
               <Download className="w-[18px] h-[18px]" strokeWidth={2.5} />
               Télécharger le QR code
             </a>
+
+            <div className="mt-6 pt-6 border-t border-[var(--color-border-soft)]">
+              <p className="text-[13px] text-[var(--color-muted)] mb-3">
+                Ou envoyez le lien directement à vos clients :
+              </p>
+              <div className="flex flex-wrap justify-center sm:justify-start gap-2.5">
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(SHARE_TEXT)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2.5 rounded-[10px] text-[14px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+                >
+                  <MessageCircle className="w-[17px] h-[17px]" strokeWidth={2.5} />
+                  WhatsApp
+                </a>
+                <a
+                  href={`mailto:?subject=${encodeURIComponent(
+                    "Prendre rendez-vous avec votre notaire"
+                  )}&body=${encodeURIComponent(SHARE_TEXT)}`}
+                  className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2.5 rounded-[10px] text-[14px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+                >
+                  <Mail className="w-[17px] h-[17px]" strokeWidth={2.5} />
+                  E-mail
+                </a>
+                <button
+                  type="button"
+                  onClick={copyLink}
+                  className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2.5 rounded-[10px] text-[14px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+                >
+                  {copied ? (
+                    <Check className="w-[17px] h-[17px] text-[var(--color-success)]" strokeWidth={2.5} />
+                  ) : (
+                    <Copy className="w-[17px] h-[17px]" strokeWidth={2.5} />
+                  )}
+                  {copied ? "Lien copié !" : "Copier le lien"}
+                </button>
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>

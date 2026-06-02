@@ -12,6 +12,34 @@ import {
 } from "lucide-react";
 import QRCard from "@/components/QRCard";
 import CardDesigner from "@/components/CardDesigner";
+import FAQ from "@/components/FAQ";
+
+const faqNotaires = [
+  {
+    q: "Combien coûte le référencement de mon étude ?",
+    a: "On vous présente les formules lors d'une démo en visio de 20 minutes, sans engagement. L'objectif : que la plateforme vous fasse gagner plus de temps qu'elle ne vous coûte.",
+  },
+  {
+    q: "Est-ce conforme à la déontologie notariale ?",
+    a: "Oui. Notaires.io est conçu par un notaire en exercice, dans le respect des règles de la profession. Rien n'est fait qui puisse vous mettre en difficulté vis-à-vis de votre déontologie.",
+  },
+  {
+    q: "Comment mes clients prennent-ils rendez-vous ?",
+    a: "Via votre QR code (sur vos cartes, plaquettes, vitrine) ou votre lien (mail, WhatsApp, signature). En un scan, ils réservent un créneau — en visio ou au cabinet.",
+  },
+  {
+    q: "En quoi ça me fait gagner du temps ?",
+    a: "Vos clients arrivent avec un dossier déjà cadré, sur la bonne spécialité. Moins d'allers-retours en amont, des rendez-vous plus efficaces, et du temps récupéré sur chaque dossier.",
+  },
+  {
+    q: "Et la protection des données de mes clients ?",
+    a: "Les données sont traitées conformément au RGPD et hébergées de façon sécurisée. La confidentialité, c'est le cœur de votre métier — et de notre plateforme.",
+  },
+  {
+    q: "Combien de temps pour démarrer ?",
+    a: "Le référencement est rapide. Après la démo, votre étude peut être en ligne et recevoir ses premiers rendez-vous très vite.",
+  },
+];
 
 // Quand la vidéo sera prête, colle ici l'URL d'intégration
 // (YouTube : https://www.youtube-nocookie.com/embed/XXXX  •  Vimeo : https://player.vimeo.com/video/XXXX)
@@ -233,6 +261,14 @@ export default function NotairePitch() {
       {/* QR code + cartes de visite */}
       <QRCard />
       <CardDesigner />
+
+      {/* FAQ notaires */}
+      <FAQ
+        id="faq"
+        eyebrow="Questions des confrères"
+        title="Les questions qu'on nous pose le plus."
+        items={faqNotaires}
+      />
 
       {/* CTA final */}
       <section id="contact" className="py-16 sm:py-20 lg:py-28 bg-white">

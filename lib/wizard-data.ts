@@ -1,6 +1,6 @@
 // Données qui pilotent le wizard de prise de RDV
 
-export type BranchId = "immo" | "famille" | "societe" | "document" | "idk";
+export type BranchId = "immo" | "offre" | "famille" | "societe" | "document" | "idk";
 
 export interface Q1Option {
   id: BranchId;
@@ -17,6 +17,13 @@ export const Q1_OPTIONS: Q1Option[] = [
     label: "Un bien immobilier",
     desc: "Vente, achat, donation d'un bien",
     tint: "blue",
+  },
+  {
+    id: "offre",
+    icon: "📝",
+    label: "Rédiger une offre de vente ou d'achat",
+    desc: "Offre d'achat, promesse, compromis",
+    tint: "rose",
   },
   {
     id: "famille",
@@ -77,6 +84,14 @@ export const Q2_TREE: Record<string, Q2Tree> = {
       { id: "litige", icon: "⚖️", label: "Je règle un litige", desc: "Indivision, conflit" },
     ],
   },
+  offre: {
+    title: "Votre offre concerne…",
+    subtitle: "On vous oriente vers le bon notaire rédacteur.",
+    options: [
+      { id: "achat", icon: "🤝", label: "Une offre d'achat", desc: "Je fais une offre sur un bien" },
+      { id: "vente", icon: "🏷️", label: "Une offre de vente", desc: "Je vends et veux cadrer l'offre" },
+    ],
+  },
   famille: {
     title: "Quel est l'événement ?",
     subtitle: "Le bon notaire dépend du moment de vie.",
@@ -118,6 +133,10 @@ export const SPECIALTY: Record<string, Record<string, string>> = {
     modification: "Modification statutaire",
     dissolution: "Dissolution & liquidation",
   },
+  offre: {
+    achat: "Rédaction d'offre d'achat",
+    vente: "Rédaction d'offre de vente",
+  },
   document: { _: "Authentification d'actes" },
   idk: { _: "Notaire généraliste" },
 };
@@ -141,6 +160,10 @@ export const ESTIM: Record<string, Record<string, string>> = {
     modification: "600 € — 1 200 €",
     dissolution: "1 600 € — 2 600 €",
   },
+  offre: {
+    achat: "300 € — 800 €",
+    vente: "300 € — 800 €",
+  },
   document: { _: "80 € — 180 €" },
   idk: { _: "Sur devis (gratuit)" },
 };
@@ -161,6 +184,16 @@ export const ENRICH: Record<string, EnrichQuestion[]> = {
     { id: "bien", label: "Type de bien", options: ["Appartement", "Maison", "Terrain", "Local"] },
     { id: "prix", label: "Prix négocié", options: ["< 200 k€", "200-500 k€", "500 k-1 M€", "> 1 M€"] },
     { id: "credit", label: "Crédit en cours ?", options: ["Oui", "Non", "Pas encore"] },
+  ],
+  "offre:achat": [
+    { id: "bien", label: "Type de bien", options: ["Appartement", "Maison", "Terrain", "Local"] },
+    { id: "prix", label: "Prix proposé", options: ["< 200 k€", "200-500 k€", "500 k-1 M€", "> 1 M€"] },
+    { id: "fin", label: "Financement", options: ["Comptant", "Crédit", "Crédit + apport", "À définir"] },
+  ],
+  "offre:vente": [
+    { id: "bien", label: "Type de bien", options: ["Appartement", "Maison", "Terrain", "Local commercial"] },
+    { id: "prix", label: "Prix demandé", options: ["< 200 k€", "200-500 k€", "500 k-1 M€", "> 1 M€"] },
+    { id: "delai", label: "Délai souhaité", options: ["Urgent", "< 3 mois", "Pas pressé"] },
   ],
   "famille:deces": [
     { id: "lien", label: "Lien avec le défunt", options: ["Enfant", "Conjoint", "Parent", "Autre"] },

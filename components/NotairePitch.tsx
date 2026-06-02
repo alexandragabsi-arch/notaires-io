@@ -189,7 +189,7 @@ export default function NotairePitch() {
                   <h3 className="font-bold text-[18px] text-[var(--color-text-strong)] mb-2">
                     {r.title}
                   </h3>
-                  <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">
+                  <p className="text-[var(--color-muted)] text-[15px] leading-relaxed text-justify hyphens-auto">
                     {r.desc}
                   </p>
                 </motion.div>
@@ -216,7 +216,7 @@ export default function NotairePitch() {
               <h2 className="serif text-[24px] sm:text-[30px] font-bold text-[var(--color-text-strong)] mb-3 leading-tight">
                 Une plateforme pensée par la profession.
               </h2>
-              <p className="text-[var(--color-muted)] text-[16px] leading-relaxed">
+              <p className="text-[var(--color-muted)] text-[16px] leading-relaxed text-justify hyphens-auto">
                 Notaires.io est conçu par un notaire en exercice. On connaît vos
                 contraintes : déontologie, organisation de l'étude, relation
                 client. Chaque fonctionnalité est faite pour vous faire gagner du

@@ -70,7 +70,7 @@ export default function Hero() {
 
             <motion.p
               variants={item}
-              className="text-[16px] sm:text-[17px] lg:text-[19px] text-[var(--color-muted)] mb-8 max-w-[520px] leading-relaxed text-pretty"
+              className="text-[16px] sm:text-[17px] lg:text-[19px] text-[var(--color-muted)] mb-8 max-w-[520px] leading-relaxed text-justify hyphens-auto"
             >
               Sans appel, sans se tromper de spécialité, sans perdre 1h en RDV.
               Notaires.io vous oriente vers le notaire spécialisé dans votre

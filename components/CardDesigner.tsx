@@ -47,7 +47,7 @@ export default function CardDesigner() {
   )}`;
 
   return (
-    <section id="cartes" className="py-16 sm:py-20 lg:py-28 bg-[var(--color-tint-blue)]">
+    <section id="cartes" className="py-16 sm:py-20 lg:py-28 bg-white">
       <div className="max-w-[1200px] mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -129,7 +129,7 @@ export default function CardDesigner() {
             <p className="text-[12px] font-bold uppercase tracking-[1.5px] text-[var(--color-muted)] mb-3 text-center">
               Aperçu en direct
             </p>
-            <div className="aspect-[1.7/1] w-full bg-white rounded-2xl shadow-[var(--shadow-strong)] border border-[var(--color-border-soft)] p-6 sm:p-7 flex flex-col justify-between overflow-hidden">
+            <div className="aspect-[1.7/1] w-full max-w-[380px] mx-auto bg-white rounded-2xl shadow-[var(--shadow-strong)] border border-[var(--color-border-soft)] p-5 flex flex-col justify-between overflow-hidden">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <div className="serif text-[19px] sm:text-[22px] font-bold text-[var(--color-text-strong)] leading-tight truncate">

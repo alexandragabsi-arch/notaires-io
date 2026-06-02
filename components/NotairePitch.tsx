@@ -10,6 +10,8 @@ import {
   ArrowRight,
   Play,
 } from "lucide-react";
+import QRCard from "@/components/QRCard";
+import CardDesigner from "@/components/CardDesigner";
 
 // Quand la vidéo sera prête, colle ici l'URL d'intégration
 // (YouTube : https://www.youtube-nocookie.com/embed/XXXX  •  Vimeo : https://player.vimeo.com/video/XXXX)
@@ -227,6 +229,10 @@ export default function NotairePitch() {
           </motion.div>
         </div>
       </section>
+
+      {/* QR code + cartes de visite */}
+      <QRCard />
+      <CardDesigner />
 
       {/* CTA final */}
       <section id="contact" className="py-16 sm:py-20 lg:py-28 bg-white">

@@ -1,8 +1,19 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
+
+const NAV_LINKS: [string, string][] = [
+  ["Comment ça marche", "/#how"],
+  ["Espace notaires", "/notaires"],
+  ["Tarifs notaires", "/notaires#contact"],
+  ["FAQ", "/#faq"],
+];
 
 export default function Header() {
+  const [open, setOpen] = useState(false);
+
   return (
     <motion.header
       initial={{ y: -40, opacity: 0 }}
@@ -18,12 +29,7 @@ export default function Header() {
           Notaires<span className="text-[var(--color-accent)]">.io</span>
         </a>
         <nav className="hidden md:flex gap-8 text-sm">
-          {[
-            ["Comment ça marche", "/#how"],
-            ["Espace notaires", "/notaires"],
-            ["Tarifs notaires", "/notaires#contact"],
-            ["FAQ", "/#faq"],
-          ].map(([label, href]) => (
+          {NAV_LINKS.map(([label, href]) => (
             <a
               key={href}
               href={href}
@@ -45,8 +51,55 @@ export default function Header() {
           >
             Prendre RDV
           </motion.a>
+          {/* Bouton menu mobile */}
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={open}
+            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-[10px] border border-[var(--color-border)] text-[var(--color-primary)]"
+          >
+            {open ? (
+              <X className="w-5 h-5" strokeWidth={2.5} />
+            ) : (
+              <Menu className="w-5 h-5" strokeWidth={2.5} />
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Menu déroulant mobile */}
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden overflow-hidden border-t border-[var(--color-border-soft)] bg-white"
+          >
+            <div className="max-w-[1200px] mx-auto px-6 py-3 flex flex-col">
+              {NAV_LINKS.map(([label, href]) => (
+                <a
+                  key={href}
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  className="py-3 text-[15px] font-medium text-[var(--color-text-strong)] border-b border-[var(--color-border-soft)] last:border-b-0 hover:text-[var(--color-accent)] transition-colors"
+                >
+                  {label}
+                </a>
+              ))}
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="py-3 text-left text-[15px] font-semibold text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors"
+              >
+                Connexion
+              </button>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }

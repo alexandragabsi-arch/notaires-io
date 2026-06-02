@@ -13,7 +13,7 @@ export default function Header() {
       <div className="max-w-[1200px] mx-auto px-6 flex items-center justify-between py-4">
         <a
           href="#"
-          className="text-[22px] font-extrabold tracking-tight text-[var(--color-primary)]"
+          className="text-[19px] sm:text-[22px] font-extrabold tracking-tight text-[var(--color-primary)] shrink-0"
         >
           Notaires<span className="text-[var(--color-accent)]">.io</span>
         </a>
@@ -34,7 +34,7 @@ export default function Header() {
           ))}
         </nav>
         <div className="flex gap-3 items-center">
-          <button className="text-[var(--color-primary)] hover:text-[var(--color-accent)] font-semibold text-sm">
+          <button className="hidden sm:block text-[var(--color-primary)] hover:text-[var(--color-accent)] font-semibold text-sm">
             Connexion
           </button>
           <motion.a

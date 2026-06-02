@@ -62,7 +62,7 @@ export default function Hero() {
 
             <motion.h1
               variants={item}
-              className="serif text-[44px] lg:text-6xl font-bold leading-[1.05] tracking-[-1.5px] text-[var(--color-text-strong)] mb-6"
+              className="serif text-[30px] sm:text-[40px] lg:text-6xl font-bold leading-[1.1] sm:leading-[1.05] tracking-[-0.5px] sm:tracking-[-1.5px] text-balance text-[var(--color-text-strong)] mb-6"
             >
               Trouvez le bon notaire{" "}
               <span className="serif-accent">en 3 questions</span>.
@@ -70,7 +70,7 @@ export default function Hero() {
 
             <motion.p
               variants={item}
-              className="text-[17px] lg:text-[19px] text-[var(--color-muted)] mb-8 max-w-[520px] leading-relaxed"
+              className="text-[16px] sm:text-[17px] lg:text-[19px] text-[var(--color-muted)] mb-8 max-w-[520px] leading-relaxed text-pretty"
             >
               Sans appel, sans se tromper de spécialité, sans perdre 1h en RDV.
               Notaires.io vous oriente vers le notaire spécialisé dans votre

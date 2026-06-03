@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Check, Bell } from "lucide-react";
+import { ArrowRight, ArrowLeft, Check, Bell, Loader2, Sparkles } from "lucide-react";
 import {
   Q1_OPTIONS,
   Q2_TREE,
@@ -15,7 +15,13 @@ import {
   type Notaire,
 } from "@/lib/wizard-data";
 
-type Step = "q1" | "q2" | "postal" | "enrich" | "result" | "confirm";
+type Step = "q1" | "q2" | "describe" | "postal" | "enrich" | "result" | "confirm";
+
+type DetectResult = {
+  branchId: BranchId;
+  q2: string | null;
+  message: string;
+};
 
 const tintBg: Record<string, string> = {
   blue: "bg-[var(--color-tint-blue)]",
@@ -43,13 +49,61 @@ export default function Wizard() {
   const [modalOpen, setModalOpen] = useState(false);
   const [bookAccept, setBookAccept] = useState(false);
 
+  // IA détection
+  const [describe, setDescribe] = useState("");
+  const [detecting, setDetecting] = useState(false);
+  const [detectResult, setDetectResult] = useState<DetectResult | null>(null);
+  const [detectError, setDetectError] = useState("");
+
   function answerQ1(id: BranchId) {
     setQ1(id);
-    if (id === "document" || id === "idk") {
+    if (id === "document") {
       setQ2("_");
       setStep("postal");
+    } else if (id === "idk") {
+      setDescribe("");
+      setDetectResult(null);
+      setDetectError("");
+      setStep("describe");
     } else {
       setStep("q2");
+    }
+  }
+
+  async function analyzeDescribe() {
+    if (!describe.trim()) return;
+    setDetecting(true);
+    setDetectResult(null);
+    setDetectError("");
+    try {
+      const res = await fetch("/api/detect-besoin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ description: describe }),
+      });
+      const data = (await res.json()) as DetectResult & { error?: string };
+      if (data.error || !data.branchId) {
+        setDetectError("Je n'ai pas réussi à identifier votre situation. Essayez avec plus de détails.");
+      } else {
+        setDetectResult(data);
+      }
+    } catch {
+      setDetectError("Connexion impossible. Vérifiez votre réseau.");
+    } finally {
+      setDetecting(false);
+    }
+  }
+
+  function confirmDetect() {
+    if (!detectResult) return;
+    setQ1(detectResult.branchId);
+    const q2val = detectResult.q2 ?? "_";
+    setQ2(q2val);
+    const key = `${detectResult.branchId}:${q2val}`;
+    if (ENRICH[key]) {
+      setStep("enrich");
+    } else {
+      setStep("postal");
     }
   }
 
@@ -90,6 +144,9 @@ export default function Wizard() {
     setQ2(null);
     setPostal("");
     setEnrich({});
+    setDescribe("");
+    setDetectResult(null);
+    setDetectError("");
     setStep("q1");
   }
 
@@ -222,6 +279,107 @@ export default function Wizard() {
                 </motion.button>
               ))}
             </div>
+          </motion.div>
+        )}
+
+        {step === "describe" && (
+          <motion.div
+            key="describe"
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.22 }}
+          >
+            <button
+              onClick={() => setStep("q1")}
+              className="inline-flex items-center gap-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-primary)] mb-3 font-medium"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" /> Retour
+            </button>
+
+            <div className="inline-flex items-center gap-1.5 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 px-3 py-1 rounded-full text-[11px] font-bold tracking-wide mb-3">
+              <Sparkles className="w-3 h-3" strokeWidth={2.5} />
+              Détection IA
+            </div>
+
+            <h2 className="serif text-[24px] font-bold leading-[1.2] tracking-tight text-[var(--color-text-strong)] mb-1.5">
+              Décrivez votre <span className="serif-accent">situation</span>
+            </h2>
+            <p className="text-sm text-[var(--color-muted)] mb-4">
+              En quelques mots, expliquez votre projet. L'IA identifie
+              le bon notaire et la bonne spécialité pour vous.
+            </p>
+
+            <textarea
+              value={describe}
+              onChange={(e) => { setDescribe(e.target.value); setDetectResult(null); setDetectError(""); }}
+              placeholder="Ex : Mon père est décédé en mars et nous sommes 3 frères à hériter d'un appartement à Paris…"
+              rows={4}
+              className="w-full px-4 py-3 rounded-xl border-[1.5px] border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition resize-none mb-3"
+            />
+
+            {/* Résultat IA */}
+            {detectResult && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-[var(--color-tint-green)] border border-emerald-200 rounded-xl px-4 py-3.5 mb-3 text-sm"
+              >
+                <div className="flex items-center gap-1.5 font-bold text-emerald-800 mb-1">
+                  <Sparkles className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  {getSpecialty(detectResult.branchId, detectResult.q2)}
+                </div>
+                <p className="text-emerald-700 text-[13px] leading-relaxed">
+                  {detectResult.message}
+                </p>
+              </motion.div>
+            )}
+
+            {detectError && (
+              <p className="text-[13px] text-red-500 bg-red-50 rounded-xl px-3.5 py-2.5 mb-3">
+                {detectError}
+              </p>
+            )}
+
+            {!detectResult ? (
+              <motion.button
+                whileHover={{ y: -1, filter: "brightness(1.05)" }}
+                whileTap={{ scale: 0.98 }}
+                onClick={analyzeDescribe}
+                disabled={!describe.trim() || detecting}
+                className="w-full bg-gradient-to-r from-purple-600 to-[var(--color-accent)] text-white border-none px-6 py-3.5 rounded-xl text-[15px] font-semibold cursor-pointer shadow-[0_4px_14px_rgba(147,51,234,0.3)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {detecting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" strokeWidth={2.5} />
+                    Analyse en cours…
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4" strokeWidth={2.5} />
+                    Détecter mon type de dossier
+                  </>
+                )}
+              </motion.button>
+            ) : (
+              <div className="flex gap-2.5">
+                <button
+                  onClick={() => { setDetectResult(null); }}
+                  className="flex-1 bg-white text-[var(--color-primary)] border-[1.5px] border-[var(--color-border)] px-4 py-3 rounded-xl text-sm font-semibold hover:bg-[var(--color-tint-blue)] hover:border-[var(--color-primary)] transition-colors"
+                >
+                  Modifier
+                </button>
+                <motion.button
+                  whileHover={{ y: -1, filter: "brightness(1.05)" }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={confirmDetect}
+                  className="flex-1 bg-gradient-cta text-white border-none px-4 py-3 rounded-xl text-sm font-semibold shadow-[var(--shadow-cta)]"
+                >
+                  Continuer →
+                </motion.button>
+              </div>
+            )}
           </motion.div>
         )}
 

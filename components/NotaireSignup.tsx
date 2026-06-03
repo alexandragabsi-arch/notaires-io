@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { addStoredProfile } from "@/lib/notaire-profiles";
+import type { ListingNotaire } from "@/lib/notaires-listing";
 import {
   User,
   Mail,
@@ -17,7 +18,13 @@ import {
   Star,
   ImagePlus,
   Trash2,
+  QrCode,
+  Download,
+  Link2,
 } from "lucide-react";
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://notaires.io";
 
 const STEPS = ["Votre compte", "Votre étude", "Votre profil", "Récapitulatif"];
 
@@ -35,6 +42,7 @@ const SPECIALTIES = [
 export default function NotaireSignup() {
   const [step, setStep] = useState(0);
   const [done, setDone] = useState(false);
+  const [savedProfile, setSavedProfile] = useState<ListingNotaire | null>(null);
 
   // Compte
   const [prenom, setPrenom] = useState("");
@@ -89,7 +97,7 @@ export default function NotaireSignup() {
 
   function finalize() {
     // On enregistre le profil pour qu'il apparaisse aussitôt dans l'annuaire.
-    addStoredProfile({
+    const profile = addStoredProfile({
       prenom,
       nom,
       ville,
@@ -99,6 +107,7 @@ export default function NotaireSignup() {
       photo,
       bio,
     });
+    setSavedProfile(profile);
     setDone(true);
   }
 
@@ -550,35 +559,107 @@ export default function NotaireSignup() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
-            className="max-w-[520px] mx-auto text-center bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-8 sm:p-12"
+            className="max-w-[600px] mx-auto"
           >
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--color-tint-green)] flex items-center justify-center text-[var(--color-success)] mb-6">
-              <Check className="w-8 h-8" strokeWidth={2.5} />
+            {/* Succès */}
+            <div className="text-center bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-8 sm:p-10 mb-5">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--color-tint-green)] flex items-center justify-center text-[var(--color-success)] mb-5">
+                <Check className="w-8 h-8" strokeWidth={2.5} />
+              </div>
+              <h2 className="serif text-[26px] sm:text-[30px] font-bold text-[var(--color-text-strong)] mb-3">
+                Votre profil est prêt, {displayName}.
+              </h2>
+              <p className="text-[var(--color-muted)] text-[15px] leading-relaxed mb-6 text-justify hyphens-auto">
+                Merci de votre confiance. Votre profil apparaît dès maintenant
+                dans l'annuaire. L'activation complète de votre référencement et
+                votre espace sécurisé arrivent très bientôt — notre équipe vous
+                contacte pour la mise en ligne de votre étude.
+              </p>
+
+              {/* Lien personnel */}
+              {savedProfile && (
+                <div className="bg-[var(--color-tint-blue)] rounded-xl px-4 py-3 flex items-center gap-2.5 text-[13px] mb-5">
+                  <Link2 className="w-4 h-4 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
+                  <span className="text-[var(--color-muted)]">Votre lien direct&nbsp;:</span>
+                  <a
+                    href={`${SITE_URL}/notaires/${savedProfile.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-[var(--color-accent)] hover:underline truncate"
+                  >
+                    notaires.io/notaires/{savedProfile.id}
+                  </a>
+                </div>
+              )}
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a
+                  href={savedProfile ? `/notaires/${savedProfile.id}` : "/annuaire"}
+                  className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+                >
+                  Voir mon profil
+                  <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+                </a>
+                <a
+                  href="/notaires"
+                  className="inline-flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-accent)] px-4 py-3 rounded-[10px] text-[15px] font-semibold transition-colors"
+                >
+                  Retour à l'espace notaires
+                </a>
+              </div>
             </div>
-            <h2 className="serif text-[26px] sm:text-[30px] font-bold text-[var(--color-text-strong)] mb-3">
-              Votre profil est prêt, {displayName}.
-            </h2>
-            <p className="text-[var(--color-muted)] text-[15px] leading-relaxed mb-7 text-justify hyphens-auto">
-              Merci de votre confiance. Votre profil apparaît dès maintenant dans
-              l'annuaire. L'activation complète de votre référencement et votre
-              espace sécurisé arrivent très bientôt — notre équipe vous contacte
-              pour la mise en ligne de votre étude.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a
-                href="/annuaire"
-                className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
-              >
-                Voir mon profil dans l'annuaire
-                <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
-              </a>
-              <a
-                href="/notaires"
-                className="inline-flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-accent)] px-4 py-3 rounded-[10px] text-[15px] font-semibold transition-colors"
-              >
-                Retour à l'espace notaires
-              </a>
-            </div>
+
+            {/* QR code */}
+            {savedProfile && (() => {
+              const profileUrl = `${SITE_URL}/notaires/${savedProfile.id}`;
+              const qrSrc = `/api/qr?data=${encodeURIComponent(profileUrl)}&size=300`;
+              return (
+                <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-7 sm:p-8">
+                  <div className="flex items-center gap-2 mb-1">
+                    <QrCode className="w-5 h-5 text-[var(--color-accent)]" strokeWidth={2} />
+                    <h3 className="serif text-[18px] font-bold text-[var(--color-text-strong)]">
+                      Votre QR code personnel
+                    </h3>
+                  </div>
+                  <p className="text-[13px] text-[var(--color-muted)] mb-5 leading-relaxed">
+                    Ce QR code renvoie directement à votre fiche de prise de rendez-vous.
+                    Imprimez-le sur vos cartes de visite, vos plaquettes ou l'entrée de votre étude.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center gap-6">
+                    {/* QR image */}
+                    <div className="shrink-0 rounded-2xl border border-[var(--color-border-soft)] overflow-hidden shadow-[var(--shadow-card)] p-3 bg-white">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={qrSrc}
+                        alt={`QR code de ${displayName}`}
+                        width={150}
+                        height={150}
+                        className="w-[150px] h-[150px]"
+                      />
+                    </div>
+                    {/* Instructions + téléchargement */}
+                    <div className="flex flex-col gap-3 flex-1 min-w-0">
+                      <div className="text-[13px] text-[var(--color-muted)] leading-relaxed text-justify hyphens-auto">
+                        En un scan depuis un smartphone, vos clients accèdent à votre profil
+                        et réservent un créneau directement — sans avoir à chercher vos
+                        coordonnées.
+                      </div>
+                      <a
+                        href={`/api/qr?data=${encodeURIComponent(profileUrl)}&size=800`}
+                        download={`qr-notaires-io-${savedProfile.id}.png`}
+                        className="inline-flex items-center gap-2 border border-[var(--color-accent)] text-[var(--color-accent)] bg-[var(--color-accent-soft)] px-5 py-2.5 rounded-[10px] text-[14px] font-semibold hover:bg-[var(--color-accent)] hover:text-white transition-colors w-fit"
+                      >
+                        <Download className="w-4 h-4" strokeWidth={2.5} />
+                        Télécharger mon QR code (PNG)
+                      </a>
+                      <p className="text-[12px] text-[var(--color-muted)]">
+                        Haute résolution · Fond blanc · Prêt à imprimer
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
           </motion.div>
         )}
       </div>

@@ -54,6 +54,7 @@ function toListing(p: SignupProfile): ListingNotaire {
     languages: p.languages?.length ? p.languages : undefined,
     next: "Sur demande",
     photo: p.photo || undefined,
+    bio: p.bio?.trim() || undefined,
     isNew: true,
   };
 }

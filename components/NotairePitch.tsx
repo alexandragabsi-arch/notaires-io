@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Video,
@@ -68,7 +67,6 @@ const reasons = [
 ];
 
 export default function NotairePitch() {
-  const [playing, setPlaying] = useState(false);
 
   return (
     <>
@@ -136,43 +134,15 @@ export default function NotairePitch() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5 }}
           >
-            <div className="relative aspect-video rounded-3xl overflow-hidden border border-[var(--color-border-soft)] shadow-[var(--shadow-card)] bg-[var(--color-tint-blue)]">
-              {playing ? (
-                // eslint-disable-next-line jsx-a11y/media-has-caption
-                <video
-                  src={DEMO_VIDEO_SRC}
-                  className="absolute inset-0 w-full h-full bg-black"
-                  controls
-                  autoPlay
-                  playsInline
-                />
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setPlaying(true)}
-                  className="group absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-4"
-                  aria-label="Lire la vidéo de démonstration"
-                >
-                  <span
-                    className="absolute inset-0 pointer-events-none opacity-60"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(circle, rgba(73,128,230,0.10) 1px, transparent 1px)",
-                      backgroundSize: "26px 26px",
-                    }}
-                  />
-                  <span className="relative w-[72px] h-[72px] rounded-full bg-white shadow-[var(--shadow-strong)] flex items-center justify-center transition-transform group-hover:scale-105">
-                    <Play
-                      className="w-7 h-7 text-[var(--color-accent)] translate-x-[2px]"
-                      strokeWidth={2}
-                      fill="currentColor"
-                    />
-                  </span>
-                  <span className="relative serif text-[20px] sm:text-[24px] font-bold text-[var(--color-text-strong)]">
-                    Notaires<span className="text-[var(--color-accent)]">.io</span> en 90 secondes
-                  </span>
-                </button>
-              )}
+            <div className="relative aspect-video rounded-3xl overflow-hidden border border-[var(--color-border-soft)] shadow-[var(--shadow-card)] bg-black">
+              {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+              <video
+                src={DEMO_VIDEO_SRC}
+                className="absolute inset-0 w-full h-full"
+                controls
+                playsInline
+                preload="metadata"
+              />
             </div>
           </motion.div>
         </div>

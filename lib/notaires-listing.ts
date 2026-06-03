@@ -9,7 +9,8 @@ export interface ListingNotaire {
   area?: string; // arrondissement / secteur (affichage)
   specialties: string[];
   languages?: string[]; // langues parlées (ex. ["Anglais", "Espagnol"])
-  next: string;
+  next: string; // conservé pour compatibilité wizard
+  slotMatrix?: string[][]; // [jour0, jour1, jour2, jour3] — créneaux dispo sur les 4 prochains jours ouvrés
   photo?: string; // photo de profil (profils créés par les notaires)
   isNew?: boolean; // profil tout juste créé
   bio?: string; // présentation courte affichée sur la fiche profil
@@ -26,6 +27,12 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     specialties: ["Immobilier", "Succession"],
     languages: ["Anglais"],
     next: "Demain 14h30",
+    slotMatrix: [
+      ["09:00", "10:00", "14:30"],
+      ["09:00", "11:00"],
+      [],
+      ["10:00", "14:00", "16:00"],
+    ],
     bio: "Notaire associée spécialisée en transactions immobilières et successions. Accompagne particuliers et familles dans leurs projets patrimoniaux depuis plus de 12 ans. Reçoit également ses clients en anglais.",
   },
   {
@@ -37,6 +44,12 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     area: "8ème",
     specialties: ["Société", "Immobilier"],
     next: "Demain 16h00",
+    slotMatrix: [
+      ["11:00", "16:00"],
+      [],
+      ["09:00", "10:00", "15:00"],
+      ["14:00", "16:00"],
+    ],
     bio: "Expert en droit des affaires et immobilier d'entreprise. Intervient régulièrement auprès de start-ups, PME et family offices pour la constitution de sociétés, les cessions et les montages patrimoniaux complexes.",
   },
   {
@@ -48,6 +61,12 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     area: "9ème",
     specialties: ["Famille", "Donation"],
     next: "Vendredi 10h00",
+    slotMatrix: [
+      ["09:00", "10:00"],
+      ["09:00", "10:00", "11:00"],
+      ["09:30", "11:00"],
+      [],
+    ],
     bio: "Spécialiste du droit de la famille et de la transmission patrimoniale. Accompagne les familles à chaque étape importante : mariage, PACS, divorce, donation, succession. Pédagogue et disponible.",
   },
   {
@@ -59,6 +78,12 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     area: "17ème",
     specialties: ["Immobilier", "Succession"],
     next: "Lundi 11h00",
+    slotMatrix: [
+      [],
+      ["14:00", "15:00", "16:00"],
+      ["11:00", "14:30"],
+      ["09:00", "11:00", "15:00"],
+    ],
     bio: "Notaire généraliste avec une forte pratique en immobilier résidentiel et successions. Attaché à expliquer simplement chaque étape à ses clients, il traite aussi bien les petits dossiers que les patrimoines importants.",
   },
   {
@@ -69,6 +94,12 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     city: "Lyon",
     specialties: ["Famille", "Mariage / PACS"],
     next: "Demain 09h30",
+    slotMatrix: [
+      ["09:30", "10:30", "11:00"],
+      ["09:00", "11:00"],
+      [],
+      ["10:00", "14:00"],
+    ],
     bio: "Spécialiste du droit de la famille à Lyon. Aide les couples à choisir le contrat le plus adapté à leur situation, et les familles à organiser leur patrimoine dans la durée.",
   },
   {
@@ -80,6 +111,12 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     specialties: ["Société", "Immobilier"],
     languages: ["Anglais", "Espagnol"],
     next: "Jeudi 15h00",
+    slotMatrix: [
+      ["14:00", "15:00"],
+      ["09:00", "10:00", "15:00"],
+      ["14:00"],
+      ["09:00", "11:00", "15:00"],
+    ],
     bio: "Notaire bilingue (français-anglais-espagnol) intervenant sur des dossiers sociétaires et immobiliers. Accompagne notamment des investisseurs étrangers et des entrepreneurs dans leurs implantations en France.",
   },
   {
@@ -90,6 +127,12 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     city: "Marseille",
     specialties: ["Immobilier", "Donation"],
     next: "Vendredi 14h00",
+    slotMatrix: [
+      ["09:00", "11:00"],
+      ["14:00", "16:00"],
+      ["09:30", "10:30"],
+      ["14:00", "15:00", "16:00"],
+    ],
     bio: "Notaire à Marseille, active sur les transactions immobilières du littoral méditerranéen et les donations entre proches. Connaissance approfondie du marché local et des règles d'urbanisme côtier.",
   },
   {
@@ -100,6 +143,12 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     city: "Bordeaux",
     specialties: ["Succession", "Famille"],
     next: "Lundi 10h30",
+    slotMatrix: [
+      ["10:30", "14:00"],
+      [],
+      ["09:00", "10:00", "11:00"],
+      ["10:00", "15:00"],
+    ],
     bio: "Installé à Bordeaux depuis 10 ans, Me Mercier est reconnu pour sa maîtrise des successions complexes et son accompagnement humain des familles en deuil. Il intervient aussi en droit de la famille au sens large.",
   },
   {
@@ -111,6 +160,12 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     specialties: ["Immobilier", "Société"],
     languages: ["Anglais"],
     next: "Demain 11h00",
+    slotMatrix: [
+      ["09:00", "11:00", "14:00"],
+      ["10:00", "16:00"],
+      [],
+      ["09:00", "10:30", "15:00"],
+    ],
     bio: "Notaire dynamique à Lille, intervenant sur des dossiers immobiliers et des constitutions de sociétés. Partenaire de confiance des entrepreneurs du Nord, elle reçoit aussi ses clients anglophones sans difficulté.",
   },
   {
@@ -121,6 +176,12 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     city: "Nantes",
     specialties: ["Famille", "Donation", "Succession"],
     next: "Mercredi 09h00",
+    slotMatrix: [
+      ["09:00", "10:00"],
+      ["09:00", "11:00", "14:00"],
+      ["10:00"],
+      ["09:00", "14:30", "16:00"],
+    ],
     bio: "Notaire généraliste à Nantes, Me Girard se consacre principalement aux dossiers familiaux : héritages, donations entre vifs, testaments. Reconnu pour sa pédagogie, il vulgarise chaque étape pour ses clients.",
   },
 ];

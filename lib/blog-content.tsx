@@ -196,10 +196,10 @@ function Article2() {
           </thead>
           <tbody>
             {[
-              ["De 0 à 6 500 €", "3,945 %"],
-              ["De 6 500 € à 17 000 €", "1,627 %"],
-              ["De 17 000 € à 60 000 €", "1,085 %"],
-              ["Au-delà de 60 000 €", "0,814 %"],
+              ["De 0 à 6 500 €", "3,870 %"],
+              ["De 6 500 € à 17 000 €", "1,596 %"],
+              ["De 17 000 € à 60 000 €", "1,064 %"],
+              ["Au-delà de 60 000 €", "0,799 %"],
             ].map(([tr, tx], i) => (
               <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                 <td className="p-3 text-[var(--color-muted)] border border-[var(--color-border)]">{tr}</td>

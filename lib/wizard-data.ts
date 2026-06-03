@@ -237,7 +237,8 @@ export interface EnrichQuestion {
   id: string;
   label: string;
   options: string[];
-  type?: "chips" | "date"; // "date" → champ texte libre (JJ/MM/AAAA)
+  type?: "chips" | "date" | "text"; // "date" → date picker · "text" → champ libre
+  placeholder?: string; // utilisé avec type "text"
 }
 
 export const ENRICH: Record<string, EnrichQuestion[]> = {
@@ -245,7 +246,14 @@ export const ENRICH: Record<string, EnrichQuestion[]> = {
     {
       id: "bien",
       label: "Quel type de bien vendez-vous ?",
-      options: ["Appartement", "Maison", "Terrain ou local", "Autre"],
+      options: ["Appartement / Lot de copropriété", "Maison", "Boutique / Commerce", "Immeuble entier", "Terrain ou autre"],
+    },
+    {
+      id: "lieu_bien",
+      label: "Où se situe le bien ?",
+      type: "text",
+      placeholder: "Ex : Paris 8ème, Lyon 6ème, Bordeaux Centre…",
+      options: [],
     },
     {
       id: "prix",
@@ -262,12 +270,24 @@ export const ENRICH: Record<string, EnrichQuestion[]> = {
     {
       id: "bien",
       label: "Quel type de bien achetez-vous ?",
-      options: ["Appartement", "Maison", "Terrain", "Local ou commerce"],
+      options: ["Appartement / Lot de copropriété", "Maison", "Boutique / Commerce", "Immeuble entier", "Terrain / Local"],
+    },
+    {
+      id: "lieu_bien",
+      label: "Où se situe le bien ?",
+      type: "text",
+      placeholder: "Ex : Paris 8ème, Lyon 6ème, Bordeaux Centre…",
+      options: [],
     },
     {
       id: "prix",
       label: "Quel est le prix d'achat ?",
       options: ["< 200 000 €", "200 000 – 500 000 €", "500 000 € – 1 million", "Plus d'1 million €"],
+    },
+    {
+      id: "occ",
+      label: "Le bien est-il actuellement loué ?",
+      options: ["Libre (non loué)", "Loué — je reprends le bail", "Occupé par le vendeur", "Je ne sais pas encore"],
     },
     {
       id: "credit",

@@ -12,8 +12,28 @@ const CITIES = [
   { label: "Lyon", href: "/notaire-lyon" },
   { label: "Marseille", href: "/notaire-marseille" },
   { label: "Bordeaux", href: "/notaire-bordeaux" },
+  { label: "Toulouse", href: "/notaire-toulouse" },
+  { label: "Nice", href: "/notaire-nice" },
   { label: "Nantes", href: "/notaire-nantes" },
+  { label: "Strasbourg", href: "/notaire-strasbourg" },
+  { label: "Montpellier", href: "/notaire-montpellier" },
   { label: "Lille", href: "/notaire-lille" },
+  { label: "Rennes", href: "/notaire-rennes" },
+  { label: "Grenoble", href: "/notaire-grenoble" },
+  { label: "Toulon", href: "/notaire-toulon" },
+  { label: "Saint-Étienne", href: "/notaire-saint-etienne" },
+  { label: "Angers", href: "/notaire-angers" },
+  { label: "Dijon", href: "/notaire-dijon" },
+  { label: "Reims", href: "/notaire-reims" },
+  { label: "Brest", href: "/notaire-brest" },
+  { label: "Le Havre", href: "/notaire-le-havre" },
+  { label: "Aix-en-Provence", href: "/notaire-aix-en-provence" },
+  { label: "Rouen", href: "/notaire-rouen" },
+  { label: "Metz", href: "/notaire-metz" },
+  { label: "Nancy", href: "/notaire-nancy" },
+  { label: "Perpignan", href: "/notaire-perpignan" },
+  { label: "Clermont-Ferrand", href: "/notaire-clermont-ferrand" },
+  { label: "Orléans", href: "/notaire-orleans" },
 ];
 
 const SPECIALTIES = [
@@ -88,7 +108,7 @@ export default function Header() {
                         <MapPin className="w-3 h-3" strokeWidth={2.5} />
                         Par ville
                       </div>
-                      <ul className="flex flex-col gap-0.5">
+                      <ul className="flex flex-col gap-0.5 max-h-[280px] overflow-y-auto pr-1 scrollbar-thin">
                         {CITIES.map((c) => (
                           <li key={c.href}>
                             <a
@@ -213,7 +233,7 @@ export default function Header() {
                 <div className="pb-2 pt-1">
                   <p className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)] mb-2">Trouver un notaire</p>
                   <div className="flex flex-wrap gap-2">
-                    {CITIES.slice(0, 3).map((c) => (
+                    {CITIES.slice(0, 5).map((c) => (
                       <a
                         key={c.href}
                         href={c.href}

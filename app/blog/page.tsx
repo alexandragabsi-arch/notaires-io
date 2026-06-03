@@ -4,9 +4,9 @@ import Footer from "@/components/Footer";
 import { BLOG_POSTS } from "@/lib/blog-posts";
 
 export const metadata: Metadata = {
-  title: "Conseils notariaux — Guide pratique",
+  title: "Conseils notariaux — Guides pratiques · Notaires.io",
   description:
-    "Guides pratiques sur l'immobilier, la succession, le mariage, le divorce et la création de société. Conseils rédigés par des notaires en exercice.",
+    "Guides pratiques sur l'immobilier, la succession, le mariage, le divorce et la création de société. Toutes vos questions notariales en clair.",
   alternates: { canonical: "https://notaires.io/blog" },
 };
 
@@ -30,16 +30,16 @@ export default function BlogPage() {
       <Header />
       <main className="flex-1 bg-white">
         {/* Hero */}
-        <section className="bg-[var(--color-tint-blue)] border-b border-[var(--color-border-soft)] py-16 px-6">
-          <div className="max-w-[1200px] mx-auto">
+        <section className="bg-white border-b border-[var(--color-border-soft)] py-16 px-6">
+          <div className="max-w-[760px] mx-auto text-center">
             <p className="text-[var(--color-accent)] font-semibold text-sm uppercase tracking-wider mb-3">
-              Blog & Guides
+              Conseils notariaux
             </p>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[var(--color-primary)] mb-4 leading-tight">
-              Conseils notariaux — Guide pratique
+              Guides pratiques
             </h1>
-            <p className="text-[var(--color-muted)] text-lg max-w-[640px]">
-              Guides rédigés par des notaires en exercice pour vous aider à préparer votre projet immobilier, votre succession, votre mariage ou votre donation.
+            <p className="text-[var(--color-muted)] text-lg max-w-[560px] mx-auto">
+              Tout ce que vous devez savoir avant votre rendez-vous : immobilier, succession, mariage, donation.
             </p>
           </div>
         </section>
@@ -96,7 +96,7 @@ export default function BlogPage() {
         </section>
 
         {/* Bottom CTA */}
-        <section className="bg-[var(--color-tint-blue)] border-t border-[var(--color-border-soft)] py-14 px-6">
+        <section className="bg-white border-t border-[var(--color-border-soft)] py-14 px-6">
           <div className="max-w-[640px] mx-auto text-center">
             <h2 className="text-2xl font-extrabold text-[var(--color-primary)] mb-3">
               Une question pour un notaire ?

@@ -99,17 +99,17 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
   return (
     <>
       {/* Hero */}
-      <section className="bg-gradient-to-br from-[var(--color-primary)] to-[#0d3578] text-white py-16 px-6">
+      <section className="bg-white py-16 px-6 border-b border-[var(--color-border-soft)]">
         <div className="max-w-[800px] mx-auto text-center">
-          <h1 className="font-extrabold text-3xl sm:text-4xl md:text-5xl leading-tight mb-5 font-[var(--font-playfair)]">
+          <h1 className="font-extrabold text-3xl sm:text-4xl md:text-5xl leading-tight mb-5 font-[var(--font-playfair)] text-[var(--color-text-strong)]">
             {h1}
           </h1>
-          <p className="text-white/80 text-lg leading-relaxed mb-8 max-w-[640px] mx-auto">
+          <p className="text-[var(--color-muted)] text-lg leading-relaxed mb-8 max-w-[640px] mx-auto">
             {intro}
           </p>
           <a
             href="/#hero"
-            className="inline-block bg-white text-[var(--color-primary)] font-bold px-8 py-3.5 rounded-xl hover:bg-[var(--color-accent)] hover:text-white transition-colors shadow-lg text-[15px]"
+            className="inline-block bg-gradient-cta text-white font-bold px-8 py-3.5 rounded-xl shadow-[var(--shadow-cta)] hover:shadow-[var(--shadow-cta-hover)] transition-all text-[15px]"
           >
             Prendre rendez-vous
           </a>
@@ -117,7 +117,7 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
       </section>
 
       {/* Notaires grid */}
-      <section className="py-14 px-6 bg-[var(--color-tint-blue)]">
+      <section className="py-14 px-6 bg-white">
         <div className="max-w-[1200px] mx-auto">
           <h2 className="text-2xl font-extrabold text-[var(--color-text-strong)] mb-2">
             Nos notaires disponibles
@@ -165,7 +165,7 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
 
       {/* Related links */}
       {relatedLinks.length > 0 && (
-        <section className="py-10 px-6 bg-[var(--color-tint-blue)] border-t border-[var(--color-border-soft)]">
+        <section className="py-10 px-6 bg-white border-t border-[var(--color-border-soft)]">
           <div className="max-w-[1200px] mx-auto">
             <h2 className="text-base font-bold text-[var(--color-text-strong)] uppercase tracking-widest mb-5 text-sm">
               Voir aussi

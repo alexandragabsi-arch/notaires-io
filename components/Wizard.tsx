@@ -479,6 +479,14 @@ export default function Wizard() {
                       onChange={(e) => selectEnrich(q.id, e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-[10px] border-[1.5px] border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition bg-white"
                     />
+                  ) : q.type === "text" ? (
+                    <input
+                      type="text"
+                      placeholder={q.placeholder ?? ""}
+                      value={enrich[q.id] ?? ""}
+                      onChange={(e) => selectEnrich(q.id, e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-[10px] border-[1.5px] border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition bg-white"
+                    />
                   ) : (
                     <div className="flex flex-wrap gap-1.5">
                       {q.options.map((o) => (

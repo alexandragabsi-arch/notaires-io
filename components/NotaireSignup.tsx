@@ -21,6 +21,7 @@ import {
   Link2,
   MessageCircle,
   Copy,
+  QrCode,
 } from "lucide-react";
 
 const SITE_URL =
@@ -609,8 +610,8 @@ export default function NotaireSignup() {
               </div>
             </div>
 
-            {/* Partager le lien de RDV */}
-            {savedProfile && <ShareBlock profileId={savedProfile.id} displayName={displayName} />}
+            {/* QR code + partage */}
+            {savedProfile && <QRShareBlock profileId={savedProfile.id} displayName={displayName} />}
           </motion.div>
         )}
       </div>
@@ -620,7 +621,7 @@ export default function NotaireSignup() {
 
 /* — Sous-composants — */
 
-function ShareBlock({ profileId, displayName }: { profileId: string; displayName: string }) {
+function QRShareBlock({ profileId, displayName }: { profileId: string; displayName: string }) {
   const [copied, setCopied] = useState(false);
   const profileUrl = `${SITE_URL}/notaires/${profileId}`;
   const shareText = `Prenez rendez-vous avec ${displayName} en ligne, directement depuis votre smartphone : ${profileUrl}`;
@@ -638,51 +639,68 @@ function ShareBlock({ profileId, displayName }: { profileId: string; displayName
   return (
     <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-7 sm:p-8">
       <div className="flex items-center gap-2 mb-1">
-        <Link2 className="w-5 h-5 text-[var(--color-accent)]" strokeWidth={2} />
+        <QrCode className="w-5 h-5 text-[var(--color-accent)]" strokeWidth={2} />
         <h3 className="serif text-[18px] font-bold text-[var(--color-text-strong)]">
-          Partagez votre lien de prise de RDV
+          Votre QR code &amp; lien de prise de RDV
         </h3>
       </div>
       <p className="text-[13px] text-[var(--color-muted)] mb-5 leading-relaxed text-justify hyphens-auto">
-        Envoyez ce lien à vos clients par WhatsApp, e-mail ou copiez-le dans votre
-        signature — en un clic, ils réservent un créneau directement sur votre profil.
+        Vos clients scannent le QR code ou ouvrent le lien — ils arrivent directement
+        sur votre profil pour réserver un créneau. Partagez-le par WhatsApp, e-mail
+        ou copiez-le dans votre signature.
       </p>
 
-      {/* Lien affiché */}
-      <div className="bg-[var(--color-tint-blue)] rounded-xl px-4 py-3 text-[13px] font-semibold text-[var(--color-accent)] mb-5 truncate">
-        {profileUrl}
-      </div>
+      <div className="flex flex-col sm:flex-row items-center gap-6 mb-5">
+        {/* QR image */}
+        <div className="shrink-0 rounded-2xl border border-[var(--color-border-soft)] p-3 bg-white shadow-[var(--shadow-card)]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`/api/qr?data=${encodeURIComponent(profileUrl)}&size=300`}
+            alt={`QR code de ${displayName}`}
+            width={140}
+            height={140}
+            className="w-[140px] h-[140px] block"
+          />
+        </div>
 
-      {/* Boutons de partage */}
-      <div className="flex flex-wrap gap-2.5">
-        <a
-          href={`https://wa.me/?text=${encodeURIComponent(shareText)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2.5 rounded-[10px] text-[14px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
-        >
-          <MessageCircle className="w-[17px] h-[17px]" strokeWidth={2.5} />
-          WhatsApp
-        </a>
-        <a
-          href={`mailto:?subject=${encodeURIComponent(`Prenez RDV avec ${displayName}`)}&body=${encodeURIComponent(shareText)}`}
-          className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2.5 rounded-[10px] text-[14px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
-        >
-          <Mail className="w-[17px] h-[17px]" strokeWidth={2.5} />
-          E-mail
-        </a>
-        <button
-          type="button"
-          onClick={copyLink}
-          className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2.5 rounded-[10px] text-[14px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
-        >
-          {copied ? (
-            <Check className="w-[17px] h-[17px] text-[var(--color-success)]" strokeWidth={2.5} />
-          ) : (
-            <Copy className="w-[17px] h-[17px]" strokeWidth={2.5} />
-          )}
-          {copied ? "Lien copié !" : "Copier le lien"}
-        </button>
+        {/* Lien + partage */}
+        <div className="flex-1 min-w-0 flex flex-col gap-3">
+          <div className="bg-[var(--color-tint-blue)] rounded-xl px-4 py-3 flex items-center gap-2 text-[13px]">
+            <Link2 className="w-4 h-4 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
+            <span className="font-semibold text-[var(--color-accent)] truncate">{profileUrl}</span>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(shareText)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2.5 rounded-[10px] text-[13px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+            >
+              <MessageCircle className="w-[16px] h-[16px]" strokeWidth={2.5} />
+              WhatsApp
+            </a>
+            <a
+              href={`mailto:?subject=${encodeURIComponent(`Prenez RDV avec ${displayName}`)}&body=${encodeURIComponent(shareText)}`}
+              className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2.5 rounded-[10px] text-[13px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+            >
+              <Mail className="w-[16px] h-[16px]" strokeWidth={2.5} />
+              E-mail
+            </a>
+            <button
+              type="button"
+              onClick={copyLink}
+              className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2.5 rounded-[10px] text-[13px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+            >
+              {copied ? (
+                <Check className="w-[16px] h-[16px] text-[var(--color-success)]" strokeWidth={2.5} />
+              ) : (
+                <Copy className="w-[16px] h-[16px]" strokeWidth={2.5} />
+              )}
+              {copied ? "Lien copié !" : "Copier le lien"}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

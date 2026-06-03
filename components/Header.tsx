@@ -168,7 +168,7 @@ export default function Header() {
           </nav>
 
           <div className="flex gap-3 items-center">
-            {/* Bouton Assistant IA Claude */}
+            {/* Bouton Assistant IA */}
             <motion.button
               type="button"
               onClick={() => setAiOpen((v) => !v)}
@@ -263,7 +263,7 @@ export default function Header() {
                     {label}
                   </a>
                 ))}
-                {/* Claude dans le menu mobile */}
+                {/* Assistant IA dans le menu mobile */}
                 <button
                   type="button"
                   onClick={() => { setAiOpen(true); setOpen(false); }}

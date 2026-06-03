@@ -462,9 +462,8 @@ export default function Wizard() {
               Quelques détails pour{" "}
               <span className="serif-accent">gagner du temps</span>
             </h2>
-            <p className="text-sm text-[var(--color-muted)] mb-4">
-              Plus c&apos;est précis, plus votre RDV sera efficace. Vous pouvez
-              passer.
+            <p className="text-sm text-[var(--color-muted)] mb-4 text-left">
+              Plus c&apos;est précis, plus votre RDV sera efficace. Vous pouvez passer.
             </p>
             <div className="flex flex-col gap-3.5">
               {ENRICH[`${q1}:${q2}`].map((q, i) => (
@@ -474,10 +473,11 @@ export default function Wizard() {
                   </div>
                   {q.type === "date" ? (
                     <input
-                      type="date"
+                      type="text"
+                      placeholder="JJ/MM/AAAA"
                       value={enrich[q.id] ?? ""}
                       onChange={(e) => selectEnrich(q.id, e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-[10px] border-[1.5px] border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition bg-white"
+                      className="w-full px-3.5 py-2.5 rounded-[10px] border-[1.5px] border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition bg-white"
                     />
                   ) : q.type === "text" ? (
                     <input

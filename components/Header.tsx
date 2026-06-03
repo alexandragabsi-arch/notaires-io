@@ -177,12 +177,12 @@ export default function Header() {
               aria-label="Ouvrir l'assistant IA"
               className={`hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] text-[13px] font-semibold border transition-all ${
                 aiOpen
-                  ? "bg-gradient-to-r from-purple-600 to-[var(--color-accent)] text-white border-transparent shadow-[0_3px_12px_rgba(147,51,234,0.3)]"
-                  : "border-[var(--color-border)] text-[var(--color-text-strong)] hover:border-purple-400 hover:text-purple-600 hover:bg-purple-50"
+                  ? "bg-[var(--color-accent-soft)] text-[var(--color-accent)] border-[var(--color-accent)]"
+                  : "border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:bg-[var(--color-accent-soft)]"
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" strokeWidth={2.5} />
-              Claude
+              Assistant IA
             </motion.button>
 
             <a
@@ -270,7 +270,7 @@ export default function Header() {
                   className="py-3 text-[15px] font-semibold text-purple-600 flex items-center gap-2 hover:text-purple-700 transition-colors border-b border-[var(--color-border-soft)]"
                 >
                   <Sparkles className="w-4 h-4" strokeWidth={2.5} />
-                  Assistant IA Claude
+                  Assistant IA
                 </button>
                 <a
                   href="/connexion"

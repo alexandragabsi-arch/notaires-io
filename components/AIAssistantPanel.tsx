@@ -47,7 +47,7 @@ export default function AIAssistantPanel({ onClose }: { onClose: () => void }) {
       if (data.error || !data.branchId) {
         setMessages((m) => [
           ...m,
-          { role: "assistant", text: "Je n'ai pas pu analyser votre situation. Pouvez-vous reformuler avec un peu plus de détails ?" },
+          { role: "assistant", text: "Pouvez-vous préciser votre situation ? Par exemple : \"Mon père est décédé\", \"Je veux acheter un appartement\", \"Je me marie bientôt\"…" },
         ]);
       } else {
         setMessages((m) => [
@@ -82,7 +82,7 @@ export default function AIAssistantPanel({ onClose }: { onClose: () => void }) {
           <div className="text-[13px] font-bold text-[var(--color-text-strong)] leading-tight">
             Assistant IA · Notaires.io
           </div>
-          <div className="text-[11px] text-[var(--color-muted)]">Propulsé par Claude</div>
+          <div className="text-[11px] text-[var(--color-muted)]">Orientation notariale gratuite</div>
         </div>
         <button
           type="button"

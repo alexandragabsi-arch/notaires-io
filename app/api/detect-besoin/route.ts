@@ -1,17 +1,42 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Détecte automatiquement le type de dossier notarial via l'API Anthropic.
-// Requiert ANTHROPIC_API_KEY dans les variables d'environnement Vercel.
+type Detected = { branchId: string; q2: string | null; message: string };
+
+function detectFromKeywords(text: string): Detected | null {
+  const t = text.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  if (/dec[eé]d|deces|mort |heritag|succession|heritier|testament|notaire.*deces/.test(t))
+    return { branchId: "famille", q2: "deces", message: "Votre situation concerne une succession. Je vous oriente vers un notaire spécialisé en droit des successions." };
+  if (/mari[ae]|pacs|contrat.*mariage|regime matrimonial/.test(t))
+    return { branchId: "famille", q2: "mariage", message: "Votre situation concerne un mariage ou un PACS. Voici les notaires spécialisés en régimes matrimoniaux." };
+  if (/divorc|separa|rupture|dissolution.*pacs|quitter.*conjoint/.test(t))
+    return { branchId: "famille", q2: "separation", message: "Votre situation concerne une séparation. Un notaire spécialisé vous accompagnera pour le partage des biens." };
+  if (/donn[ae]|transmet|legu|don.*enfant|enfant.*don|donation/.test(t))
+    return { branchId: "famille", q2: "donation", message: "Votre situation concerne une donation. Voici les notaires spécialisés en droit des libéralités." };
+  if (/achet|acqueri|acquisition|compromis|acte.*vente|achat.*appartement|achat.*maison/.test(t))
+    return { branchId: "immo", q2: "achat", message: "Votre projet concerne un achat immobilier. Voici les notaires disponibles en transactions immobilières." };
+  if (/\bvend|ceder|mise en vente|vente.*bien|bien.*vente/.test(t))
+    return { branchId: "immo", q2: "vente", message: "Votre projet concerne une vente immobilière. Voici les notaires disponibles." };
+  if (/immo|appartement|maison|terrain|bien immobilier/.test(t))
+    return { branchId: "immo", q2: "achat", message: "Votre situation concerne l'immobilier. Voici les notaires spécialisés." };
+  if (/soci[eé]t[eé]|sas|sarl|sci|holding|creer.*soci|associe|parts sociales|statuts/.test(t))
+    return { branchId: "societe", q2: "creation", message: "Votre situation concerne votre société. Voici les notaires spécialisés en droit des sociétés." };
+  if (/procuration|legalis|authenti|certifi|signature/.test(t))
+    return { branchId: "document", q2: null, message: "Votre besoin concerne l'authentification d'un acte ou une procuration. Voici les notaires disponibles." };
+  return null;
+}
 
 export async function POST(req: NextRequest) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json({ error: "ANTHROPIC_API_KEY manquant" }, { status: 500 });
-  }
-
   const { description } = (await req.json()) as { description: string };
   if (!description?.trim()) {
     return NextResponse.json({ error: "Description vide" }, { status: 400 });
+  }
+
+  // Fallback sans clé API — détection par mots-clés
+  if (!apiKey) {
+    const detected = detectFromKeywords(description);
+    if (detected) return NextResponse.json(detected);
+    return NextResponse.json({ error: "non_detecte" }, { status: 422 });
   }
 
   const system = `Tu es un assistant spécialisé en droit notarial français.

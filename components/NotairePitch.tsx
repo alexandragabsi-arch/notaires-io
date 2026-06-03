@@ -8,7 +8,6 @@ import {
   ListChecks,
   ScrollText,
   ArrowRight,
-  Play,
   CreditCard,
 } from "lucide-react";
 import QRCard from "@/components/QRCard";
@@ -115,13 +114,6 @@ export default function NotairePitch() {
               >
                 Référencer mon étude
                 <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
-              </a>
-              <a
-                href="#demo"
-                className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-6 py-3 rounded-[10px] text-[15px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
-              >
-                <Play className="w-[17px] h-[17px]" strokeWidth={2.5} />
-                Voir la vidéo
               </a>
             </div>
           </motion.div>

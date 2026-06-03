@@ -28,6 +28,7 @@ const SPECIALTIES = [
 
 const OTHER_LINKS: [string, string][] = [
   ["Comment ça marche", "/#how"],
+  ["Blog", "/blog"],
   ["Espace notaires", "/notaires"],
   ["FAQ", "/#faq"],
 ];

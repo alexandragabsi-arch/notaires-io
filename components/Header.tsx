@@ -1,14 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X, Sparkles, ChevronDown, MapPin, Scale } from "lucide-react";
 import dynamic from "next/dynamic";
 
 const AIAssistantPanel = dynamic(() => import("./AIAssistantPanel"), { ssr: false });
 
-const NAV_LINKS: [string, string][] = [
-  ["Trouver un notaire", "/annuaire"],
+const CITIES = [
+  { label: "Paris", href: "/notaire-paris" },
+  { label: "Lyon", href: "/notaire-lyon" },
+  { label: "Marseille", href: "/notaire-marseille" },
+  { label: "Bordeaux", href: "/notaire-bordeaux" },
+  { label: "Nantes", href: "/notaire-nantes" },
+  { label: "Lille", href: "/notaire-lille" },
+];
+
+const SPECIALTIES = [
+  { label: "Immobilier", href: "/notaire-immobilier" },
+  { label: "Succession", href: "/notaire-succession" },
+  { label: "Contrat de mariage", href: "/notaire-contrat-mariage" },
+  { label: "Mariage / PACS", href: "/notaire-mariage-pacs" },
+  { label: "Divorce", href: "/notaire-divorce" },
+  { label: "Donation", href: "/notaire-donation" },
+  { label: "Création de société", href: "/notaire-creation-societe" },
+];
+
+const OTHER_LINKS: [string, string][] = [
   ["Comment ça marche", "/#how"],
   ["Espace notaires", "/notaires"],
   ["FAQ", "/#faq"],
@@ -17,6 +35,8 @@ const NAV_LINKS: [string, string][] = [
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
+  const [dropOpen, setDropOpen] = useState(false);
+  const dropRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
@@ -34,8 +54,88 @@ export default function Header() {
             Notaires<span className="text-[var(--color-accent)]">.io</span>
           </a>
 
-          <nav className="hidden md:flex gap-8 text-sm">
-            {NAV_LINKS.map(([label, href]) => (
+          <nav className="hidden md:flex gap-8 text-sm items-center">
+            {/* Dropdown "Trouver un notaire" */}
+            <div
+              ref={dropRef}
+              className="relative"
+              onMouseEnter={() => setDropOpen(true)}
+              onMouseLeave={() => setDropOpen(false)}
+            >
+              <button
+                type="button"
+                className="flex items-center gap-1 text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors font-medium"
+                aria-expanded={dropOpen}
+                aria-haspopup="true"
+              >
+                Trouver un notaire
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${dropOpen ? "rotate-180" : ""}`} strokeWidth={2.5} />
+              </button>
+
+              <AnimatePresence>
+                {dropOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[480px] bg-white rounded-2xl shadow-[0_16px_48px_rgba(15,37,87,0.14)] border border-[var(--color-border-soft)] p-5 grid grid-cols-2 gap-5"
+                  >
+                    {/* Villes */}
+                    <div>
+                      <div className="flex items-center gap-1.5 mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)]">
+                        <MapPin className="w-3 h-3" strokeWidth={2.5} />
+                        Par ville
+                      </div>
+                      <ul className="flex flex-col gap-0.5">
+                        {CITIES.map((c) => (
+                          <li key={c.href}>
+                            <a
+                              href={c.href}
+                              className="block px-2.5 py-1.5 rounded-lg text-[13px] font-medium text-[var(--color-text-strong)] hover:bg-[var(--color-tint-blue)] hover:text-[var(--color-primary)] transition-colors"
+                            >
+                              Notaire à {c.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Spécialités */}
+                    <div>
+                      <div className="flex items-center gap-1.5 mb-2.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)]">
+                        <Scale className="w-3 h-3" strokeWidth={2.5} />
+                        Par spécialité
+                      </div>
+                      <ul className="flex flex-col gap-0.5">
+                        {SPECIALTIES.map((s) => (
+                          <li key={s.href}>
+                            <a
+                              href={s.href}
+                              className="block px-2.5 py-1.5 rounded-lg text-[13px] font-medium text-[var(--color-text-strong)] hover:bg-[var(--color-tint-blue)] hover:text-[var(--color-primary)] transition-colors"
+                            >
+                              {s.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Footer du dropdown */}
+                    <div className="col-span-2 pt-3 border-t border-[var(--color-border-soft)]">
+                      <a
+                        href="/annuaire"
+                        className="flex items-center justify-center gap-1.5 text-[13px] font-semibold text-[var(--color-accent)] hover:underline"
+                      >
+                        Voir tous les notaires →
+                      </a>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {OTHER_LINKS.map(([label, href]) => (
               <a
                 key={href}
                 href={href}
@@ -108,7 +208,31 @@ export default function Header() {
               className="md:hidden overflow-hidden border-t border-[var(--color-border-soft)] bg-white"
             >
               <div className="max-w-[1200px] mx-auto px-6 py-3 flex flex-col">
-                {NAV_LINKS.map(([label, href]) => (
+                {/* Villes populaires */}
+                <div className="pb-2 pt-1">
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-muted)] mb-2">Trouver un notaire</p>
+                  <div className="flex flex-wrap gap-2">
+                    {CITIES.slice(0, 3).map((c) => (
+                      <a
+                        key={c.href}
+                        href={c.href}
+                        onClick={() => setOpen(false)}
+                        className="text-[13px] font-medium px-3 py-1.5 rounded-full border border-[var(--color-border)] text-[var(--color-text-strong)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors"
+                      >
+                        {c.label}
+                      </a>
+                    ))}
+                    <a
+                      href="/annuaire"
+                      onClick={() => setOpen(false)}
+                      className="text-[13px] font-medium px-3 py-1.5 rounded-full border border-[var(--color-border)] text-[var(--color-accent)] hover:bg-[var(--color-tint-blue)] transition-colors"
+                    >
+                      Voir tout →
+                    </a>
+                  </div>
+                </div>
+                <div className="border-t border-[var(--color-border-soft)] my-1" />
+                {OTHER_LINKS.map(([label, href]) => (
                   <a
                     key={href}
                     href={href}

@@ -38,6 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/notaire-creation-societe`, lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE}/notaire-donation`,         lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE}/notaire-divorce`,          lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/notaire-contrat-mariage`, lastModified: NOW, changeFrequency: "weekly", priority: 0.9 },
   ];
 
   return [...staticPages, ...notairePages, ...seoLandingPages];

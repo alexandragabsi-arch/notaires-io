@@ -93,6 +93,17 @@ export default function QRCard() {
               Télécharger le QR code
             </a>
 
+            {/* Teaser QR personnalisé */}
+            <div className="mt-5 bg-[var(--color-tint-green)] border border-[rgba(16,185,129,0.2)] rounded-xl px-4 py-3 flex items-start gap-2.5 text-left">
+              <span className="text-[16px] shrink-0 mt-px">✨</span>
+              <p className="text-[13px] text-[var(--color-text-strong)] leading-relaxed">
+                <strong>QR code personnalisé inclus à l'inscription</strong> — une fois votre profil créé, vous obtenez votre propre QR code qui mène directement à vos créneaux de rendez-vous.{" "}
+                <a href="/inscription" className="text-[var(--color-accent)] font-semibold hover:underline">
+                  Créer mon profil →
+                </a>
+              </p>
+            </div>
+
             <div className="mt-6 pt-6 border-t border-[var(--color-border-soft)]">
               <p className="text-[13px] text-[var(--color-muted)] mb-3">
                 Ou envoyez le lien directement à vos clients :

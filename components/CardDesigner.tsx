@@ -15,7 +15,7 @@ import {
   Check,
 } from "lucide-react";
 
-/* ─── Tarifs (TTC, QR code + impression + design inclus) ──────────────────── */
+/* ─── Tarifs (HT, QR code + impression + design inclus) ──────────────────── */
 type CardType = "standard" | "premium";
 type Qty = 100 | 250 | 500;
 
@@ -42,7 +42,7 @@ const CARD_TYPES: {
   },
 ];
 
-// Prix en euros (TTC) par type et quantité
+// Prix en euros (HT) par type et quantité
 const PRICES: Record<CardType, Record<Qty, number>> = {
   standard: { 100: 39, 250: 59, 500: 89 },
   premium:  { 100: 65, 250: 95, 500: 139 },
@@ -363,7 +363,7 @@ export default function CardDesigner() {
                   <span className="font-semibold text-[var(--color-success)]">Inclus</span>
                 </div>
                 <div className="flex items-center justify-between pt-3 mt-1 border-t border-[var(--color-border-soft)]">
-                  <span className="font-bold text-[16px] text-[var(--color-text-strong)]">Total TTC</span>
+                  <span className="font-bold text-[16px] text-[var(--color-text-strong)]">Total HT</span>
                   <span className="serif text-[26px] font-bold text-[var(--color-primary)]">
                     {total.toFixed(2).replace(".", ",")} €
                   </span>

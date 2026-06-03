@@ -315,22 +315,31 @@ export default function Wizard() {
                   <div className="text-[13px] font-semibold text-[var(--color-text-strong)]">
                     {i + 1}. {q.label}
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {q.options.map((o) => (
-                      <button
-                        key={o}
-                        type="button"
-                        onClick={() => selectEnrich(q.id, o)}
-                        className={`px-3 py-1.5 rounded-[9px] text-xs font-medium border-[1.5px] transition-colors ${
-                          enrich[q.id] === o
-                            ? "border-[var(--color-primary)] bg-[var(--color-accent-soft)] text-[var(--color-primary)] font-semibold"
-                            : "border-[var(--color-border)] bg-white text-[var(--color-text-strong)] hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)]"
-                        }`}
-                      >
-                        {o}
-                      </button>
-                    ))}
-                  </div>
+                  {q.type === "date" ? (
+                    <input
+                      type="date"
+                      value={enrich[q.id] ?? ""}
+                      onChange={(e) => selectEnrich(q.id, e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-[10px] border-[1.5px] border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition bg-white"
+                    />
+                  ) : (
+                    <div className="flex flex-wrap gap-1.5">
+                      {q.options.map((o) => (
+                        <button
+                          key={o}
+                          type="button"
+                          onClick={() => selectEnrich(q.id, o)}
+                          className={`px-3 py-1.5 rounded-[9px] text-xs font-medium border-[1.5px] transition-colors ${
+                            enrich[q.id] === o
+                              ? "border-[var(--color-primary)] bg-[var(--color-accent-soft)] text-[var(--color-primary)] font-semibold"
+                              : "border-[var(--color-border)] bg-white text-[var(--color-text-strong)] hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)]"
+                          }`}
+                        >
+                          {o}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

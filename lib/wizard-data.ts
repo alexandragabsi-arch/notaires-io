@@ -230,6 +230,7 @@ export interface EnrichQuestion {
   id: string;
   label: string;
   options: string[];
+  type?: "chips" | "date"; // "date" → champ texte libre (JJ/MM/AAAA)
 }
 
 export const ENRICH: Record<string, EnrichQuestion[]> = {
@@ -303,6 +304,12 @@ export const ENRICH: Record<string, EnrichQuestion[]> = {
   ],
   "famille:deces": [
     {
+      id: "date_deces",
+      label: "Date du décès",
+      options: [],
+      type: "date",
+    },
+    {
       id: "lien",
       label: "Quel est votre lien avec la personne décédée ?",
       options: ["Je suis enfant", "Je suis conjoint·e", "Je suis parent", "Autre lien"],
@@ -324,6 +331,12 @@ export const ENRICH: Record<string, EnrichQuestion[]> = {
     },
   ],
   "famille:mariage": [
+    {
+      id: "date_mariage",
+      label: "Date prévue du mariage ou du PACS",
+      options: [],
+      type: "date",
+    },
     {
       id: "reg",
       label: "Quel régime vous attire ?",

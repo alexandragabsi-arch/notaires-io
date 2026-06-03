@@ -34,10 +34,10 @@ export default function Footer() {
             {
               h: "Légal",
               links: [
-                ["Mentions légales", "#"],
-                ["CGU", "#"],
-                ["Confidentialité", "#"],
-                ["RGPD", "#"],
+                ["Mentions légales", "/mentions-legales"],
+                ["CGU", "/cgu"],
+                ["Confidentialité", "/confidentialite"],
+                ["RGPD", "/confidentialite"],
               ],
             },
           ].map((col) => (

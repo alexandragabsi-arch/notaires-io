@@ -18,8 +18,8 @@ const features = [
   {
     icon: "💰",
     tint: "bg-[var(--color-tint-green)]",
-    title: "Des honoraires clairs",
-    desc: "Une estimation avant le rendez-vous, sans mauvaise surprise.",
+    title: "1er RDV offert, 30 min",
+    desc: "Le premier rendez-vous est gratuit. Vous ne payez les honoraires du notaire que si vous passez à l'acte — selon le tarif réglementé, comme dans toute étude.",
   },
   {
     icon: "🔒",
@@ -71,7 +71,7 @@ export default function Features() {
               <h3 className="font-bold text-[18px] text-[var(--color-text-strong)] mb-2">
                 {f.title}
               </h3>
-              <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">
+              <p className="text-[var(--color-muted)] text-[15px] leading-relaxed text-justify hyphens-auto">
                 {f.desc}
               </p>
             </motion.div>
@@ -92,7 +92,7 @@ export default function Features() {
               <h3 className="font-bold text-[18px] text-[var(--color-text-strong)] mb-2">
                 Vous êtes notaire ?
               </h3>
-              <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">
+              <p className="text-[var(--color-muted)] text-[15px] leading-relaxed text-justify hyphens-auto">
                 Vos outils dédiés vous attendent dans votre espace. Accès
                 réservé aux études référencées.
               </p>

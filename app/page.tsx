@@ -6,8 +6,8 @@ import Footer from "@/components/Footer";
 
 const faqParticuliers = [
   {
-    q: "Combien ça coûte de prendre rendez-vous ?",
-    a: "La prise de rendez-vous sur Notaires.io est gratuite pour les particuliers. Vous ne payez que les honoraires du notaire, selon la prestation, comme dans n'importe quelle étude.",
+    q: "Combien ça coûte ?",
+    a: "Le premier rendez-vous est offert, limité à 30 minutes. C'est suffisant pour poser vos questions, comprendre votre situation et décider de la suite. Si un acte notarié est nécessaire, vous réglez ensuite les honoraires directement au notaire — comme dans n'importe quelle étude, selon le tarif réglementé.",
   },
   {
     q: "Comment ça marche concrètement ?",

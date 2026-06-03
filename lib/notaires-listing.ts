@@ -8,9 +8,10 @@ export interface ListingNotaire {
   city: string; // ville principale (sert au filtre)
   area?: string; // arrondissement / secteur (affichage)
   specialties: string[];
-  rating: number;
-  count: number;
+  languages?: string[]; // langues parlées (ex. ["Anglais", "Espagnol"])
   next: string;
+  photo?: string; // photo de profil (profils créés par les notaires)
+  isNew?: boolean; // profil tout juste créé
 }
 
 export const LISTING_NOTAIRES: ListingNotaire[] = [
@@ -22,8 +23,7 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     city: "Paris",
     area: "8ème",
     specialties: ["Immobilier", "Succession"],
-    rating: 4.9,
-    count: 142,
+    languages: ["Anglais"],
     next: "Demain 14h30",
   },
   {
@@ -34,8 +34,6 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     city: "Paris",
     area: "8ème",
     specialties: ["Société", "Immobilier"],
-    rating: 4.8,
-    count: 98,
     next: "Demain 16h00",
   },
   {
@@ -46,8 +44,6 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     city: "Paris",
     area: "9ème",
     specialties: ["Famille", "Donation"],
-    rating: 4.9,
-    count: 211,
     next: "Vendredi 10h00",
   },
   {
@@ -58,8 +54,6 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     city: "Paris",
     area: "17ème",
     specialties: ["Immobilier", "Succession"],
-    rating: 4.7,
-    count: 76,
     next: "Lundi 11h00",
   },
   {
@@ -69,8 +63,6 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     name: "Me Claire Fontaine",
     city: "Lyon",
     specialties: ["Famille", "Mariage / PACS"],
-    rating: 4.8,
-    count: 124,
     next: "Demain 09h30",
   },
   {
@@ -80,8 +72,7 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     name: "Me Antoine Roux",
     city: "Lyon",
     specialties: ["Société", "Immobilier"],
-    rating: 4.9,
-    count: 167,
+    languages: ["Anglais", "Espagnol"],
     next: "Jeudi 15h00",
   },
   {
@@ -91,8 +82,6 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     name: "Me Julie Lambert",
     city: "Marseille",
     specialties: ["Immobilier", "Donation"],
-    rating: 4.7,
-    count: 89,
     next: "Vendredi 14h00",
   },
   {
@@ -102,8 +91,6 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     name: "Me Hugo Mercier",
     city: "Bordeaux",
     specialties: ["Succession", "Famille"],
-    rating: 4.8,
-    count: 103,
     next: "Lundi 10h30",
   },
   {
@@ -113,8 +100,7 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     name: "Me Léa Garnier",
     city: "Lille",
     specialties: ["Immobilier", "Société"],
-    rating: 4.6,
-    count: 58,
+    languages: ["Anglais"],
     next: "Demain 11h00",
   },
   {
@@ -124,8 +110,6 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     name: "Me Paul Girard",
     city: "Nantes",
     specialties: ["Famille", "Donation", "Succession"],
-    rating: 4.9,
-    count: 145,
     next: "Mercredi 09h00",
   },
 ];

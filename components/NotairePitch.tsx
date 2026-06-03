@@ -43,9 +43,8 @@ const faqNotaires = [
   },
 ];
 
-// Quand la vidéo sera prête, colle ici l'URL d'intégration
-// (YouTube : https://www.youtube-nocookie.com/embed/XXXX  •  Vimeo : https://player.vimeo.com/video/XXXX)
-const DEMO_VIDEO_URL = "";
+// Vidéo de présentation auto-hébergée (fichier dans /public)
+const DEMO_VIDEO_SRC = "/demo-notaires-io.mp4";
 
 const reasons = [
   {
@@ -100,7 +99,7 @@ export default function NotairePitch() {
               Pourquoi choisir{" "}
               <span className="serif-accent">Notaires.io</span> ?
             </h1>
-            <p className="text-[17px] lg:text-[19px] text-[var(--color-muted)] max-w-[620px] mx-auto leading-relaxed mb-4">
+            <p className="text-[17px] lg:text-[19px] text-[var(--color-muted)] max-w-[620px] mx-auto leading-relaxed mb-4 text-justify hyphens-auto">
               Une plateforme qui vous amène des rendez-vous déjà préparés, sur la
               bonne spécialité — et qui vous fait gagner du temps à chaque
               dossier.
@@ -138,18 +137,19 @@ export default function NotairePitch() {
             transition={{ duration: 0.5 }}
           >
             <div className="relative aspect-video rounded-3xl overflow-hidden border border-[var(--color-border-soft)] shadow-[var(--shadow-card)] bg-[var(--color-tint-blue)]">
-              {playing && DEMO_VIDEO_URL ? (
-                <iframe
-                  src={`${DEMO_VIDEO_URL}?autoplay=1`}
-                  title="Démo Notaires.io"
-                  className="absolute inset-0 w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
+              {playing ? (
+                // eslint-disable-next-line jsx-a11y/media-has-caption
+                <video
+                  src={DEMO_VIDEO_SRC}
+                  className="absolute inset-0 w-full h-full bg-black"
+                  controls
+                  autoPlay
+                  playsInline
                 />
               ) : (
                 <button
                   type="button"
-                  onClick={() => DEMO_VIDEO_URL && setPlaying(true)}
+                  onClick={() => setPlaying(true)}
                   className="group absolute inset-0 w-full h-full flex flex-col items-center justify-center gap-4"
                   aria-label="Lire la vidéo de démonstration"
                 >
@@ -171,11 +171,6 @@ export default function NotairePitch() {
                   <span className="relative serif text-[20px] sm:text-[24px] font-bold text-[var(--color-text-strong)]">
                     Notaires<span className="text-[var(--color-accent)]">.io</span> en 90 secondes
                   </span>
-                  {!DEMO_VIDEO_URL && (
-                    <span className="relative text-[13px] text-[var(--color-muted)]">
-                      Vidéo en préparation — disponible très bientôt
-                    </span>
-                  )}
                 </button>
               )}
             </div>

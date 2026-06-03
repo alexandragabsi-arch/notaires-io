@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { addStoredProfile } from "@/lib/notaire-profiles";
 import {
   User,
   Mail,
@@ -47,11 +48,15 @@ export default function NotaireSignup() {
   const [adresse, setAdresse] = useState("");
   const [ville, setVille] = useState("");
   const [specs, setSpecs] = useState<string[]>([]);
+  const [langs, setLangs] = useState<string[]>([]);
 
   // Profil public
   const [photo, setPhoto] = useState<string | null>(null);
   const [bio, setBio] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
+
+  // Consentement RGPD (obligatoire pour finaliser)
+  const [accept, setAccept] = useState(false);
 
   const fullName = [prenom.trim(), nom.trim()].filter(Boolean).join(" ");
   const displayName = fullName ? `Me ${fullName}` : "Me Votre Nom";
@@ -64,6 +69,14 @@ export default function NotaireSignup() {
     );
   }
 
+  function toggleLang(l: string) {
+    setLangs((prev) =>
+      prev.includes(l) ? prev.filter((x) => x !== l) : [...prev, l],
+    );
+  }
+
+  const LANGUAGES = ["Anglais", "Espagnol", "Arabe", "Italien", "Allemand", "Portugais", "Mandarin"];
+
   function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -73,6 +86,21 @@ export default function NotaireSignup() {
   }
 
   const isLast = step === STEPS.length - 1;
+
+  function finalize() {
+    // On enregistre le profil pour qu'il apparaisse aussitôt dans l'annuaire.
+    addStoredProfile({
+      prenom,
+      nom,
+      ville,
+      etude,
+      specialties: specs,
+      languages: langs,
+      photo,
+      bio,
+    });
+    setDone(true);
+  }
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
@@ -253,6 +281,32 @@ export default function NotaireSignup() {
                           })}
                         </div>
                       </div>
+
+                      <div>
+                        <span className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-2 block">
+                          Langues parlées
+                          <span className="text-[var(--color-muted)] font-normal"> (hors français)</span>
+                        </span>
+                        <div className="flex flex-wrap gap-2">
+                          {LANGUAGES.map((l) => {
+                            const on = langs.includes(l);
+                            return (
+                              <button
+                                key={l}
+                                type="button"
+                                onClick={() => toggleLang(l)}
+                                className={`px-3.5 py-2 rounded-full text-[13px] font-semibold border transition-colors ${
+                                  on
+                                    ? "bg-[var(--color-tint-green)] text-[var(--color-success)] border-[var(--color-success)]"
+                                    : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-success)] hover:text-[var(--color-success)]"
+                                }`}
+                              >
+                                🌍 {l}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </>
                   )}
 
@@ -343,6 +397,10 @@ export default function NotaireSignup() {
                         value={specs.length ? specs.join(" · ") : "—"}
                       />
                       <Recap
+                        label="Langues"
+                        value={langs.length ? langs.join(" · ") : "Français uniquement"}
+                      />
+                      <Recap
                         label="Photo"
                         value={photo ? "Ajoutée" : "À ajouter plus tard"}
                       />
@@ -352,6 +410,34 @@ export default function NotaireSignup() {
                         bientôt — notre équipe vous contacte pour la mise en
                         ligne de votre étude.
                       </p>
+                      <label className="flex items-start gap-2.5 mt-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={accept}
+                          onChange={(e) => setAccept(e.target.checked)}
+                          className="mt-0.5 w-4 h-4 shrink-0 accent-[var(--color-accent)] cursor-pointer"
+                        />
+                        <span className="text-[13px] text-[var(--color-muted)] leading-relaxed">
+                          J'accepte les{" "}
+                          <a
+                            href="/cgu"
+                            target="_blank"
+                            className="text-[var(--color-accent)] font-semibold hover:underline"
+                          >
+                            CGU
+                          </a>{" "}
+                          et la{" "}
+                          <a
+                            href="/confidentialite"
+                            target="_blank"
+                            className="text-[var(--color-accent)] font-semibold hover:underline"
+                          >
+                            politique de confidentialité
+                          </a>
+                          , et le traitement de mes données conformément au
+                          RGPD.
+                        </span>
+                      </label>
                     </div>
                   )}
                 </motion.div>
@@ -371,8 +457,9 @@ export default function NotaireSignup() {
                 {isLast ? (
                   <button
                     type="button"
-                    onClick={() => setDone(true)}
-                    className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+                    onClick={finalize}
+                    disabled={!accept}
+                    className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                   >
                     Finaliser mon inscription
                     <Check className="w-[18px] h-[18px]" strokeWidth={2.5} />
@@ -471,18 +558,27 @@ export default function NotaireSignup() {
             <h2 className="serif text-[26px] sm:text-[30px] font-bold text-[var(--color-text-strong)] mb-3">
               Votre profil est prêt, {displayName}.
             </h2>
-            <p className="text-[var(--color-muted)] text-[15px] leading-relaxed mb-7">
-              Merci de votre confiance. L'activation de votre référencement et
-              votre espace sécurisé arrivent très bientôt — notre équipe vous
-              contacte pour la mise en ligne de votre étude.
+            <p className="text-[var(--color-muted)] text-[15px] leading-relaxed mb-7 text-justify hyphens-auto">
+              Merci de votre confiance. Votre profil apparaît dès maintenant dans
+              l'annuaire. L'activation complète de votre référencement et votre
+              espace sécurisé arrivent très bientôt — notre équipe vous contacte
+              pour la mise en ligne de votre étude.
             </p>
-            <a
-              href="/notaires"
-              className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
-            >
-              Retour à l'espace notaires
-              <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
-            </a>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href="/annuaire"
+                className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+              >
+                Voir mon profil dans l'annuaire
+                <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+              </a>
+              <a
+                href="/notaires"
+                className="inline-flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-accent)] px-4 py-3 rounded-[10px] text-[15px] font-semibold transition-colors"
+              >
+                Retour à l'espace notaires
+              </a>
+            </div>
           </motion.div>
         )}
       </div>

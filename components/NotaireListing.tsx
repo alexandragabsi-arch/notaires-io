@@ -1,13 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Search, MapPin, Star, Clock, ArrowRight, SlidersHorizontal } from "lucide-react";
-import {
-  LISTING_NOTAIRES,
-  LISTING_CITIES,
-  LISTING_SPECIALTIES,
-} from "@/lib/notaires-listing";
+import { Search, MapPin, BadgeCheck, Clock, ArrowRight, SlidersHorizontal, Sparkles, Globe } from "lucide-react";
+import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
+import type { ListingNotaire } from "@/lib/notaires-listing";
+import { getStoredProfiles } from "@/lib/notaire-profiles";
 
 const ALL = "Toutes";
 
@@ -15,21 +13,53 @@ export default function NotaireListing() {
   const [query, setQuery] = useState("");
   const [city, setCity] = useState<string>(ALL);
   const [specialty, setSpecialty] = useState<string>(ALL);
+  const [language, setLanguage] = useState<string>(ALL);
+
+  // Profils créés par les notaires (stockés côté navigateur), chargés au montage.
+  const [stored, setStored] = useState<ListingNotaire[]>([]);
+  useEffect(() => {
+    setStored(getStoredProfiles());
+  }, []);
+
+  // Annuaire complet : profils créés (récents en tête) + annuaire de référence.
+  const all = useMemo(() => [...stored, ...LISTING_NOTAIRES], [stored]);
+
+  // Villes, spécialités et langues calculées dynamiquement.
+  const cities = useMemo(
+    () => Array.from(new Set(all.map((n) => n.city))),
+    [all],
+  );
+  const specialties = useMemo(
+    () =>
+      Array.from(new Set(all.flatMap((n) => n.specialties))).sort((a, b) =>
+        a.localeCompare(b, "fr"),
+      ),
+    [all],
+  );
+  const languages = useMemo(
+    () =>
+      Array.from(new Set(all.flatMap((n) => n.languages ?? []))).sort((a, b) =>
+        a.localeCompare(b, "fr"),
+      ),
+    [all],
+  );
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return LISTING_NOTAIRES.filter((n) => {
+    return all.filter((n) => {
       const matchCity = city === ALL || n.city === city;
       const matchSpec = specialty === ALL || n.specialties.includes(specialty);
+      const matchLang = language === ALL || (n.languages ?? []).includes(language);
       const matchQuery =
         !q ||
         n.name.toLowerCase().includes(q) ||
         n.city.toLowerCase().includes(q) ||
         (n.area ?? "").toLowerCase().includes(q) ||
-        n.specialties.some((s) => s.toLowerCase().includes(q));
-      return matchCity && matchSpec && matchQuery;
+        n.specialties.some((s) => s.toLowerCase().includes(q)) ||
+        (n.languages ?? []).some((l) => l.toLowerCase().includes(q));
+      return matchCity && matchSpec && matchLang && matchQuery;
     });
-  }, [query, city, specialty]);
+  }, [all, query, city, specialty, language]);
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
@@ -79,7 +109,7 @@ export default function NotaireListing() {
               Ville
             </div>
             <div className="flex flex-wrap gap-2">
-              {[ALL, ...LISTING_CITIES].map((c) => {
+              {[ALL, ...cities].map((c) => {
                 const on = city === c;
                 return (
                   <button
@@ -100,13 +130,13 @@ export default function NotaireListing() {
           </div>
 
           {/* Filtre Spécialités */}
-          <div>
+          <div className="mb-4">
             <div className="flex items-center gap-1.5 text-[12px] font-bold tracking-[0.5px] uppercase text-[var(--color-muted)] mb-2.5">
               <SlidersHorizontal className="w-[14px] h-[14px]" strokeWidth={2} />
               Spécialité
             </div>
             <div className="flex flex-wrap gap-2">
-              {[ALL, ...LISTING_SPECIALTIES].map((s) => {
+              {[ALL, ...specialties].map((s) => {
                 const on = specialty === s;
                 return (
                   <button
@@ -125,6 +155,35 @@ export default function NotaireListing() {
               })}
             </div>
           </div>
+
+          {/* Filtre Langues */}
+          {languages.length > 0 && (
+            <div>
+              <div className="flex items-center gap-1.5 text-[12px] font-bold tracking-[0.5px] uppercase text-[var(--color-muted)] mb-2.5">
+                <Globe className="w-[14px] h-[14px]" strokeWidth={2} />
+                Langue
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {[ALL, ...languages].map((l) => {
+                  const on = language === l;
+                  return (
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={() => setLanguage(l)}
+                      className={`px-3.5 py-2 rounded-full text-[13px] font-semibold border transition-colors ${
+                        on
+                          ? "bg-[var(--color-tint-green)] text-[var(--color-success)] border-[var(--color-success)]"
+                          : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-success)] hover:text-[var(--color-success)]"
+                      }`}
+                    >
+                      {l === ALL ? "Toutes" : `🌍 ${l}`}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </motion.div>
 
         {/* Compteur */}
@@ -136,13 +195,14 @@ export default function NotaireListing() {
             {results.length > 1 ? "notaires trouvés" : "notaire trouvé"}
             {city !== ALL && ` à ${city}`}
           </div>
-          {(city !== ALL || specialty !== ALL || query) && (
+          {(city !== ALL || specialty !== ALL || language !== ALL || query) && (
             <button
               type="button"
               onClick={() => {
                 setQuery("");
                 setCity(ALL);
                 setSpecialty(ALL);
+                setLanguage(ALL);
               }}
               className="text-[13px] font-semibold text-[var(--color-accent)] hover:underline"
             >
@@ -163,20 +223,39 @@ export default function NotaireListing() {
                 className="bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-[var(--shadow-card)] p-5 flex flex-col"
               >
                 <div className="flex items-center gap-3.5 mb-4">
-                  <div
-                    className={`w-12 h-12 rounded-full text-white flex items-center justify-center font-bold text-[14px] shrink-0 ${
-                      n.color === "green"
-                        ? "bg-gradient-green"
-                        : n.color === "purple"
-                          ? "bg-gradient-to-br from-purple-500 to-purple-700"
-                          : "bg-gradient-cta"
-                    }`}
-                  >
-                    {n.initials}
-                  </div>
+                  {n.photo ? (
+                    <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 bg-[var(--color-tint-blue)]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={n.photo}
+                        alt={`Photo de ${n.name}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className={`w-12 h-12 rounded-full text-white flex items-center justify-center font-bold text-[14px] shrink-0 ${
+                        n.color === "green"
+                          ? "bg-gradient-green"
+                          : n.color === "purple"
+                            ? "bg-gradient-to-br from-purple-500 to-purple-700"
+                            : "bg-gradient-cta"
+                      }`}
+                    >
+                      {n.initials}
+                    </div>
+                  )}
                   <div className="min-w-0">
-                    <div className="font-bold text-[16px] text-[var(--color-text-strong)] truncate">
-                      {n.name}
+                    <div className="flex items-center gap-1.5">
+                      <div className="font-bold text-[16px] text-[var(--color-text-strong)] truncate">
+                        {n.name}
+                      </div>
+                      {n.isNew && (
+                        <span className="inline-flex items-center gap-1 shrink-0 px-2 py-0.5 rounded-full text-[11px] font-bold bg-[var(--color-tint-green)] text-[var(--color-success)]">
+                          <Sparkles className="w-3 h-3" strokeWidth={2.5} />
+                          Nouveau
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center gap-1 text-[13px] text-[var(--color-muted)]">
                       <MapPin
@@ -198,20 +277,29 @@ export default function NotaireListing() {
                       {s}
                     </span>
                   ))}
+                  {(n.languages ?? []).map((l) => (
+                    <span
+                      key={l}
+                      className="px-2.5 py-1 rounded-full text-[12px] font-semibold bg-[var(--color-tint-green)] text-[var(--color-success)] flex items-center gap-1"
+                    >
+                      <Globe className="w-[11px] h-[11px]" strokeWidth={2.5} />
+                      {l}
+                    </span>
+                  ))}
                 </div>
 
-                <div className="flex items-center gap-4 text-[13px] text-[var(--color-muted)] mb-4">
-                  <span className="flex items-center gap-1">
-                    <Star
-                      className="w-[14px] h-[14px] text-[var(--color-accent)]"
-                      strokeWidth={2}
-                      fill="currentColor"
-                    />
-                    <span className="font-bold text-[var(--color-text-strong)]">
-                      {n.rating}
+                <div className="flex items-center gap-4 text-[13px] mb-4">
+                  {n.isNew ? (
+                    <span className="flex items-center gap-1 text-[var(--color-muted)] italic">
+                      <Sparkles className="w-[13px] h-[13px]" strokeWidth={2} />
+                      Profil récent
                     </span>
-                    ({n.count} avis)
-                  </span>
+                  ) : (
+                    <span className="flex items-center gap-1 text-[var(--color-success)] font-semibold">
+                      <BadgeCheck className="w-[15px] h-[15px]" strokeWidth={2} />
+                      Notaire vérifié
+                    </span>
+                  )}
                   <span className="flex items-center gap-1 text-[var(--color-success)] font-medium">
                     <Clock className="w-[14px] h-[14px]" strokeWidth={2} />
                     {n.next}

@@ -64,7 +64,7 @@ export default function HowItWorks() {
               <h3 className="font-bold text-[18px] text-[var(--color-text-strong)] mb-2">
                 {s.title}
               </h3>
-              <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">
+              <p className="text-[var(--color-muted)] text-[15px] leading-relaxed text-justify hyphens-auto">
                 {s.desc}
               </p>
             </motion.div>

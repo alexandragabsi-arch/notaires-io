@@ -41,6 +41,7 @@ export default function Wizard() {
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [mode, setMode] = useState<"office" | "video">("office");
   const [modalOpen, setModalOpen] = useState(false);
+  const [bookAccept, setBookAccept] = useState(false);
 
   function answerQ1(id: BranchId) {
     setQ1(id);
@@ -75,6 +76,7 @@ export default function Wizard() {
     setCurrentNotary(n);
     setSelectedSlot(null);
     setMode("office");
+    setBookAccept(false);
     setModalOpen(true);
   }
 
@@ -423,10 +425,9 @@ export default function Wizard() {
                     </div>
                     <div className="text-xs text-[var(--color-muted)] flex gap-2.5 mt-0.5">
                       <span>{n.city}</span>
-                      <span className="text-[var(--color-accent)] font-bold">
-                        ★ {n.rating}
+                      <span className="text-emerald-600 font-semibold flex items-center gap-0.5">
+                        ✓ Notaire vérifié
                       </span>
-                      <span>{n.count} avis</span>
                     </div>
                     <div className="text-xs text-emerald-600 font-medium mt-1">
                       ⏱ {n.next}
@@ -472,7 +473,7 @@ export default function Wizard() {
             <div className="text-left bg-[var(--color-tint-blue)] rounded-xl px-4 py-3.5 mb-4 text-xs text-[var(--color-muted)] leading-relaxed flex flex-col gap-1.5">
               <span>📧 Email de confirmation envoyé</span>
               <span>📋 Pré-dossier transmis au notaire</span>
-              <span>💰 Devis estimé inclus</span>
+              <span className="font-semibold text-[var(--color-success)]">🎁 1er RDV offert — limité à 30 minutes</span>
               <span className="flex items-start gap-1.5 text-[var(--color-accent)] font-semibold">
                 <Bell className="w-3.5 h-3.5 shrink-0 mt-px" strokeWidth={2.5} />
                 Rappels e-mail : la veille et 2h avant le RDV
@@ -509,9 +510,12 @@ export default function Wizard() {
               <h2 className="serif text-[26px] font-bold mb-1.5 text-[var(--color-text-strong)] tracking-tight">
                 {currentNotary.name}
               </h2>
-              <p className="text-[var(--color-muted)] text-sm mb-5">
+              <p className="text-[var(--color-muted)] text-sm mb-3">
                 {currentNotary.city} · Choisissez votre créneau
               </p>
+              <div className="bg-[var(--color-tint-green)] text-emerald-700 text-[12px] font-semibold rounded-[10px] px-3.5 py-2 mb-4 flex items-center gap-1.5">
+                🎁 Premier rendez-vous offert — limité à 30 minutes
+              </div>
               <div className="flex gap-2 mb-4">
                 <button
                   onClick={() => setMode("office")}
@@ -569,6 +573,26 @@ export default function Wizard() {
                   </button>
                 ))}
               </div>
+              <label className="flex items-start gap-2.5 mb-4 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={bookAccept}
+                  onChange={(e) => setBookAccept(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 shrink-0 accent-[var(--color-primary)] cursor-pointer"
+                />
+                <span className="text-[12px] text-[var(--color-muted)] leading-relaxed">
+                  J'accepte que mes informations soient transmises au notaire
+                  pour préparer ce rendez-vous, conformément à la{" "}
+                  <a
+                    href="/confidentialite"
+                    target="_blank"
+                    className="text-[var(--color-accent)] font-semibold hover:underline"
+                  >
+                    politique de confidentialité
+                  </a>
+                  .
+                </span>
+              </label>
               <div className="flex gap-2.5">
                 <button
                   onClick={() => setModalOpen(false)}
@@ -580,7 +604,7 @@ export default function Wizard() {
                   whileHover={{ y: -1, filter: "brightness(1.05)" }}
                   whileTap={{ scale: 0.98 }}
                   onClick={confirmBooking}
-                  disabled={!selectedSlot}
+                  disabled={!selectedSlot || !bookAccept}
                   className="flex-1 bg-gradient-cta text-white border-none px-5 py-3.5 rounded-xl text-sm font-semibold shadow-[var(--shadow-cta)] disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
                   Confirmer le RDV

@@ -240,8 +240,6 @@ export interface Notaire {
   color: "default" | "green" | "purple";
   name: string;
   city: string;
-  rating: number;
-  count: number;
   next: string;
 }
 
@@ -251,8 +249,6 @@ export const NOTAIRES: Notaire[] = [
     color: "default",
     name: "Me Amélie Martin",
     city: "Paris 8ème",
-    rating: 4.9,
-    count: 142,
     next: "Demain 14h30",
   },
   {
@@ -260,8 +256,6 @@ export const NOTAIRES: Notaire[] = [
     color: "purple",
     name: "Me Charles Delaunay",
     city: "Paris 8ème",
-    rating: 4.8,
-    count: 98,
     next: "Demain 16h00",
   },
   {
@@ -269,8 +263,6 @@ export const NOTAIRES: Notaire[] = [
     color: "green",
     name: "Me Sophie Pellerin",
     city: "Paris 9ème",
-    rating: 4.9,
-    count: 211,
     next: "Vendredi 10h00",
   },
   {
@@ -278,8 +270,6 @@ export const NOTAIRES: Notaire[] = [
     color: "default",
     name: "Me Jean Beaumont",
     city: "Paris 17ème",
-    rating: 4.7,
-    count: 76,
     next: "Lundi 11h00",
   },
 ];

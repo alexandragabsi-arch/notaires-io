@@ -114,7 +114,7 @@ export default function NotaireDashboard() {
           <h2 className="serif text-[28px] sm:text-[34px] lg:text-[40px] font-bold leading-[1.15] text-[var(--color-text-strong)] tracking-tight text-balance">
             Tous vos rendez-vous, au même endroit.
           </h2>
-          <p className="text-[var(--color-muted)] text-[16px] max-w-[600px] mx-auto mt-4 leading-relaxed">
+          <p className="text-[var(--color-muted)] text-[16px] max-w-[600px] mx-auto mt-4 leading-relaxed text-justify hyphens-auto">
             Suivez vos rendez-vous à venir d'un coup d'œil. Vos clients reçoivent
             un rappel automatique par e-mail — la veille et 2 heures avant — pour
             ne plus jamais manquer un rendez-vous.

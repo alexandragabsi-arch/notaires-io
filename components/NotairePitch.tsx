@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Video,
   QrCode,
@@ -12,6 +13,7 @@ import {
   Layers,
 } from "lucide-react";
 import QRCard from "@/components/QRCard";
+import CardDesigner from "@/components/CardDesigner";
 import NotaireDashboard from "@/components/NotaireDashboard";
 import NotaireBilling from "@/components/NotaireBilling";
 import FAQ from "@/components/FAQ";
@@ -68,6 +70,7 @@ const reasons = [
 ];
 
 export default function NotairePitch() {
+  const [cartesOpen, setCartesOpen] = useState(false);
 
   return (
     <>
@@ -262,18 +265,41 @@ export default function NotairePitch() {
                     Premium dès <strong className="text-[var(--color-text-strong)]">65 €</strong>
                   </span>
                 </div>
-                <a
-                  href="/notaires/cartes"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCartesOpen(true);
+                    setTimeout(() => {
+                      document.getElementById("cartes-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 80);
+                  }}
                   className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
                 >
                   Commander mes cartes
                   <ArrowRight className="w-[17px] h-[17px]" strokeWidth={2.5} />
-                </a>
+                </button>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
+
+      {/* CardDesigner — révélé au clic sur "Commander mes cartes" */}
+      <AnimatePresence>
+        {cartesOpen && (
+          <motion.div
+            id="cartes-form"
+            key="cartes-form"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="overflow-hidden"
+          >
+            <CardDesigner />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Tableau de bord des rendez-vous + rappels e-mail */}
       <NotaireDashboard />

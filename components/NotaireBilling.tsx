@@ -30,11 +30,7 @@ const DOSSIERS = [
   "Conseil juridique",
 ];
 
-const TARIF_TYPES = [
-  { id: "forfait", label: "Forfait global", desc: "Montant fixe pour l'ensemble de la mission" },
-  { id: "temps", label: "Temps passé", desc: "Taux horaire × heures estimées" },
-  { id: "acte", label: "Selon acte", desc: "Tarif réglementé applicable à l'acte" },
-];
+// Notaires : tarif réglementé uniquement (barème légal — décret n° 2020-179)
 
 type PropStatus = "brouillon" | "envoyee" | "acceptee" | "refusee";
 
@@ -63,9 +59,9 @@ const STEPS: { id: Status; label: string }[] = [
 
 /* ─── Abonnement Notaires.io ────────────────────────────────────────────────── */
 const INVOICES = [
-  { id: "2026-05", label: "Mai 2026", amount: "149,00 €", state: "Payée" },
-  { id: "2026-04", label: "Avril 2026", amount: "149,00 €", state: "Payée" },
-  { id: "2026-03", label: "Mars 2026", amount: "149,00 €", state: "Payée" },
+  { id: "2026-05", label: "Mai 2026", amount: "129,00 €", state: "Payée" },
+  { id: "2026-04", label: "Avril 2026", amount: "129,00 €", state: "Payée" },
+  { id: "2026-03", label: "Mars 2026", amount: "129,00 €", state: "Payée" },
 ];
 
 /* ─── Composants partagés ───────────────────────────────────────────────────── */
@@ -131,7 +127,6 @@ export default function NotaireBilling() {
   /* État — Proposition d'honoraires */
   const [pClient, setPClient] = useState("");
   const [pDossier, setPDossier] = useState(DOSSIERS[0]);
-  const [pTarif, setPTarif] = useState<"forfait" | "temps" | "acte">("forfait");
   const [pMontant, setPMontant] = useState("");
   const [pConditions, setPConditions] = useState("");
   const [propStatus, setPropStatus] = useState<PropStatus>("brouillon");
@@ -264,38 +259,15 @@ export default function NotaireBilling() {
                 </label>
 
                 <div>
-                  <span className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-2 block">Type de tarification</span>
-                  <div className="flex flex-col gap-2">
-                    {TARIF_TYPES.map((t) => (
-                      <button
-                        key={t.id}
-                        type="button"
-                        onClick={() => pEdit(setPTarif)(t.id as typeof pTarif)}
-                        className={`flex items-start gap-3 rounded-[10px] border px-3.5 py-2.5 text-left transition-colors ${
-                          pTarif === t.id
-                            ? "border-[var(--color-accent)] bg-[var(--color-accent-soft)]"
-                            : "border-[var(--color-border)] bg-white hover:border-[var(--color-accent)]"
-                        }`}
-                      >
-                        <span
-                          className={`mt-0.5 w-4 h-4 shrink-0 rounded-full border-2 flex items-center justify-center ${
-                            pTarif === t.id ? "border-[var(--color-accent)]" : "border-[var(--color-border)]"
-                          }`}
-                        >
-                          {pTarif === t.id && (
-                            <span className="w-2 h-2 rounded-full bg-[var(--color-accent)] block" />
-                          )}
-                        </span>
-                        <span>
-                          <span className="block text-[13px] font-semibold text-[var(--color-text-strong)]">
-                            {t.label}
-                          </span>
-                          <span className="block text-[12px] text-[var(--color-muted)]">
-                            {t.desc}
-                          </span>
-                        </span>
-                      </button>
-                    ))}
+                  <span className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-2 block">Tarification</span>
+                  <div className="flex items-center gap-2.5 bg-[var(--color-tint-blue)] border border-[var(--color-border-soft)] rounded-[10px] px-3.5 py-2.5">
+                    <span className="text-[16px]">⚖️</span>
+                    <span className="text-[13px] text-[var(--color-text-strong)]">
+                      <strong>Tarif réglementé</strong>
+                      <span className="block text-[12px] text-[var(--color-muted)] font-normal mt-0.5">
+                        Barème légal applicable à l'acte (décret n° 2020-179)
+                      </span>
+                    </span>
                   </div>
                 </div>
 
@@ -361,7 +333,7 @@ export default function NotaireBilling() {
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[13px] text-[var(--color-muted)]">Tarification</span>
                       <span className="text-[13px] font-semibold text-[var(--color-text-strong)] text-right">
-                        {TARIF_TYPES.find((t) => t.id === pTarif)?.label}
+                        Tarif réglementé
                       </span>
                     </div>
                     {pConditions.trim() && (

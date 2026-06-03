@@ -19,6 +19,13 @@ export const Q1_OPTIONS: Q1Option[] = [
     tint: "blue",
   },
   {
+    id: "offre",
+    icon: "✍️",
+    label: "Rédiger une offre rapidement",
+    desc: "Sécuriser une offre d'achat ou de vente avant la signature du compromis",
+    tint: "blue",
+  },
+  {
     id: "famille",
     icon: "👨‍👩‍👧",
     label: "Un événement dans ma famille",
@@ -43,7 +50,7 @@ export const Q1_OPTIONS: Q1Option[] = [
     id: "idk",
     icon: "💬",
     label: "Autre situation ou besoin d'orientation",
-    desc: "Décrivez votre projet lors du RDV — le notaire vous guidera",
+    desc: "Décrivez votre situation en quelques mots — on s'occupe du reste",
     tint: "rose",
   },
 ];
@@ -76,25 +83,25 @@ export const Q2_TREE: Record<string, Q2Tree> = {
         id: "achat",
         icon: "🔑",
         label: "J'achète un bien",
-        desc: "J'ai trouvé un bien et je dois signer un compromis ou l'acte définitif",
+        desc: "J'ai trouvé un bien et je dois signer le compromis ou l'acte de vente final",
       },
       {
         id: "transmission",
         icon: "🎁",
         label: "Je transmets à un proche",
-        desc: "Donation d'un bien, démembrement, passage de patrimoine en famille",
+        desc: "Donner un bien à un enfant ou conjoint, ou organiser votre succession",
       },
       {
         id: "litige",
         icon: "⚖️",
-        label: "Je gère une indivision ou un conflit",
-        desc: "Bien en copropriété familiale, désaccord entre héritiers ou copropriétaires",
+        label: "Un bien détenu à plusieurs",
+        desc: "Bien partagé entre héritiers ou copropriétaires, désaccord à régler",
       },
     ],
   },
   offre: {
     title: "Votre offre concerne…",
-    subtitle: "On vous oriente vers le bon notaire rédacteur.",
+    subtitle: "On vous oriente vers le bon notaire pour votre situation.",
     options: [
       {
         id: "achat",
@@ -124,7 +131,7 @@ export const Q2_TREE: Record<string, Q2Tree> = {
         id: "mariage",
         icon: "💍",
         label: "Je me marie ou me pacse",
-        desc: "Contrat de mariage, choix du régime matrimonial ou convention de PACS",
+        desc: "Contrat de mariage, règles sur les biens communs ou convention de PACS",
       },
       {
         id: "separation",
@@ -148,25 +155,25 @@ export const Q2_TREE: Record<string, Q2Tree> = {
         id: "creation",
         icon: "🚀",
         label: "Je crée ma société",
-        desc: "SAS, SARL, SCI, holding — rédaction des statuts et acte de constitution",
+        desc: "SAS, SARL, SCI, holding — rédaction des statuts et création officielle",
       },
       {
         id: "cession",
         icon: "🤝",
         label: "Je vends ou je rachète",
-        desc: "Cession de parts sociales ou vente d'un fonds de commerce",
+        desc: "Vente ou rachat de parts de société ou d'un commerce",
       },
       {
         id: "modification",
         icon: "✏️",
         label: "Je modifie mes statuts",
-        desc: "Changement de dirigeant, d'adresse, d'objet social ou de capital",
+        desc: "Changement de dirigeant, d'adresse ou de règles internes",
       },
       {
         id: "dissolution",
         icon: "📕",
         label: "Je ferme ma société",
-        desc: "Dissolution amiable, liquidation et partage des actifs",
+        desc: "Fermeture officielle, clôture des comptes et partage des actifs",
       },
     ],
   },
@@ -339,12 +346,12 @@ export const ENRICH: Record<string, EnrichQuestion[]> = {
     },
     {
       id: "reg",
-      label: "Quel régime vous attire ?",
+      label: "Comment souhaitez-vous gérer vos biens ?",
       options: [
-        "Tout mettre en commun (communauté)",
+        "Tout mettre en commun",
         "Garder nos biens séparés",
-        "Un mix des deux",
-        "Je veux qu'on m'explique les options",
+        "En partie communs, en partie séparés",
+        "Je ne sais pas encore, besoin d'explications",
       ],
     },
     {
@@ -360,19 +367,23 @@ export const ENRICH: Record<string, EnrichQuestion[]> = {
   ],
   "famille:separation": [
     {
-      id: "reg",
-      label: "Votre régime matrimonial ?",
+      id: "contrat",
+      label: "Avez-vous signé un contrat de mariage avant votre union ?",
       options: [
-        "Tout en commun (communauté)",
-        "Biens séparés",
-        "Je ne sais pas",
-        "Autre",
+        "Oui, nous avons un contrat de mariage",
+        "Non, pas de contrat (règles standard s'appliquent)",
+        "Je ne sais pas / pas sûr·e",
       ],
     },
     {
-      id: "immo",
-      label: "Avez-vous un bien immobilier en commun ?",
-      options: ["Oui", "Non"],
+      id: "biens",
+      label: "Avez-vous acheté ensemble des biens ?",
+      options: [
+        "Oui, un bien immobilier",
+        "Oui, d'autres biens (voiture, épargne…)",
+        "Oui, plusieurs types de biens",
+        "Non, rien en commun",
+      ],
     },
     {
       id: "enf",
@@ -394,14 +405,14 @@ export const ENRICH: Record<string, EnrichQuestion[]> = {
     {
       id: "type",
       label: "Qu'est-ce que vous voulez donner ?",
-      options: ["De l'argent (liquidités)", "Un bien immobilier", "Des placements ou titres", "Un mix des deux"],
+      options: ["De l'argent (virement ou espèces)", "Un bien immobilier", "Des placements ou actions", "Un peu des deux"],
     },
   ],
   "societe:creation": [
     {
       id: "act",
       label: "Quel type d'activité ?",
-      options: ["Commerciale (SAS, SARL…)", "Civile (SCP, SCI…)", "Holding (groupe de sociétés)", "Immobilière (SCI familiale)"],
+      options: ["Commerciale (SAS, SARL…)", "Civile ou professionnelle (SCI, SCP…)", "Holding (société mère d'un groupe)", "Immobilière familiale (SCI)"],
     },
     {
       id: "nb",

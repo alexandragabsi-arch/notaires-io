@@ -10,7 +10,6 @@ import {
   NOTAIRES,
   SLOTS,
   getSpecialty,
-  getEstim,
   type BranchId,
   type Notaire,
 } from "@/lib/wizard-data";
@@ -307,14 +306,14 @@ export default function Wizard() {
               Décrivez votre <span className="serif-accent">situation</span>
             </h2>
             <p className="text-sm text-[var(--color-muted)] mb-4">
-              En quelques mots, expliquez votre projet. L'IA identifie
-              le bon notaire et la bonne spécialité pour vous.
+              En quelques mots, expliquez votre situation. On identifie
+              automatiquement quel type de notaire peut vous aider.
             </p>
 
             <textarea
               value={describe}
               onChange={(e) => { setDescribe(e.target.value); setDetectResult(null); setDetectError(""); }}
-              placeholder="Ex : Mon père est décédé en mars et nous sommes 3 frères à hériter d'un appartement à Paris…"
+              placeholder="Ex : Mon père est décédé en mars et nous sommes 3 à hériter d'un appartement à Paris. On ne sait pas par où commencer…"
               rows={4}
               className="w-full px-4 py-3 rounded-xl border-[1.5px] border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition resize-none mb-3"
             />
@@ -358,7 +357,7 @@ export default function Wizard() {
                 ) : (
                   <>
                     <Sparkles className="w-4 h-4" strokeWidth={2.5} />
-                    Détecter mon type de dossier
+                    Identifier mon besoin
                   </>
                 )}
               </motion.button>
@@ -555,16 +554,15 @@ export default function Wizard() {
                 <span>4 notaires disponibles près du {postal}</span>
                 {Object.keys(enrich).length > 0 && (
                   <span className="bg-[var(--color-tint-green)] text-emerald-800 px-2 py-0.5 rounded-full text-[10px] font-semibold">
-                    📋 Pré-dossier prêt
+                    📋 Informations transmises
                   </span>
                 )}
               </div>
             </motion.div>
             <div className="flex items-center gap-2 bg-[var(--color-tint-mint)] border border-teal-200 rounded-xl px-3.5 py-3 mb-4 text-xs">
               <span className="text-emerald-800 font-semibold">
-                💰 Honoraires estimés :
+                📋 Les honoraires (tarifs) vous seront communiqués par le notaire lors de votre premier rendez-vous
               </span>
-              <span className="text-emerald-800 font-bold">{getEstim(q1, q2)}</span>
             </div>
             <div className="flex flex-col gap-2.5">
               {NOTAIRES.map((n, i) => (
@@ -639,7 +637,7 @@ export default function Wizard() {
             </p>
             <div className="text-left bg-[var(--color-tint-blue)] rounded-xl px-4 py-3.5 mb-4 text-xs text-[var(--color-muted)] leading-relaxed flex flex-col gap-1.5">
               <span>📧 Email de confirmation envoyé</span>
-              <span>📋 Pré-dossier transmis au notaire</span>
+              <span>📋 Vos réponses transmises au notaire pour préparer le RDV</span>
               <span className="font-semibold text-[var(--color-success)]">🎁 1er RDV offert — limité à 30 minutes</span>
               <span className="flex items-start gap-1.5 text-[var(--color-accent)] font-semibold">
                 <Bell className="w-3.5 h-3.5 shrink-0 mt-px" strokeWidth={2.5} />

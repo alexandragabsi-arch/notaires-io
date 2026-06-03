@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { ChevronLeft, ChevronRight, MapPin, Phone } from "lucide-react";
 import type { ListingNotaire } from "@/lib/notaires-listing";
+import NearYou from "./NearYou";
 
 interface Props {
   h1: string;
@@ -232,12 +233,15 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
           <p className="text-[var(--color-muted)] text-lg leading-relaxed mb-8 max-w-[640px] mx-auto">
             {intro}
           </p>
-          <a
-            href="/#hero"
-            className="inline-block bg-gradient-cta text-white font-bold px-8 py-3.5 rounded-xl shadow-[var(--shadow-cta)] hover:shadow-[var(--shadow-cta-hover)] transition-all text-[15px]"
-          >
-            Prendre rendez-vous
-          </a>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="/#hero"
+              className="inline-block bg-gradient-cta text-white font-bold px-8 py-3.5 rounded-xl shadow-[var(--shadow-cta)] hover:shadow-[var(--shadow-cta-hover)] transition-all text-[15px]"
+            >
+              Prendre rendez-vous
+            </a>
+            <NearYou />
+          </div>
         </div>
       </section>
 

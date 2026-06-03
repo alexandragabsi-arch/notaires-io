@@ -2,50 +2,12 @@
 /**
  * enrich-arrondissements.mjs
  * Enrichit notaires-membres.json avec les codes postaux (arrondissements)
- * pour Paris (750xx), Lyon (690xx) et Marseille (130xx)
+ * pour Paris (750xx / 75116), Lyon (690xx) et Marseille (130xx)
+ * Source : recherche-entreprises.api.gouv.fr (données gouvernementales, sans clé)
  * Usage: node scripts/enrich-arrondissements.mjs
  */
 
 import { readFileSync, writeFileSync } from "fs";
-
-function decodeField(raw) {
-  const decoded = raw
-    .replace(/\\\\\\u0022/g, '\\"')
-    .replace(/\\\\u0022/g, '\\\\"')
-    .replace(/\\u0022/g, '"')
-    .replace(/\\u003C/g, '<')
-    .replace(/\\u003E/g, '>')
-    .replace(/\\u0026/g, '&')
-    .replace(/\\u00[0-9a-fA-F]{2}/g, m => String.fromCharCode(parseInt(m.slice(2), 16)))
-    .replace(/\\\//g, '/');
-  const lastBracket = decoded.lastIndexOf(']');
-  if (lastBracket === -1) return [];
-  try { return JSON.parse(decoded.substring(0, lastBracket + 1)); } catch { return []; }
-}
-
-async function getPostalCode(officeUrl) {
-  try {
-    const res = await fetch(officeUrl, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-        "Accept": "text/html,application/xhtml+xml",
-        "Accept-Language": "fr-FR,fr;q=0.9",
-      }
-    });
-    if (!res.ok) return null;
-    const html = await res.text();
-
-    // Extraire le postalCode depuis le member JSON
-    const memberMatch = html.match(/"member":\s*"(\[[\s\S]*?)"\s*[,}]/);
-    if (!memberMatch) return null;
-    const members = decodeField(memberMatch[1]);
-    if (!members.length) return null;
-    const first = members[0]?.item ?? members[0];
-    return (first?.adress?.postalCode ?? first?.address?.postalCode ?? null);
-  } catch {
-    return null;
-  }
-}
 
 function postalToArrondissement(postal) {
   if (!postal) return null;
@@ -54,6 +16,10 @@ function postalToArrondissement(postal) {
   if (/^750\d\d$/.test(code)) {
     const n = parseInt(code.slice(3), 10);
     if (n >= 1 && n <= 20) return { city: "Paris", num: n, label: n === 1 ? "1er" : `${n}ème`, slug: `${n}${n === 1 ? "er" : "eme"}` };
+  }
+  // 75116 = Paris 16ème (arrondissement de Passy)
+  if (code === "75116") {
+    return { city: "Paris", num: 16, label: "16ème", slug: "16eme" };
   }
   // Lyon: 69001-69009 → 1er-9ème
   if (/^690\d\d$/.test(code)) {
@@ -70,43 +36,69 @@ function postalToArrondissement(postal) {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+/**
+ * Cherche une étude notariale via l'API gouvernementale.
+ * NAF 69.10Z = Activités juridiques (inclut les notaires)
+ */
+async function lookupPostalCode(officeName, dept) {
+  try {
+    const q = encodeURIComponent(officeName.replace(/SELARL?\s+/i, "").replace(/SELAS?\s+/i, "").trim());
+    const url = `https://recherche-entreprises.api.gouv.fr/search?q=${q}&departement=${dept}&activite_principale=69.10Z&page=1&per_page=5`;
+    const res = await fetch(url, {
+      headers: { "User-Agent": "notaires.io/1.0 (enrichissement données)" },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const results = data.results ?? [];
+    if (!results.length) return null;
+
+    // Cherche le meilleur résultat : nom le plus proche + bonne ville
+    for (const r of results) {
+      const siege = r.siege ?? {};
+      const postal = siege.code_postal ?? null;
+      if (postal) return postal;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 async function main() {
-  console.log("📍 Enrichissement des arrondissements\n");
+  console.log("📍 Enrichissement des arrondissements (API gouvernementale)\n");
 
   const notaires = JSON.parse(readFileSync("data/notaires-membres.json", "utf-8"));
-  const offices = JSON.parse(readFileSync("data/notaires-france.json", "utf-8"));
 
-  // Index offices par website URL
-  const officeMap = new Map(offices.map(o => [o.website, o]));
+  const cityToDept = { "Paris": "75", "Lyon": "69", "Marseille": "13" };
+  const targetCities = new Set(Object.keys(cityToDept));
 
-  // Grouper les notaires par office (même website)
+  // Grouper par office (website) pour ne faire qu'une requête par étude
   const officeGroups = new Map();
   for (const n of notaires) {
-    if (!n.website) continue;
+    if (!n.website || !targetCities.has(n.city)) continue;
     if (!officeGroups.has(n.website)) officeGroups.set(n.website, []);
     officeGroups.get(n.website).push(n);
   }
 
-  // Filtrer les offices Paris/Lyon/Marseille
-  const targetCities = new Set(["Paris", "Lyon", "Marseille"]);
-  const targetOffices = [...officeGroups.entries()].filter(([url, ns]) =>
-    ns.some(n => targetCities.has(n.city))
-  );
+  const targetOffices = [...officeGroups.entries()];
+  console.log(`Offices à enrichir : ${targetOffices.length}\n`);
 
-  console.log(`Offices à enrichir : ${targetOffices.length}`);
-
-  // Cache postal code par office
   const postalCache = new Map();
   let done = 0;
 
   for (const [url, ns] of targetOffices) {
     done++;
-    process.stdout.write(`[${done}/${targetOffices.length}] `);
-    const postal = await getPostalCode(url);
+    const city = ns[0].city;
+    const officeName = ns[0].officeName ?? "";
+    const dept = cityToDept[city];
+    process.stdout.write(`[${done}/${targetOffices.length}] ${city} — ${officeName.substring(0, 40)}… `);
+
+    const postal = await lookupPostalCode(officeName, dept);
     postalCache.set(url, postal);
     const arr = postalToArrondissement(postal);
-    process.stdout.write(`${ns[0]?.city} — ${arr?.label ?? postal ?? 'N/A'}\n`);
-    await sleep(300);
+    process.stdout.write(`${arr?.label ?? postal ?? 'N/A'}\n`);
+
+    await sleep(150); // 150ms entre requêtes (API limite ~10 req/s)
   }
 
   // Appliquer les codes postaux
@@ -127,14 +119,14 @@ async function main() {
   writeFileSync("data/notaires-membres.json", JSON.stringify(notaires, null, 2));
   console.log(`\n✅ ${enriched} notaires enrichis avec leur arrondissement`);
 
-  // Stats
+  // Stats par arrondissement
   const byArr = {};
   for (const n of notaires) {
     if (!n.arrondissementLabel) continue;
     const key = `${n.city} ${n.arrondissementLabel}`;
     byArr[key] = (byArr[key] || 0) + 1;
   }
-  Object.entries(byArr).sort((a,b) => a[0].localeCompare(b[0]))
+  Object.entries(byArr).sort((a, b) => a[0].localeCompare(b[0]))
     .forEach(([k, v]) => console.log(`  ${k}: ${v} notaires`));
 }
 

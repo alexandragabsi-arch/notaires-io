@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import Wizard from "./Wizard";
+import NearYou from "./NearYou";
 
 const benefits = [
   "Spécialité garantie (succession, immobilier, famille, société)",
@@ -83,7 +84,7 @@ export default function Hero() {
 
             <motion.div
               variants={item}
-              className="grid grid-cols-3 gap-4 max-w-[420px]"
+              className="grid grid-cols-3 gap-4 max-w-[420px] mb-6"
             >
               {trust.map(([num, label]) => (
                 <div key={label} className="text-[13px] text-[var(--color-muted)]">
@@ -93,6 +94,10 @@ export default function Hero() {
                   {label}
                 </div>
               ))}
+            </motion.div>
+
+            <motion.div variants={item}>
+              <NearYou />
             </motion.div>
           </motion.div>
 

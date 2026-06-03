@@ -215,12 +215,13 @@ export default function NotaireListing() {
         {results.length > 0 ? (
           <div className="grid sm:grid-cols-2 gap-4">
             {results.map((n, i) => (
-              <motion.div
+              <motion.a
                 key={n.id}
+                href={`/notaires/${n.id}`}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.3) }}
-                className="bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-[var(--shadow-card)] p-5 flex flex-col"
+                className="bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-[var(--shadow-card)] p-5 flex flex-col cursor-pointer hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-strong)] transition-all"
               >
                 <div className="flex items-center gap-3.5 mb-4">
                   {n.photo ? (
@@ -306,14 +307,11 @@ export default function NotaireListing() {
                   </span>
                 </div>
 
-                <a
-                  href="/#hero"
-                  className="mt-auto inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-5 py-2.5 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
-                >
-                  Prendre rendez-vous
+                <div className="mt-auto inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-5 py-2.5 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)]">
+                  Voir le profil
                   <ArrowRight className="w-[16px] h-[16px]" strokeWidth={2.5} />
-                </a>
-              </motion.div>
+                </div>
+              </motion.a>
             ))}
           </div>
         ) : (

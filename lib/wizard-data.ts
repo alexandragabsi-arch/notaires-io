@@ -14,43 +14,36 @@ export const Q1_OPTIONS: Q1Option[] = [
   {
     id: "immo",
     icon: "🏠",
-    label: "Un bien immobilier",
-    desc: "Vente, achat, donation d'un bien",
+    label: "J'ai un projet immobilier",
+    desc: "Acheter, vendre ou transmettre un appartement, une maison ou un terrain",
     tint: "blue",
-  },
-  {
-    id: "offre",
-    icon: "📝",
-    label: "Rédiger une offre de vente ou d'achat",
-    desc: "Offre d'achat, promesse, compromis",
-    tint: "rose",
   },
   {
     id: "famille",
     icon: "👨‍👩‍👧",
-    label: "Ma famille",
-    desc: "Succession, mariage, divorce, donation",
+    label: "Un événement dans ma famille",
+    desc: "Héritage, mariage, PACS, divorce ou donation à un proche",
     tint: "purple",
   },
   {
     id: "societe",
     icon: "💼",
-    label: "Mon entreprise",
-    desc: "Création, cession, statuts",
+    label: "Ma société ou mon entreprise",
+    desc: "Créer une société, vendre des parts, modifier les statuts",
     tint: "green",
   },
   {
     id: "document",
     icon: "📜",
-    label: "Un document",
-    desc: "Authentifier, certifier",
+    label: "Faire certifier un document",
+    desc: "Procuration, légalisation de signature, authentification d'un acte",
     tint: "warm",
   },
   {
     id: "idk",
     icon: "❓",
-    label: "Je ne sais pas exactement",
-    desc: "On vous guide",
+    label: "Je ne sais pas encore",
+    desc: "On vous guide en quelques questions — sans jargon",
     tint: "rose",
   },
 ];
@@ -70,46 +63,111 @@ export interface Q2Tree {
 
 export const Q2_TREE: Record<string, Q2Tree> = {
   immo: {
-    title: "Quelle est votre situation ?",
-    subtitle: "On affine pour vous orienter.",
+    title: "C'est pour acheter ou vendre ?",
+    subtitle: "Dites-nous en un mot où vous en êtes.",
     options: [
-      { id: "vente", icon: "🏷️", label: "Je vends", desc: "Mon bien est à la vente" },
-      { id: "achat", icon: "🔑", label: "J'achète", desc: "Je signe un compromis" },
+      {
+        id: "vente",
+        icon: "🏷️",
+        label: "Je vends mon bien",
+        desc: "J'ai un acheteur ou je prépare la mise en vente",
+      },
+      {
+        id: "achat",
+        icon: "🔑",
+        label: "J'achète un bien",
+        desc: "J'ai trouvé un bien et je dois signer un compromis ou l'acte définitif",
+      },
       {
         id: "transmission",
         icon: "🎁",
-        label: "Je transmets en famille",
-        desc: "Donation, démembrement",
+        label: "Je transmets à un proche",
+        desc: "Donation d'un bien, démembrement, passage de patrimoine en famille",
       },
-      { id: "litige", icon: "⚖️", label: "Je règle un litige", desc: "Indivision, conflit" },
+      {
+        id: "litige",
+        icon: "⚖️",
+        label: "Je gère une indivision ou un conflit",
+        desc: "Bien en copropriété familiale, désaccord entre héritiers ou copropriétaires",
+      },
     ],
   },
   offre: {
     title: "Votre offre concerne…",
     subtitle: "On vous oriente vers le bon notaire rédacteur.",
     options: [
-      { id: "achat", icon: "🤝", label: "Une offre d'achat", desc: "Je fais une offre sur un bien" },
-      { id: "vente", icon: "🏷️", label: "Une offre de vente", desc: "Je vends et veux cadrer l'offre" },
+      {
+        id: "achat",
+        icon: "🤝",
+        label: "Une offre d'achat",
+        desc: "Je fais une offre sur un bien et je veux la sécuriser",
+      },
+      {
+        id: "vente",
+        icon: "🏷️",
+        label: "Une offre de vente",
+        desc: "Je vends et je veux que l'offre soit bien encadrée",
+      },
     ],
   },
   famille: {
     title: "Quel est l'événement ?",
-    subtitle: "Le bon notaire dépend du moment de vie.",
+    subtitle: "On sélectionne le bon spécialiste pour votre situation.",
     options: [
-      { id: "deces", icon: "🕊️", label: "Un décès dans la famille", desc: "Succession à organiser" },
-      { id: "mariage", icon: "💍", label: "Un mariage / PACS à venir", desc: "Contrat à préparer" },
-      { id: "separation", icon: "💔", label: "Une séparation", desc: "Divorce, dissolution PACS" },
-      { id: "donation", icon: "🎁", label: "Une donation à un proche", desc: "Enfant, conjoint, tiers" },
+      {
+        id: "deces",
+        icon: "🕊️",
+        label: "Un proche est décédé",
+        desc: "Je dois organiser l'héritage et le partage des biens entre héritiers",
+      },
+      {
+        id: "mariage",
+        icon: "💍",
+        label: "Je me marie ou me pacse",
+        desc: "Contrat de mariage, choix du régime matrimonial ou convention de PACS",
+      },
+      {
+        id: "separation",
+        icon: "💔",
+        label: "Je vis une séparation",
+        desc: "Divorce, dissolution du PACS, partage des biens en commun",
+      },
+      {
+        id: "donation",
+        icon: "🎁",
+        label: "Je veux donner à un proche",
+        desc: "Don d'argent, d'un bien immobilier ou de placements à un enfant ou conjoint",
+      },
     ],
   },
   societe: {
-    title: "Pour votre entreprise, c'est…",
-    subtitle: "Chaque étape demande une expertise différente.",
+    title: "Quelle étape pour votre société ?",
+    subtitle: "Chaque moment demande une expertise différente.",
     options: [
-      { id: "creation", icon: "🚀", label: "Une création", desc: "Société, statuts" },
-      { id: "cession", icon: "🤝", label: "Une cession", desc: "Vente de parts, fonds" },
-      { id: "modification", icon: "✏️", label: "Une modification", desc: "Statuts, dirigeants" },
-      { id: "dissolution", icon: "📕", label: "Une dissolution", desc: "Cessation d'activité" },
+      {
+        id: "creation",
+        icon: "🚀",
+        label: "Je crée ma société",
+        desc: "SAS, SARL, SCI, holding — rédaction des statuts et acte de constitution",
+      },
+      {
+        id: "cession",
+        icon: "🤝",
+        label: "Je vends ou je rachète",
+        desc: "Cession de parts sociales ou vente d'un fonds de commerce",
+      },
+      {
+        id: "modification",
+        icon: "✏️",
+        label: "Je modifie mes statuts",
+        desc: "Changement de dirigeant, d'adresse, d'objet social ou de capital",
+      },
+      {
+        id: "dissolution",
+        icon: "📕",
+        label: "Je ferme ma société",
+        desc: "Dissolution amiable, liquidation et partage des actifs",
+      },
     ],
   },
 };
@@ -176,62 +234,172 @@ export interface EnrichQuestion {
 
 export const ENRICH: Record<string, EnrichQuestion[]> = {
   "immo:vente": [
-    { id: "bien", label: "Type de bien", options: ["Appartement", "Maison", "Terrain", "Local commercial"] },
-    { id: "prix", label: "Estimation de prix", options: ["< 200 k€", "200-500 k€", "500 k-1 M€", "> 1 M€"] },
-    { id: "occ", label: "Le bien est", options: ["Occupé", "Libre", "En cours de vente"] },
+    {
+      id: "bien",
+      label: "Quel type de bien vendez-vous ?",
+      options: ["Appartement", "Maison", "Terrain ou local", "Autre"],
+    },
+    {
+      id: "prix",
+      label: "À quel prix estimez-vous votre bien ?",
+      options: ["< 200 000 €", "200 000 – 500 000 €", "500 000 € – 1 million", "Plus d'1 million €"],
+    },
+    {
+      id: "occ",
+      label: "Le bien est actuellement…",
+      options: ["Occupé (locataire ou moi)", "Libre et vide", "Déjà sous offre"],
+    },
   ],
   "immo:achat": [
-    { id: "bien", label: "Type de bien", options: ["Appartement", "Maison", "Terrain", "Local"] },
-    { id: "prix", label: "Prix négocié", options: ["< 200 k€", "200-500 k€", "500 k-1 M€", "> 1 M€"] },
-    { id: "credit", label: "Crédit en cours ?", options: ["Oui", "Non", "Pas encore"] },
+    {
+      id: "bien",
+      label: "Quel type de bien achetez-vous ?",
+      options: ["Appartement", "Maison", "Terrain", "Local ou commerce"],
+    },
+    {
+      id: "prix",
+      label: "Quel est le prix d'achat ?",
+      options: ["< 200 000 €", "200 000 – 500 000 €", "500 000 € – 1 million", "Plus d'1 million €"],
+    },
+    {
+      id: "credit",
+      label: "Comment financez-vous cet achat ?",
+      options: ["Avec un crédit bancaire", "Comptant (sans crédit)", "Crédit + apport personnel", "Pas encore décidé"],
+    },
   ],
   "offre:achat": [
-    { id: "bien", label: "Type de bien", options: ["Appartement", "Maison", "Terrain", "Local"] },
-    { id: "prix", label: "Prix proposé", options: ["< 200 k€", "200-500 k€", "500 k-1 M€", "> 1 M€"] },
-    { id: "fin", label: "Financement", options: ["Comptant", "Crédit", "Crédit + apport", "À définir"] },
+    {
+      id: "bien",
+      label: "Quel type de bien ?",
+      options: ["Appartement", "Maison", "Terrain", "Local"],
+    },
+    {
+      id: "prix",
+      label: "Quel est le montant de votre offre ?",
+      options: ["< 200 000 €", "200 000 – 500 000 €", "500 000 € – 1 million", "Plus d'1 million €"],
+    },
+    {
+      id: "fin",
+      label: "Comment financez-vous ?",
+      options: ["Comptant (sans crédit)", "Avec un crédit bancaire", "Crédit + apport perso", "Pas encore défini"],
+    },
   ],
   "offre:vente": [
-    { id: "bien", label: "Type de bien", options: ["Appartement", "Maison", "Terrain", "Local commercial"] },
-    { id: "prix", label: "Prix demandé", options: ["< 200 k€", "200-500 k€", "500 k-1 M€", "> 1 M€"] },
-    { id: "delai", label: "Délai souhaité", options: ["Urgent", "< 3 mois", "Pas pressé"] },
+    {
+      id: "bien",
+      label: "Quel type de bien vendez-vous ?",
+      options: ["Appartement", "Maison", "Terrain", "Local commercial"],
+    },
+    {
+      id: "prix",
+      label: "Quel prix demandez-vous ?",
+      options: ["< 200 000 €", "200 000 – 500 000 €", "500 000 € – 1 million", "Plus d'1 million €"],
+    },
+    {
+      id: "delai",
+      label: "Dans quel délai souhaitez-vous vendre ?",
+      options: ["Dès que possible", "D'ici 3 mois", "Pas de presse, je cherche"],
+    },
   ],
   "famille:deces": [
-    { id: "lien", label: "Lien avec le défunt", options: ["Enfant", "Conjoint", "Parent", "Autre"] },
-    { id: "nb", label: "Nombre d'héritiers", options: ["1", "2-3", "4-5", "Plus"] },
-    { id: "test", label: "Testament ?", options: ["Oui", "Non", "Je ne sais pas"] },
-    { id: "immo", label: "Bien immo dans la succession ?", options: ["Oui", "Non"] },
+    {
+      id: "lien",
+      label: "Quel est votre lien avec la personne décédée ?",
+      options: ["Je suis enfant", "Je suis conjoint·e", "Je suis parent", "Autre lien"],
+    },
+    {
+      id: "nb",
+      label: "Combien d'héritiers y a-t-il en tout ?",
+      options: ["Je suis seul·e héritier·ère", "Nous sommes 2 ou 3", "Nous sommes 4 ou 5", "Plus de 5 héritiers"],
+    },
+    {
+      id: "test",
+      label: "Y a-t-il un testament ?",
+      options: ["Oui, il existe un testament", "Non, pas de testament", "Je ne suis pas sûr·e"],
+    },
+    {
+      id: "immo",
+      label: "Y a-t-il un bien immobilier dans l'héritage ?",
+      options: ["Oui", "Non"],
+    },
   ],
   "famille:mariage": [
     {
       id: "reg",
-      label: "Régime souhaité",
-      options: ["Communauté", "Séparation", "Mixte", "Je veux conseil"],
+      label: "Quel régime vous attire ?",
+      options: [
+        "Tout mettre en commun (communauté)",
+        "Garder nos biens séparés",
+        "Un mix des deux",
+        "Je veux qu'on m'explique les options",
+      ],
     },
-    { id: "patr", label: "Patrimoine pré-existant", options: ["Oui (chacun)", "Oui (un seul)", "Non"] },
-    { id: "enf", label: "Enfants d'union précédente", options: ["Oui", "Non"] },
+    {
+      id: "patr",
+      label: "Avez-vous des biens personnels avant le mariage ?",
+      options: ["Oui, nous deux", "Oui, l'un d'entre nous", "Non, on repart à zéro"],
+    },
+    {
+      id: "enf",
+      label: "Avez-vous des enfants d'une relation précédente ?",
+      options: ["Oui", "Non"],
+    },
   ],
   "famille:separation": [
     {
       id: "reg",
-      label: "Régime matrimonial",
-      options: ["Communauté", "Séparation", "Autre", "Je ne sais pas"],
+      label: "Votre régime matrimonial ?",
+      options: [
+        "Tout en commun (communauté)",
+        "Biens séparés",
+        "Je ne sais pas",
+        "Autre",
+      ],
     },
-    { id: "immo", label: "Bien immo en commun", options: ["Oui", "Non"] },
-    { id: "enf", label: "Enfants mineurs", options: ["Oui", "Non"] },
+    {
+      id: "immo",
+      label: "Avez-vous un bien immobilier en commun ?",
+      options: ["Oui", "Non"],
+    },
+    {
+      id: "enf",
+      label: "Avez-vous des enfants mineurs ?",
+      options: ["Oui", "Non"],
+    },
   ],
   "famille:donation": [
-    { id: "stat", label: "Statut du donateur", options: ["Marié", "Pacsé", "Célibataire", "Veuf"] },
-    { id: "benef", label: "Bénéficiaire", options: ["Enfant", "Conjoint", "Petit-enfant", "Autre"] },
-    { id: "type", label: "Type de don", options: ["Liquidités", "Bien immo", "Titres", "Mixte"] },
+    {
+      id: "stat",
+      label: "Quelle est votre situation actuelle ?",
+      options: ["Marié·e", "Pacsé·e", "Célibataire", "Veuf ou veuve"],
+    },
+    {
+      id: "benef",
+      label: "À qui souhaitez-vous donner ?",
+      options: ["À mon enfant", "À mon conjoint·e", "À un petit-enfant", "À une autre personne"],
+    },
+    {
+      id: "type",
+      label: "Qu'est-ce que vous voulez donner ?",
+      options: ["De l'argent (liquidités)", "Un bien immobilier", "Des placements ou titres", "Un mix des deux"],
+    },
   ],
   "societe:creation": [
     {
       id: "act",
-      label: "Type d'activité",
-      options: ["Commerciale", "Civile", "Holding", "Immobilier (SCI)"],
+      label: "Quel type d'activité ?",
+      options: ["Commerciale (SAS, SARL…)", "Civile (SCP, SCI…)", "Holding (groupe de sociétés)", "Immobilière (SCI familiale)"],
     },
-    { id: "nb", label: "Nombre d'associés", options: ["1 (seul)", "2-3", "Plus"] },
-    { id: "app", label: "Apport(s)", options: ["Cash seulement", "Bien immo", "Mixte"] },
+    {
+      id: "nb",
+      label: "Combien d'associés êtes-vous ?",
+      options: ["Je suis seul·e", "Nous sommes 2 ou 3", "Plus de 3 associés"],
+    },
+    {
+      id: "app",
+      label: "Qu'apportez-vous à la société ?",
+      options: ["De l'argent seulement", "Un bien immobilier", "Les deux", "Pas encore décidé"],
+    },
   ],
 };
 

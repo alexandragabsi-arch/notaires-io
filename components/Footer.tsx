@@ -62,7 +62,6 @@ export default function Footer() {
         </div>
         <div className="border-t border-[var(--color-border-soft)] pt-6 flex flex-wrap justify-between gap-3 text-[13px]">
           <div>© 2026 Notaires.io · Une marque du groupe LegalCorners</div>
-          <div>Made with ♥ in Paris</div>
         </div>
       </div>
     </footer>

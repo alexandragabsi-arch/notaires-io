@@ -41,9 +41,9 @@ export const Q1_OPTIONS: Q1Option[] = [
   },
   {
     id: "idk",
-    icon: "❓",
-    label: "Je ne sais pas encore",
-    desc: "On vous guide en quelques questions — sans jargon",
+    icon: "💬",
+    label: "Autre situation ou besoin d'orientation",
+    desc: "Décrivez votre projet lors du RDV — le notaire vous guidera",
     tint: "rose",
   },
 ];

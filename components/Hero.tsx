@@ -32,19 +32,6 @@ export default function Hero() {
       id="hero"
       className="relative py-14 sm:py-20 lg:py-28 overflow-hidden"
     >
-      {/* Dotted background pattern */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-50"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(73,128,230,0.08) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-          maskImage:
-            "radial-gradient(ellipse at top, rgba(0,0,0,0.3), transparent 70%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse at top, rgba(0,0,0,0.3), transparent 70%)",
-        }}
-      />
 
       <div className="max-w-[1200px] mx-auto px-6 relative">
         <div className="grid lg:grid-cols-[1fr_480px] gap-16 items-center">

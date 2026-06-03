@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import QRCard from "@/components/QRCard";
 import CardDesigner from "@/components/CardDesigner";
+import NotaireDashboard from "@/components/NotaireDashboard";
 import NotaireBilling from "@/components/NotaireBilling";
 import FAQ from "@/components/FAQ";
 
@@ -262,6 +263,9 @@ export default function NotairePitch() {
       {/* QR code + cartes de visite */}
       <QRCard />
       <CardDesigner />
+
+      {/* Tableau de bord des rendez-vous + rappels e-mail */}
+      <NotaireDashboard />
 
       {/* Espace facturation : honoraires + factures Notaires.io */}
       <NotaireBilling />

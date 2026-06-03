@@ -84,7 +84,7 @@ export default function NotaireSignup() {
     );
   }
 
-  const LANGUAGES = ["Anglais", "Espagnol", "Arabe", "Italien", "Allemand", "Portugais", "Mandarin"];
+  const LANGUAGES = ["Anglais", "Espagnol", "Arabe", "Italien", "Allemand", "Portugais", "Mandarin", "Hébreu", "Créole"];
 
   function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];

@@ -41,5 +41,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/notaire-contrat-mariage`, lastModified: NOW, changeFrequency: "weekly", priority: 0.9 },
   ];
 
-  return [...staticPages, ...notairePages, ...seoLandingPages];
+  const blogPages: MetadataRoute.Sitemap = [
+    { url: `${BASE}/blog`,                                                                      lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/blog/contrat-de-mariage-separation-de-biens-ou-communaute`,                 lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog/frais-de-notaire-achat-immobilier`,                                    lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog/delai-succession-notaire`,                                             lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog/pacs-ou-mariage-difference-notaire`,                                   lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog/premier-rendez-vous-notaire-gratuit`,                                  lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog/donation-enfants-avant-deces`,                                         lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+  ];
+
+  return [...staticPages, ...notairePages, ...seoLandingPages, ...blogPages];
 }

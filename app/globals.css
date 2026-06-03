@@ -46,6 +46,12 @@ body {
   background: #ffffff;
 }
 
+/* Justification de tous les textes courants */
+p, li, td, th, blockquote, dd, dt, figcaption {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
 html {
   scroll-behavior: smooth;
 }

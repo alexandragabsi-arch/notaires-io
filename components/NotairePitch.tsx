@@ -10,7 +10,6 @@ import {
   ArrowRight,
   Play,
   CreditCard,
-  Layers,
 } from "lucide-react";
 import QRCard from "@/components/QRCard";
 import CardDesigner from "@/components/CardDesigner";
@@ -250,21 +249,11 @@ export default function NotairePitch() {
                 <h2 className="serif text-[24px] sm:text-[30px] font-bold text-[var(--color-text-strong)] mb-3 leading-tight">
                   Commandez vos cartes de visite avec QR code intégré.
                 </h2>
-                <p className="text-[var(--color-muted)] text-[16px] leading-relaxed mb-3 text-justify hyphens-auto">
+                <p className="text-[var(--color-muted)] text-[16px] leading-relaxed mb-6 text-justify hyphens-auto">
                   Standard 350 g ou Premium 600 g soft-touch — design et QR code
                   inclus, livraison offerte dès 250 exemplaires. Devis en temps
                   réel, paiement sécurisé en ligne.
                 </p>
-                <div className="flex flex-wrap gap-4 mb-6 text-[14px] text-[var(--color-muted)]">
-                  <span className="flex items-center gap-1.5">
-                    <Layers className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
-                    Standard dès <strong className="text-[var(--color-text-strong)]">39 €</strong>
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Layers className="w-4 h-4 text-[var(--color-primary)]" strokeWidth={2} />
-                    Premium dès <strong className="text-[var(--color-text-strong)]">65 €</strong>
-                  </span>
-                </div>
                 <button
                   type="button"
                   onClick={() => {

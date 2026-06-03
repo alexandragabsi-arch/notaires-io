@@ -55,6 +55,11 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
             <div>
               <div className="font-bold text-[var(--color-text-strong)] text-[15px] leading-snug">{notaire.name}</div>
               <div className="text-[12px] text-[var(--color-muted)]">Notaire associé</div>
+              {notaire.officeName && (
+                <div className="text-[11px] text-[var(--color-muted)] mt-0.5 truncate max-w-[170px]" title={notaire.officeName}>
+                  {notaire.officeName}
+                </div>
+              )}
             </div>
           </div>
 

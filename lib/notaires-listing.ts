@@ -9,6 +9,7 @@ export interface ListingNotaire {
   area?: string; // arrondissement / secteur (affichage)
   address?: string; // adresse complète du cabinet
   phone?: string; // téléphone du cabinet
+  officeName?: string; // nom de l'étude / cabinet de rattachement
   specialties: string[];
   languages?: string[]; // langues parlées (ex. ["Anglais", "Espagnol"])
   next: string; // conservé pour compatibilité wizard

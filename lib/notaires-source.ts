@@ -89,14 +89,15 @@ function deterministicSlots(id: string): string[][] {
  * @param city Nom de la ville (insensible à la casse et aux accents)
  * @param limit Nombre maximum de résultats (défaut : 20)
  */
-export function getNotairesByCity(city: string, limit = 20): ListingNotaire[] {
+export function getNotairesByCity(city: string, limit = Infinity): ListingNotaire[] {
   const all = loadAll();
   const target = normalizeCity(city);
 
   const filtered = all.filter(n => normalizeCity(n.city) === target);
 
-  // Prendre les `limit` premiers (déjà dans l'ordre de scraping)
-  return filtered.slice(0, limit).map((n, idx) => ({
+  // Prendre tous les notaires (ou jusqu'à `limit`)
+  const slice = isFinite(limit) ? filtered.slice(0, limit) : filtered;
+  return slice.map((n, idx) => ({
     id: n.id,
     name: n.name,
     initials: n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map(p => p[0]).join(""),

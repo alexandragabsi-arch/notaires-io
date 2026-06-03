@@ -72,7 +72,7 @@ const FAQ = [
 
 export default function Page() {
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
-  const scrapedNotaires = getNotairesByCity("Toulouse", 15);
+  const scrapedNotaires = getNotairesByCity("Toulouse");
   const notaires = scrapedNotaires.length > 0
     ? scrapedNotaires
     : LISTING_NOTAIRES.filter((n) => n.city === "Toulouse");

@@ -1,14 +1,17 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Video,
   QrCode,
   ListChecks,
   ScrollText,
   ArrowRight,
+  CreditCard,
 } from "lucide-react";
 import QRCard from "@/components/QRCard";
+import CardDesigner from "@/components/CardDesigner";
 import NotaireDashboard from "@/components/NotaireDashboard";
 import NotaireBilling from "@/components/NotaireBilling";
 import FAQ from "@/components/FAQ";
@@ -65,6 +68,8 @@ const reasons = [
 ];
 
 export default function NotairePitch() {
+  const [cartesOpen, setCartesOpen] = useState(false);
+
   return (
     <>
       {/* Hero notaires */}
@@ -217,6 +222,44 @@ export default function NotairePitch() {
 
       {/* QR code */}
       <QRCard />
+
+      {/* Cartes de visite — bouton discret + révélation CardDesigner au clic */}
+      <div id="cartes" className="flex justify-center py-6">
+        <button
+          type="button"
+          onClick={() => {
+            setCartesOpen((v) => !v);
+            if (!cartesOpen) {
+              setTimeout(() => {
+                document.getElementById("cartes-designer")?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }, 80);
+            }
+          }}
+          className="inline-flex items-center gap-2 border-[1.5px] border-[var(--color-border)] text-[var(--color-text-strong)] bg-white px-5 py-2.5 rounded-[10px] text-[14px] font-semibold hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)] transition-colors"
+        >
+          <CreditCard className="w-4 h-4 text-[var(--color-primary)]" strokeWidth={2} />
+          Cartes de visite avec QR code
+          <span className="text-[var(--color-muted)] font-normal text-[13px]">
+            {cartesOpen ? "▲ fermer" : "▼ voir les tarifs"}
+          </span>
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {cartesOpen && (
+          <motion.div
+            id="cartes-designer"
+            key="cartes-designer"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="overflow-hidden"
+          >
+            <CardDesigner />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Tableau de bord des rendez-vous + rappels e-mail */}
       <NotaireDashboard />

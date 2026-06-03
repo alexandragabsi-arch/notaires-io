@@ -40,9 +40,12 @@ export default function Header() {
           ))}
         </nav>
         <div className="flex gap-3 items-center">
-          <button className="hidden sm:block text-[var(--color-primary)] hover:text-[var(--color-accent)] font-semibold text-sm">
+          <a
+            href="/connexion"
+            className="hidden sm:block text-[var(--color-primary)] hover:text-[var(--color-accent)] font-semibold text-sm"
+          >
             Connexion
-          </button>
+          </a>
           <motion.a
             href="/#hero"
             whileHover={{ y: -1, filter: "brightness(1.05)" }}
@@ -89,13 +92,13 @@ export default function Header() {
                   {label}
                 </a>
               ))}
-              <button
-                type="button"
+              <a
+                href="/connexion"
                 onClick={() => setOpen(false)}
-                className="py-3 text-left text-[15px] font-semibold text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors"
+                className="py-3 text-[15px] font-semibold text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors"
               >
                 Connexion
-              </button>
+              </a>
             </div>
           </motion.nav>
         )}

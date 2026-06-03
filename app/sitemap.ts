@@ -23,5 +23,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  return [...staticPages, ...notairePages];
+  const seoLandingPages: MetadataRoute.Sitemap = [
+    // City pages
+    { url: `${BASE}/notaire-paris`,      lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/notaire-lyon`,       lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/notaire-bordeaux`,   lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/notaire-marseille`,  lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/notaire-nantes`,     lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/notaire-lille`,      lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    // Specialty pages
+    { url: `${BASE}/notaire-immobilier`,       lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/notaire-succession`,       lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/notaire-mariage-pacs`,     lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/notaire-creation-societe`, lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/notaire-donation`,         lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/notaire-divorce`,          lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+  ];
+
+  return [...staticPages, ...notairePages, ...seoLandingPages];
 }

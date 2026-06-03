@@ -86,6 +86,17 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
             </div>
           </div>
 
+          {/* Langues */}
+          {notaire.languages && notaire.languages.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {notaire.languages.map((l) => (
+                <span key={l} className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">
+                  🌐 {l}
+                </span>
+              ))}
+            </div>
+          )}
+
           {/* CTA */}
           <a
             href={`/notaires/${notaire.id}`}

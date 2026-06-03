@@ -147,7 +147,7 @@ export default function LoginPanel() {
               ? "Votre étude n'est pas encore référencée ? "
               : "Pas encore de compte ? "}
             <a
-              href={isNotaire ? "/notaires#contact" : "/#hero"}
+              href={isNotaire ? "/inscription" : "/#hero"}
               className="text-[var(--color-accent)] font-semibold hover:underline"
             >
               {isNotaire ? "Référencer mon étude" : "Prendre un premier RDV"}

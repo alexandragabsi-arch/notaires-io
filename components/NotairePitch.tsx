@@ -109,7 +109,7 @@ export default function NotairePitch() {
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <a
-                href="#contact"
+                href="/inscription"
                 className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
               >
                 Référencer mon étude
@@ -292,7 +292,7 @@ export default function NotairePitch() {
               tout en 20 minutes.
             </p>
             <a
-              href="#contact"
+              href="/inscription"
               className="inline-flex items-center gap-2 bg-gradient-cta text-white px-7 py-3.5 rounded-[10px] text-[16px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
             >
               Référencer mon étude

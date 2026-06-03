@@ -128,7 +128,7 @@ function Article1() {
         Il est possible de <strong className="text-[var(--color-text-strong)]">changer de régime matrimonial</strong> après deux ans d'application, toujours devant notaire. La procédure est simplifiée depuis 2007 : sauf opposition des créanciers ou des enfants majeurs, le changement est homologué sans passer par le tribunal.
       </p>
       <p className="text-[var(--color-muted)] mb-4 leading-relaxed">
-        Les honoraires du notaire pour la rédaction d'un contrat de mariage sont libres (non réglementés). Comptez généralement entre <strong className="text-[var(--color-text-strong)]">200 et 500 €</strong>, selon la complexité du contrat et la région. Un investissement modeste au regard des enjeux patrimoniaux sur la durée d'une vie commune.
+        Les émoluments du notaire pour la rédaction d'un contrat de mariage sont <strong className="text-[var(--color-text-strong)]">réglementés par l'État</strong> : 371,48 € HT, soit 445,78 € TTC. Auxquels s'ajoutent les débours (environ 50 à 100 €). Le coût total est généralement compris entre <strong className="text-[var(--color-text-strong)]">500 et 620 €</strong>, quelle que soit la région ou la complexité du contrat.
       </p>
       <p className="text-[var(--color-muted)] leading-relaxed">
         Chez Notaires.io, vous pouvez <a href="/notaire-contrat-mariage" className="text-[var(--color-accent)] font-semibold hover:underline">trouver un notaire spécialisé en contrat de mariage</a> ou prendre rendez-vous pour un <a href="/notaire-mariage-pacs" className="text-[var(--color-accent)] font-semibold hover:underline">conseil mariage et PACS</a> dès aujourd'hui.

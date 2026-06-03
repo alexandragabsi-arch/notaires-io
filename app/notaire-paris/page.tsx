@@ -5,6 +5,12 @@ import SeoLandingPage from "@/components/SeoLandingPage";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
+const PARIS_ARRONDISSEMENTS = Array.from({ length: 20 }, (_, i) => ({
+  num: i + 1,
+  label: i === 0 ? "1er" : `${i + 1}ème`,
+  slug: i === 0 ? "1er" : `${i + 1}eme`,
+}));
+
 export const metadata: Metadata = {
   title: "Notaire à Paris — 1er RDV offert · Notaires.io",
   description:
@@ -91,11 +97,12 @@ export default function Page() {
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
+            ...PARIS_ARRONDISSEMENTS.map(a => ({
+              href: `/notaire-paris/${a.slug}`,
+              label: `Notaire Paris ${a.label}`,
+            })),
             { href: "/notaire-lyon", label: "Notaire à Lyon" },
-            { href: "/notaire-bordeaux", label: "Notaire à Bordeaux" },
             { href: "/notaire-marseille", label: "Notaire à Marseille" },
-            { href: "/notaire-nantes", label: "Notaire à Nantes" },
-            { href: "/notaire-lille", label: "Notaire à Lille" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },

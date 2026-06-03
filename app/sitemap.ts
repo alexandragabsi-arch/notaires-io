@@ -51,6 +51,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/notaire-perpignan`,         lastModified: NOW, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE}/notaire-clermont-ferrand`,  lastModified: NOW, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE}/notaire-orleans`,           lastModified: NOW, changeFrequency: "weekly", priority: 0.7 },
+    // Paris arrondissements (1er–20ème)
+    ...Array.from({ length: 20 }, (_, i) => ({
+      url: `${BASE}/notaire-paris/${i === 0 ? "1er" : `${i + 1}eme`}`,
+      lastModified: NOW,
+      changeFrequency: "weekly" as const,
+      priority: 0.82,
+    })),
+    // Lyon arrondissements (1er–9ème)
+    ...Array.from({ length: 9 }, (_, i) => ({
+      url: `${BASE}/notaire-lyon/${i === 0 ? "1er" : `${i + 1}eme`}`,
+      lastModified: NOW,
+      changeFrequency: "weekly" as const,
+      priority: 0.78,
+    })),
+    // Marseille arrondissements (1er–16ème)
+    ...Array.from({ length: 16 }, (_, i) => ({
+      url: `${BASE}/notaire-marseille/${i === 0 ? "1er" : `${i + 1}eme`}`,
+      lastModified: NOW,
+      changeFrequency: "weekly" as const,
+      priority: 0.78,
+    })),
     // Specialty pages
     { url: `${BASE}/notaire-immobilier`,       lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE}/notaire-succession`,       lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },

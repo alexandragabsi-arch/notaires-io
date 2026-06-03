@@ -5,6 +5,12 @@ import SeoLandingPage from "@/components/SeoLandingPage";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
+const LYON_ARRONDISSEMENTS = Array.from({ length: 9 }, (_, i) => ({
+  num: i + 1,
+  label: i === 0 ? "1er" : `${i + 1}ème`,
+  slug: i === 0 ? "1er" : `${i + 1}eme`,
+}));
+
 export const metadata: Metadata = {
   title: "Notaire à Lyon — 1er RDV offert · Notaires.io",
   description:
@@ -91,13 +97,14 @@ export default function Page() {
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
+            ...LYON_ARRONDISSEMENTS.map(a => ({
+              href: `/notaire-lyon/${a.slug}`,
+              label: `Notaire Lyon ${a.label}`,
+            })),
             { href: "/notaire-paris", label: "Notaire à Paris" },
-            { href: "/notaire-bordeaux", label: "Notaire à Bordeaux" },
             { href: "/notaire-marseille", label: "Notaire à Marseille" },
-            { href: "/notaire-nantes", label: "Notaire à Nantes" },
-            { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
-            { href: "/notaire-creation-societe", label: "Notaire création de société" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
+            { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
           ]}
         />
       </main>

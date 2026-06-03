@@ -5,6 +5,12 @@ import SeoLandingPage from "@/components/SeoLandingPage";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
+const MARSEILLE_ARRONDISSEMENTS = Array.from({ length: 16 }, (_, i) => ({
+  num: i + 1,
+  label: i === 0 ? "1er" : `${i + 1}ème`,
+  slug: i === 0 ? "1er" : `${i + 1}eme`,
+}));
+
 export const metadata: Metadata = {
   title: "Notaire à Marseille — 1er RDV offert · Notaires.io",
   description:
@@ -91,13 +97,13 @@ export default function Page() {
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
+            ...MARSEILLE_ARRONDISSEMENTS.map(a => ({
+              href: `/notaire-marseille/${a.slug}`,
+              label: `Notaire Marseille ${a.label}`,
+            })),
             { href: "/notaire-paris", label: "Notaire à Paris" },
             { href: "/notaire-lyon", label: "Notaire à Lyon" },
-            { href: "/notaire-bordeaux", label: "Notaire à Bordeaux" },
-            { href: "/notaire-nantes", label: "Notaire à Nantes" },
-            { href: "/notaire-lille", label: "Notaire à Lille" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
-            { href: "/notaire-donation", label: "Notaire donation" },
             { href: "/notaire-succession", label: "Notaire succession" },
           ]}
         />

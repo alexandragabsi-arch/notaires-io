@@ -133,3 +133,51 @@ export function countNotairesByCity(city: string): number {
   const target = normalizeCity(city);
   return all.filter(n => normalizeCity(n.city) === target).length;
 }
+
+/**
+ * Retourne les notaires d'un arrondissement donné
+ * @param city    "Paris" | "Lyon" | "Marseille"
+ * @param arrNum  numéro de l'arrondissement (1–20 pour Paris, 1–9 Lyon, 1–16 Marseille)
+ */
+export function getNotairesByArrondissement(city: string, arrNum: number): ListingNotaire[] {
+  const all = loadAll();
+  const target = normalizeCity(city);
+  return all
+    .filter(n => normalizeCity(n.city) === target && (n as RawNotaire & { arrondissement?: number }).arrondissement === arrNum)
+    .map(n => ({
+      id: n.id,
+      name: n.name,
+      initials: n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map(p => p[0]).join(""),
+      color: n.color,
+      city: n.city,
+      address: n.address || undefined,
+      phone: n.phone ? formatPhone(n.phone) : undefined,
+      officeName: n.officeName || undefined,
+      specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
+      next: "Disponible rapidement",
+      slotMatrix: deterministicSlots(n.id),
+      bio: undefined,
+    }));
+}
+
+/**
+ * Liste les arrondissements disponibles pour une ville (avec au moins 1 notaire)
+ */
+export function getArrondissements(city: string): { num: number; label: string; slug: string; count: number }[] {
+  const all = loadAll();
+  const target = normalizeCity(city);
+  const filtered = all.filter(n => normalizeCity(n.city) === target && (n as RawNotaire & { arrondissement?: number }).arrondissement);
+  const map = new Map<number, number>();
+  for (const n of filtered) {
+    const arr = (n as RawNotaire & { arrondissement?: number }).arrondissement!;
+    map.set(arr, (map.get(arr) ?? 0) + 1);
+  }
+  return [...map.entries()]
+    .sort((a, b) => a[0] - b[0])
+    .map(([num, count]) => ({
+      num,
+      label: num === 1 ? "1er" : `${num}ème`,
+      slug: num === 1 ? "1er" : `${num}eme`,
+      count,
+    }));
+}

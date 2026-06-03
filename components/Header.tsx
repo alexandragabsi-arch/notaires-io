@@ -5,9 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS: [string, string][] = [
+  ["Trouver un notaire", "/annuaire"],
   ["Comment ça marche", "/#how"],
   ["Espace notaires", "/notaires"],
-  ["Tarifs notaires", "/notaires#contact"],
   ["FAQ", "/#faq"],
 ];
 

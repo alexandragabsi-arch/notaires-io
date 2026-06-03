@@ -112,51 +112,57 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
         </div>
 
         {/* ── Calendrier droite ── */}
-        <div className="flex-1 p-5 flex flex-col gap-3">
+        <div className="flex-1 p-4 lg:p-5 flex flex-col gap-3">
           {/* Navigation jours */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 lg:gap-2">
             <button
               type="button"
               onClick={() => setOffset((o) => Math.max(0, o - 1))}
               disabled={offset === 0}
-              className="w-7 h-7 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-30 transition-colors"
+              className="w-7 h-7 shrink-0 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-30 transition-colors"
             >
               <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
             </button>
 
-            <div className="flex-1 grid gap-2" style={{ gridTemplateColumns: `repeat(${DAYS_VISIBLE}, 1fr)` }}>
-              {visibleDays.map((day, di) => {
-                const times = notaire.slotMatrix?.[offset + di] ?? [];
-                const label = formatDayLabel(day);
-                return (
-                  <div key={di} className="flex flex-col gap-1.5">
-                    <div className="text-center pb-1.5 border-b border-[var(--color-border-soft)]">
-                      <div className="text-[10px] font-bold text-[var(--color-muted)] uppercase tracking-wide">{label.short}</div>
-                      <div className="text-[12px] text-[var(--color-text-strong)] font-semibold">{label.date}</div>
+            {/* Scrollable on mobile, fixed grid on desktop */}
+            <div className="flex-1 overflow-x-auto scrollbar-none -mx-0.5 px-0.5">
+              <div
+                className="grid gap-2"
+                style={{ gridTemplateColumns: `repeat(${DAYS_VISIBLE}, minmax(62px, 1fr))` }}
+              >
+                {visibleDays.map((day, di) => {
+                  const times = notaire.slotMatrix?.[offset + di] ?? [];
+                  const label = formatDayLabel(day);
+                  return (
+                    <div key={di} className="flex flex-col gap-1.5 min-w-[62px]">
+                      <div className="text-center pb-1.5 border-b border-[var(--color-border-soft)]">
+                        <div className="text-[10px] font-bold text-[var(--color-muted)] uppercase tracking-wide">{label.short}</div>
+                        <div className="text-[11px] text-[var(--color-text-strong)] font-semibold whitespace-nowrap">{label.date}</div>
+                      </div>
+                      {times.length === 0 ? (
+                        <div className="text-[11px] text-[var(--color-muted)] text-center py-2 opacity-40">—</div>
+                      ) : (
+                        times.slice(0, 3).map((t) => (
+                          <a
+                            key={t}
+                            href={`/notaires/${notaire.id}`}
+                            className="block text-center text-[12px] font-bold text-white bg-[var(--color-primary)] hover:bg-[var(--color-accent)] rounded-lg py-2 transition-colors"
+                          >
+                            {t}
+                          </a>
+                        ))
+                      )}
                     </div>
-                    {times.length === 0 ? (
-                      <div className="text-[11px] text-[var(--color-muted)] text-center py-2 opacity-40">—</div>
-                    ) : (
-                      times.slice(0, 3).map((t) => (
-                        <a
-                          key={t}
-                          href={`/notaires/${notaire.id}`}
-                          className="block text-center text-[13px] font-bold text-white bg-[var(--color-primary)] hover:bg-[var(--color-accent)] rounded-lg py-1.5 transition-colors"
-                        >
-                          {t}
-                        </a>
-                      ))
-                    )}
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
 
             <button
               type="button"
               onClick={() => setOffset((o) => Math.min(maxOffset, o + 1))}
               disabled={offset >= maxOffset}
-              className="w-7 h-7 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-30 transition-colors"
+              className="w-7 h-7 shrink-0 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-30 transition-colors"
             >
               <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
             </button>

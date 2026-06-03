@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { ChevronLeft, ChevronRight, MapPin, Phone } from "lucide-react";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
   faq: { q: string; a: string }[];
   relatedLinks: { href: string; label: string }[];
 }
+
+const DAYS_VISIBLE = 5;
 
 function getNextWorkdays(n: number): Date[] {
   const days: Date[] = [];
@@ -28,6 +31,10 @@ function formatDayLabel(d: Date): { short: string; date: string } {
 }
 
 function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays: Date[] }) {
+  const [offset, setOffset] = useState(0);
+  const maxOffset = workdays.length - DAYS_VISIBLE;
+  const visibleDays = workdays.slice(offset, offset + DAYS_VISIBLE);
+
   const colorMap: Record<ListingNotaire["color"], string> = {
     default: "bg-[var(--color-tint-blue)] text-[var(--color-primary)]",
     green: "bg-emerald-100 text-emerald-700",
@@ -35,84 +42,123 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
   };
 
   return (
-    <div className="rounded-2xl border border-[var(--color-border-soft)] bg-white p-5 sm:p-6 shadow-sm hover:shadow-md transition-all">
-      <div className="flex flex-col lg:flex-row gap-5">
+    <div className="rounded-2xl border border-[var(--color-border-soft)] bg-white shadow-sm hover:shadow-md transition-all overflow-hidden">
+      <div className="flex flex-col lg:flex-row">
 
-        {/* Identité */}
-        <div className="flex items-start gap-4 lg:w-[260px] shrink-0">
-          <div className={`w-13 h-13 w-12 h-12 rounded-full flex items-center justify-center text-[15px] font-extrabold shrink-0 ${colorMap[notaire.color]}`}>
-            {notaire.initials}
+        {/* ── Profil gauche ── */}
+        <div className="lg:w-[280px] shrink-0 p-5 border-b lg:border-b-0 lg:border-r border-[var(--color-border-soft)] flex flex-col gap-3">
+          {/* Avatar + nom */}
+          <div className="flex items-center gap-3">
+            <div className={`w-14 h-14 rounded-full flex items-center justify-center text-[17px] font-extrabold shrink-0 ${colorMap[notaire.color]}`}>
+              {notaire.initials}
+            </div>
+            <div>
+              <div className="font-bold text-[var(--color-text-strong)] text-[15px] leading-snug">{notaire.name}</div>
+              <div className="text-[12px] text-[var(--color-muted)]">Notaire associé</div>
+            </div>
           </div>
+
+          {/* Adresse */}
+          {notaire.address && (
+            <div className="flex items-start gap-1.5 text-[12px] text-[var(--color-muted)]">
+              <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--color-accent)]" strokeWidth={2} />
+              <span>{notaire.address}</span>
+            </div>
+          )}
+
+          {/* Téléphone */}
+          {notaire.phone && (
+            <div className="flex items-center gap-1.5 text-[12px] text-[var(--color-muted)]">
+              <Phone className="w-3.5 h-3.5 shrink-0 text-[var(--color-accent)]" strokeWidth={2} />
+              <span>{notaire.phone}</span>
+            </div>
+          )}
+
+          {/* Spécialités */}
           <div>
-            <div className="font-bold text-[var(--color-text-strong)] text-[15px] leading-tight">
-              {notaire.name}
-            </div>
-            <div className="text-[13px] text-[var(--color-muted)] mt-0.5">
-              Notaire associé{notaire.area ? ` · ${notaire.area}` : ""}
-            </div>
-            <div className="text-[12px] text-[var(--color-muted)] mt-0.5">
-              📍 {notaire.city}{notaire.area ? `, ${notaire.area}` : ""}
-            </div>
-            <div className="flex flex-wrap gap-1.5 mt-2">
+            <div className="text-[11px] font-bold text-[var(--color-text-strong)] uppercase tracking-wide mb-1.5">Domaines :</div>
+            <div className="flex flex-wrap gap-1.5">
               {notaire.specialties.map((s) => (
-                <span key={s} className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[var(--color-tint-blue)] text-[var(--color-primary)]">
+                <span key={s} className="text-[11px] px-2.5 py-1 rounded-full border border-[var(--color-border)] text-[var(--color-text-strong)]">
                   {s}
                 </span>
               ))}
             </div>
           </div>
+
+          {/* CTA */}
+          <a
+            href={`/notaires/${notaire.id}`}
+            className="mt-auto block text-center text-[13px] font-bold text-white bg-[var(--color-primary)] hover:bg-[var(--color-accent)] px-4 py-2.5 rounded-xl transition-colors"
+          >
+            Voir la page de {notaire.name.replace("Me ", "")}
+          </a>
         </div>
 
-        {/* Créneaux */}
-        <div className="flex-1 overflow-x-auto">
-          <div className="flex gap-2.5 min-w-0">
-            {workdays.map((day, di) => {
-              const times = notaire.slotMatrix?.[di] ?? [];
-              const label = formatDayLabel(day);
-              return (
-                <div key={di} className="flex flex-col gap-1.5 min-w-[68px]">
-                  <div className="text-center pb-1 border-b border-[var(--color-border-soft)]">
-                    <div className="text-[10px] font-bold text-[var(--color-muted)] uppercase tracking-wide">{label.short}</div>
-                    <div className="text-[12px] text-[var(--color-text-strong)] font-semibold">{label.date}</div>
-                  </div>
-                  {times.length === 0 ? (
-                    <div className="text-[11px] text-[var(--color-muted)] text-center py-2">—</div>
-                  ) : (
-                    <>
-                      {times.slice(0, 3).map((t) => (
+        {/* ── Calendrier droite ── */}
+        <div className="flex-1 p-5 flex flex-col gap-3">
+          {/* Navigation jours */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setOffset((o) => Math.max(0, o - 1))}
+              disabled={offset === 0}
+              className="w-7 h-7 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-30 transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
+            </button>
+
+            <div className="flex-1 grid gap-2" style={{ gridTemplateColumns: `repeat(${DAYS_VISIBLE}, 1fr)` }}>
+              {visibleDays.map((day, di) => {
+                const times = notaire.slotMatrix?.[offset + di] ?? [];
+                const label = formatDayLabel(day);
+                return (
+                  <div key={di} className="flex flex-col gap-1.5">
+                    <div className="text-center pb-1.5 border-b border-[var(--color-border-soft)]">
+                      <div className="text-[10px] font-bold text-[var(--color-muted)] uppercase tracking-wide">{label.short}</div>
+                      <div className="text-[12px] text-[var(--color-text-strong)] font-semibold">{label.date}</div>
+                    </div>
+                    {times.length === 0 ? (
+                      <div className="text-[11px] text-[var(--color-muted)] text-center py-2 opacity-40">—</div>
+                    ) : (
+                      times.slice(0, 3).map((t) => (
                         <a
                           key={t}
                           href={`/notaires/${notaire.id}`}
-                          className="block text-center text-[13px] font-semibold text-[var(--color-primary)] bg-[var(--color-tint-blue)] hover:bg-[var(--color-accent)] hover:text-white rounded-lg py-1.5 transition-colors"
+                          className="block text-center text-[13px] font-bold text-white bg-[var(--color-primary)] hover:bg-[var(--color-accent)] rounded-lg py-1.5 transition-colors"
                         >
                           {t}
                         </a>
-                      ))}
-                      {times.length > 3 && (
-                        <a href={`/notaires/${notaire.id}`} className="text-[11px] text-[var(--color-accent)] text-center hover:underline">
-                          +{times.length - 3} autres
-                        </a>
-                      )}
-                    </>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+                      ))
+                    )}
+                  </div>
+                );
+              })}
+            </div>
 
-        {/* CTA */}
-        <div className="flex lg:flex-col lg:items-end lg:justify-between gap-3">
+            <button
+              type="button"
+              onClick={() => setOffset((o) => Math.min(maxOffset, o + 1))}
+              disabled={offset >= maxOffset}
+              className="w-7 h-7 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-30 transition-colors"
+            >
+              <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
+            </button>
+          </div>
+
+          {/* Voir plus */}
           <a
             href={`/notaires/${notaire.id}`}
-            className="inline-block text-center text-[13px] font-semibold text-[var(--color-accent)] border border-[var(--color-accent)] px-4 py-2 rounded-lg hover:bg-[var(--color-tint-blue)] transition-colors whitespace-nowrap"
+            className="self-center text-[12px] font-semibold text-[var(--color-accent)] hover:underline flex items-center gap-1 mt-1"
           >
-            Voir le profil →
+            + Voir plus d&apos;horaires
           </a>
-          <span className="text-[11px] text-emerald-600 font-medium">
-            <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1 align-middle" />
-            1er RDV offert
-          </span>
+
+          {/* Badge 1er RDV */}
+          <div className="mt-auto pt-3 border-t border-[var(--color-border-soft)] flex items-center gap-1.5 text-[11px] text-emerald-600 font-medium">
+            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
+            Réservation en ligne · Confirmation immédiate · 1er RDV offert · 30 min · visio ou cabinet
+          </div>
         </div>
 
       </div>
@@ -152,7 +198,7 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
 }
 
 export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks }: Props) {
-  const workdays = useMemo(() => getNextWorkdays(4), []);
+  const workdays = useMemo(() => getNextWorkdays(7), []);
   return (
     <>
       {/* Hero */}

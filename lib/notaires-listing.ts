@@ -7,10 +7,12 @@ export interface ListingNotaire {
   name: string;
   city: string; // ville principale (sert au filtre)
   area?: string; // arrondissement / secteur (affichage)
+  address?: string; // adresse complète du cabinet
+  phone?: string; // téléphone du cabinet
   specialties: string[];
   languages?: string[]; // langues parlées (ex. ["Anglais", "Espagnol"])
   next: string; // conservé pour compatibilité wizard
-  slotMatrix?: string[][]; // [jour0, jour1, jour2, jour3] — créneaux dispo sur les 4 prochains jours ouvrés
+  slotMatrix?: string[][]; // [jour0…jour6] — créneaux dispo sur les 7 prochains jours ouvrés
   photo?: string; // photo de profil (profils créés par les notaires)
   isNew?: boolean; // profil tout juste créé
   bio?: string; // présentation courte affichée sur la fiche profil
@@ -24,7 +26,9 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     name: "Me Amélie Martin",
     city: "Paris",
     area: "8ème",
-    specialties: ["Immobilier", "Succession"],
+    address: "14 Rue du Faubourg Saint-Honoré, 75008 Paris",
+    phone: "01 42 65 18 30",
+    specialties: ["Droit immobilier", "Successions"],
     languages: ["Anglais"],
     next: "Demain 14h30",
     slotMatrix: [
@@ -32,6 +36,9 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
       ["09:00", "11:00"],
       [],
       ["10:00", "14:00", "16:00"],
+      ["09:00", "10:00"],
+      [],
+      ["11:00", "14:00", "15:30"],
     ],
     bio: "Notaire associée spécialisée en transactions immobilières et successions. Accompagne particuliers et familles dans leurs projets patrimoniaux depuis plus de 12 ans. Reçoit également ses clients en anglais.",
   },
@@ -42,13 +49,18 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     name: "Me Charles Delaunay",
     city: "Paris",
     area: "8ème",
-    specialties: ["Société", "Immobilier"],
+    address: "32 Avenue de Wagram, 75008 Paris",
+    phone: "01 47 66 22 10",
+    specialties: ["Droit des sociétés", "Droit immobilier"],
     next: "Demain 16h00",
     slotMatrix: [
       ["11:00", "16:00"],
       [],
       ["09:00", "10:00", "15:00"],
       ["14:00", "16:00"],
+      [],
+      ["09:00", "11:00"],
+      ["14:00", "15:00", "16:00"],
     ],
     bio: "Expert en droit des affaires et immobilier d'entreprise. Intervient régulièrement auprès de start-ups, PME et family offices pour la constitution de sociétés, les cessions et les montages patrimoniaux complexes.",
   },
@@ -59,12 +71,17 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     name: "Me Sophie Pellerin",
     city: "Paris",
     area: "9ème",
-    specialties: ["Famille", "Donation"],
+    address: "8 Rue La Fayette, 75009 Paris",
+    phone: "01 48 74 56 20",
+    specialties: ["Droit de la famille", "Donations"],
     next: "Vendredi 10h00",
     slotMatrix: [
       ["09:00", "10:00"],
       ["09:00", "10:00", "11:00"],
       ["09:30", "11:00"],
+      [],
+      ["09:00", "10:30"],
+      ["09:00", "11:00", "14:00"],
       [],
     ],
     bio: "Spécialiste du droit de la famille et de la transmission patrimoniale. Accompagne les familles à chaque étape importante : mariage, PACS, divorce, donation, succession. Pédagogue et disponible.",
@@ -76,13 +93,18 @@ export const LISTING_NOTAIRES: ListingNotaire[] = [
     name: "Me Jean Beaumont",
     city: "Paris",
     area: "17ème",
-    specialties: ["Immobilier", "Succession"],
+    address: "55 Boulevard Pereire, 75017 Paris",
+    phone: "01 43 80 14 52",
+    specialties: ["Droit immobilier", "Successions"],
     next: "Lundi 11h00",
     slotMatrix: [
       [],
       ["14:00", "15:00", "16:00"],
       ["11:00", "14:30"],
       ["09:00", "11:00", "15:00"],
+      ["14:00", "16:00"],
+      [],
+      ["09:00", "10:00", "11:00"],
     ],
     bio: "Notaire généraliste avec une forte pratique en immobilier résidentiel et successions. Attaché à expliquer simplement chaque étape à ses clients, il traite aussi bien les petits dossiers que les patrimoines importants.",
   },

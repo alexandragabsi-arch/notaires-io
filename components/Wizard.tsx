@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Check } from "lucide-react";
+import { ArrowRight, ArrowLeft, Check, Bell } from "lucide-react";
 import {
   Q1_OPTIONS,
   Q2_TREE,
@@ -469,13 +469,15 @@ export default function Wizard() {
               <strong>{currentNotary.name}</strong> · {selectedSlot} ·{" "}
               {mode === "video" ? "🎥 Visio" : "🏢 Cabinet"}
             </p>
-            <p className="text-xs text-[var(--color-muted)] mb-4 leading-relaxed">
-              📧 Email de confirmation envoyé
-              <br />
-              📋 Pré-dossier transmis au notaire
-              <br />
-              💰 Devis estimé inclus
-            </p>
+            <div className="text-left bg-[var(--color-tint-blue)] rounded-xl px-4 py-3.5 mb-4 text-xs text-[var(--color-muted)] leading-relaxed flex flex-col gap-1.5">
+              <span>📧 Email de confirmation envoyé</span>
+              <span>📋 Pré-dossier transmis au notaire</span>
+              <span>💰 Devis estimé inclus</span>
+              <span className="flex items-start gap-1.5 text-[var(--color-accent)] font-semibold">
+                <Bell className="w-3.5 h-3.5 shrink-0 mt-px" strokeWidth={2.5} />
+                Rappels e-mail : la veille et 2h avant le RDV
+              </span>
+            </div>
             <button
               onClick={resetAll}
               className="bg-white text-[var(--color-primary)] border-[1.5px] border-[var(--color-border)] px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-[var(--color-tint-blue)] hover:border-[var(--color-primary)] transition-colors"

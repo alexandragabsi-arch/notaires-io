@@ -18,7 +18,7 @@ export default function Footer() {
               links: [
                 ["Comment ça marche", "/#how"],
                 ["Espace notaires", "/notaires"],
-                ["Tarifs notaires", "/notaires#contact"],
+                ["Tarifs notaires", "/notaires#tarifs"],
                 ["FAQ", "/#faq"],
               ],
             },

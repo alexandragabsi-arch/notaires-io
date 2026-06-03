@@ -8,9 +8,10 @@ import {
   ScrollText,
   ArrowRight,
   Play,
+  CreditCard,
+  Layers,
 } from "lucide-react";
 import QRCard from "@/components/QRCard";
-import CardDesigner from "@/components/CardDesigner";
 import NotaireDashboard from "@/components/NotaireDashboard";
 import NotaireBilling from "@/components/NotaireBilling";
 import FAQ from "@/components/FAQ";
@@ -225,9 +226,54 @@ export default function NotairePitch() {
         </div>
       </section>
 
-      {/* QR code + cartes de visite */}
+      {/* QR code */}
       <QRCard />
-      <CardDesigner />
+
+      {/* Cartes de visite — CTA vers la page dédiée */}
+      <section id="cartes" className="py-16 sm:py-20 lg:py-24 bg-white">
+        <div className="max-w-[920px] mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.45 }}
+            className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-8 sm:p-12"
+          >
+            <div className="flex flex-col sm:flex-row items-start gap-7">
+              <div className="w-14 h-14 shrink-0 rounded-2xl bg-[var(--color-tint-blue)] flex items-center justify-center text-[var(--color-primary)]">
+                <CreditCard className="w-7 h-7" strokeWidth={2} />
+              </div>
+              <div className="flex-1">
+                <h2 className="serif text-[24px] sm:text-[30px] font-bold text-[var(--color-text-strong)] mb-3 leading-tight">
+                  Commandez vos cartes de visite avec QR code intégré.
+                </h2>
+                <p className="text-[var(--color-muted)] text-[16px] leading-relaxed mb-3 text-justify hyphens-auto">
+                  Standard 350 g ou Premium 600 g soft-touch — design et QR code
+                  inclus, livraison offerte dès 250 exemplaires. Devis en temps
+                  réel, paiement sécurisé en ligne.
+                </p>
+                <div className="flex flex-wrap gap-4 mb-6 text-[14px] text-[var(--color-muted)]">
+                  <span className="flex items-center gap-1.5">
+                    <Layers className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
+                    Standard dès <strong className="text-[var(--color-text-strong)]">39 €</strong>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <Layers className="w-4 h-4 text-[var(--color-primary)]" strokeWidth={2} />
+                    Premium dès <strong className="text-[var(--color-text-strong)]">65 €</strong>
+                  </span>
+                </div>
+                <a
+                  href="/notaires/cartes"
+                  className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+                >
+                  Commander mes cartes
+                  <ArrowRight className="w-[17px] h-[17px]" strokeWidth={2.5} />
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Tableau de bord des rendez-vous + rappels e-mail */}
       <NotaireDashboard />

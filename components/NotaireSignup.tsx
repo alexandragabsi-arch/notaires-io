@@ -18,9 +18,9 @@ import {
   Star,
   ImagePlus,
   Trash2,
-  QrCode,
-  Download,
   Link2,
+  MessageCircle,
+  Copy,
 } from "lucide-react";
 
 const SITE_URL =
@@ -609,57 +609,8 @@ export default function NotaireSignup() {
               </div>
             </div>
 
-            {/* QR code */}
-            {savedProfile && (() => {
-              const profileUrl = `${SITE_URL}/notaires/${savedProfile.id}`;
-              const qrSrc = `/api/qr?data=${encodeURIComponent(profileUrl)}&size=300`;
-              return (
-                <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-7 sm:p-8">
-                  <div className="flex items-center gap-2 mb-1">
-                    <QrCode className="w-5 h-5 text-[var(--color-accent)]" strokeWidth={2} />
-                    <h3 className="serif text-[18px] font-bold text-[var(--color-text-strong)]">
-                      Votre QR code personnel
-                    </h3>
-                  </div>
-                  <p className="text-[13px] text-[var(--color-muted)] mb-5 leading-relaxed">
-                    Ce QR code renvoie directement à votre fiche de prise de rendez-vous.
-                    Imprimez-le sur vos cartes de visite, vos plaquettes ou l'entrée de votre étude.
-                  </p>
-                  <div className="flex flex-col sm:flex-row items-center gap-6">
-                    {/* QR image */}
-                    <div className="shrink-0 rounded-2xl border border-[var(--color-border-soft)] overflow-hidden shadow-[var(--shadow-card)] p-3 bg-white">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={qrSrc}
-                        alt={`QR code de ${displayName}`}
-                        width={150}
-                        height={150}
-                        className="w-[150px] h-[150px]"
-                      />
-                    </div>
-                    {/* Instructions + téléchargement */}
-                    <div className="flex flex-col gap-3 flex-1 min-w-0">
-                      <div className="text-[13px] text-[var(--color-muted)] leading-relaxed text-justify hyphens-auto">
-                        En un scan depuis un smartphone, vos clients accèdent à votre profil
-                        et réservent un créneau directement — sans avoir à chercher vos
-                        coordonnées.
-                      </div>
-                      <a
-                        href={`/api/qr?data=${encodeURIComponent(profileUrl)}&size=800`}
-                        download={`qr-notaires-io-${savedProfile.id}.png`}
-                        className="inline-flex items-center gap-2 border border-[var(--color-accent)] text-[var(--color-accent)] bg-[var(--color-accent-soft)] px-5 py-2.5 rounded-[10px] text-[14px] font-semibold hover:bg-[var(--color-accent)] hover:text-white transition-colors w-fit"
-                      >
-                        <Download className="w-4 h-4" strokeWidth={2.5} />
-                        Télécharger mon QR code (PNG)
-                      </a>
-                      <p className="text-[12px] text-[var(--color-muted)]">
-                        Haute résolution · Fond blanc · Prêt à imprimer
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })()}
+            {/* Partager le lien de RDV */}
+            {savedProfile && <ShareBlock profileId={savedProfile.id} displayName={displayName} />}
           </motion.div>
         )}
       </div>
@@ -668,6 +619,74 @@ export default function NotaireSignup() {
 }
 
 /* — Sous-composants — */
+
+function ShareBlock({ profileId, displayName }: { profileId: string; displayName: string }) {
+  const [copied, setCopied] = useState(false);
+  const profileUrl = `${SITE_URL}/notaires/${profileId}`;
+  const shareText = `Prenez rendez-vous avec ${displayName} en ligne, directement depuis votre smartphone : ${profileUrl}`;
+
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(profileUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // clipboard indisponible
+    }
+  }
+
+  return (
+    <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-7 sm:p-8">
+      <div className="flex items-center gap-2 mb-1">
+        <Link2 className="w-5 h-5 text-[var(--color-accent)]" strokeWidth={2} />
+        <h3 className="serif text-[18px] font-bold text-[var(--color-text-strong)]">
+          Partagez votre lien de prise de RDV
+        </h3>
+      </div>
+      <p className="text-[13px] text-[var(--color-muted)] mb-5 leading-relaxed text-justify hyphens-auto">
+        Envoyez ce lien à vos clients par WhatsApp, e-mail ou copiez-le dans votre
+        signature — en un clic, ils réservent un créneau directement sur votre profil.
+      </p>
+
+      {/* Lien affiché */}
+      <div className="bg-[var(--color-tint-blue)] rounded-xl px-4 py-3 text-[13px] font-semibold text-[var(--color-accent)] mb-5 truncate">
+        {profileUrl}
+      </div>
+
+      {/* Boutons de partage */}
+      <div className="flex flex-wrap gap-2.5">
+        <a
+          href={`https://wa.me/?text=${encodeURIComponent(shareText)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2.5 rounded-[10px] text-[14px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+        >
+          <MessageCircle className="w-[17px] h-[17px]" strokeWidth={2.5} />
+          WhatsApp
+        </a>
+        <a
+          href={`mailto:?subject=${encodeURIComponent(`Prenez RDV avec ${displayName}`)}&body=${encodeURIComponent(shareText)}`}
+          className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2.5 rounded-[10px] text-[14px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+        >
+          <Mail className="w-[17px] h-[17px]" strokeWidth={2.5} />
+          E-mail
+        </a>
+        <button
+          type="button"
+          onClick={copyLink}
+          className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2.5 rounded-[10px] text-[14px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+        >
+          {copied ? (
+            <Check className="w-[17px] h-[17px] text-[var(--color-success)]" strokeWidth={2.5} />
+          ) : (
+            <Copy className="w-[17px] h-[17px]" strokeWidth={2.5} />
+          )}
+          {copied ? "Lien copié !" : "Copier le lien"}
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function Field({
   label,

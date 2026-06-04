@@ -29,7 +29,7 @@ const faqNotaires = [
   },
   {
     q: "En quoi ça me fait gagner du temps ?",
-    a: "Les questions essentielles ont été posées en amont : situation familiale, bien concerné, objectif de l'acte. Le client a téléchargé ses documents avant le rendez-vous. Vous pouvez vous concentrer sur l'essentiel — le conseil à apporter et l'acte à établir.",
+    a: "Les questions essentielles ont été posées en amont : situation familiale, bien concerné, objectif de l'acte. Le client a la possibilité de télécharger ses documents avant le rendez-vous. Vous pouvez vous concentrer sur l'essentiel — le conseil à apporter et l'acte à établir.",
   },
   {
     q: "Et la protection des données de mes clients ?",

@@ -46,10 +46,13 @@ body {
   background: #ffffff;
 }
 
-/* Justification de tous les textes courants */
-p, li, td, th, blockquote, dd, dt, figcaption {
-  text-align: justify;
-  text-justify: inter-word;
+/* Justification de tous les textes courants — dans @layer base
+   pour que les utilities Tailwind (text-center etc.) puissent l'écraser */
+@layer base {
+  p, li, td, th, blockquote, dd, dt, figcaption {
+    text-align: justify;
+    text-justify: inter-word;
+  }
 }
 
 html {

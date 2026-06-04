@@ -105,6 +105,9 @@ export default function NotairePitch() {
                 la bonne spécialité — et qui vous fait gagner du temps à chaque
                 dossier.
               </p>
+              <p className="serif text-[18px] sm:text-[20px] italic text-[var(--color-primary)] text-center">
+                Créé par un notaire, au service des notaires.
+              </p>
             </div>
             <div className="flex flex-wrap justify-center gap-3">
               <a

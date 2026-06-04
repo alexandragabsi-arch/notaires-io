@@ -24,6 +24,7 @@ interface RawNotaire {
   slotMatrix: string[][];
   source: string;
   claimed: boolean;
+  role?: "associé" | "salarié";
 }
 
 let _cache: RawNotaire[] | null = null;
@@ -107,6 +108,7 @@ export function getNotairesByCity(city: string, limit = Infinity): ListingNotair
     phone: n.phone ? formatPhone(n.phone) : undefined,
     officeName: n.officeName || undefined,
     arrondissement: (n as RawNotaire & { arrondissement?: number }).arrondissement || undefined,
+    role: n.role,
     specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
     next: "Disponible rapidement",
     slotMatrix: deterministicSlots(n.id),

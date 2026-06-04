@@ -10,6 +10,7 @@ export interface ListingNotaire {
   address?: string; // adresse complète du cabinet
   phone?: string; // téléphone du cabinet
   officeName?: string; // nom de l'étude / cabinet de rattachement
+  arrondissement?: number; // numéro d'arrondissement (1–20 Paris, 1–9 Lyon, 1–16 Marseille)
   specialties: string[];
   languages?: string[]; // langues parlées (ex. ["Anglais", "Espagnol"])
   next: string; // conservé pour compatibilité wizard

@@ -95,14 +95,16 @@ export default function NotairePitch() {
               Pourquoi choisir{" "}
               <span className="serif-accent">Notaires.io</span> ?
             </h1>
-            <p className="text-[17px] lg:text-[19px] text-[var(--color-muted)] max-w-[620px] mx-auto leading-relaxed mb-4 text-center">
-              Une plateforme qui vous amène des rendez-vous déjà préparés, sur la
-              bonne spécialité — et qui vous fait gagner du temps à chaque
-              dossier.
-            </p>
-            <p className="serif text-[18px] sm:text-[20px] italic text-[var(--color-primary)] mb-9 text-center">
-              Créé par un notaire, au service des notaires.
-            </p>
+            <div className="max-w-[560px] mx-auto text-center mb-9">
+              <p className="text-[17px] lg:text-[19px] text-[var(--color-muted)] leading-relaxed mb-4">
+                Une plateforme qui vous amène des rendez-vous déjà préparés, sur
+                la bonne spécialité — et qui vous fait gagner du temps à chaque
+                dossier.
+              </p>
+              <p className="serif text-[18px] sm:text-[20px] italic text-[var(--color-primary)]">
+                Créé par un notaire, au service des notaires.
+              </p>
+            </div>
             <div className="flex flex-wrap justify-center gap-3">
               <a
                 href="/inscription"

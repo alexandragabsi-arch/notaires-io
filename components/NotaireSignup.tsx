@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { addStoredProfile } from "@/lib/notaire-profiles";
+import { addProfile } from "@/lib/notaire-profiles";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import {
   User,
@@ -97,9 +97,9 @@ export default function NotaireSignup() {
 
   const isLast = step === STEPS.length - 1;
 
-  function finalize() {
-    // On enregistre le profil pour qu'il apparaisse aussitôt dans l'annuaire.
-    const profile = addStoredProfile({
+  async function finalize() {
+    // Enregistre dans localStorage (instantané) ET Supabase (visible par tous).
+    const profile = await addProfile({
       prenom,
       nom,
       ville,

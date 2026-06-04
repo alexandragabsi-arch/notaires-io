@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Search, MapPin, BadgeCheck, Clock, ArrowRight, SlidersHorizontal, Sparkles, Globe } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
-import { getStoredProfiles } from "@/lib/notaire-profiles";
+import { getStoredProfiles, getRemoteProfiles } from "@/lib/notaire-profiles";
 
 const ALL = "Toutes";
 
@@ -15,10 +15,17 @@ export default function NotaireListing() {
   const [specialty, setSpecialty] = useState<string>(ALL);
   const [language, setLanguage] = useState<string>(ALL);
 
-  // Profils créés par les notaires (stockés côté navigateur), chargés au montage.
+  // Profils : localStorage (instantané) fusionné avec Supabase (persistant).
   const [stored, setStored] = useState<ListingNotaire[]>([]);
   useEffect(() => {
+    // 1. Affiche d'abord les profils locaux (instantané)
     setStored(getStoredProfiles());
+    // 2. Charge les profils Supabase et fusionne
+    getRemoteProfiles().then((remote) => {
+      const localIds = new Set(getStoredProfiles().map((n) => n.id));
+      const newRemote = remote.filter((n) => !localIds.has(n.id));
+      setStored((prev) => [...prev, ...newRemote]);
+    });
   }, []);
 
   // Annuaire complet : profils créés (récents en tête) + annuaire de référence.

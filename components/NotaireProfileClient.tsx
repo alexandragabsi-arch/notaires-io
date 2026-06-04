@@ -18,7 +18,7 @@ import {
   Award,
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
-import { getStoredProfiles } from "@/lib/notaire-profiles";
+import { getStoredProfiles, getRemoteProfiles } from "@/lib/notaire-profiles";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 
 /* ── Jours de la semaine courts ─────────────────────────────────────────── */
@@ -139,10 +139,13 @@ export default function NotaireProfileClient({ id }: { id: string }) {
   const [notaire, setNotaire] = useState<ListingNotaire | null | undefined>(undefined);
 
   useEffect(() => {
-    const stored = getStoredProfiles();
-    const all = [...stored, ...LISTING_NOTAIRES];
-    const found = all.find((n) => n.id === id) ?? null;
-    setNotaire(found);
+    const local = [...getStoredProfiles(), ...LISTING_NOTAIRES];
+    const found = local.find((n) => n.id === id);
+    if (found) { setNotaire(found); return; }
+    // Pas trouvé localement → cherche dans Supabase
+    getRemoteProfiles().then((remote) => {
+      setNotaire(remote.find((n) => n.id === id) ?? null);
+    });
   }, [id]);
 
   if (notaire === undefined) {

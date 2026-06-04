@@ -1,8 +1,8 @@
 // Profils créés par les notaires lors de l'inscription (/inscription).
-// Pas de backend pour l'instant : on stocke côté navigateur (localStorage)
-// pour que le profil apparaisse aussitôt dans l'annuaire (/annuaire).
+// Stockage double : localStorage (instantané) + Supabase (persistant, visible par tous).
 
 import type { ListingNotaire } from "./notaires-listing";
+import { supabase } from "./supabase";
 
 const STORAGE_KEY = "notaires-io:profils";
 
@@ -31,10 +31,38 @@ function safeParse(raw: string | null): ListingNotaire[] {
   }
 }
 
-// Lit les profils enregistrés (les plus récents d'abord).
+// Lit les profils stockés localement (instantané, propre au navigateur).
 export function getStoredProfiles(): ListingNotaire[] {
   if (typeof window === "undefined") return [];
   return safeParse(window.localStorage.getItem(STORAGE_KEY));
+}
+
+// Lit les profils depuis Supabase (visible par tous les visiteurs).
+export async function getRemoteProfiles(): Promise<ListingNotaire[]> {
+  const { data, error } = await supabase
+    .from("notaire_profiles")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error || !data) return [];
+
+  return data.map((row) => ({
+    id: row.id as string,
+    name: row.name as string,
+    initials: (row.initials as string) || "N",
+    color: (row.color as ListingNotaire["color"]) || "default",
+    city: row.city as string,
+    officeName: row.office_name as string | undefined,
+    address: row.address as string | undefined,
+    phone: row.phone as string | undefined,
+    role: row.role as "associé" | "salarié" | undefined,
+    specialties: (row.specialties as string[]) || [],
+    languages: (row.languages as string[]) || undefined,
+    bio: row.bio as string | undefined,
+    photo: row.photo as string | undefined,
+    next: "Sur demande",
+    isNew: false,
+  }));
 }
 
 // Transforme la saisie du wizard en entrée d'annuaire.
@@ -42,15 +70,16 @@ function toListing(p: SignupProfile): ListingNotaire {
   const prenom = p.prenom.trim();
   const nom = p.nom.trim();
   const fullName = [prenom, nom].filter(Boolean).join(" ");
-  const initials =
-    ((prenom[0] || "") + (nom[0] || "")).toUpperCase() || "N";
+  const initials = ((prenom[0] || "") + (nom[0] || "")).toUpperCase() || "N";
+  const id = `me-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 
   return {
-    id: `me-${Date.now()}`,
+    id,
     initials,
     color: COLORS[Math.floor(Math.random() * COLORS.length)],
     name: fullName ? `Me ${fullName}` : "Me Nouveau notaire",
     city: p.ville.trim() || "France",
+    officeName: p.etude?.trim() || undefined,
     specialties: p.specialties.length ? p.specialties : ["Notariat"],
     languages: p.languages?.length ? p.languages : undefined,
     next: "Sur demande",
@@ -61,11 +90,53 @@ function toListing(p: SignupProfile): ListingNotaire {
   };
 }
 
-// Enregistre un nouveau profil (dédoublonné par nom + ville).
+// Enregistre un nouveau profil : localStorage (instantané) + Supabase (persistant).
+export async function addProfile(p: SignupProfile): Promise<ListingNotaire> {
+  const entry = toListing(p);
+
+  // 1. localStorage pour affichage immédiat
+  if (typeof window !== "undefined") {
+    const existing = getStoredProfiles().filter(
+      (n) =>
+        !(
+          n.name.toLowerCase() === entry.name.toLowerCase() &&
+          n.city.toLowerCase() === entry.city.toLowerCase()
+        ),
+    );
+    try {
+      window.localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify([entry, ...existing]),
+      );
+    } catch {
+      // quota / mode privé : on ignore silencieusement
+    }
+  }
+
+  // 2. Supabase pour persistance multi-utilisateurs
+  await supabase.from("notaire_profiles").upsert({
+    id: entry.id,
+    name: entry.name,
+    initials: entry.initials,
+    color: entry.color,
+    city: entry.city,
+    office_name: entry.officeName ?? null,
+    address: null,
+    phone: null,
+    role: entry.role ?? null,
+    specialties: entry.specialties,
+    languages: entry.languages ?? [],
+    bio: entry.bio ?? null,
+    photo: entry.photo ?? null,
+  });
+
+  return entry;
+}
+
+// Compat : ancienne API synchrone (garde localStorage seul pour rétrocompatibilité)
 export function addStoredProfile(p: SignupProfile): ListingNotaire {
   const entry = toListing(p);
   if (typeof window === "undefined") return entry;
-
   const existing = getStoredProfiles().filter(
     (n) =>
       !(
@@ -73,11 +144,11 @@ export function addStoredProfile(p: SignupProfile): ListingNotaire {
         n.city.toLowerCase() === entry.city.toLowerCase()
       ),
   );
-  const next = [entry, ...existing];
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-  } catch {
-    // quota / mode privé : on ignore silencieusement
-  }
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify([entry, ...existing]),
+    );
+  } catch { /* ignore */ }
   return entry;
 }

@@ -8,48 +8,17 @@ import {
   MapPin,
   Phone,
   Mail,
-  Package,
-  Truck,
-  CreditCard,
+  ArrowRight,
 } from "lucide-react";
 
-/* ─── Tarifs (HT, QR code + impression + design inclus) ──────────────────── */
+/* ─── Types ────────────────────────────────────────────────────────────────── */
 type CardType = "standard" | "premium";
 type Qty = 100 | 250 | 500;
 
-const CARD_TYPES: {
-  id: CardType;
-  label: string;
-  grammage: string;
-  finish: string;
-  desc: string;
-}[] = [
-  {
-    id: "standard",
-    label: "Standard",
-    grammage: "350 g",
-    finish: "Mat ou brillant",
-    desc: "Solide et élégant — le choix des études.",
-  },
-  {
-    id: "premium",
-    label: "Premium Épais",
-    grammage: "600 g",
-    finish: "Soft-touch",
-    desc: "Toucher luxe, impression côté tête.",
-  },
+const CARD_TYPES: { id: CardType; grammage: string; finish: string }[] = [
+  { id: "standard", grammage: "350 g", finish: "Mat ou brillant" },
+  { id: "premium",  grammage: "600 g", finish: "Soft-touch" },
 ];
-
-// Prix en euros (HT) par type et quantité
-const PRICES: Record<CardType, Record<Qty, number>> = {
-  standard: { 100: 39, 250: 59, 500: 89 },
-  premium:  { 100: 65, 250: 95, 500: 139 },
-};
-
-// Livraison : offerte à partir de 250 cartes
-const DELIVERY_COST: Record<Qty, number> = { 100: 5.9, 250: 0, 500: 0 };
-
-const QUANTITIES: Qty[] = [100, 250, 500];
 
 /* ─── Champs info carte ────────────────────────────────────────────────────── */
 type CardField = {
@@ -69,19 +38,8 @@ const cardFields: CardField[] = [
 
 /* ─── Composant ────────────────────────────────────────────────────────────── */
 export default function CardDesigner() {
-  /* Infos carte */
   const [form, setForm] = useState({ nom: "", etude: "", adresse: "", tel: "", email: "" });
-
-  /* Options commande */
   const [cardType, setCardType] = useState<CardType>("standard");
-  const [qty, setQty] = useState<Qty>(250);
-
-
-
-  /* Calcul devis */
-  const cardPrice = PRICES[cardType][qty];
-  const deliveryPrice = DELIVERY_COST[qty];
-  const total = cardPrice + deliveryPrice;
 
   const v = (k: CardField["key"]) =>
     form[k] || cardFields.find((f) => f.key === k)!.placeholder;
@@ -151,116 +109,14 @@ export default function CardDesigner() {
               </div>
             </div>
 
-            {/* 2. Options de commande */}
-            <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-7">
-              <div className="flex items-center gap-2 text-[13px] font-bold text-[var(--color-text-strong)] uppercase tracking-[0.5px] mb-5">
-                <Package className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
-                Votre commande
-              </div>
-
-              {/* Type de carte */}
-              <div className="mb-5">
-                <span className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-2.5 block">
-                  Type de carte
-                </span>
-                <div className="grid grid-cols-2 gap-3">
-                  {CARD_TYPES.map((t) => {
-                    const on = cardType === t.id;
-                    return (
-                      <button
-                        key={t.id}
-                        type="button"
-                        onClick={() => setCardType(t.id)}
-                        className={`flex flex-col gap-1 rounded-2xl border-2 p-4 text-left transition-all ${
-                          on
-                            ? "border-[var(--color-accent)] bg-[var(--color-accent-soft)]"
-                            : "border-[var(--color-border)] bg-white hover:border-[var(--color-accent)]"
-                        }`}
-                      >
-                        <span className="font-bold text-[14px] text-[var(--color-text-strong)]">
-                          {t.label}
-                        </span>
-                        <span className="text-[12px] text-[var(--color-accent)] font-semibold">
-                          {t.grammage} · {t.finish}
-                        </span>
-                        <span className="text-[12px] text-[var(--color-muted)] leading-relaxed">
-                          {t.desc}
-                        </span>
-                        <span className="text-[13px] font-bold text-[var(--color-text-strong)] mt-1">
-                          dès {PRICES[t.id][100]}€
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Quantité */}
-              <div className="mb-5">
-                <span className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-2.5 block">
-                  Quantité
-                </span>
-                <div className="flex gap-2">
-                  {QUANTITIES.map((q) => {
-                    const on = qty === q;
-                    return (
-                      <button
-                        key={q}
-                        type="button"
-                        onClick={() => setQty(q)}
-                        className={`flex-1 flex flex-col items-center gap-0.5 rounded-[12px] border-2 py-3 transition-all ${
-                          on
-                            ? "border-[var(--color-accent)] bg-[var(--color-accent-soft)]"
-                            : "border-[var(--color-border)] bg-white hover:border-[var(--color-accent)]"
-                        }`}
-                      >
-                        <span className="font-bold text-[15px] text-[var(--color-text-strong)]">
-                          {q}
-                        </span>
-                        <span className="text-[12px] text-[var(--color-muted)]">cartes</span>
-                        <span className="text-[13px] font-bold text-[var(--color-accent)] mt-0.5">
-                          {PRICES[cardType][q]}€
-                        </span>
-                        {DELIVERY_COST[q] === 0 && (
-                          <span className="text-[10px] text-[var(--color-success)] font-semibold">
-                            Livraison offerte
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-            </div>
-
-            {/* 3. CTA vers la page commande */}
-            <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-7">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <div className="text-[13px] text-[var(--color-muted)]">
-                    {CARD_TYPES.find(t => t.id === cardType)!.label} × {qty}
-                  </div>
-                  <div className="serif text-[28px] font-bold text-[var(--color-primary)]">
-                    {total.toFixed(2).replace(".", ",")} €
-                    <span className="text-[14px] font-normal text-[var(--color-muted)] ml-1">HT</span>
-                  </div>
-                  {deliveryPrice === 0 && (
-                    <div className="text-[12px] text-[var(--color-success)] font-semibold">Livraison offerte · QR code inclus</div>
-                  )}
-                </div>
-              </div>
-              <a
-                href={`/notaires/cartes?type=${cardType}&qty=${qty}&nom=${encodeURIComponent(form.nom)}&etude=${encodeURIComponent(form.etude)}`}
-                className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
-              >
-                <CreditCard className="w-[18px] h-[18px]" strokeWidth={2.5} />
-                Commander — {total.toFixed(2).replace(".", ",")} €
-              </a>
-              <p className="text-[12px] text-[var(--color-muted)] text-center mt-3 leading-relaxed">
-                Paiement sécurisé par Stripe · Bon à tirer envoyé par e-mail avant impression
-              </p>
-            </div>
+            {/* 2. CTA → page commande */}
+            <a
+              href={`/notaires/cartes?nom=${encodeURIComponent(form.nom)}&etude=${encodeURIComponent(form.etude)}`}
+              className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-4 rounded-[14px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+            >
+              Commander ma carte
+              <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+            </a>
           </motion.div>
 
           {/* ── Aperçu carte en direct ────────────────────────────────────── */}

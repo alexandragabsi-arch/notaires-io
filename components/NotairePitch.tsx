@@ -36,6 +36,10 @@ const faqNotaires = [
     a: "Les données sont traitées conformément au RGPD et hébergées de façon sécurisée. La confidentialité, c'est le cœur de votre métier — et de notre plateforme.",
   },
   {
+    q: "Je suis notaire salarié, puis-je y figurer ?",
+    a: "Oui. Notaires associés comme notaires salariés peuvent créer leur profil et apparaître dans l'annuaire. Votre fiche est à votre nom, avec vos spécialités — indépendamment du statut au sein de l'étude.",
+  },
+  {
     q: "Combien de temps pour démarrer ?",
     a: "Le référencement est rapide. Après la démo, votre étude peut être en ligne et recevoir ses premiers rendez-vous très vite.",
   },

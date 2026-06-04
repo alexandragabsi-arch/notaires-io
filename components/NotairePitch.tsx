@@ -29,7 +29,7 @@ const faqNotaires = [
   },
   {
     q: "En quoi ça me fait gagner du temps ?",
-    a: "Vos clients arrivent avec un dossier déjà cadré, sur la bonne spécialité. Moins d'allers-retours en amont, des rendez-vous plus efficaces, et du temps récupéré sur chaque dossier.",
+    a: "Les questions essentielles ont été posées en amont : situation familiale, bien concerné, objectif de l'acte. Le client a téléchargé ses documents avant le rendez-vous. Vous pouvez vous concentrer sur l'essentiel — le conseil à apporter et l'acte à établir.",
   },
   {
     q: "Et la protection des données de mes clients ?",

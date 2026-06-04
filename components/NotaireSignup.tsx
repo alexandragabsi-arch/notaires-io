@@ -58,6 +58,7 @@ export default function NotaireSignup() {
   const [ville, setVille] = useState("");
   const [specs, setSpecs] = useState<string[]>([]);
   const [langs, setLangs] = useState<string[]>([]);
+  const [role, setRole] = useState<"associé" | "salarié" | "">("");
 
   // Profil public
   const [photo, setPhoto] = useState<string | null>(null);
@@ -107,6 +108,7 @@ export default function NotaireSignup() {
       languages: langs,
       photo,
       bio,
+      role: role || undefined,
     });
     setSavedProfile(profile);
     setDone(true);
@@ -210,6 +212,24 @@ export default function NotaireSignup() {
                           />
                         </Field>
                       </div>
+                      <Field label="Statut">
+                        <div className="flex gap-3">
+                          {(["associé", "salarié"] as const).map((r) => (
+                            <button
+                              key={r}
+                              type="button"
+                              onClick={() => setRole(role === r ? "" : r)}
+                              className={`flex-1 py-2.5 rounded-xl text-[13px] font-semibold border transition-colors ${
+                                role === r
+                                  ? "bg-[var(--color-primary)] text-white border-[var(--color-primary)]"
+                                  : "border-[var(--color-border-soft)] text-[var(--color-text-strong)] hover:border-[var(--color-primary)]"
+                              }`}
+                            >
+                              Notaire {r}
+                            </button>
+                          ))}
+                        </div>
+                      </Field>
                       <Field label="E-mail professionnel">
                         <IconInput
                           icon={Mail}
@@ -392,7 +412,7 @@ export default function NotaireSignup() {
                   {/* Étape 4 — Récapitulatif */}
                   {step === 3 && (
                     <div className="flex flex-col gap-3">
-                      <Recap label="Notaire" value={displayName} />
+                      <Recap label="Notaire" value={`${displayName}${role ? ` · ${role === "associé" ? "Notaire associé" : "Notaire salarié"}` : ""}`} />
                       <Recap label="E-mail" value={email || "—"} />
                       <Recap label="Téléphone" value={tel || "—"} />
                       <Recap label="Étude" value={etude || "—"} />

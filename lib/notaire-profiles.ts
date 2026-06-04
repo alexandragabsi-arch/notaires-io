@@ -16,6 +16,7 @@ export interface SignupProfile {
   languages?: string[];
   photo?: string | null;
   bio?: string;
+  role?: "associé" | "salarié";
 }
 
 const COLORS: ListingNotaire["color"][] = ["default", "green", "purple"];
@@ -56,6 +57,7 @@ function toListing(p: SignupProfile): ListingNotaire {
     photo: p.photo || undefined,
     bio: p.bio?.trim() || undefined,
     isNew: true,
+    role: p.role,
   };
 }
 

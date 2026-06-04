@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
+import { getNotairesBySpecialty, getNotairesMixed } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
   title: "Notaire divorce — 1er RDV offert · Notaires.io",
@@ -69,7 +70,11 @@ const FAQ = [
 ];
 
 export default function Page() {
-  const notaires = LISTING_NOTAIRES.filter((n) => n.specialties.includes("Famille"));
+  const scraped = getNotairesBySpecialty("Divorce", ["Droit de la famille"], 60);
+  // Si peu de résultats spécialisés, affiche un panel multi-villes
+  const notaires = scraped.length >= 6
+    ? scraped
+    : getNotairesMixed(60);
 
   return (
     <>

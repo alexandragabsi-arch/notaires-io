@@ -56,13 +56,11 @@ export const metadata: Metadata = {
     siteName: "Notaires.io",
     locale: "fr_FR",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Notaires.io — La plateforme de prise de RDV notariale" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Notaires.io — Prendre rendez-vous avec un notaire en ligne",
     description: "Trouvez le notaire qu'il vous faut en 3 questions. 1er RDV offert.",
-    images: ["/og-image.png"],
   },
   alternates: { canonical: BASE },
   verification: {

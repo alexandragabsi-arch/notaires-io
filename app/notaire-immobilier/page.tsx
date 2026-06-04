@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
+import { getNotairesBySpecialty } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
   title: "Notaire immobilier — 1er RDV offert · Notaires.io",
@@ -70,7 +71,10 @@ const FAQ = [
 ];
 
 export default function Page() {
-  const notaires = LISTING_NOTAIRES.filter((n) => n.specialties.includes("Immobilier"));
+  const scraped = getNotairesBySpecialty("Droit immobilier", [], 60);
+  const notaires = scraped.length > 0
+    ? scraped
+    : LISTING_NOTAIRES.filter((n) => n.specialties.includes("Droit immobilier"));
 
   return (
     <>

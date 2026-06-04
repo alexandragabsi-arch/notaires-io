@@ -9,7 +9,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import QRCard from "@/components/QRCard";
-import CardDesigner from "@/components/CardDesigner";
+
 import NotaireDashboard from "@/components/NotaireDashboard";
 import NotaireBilling from "@/components/NotaireBilling";
 import FAQ from "@/components/FAQ";
@@ -100,7 +100,7 @@ export default function NotairePitch() {
               bonne spécialité — et qui vous fait gagner du temps à chaque
               dossier.
             </p>
-            <p className="serif text-[18px] sm:text-[20px] italic text-[var(--color-primary)] mb-9">
+            <p className="serif text-[18px] sm:text-[20px] italic text-[var(--color-primary)] mb-9 text-center">
               Créé par un notaire, au service des notaires.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
@@ -219,8 +219,81 @@ export default function NotairePitch() {
       {/* QR code */}
       <QRCard />
 
-      {/* Cartes de visite — toujours visible */}
-      <CardDesigner />
+      {/* Cartes de visite — teaser avec CTA vers /notaires/cartes */}
+      <section id="cartes" className="py-16 sm:py-20 lg:py-24 bg-[var(--color-tint-blue)]">
+        <div className="max-w-[920px] mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.45 }}
+            className="text-center mb-10"
+          >
+            <div className="text-[var(--color-accent)] text-[13px] font-bold tracking-[1.5px] uppercase mb-3">
+              Vos cartes de visite
+            </div>
+            <h2 className="serif text-[28px] sm:text-[34px] font-bold leading-[1.15] text-[var(--color-text-strong)] tracking-tight mb-3">
+              Cartes professionnelles avec{" "}
+              <span className="serif-accent">QR code intégré</span>
+            </h2>
+            <p className="text-[var(--color-muted)] text-[17px] max-w-[520px] mx-auto leading-relaxed">
+              Standard 350 g ou Premium 600 g soft-touch — design, QR code et livraison inclus dès 250 exemplaires.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.45, delay: 0.1 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6"
+          >
+            {/* Mini cartes aperçu */}
+            {[
+              { qty: "100", price: "39 €", delivery: null },
+              { qty: "250", price: "59 €", delivery: "Livraison offerte", highlight: true },
+              { qty: "500", price: "89 €", delivery: "Livraison offerte" },
+            ].map(({ qty, price, delivery, highlight }) => (
+              <div
+                key={qty}
+                className={`flex-1 min-w-[140px] max-w-[180px] rounded-2xl border-2 p-5 text-center bg-white transition-all ${
+                  highlight
+                    ? "border-[var(--color-accent)] shadow-[var(--shadow-strong)]"
+                    : "border-[var(--color-border-soft)] shadow-[var(--shadow-card)]"
+                }`}
+              >
+                <div className="text-[26px] font-bold text-[var(--color-text-strong)]">{qty}</div>
+                <div className="text-[13px] text-[var(--color-muted)] mb-2">cartes</div>
+                <div className={`text-[20px] font-bold mb-1 ${highlight ? "text-[var(--color-accent)]" : "text-[var(--color-text-strong)]"}`}>
+                  {price}
+                </div>
+                {delivery && (
+                  <div className="text-[11px] text-[var(--color-success)] font-semibold">{delivery}</div>
+                )}
+              </div>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="text-center mt-10"
+          >
+            <a
+              href="/notaires/cartes"
+              className="inline-flex items-center gap-2 bg-gradient-cta text-white px-8 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+            >
+              Commander mes cartes
+              <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+            </a>
+            <p className="text-[12px] text-[var(--color-muted)] mt-3">
+              QR code + design inclus · Paiement sécurisé Stripe
+            </p>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Tableau de bord des rendez-vous + rappels e-mail */}
       <NotaireDashboard />

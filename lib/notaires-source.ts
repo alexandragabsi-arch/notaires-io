@@ -129,6 +129,69 @@ function formatPhone(phone: string): string {
 }
 
 /**
+ * Retourne les notaires ayant une spécialité donnée (toutes villes confondues),
+ * en mélangeant les villes pour éviter un résultat Paris-only.
+ * @param specialty  Spécialité exacte (ex. "Successions", "Droit de la famille")
+ * @param extraSpecialties  Spécialités supplémentaires (union, ex. ["Mariage / PACS"])
+ * @param limit  Nombre max de résultats (défaut : 60)
+ */
+export function getNotairesBySpecialty(
+  specialty: string,
+  extraSpecialties: string[] = [],
+  limit = 60,
+): ListingNotaire[] {
+  const all = loadAll();
+  const keys = [specialty, ...extraSpecialties];
+  const filtered = all.filter(n =>
+    keys.some(k => (n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"]).includes(k)),
+  );
+
+  // Regroupe par ville et mélange en round-robin pour avoir une sélection multi-villes
+  const byCity = new Map<string, RawNotaire[]>();
+  for (const n of filtered) {
+    if (!byCity.has(n.city)) byCity.set(n.city, []);
+    byCity.get(n.city)!.push(n);
+  }
+  // Villes ordonnées par taille décroissante (plus de choix = mieux représenté)
+  const cityQueues = [...byCity.entries()]
+    .sort((a, b) => b[1].length - a[1].length)
+    .map(([, arr]) => arr);
+
+  const picked: RawNotaire[] = [];
+  let i = 0;
+  while (picked.length < limit && cityQueues.some(q => q.length > 0)) {
+    const queue = cityQueues[i % cityQueues.length];
+    if (queue.length > 0) picked.push(queue.shift()!);
+    i++;
+  }
+
+  return picked.map(n => ({
+    id: n.id,
+    name: n.name,
+    initials: n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map(p => p[0]).join(""),
+    color: n.color,
+    city: n.city,
+    address: n.address || undefined,
+    phone: n.phone ? formatPhone(n.phone) : undefined,
+    officeName: n.officeName || undefined,
+    arrondissement: (n as RawNotaire & { arrondissement?: number }).arrondissement || undefined,
+    role: n.role,
+    specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
+    next: "Disponible rapidement",
+    slotMatrix: deterministicSlots(n.id),
+    bio: undefined,
+  }));
+}
+
+/**
+ * Retourne un panel de notaires de toutes villes confondues (round-robin),
+ * utilisé comme fallback quand une spécialité est peu représentée dans les données.
+ */
+export function getNotairesMixed(limit = 60): ListingNotaire[] {
+  return getNotairesBySpecialty("Successions", [], limit);
+}
+
+/**
  * Retourne le nombre de notaires disponibles pour une ville
  */
 export function countNotairesByCity(city: string): number {

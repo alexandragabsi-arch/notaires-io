@@ -219,13 +219,13 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between gap-4 py-4 text-left text-[var(--color-text-strong)] font-semibold text-[15px] hover:text-[var(--color-accent)] transition-colors"
+        className="w-full flex items-start justify-between gap-4 py-4 text-left text-[var(--color-text-strong)] font-semibold text-[15px] hover:text-[var(--color-accent)] transition-colors"
         aria-expanded={open}
         aria-controls={`faq-answer-${index}`}
       >
-        <span>{q}</span>
+        <span className="flex-1">{q}</span>
         <span
-          className={`shrink-0 w-6 h-6 rounded-full border border-[var(--color-border-soft)] flex items-center justify-center text-[var(--color-muted)] transition-transform ${open ? "rotate-45" : ""}`}
+          className={`shrink-0 mt-0.5 w-6 h-6 rounded-full border border-[var(--color-border-soft)] flex items-center justify-center text-[var(--color-muted)] transition-transform ${open ? "rotate-45" : ""}`}
         >
           +
         </span>
@@ -233,7 +233,7 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
       {open && (
         <div
           id={`faq-answer-${index}`}
-          className="pb-4 text-[var(--color-muted)] text-sm leading-relaxed"
+          className="pb-4 text-[var(--color-muted)] text-sm leading-relaxed text-justify hyphens-auto"
         >
           {a}
         </div>

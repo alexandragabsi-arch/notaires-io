@@ -11,8 +11,6 @@ import {
   Package,
   Truck,
   CreditCard,
-  Loader2,
-  Check,
 } from "lucide-react";
 
 /* ─── Tarifs (HT, QR code + impression + design inclus) ──────────────────── */
@@ -78,13 +76,7 @@ export default function CardDesigner() {
   const [cardType, setCardType] = useState<CardType>("standard");
   const [qty, setQty] = useState<Qty>(250);
 
-  /* Livraison */
-  const [delivery, setDelivery] = useState({ nom: "", adresse: "", cp: "", ville: "" });
 
-  /* Paiement */
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [ordered, setOrdered] = useState(false);
 
   /* Calcul devis */
   const cardPrice = PRICES[cardType][qty];
@@ -93,60 +85,6 @@ export default function CardDesigner() {
 
   const v = (k: CardField["key"]) =>
     form[k] || cardFields.find((f) => f.key === k)!.placeholder;
-
-  async function handleOrder() {
-    setError("");
-    setLoading(true);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          cardType,
-          quantity: qty,
-          totalCents: Math.round(total * 100),
-          productName: `Cartes de visite ${cardType === "premium" ? "Premium 600g" : "Standard 350g"} × ${qty}`,
-          productDesc: `Notaires.io · QR code intégré · ${CARD_TYPES.find(t => t.id === cardType)!.finish} · ${qty} exemplaires`,
-          notaire: v("nom"),
-          etude: v("etude"),
-          deliveryNom: delivery.nom,
-          deliveryAdresse: delivery.adresse,
-          deliveryCp: delivery.cp,
-          deliveryVille: delivery.ville,
-        }),
-      });
-      const data = (await res.json()) as { url?: string; error?: string };
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        setError(data.error ?? "Erreur lors de la redirection vers le paiement.");
-        setLoading(false);
-      }
-    } catch {
-      setError("Impossible de contacter le serveur de paiement.");
-      setLoading(false);
-    }
-  }
-
-  /* Message de confirmation après retour Stripe */
-  if (ordered) {
-    return (
-      <section id="cartes" className="py-16 sm:py-20 lg:py-28 bg-white">
-        <div className="max-w-[520px] mx-auto px-6 text-center">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--color-tint-green)] flex items-center justify-center text-[var(--color-success)] mb-6">
-            <Check className="w-8 h-8" strokeWidth={2.5} />
-          </div>
-          <h2 className="serif text-[26px] font-bold text-[var(--color-text-strong)] mb-3">
-            Commande reçue !
-          </h2>
-          <p className="text-[var(--color-muted)] text-[15px] leading-relaxed text-justify hyphens-auto">
-            Nous vérifions votre visuel avant de lancer l'impression. Vous recevrez
-            un bon à tirer par e-mail sous 24 h ouvrées.
-          </p>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section id="cartes" className="py-16 sm:py-20 lg:py-28 bg-white">
@@ -294,106 +232,31 @@ export default function CardDesigner() {
                 </div>
               </div>
 
-              {/* Adresse de livraison */}
-              <div>
-                <div className="flex items-center gap-2 text-[13px] font-semibold text-[var(--color-text-strong)] mb-2.5">
-                  <Truck className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
-                  Adresse de livraison
-                </div>
-                <div className="flex flex-col gap-3">
-                  <input
-                    type="text"
-                    value={delivery.nom}
-                    onChange={(e) => setDelivery((d) => ({ ...d, nom: e.target.value }))}
-                    placeholder="Nom / Étude (destinataire)"
-                    className="w-full px-3.5 py-2.5 rounded-[10px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
-                  />
-                  <input
-                    type="text"
-                    value={delivery.adresse}
-                    onChange={(e) => setDelivery((d) => ({ ...d, adresse: e.target.value }))}
-                    placeholder="Adresse (rue, numéro)"
-                    className="w-full px-3.5 py-2.5 rounded-[10px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
-                  />
-                  <div className="grid grid-cols-[1fr_2fr] gap-3">
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      value={delivery.cp}
-                      onChange={(e) => setDelivery((d) => ({ ...d, cp: e.target.value }))}
-                      placeholder="Code postal"
-                      className="w-full px-3.5 py-2.5 rounded-[10px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
-                    />
-                    <input
-                      type="text"
-                      value={delivery.ville}
-                      onChange={(e) => setDelivery((d) => ({ ...d, ville: e.target.value }))}
-                      placeholder="Ville"
-                      className="w-full px-3.5 py-2.5 rounded-[10px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
-                    />
-                  </div>
-                </div>
-              </div>
             </div>
 
-            {/* 3. Devis + paiement */}
+            {/* 3. CTA vers la page commande */}
             <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-7">
-              <div className="flex items-center gap-2 text-[13px] font-bold text-[var(--color-text-strong)] uppercase tracking-[0.5px] mb-5">
-                <CreditCard className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
-                Récapitulatif & paiement
-              </div>
-
-              <div className="flex flex-col gap-2 mb-5">
-                <div className="flex items-center justify-between text-[14px]">
-                  <span className="text-[var(--color-muted)]">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <div className="text-[13px] text-[var(--color-muted)]">
                     {CARD_TYPES.find(t => t.id === cardType)!.label} × {qty}
-                  </span>
-                  <span className="font-semibold text-[var(--color-text-strong)]">
-                    {cardPrice}€
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-[14px]">
-                  <span className="text-[var(--color-muted)]">Livraison</span>
-                  <span className={`font-semibold ${deliveryPrice === 0 ? "text-[var(--color-success)]" : "text-[var(--color-text-strong)]"}`}>
-                    {deliveryPrice === 0 ? "Offerte" : `${deliveryPrice.toFixed(2).replace(".", ",")} €`}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-[14px]">
-                  <span className="text-[var(--color-muted)]">QR code + design</span>
-                  <span className="font-semibold text-[var(--color-success)]">Inclus</span>
-                </div>
-                <div className="flex items-center justify-between pt-3 mt-1 border-t border-[var(--color-border-soft)]">
-                  <span className="font-bold text-[16px] text-[var(--color-text-strong)]">Total HT</span>
-                  <span className="serif text-[26px] font-bold text-[var(--color-primary)]">
+                  </div>
+                  <div className="serif text-[28px] font-bold text-[var(--color-primary)]">
                     {total.toFixed(2).replace(".", ",")} €
-                  </span>
+                    <span className="text-[14px] font-normal text-[var(--color-muted)] ml-1">HT</span>
+                  </div>
+                  {deliveryPrice === 0 && (
+                    <div className="text-[12px] text-[var(--color-success)] font-semibold">Livraison offerte · QR code inclus</div>
+                  )}
                 </div>
               </div>
-
-              {error && (
-                <p className="text-[13px] text-red-500 bg-red-50 rounded-[10px] px-3.5 py-2.5 mb-4">
-                  {error}
-                </p>
-              )}
-
-              <button
-                type="button"
-                onClick={handleOrder}
-                disabled={loading}
-                className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+              <a
+                href={`/notaires/cartes?type=${cardType}&qty=${qty}&nom=${encodeURIComponent(form.nom)}&etude=${encodeURIComponent(form.etude)}`}
+                className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
               >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-[18px] h-[18px] animate-spin" strokeWidth={2.5} />
-                    Redirection vers le paiement…
-                  </>
-                ) : (
-                  <>
-                    <CreditCard className="w-[18px] h-[18px]" strokeWidth={2.5} />
-                    Commander — {total.toFixed(2).replace(".", ",")} €
-                  </>
-                )}
-              </button>
+                <CreditCard className="w-[18px] h-[18px]" strokeWidth={2.5} />
+                Commander — {total.toFixed(2).replace(".", ",")} €
+              </a>
               <p className="text-[12px] text-[var(--color-muted)] text-center mt-3 leading-relaxed">
                 Paiement sécurisé par Stripe · Bon à tirer envoyé par e-mail avant impression
               </p>

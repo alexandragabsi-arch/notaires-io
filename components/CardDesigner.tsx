@@ -193,12 +193,6 @@ export default function CardDesigner() {
               </span>
             </div>
 
-            {/* Explication livraison */}
-            <div className="mt-5 bg-[var(--color-tint-blue)] rounded-2xl px-5 py-4 text-[13px] text-[var(--color-muted)] leading-relaxed flex flex-col gap-1.5">
-              <span className="font-semibold text-[var(--color-text-strong)]">🚚 Délai de livraison</span>
-              <span>Impression sous 3–5 jours ouvrés après validation du bon à tirer.</span>
-              <span className="text-[var(--color-success)] font-semibold">Livraison offerte à partir de 250 cartes.</span>
-            </div>
           </motion.div>
         </div>
       </div>

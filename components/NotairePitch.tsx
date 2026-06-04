@@ -101,9 +101,6 @@ export default function NotairePitch() {
                 la bonne spécialité — et qui vous fait gagner du temps à chaque
                 dossier.
               </p>
-              <p className="serif text-[18px] sm:text-[20px] italic text-[var(--color-primary)] text-center">
-                Créé par un notaire, au service des notaires.
-              </p>
             </div>
             <div className="flex flex-wrap justify-center gap-3">
               <a
@@ -189,34 +186,6 @@ export default function NotairePitch() {
         </div>
       </section>
 
-      {/* Créé par un notaire */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-white">
-        <div className="max-w-[920px] mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.45 }}
-            className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-8 sm:p-12 flex flex-col sm:flex-row items-start gap-7"
-          >
-            <div className="w-14 h-14 shrink-0 rounded-2xl bg-[var(--color-tint-warm)] flex items-center justify-center text-[var(--color-primary)]">
-              <ScrollText className="w-7 h-7" strokeWidth={2} />
-            </div>
-            <div>
-              <h2 className="serif text-[24px] sm:text-[30px] font-bold text-[var(--color-text-strong)] mb-3 leading-tight">
-                Une plateforme pensée par la profession.
-              </h2>
-              <p className="text-[var(--color-muted)] text-[16px] leading-relaxed text-justify hyphens-auto">
-                Notaires.io est conçu par un notaire en exercice. On connaît vos
-                contraintes : déontologie, organisation de l'étude, relation
-                client. Chaque fonctionnalité est faite pour vous faire gagner du
-                temps, jamais pour vous en faire perdre — et pour vous présenter
-                des clients qui savent déjà pourquoi ils viennent.
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       {/* QR code */}
       <QRCard />

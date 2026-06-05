@@ -117,7 +117,12 @@ async function main() {
       const siren = company.siren ?? "";
 
       const dirigeants = company.dirigeants ?? [];
-      const persons = dirigeants.filter(d => d.type_dirigeant === "personne physique" && d.nom);
+      const EXCLUDE_QUALITE = /commissaire aux comptes/i;
+      const persons = dirigeants.filter(d =>
+        d.type_dirigeant === "personne physique" &&
+        d.nom &&
+        !EXCLUDE_QUALITE.test(d.qualite ?? "")
+      );
 
       if (persons.length === 0) {
         // Pas d'individus → on met l'étude elle-même
@@ -147,6 +152,8 @@ async function main() {
           const id = slugify(`${p.nom}-${p.prenoms ?? ""}-${siren}`);
           if (seen.has(id) || !p.nom) continue;
           seen.add(id);
+          // "Gérant et associé" → associé, sinon associé par défaut (tous sont dirigeants)
+          const role = /salar/i.test(p.qualite ?? "") ? "salarié" : "associé";
           all.push({
             id,
             name: formatted,
@@ -160,6 +167,7 @@ async function main() {
             website: "",
             specialties: guessSpecialties(officeName),
             slotMatrix: deterministicSlots(id),
+            role,
             source: "api-entreprises",
             claimed: false,
           });

@@ -18,7 +18,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
 
   // Champ de recherche ville/CP
   const [cityInput, setCityInput] = useState(urlVille);
-  const [city, setCity] = useState<string>(ALL);          // filtre actif
+  const [city, setCity] = useState<string>(urlVille || ALL); // filtre actif — initialisé depuis URL
   const [suggestions, setSuggestions] = useState<CitySugg[]>([]);
   const [showSugg, setShowSugg] = useState(false);
   const suggTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -69,6 +69,9 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
     setCity(urlVille);
   }, [urlVille]);
 
+  // Reset pagination quand la ville change
+  useEffect(() => { setDisplayLimit(60); }, [city]);
+
   function selectSuggestion(item: CitySugg) {
     setCityInput(`${item.city} (${item.postcode})`);
     setCity(item.city);
@@ -89,17 +92,20 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
     [all],
   );
 
+  const [displayLimit, setDisplayLimit] = useState(60);
+
   const results = useMemo(() => {
     const norm = city === ALL ? "" : city.toLowerCase().trim();
     return all.filter((n) => {
-      const matchCity = !norm ||
-        n.city.toLowerCase().includes(norm) ||
-        norm.includes(n.city.toLowerCase());
+      const matchCity = !norm || n.city.toLowerCase().includes(norm);
       const matchSpec = specialty === ALL || n.specialties.includes(specialty);
       const matchLang = language === ALL || (n.languages ?? []).includes(language);
       return matchCity && matchSpec && matchLang;
     });
   }, [all, city, specialty, language]);
+
+  // Reset limit when city changes
+  const displayed = useMemo(() => results.slice(0, displayLimit), [results, displayLimit]);
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
@@ -193,7 +199,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
         {/* Résultats */}
         {results.length > 0 ? (
           <div className="grid sm:grid-cols-2 gap-4">
-            {results.map((n, i) => (
+            {displayed.map((n, i) => (
               <motion.a
                 key={n.id}
                 href={`/notaires/${n.id}`}
@@ -268,7 +274,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
                   ))}
                 </div>
 
-                <div className="flex items-center gap-4 text-[13px] mb-4">
+                <div className="flex flex-wrap items-center gap-3 text-[13px] mb-4">
                   {n.isNew ? (
                     <span className="flex items-center gap-1 text-[var(--color-muted)] italic">
                       <Sparkles className="w-[13px] h-[13px]" strokeWidth={2} />
@@ -278,6 +284,15 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
                     <span className="flex items-center gap-1 text-[var(--color-success)] font-semibold">
                       <BadgeCheck className="w-[15px] h-[15px]" strokeWidth={2} />
                       Notaire vérifié
+                    </span>
+                  )}
+                  {n.role && (
+                    <span className={`px-2 py-0.5 rounded-full text-[11px] font-semibold border ${
+                      n.role === "salarié"
+                        ? "bg-purple-50 text-purple-600 border-purple-200"
+                        : "bg-blue-50 text-blue-600 border-blue-200"
+                    }`}>
+                      {n.role === "salarié" ? "Notaire salarié" : "Notaire associé"}
                     </span>
                   )}
                   <span className="flex items-center gap-1 text-[var(--color-success)] font-medium">
@@ -293,7 +308,25 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
               </motion.a>
             ))}
           </div>
-        ) : (
+        ) : null}
+
+        {/* Voir plus */}
+        {results.length > displayLimit && (
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => setDisplayLimit(l => l + 60)}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] font-semibold text-[var(--color-text-strong)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+            >
+              Voir {Math.min(60, results.length - displayLimit)} notaires de plus
+              <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
+            </button>
+            <p className="text-[12px] text-[var(--color-muted)] mt-2">
+              {displayLimit} / {results.length.toLocaleString("fr-FR")} affichés
+            </p>
+          </div>
+        )}
+
+        {results.length === 0 && (
           <div className="text-center bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-[var(--shadow-card)] py-14 px-6">
             <div className="w-14 h-14 mx-auto rounded-2xl bg-[var(--color-tint-blue)] flex items-center justify-center text-[var(--color-muted)] mb-4">
               <Search className="w-7 h-7" strokeWidth={2} />

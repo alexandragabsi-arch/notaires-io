@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Check, Bell, Loader2, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowLeft, Check, Bell, Loader2, Sparkles, MapPin } from "lucide-react";
 import {
   Q1_OPTIONS,
   Q2_TREE,
@@ -48,9 +48,10 @@ export default function Wizard() {
   const [modalOpen, setModalOpen] = useState(false);
   const [bookAccept, setBookAccept] = useState(false);
 
-  // Autocomplete ville
-  const [citySuggestions, setCitySuggestions] = useState<{ label: string; city: string; postcode: string }[]>([]);
+  // Autocomplete ville / CP
+  const [citySuggestions, setCitySuggestions] = useState<{ city: string; postcode: string }[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [geoLoading, setGeoLoading] = useState(false);
   const suggestTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -60,23 +61,44 @@ export default function Wizard() {
     if (suggestTimer.current) clearTimeout(suggestTimer.current);
     suggestTimer.current = setTimeout(async () => {
       try {
-        const res = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(q)}&type=municipality&limit=6`);
+        // Pas de filtre type= pour couvrir aussi les CP (ex: "75008" → Paris 8e)
+        const res = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(q)}&type=municipality&limit=7&autocomplete=1`);
         const json = await res.json();
-        const items = (json.features ?? []).map((f: { properties: { label: string; city: string; postcode: string } }) => ({
-          label: `${f.properties.city} (${f.properties.postcode})`,
-          city: f.properties.city,
-          postcode: f.properties.postcode,
-        }));
+        const seen = new Set<string>();
+        const items: { city: string; postcode: string }[] = [];
+        for (const f of json.features ?? []) {
+          const key = f.properties.city + f.properties.postcode;
+          if (!seen.has(key)) { seen.add(key); items.push({ city: f.properties.city, postcode: f.properties.postcode }); }
+        }
         setCitySuggestions(items);
         setShowSuggestions(items.length > 0);
       } catch { /* silencieux */ }
-    }, 220);
+    }, 200);
   }, [postal]);
 
-  function selectCity(item: { label: string; city: string; postcode: string }) {
+  function selectCity(item: { city: string; postcode: string }) {
     setPostal(item.postcode);
     setCitySuggestions([]);
     setShowSuggestions(false);
+    inputRef.current?.focus();
+  }
+
+  async function detectNearMe() {
+    setGeoLoading(true);
+    try {
+      const coords = await new Promise<GeolocationCoordinates>((res, rej) =>
+        navigator.geolocation.getCurrentPosition(p => res(p.coords), rej, { timeout: 8000 })
+      );
+      const r = await fetch(`https://api-adresse.data.gouv.fr/reverse/?lon=${coords.longitude}&lat=${coords.latitude}&limit=1`);
+      const geo = await r.json();
+      const props = geo.features?.[0]?.properties;
+      if (props?.postcode) {
+        setPostal(props.postcode);
+        setCitySuggestions([]);
+        setShowSuggestions(false);
+      }
+    } catch { /* silencieux */ }
+    finally { setGeoLoading(false); }
   }
 
   // IA détection
@@ -471,6 +493,17 @@ export default function Wizard() {
                   </ul>
                 )}
               </div>
+              <button
+                type="button"
+                onClick={detectNearMe}
+                disabled={geoLoading}
+                className="inline-flex items-center justify-center gap-2 text-[14px] text-[var(--color-accent)] font-semibold py-2 hover:underline disabled:opacity-50 transition"
+              >
+                {geoLoading
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Localisation…</>
+                  : <><MapPin className="w-4 h-4" /> Près de chez moi</>
+                }
+              </button>
               <motion.button
                 type="submit"
                 whileHover={{ y: -1, filter: "brightness(1.05)" }}

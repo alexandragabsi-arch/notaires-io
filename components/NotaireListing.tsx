@@ -298,6 +298,9 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
 
   const displayed = useMemo(() => results.slice(0, displayLimit), [results, displayLimit]);
 
+  /** Vrai dès qu'une ville OU un nom est saisi */
+  const hasSearch = city !== ALL || nameQuery.trim().length > 0;
+
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
       <div className="max-w-[1100px] mx-auto px-6">
@@ -393,31 +396,61 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
           </div>
         )}
 
-        {/* Compteur */}
-        <div className="flex items-center justify-between mb-5 max-w-[860px] mx-auto">
-          <p className="text-[14px] text-[var(--color-muted)]">
-            <span className="font-bold text-[var(--color-text-strong)]">
-              {results.length.toLocaleString("fr-FR")}
-            </span>{" "}résultat{results.length > 1 ? "s" : ""}
-            {city !== ALL && <span className="font-semibold text-[var(--color-text-strong)]"> à {city}</span>}
-          </p>
-          {city !== ALL && (
-            <button type="button" onClick={clearCity}
-              className="text-[13px] font-semibold text-[var(--color-accent)] hover:underline flex items-center gap-1">
-              <X className="w-3.5 h-3.5" strokeWidth={2.5} /> Effacer
-            </button>
-          )}
-        </div>
+        {/* ── État sans filtre : invite à chercher ── */}
+        {!hasSearch && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.12 }}
+            className="max-w-[860px] mx-auto mt-4 text-center py-16 px-6 bg-[var(--color-tint-blue)] rounded-3xl border border-[var(--color-accent-soft)]"
+          >
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--color-accent)] flex items-center justify-center mb-5 shadow-[var(--shadow-cta)]">
+              <Search className="w-8 h-8 text-white" strokeWidth={2} />
+            </div>
+            <p className="text-[20px] font-bold text-[var(--color-text-strong)] mb-2">
+              9 055 notaires référencés en France
+            </p>
+            <p className="text-[15px] text-[var(--color-muted)] max-w-[400px] mx-auto">
+              Saisissez une ville ou le nom d'un notaire pour voir ses disponibilités et prendre rendez-vous.
+            </p>
+            <div className="flex flex-wrap justify-center gap-2 mt-6">
+              {["Paris", "Lyon", "Marseille", "Bordeaux", "Toulouse", "Nice"].map(v => (
+                <button key={v} type="button"
+                  onClick={() => { setCityInput(v); setCity(v); }}
+                  className="px-4 py-2 rounded-full text-[13px] font-semibold bg-white border border-[var(--color-accent-soft)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-colors shadow-sm">
+                  {v}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
-        {/* Liste */}
-        {results.length > 0 && (
+        {/* ── Compteur ── */}
+        {hasSearch && (
+          <div className="flex items-center justify-between mb-5 max-w-[860px] mx-auto">
+            <p className="text-[14px] text-[var(--color-muted)]">
+              <span className="font-bold text-[var(--color-text-strong)]">
+                {results.length.toLocaleString("fr-FR")}
+              </span>{" "}résultat{results.length > 1 ? "s" : ""}
+              {city !== ALL && <span className="font-semibold text-[var(--color-text-strong)]"> à {city}</span>}
+            </p>
+            {city !== ALL && (
+              <button type="button" onClick={clearCity}
+                className="text-[13px] font-semibold text-[var(--color-accent)] hover:underline flex items-center gap-1">
+                <X className="w-3.5 h-3.5" strokeWidth={2.5} /> Effacer
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* ── Liste ── */}
+        {hasSearch && results.length > 0 && (
           <div className="flex flex-col gap-4">
             {displayed.map((n, i) => <NotaireCard key={n.id} n={n} i={i} />)}
           </div>
         )}
 
         {/* Voir plus */}
-        {results.length > displayLimit && (
+        {hasSearch && results.length > displayLimit && (
           <div className="mt-8 text-center">
             <button onClick={() => setDisplayLimit((l) => l + 60)}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] font-semibold text-[var(--color-text-strong)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors">
@@ -431,7 +464,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
         )}
 
         {/* Résultat vide */}
-        {results.length === 0 && (
+        {hasSearch && results.length === 0 && (
           <div className="text-center bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-[var(--shadow-card)] py-14 px-6">
             <div className="w-14 h-14 mx-auto rounded-2xl bg-[var(--color-tint-blue)] flex items-center justify-center text-[var(--color-muted)] mb-4">
               <Search className="w-7 h-7" strokeWidth={2} />

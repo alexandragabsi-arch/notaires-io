@@ -137,56 +137,68 @@ async function fetchMembers(office) {
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
+const CONCURRENCY = 4;   // requêtes parallèles
+const DELAY_MS    = 250; // délai entre chaque batch
+const CHECKPOINT  = 200; // sauvegarde tous les N offices traités
+
+async function processOffice(office, all, seen) {
+  const members = await fetchMembers(office);
+  members.forEach((m) => {
+    const id = slugify(`${m.formattedName}-${slugify(office.city)}`);
+    if (seen.has(id)) return;
+    seen.add(id);
+    const citySlug = slugify(office.city);
+    all.push({
+      id,
+      name: m.formattedName,
+      initials: getInitials(m.formattedName),
+      color: getColor(all.length),
+      city: office.city.charAt(0) + office.city.slice(1).toLowerCase(),
+      citySlug,
+      officeName: office.name,
+      address: office.address,
+      phone: office.phone,
+      website: office.website,
+      specialties: guessSpecialties(office.name, ""),
+      slotMatrix: generateSlotMatrix(),
+      source: "notaires.fr",
+      claimed: false,
+    });
+  });
+  return members.length;
+}
+
 async function main() {
   console.log("👤  Récupération des notaires associés par étude\n");
 
   const offices = JSON.parse(readFileSync("data/notaires-france.json", "utf-8"));
-  // Toutes les études de France (pas de filtre par ville)
-  console.log(`Total études : ${offices.length}\n`);
+  console.log(`Total études : ${offices.length} — concurrence : ${CONCURRENCY}\n`);
 
   const all = [];
   const seen = new Set();
-  let idx = 0;
+  let done = 0;
 
-  for (const office of offices) {
-    idx++;
-    process.stdout.write(`[${idx}/${offices.length}] ${office.city} — ${office.name.substring(0, 40)}… `);
+  // Traitement par batches de CONCURRENCY
+  for (let i = 0; i < offices.length; i += CONCURRENCY) {
+    const batch = offices.slice(i, i + CONCURRENCY);
+    const results = await Promise.all(batch.map(o => processOffice(o, all, seen)));
+    done += batch.length;
+    const total = results.reduce((s, n) => s + n, 0);
+    process.stdout.write(`[${done}/${offices.length}] +${total} → ${all.length} notaires\n`);
 
-    const members = await fetchMembers(office);
-    process.stdout.write(`${members.length} associé(s)\n`);
+    // Checkpoint
+    if (done % CHECKPOINT === 0) {
+      mkdirSync("data", { recursive: true });
+      writeFileSync("data/notaires-membres.json", JSON.stringify(all, null, 2));
+      console.log(`  💾 Checkpoint sauvegardé (${all.length})`);
+    }
 
-    members.forEach((m, i) => {
-      const id = slugify(`${m.formattedName}-${slugify(office.city)}`);
-      if (seen.has(id)) return;
-      seen.add(id);
-
-      const citySlug = slugify(office.city === "LE HAVRE" ? "le-havre" : office.city);
-      const colorIdx = all.length;
-
-      all.push({
-        id,
-        name: m.formattedName,
-        initials: getInitials(m.formattedName),
-        color: getColor(colorIdx),
-        city: office.city.charAt(0) + office.city.slice(1).toLowerCase().replace(/^(le |la |les |l'|d'|de |du |des |en |saint-)/i, (m) => m),
-        citySlug,
-        officeName: office.name,
-        address: office.address,
-        phone: office.phone,
-        website: office.website,
-        specialties: guessSpecialties(office.name, ""),
-        slotMatrix: generateSlotMatrix(),
-        source: "notaires.fr",
-        claimed: false,
-      });
-    });
-
-    await sleep(350);
+    await sleep(DELAY_MS);
   }
 
   mkdirSync("data", { recursive: true });
   writeFileSync("data/notaires-membres.json", JSON.stringify(all, null, 2));
-  console.log(`\n✅ ${all.length} notaires associés sauvegardés dans data/notaires-membres.json`);
+  console.log(`\n✅ ${all.length} notaires sauvegardés dans data/notaires-membres.json`);
 
   // Top 20 villes
   console.log("\n📊 Top villes :");

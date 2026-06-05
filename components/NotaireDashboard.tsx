@@ -12,7 +12,7 @@ import {
   User,
   CalendarDays,
 } from "lucide-react";
-import { generateRoomId, internalVisioUrl } from "@/lib/visio";
+import { generateRoomId, internalVisioUrl, slotDayToDate } from "@/lib/visio";
 
 type Mode = "visio" | "cabinet";
 
@@ -206,17 +206,28 @@ export default function NotaireDashboard() {
                         <ModeIcon className="w-3.5 h-3.5" strokeWidth={2} />
                         {r.mode === "visio" ? "Visio" : "Au cabinet"}
                       </span>
-                      {r.mode === "visio" && (
-                        <a
-                          href={internalVisioUrl(generateRoomId(r.id, r.time))}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-[12px] font-semibold px-2.5 py-1 rounded-full bg-gradient-cta text-white hover:opacity-90 transition-opacity"
-                        >
-                          <Video className="w-3.5 h-3.5" strokeWidth={2.5} />
-                          Rejoindre
-                        </a>
-                      )}
+                      {r.mode === "visio" && (() => {
+                          const rdvDate = slotDayToDate(r.day);
+                          const roomId = generateRoomId(r.id, r.time, rdvDate);
+                          const isToday = rdvDate === new Date().toISOString().slice(0, 10);
+                          return isToday ? (
+                            <a
+                              key="join"
+                              href={internalVisioUrl(roomId, rdvDate)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-[12px] font-semibold px-2.5 py-1 rounded-full bg-gradient-cta text-white hover:opacity-90 transition-opacity"
+                            >
+                              <Video className="w-3.5 h-3.5" strokeWidth={2.5} />
+                              Rejoindre
+                            </a>
+                          ) : (
+                            <span key="pending" className="inline-flex items-center gap-1 text-[12px] font-medium px-2.5 py-1 rounded-full bg-[var(--color-tint-blue)] text-[var(--color-muted)]">
+                              <Video className="w-3.5 h-3.5" strokeWidth={2} />
+                              Visio · {r.day}
+                            </span>
+                          );
+                        })()}
                       {remindEve && (
                         <span className="inline-flex items-center gap-1 text-[12px] font-medium px-2.5 py-1 rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
                           <Mail className="w-3.5 h-3.5" strokeWidth={2} />

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Check, Bell, Loader2, Sparkles, MapPin, Video } from "lucide-react";
-import { generateRoomId, internalVisioUrl } from "@/lib/visio";
+import { generateRoomId, internalVisioUrl, slotDayToDate } from "@/lib/visio";
 import {
   Q1_OPTIONS,
   Q2_TREE,
@@ -766,8 +766,10 @@ export default function Wizard() {
 
             {/* Lien visio si mode vidéo */}
             {mode === "video" && currentNotary && selectedSlot && (() => {
-              const roomId = generateRoomId(currentNotary.initials, selectedSlot);
-              const visioUrl = internalVisioUrl(roomId);
+              const day = selectedSlot.split(" ")[0]; // "Demain", "Vendredi"…
+              const rdvDate = slotDayToDate(day);
+              const roomId = generateRoomId(currentNotary.initials, selectedSlot, rdvDate);
+              const visioUrl = internalVisioUrl(roomId, rdvDate);
               return (
                 <a
                   href={visioUrl}

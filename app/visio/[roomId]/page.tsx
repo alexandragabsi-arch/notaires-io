@@ -1,9 +1,9 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { Video, Loader2, ExternalLink, Mic, Camera, Users } from "lucide-react";
-import { jitsiRoomUrl } from "@/lib/visio";
+import { useParams, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState, Suspense } from "react";
+import { Video, Loader2, ExternalLink, Mic, Camera, Lock, CalendarClock } from "lucide-react";
+import { jitsiRoomUrl, isRdvDay, formatRdvDate } from "@/lib/visio";
 
 declare global {
   interface Window {
@@ -12,14 +12,33 @@ declare global {
   }
 }
 
-export default function VisioPage() {
+function VisioContent() {
   const { roomId } = useParams<{ roomId: string }>();
+  const searchParams = useSearchParams();
+  const rdvDate = searchParams.get("date") ?? "";
+
   const containerRef = useRef<HTMLDivElement>(null);
-  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [status, setStatus] = useState<"checking" | "locked" | "loading" | "ready" | "error">("checking");
   const jitsiUrl = jitsiRoomUrl(roomId);
 
+  // 1. Vérifie d'abord si c'est bien le jour du RDV
   useEffect(() => {
-    // Charge le script Jitsi External API
+    if (!rdvDate) {
+      // Pas de date → on laisse passer (cas dashboard notaire sans date)
+      setStatus("loading");
+      return;
+    }
+    if (isRdvDay(rdvDate)) {
+      setStatus("loading");
+    } else {
+      setStatus("locked");
+    }
+  }, [rdvDate]);
+
+  // 2. Initialise Jitsi quand status = "loading"
+  useEffect(() => {
+    if (status !== "loading") return;
+
     const script = document.createElement("script");
     script.src = "https://meet.jit.si/external_api.js";
     script.async = true;
@@ -56,11 +75,8 @@ export default function VisioPage() {
     };
     script.onerror = () => setStatus("error");
     document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, [roomId]);
+    return () => { try { document.head.removeChild(script); } catch {} };
+  }, [status, roomId]);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#0f172a]">
@@ -72,20 +88,49 @@ export default function VisioPage() {
           </div>
           <span className="text-white font-bold text-[15px] tracking-tight">Notaires.io · Visio</span>
         </div>
-        <a
-          href={jitsiUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/50 hover:text-white transition-colors"
-        >
-          <ExternalLink className="w-3.5 h-3.5" />
-          Ouvrir dans Jitsi
-        </a>
+        {status !== "locked" && (
+          <a
+            href={jitsiUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/50 hover:text-white transition-colors"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            Ouvrir dans Jitsi
+          </a>
+        )}
       </header>
 
-      {/* Zone de la salle */}
       <div className="relative flex-1" style={{ minHeight: "calc(100vh - 64px)" }}>
-        {/* Chargement */}
+
+        {/* ── Salle verrouillée ── */}
+        {status === "locked" && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 text-center">
+            <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+              <Lock className="w-7 h-7 text-white/40" strokeWidth={1.5} />
+            </div>
+            <div>
+              <p className="text-white font-bold text-lg mb-2">Salle non disponible</p>
+              <p className="text-white/50 text-sm max-w-[360px]">
+                Cette salle de visio ne s&apos;ouvre que le jour de votre rendez-vous.
+              </p>
+            </div>
+            {rdvDate && (
+              <div className="flex items-center gap-2.5 bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5">
+                <CalendarClock className="w-5 h-5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
+                <div className="text-left">
+                  <p className="text-xs text-white/40 font-medium mb-0.5">Votre rendez-vous</p>
+                  <p className="text-white font-semibold text-sm capitalize">{formatRdvDate(rdvDate)}</p>
+                </div>
+              </div>
+            )}
+            <p className="text-white/30 text-xs">
+              Revenez sur cette page le jour J pour rejoindre la visio.
+            </p>
+          </div>
+        )}
+
+        {/* ── Chargement ── */}
         {status === "loading" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 text-white/60 z-10 pointer-events-none">
             <Loader2 className="w-9 h-9 animate-spin" />
@@ -96,12 +141,11 @@ export default function VisioPage() {
             <div className="flex items-center gap-6 text-xs text-white/40 mt-2">
               <span className="flex items-center gap-1.5"><Mic className="w-3.5 h-3.5" /> Micro</span>
               <span className="flex items-center gap-1.5"><Camera className="w-3.5 h-3.5" /> Caméra</span>
-              <span className="flex items-center gap-1.5"><Users className="w-3.5 h-3.5" /> Chiffré</span>
             </div>
           </div>
         )}
 
-        {/* Erreur */}
+        {/* ── Erreur ── */}
         {status === "error" && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-white/60 z-10">
             <p className="text-sm text-white/80 font-semibold">Impossible de charger la visio</p>
@@ -117,9 +161,19 @@ export default function VisioPage() {
           </div>
         )}
 
-        {/* Container Jitsi */}
-        <div ref={containerRef} className="w-full h-full" style={{ minHeight: "calc(100vh - 64px)" }} />
+        {/* ── Container Jitsi ── */}
+        {status !== "locked" && (
+          <div ref={containerRef} className="w-full h-full" style={{ minHeight: "calc(100vh - 64px)" }} />
+        )}
       </div>
     </div>
+  );
+}
+
+export default function VisioPage() {
+  return (
+    <Suspense>
+      <VisioContent />
+    </Suspense>
   );
 }

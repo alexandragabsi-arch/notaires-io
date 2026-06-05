@@ -13,7 +13,6 @@ const benefits = [
 const trust = [
   ["4,9★", "sur 2 814 avis"],
   ["17 000", "notaires référencés"],
-  ["72 h", "délai RDV moyen"],
 ];
 
 const container = {

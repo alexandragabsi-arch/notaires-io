@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import Wizard from "./Wizard";
-import NearYou from "./NearYou";
 
 const benefits = [
   "Spécialité garantie (succession, immobilier, famille, société)",
@@ -96,9 +95,6 @@ export default function Hero() {
               ))}
             </motion.div>
 
-            <motion.div variants={item}>
-              <NearYou />
-            </motion.div>
           </motion.div>
 
           <motion.div

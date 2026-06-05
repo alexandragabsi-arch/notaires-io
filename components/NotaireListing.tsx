@@ -396,33 +396,6 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
           </div>
         )}
 
-        {/* ── État sans filtre : invite à chercher ── */}
-        {!hasSearch && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.12 }}
-            className="max-w-[860px] mx-auto mt-4 text-center py-16 px-6 bg-[var(--color-tint-blue)] rounded-3xl border border-[var(--color-accent-soft)]"
-          >
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--color-accent)] flex items-center justify-center mb-5 shadow-[var(--shadow-cta)]">
-              <Search className="w-8 h-8 text-white" strokeWidth={2} />
-            </div>
-            <p className="text-[20px] font-bold text-[var(--color-text-strong)] mb-2">
-              9 055 notaires référencés en France
-            </p>
-            <p className="text-[15px] text-[var(--color-muted)] max-w-[400px] mx-auto">
-              Saisissez une ville ou le nom d'un notaire pour voir ses disponibilités et prendre rendez-vous.
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 mt-6">
-              {["Paris", "Lyon", "Marseille", "Bordeaux", "Toulouse", "Nice"].map(v => (
-                <button key={v} type="button"
-                  onClick={() => { setCityInput(v); setCity(v); }}
-                  className="px-4 py-2 rounded-full text-[13px] font-semibold bg-white border border-[var(--color-accent-soft)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-colors shadow-sm">
-                  {v}
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        )}
 
         {/* ── Compteur ── */}
         {hasSearch && (

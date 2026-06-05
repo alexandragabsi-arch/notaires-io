@@ -135,18 +135,29 @@ function SlotCalendar({ slotMatrix }: { slotMatrix: string[][] }) {
 }
 
 /* ── Composant principal ─────────────────────────────────────────────────── */
-export default function NotaireProfileClient({ id }: { id: string }) {
-  const [notaire, setNotaire] = useState<ListingNotaire | null | undefined>(undefined);
+export default function NotaireProfileClient({
+  id,
+  initialNotaire,
+}: {
+  id: string;
+  initialNotaire?: ListingNotaire;
+}) {
+  // Si le serveur a déjà trouvé le notaire, on l'utilise directement
+  const [notaire, setNotaire] = useState<ListingNotaire | null | undefined>(
+    initialNotaire ?? undefined,
+  );
 
   useEffect(() => {
+    // Si déjà fourni par le serveur, pas besoin de chercher davantage
+    if (initialNotaire) return;
     const local = [...getStoredProfiles(), ...LISTING_NOTAIRES];
     const found = local.find((n) => n.id === id);
     if (found) { setNotaire(found); return; }
-    // Pas trouvé localement → cherche dans Supabase
+    // Pas trouvé localement → cherche dans Supabase (profils revendiqués)
     getRemoteProfiles().then((remote) => {
       setNotaire(remote.find((n) => n.id === id) ?? null);
     });
-  }, [id]);
+  }, [id, initialNotaire]);
 
   if (notaire === undefined) {
     return (

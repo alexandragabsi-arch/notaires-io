@@ -3,9 +3,23 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import NotaireProfileClient from "@/components/NotaireProfileClient";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
+import { getAllNotaires } from "@/lib/notaires-source";
+import type { ListingNotaire } from "@/lib/notaires-listing";
 
+// Génère statiquement les 35 notaires vedettes ; les autres sont SSR à la demande
 export async function generateStaticParams() {
   return LISTING_NOTAIRES.map((n) => ({ id: n.id }));
+}
+
+// Permet les pages dynamiques pour les 9 000+ membres non pré-générés
+export const dynamicParams = true;
+
+/** Cherche un notaire dans LISTING_NOTAIRES puis dans getAllNotaires() */
+function findNotaire(id: string): ListingNotaire | undefined {
+  return (
+    LISTING_NOTAIRES.find((n) => n.id === id) ??
+    getAllNotaires().find((n) => n.id === id)
+  );
 }
 
 export async function generateMetadata({
@@ -14,7 +28,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const n = LISTING_NOTAIRES.find((x) => x.id === id);
+  const n = findNotaire(id);
   if (!n) return { title: "Profil notaire · Notaires.io" };
 
   const location = n.area ? `${n.city} ${n.area}` : n.city;
@@ -41,7 +55,7 @@ export async function generateMetadata({
 }
 
 function buildJsonLd(id: string) {
-  const n = LISTING_NOTAIRES.find((x) => x.id === id);
+  const n = findNotaire(id);
   if (!n) return null;
   const location = n.area ? `${n.city} ${n.area}` : n.city;
   return {
@@ -91,6 +105,7 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const notaire = findNotaire(id);  // lookup serveur (membres.json inclus)
   const jsonLd = buildJsonLd(id);
 
   return (
@@ -103,7 +118,8 @@ export default async function Page({
       )}
       <Header />
       <main className="min-h-screen bg-white">
-        <NotaireProfileClient id={id} />
+        {/* On passe le notaire en prop pour éviter le lookup côté client (membres.json = server only) */}
+        <NotaireProfileClient id={id} initialNotaire={notaire} />
       </main>
       <Footer />
     </>

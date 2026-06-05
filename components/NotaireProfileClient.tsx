@@ -706,6 +706,29 @@ export default function NotaireProfileClient({
         </motion.div>
       </div>
 
+      {/* ── CTA notaire : revendiquer son profil (payant) ── */}
+      <div className="mt-10 max-w-[720px] mx-auto mb-4">
+        <a
+          href="/inscription"
+          className="w-full flex items-center justify-between gap-4 py-5 px-6 rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-tint-blue)] hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-card)] transition-all group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[var(--color-accent)] flex items-center justify-center shrink-0">
+              <Award className="w-5 h-5 text-white" strokeWidth={2} />
+            </div>
+            <div>
+              <p className="font-bold text-[14px] text-[var(--color-text-strong)]">
+                Vous êtes {notaire.name} ?
+              </p>
+              <p className="text-[13px] text-[var(--color-muted)]">
+                Activez votre profil et recevez des prises de RDV en ligne
+              </p>
+            </div>
+          </div>
+          <ArrowRight className="w-5 h-5 text-[var(--color-accent)] shrink-0 group-hover:translate-x-1 transition-transform" strokeWidth={2.5} />
+        </a>
+      </div>
+
     </div>
   );
 }

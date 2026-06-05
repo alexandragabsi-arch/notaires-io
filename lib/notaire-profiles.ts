@@ -133,6 +133,38 @@ export async function addProfile(p: SignupProfile): Promise<ListingNotaire> {
   return entry;
 }
 
+// ── Revendication / enrichissement d'un profil existant ─────────────────────
+export interface ClaimData {
+  photo?: string | null;
+  bio?: string;
+  specialties?: string[];
+  languages?: string[];
+  phone?: string;
+  address?: string;
+}
+
+/**
+ * Un notaire revendique son profil existant (id = membres.json) et l'enrichit.
+ * Upsert dans Supabase avec l'ID d'origine → priorité sur la fiche scrappée.
+ */
+export async function claimProfile(id: string, name: string, city: string, data: ClaimData): Promise<void> {
+  await supabase.from("notaire_profiles").upsert({
+    id,
+    name,
+    city,
+    initials: name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map((w: string) => w[0]).join("").toUpperCase() || "N",
+    color: "default",
+    office_name: null,
+    address: data.address ?? null,
+    phone: data.phone ?? null,
+    role: null,
+    specialties: data.specialties ?? [],
+    languages: data.languages ?? [],
+    bio: data.bio ?? null,
+    photo: data.photo ?? null,
+  });
+}
+
 // Compat : ancienne API synchrone (garde localStorage seul pour rétrocompatibilité)
 export function addStoredProfile(p: SignupProfile): ListingNotaire {
   const entry = toListing(p);

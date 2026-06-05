@@ -18,8 +18,15 @@ import {
   Award,
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
-import { getStoredProfiles, getRemoteProfiles } from "@/lib/notaire-profiles";
+import { getStoredProfiles, getRemoteProfiles, claimProfile } from "@/lib/notaire-profiles";
 import type { ListingNotaire } from "@/lib/notaires-listing";
+
+const ALL_SPECIALTIES = [
+  "Droit immobilier", "Successions", "Droit de la famille",
+  "Droit des sociétés", "Donations", "Mariage / PACS",
+  "Droit rural", "Droit commercial",
+];
+const ALL_LANGUAGES = ["Anglais", "Espagnol", "Arabe", "Portugais", "Italien", "Allemand", "Chinois"];
 
 /* ── Jours de la semaine courts ─────────────────────────────────────────── */
 const DAY_LABELS = ["Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam.", "Dim."];
@@ -129,6 +136,186 @@ function SlotCalendar({ slotMatrix }: { slotMatrix: string[][] }) {
             visio ou cabinet
           </p>
         </motion.div>
+      )}
+    </div>
+  );
+}
+
+/* ── Formulaire de revendication / enrichissement ───────────────────────── */
+function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
+  const [open, setOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [done, setDone] = useState(false);
+
+  const [photo, setPhoto] = useState(notaire.photo ?? "");
+  const [bio, setBio] = useState(notaire.bio ?? "");
+  const [phone, setPhone] = useState(notaire.phone ?? "");
+  const [specs, setSpecs] = useState<string[]>(notaire.specialties ?? []);
+  const [langs, setLangs] = useState<string[]>(notaire.languages ?? []);
+
+  function toggleSpec(s: string) {
+    setSpecs(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]);
+  }
+  function toggleLang(l: string) {
+    setLangs(prev => prev.includes(l) ? prev.filter(x => x !== l) : [...prev, l]);
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      await claimProfile(notaire.id, notaire.name, notaire.city, {
+        photo: photo.trim() || null,
+        bio: bio.trim() || undefined,
+        phone: phone.trim() || undefined,
+        specialties: specs,
+        languages: langs,
+      });
+      setDone(true);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (done) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+        className="mt-10 max-w-[720px] mx-auto bg-[var(--color-tint-green)] border border-emerald-100 rounded-2xl p-6 text-center"
+      >
+        <BadgeCheck className="w-8 h-8 text-[var(--color-success)] mx-auto mb-3" strokeWidth={2} />
+        <p className="font-bold text-[16px] text-[var(--color-text-strong)] mb-1">Profil mis à jour !</p>
+        <p className="text-[14px] text-[var(--color-muted)]">
+          Vos informations sont enregistrées et visibles sur votre fiche.
+        </p>
+      </motion.div>
+    );
+  }
+
+  return (
+    <div className="mt-10 max-w-[720px] mx-auto">
+      {!open ? (
+        <button
+          onClick={() => setOpen(true)}
+          className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl border-2 border-dashed border-[var(--color-border)] text-[14px] font-semibold text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+        >
+          <Award className="w-4 h-4" strokeWidth={2} />
+          Vous êtes {notaire.name.replace(/^Me\s+/, "Me ")} ? Complétez votre profil gratuitement
+        </button>
+      ) : (
+        <motion.form
+          onSubmit={handleSubmit}
+          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+          className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6 sm:p-8 flex flex-col gap-6"
+        >
+          <div className="flex items-center justify-between">
+            <h2 className="font-bold text-[18px] text-[var(--color-text-strong)]">
+              Complétez votre profil
+            </h2>
+            <button type="button" onClick={() => setOpen(false)} className="text-[var(--color-muted)] hover:text-[var(--color-text-strong)]">
+              <ArrowLeft className="w-5 h-5" strokeWidth={2} />
+            </button>
+          </div>
+
+          {/* Photo */}
+          <div>
+            <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-2">
+              Photo (URL)
+            </label>
+            <input
+              type="url"
+              value={photo}
+              onChange={e => setPhoto(e.target.value)}
+              placeholder="https://…/votre-photo.jpg"
+              className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] transition"
+            />
+            {photo && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={photo} alt="Aperçu" className="mt-2 w-16 h-16 rounded-full object-cover border-2 border-[var(--color-border-soft)]" />
+            )}
+          </div>
+
+          {/* Téléphone */}
+          <div>
+            <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-2">
+              Téléphone
+            </label>
+            <input
+              type="tel"
+              value={phone}
+              onChange={e => setPhone(e.target.value)}
+              placeholder="01 23 45 67 89"
+              className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] transition"
+            />
+          </div>
+
+          {/* Bio */}
+          <div>
+            <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-2">
+              Présentation <span className="normal-case font-normal">(max 400 caractères)</span>
+            </label>
+            <textarea
+              value={bio}
+              onChange={e => setBio(e.target.value.slice(0, 400))}
+              rows={4}
+              placeholder="Notaire à … depuis …, je vous accompagne dans vos projets immobiliers, familiaux et patrimoniaux…"
+              className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] transition resize-none"
+            />
+            <p className="text-[11px] text-[var(--color-muted)] text-right mt-1">{bio.length}/400</p>
+          </div>
+
+          {/* Spécialités */}
+          <div>
+            <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-3">
+              Domaines d'intervention
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {ALL_SPECIALTIES.map(s => (
+                <button key={s} type="button" onClick={() => toggleSpec(s)}
+                  className={`px-3 py-1.5 rounded-full text-[12px] font-semibold border transition-colors ${
+                    specs.includes(s)
+                      ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)]"
+                      : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                  }`}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Langues */}
+          <div>
+            <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-3">
+              Langues de travail (hors français)
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {ALL_LANGUAGES.map(l => (
+                <button key={l} type="button" onClick={() => toggleLang(l)}
+                  className={`px-3 py-1.5 rounded-full text-[12px] font-semibold border transition-colors ${
+                    langs.includes(l)
+                      ? "bg-[var(--color-success)] text-white border-[var(--color-success)]"
+                      : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-success)] hover:text-[var(--color-success)]"
+                  }`}>
+                  🌍 {l}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={saving}
+            className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] disabled:opacity-60 transition"
+          >
+            {saving ? "Enregistrement…" : "Enregistrer mon profil"}
+            {!saving && <ArrowRight className="w-4 h-4" strokeWidth={2.5} />}
+          </button>
+
+          <p className="text-[11px] text-[var(--color-muted)] text-center">
+            Gratuit · Visible immédiatement sur l'annuaire · Modifiable à tout moment
+          </p>
+        </motion.form>
       )}
     </div>
   );
@@ -518,6 +705,10 @@ export default function NotaireProfileClient({
           )}
         </motion.div>
       </div>
+
+      {/* ── Revendiquer / Compléter son profil ── */}
+      <ClaimSection notaire={notaire} />
+
     </div>
   );
 }

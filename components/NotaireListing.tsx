@@ -17,6 +17,16 @@ interface CitySugg { city: string; postcode: string; }
 
 const DAY_SHORT = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
 
+/**
+ * "Paris 18e Arrondissement" → "Paris"
+ * "Lyon 3e Arrondissement"   → "Lyon"
+ * "Marseille 2e Arrondissement" → "Marseille"
+ * Ville normale inchangée
+ */
+function extractBaseCity(city: string): string {
+  return city.replace(/\s+\d+e[r]?\s+arrondissement$/i, "").trim();
+}
+
 /** Calcule les 3 prochains jours ayant des créneaux */
 function buildSlotDays(slotMatrix: string[][] | undefined) {
   if (!slotMatrix) return [];
@@ -273,7 +283,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
 
   function selectSuggestion(item: CitySugg) {
     setCityInput(`${item.city} (${item.postcode})`);
-    setCity(item.city);
+    setCity(extractBaseCity(item.city)); // "Paris 18e Arrondissement" → "Paris"
     setSuggestions([]);
     setShowSugg(false);
     inputRef.current?.blur();

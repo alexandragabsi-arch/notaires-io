@@ -39,11 +39,15 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   const base = baseListings ?? LISTING_NOTAIRES;
   const all = useMemo(() => [...stored, ...base], [stored, base]);
 
-  // Villes, spécialités et langues calculées dynamiquement.
-  const cities = useMemo(
-    () => Array.from(new Set(all.map((n) => n.city))),
-    [all],
-  );
+  // Villes : on ne montre en chips que les ~20 plus représentées
+  const cities = useMemo(() => {
+    const count: Record<string, number> = {};
+    for (const n of all) count[n.city] = (count[n.city] ?? 0) + 1;
+    return Object.entries(count)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 20)
+      .map(([c]) => c);
+  }, [all]);
 
   // Pré-sélectionne la ville depuis l'URL une fois les données chargées
   useEffect(() => {

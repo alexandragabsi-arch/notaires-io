@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Check, Bell, Loader2, Sparkles, MapPin } from "lucide-react";
+import { ArrowRight, ArrowLeft, Check, Bell, Loader2, Sparkles, MapPin, Video } from "lucide-react";
+import { generateRoomId, internalVisioUrl } from "@/lib/visio";
 import {
   Q1_OPTIONS,
   Q2_TREE,
@@ -762,9 +763,27 @@ export default function Wizard() {
                 Rappels e-mail : la veille et 2h avant le RDV
               </span>
             </div>
+
+            {/* Lien visio si mode vidéo */}
+            {mode === "video" && currentNotary && selectedSlot && (() => {
+              const roomId = generateRoomId(currentNotary.initials, selectedSlot);
+              const visioUrl = internalVisioUrl(roomId);
+              return (
+                <a
+                  href={visioUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2.5 w-full bg-gradient-cta text-white px-5 py-3 rounded-xl text-sm font-semibold shadow-[var(--shadow-cta)] mb-3 hover:opacity-90 transition-opacity"
+                >
+                  <Video className="w-4 h-4" strokeWidth={2.5} />
+                  Rejoindre la visio
+                </a>
+              );
+            })()}
+
             <button
               onClick={resetAll}
-              className="bg-white text-[var(--color-primary)] border-[1.5px] border-[var(--color-border)] px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-[var(--color-tint-blue)] hover:border-[var(--color-primary)] transition-colors"
+              className="bg-white text-[var(--color-primary)] border-[1.5px] border-[var(--color-border)] px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-[var(--color-tint-blue)] hover:border-[var(--color-primary)] transition-colors w-full"
             >
               Faire une autre recherche
             </button>

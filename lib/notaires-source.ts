@@ -1,7 +1,8 @@
 /**
  * notaires-source.ts
- * Charge les notaires depuis data/notaires-membres.json (généré par scripts/fetch-membres.mjs)
- * et les convertit en ListingNotaire pour les pages SEO.
+ * Charge les notaires depuis :
+ *   1. data/notaires-membres.json  — notaires individuels scrapés (26 grandes villes)
+ *   2. data/notaires-france.json   — études de France entière (fallback pour les villes manquantes)
  * Utilisé côté serveur uniquement (Server Components).
  */
 
@@ -27,7 +28,21 @@ interface RawNotaire {
   role?: "associé" | "salarié";
 }
 
+interface RawOffice {
+  id: string;
+  name: string;
+  address: string;
+  postalCode: string;
+  city: string;
+  citySlug: string;
+  phone: string;
+  website: string;
+  claimed: boolean;
+  source: string;
+}
+
 let _cache: RawNotaire[] | null = null;
+let _officeCache: RawOffice[] | null = null;
 
 function loadAll(): RawNotaire[] {
   if (_cache) return _cache;
@@ -37,9 +52,83 @@ function loadAll(): RawNotaire[] {
     _cache = JSON.parse(raw) as RawNotaire[];
     return _cache;
   } catch {
-    // Fichier pas encore généré → retourne tableau vide
     return [];
   }
+}
+
+function loadOffices(): RawOffice[] {
+  if (_officeCache) return _officeCache;
+  try {
+    const filePath = join(process.cwd(), "data", "notaires-france.json");
+    const raw = readFileSync(filePath, "utf-8");
+    _officeCache = JSON.parse(raw) as RawOffice[];
+    return _officeCache;
+  } catch {
+    return [];
+  }
+}
+
+/** Normalise une ville pour comparaison */
+function normCity(city: string): string {
+  return city.toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+}
+
+const OFFICE_PREFIXES = /^(SELARL|SCP|SELAS|SELASU|SAS|SA|SARL|EURL|GIE|SCI|OFFICE|ÉTUDE|ETUDE|GROUPEMENT|ASSOCIATION)\b/i;
+
+const OFFICE_KEYWORDS = /\b(associé|associes|notaire|notaires|office|cabinet|&|et associés|et assoc)\b/i;
+
+/**
+ * Détecte si le nom est un notaire individuel (ex: "GUILLERMET Alexandre")
+ * vs une étude (ex: "SELARL GATTA & ASSOCIES").
+ */
+function isIndividual(name: string): boolean {
+  if (OFFICE_PREFIXES.test(name)) return false;
+  if (OFFICE_KEYWORDS.test(name)) return false;
+  if (name.includes(",")) return false;
+  const words = name.trim().split(/\s+/);
+  // Individu = 2 à 4 mots, dont au moins un en minuscule (prénom)
+  if (words.length < 2 || words.length > 4) return false;
+  const hasLower = words.some(w => /[a-z]/.test(w));
+  const lastWordMixed = /^[A-Z][a-z]/.test(words[words.length - 1]);
+  return hasLower || lastWordMixed;
+}
+
+/** "GUILLERMET Alexandre" → "Me Alexandre Guillermet" */
+function formatIndividual(name: string): string {
+  const words = name.trim().split(/\s+/);
+  // Convention notaires.fr : NOM Prénom (dernier mot = prénom)
+  const prenom = words[words.length - 1];
+  const nom = words.slice(0, -1).map(w =>
+    w.split("-").map(p => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase()).join("-")
+  ).join(" ");
+  const prenomCap = prenom.charAt(0).toUpperCase() + prenom.slice(1).toLowerCase();
+  return `Me ${prenomCap} ${nom}`;
+}
+
+/** "SELARL DUPONT ET ASSOCIÉS" → "Étude Dupont et Associés" */
+function formatOfficeName(officeName: string): string {
+  const stripped = officeName.replace(OFFICE_PREFIXES, "").replace(/^\s*[-–—]\s*/, "").trim();
+  const capped = stripped
+    .toLowerCase()
+    .split(/\s+/)
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+  return `Étude ${capped}`;
+}
+
+function formatOfficeListing(name: string): string {
+  return isIndividual(name) ? formatIndividual(name) : formatOfficeName(name);
+}
+
+function officeInitials(name: string): string {
+  if (isIndividual(name)) {
+    const words = name.trim().split(/\s+/);
+    // NOM Prénom → initiales NP
+    return ((words[0]?.[0] ?? "") + (words[words.length - 1]?.[0] ?? "")).toUpperCase();
+  }
+  const stripped = name.replace(OFFICE_PREFIXES, "").trim();
+  const words = stripped.split(/[\s&+,]+/).filter(w => w.length > 2);
+  return words.slice(0, 2).map(w => w[0]?.toUpperCase() ?? "").join("");
 }
 
 /**
@@ -250,12 +339,41 @@ export function getArrondissements(city: string): { num: number; label: string; 
 }
 
 /**
- * Retourne TOUS les notaires du JSON en format ListingNotaire
- * (pour l'annuaire complet côté serveur)
+ * Retourne TOUS les notaires disponibles :
+ *  - notaires-membres.json (individus, 26 grandes villes)
+ *  - notaires-france.json  (études, toutes villes non couvertes par membres)
+ * Total ~10 000+ entrées.
  */
 export function getAllNotaires(): ListingNotaire[] {
-  const all = loadAll();
-  return all.map((n) => ({
+  const membres = loadAll();
+  const offices = loadOffices();
+
+  // Villes déjà couvertes par des individus
+  const coveredCities = new Set(membres.map(n => normCity(n.city)));
+
+  // Offices de villes non couvertes → 1 entrée par office
+  const officeEntries: ListingNotaire[] = offices
+    .filter(o => !coveredCities.has(normCity(o.city)))
+    .map((o, idx) => {
+      const cityLabel = o.city.charAt(0) + o.city.slice(1).toLowerCase();
+      return {
+        id: o.id,
+        name: formatOfficeListing(o.name),
+        initials: officeInitials(o.name) || "NO",
+        color: (["default", "green", "purple"] as const)[idx % 3],
+        city: cityLabel,
+        address: o.address || undefined,
+        phone: o.phone ? formatPhone(o.phone) : undefined,
+        officeName: o.name,
+        specialties: ["Droit immobilier", "Successions"],
+        next: "Disponible rapidement",
+        slotMatrix: deterministicSlots(o.id),
+        bio: undefined,
+      };
+    });
+
+  // Individus en premier (plus riches en données), puis études
+  const individuals: ListingNotaire[] = membres.map((n) => ({
     id: n.id,
     name: n.name,
     initials: n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map(p => p[0]).join(""),
@@ -271,4 +389,6 @@ export function getAllNotaires(): ListingNotaire[] {
     slotMatrix: deterministicSlots(n.id),
     bio: undefined,
   }));
+
+  return [...individuals, ...officeEntries];
 }

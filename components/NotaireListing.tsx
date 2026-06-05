@@ -9,7 +9,7 @@ import { getStoredProfiles, getRemoteProfiles } from "@/lib/notaire-profiles";
 
 const ALL = "Toutes";
 
-export default function NotaireListing() {
+export default function NotaireListing({ baseListings }: { baseListings?: ListingNotaire[] }) {
   const [query, setQuery] = useState("");
   const [city, setCity] = useState<string>(ALL);
   const [specialty, setSpecialty] = useState<string>(ALL);
@@ -29,7 +29,8 @@ export default function NotaireListing() {
   }, []);
 
   // Annuaire complet : profils créés (récents en tête) + annuaire de référence.
-  const all = useMemo(() => [...stored, ...LISTING_NOTAIRES], [stored]);
+  const base = baseListings ?? LISTING_NOTAIRES;
+  const all = useMemo(() => [...stored, ...base], [stored, base]);
 
   // Villes, spécialités et langues calculées dynamiquement.
   const cities = useMemo(

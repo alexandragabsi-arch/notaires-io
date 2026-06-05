@@ -248,3 +248,27 @@ export function getArrondissements(city: string): { num: number; label: string; 
       count,
     }));
 }
+
+/**
+ * Retourne TOUS les notaires du JSON en format ListingNotaire
+ * (pour l'annuaire complet côté serveur)
+ */
+export function getAllNotaires(): ListingNotaire[] {
+  const all = loadAll();
+  return all.map((n) => ({
+    id: n.id,
+    name: n.name,
+    initials: n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map(p => p[0]).join(""),
+    color: n.color,
+    city: n.city,
+    address: n.address || undefined,
+    phone: n.phone ? formatPhone(n.phone) : undefined,
+    officeName: n.officeName || undefined,
+    arrondissement: (n as RawNotaire & { arrondissement?: number }).arrondissement || undefined,
+    role: n.role,
+    specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
+    next: "Disponible rapidement",
+    slotMatrix: deterministicSlots(n.id),
+    bio: undefined,
+  }));
+}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import NotaireListing from "@/components/NotaireListing";
 import Footer from "@/components/Footer";
-import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
+import { getAllNotaires } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
   title: "Annuaire des notaires — Trouver un notaire par ville et spécialité",
@@ -27,41 +27,43 @@ export const metadata: Metadata = {
   },
 };
 
-/* ── JSON-LD : ItemList des notaires + CollectionPage ──────────────────────── */
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "CollectionPage",
-      "@id": "https://notaires.io/annuaire#webpage",
-      url: "https://notaires.io/annuaire",
-      name: "Annuaire des notaires — Notaires.io",
-      description: "Annuaire de notaires partenaires avec prise de rendez-vous en ligne.",
-      isPartOf: { "@id": "https://notaires.io/#website" },
-      inLanguage: "fr-FR",
-      breadcrumb: {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-          { "@type": "ListItem", position: 2, name: "Annuaire", item: "https://notaires.io/annuaire" },
-        ],
-      },
-    },
-    {
-      "@type": "ItemList",
-      name: "Notaires partenaires Notaires.io",
-      numberOfItems: LISTING_NOTAIRES.length,
-      itemListElement: LISTING_NOTAIRES.map((n, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        url: `https://notaires.io/notaires/${n.id}`,
-        name: `${n.name} — Notaire à ${n.city}${n.area ? ` ${n.area}` : ""}`,
-      })),
-    },
-  ],
-};
-
 export default function AnnuairePage() {
+  const allNotaires = getAllNotaires();
+
+  /* ── JSON-LD : CollectionPage + ItemList (30 premiers pour rester léger) ── */
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": "https://notaires.io/annuaire#webpage",
+        url: "https://notaires.io/annuaire",
+        name: "Annuaire des notaires — Notaires.io",
+        description: "Annuaire de notaires partenaires avec prise de rendez-vous en ligne.",
+        isPartOf: { "@id": "https://notaires.io/#website" },
+        inLanguage: "fr-FR",
+        breadcrumb: {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
+            { "@type": "ListItem", position: 2, name: "Annuaire", item: "https://notaires.io/annuaire" },
+          ],
+        },
+      },
+      {
+        "@type": "ItemList",
+        name: "Notaires Notaires.io",
+        numberOfItems: allNotaires.length,
+        itemListElement: allNotaires.slice(0, 30).map((n, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          url: `https://notaires.io/notaires/${n.id}`,
+          name: `${n.name} — Notaire à ${n.city}`,
+        })),
+      },
+    ],
+  };
+
   return (
     <>
       <script
@@ -70,7 +72,7 @@ export default function AnnuairePage() {
       />
       <Header />
       <main className="flex-1">
-        <NotaireListing />
+        <NotaireListing baseListings={allNotaires} />
       </main>
       <Footer />
     </>

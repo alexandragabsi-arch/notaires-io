@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Search, MapPin, BadgeCheck, Clock, ArrowRight, SlidersHorizontal, Sparkles, Globe } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
@@ -9,8 +10,14 @@ import { getStoredProfiles, getRemoteProfiles } from "@/lib/notaire-profiles";
 
 const ALL = "Toutes";
 
-export default function NotaireListing({ baseListings }: { baseListings?: ListingNotaire[] }) {
-  const [query, setQuery] = useState("");
+function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[] }) {
+  const searchParams = useSearchParams();
+
+  // Pré-filtre depuis l'URL : ?ville=Cannes&q=succession
+  const urlVille = searchParams.get("ville") ?? "";
+  const urlQ = searchParams.get("q") ?? "";
+
+  const [query, setQuery] = useState(urlQ);
   const [city, setCity] = useState<string>(ALL);
   const [specialty, setSpecialty] = useState<string>(ALL);
   const [language, setLanguage] = useState<string>(ALL);
@@ -37,6 +44,17 @@ export default function NotaireListing({ baseListings }: { baseListings?: Listin
     () => Array.from(new Set(all.map((n) => n.city))),
     [all],
   );
+
+  // Pré-sélectionne la ville depuis l'URL une fois les données chargées
+  useEffect(() => {
+    if (!urlVille || all.length === 0) return;
+    const norm = urlVille.toLowerCase().trim();
+    const match = cities.find(
+      c => c.toLowerCase() === norm || c.toLowerCase().startsWith(norm)
+    );
+    if (match) setCity(match);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [all.length, urlVille]);
   const specialties = useMemo(
     () =>
       Array.from(new Set(all.flatMap((n) => n.specialties))).sort((a, b) =>
@@ -337,5 +355,13 @@ export default function NotaireListing({ baseListings }: { baseListings?: Listin
         )}
       </div>
     </section>
+  );
+}
+
+export default function NotaireListing({ baseListings }: { baseListings?: ListingNotaire[] }) {
+  return (
+    <Suspense>
+      <NotaireListingInner baseListings={baseListings} />
+    </Suspense>
   );
 }

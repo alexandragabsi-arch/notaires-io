@@ -457,32 +457,32 @@ export interface Notaire {
 
 export const NOTAIRES: Notaire[] = [
   {
-    initials: "AM",
+    initials: "LB",
     color: "default",
-    name: "Me Amélie Martin",
+    name: "Me Linda Bozetti-Heurtevent",
     city: "Paris 8ème",
     next: "Demain 14h30",
   },
   {
-    initials: "CD",
-    color: "purple",
-    name: "Me Charles Delaunay",
-    city: "Paris 8ème",
-    next: "Demain 16h00",
-  },
-  {
-    initials: "SP",
+    initials: "EF",
     color: "green",
-    name: "Me Sophie Pellerin",
-    city: "Paris 9ème",
-    next: "Vendredi 10h00",
+    name: "Me Élodie Féret",
+    city: "Paris 16ème",
+    next: "Demain 10h00",
   },
   {
-    initials: "JB",
+    initials: "CP",
+    color: "purple",
+    name: "Me Caroline Pichowicz",
+    city: "Paris 9ème",
+    next: "Vendredi 11h00",
+  },
+  {
+    initials: "PA",
     color: "default",
-    name: "Me Jean Beaumont",
+    name: "Me Pauline Audouin",
     city: "Paris 17ème",
-    next: "Lundi 11h00",
+    next: "Lundi 09h30",
   },
 ];
 

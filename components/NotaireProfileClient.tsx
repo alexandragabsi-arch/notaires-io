@@ -706,9 +706,6 @@ export default function NotaireProfileClient({
         </motion.div>
       </div>
 
-      {/* ── Revendiquer / Compléter son profil ── */}
-      <ClaimSection notaire={notaire} />
-
     </div>
   );
 }

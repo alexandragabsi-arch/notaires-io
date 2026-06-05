@@ -348,12 +348,11 @@ export function getAllNotaires(): ListingNotaire[] {
   const membres = loadAll();
   const offices = loadOffices();
 
-  // Villes déjà couvertes par des individus
-  const coveredCities = new Set(membres.map(n => normCity(n.city)));
+  // Déduplique uniquement par ID (inclut toutes les études, même les villes déjà couvertes)
+  const memberIds = new Set(membres.map(n => n.id));
 
-  // Offices de villes non couvertes → 1 entrée par office
   const officeEntries: ListingNotaire[] = offices
-    .filter(o => !coveredCities.has(normCity(o.city)))
+    .filter(o => !memberIds.has(o.id))
     .map((o, idx) => {
       const cityLabel = o.city.charAt(0) + o.city.slice(1).toLowerCase();
       return {

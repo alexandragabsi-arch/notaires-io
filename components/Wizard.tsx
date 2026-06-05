@@ -157,7 +157,7 @@ export default function Wizard() {
   }
 
   function goToListing(city: string) {
-    router.push(`/annuaire?ville=${encodeURIComponent(city)}`);
+    window.open(`/annuaire?ville=${encodeURIComponent(city)}`, "_blank");
   }
 
   function submitPostal() {

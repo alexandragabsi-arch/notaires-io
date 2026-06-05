@@ -1,95 +1,105 @@
 "use client";
 
-import { useEffect, useMemo, useState, Suspense } from "react";
+import { useEffect, useMemo, useState, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { Search, MapPin, BadgeCheck, Clock, ArrowRight, SlidersHorizontal, Sparkles, Globe } from "lucide-react";
+import { Search, MapPin, BadgeCheck, Clock, ArrowRight, Sparkles, Globe, X } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { getStoredProfiles, getRemoteProfiles } from "@/lib/notaire-profiles";
 
 const ALL = "Toutes";
 
+interface CitySugg { city: string; postcode: string; }
+
 function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[] }) {
   const searchParams = useSearchParams();
-
-  // Pré-filtre depuis l'URL : ?ville=Cannes&q=succession
   const urlVille = searchParams.get("ville") ?? "";
-  const urlQ = searchParams.get("q") ?? "";
 
-  const [query, setQuery] = useState(urlQ);
-  const [city, setCity] = useState<string>(ALL);
+  // Champ de recherche ville/CP
+  const [cityInput, setCityInput] = useState(urlVille);
+  const [city, setCity] = useState<string>(ALL);          // filtre actif
+  const [suggestions, setSuggestions] = useState<CitySugg[]>([]);
+  const [showSugg, setShowSugg] = useState(false);
+  const suggTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const [specialty, setSpecialty] = useState<string>(ALL);
   const [language, setLanguage] = useState<string>(ALL);
 
   // Profils : localStorage (instantané) fusionné avec Supabase (persistant).
   const [stored, setStored] = useState<ListingNotaire[]>([]);
   useEffect(() => {
-    // 1. Affiche d'abord les profils locaux (instantané)
     setStored(getStoredProfiles());
-    // 2. Charge les profils Supabase et fusionne
     getRemoteProfiles().then((remote) => {
       const localIds = new Set(getStoredProfiles().map((n) => n.id));
-      const newRemote = remote.filter((n) => !localIds.has(n.id));
-      setStored((prev) => [...prev, ...newRemote]);
+      setStored((prev) => [...prev, ...remote.filter((n) => !localIds.has(n.id))]);
     });
   }, []);
 
-  // Annuaire complet : profils créés (récents en tête) + annuaire de référence.
+  // Annuaire complet
   const base = baseListings ?? LISTING_NOTAIRES;
   const all = useMemo(() => [...stored, ...base], [stored, base]);
 
-  // Villes : on ne montre en chips que les ~20 plus représentées
-  const cities = useMemo(() => {
-    const count: Record<string, number> = {};
-    for (const n of all) count[n.city] = (count[n.city] ?? 0) + 1;
-    return Object.entries(count)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 20)
-      .map(([c]) => c);
-  }, [all]);
-
-  // Pré-sélectionne la ville depuis l'URL une fois les données chargées
+  // Autocomplete ville/CP via api-adresse.data.gouv.fr
   useEffect(() => {
-    if (!urlVille || all.length === 0) return;
-    const norm = urlVille.toLowerCase().trim();
-    const match = cities.find(
-      c => c.toLowerCase() === norm || c.toLowerCase().startsWith(norm)
-    );
-    if (match) setCity(match);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [all.length, urlVille]);
-  const specialties = useMemo(
-    () =>
-      Array.from(new Set(all.flatMap((n) => n.specialties))).sort((a, b) =>
-        a.localeCompare(b, "fr"),
-      ),
-    [all],
-  );
+    const q = cityInput.trim();
+    if (q.length < 2) { setSuggestions([]); setShowSugg(false); return; }
+    if (suggTimer.current) clearTimeout(suggTimer.current);
+    suggTimer.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(q)}&type=municipality&limit=6&autocomplete=1`);
+        const json = await res.json();
+        const seen = new Set<string>();
+        const items: CitySugg[] = [];
+        for (const f of json.features ?? []) {
+          const key = f.properties.city + f.properties.postcode;
+          if (!seen.has(key)) { seen.add(key); items.push({ city: f.properties.city, postcode: f.properties.postcode }); }
+        }
+        setSuggestions(items);
+        setShowSugg(items.length > 0);
+      } catch { /* silencieux */ }
+    }, 180);
+  }, [cityInput]);
+
+  // Pré-sélectionne depuis l'URL (?ville=Cannes)
+  useEffect(() => {
+    if (!urlVille) return;
+    setCityInput(urlVille);
+    setCity(urlVille);
+  }, [urlVille]);
+
+  function selectSuggestion(item: CitySugg) {
+    setCityInput(item.city);
+    setCity(item.city);
+    setSuggestions([]);
+    setShowSugg(false);
+    inputRef.current?.blur();
+  }
+
+  function clearCity() {
+    setCityInput("");
+    setCity(ALL);
+    setSuggestions([]);
+    inputRef.current?.focus();
+  }
+
   const languages = useMemo(
-    () =>
-      Array.from(new Set(all.flatMap((n) => n.languages ?? []))).sort((a, b) =>
-        a.localeCompare(b, "fr"),
-      ),
+    () => Array.from(new Set(all.flatMap((n) => n.languages ?? []))).sort((a, b) => a.localeCompare(b, "fr")),
     [all],
   );
 
   const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const norm = city === ALL ? "" : city.toLowerCase().trim();
     return all.filter((n) => {
-      const matchCity = city === ALL || n.city === city;
+      const matchCity = !norm ||
+        n.city.toLowerCase().includes(norm) ||
+        norm.includes(n.city.toLowerCase());
       const matchSpec = specialty === ALL || n.specialties.includes(specialty);
       const matchLang = language === ALL || (n.languages ?? []).includes(language);
-      const matchQuery =
-        !q ||
-        n.name.toLowerCase().includes(q) ||
-        n.city.toLowerCase().includes(q) ||
-        (n.area ?? "").toLowerCase().includes(q) ||
-        n.specialties.some((s) => s.toLowerCase().includes(q)) ||
-        (n.languages ?? []).some((l) => l.toLowerCase().includes(q));
-      return matchCity && matchSpec && matchLang && matchQuery;
+      return matchCity && matchSpec && matchLang;
     });
-  }, [all, query, city, specialty, language]);
+  }, [all, city, specialty, language]);
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
@@ -99,144 +109,83 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
-          className="text-center mb-9"
+          className="text-center mb-8"
         >
           <h1 className="serif text-[30px] sm:text-[40px] font-bold text-[var(--color-text-strong)] tracking-tight mb-2">
             Trouvez votre <span className="serif-accent">notaire</span>
           </h1>
           <p className="text-[var(--color-muted)] text-[15px] sm:text-[16px] max-w-[540px] mx-auto">
-            Filtrez par ville et par spécialité, puis réservez votre rendez-vous
-            en ligne — en visio ou au cabinet.
+            Entrez votre ville ou code postal — les notaires disponibles apparaissent immédiatement.
           </p>
         </motion.div>
 
-        {/* Barre de recherche + filtres */}
+        {/* Barre ville / CP */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.05 }}
-          className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-5 sm:p-6 mb-8"
+          className="relative mb-4 max-w-[600px] mx-auto"
         >
-          {/* Recherche texte */}
-          <div className="relative flex items-center mb-5">
-            <Search
-              className="absolute left-3.5 w-[18px] h-[18px] text-[var(--color-muted)]"
-              strokeWidth={2}
-            />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Rechercher un notaire, une ville, une spécialité…"
-              className="w-full pl-11 pr-3 py-3 rounded-[12px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
-            />
-          </div>
-
-          {/* Filtre Villes */}
-          <div className="mb-4">
-            <div className="flex items-center gap-1.5 text-[12px] font-bold tracking-[0.5px] uppercase text-[var(--color-muted)] mb-2.5">
-              <MapPin className="w-[14px] h-[14px]" strokeWidth={2} />
-              Ville
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {[ALL, ...cities].map((c) => {
-                const on = city === c;
-                return (
-                  <button
-                    key={c}
-                    type="button"
-                    onClick={() => setCity(c)}
-                    className={`px-3.5 py-2 rounded-full text-[13px] font-semibold border transition-colors ${
-                      on
-                        ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)]"
-                        : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-                    }`}
-                  >
-                    {c === ALL ? "Toutes les villes" : c}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Filtre Spécialités */}
-          <div className="mb-4">
-            <div className="flex items-center gap-1.5 text-[12px] font-bold tracking-[0.5px] uppercase text-[var(--color-muted)] mb-2.5">
-              <SlidersHorizontal className="w-[14px] h-[14px]" strokeWidth={2} />
-              Spécialité
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {[ALL, ...specialties].map((s) => {
-                const on = specialty === s;
-                return (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => setSpecialty(s)}
-                    className={`px-3.5 py-2 rounded-full text-[13px] font-semibold border transition-colors ${
-                      on
-                        ? "bg-[var(--color-primary)] text-white border-[var(--color-primary)]"
-                        : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]"
-                    }`}
-                  >
-                    {s === ALL ? "Toutes" : s}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Filtre Langues */}
-          {languages.length > 0 && (
-            <div>
-              <div className="flex items-center gap-1.5 text-[12px] font-bold tracking-[0.5px] uppercase text-[var(--color-muted)] mb-2.5">
-                <Globe className="w-[14px] h-[14px]" strokeWidth={2} />
-                Langue
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {[ALL, ...languages].map((l) => {
-                  const on = language === l;
-                  return (
-                    <button
-                      key={l}
-                      type="button"
-                      onClick={() => setLanguage(l)}
-                      className={`px-3.5 py-2 rounded-full text-[13px] font-semibold border transition-colors ${
-                        on
-                          ? "bg-[var(--color-tint-green)] text-[var(--color-success)] border-[var(--color-success)]"
-                          : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-success)] hover:text-[var(--color-success)]"
-                      }`}
-                    >
-                      {l === ALL ? "Toutes" : `🌍 ${l}`}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+          <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-accent)] pointer-events-none" strokeWidth={2} />
+          <input
+            ref={inputRef}
+            type="text"
+            value={cityInput}
+            onChange={e => { setCityInput(e.target.value); if (!e.target.value) setCity(ALL); }}
+            onFocus={() => suggestions.length > 0 && setShowSugg(true)}
+            onBlur={() => setTimeout(() => setShowSugg(false), 150)}
+            onKeyDown={e => { if (e.key === "Enter" && suggestions[0]) selectSuggestion(suggestions[0]); }}
+            placeholder="Ville ou code postal…"
+            autoComplete="off"
+            className="w-full pl-12 pr-12 py-4 rounded-2xl border-2 border-[var(--color-border)] text-[16px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition shadow-[var(--shadow-card)] bg-white"
+          />
+          {cityInput && (
+            <button onClick={clearCity} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)] hover:text-[var(--color-text-strong)]">
+              <X className="w-4 h-4" strokeWidth={2.5} />
+            </button>
+          )}
+          {showSugg && suggestions.length > 0 && (
+            <ul className="absolute z-50 top-full left-0 right-0 mt-1.5 bg-white border border-[var(--color-border-soft)] rounded-xl shadow-lg overflow-hidden">
+              {suggestions.map(item => (
+                <li
+                  key={item.postcode + item.city}
+                  onMouseDown={() => selectSuggestion(item)}
+                  className="px-4 py-3 text-[14px] text-[var(--color-text-strong)] hover:bg-[var(--color-tint-blue)] cursor-pointer flex justify-between items-center"
+                >
+                  <span className="font-semibold flex items-center gap-2">
+                    <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
+                    {item.city}
+                  </span>
+                  <span className="text-[var(--color-muted)] text-[13px]">{item.postcode}</span>
+                </li>
+              ))}
+            </ul>
           )}
         </motion.div>
 
-        {/* Compteur */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="text-[14px] text-[var(--color-muted)]">
-            <span className="font-bold text-[var(--color-text-strong)]">
-              {results.length}
-            </span>{" "}
-            {results.length > 1 ? "notaires trouvés" : "notaire trouvé"}
-            {city !== ALL && ` à ${city}`}
+        {/* Filtre langues (discret, si pertinent) */}
+        {languages.length > 0 && city !== ALL && (
+          <div className="flex flex-wrap gap-2 mb-6 max-w-[600px] mx-auto">
+            {[ALL, ...languages].map(l => (
+              <button key={l} type="button" onClick={() => setLanguage(l === language ? ALL : l)}
+                className={`px-3 py-1.5 rounded-full text-[12px] font-semibold border transition-colors ${language === l && l !== ALL ? "bg-[var(--color-tint-green)] text-[var(--color-success)] border-[var(--color-success)]" : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-success)] hover:text-[var(--color-success)]"}`}>
+                {l === ALL ? "Toutes langues" : `🌍 ${l}`}
+              </button>
+            ))}
           </div>
-          {(city !== ALL || specialty !== ALL || language !== ALL || query) && (
-            <button
-              type="button"
-              onClick={() => {
-                setQuery("");
-                setCity(ALL);
-                setSpecialty(ALL);
-                setLanguage(ALL);
-              }}
-              className="text-[13px] font-semibold text-[var(--color-accent)] hover:underline"
-            >
-              Réinitialiser
+        )}
+
+        {/* Compteur */}
+        <div className="flex items-center justify-between mb-6 max-w-[600px] mx-auto">
+          <div className="text-[14px] text-[var(--color-muted)]">
+            <span className="font-bold text-[var(--color-text-strong)]">{results.length.toLocaleString("fr-FR")}</span>{" "}
+            {results.length > 1 ? "notaires" : "notaire"}
+            {city !== ALL && <span className="font-semibold text-[var(--color-text-strong)]"> à {city}</span>}
+          </div>
+          {city !== ALL && (
+            <button type="button" onClick={clearCity}
+              className="text-[13px] font-semibold text-[var(--color-accent)] hover:underline flex items-center gap-1">
+              <X className="w-3.5 h-3.5" strokeWidth={2.5} /> Effacer
             </button>
           )}
         </div>

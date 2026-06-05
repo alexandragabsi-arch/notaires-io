@@ -44,7 +44,7 @@ export default function Hero() {
               variants={item}
               className="inline-flex items-center gap-2 bg-[var(--color-accent-soft)] text-[var(--color-accent)] px-4 py-2 rounded-full text-[13px] font-semibold mb-6"
             >
-              <span>✦</span> 1er RDV offert · 30 min · visio ou cabinet
+              <span>✦</span> visio ou cabinet
             </motion.div>
 
             <motion.h1

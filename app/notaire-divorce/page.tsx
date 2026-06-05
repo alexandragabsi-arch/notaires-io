@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty, getNotairesMixed } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire divorce — 1er RDV offert · Notaires.io",
+  title: "Notaire divorce · Notaires.io",
   description:
     "Trouvez un notaire pour votre divorce par consentement mutuel, la liquidation de votre régime matrimonial ou la vente de votre bien commun. Accompagnement bienveillant, 1er rendez-vous offert.",
   keywords: [
@@ -21,9 +21,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-divorce" },
   openGraph: {
-    title: "Notaire divorce — 1er RDV offert · Notaires.io",
+    title: "Notaire divorce · Notaires.io",
     description:
-      "Divorce par consentement mutuel, liquidation du régime matrimonial : nos notaires vous accompagnent. 1er RDV offert.",
+      "Divorce par consentement mutuel, liquidation du régime matrimonial : nos notaires vous accompagnent.",
     url: "https://notaires.io/notaire-divorce",
     type: "website",
   },

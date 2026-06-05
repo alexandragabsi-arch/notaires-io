@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire à Bordeaux — 1er RDV offert · Notaires.io",
+  title: "Notaire à Bordeaux · Notaires.io",
   description:
     "Trouvez un notaire à Bordeaux pour votre succession, achat immobilier, mariage ou divorce. Prise de rendez-vous en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
   keywords: [
@@ -21,9 +21,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-bordeaux" },
   openGraph: {
-    title: "Notaire à Bordeaux — 1er RDV offert · Notaires.io",
+    title: "Notaire à Bordeaux · Notaires.io",
     description:
-      "Trouvez un notaire à Bordeaux disponible rapidement. Succession, famille, immobilier — 1er RDV offert.",
+      "Trouvez un notaire à Bordeaux disponible rapidement. Succession, famille, immobilier.",
     url: "https://notaires.io/notaire-bordeaux",
     type: "website",
   },

@@ -37,11 +37,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!num) return {};
   const label = numToLabel(num);
   return {
-    title: `Notaire Marseille ${label} arrondissement — 1er RDV offert · Notaires.io`,
+    title: `Notaire Marseille ${label} arrondissement · Notaires.io`,
     description: `Trouvez un notaire dans le ${label} arrondissement de Marseille. Immobilier, succession, mariage, PACS — prise de rendez-vous en ligne, 1er rendez-vous offert.`,
     alternates: { canonical: `https://notaires.io/notaire-marseille/${arrondissement}` },
     openGraph: {
-      title: `Notaire Marseille ${label} — 1er RDV offert · Notaires.io`,
+      title: `Notaire Marseille ${label} · Notaires.io`,
       description: `Notaires disponibles dans le ${label} arrondissement de Marseille. 1er rendez-vous offert.`,
       url: `https://notaires.io/notaire-marseille/${arrondissement}`,
       type: "website",

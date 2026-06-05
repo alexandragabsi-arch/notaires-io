@@ -12,7 +12,7 @@ const MARSEILLE_ARRONDISSEMENTS = Array.from({ length: 16 }, (_, i) => ({
 }));
 
 export const metadata: Metadata = {
-  title: "Notaire à Marseille — 1er RDV offert · Notaires.io",
+  title: "Notaire à Marseille · Notaires.io",
   description:
     "Trouvez un notaire à Marseille pour votre achat immobilier, donation ou succession. Prise de rendez-vous en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
   keywords: [
@@ -27,9 +27,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-marseille" },
   openGraph: {
-    title: "Notaire à Marseille — 1er RDV offert · Notaires.io",
+    title: "Notaire à Marseille · Notaires.io",
     description:
-      "Trouvez un notaire à Marseille pour votre achat immobilier ou donation. 1er RDV offert.",
+      "Trouvez un notaire à Marseille pour votre achat immobilier ou donation.",
     url: "https://notaires.io/notaire-marseille",
     type: "website",
   },

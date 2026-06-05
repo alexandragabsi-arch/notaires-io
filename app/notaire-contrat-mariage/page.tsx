@@ -6,9 +6,9 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty, getNotairesMixed } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Contrat de mariage — Notaire en ligne, 1er RDV offert · Notaires.io",
+  title: "Contrat de mariage — Notaire en ligne · Notaires.io",
   description:
-    "Besoin d'un notaire pour votre contrat de mariage ? Séparation de biens, communauté réduite aux acquêts, régime de participation — nos notaires vous conseillent et rédigent votre contrat. 1er RDV offert en visio ou au cabinet.",
+    "Besoin d'un notaire pour votre contrat de mariage ? Séparation de biens, communauté réduite aux acquêts, régime de participation — nos notaires vous conseillent et rédigent votre contrat. Prise de RDV en ligne en visio ou au cabinet.",
   keywords: [
     "contrat de mariage notaire",
     "contrat de mariage séparation de biens",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Contrat de mariage — Notaire en ligne · Notaires.io",
     description:
-      "Séparation de biens ou communauté ? Nos notaires vous conseillent sur votre régime matrimonial. 1er RDV offert.",
+      "Séparation de biens ou communauté ? Nos notaires vous conseillent sur votre régime matrimonial.",
     url: "https://notaires.io/notaire-contrat-mariage",
     type: "website",
   },

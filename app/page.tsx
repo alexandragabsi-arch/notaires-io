@@ -6,9 +6,9 @@ import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Prendre rendez-vous avec un notaire en ligne — 1er RDV offert",
+  title: "Prendre rendez-vous avec un notaire en ligne",
   description:
-    "Trouvez le bon notaire pour votre situation en 3 questions. Achat immobilier, succession, mariage, PACS, création de société — rendez-vous en visio ou au cabinet, 1er RDV offert (30 min). Tarifs réglementés.",
+    "Trouvez le bon notaire pour votre situation en 3 questions. Achat immobilier, succession, mariage, PACS, création de société — rendez-vous en visio ou au cabinet (30 min). Tarifs réglementés.",
   keywords: [
     "prendre rendez-vous notaire",
     "notaire en ligne",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Notaires.io — Prendre rendez-vous avec un notaire en ligne",
     description:
-      "Trouvez le bon notaire pour votre situation en 3 questions. 1er RDV offert, en visio ou au cabinet.",
+      "Trouvez le bon notaire pour votre situation en 3 questions. en visio ou au cabinet.",
     url: "https://notaires.io",
     type: "website",
   },
@@ -67,7 +67,7 @@ const jsonLd = {
       isPartOf: { "@id": "https://notaires.io/#website" },
       about: { "@id": "https://notaires.io/#organization" },
       description:
-        "Trouvez le bon notaire pour votre situation en 3 questions. Immobilier, succession, mariage, société — 1er RDV offert.",
+        "Trouvez le bon notaire pour votre situation en 3 questions. Immobilier, succession, mariage, société.",
       inLanguage: "fr-FR",
       breadcrumb: {
         "@type": "BreadcrumbList",

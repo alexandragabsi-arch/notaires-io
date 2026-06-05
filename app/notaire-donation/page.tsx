@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty, getNotairesMixed } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire donation — 1er RDV offert · Notaires.io",
+  title: "Notaire donation · Notaires.io",
   description:
     "Trouvez un notaire spécialisé en donation pour transmettre votre patrimoine à vos enfants ou proches. Donation simple, donation-partage, usufruit, abattements fiscaux. 1er rendez-vous offert.",
   keywords: [
@@ -22,9 +22,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-donation" },
   openGraph: {
-    title: "Notaire donation — 1er RDV offert · Notaires.io",
+    title: "Notaire donation · Notaires.io",
     description:
-      "Donation simple, donation-partage, usufruit : nos notaires optimisent votre transmission. 1er RDV offert.",
+      "Donation simple, donation-partage, usufruit : nos notaires optimisent votre transmission.",
     url: "https://notaires.io/notaire-donation",
     type: "website",
   },

@@ -117,7 +117,7 @@ export default function Image() {
         {/* Bénéfices */}
         <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
           {[
-            "1er RDV offert — 30 min",
+            "Confirmation en 2 min",
             "En visio ou au cabinet",
             "Immobilier · Succession · Famille · Société",
           ].map((text) => (

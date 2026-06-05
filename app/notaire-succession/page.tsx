@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire succession — 1er RDV offert · Notaires.io",
+  title: "Notaire succession · Notaires.io",
   description:
     "Trouvez un notaire spécialisé en succession pour régler un héritage, organiser un partage ou rédiger un testament. Prise de rendez-vous en ligne, 1er rendez-vous offert. Accompagnement humain garanti.",
   keywords: [
@@ -22,9 +22,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-succession" },
   openGraph: {
-    title: "Notaire succession — 1er RDV offert · Notaires.io",
+    title: "Notaire succession · Notaires.io",
     description:
-      "Règlement de succession, testament, partage : nos notaires spécialisés vous accompagnent. 1er RDV offert.",
+      "Règlement de succession, testament, partage : nos notaires spécialisés vous accompagnent.",
     url: "https://notaires.io/notaire-succession",
     type: "website",
   },

@@ -18,7 +18,7 @@ const features = [
   {
     icon: "💰",
     tint: "bg-[var(--color-tint-green)]",
-    title: "1er RDV offert, 30 min",
+    title: "30 min",
     desc: "Le premier rendez-vous est gratuit. Vous ne payez les honoraires du notaire que si vous passez à l'acte — selon le tarif réglementé, comme dans toute étude.",
   },
   {

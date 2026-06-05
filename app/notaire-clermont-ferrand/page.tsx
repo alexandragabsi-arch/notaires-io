@@ -6,9 +6,9 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire à Clermont-Ferrand — 1er RDV offert · Notaires.io",
+  title: "Notaire à Clermont-Ferrand · Notaires.io",
   description:
-    "Trouvez un notaire à Clermont-Ferrand disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne, 1er RDV offert. Notaires certifiés, tarifs réglementés.",
+    "Trouvez un notaire à Clermont-Ferrand disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
     "notaire Clermont-Ferrand",
     "notaire Clermont immobilier",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-clermont-ferrand" },
   openGraph: {
-    title: "Notaire à Clermont-Ferrand — 1er RDV offert · Notaires.io",
+    title: "Notaire à Clermont-Ferrand · Notaires.io",
     description:
       "Trouvez un notaire à Clermont-Ferrand disponible rapidement. 1er rendez-vous offert, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-clermont-ferrand",

@@ -33,7 +33,7 @@ export async function generateMetadata({
     alternates: { canonical: `https://notaires.io/notaires/${n.id}` },
     openGraph: {
       title: `${n.name} — Notaire à ${location} · Notaires.io`,
-      description: `Spécialités : ${specs}. 1er RDV offert, en visio ou au cabinet.`,
+      description: `Spécialités : ${specs}. en visio ou au cabinet.`,
       url: `https://notaires.io/notaires/${n.id}`,
       type: "profile",
     },

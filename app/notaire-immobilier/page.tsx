@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire immobilier — 1er RDV offert · Notaires.io",
+  title: "Notaire immobilier · Notaires.io",
   description:
     "Trouvez un notaire spécialisé en immobilier pour votre achat, vente, investissement locatif ou SCI. Prise de rendez-vous en ligne, 1er rendez-vous offert. Tarifs réglementés, acte authentique garanti.",
   keywords: [
@@ -22,9 +22,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-immobilier" },
   openGraph: {
-    title: "Notaire immobilier — 1er RDV offert · Notaires.io",
+    title: "Notaire immobilier · Notaires.io",
     description:
-      "Notaires spécialisés en immobilier : achat, vente, SCI, investissement. 1er RDV offert.",
+      "Notaires spécialisés en immobilier : achat, vente, SCI, investissement.",
     url: "https://notaires.io/notaire-immobilier",
     type: "website",
   },

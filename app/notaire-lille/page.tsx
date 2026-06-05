@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire à Lille — 1er RDV offert · Notaires.io",
+  title: "Notaire à Lille · Notaires.io",
   description:
     "Trouvez un notaire à Lille pour votre achat immobilier, création de société ou succession. Prise de rendez-vous en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
   keywords: [
@@ -22,9 +22,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-lille" },
   openGraph: {
-    title: "Notaire à Lille — 1er RDV offert · Notaires.io",
+    title: "Notaire à Lille · Notaires.io",
     description:
-      "Trouvez un notaire à Lille pour votre achat immobilier ou création de société. 1er RDV offert.",
+      "Trouvez un notaire à Lille pour votre achat immobilier ou création de société.",
     url: "https://notaires.io/notaire-lille",
     type: "website",
   },

@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire création de société — 1er RDV offert · Notaires.io",
+  title: "Notaire création de société · Notaires.io",
   description:
     "Trouvez un notaire spécialisé en droit des sociétés pour créer votre SCI, SAS, SARL ou holding. Statuts sécurisés, apports immobiliers, pactes d'associés. 1er rendez-vous offert.",
   keywords: [
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-creation-societe" },
   openGraph: {
-    title: "Notaire création de société — 1er RDV offert · Notaires.io",
+    title: "Notaire création de société · Notaires.io",
     description:
-      "Créez votre SCI, SAS ou holding avec un notaire spécialisé. Statuts sécurisés, apports immobiliers. 1er RDV offert.",
+      "Créez votre SCI, SAS ou holding avec un notaire spécialisé. Statuts sécurisés, apports immobiliers.",
     url: "https://notaires.io/notaire-creation-societe",
     type: "website",
   },

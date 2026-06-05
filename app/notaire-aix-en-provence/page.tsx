@@ -6,9 +6,9 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire à Aix-en-Provence — 1er RDV offert · Notaires.io",
+  title: "Notaire à Aix-en-Provence · Notaires.io",
   description:
-    "Trouvez un notaire à Aix-en-Provence disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne, 1er RDV offert. Notaires certifiés, tarifs réglementés.",
+    "Trouvez un notaire à Aix-en-Provence disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
     "notaire Aix-en-Provence",
     "notaire Aix immobilier",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-aix-en-provence" },
   openGraph: {
-    title: "Notaire à Aix-en-Provence — 1er RDV offert · Notaires.io",
+    title: "Notaire à Aix-en-Provence · Notaires.io",
     description:
       "Trouvez un notaire à Aix-en-Provence disponible rapidement. 1er rendez-vous offert, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-aix-en-provence",

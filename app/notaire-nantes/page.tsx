@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire à Nantes — 1er RDV offert · Notaires.io",
+  title: "Notaire à Nantes · Notaires.io",
   description:
     "Trouvez un notaire à Nantes pour votre succession, donation ou mariage. Prise de rendez-vous en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
   keywords: [
@@ -21,9 +21,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-nantes" },
   openGraph: {
-    title: "Notaire à Nantes — 1er RDV offert · Notaires.io",
+    title: "Notaire à Nantes · Notaires.io",
     description:
-      "Trouvez un notaire à Nantes pour votre succession, donation ou mariage. 1er RDV offert.",
+      "Trouvez un notaire à Nantes pour votre succession, donation ou mariage.",
     url: "https://notaires.io/notaire-nantes",
     type: "website",
   },

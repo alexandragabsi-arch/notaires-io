@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire à Toulouse — 1er RDV offert · Notaires.io",
+  title: "Notaire à Toulouse · Notaires.io",
   description:
     "Trouvez un notaire à Toulouse disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
   keywords: [
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-toulouse" },
   openGraph: {
-    title: "Notaire à Toulouse — 1er RDV offert · Notaires.io",
+    title: "Notaire à Toulouse · Notaires.io",
     description:
       "Trouvez un notaire à Toulouse disponible rapidement. 1er rendez-vous offert, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-toulouse",

@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire à Orléans — 1er RDV offert · Notaires.io",
+  title: "Notaire à Orléans · Notaires.io",
   description:
     "Trouvez un notaire à Orléans disponible rapidement. Mariage, PACS, immobilier, succession — prise de rendez-vous en ligne, 1er rendez-vous offert.",
   keywords: [
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-orleans" },
   openGraph: {
-    title: "Notaire à Orléans — 1er RDV offert · Notaires.io",
+    title: "Notaire à Orléans · Notaires.io",
     description: "Trouvez un notaire à Orléans rapidement. 1er rendez-vous offert, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-orleans",
     type: "website",

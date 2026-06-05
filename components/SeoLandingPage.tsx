@@ -199,10 +199,10 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
             + Voir plus d&apos;horaires
           </a>
 
-          {/* Badge 1er RDV */}
+          {/* Badge réservation */}
           <div className="mt-auto pt-3 border-t border-[var(--color-border-soft)] flex items-center gap-1.5 text-[11px] text-emerald-600 font-medium">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
-            Réservation en ligne · Confirmation immédiate · 1er RDV offert · 30 min · visio ou cabinet
+            Réservation en ligne · Confirmation immédiate · 30 min · visio ou cabinet
           </div>
         </div>
 

@@ -728,7 +728,7 @@ export default function Wizard() {
             <div className="text-left bg-[var(--color-tint-blue)] rounded-xl px-4 py-3.5 mb-4 text-xs text-[var(--color-muted)] leading-relaxed flex flex-col gap-1.5">
               <span>📧 Email de confirmation envoyé</span>
               <span>📋 Vos réponses transmises au notaire pour préparer le RDV</span>
-              <span className="font-semibold text-[var(--color-success)]">🎁 1er RDV offert — limité à 30 minutes</span>
+              <span className="font-semibold text-[var(--color-success)]">Confirmation immédiate par email</span>
               <span className="flex items-start gap-1.5 text-[var(--color-accent)] font-semibold">
                 <Bell className="w-3.5 h-3.5 shrink-0 mt-px" strokeWidth={2.5} />
                 Rappels e-mail : la veille et 2h avant le RDV

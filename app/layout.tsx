@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Notaires.io — Prendre rendez-vous avec un notaire en ligne",
     description:
-      "Trouvez le notaire qu'il vous faut en 3 questions. Immobilier, succession, mariage, société — 1er RDV offert, en visio ou au cabinet.",
+      "Trouvez le notaire qu'il vous faut en 3 questions. Immobilier, succession, mariage, société, en visio ou au cabinet.",
     url: BASE,
     siteName: "Notaires.io",
     locale: "fr_FR",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Notaires.io — Prendre rendez-vous avec un notaire en ligne",
-    description: "Trouvez le notaire qu'il vous faut en 3 questions. 1er RDV offert.",
+    description: "Trouvez le notaire qu'il vous faut en 3 questions.",
   },
   alternates: { canonical: BASE },
   verification: {

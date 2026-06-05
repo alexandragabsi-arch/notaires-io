@@ -126,7 +126,7 @@ function SlotCalendar({ slotMatrix }: { slotMatrix: string[][] }) {
             <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
           </a>
           <p className="text-[11px] text-[var(--color-muted)] text-center">
-            1er RDV offert · 30 min · visio ou cabinet
+            visio ou cabinet
           </p>
         </motion.div>
       )}
@@ -310,7 +310,7 @@ export default function NotaireProfileClient({ id }: { id: string }) {
               </div>
             </div>
             <div className="mt-1 text-[11px] text-[var(--color-success)] font-semibold">
-              🎁 1er RDV offert — 30 min
+              Rendez-vous confirmé
             </div>
           </div>
         </div>
@@ -467,7 +467,7 @@ export default function NotaireProfileClient({ id }: { id: string }) {
             <p className="text-[12px] text-[var(--color-muted)] text-center leading-relaxed">
               Réservation en ligne · Confirmation immédiate
               <br />
-              1er RDV offert · 30 min · visio ou cabinet
+              visio ou cabinet
             </p>
           </div>
 

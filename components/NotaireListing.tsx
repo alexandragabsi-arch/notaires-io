@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { Search, MapPin, BadgeCheck, Clock, ArrowRight, Sparkles, Globe, X } from "lucide-react";
+import { Search, MapPin, BadgeCheck, Clock, ArrowRight, Sparkles, Globe, X, Video, Phone } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { getStoredProfiles, getRemoteProfiles } from "@/lib/notaire-profiles";
@@ -26,6 +26,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
 
   const [specialty, setSpecialty] = useState<string>(ALL);
   const [language, setLanguage] = useState<string>(ALL);
+  const [nameQuery, setNameQuery] = useState("");
 
   // Profils : localStorage (instantané) fusionné avec Supabase (persistant).
   const [stored, setStored] = useState<ListingNotaire[]>([]);
@@ -96,13 +97,15 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
 
   const results = useMemo(() => {
     const norm = city === ALL ? "" : city.toLowerCase().trim();
+    const nq = nameQuery.toLowerCase().trim();
     return all.filter((n) => {
       const matchCity = !norm || n.city.toLowerCase().includes(norm);
+      const matchName = !nq || n.name.toLowerCase().includes(nq);
       const matchSpec = specialty === ALL || n.specialties.includes(specialty);
       const matchLang = language === ALL || (n.languages ?? []).includes(language);
-      return matchCity && matchSpec && matchLang;
+      return matchCity && matchName && matchSpec && matchLang;
     });
-  }, [all, city, specialty, language]);
+  }, [all, city, nameQuery, specialty, language]);
 
   // Reset limit when city changes
   const displayed = useMemo(() => results.slice(0, displayLimit), [results, displayLimit]);
@@ -166,6 +169,29 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
                 </li>
               ))}
             </ul>
+          )}
+        </motion.div>
+
+        {/* Barre recherche nom */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.08 }}
+          className="relative mb-4 max-w-[600px] mx-auto"
+        >
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-muted)] pointer-events-none" strokeWidth={2} />
+          <input
+            type="text"
+            value={nameQuery}
+            onChange={e => setNameQuery(e.target.value)}
+            placeholder="Nom du notaire (ex : Martin, Dupont…)"
+            autoComplete="off"
+            className="w-full pl-12 pr-12 py-4 rounded-2xl border-2 border-[var(--color-border)] text-[16px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition shadow-[var(--shadow-card)] bg-white"
+          />
+          {nameQuery && (
+            <button onClick={() => setNameQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)] hover:text-[var(--color-text-strong)]">
+              <X className="w-4 h-4" strokeWidth={2.5} />
+            </button>
           )}
         </motion.div>
 
@@ -298,6 +324,16 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
                   <span className="flex items-center gap-1 text-[var(--color-success)] font-medium">
                     <Clock className="w-[14px] h-[14px]" strokeWidth={2} />
                     {n.next}
+                  </span>
+                </div>
+
+                {/* Modes de RDV */}
+                <div className="flex gap-2 mb-4">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[var(--color-tint-blue)] text-[var(--color-accent)] border border-[var(--color-accent-soft)]">
+                    <Video className="w-3 h-3" strokeWidth={2.5} /> Visio disponible
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[var(--color-tint-green)] text-[var(--color-success)] border border-emerald-100">
+                    <Phone className="w-3 h-3" strokeWidth={2.5} /> Appel possible
                   </span>
                 </div>
 

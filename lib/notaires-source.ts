@@ -346,33 +346,9 @@ export function getArrondissements(city: string): { num: number; label: string; 
  */
 export function getAllNotaires(): ListingNotaire[] {
   const membres = loadAll();
-  const offices = loadOffices();
 
-  // Déduplique uniquement par ID (inclut toutes les études, même les villes déjà couvertes)
-  const memberIds = new Set(membres.map(n => n.id));
-
-  const officeEntries: ListingNotaire[] = offices
-    .filter(o => !memberIds.has(o.id))
-    .map((o, idx) => {
-      const cityLabel = o.city.charAt(0) + o.city.slice(1).toLowerCase();
-      return {
-        id: o.id,
-        name: formatOfficeListing(o.name),
-        initials: officeInitials(o.name) || "NO",
-        color: (["default", "green", "purple"] as const)[idx % 3],
-        city: cityLabel,
-        address: o.address || undefined,
-        phone: o.phone ? formatPhone(o.phone) : undefined,
-        officeName: o.name,
-        specialties: ["Droit immobilier", "Successions"],
-        next: "Disponible rapidement",
-        slotMatrix: deterministicSlots(o.id),
-        bio: undefined,
-      };
-    });
-
-  // Individus en premier (plus riches en données), puis études
-  const individuals: ListingNotaire[] = membres.map((n) => ({
+  // Uniquement les notaires individuels (pas les études)
+  return membres.map((n) => ({
     id: n.id,
     name: n.name,
     initials: n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map(p => p[0]).join(""),
@@ -388,6 +364,4 @@ export function getAllNotaires(): ListingNotaire[] {
     slotMatrix: deterministicSlots(n.id),
     bio: undefined,
   }));
-
-  return [...individuals, ...officeEntries];
 }

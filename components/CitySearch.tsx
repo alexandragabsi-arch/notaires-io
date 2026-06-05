@@ -119,19 +119,6 @@ export default function CitySearch() {
           </button>
         </form>
 
-        {/* Villes rapides */}
-        <div className="flex flex-wrap gap-2 mt-4 justify-center">
-          {["Paris", "Lyon", "Marseille", "Bordeaux", "Nice", "Toulouse", "Cannes", "Versailles"].map(c => (
-            <button
-              key={c}
-              type="button"
-              onClick={() => router.push(`/annuaire?ville=${encodeURIComponent(c)}`)}
-              className="px-3 py-1.5 rounded-full text-[13px] font-semibold border border-[var(--color-border)] bg-white text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
-            >
-              {c}
-            </button>
-          ))}
-        </div>
       </div>
     </section>
   );

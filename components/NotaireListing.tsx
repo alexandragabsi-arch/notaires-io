@@ -70,7 +70,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   }, [urlVille]);
 
   function selectSuggestion(item: CitySugg) {
-    setCityInput(item.city);
+    setCityInput(`${item.city} (${item.postcode})`);
     setCity(item.city);
     setSuggestions([]);
     setShowSugg(false);

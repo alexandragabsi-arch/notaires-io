@@ -287,14 +287,15 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
       const city: string = props?.city ?? "";
       const num = postalToArrNum(postcode);
       if (num && availableArr.includes(num)) {
+        /* Arrondissement détecté ET des notaires y figurent */
         setSelectedArr(num);
         setNearLabel(`${city} ${arrLabel(num)}`);
         setNearState("done");
       } else if (num) {
-        /* Arrondissement détecté mais pas de notaire dans les données */
-        setNearLabel(`${city} ${arrLabel(num)}`);
+        /* Arrondissement détecté mais aucun notaire → fallback ville entière */
+        setSelectedArr(null);
+        setNearLabel(city);
         setNearState("done");
-        setSelectedArr(num);
       } else {
         setNearState("error");
       }

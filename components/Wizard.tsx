@@ -112,7 +112,7 @@ export default function Wizard() {
   }
 
   function submitPostal() {
-    if (postal.length !== 5) return;
+    if (postal.trim().length < 2) return;
     const key = `${q1}:${q2}`;
     if (ENRICH[key]) {
       setStep("enrich");
@@ -413,13 +413,11 @@ export default function Wizard() {
             >
               <input
                 type="text"
-                inputMode="numeric"
-                pattern="[0-9]{5}"
-                maxLength={5}
                 value={postal}
-                onChange={(e) => setPostal(e.target.value.replace(/\D/g, ""))}
-                placeholder="75008"
-                className="w-full px-5 py-3.5 text-lg border-[1.5px] border-[var(--color-border)] rounded-xl outline-none focus:border-[var(--color-primary)] text-center font-bold tracking-[2px] text-[var(--color-text-strong)] transition-colors"
+                onChange={(e) => setPostal(e.target.value)}
+                placeholder="75008 ou Paris"
+                autoComplete="off"
+                className="w-full px-5 py-3.5 text-lg border-[1.5px] border-[var(--color-border)] rounded-xl outline-none focus:border-[var(--color-primary)] text-center font-bold tracking-[1px] text-[var(--color-text-strong)] transition-colors"
                 required
               />
               <motion.button
@@ -427,7 +425,7 @@ export default function Wizard() {
                 whileHover={{ y: -1, filter: "brightness(1.05)" }}
                 whileTap={{ scale: 0.98 }}
                 className="bg-gradient-cta text-white border-none px-6 py-3.5 rounded-xl text-[15px] font-semibold cursor-pointer w-full shadow-[var(--shadow-cta)] disabled:bg-gray-300 disabled:cursor-not-allowed"
-                disabled={postal.length !== 5}
+                disabled={postal.trim().length < 2}
               >
                 Continuer →
               </motion.button>
@@ -559,7 +557,7 @@ export default function Wizard() {
                 {getSpecialty(q1, q2)}
               </div>
               <div className="mt-2.5 text-xs opacity-90 flex items-center gap-2">
-                <span>4 notaires disponibles près du {postal}</span>
+                <span>4 notaires disponibles près de {postal}</span>
                 {Object.keys(enrich).length > 0 && (
                   <span className="bg-[var(--color-tint-green)] text-emerald-800 px-2 py-0.5 rounded-full text-[10px] font-semibold">
                     📋 Informations transmises

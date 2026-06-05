@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
-  Search, MapPin, BadgeCheck, ArrowRight, Sparkles,
-  Globe, X, Video, Phone
+  Search, MapPin, X, Video, Phone, Globe,
+  BadgeCheck, ArrowRight, Sparkles, ChevronRight
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
@@ -16,19 +16,16 @@ const ALL = "Toutes";
 interface CitySugg { city: string; postcode: string; }
 
 const DAY_SHORT = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+const MONTH_SHORT = ["janv.", "févr.", "mars", "avr.", "mai", "juin",
+  "juil.", "août", "sept.", "oct.", "nov.", "déc."];
 
-/**
- * "Paris 18e Arrondissement" → "Paris"
- * "Lyon 3e Arrondissement"   → "Lyon"
- * "Marseille 2e Arrondissement" → "Marseille"
- * Ville normale inchangée
- */
+/** "Paris 18e Arrondissement" → "Paris" */
 function extractBaseCity(city: string): string {
   return city.replace(/\s+\d+e[r]?\s+arrondissement$/i, "").trim();
 }
 
-/** Calcule les 3 prochains jours ayant des créneaux */
-function buildSlotDays(slotMatrix: string[][] | undefined) {
+/** Construit les colonnes de jours pour le calendrier */
+function buildDayColumns(slotMatrix: string[][] | undefined, maxDays = 5) {
   if (!slotMatrix) return [];
   const today = new Date();
   return slotMatrix
@@ -36,184 +33,170 @@ function buildSlotDays(slotMatrix: string[][] | undefined) {
       const d = new Date(today);
       d.setDate(today.getDate() + idx);
       return {
-        label: `${DAY_SHORT[d.getDay()]} ${d.getDate()}`,
+        dayShort: DAY_SHORT[d.getDay()],
+        date: d.getDate(),
+        month: MONTH_SHORT[d.getMonth()],
         slots,
         idx,
       };
     })
     .filter((d) => d.slots.length > 0)
-    .slice(0, 3);
+    .slice(0, maxDays);
 }
 
-/** Carte notaire : 1 ligne, info gauche + créneaux droite */
+/* ── Carte notaire style neonotario ────────────────────── */
 function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
-  const [mode, setMode] = useState<"visio" | "appel">("visio");
-  const slotDays = useMemo(() => buildSlotDays(n.slotMatrix), [n.slotMatrix]);
+  const columns = useMemo(() => buildDayColumns(n.slotMatrix, 5), [n.slotMatrix]);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: Math.min(i * 0.03, 0.4) }}
+      transition={{ duration: 0.28, delay: Math.min(i * 0.025, 0.4) }}
       className="bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-[var(--shadow-card)] p-5 flex flex-col sm:flex-row gap-5 hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-strong)] transition-all"
     >
-      {/* ── Gauche : infos notaire ─────────────────────── */}
-      <div className="flex-1 min-w-0 flex flex-col gap-3">
-        {/* Avatar + nom + ville */}
-        <div className="flex items-start gap-3">
+      {/* ── Gauche : fiche notaire ───────────────────────── */}
+      <div className="sm:w-[260px] shrink-0 flex flex-col gap-2.5">
+
+        {/* Avatar + nom */}
+        <div className="flex items-center gap-3">
           {n.photo ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={n.photo}
-              alt={`Photo de ${n.name}`}
-              className="w-12 h-12 rounded-full object-cover shrink-0"
-            />
+            <img src={n.photo} alt={n.name}
+              className="w-14 h-14 rounded-full object-cover shrink-0 border-2 border-[var(--color-border-soft)]" />
           ) : (
-            <div
-              className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white text-[14px] shrink-0 ${
-                n.color === "green"
-                  ? "bg-gradient-green"
-                  : n.color === "purple"
-                    ? "bg-gradient-to-br from-purple-500 to-purple-700"
-                    : "bg-gradient-cta"
-              }`}
-            >
+            <div className={`w-14 h-14 rounded-full flex items-center justify-center font-bold text-white text-[16px] shrink-0 ${
+              n.color === "green"
+                ? "bg-gradient-green"
+                : n.color === "purple"
+                  ? "bg-gradient-to-br from-purple-500 to-purple-700"
+                  : "bg-gradient-cta"
+            }`}>
               {n.initials}
             </div>
           )}
           <div className="min-w-0">
-            <div className="font-bold text-[16px] text-[var(--color-text-strong)] leading-tight flex items-center gap-1.5 flex-wrap">
+            <div className="font-bold text-[15px] text-[var(--color-text-strong)] leading-tight">
               {n.name}
-              {n.isNew && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[var(--color-tint-green)] text-[var(--color-success)]">
-                  <Sparkles className="w-2.5 h-2.5" strokeWidth={2.5} /> Nouveau
-                </span>
-              )}
             </div>
-            <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-              <span className="flex items-center gap-1 text-[13px] text-[var(--color-muted)]">
-                <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
-                {n.city}{n.area ? ` · ${n.area}` : ""}
-              </span>
-              {n.role && (
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
-                  n.role === "salarié"
-                    ? "bg-purple-50 text-purple-600 border-purple-200"
-                    : "bg-blue-50 text-blue-600 border-blue-200"
-                }`}>
-                  {n.role === "salarié" ? "Notaire salarié" : "Notaire associé"}
+            <div className="text-[12px] text-[var(--color-muted)] mt-0.5">
+              {n.role === "salarié" ? "Notaire Salarié" : "Notaire Associé"}
+              {n.isNew && (
+                <span className="ml-1.5 inline-flex items-center gap-0.5 text-[10px] font-bold text-[var(--color-success)]">
+                  <Sparkles className="w-2.5 h-2.5" strokeWidth={2.5} /> Nouveau
                 </span>
               )}
             </div>
           </div>
         </div>
 
-        {/* Spécialités + langues */}
+        {/* Adresse */}
+        {n.address && (
+          <div className="flex items-start gap-1.5 text-[12px] text-[var(--color-muted)]">
+            <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--color-accent)]" strokeWidth={2} />
+            <span className="leading-snug">{n.address}</span>
+          </div>
+        )}
+        {!n.address && (
+          <div className="flex items-center gap-1.5 text-[12px] text-[var(--color-muted)]">
+            <MapPin className="w-3.5 h-3.5 shrink-0 text-[var(--color-accent)]" strokeWidth={2} />
+            {n.city}
+          </div>
+        )}
+
+        {/* Téléphone */}
+        {n.phone && (
+          <div className="flex items-center gap-1.5 text-[12px] text-[var(--color-muted)]">
+            <Phone className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
+            {n.phone}
+          </div>
+        )}
+
+        {/* Accepte les RDVs */}
+        <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-accent)]">
+          <Video className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
+          Accepte les RDVs :
+          <span className="flex items-center gap-1">
+            <Video className="w-3.5 h-3.5" strokeWidth={2} />
+            <Phone className="w-3.5 h-3.5" strokeWidth={2} />
+          </span>
+        </div>
+
+        {/* Vérifié */}
+        {!n.isNew && (
+          <div className="flex items-center gap-1 text-[12px] text-[var(--color-success)] font-semibold">
+            <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} /> Notaire vérifié
+          </div>
+        )}
+
+        {/* Domaines */}
         <div className="flex flex-wrap gap-1.5">
           {n.specialties.map((s) => (
-            <span
-              key={s}
-              className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[var(--color-accent-soft)] text-[var(--color-accent)]"
-            >
+            <span key={s}
+              className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
               {s}
             </span>
           ))}
           {(n.languages ?? []).map((l) => (
-            <span
-              key={l}
-              className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[var(--color-tint-green)] text-[var(--color-success)] flex items-center gap-1"
-            >
-              <Globe className="w-3 h-3" strokeWidth={2.5} />
-              {l}
+            <span key={l}
+              className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[var(--color-tint-green)] text-[var(--color-success)] flex items-center gap-1">
+              <Globe className="w-3 h-3" strokeWidth={2.5} />{l}
             </span>
           ))}
         </div>
 
-        {/* Badges vérification */}
-        <div className="flex items-center gap-3 text-[12px]">
-          {n.isNew ? (
-            <span className="flex items-center gap-1 text-[var(--color-muted)] italic">
-              <Sparkles className="w-3 h-3" strokeWidth={2} /> Profil récent
-            </span>
-          ) : (
-            <span className="flex items-center gap-1 text-[var(--color-success)] font-semibold">
-              <BadgeCheck className="w-[13px] h-[13px]" strokeWidth={2} /> Notaire vérifié
-            </span>
-          )}
-          {n.officeName && (
-            <span className="text-[var(--color-muted)] truncate hidden sm:block max-w-[220px]" title={n.officeName}>
-              {n.officeName}
-            </span>
-          )}
-        </div>
+        {/* CTA */}
+        <a href={`/notaires/${n.id}`}
+          className="mt-auto inline-flex items-center justify-center gap-1.5 bg-gradient-cta text-white px-4 py-2.5 rounded-[10px] text-[13px] font-semibold shadow-[var(--shadow-cta)] w-full">
+          Voir la page de {n.name.replace(/^Me\s+/, "")}
+          <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
+        </a>
       </div>
 
-      {/* ── Droite : créneaux + CTA ────────────────────── */}
-      <div className="sm:w-[300px] shrink-0 flex flex-col gap-3 sm:border-l sm:border-[var(--color-border-soft)] sm:pl-5">
-        {/* Onglets Visio / Appel */}
-        <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
-          <button
-            onClick={() => setMode("visio")}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
-              mode === "visio"
-                ? "bg-white shadow text-[var(--color-accent)]"
-                : "text-[var(--color-muted)] hover:text-[var(--color-text-strong)]"
-            }`}
-          >
-            <Video className="w-3.5 h-3.5" strokeWidth={2.5} /> Visio
-          </button>
-          <button
-            onClick={() => setMode("appel")}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
-              mode === "appel"
-                ? "bg-white shadow text-[var(--color-success)]"
-                : "text-[var(--color-muted)] hover:text-[var(--color-text-strong)]"
-            }`}
-          >
-            <Phone className="w-3.5 h-3.5" strokeWidth={2.5} /> Appel
-          </button>
-        </div>
-
-        {/* Grille des créneaux */}
-        <div className="flex flex-col gap-2 flex-1">
-          {slotDays.length > 0 ? (
-            slotDays.map((day) => (
-              <div key={day.idx} className="flex items-center gap-2">
-                <span className="text-[11px] font-semibold text-[var(--color-muted)] w-12 shrink-0 uppercase tracking-wide">
-                  {day.label}
-                </span>
-                <div className="flex flex-wrap gap-1">
+      {/* ── Droite : calendrier colonnes ─────────────────── */}
+      <div className="flex-1 border-t sm:border-t-0 sm:border-l border-[var(--color-border-soft)] pt-4 sm:pt-0 sm:pl-5 flex flex-col gap-3 min-w-0">
+        {columns.length > 0 ? (
+          <>
+            <div className="flex gap-3 overflow-x-auto pb-1">
+              {columns.map((day) => (
+                <div key={day.idx} className="flex flex-col items-center gap-1.5 min-w-[72px]">
+                  {/* En-tête jour */}
+                  <div className="text-center">
+                    <div className="text-[11px] font-semibold text-[var(--color-muted)] uppercase tracking-wide">
+                      {day.dayShort}.
+                    </div>
+                    <div className="text-[11px] text-[var(--color-muted)]">
+                      {String(day.date).padStart(2, "0")} {day.month}
+                    </div>
+                  </div>
+                  {/* Créneaux */}
                   {day.slots.map((slot) => (
                     <a
                       key={slot}
                       href={`/notaires/${n.id}`}
-                      className={`px-2.5 py-1 rounded-lg text-[12px] font-bold border transition-colors ${
-                        mode === "visio"
-                          ? "bg-[var(--color-tint-blue)] text-[var(--color-accent)] border-[var(--color-accent-soft)] hover:bg-[var(--color-accent)] hover:text-white"
-                          : "bg-[var(--color-tint-green)] text-[var(--color-success)] border-emerald-100 hover:bg-[var(--color-success)] hover:text-white"
-                      }`}
+                      className="w-full text-center px-2 py-2 rounded-lg text-[13px] font-bold bg-[var(--color-accent)] text-white hover:opacity-80 transition-opacity"
                     >
                       {slot}
                     </a>
                   ))}
                 </div>
-              </div>
-            ))
-          ) : (
-            <p className="text-[12px] text-[var(--color-muted)] italic">
-              Disponible sur demande
-            </p>
-          )}
-        </div>
+              ))}
+            </div>
 
-        {/* CTA profil */}
-        <a
-          href={`/notaires/${n.id}`}
-          className="inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-4 py-2.5 rounded-[10px] text-[13px] font-semibold shadow-[var(--shadow-cta)] w-full mt-auto"
-        >
-          Voir le profil
-          <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
-        </a>
+            {/* Voir plus */}
+            <a href={`/notaires/${n.id}`}
+              className="inline-flex items-center gap-1 text-[12px] font-semibold text-[var(--color-accent)] hover:underline self-start">
+              <ChevronRight className="w-3.5 h-3.5" strokeWidth={2.5} />
+              Voir plus d'horaires
+            </a>
+          </>
+        ) : (
+          <div className="flex-1 flex items-center justify-center">
+            <p className="text-[13px] text-[var(--color-muted)] italic">
+              Disponible sur demande — <a href={`/notaires/${n.id}`} className="text-[var(--color-accent)] font-semibold hover:underline">contacter</a>
+            </p>
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -234,6 +217,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
 
   const [nameQuery, setNameQuery] = useState("");
   const [language, setLanguage] = useState<string>(ALL);
+  const [displayLimit, setDisplayLimit] = useState(60);
 
   const [stored, setStored] = useState<ListingNotaire[]>([]);
   useEffect(() => {
@@ -283,7 +267,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
 
   function selectSuggestion(item: CitySugg) {
     setCityInput(`${item.city} (${item.postcode})`);
-    setCity(extractBaseCity(item.city)); // "Paris 18e Arrondissement" → "Paris"
+    setCity(extractBaseCity(item.city));
     setSuggestions([]);
     setShowSugg(false);
     inputRef.current?.blur();
@@ -301,8 +285,6 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
     [all],
   );
 
-  const [displayLimit, setDisplayLimit] = useState(60);
-
   const results = useMemo(() => {
     const norm = city === ALL ? "" : city.toLowerCase().trim();
     const nq = nameQuery.toLowerCase().trim();
@@ -318,104 +300,93 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
-      <div className="max-w-[900px] mx-auto px-6">
+      <div className="max-w-[1100px] mx-auto px-6">
 
         {/* En-tête */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
           className="text-center mb-8"
         >
           <h1 className="serif text-[30px] sm:text-[40px] font-bold text-[var(--color-text-strong)] tracking-tight mb-2">
             Trouvez votre <span className="serif-accent">notaire</span>
           </h1>
-          <p className="text-[var(--color-muted)] text-[15px] sm:text-[16px] max-w-[540px] mx-auto">
+          <p className="text-[var(--color-muted)] text-[15px] sm:text-[16px] max-w-[560px] mx-auto">
             Entrez votre ville ou le nom d'un notaire — les disponibilités apparaissent immédiatement.
           </p>
         </motion.div>
 
-        {/* Barre ville / CP */}
+        {/* Barres de recherche côte à côte */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.05 }}
-          className="relative mb-3 max-w-[640px] mx-auto"
+          className="flex flex-col sm:flex-row gap-3 mb-5 max-w-[860px] mx-auto"
         >
-          <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-accent)] pointer-events-none" strokeWidth={2} />
-          <input
-            ref={inputRef}
-            type="text"
-            value={cityInput}
-            onChange={(e) => { setCityInput(e.target.value); if (!e.target.value) setCity(ALL); }}
-            onFocus={() => suggestions.length > 0 && setShowSugg(true)}
-            onBlur={() => setTimeout(() => setShowSugg(false), 150)}
-            onKeyDown={(e) => { if (e.key === "Enter" && suggestions[0]) selectSuggestion(suggestions[0]); }}
-            placeholder="Ville ou code postal…"
-            autoComplete="off"
-            className="w-full pl-12 pr-12 py-4 rounded-2xl border-2 border-[var(--color-border)] text-[16px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition shadow-[var(--shadow-card)] bg-white"
-          />
-          {cityInput && (
-            <button onClick={clearCity} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)] hover:text-[var(--color-text-strong)]">
-              <X className="w-4 h-4" strokeWidth={2.5} />
-            </button>
-          )}
-          {showSugg && suggestions.length > 0 && (
-            <ul className="absolute z-50 top-full left-0 right-0 mt-1.5 bg-white border border-[var(--color-border-soft)] rounded-xl shadow-lg overflow-hidden">
-              {suggestions.map((item) => (
-                <li
-                  key={item.postcode + item.city}
-                  onMouseDown={() => selectSuggestion(item)}
-                  className="px-4 py-3 text-[14px] text-[var(--color-text-strong)] hover:bg-[var(--color-tint-blue)] cursor-pointer flex justify-between items-center"
-                >
-                  <span className="font-semibold flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
-                    {item.city}
-                  </span>
-                  <span className="text-[var(--color-muted)] text-[13px]">{item.postcode}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </motion.div>
+          {/* Ville */}
+          <div className="relative flex-1">
+            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-accent)] pointer-events-none" strokeWidth={2} />
+            <input
+              ref={inputRef}
+              type="text"
+              value={cityInput}
+              onChange={(e) => { setCityInput(e.target.value); if (!e.target.value) setCity(ALL); }}
+              onFocus={() => suggestions.length > 0 && setShowSugg(true)}
+              onBlur={() => setTimeout(() => setShowSugg(false), 150)}
+              onKeyDown={(e) => { if (e.key === "Enter" && suggestions[0]) selectSuggestion(suggestions[0]); }}
+              placeholder="Saisir une ville…"
+              autoComplete="off"
+              className="w-full pl-12 pr-10 py-4 rounded-2xl border-2 border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition shadow-[var(--shadow-card)] bg-white"
+            />
+            {cityInput && (
+              <button onClick={clearCity} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-muted)] hover:text-[var(--color-text-strong)]">
+                <X className="w-4 h-4" strokeWidth={2.5} />
+              </button>
+            )}
+            {showSugg && suggestions.length > 0 && (
+              <ul className="absolute z-50 top-full left-0 right-0 mt-1.5 bg-white border border-[var(--color-border-soft)] rounded-xl shadow-lg overflow-hidden">
+                {suggestions.map((item) => (
+                  <li key={item.postcode + item.city} onMouseDown={() => selectSuggestion(item)}
+                    className="px-4 py-3 text-[14px] hover:bg-[var(--color-tint-blue)] cursor-pointer flex justify-between items-center">
+                    <span className="font-semibold flex items-center gap-2">
+                      <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
+                      {item.city}
+                    </span>
+                    <span className="text-[var(--color-muted)] text-[13px]">{item.postcode}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
-        {/* Barre nom */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.08 }}
-          className="relative mb-5 max-w-[640px] mx-auto"
-        >
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-muted)] pointer-events-none" strokeWidth={2} />
-          <input
-            type="text"
-            value={nameQuery}
-            onChange={(e) => setNameQuery(e.target.value)}
-            placeholder="Nom du notaire (ex : Martin, Dupont…)"
-            autoComplete="off"
-            className="w-full pl-12 pr-12 py-4 rounded-2xl border-2 border-[var(--color-border)] text-[16px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition shadow-[var(--shadow-card)] bg-white"
-          />
-          {nameQuery && (
-            <button onClick={() => setNameQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)] hover:text-[var(--color-text-strong)]">
-              <X className="w-4 h-4" strokeWidth={2.5} />
-            </button>
-          )}
+          {/* Nom */}
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-muted)] pointer-events-none" strokeWidth={2} />
+            <input
+              type="text"
+              value={nameQuery}
+              onChange={(e) => setNameQuery(e.target.value)}
+              placeholder="Saisir le nom d'un notaire…"
+              autoComplete="off"
+              className="w-full pl-12 pr-10 py-4 rounded-2xl border-2 border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition shadow-[var(--shadow-card)] bg-white"
+            />
+            {nameQuery && (
+              <button onClick={() => setNameQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-muted)] hover:text-[var(--color-text-strong)]">
+                <X className="w-4 h-4" strokeWidth={2.5} />
+              </button>
+            )}
+          </div>
         </motion.div>
 
         {/* Filtre langues */}
         {languages.length > 0 && city !== ALL && (
-          <div className="flex flex-wrap gap-2 mb-5 max-w-[640px] mx-auto">
+          <div className="flex flex-wrap gap-2 mb-4 max-w-[860px] mx-auto">
             {[ALL, ...languages].map((l) => (
-              <button
-                key={l}
-                type="button"
-                onClick={() => setLanguage(l === language ? ALL : l)}
+              <button key={l} type="button" onClick={() => setLanguage(l === language ? ALL : l)}
                 className={`px-3 py-1.5 rounded-full text-[12px] font-semibold border transition-colors ${
                   language === l && l !== ALL
                     ? "bg-[var(--color-tint-green)] text-[var(--color-success)] border-[var(--color-success)]"
                     : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-success)] hover:text-[var(--color-success)]"
-                }`}
-              >
+                }`}>
                 {l === ALL ? "Toutes langues" : `🌍 ${l}`}
               </button>
             ))}
@@ -423,41 +394,33 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
         )}
 
         {/* Compteur */}
-        <div className="flex items-center justify-between mb-5 max-w-[640px] mx-auto">
-          <div className="text-[14px] text-[var(--color-muted)]">
-            <span className="font-bold text-[var(--color-text-strong)]">{results.length.toLocaleString("fr-FR")}</span>{" "}
-            {results.length > 1 ? "notaires" : "notaire"}
-            {city !== ALL && (
-              <span className="font-semibold text-[var(--color-text-strong)]"> à {city}</span>
-            )}
-          </div>
+        <div className="flex items-center justify-between mb-5 max-w-[860px] mx-auto">
+          <p className="text-[14px] text-[var(--color-muted)]">
+            <span className="font-bold text-[var(--color-text-strong)]">
+              {results.length.toLocaleString("fr-FR")}
+            </span>{" "}résultat{results.length > 1 ? "s" : ""}
+            {city !== ALL && <span className="font-semibold text-[var(--color-text-strong)]"> à {city}</span>}
+          </p>
           {city !== ALL && (
-            <button
-              type="button"
-              onClick={clearCity}
-              className="text-[13px] font-semibold text-[var(--color-accent)] hover:underline flex items-center gap-1"
-            >
+            <button type="button" onClick={clearCity}
+              className="text-[13px] font-semibold text-[var(--color-accent)] hover:underline flex items-center gap-1">
               <X className="w-3.5 h-3.5" strokeWidth={2.5} /> Effacer
             </button>
           )}
         </div>
 
-        {/* Liste des notaires — 1 par ligne */}
+        {/* Liste */}
         {results.length > 0 && (
           <div className="flex flex-col gap-4">
-            {displayed.map((n, i) => (
-              <NotaireCard key={n.id} n={n} i={i} />
-            ))}
+            {displayed.map((n, i) => <NotaireCard key={n.id} n={n} i={i} />)}
           </div>
         )}
 
         {/* Voir plus */}
         {results.length > displayLimit && (
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => setDisplayLimit((l) => l + 60)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] font-semibold text-[var(--color-text-strong)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
-            >
+          <div className="mt-8 text-center">
+            <button onClick={() => setDisplayLimit((l) => l + 60)}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] font-semibold text-[var(--color-text-strong)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors">
               Voir {Math.min(60, results.length - displayLimit)} notaires de plus
               <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
             </button>
@@ -473,12 +436,8 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
             <div className="w-14 h-14 mx-auto rounded-2xl bg-[var(--color-tint-blue)] flex items-center justify-center text-[var(--color-muted)] mb-4">
               <Search className="w-7 h-7" strokeWidth={2} />
             </div>
-            <p className="text-[15px] font-semibold text-[var(--color-text-strong)] mb-1">
-              Aucun notaire pour ces critères
-            </p>
-            <p className="text-[14px] text-[var(--color-muted)]">
-              Essayez une autre ville ou élargissez votre recherche.
-            </p>
+            <p className="text-[15px] font-semibold text-[var(--color-text-strong)] mb-1">Aucun résultat</p>
+            <p className="text-[14px] text-[var(--color-muted)]">Essayez une autre ville ou un autre nom.</p>
           </div>
         )}
 

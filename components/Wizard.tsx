@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Check, Bell, Loader2, Sparkles } from "lucide-react";
 import {
@@ -47,6 +47,37 @@ export default function Wizard() {
   const [mode, setMode] = useState<"office" | "video">("office");
   const [modalOpen, setModalOpen] = useState(false);
   const [bookAccept, setBookAccept] = useState(false);
+
+  // Autocomplete ville
+  const [citySuggestions, setCitySuggestions] = useState<{ label: string; city: string; postcode: string }[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const suggestTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const q = postal.trim();
+    if (q.length < 2) { setCitySuggestions([]); setShowSuggestions(false); return; }
+    if (suggestTimer.current) clearTimeout(suggestTimer.current);
+    suggestTimer.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(q)}&type=municipality&limit=6`);
+        const json = await res.json();
+        const items = (json.features ?? []).map((f: { properties: { label: string; city: string; postcode: string } }) => ({
+          label: `${f.properties.city} (${f.properties.postcode})`,
+          city: f.properties.city,
+          postcode: f.properties.postcode,
+        }));
+        setCitySuggestions(items);
+        setShowSuggestions(items.length > 0);
+      } catch { /* silencieux */ }
+    }, 220);
+  }, [postal]);
+
+  function selectCity(item: { label: string; city: string; postcode: string }) {
+    setPostal(item.postcode);
+    setCitySuggestions([]);
+    setShowSuggestions(false);
+  }
 
   // IA détection
   const [describe, setDescribe] = useState("");
@@ -407,19 +438,39 @@ export default function Wizard() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
+                setShowSuggestions(false);
                 submitPostal();
               }}
               className="flex flex-col gap-3"
             >
-              <input
-                type="text"
-                value={postal}
-                onChange={(e) => setPostal(e.target.value)}
-                placeholder="75008 ou Paris"
-                autoComplete="off"
-                className="w-full px-5 py-3.5 text-lg border-[1.5px] border-[var(--color-border)] rounded-xl outline-none focus:border-[var(--color-primary)] text-center font-bold tracking-[1px] text-[var(--color-text-strong)] transition-colors"
-                required
-              />
+              <div className="relative">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={postal}
+                  onChange={(e) => setPostal(e.target.value)}
+                  onFocus={() => citySuggestions.length > 0 && setShowSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                  placeholder="Ville ou code postal"
+                  autoComplete="off"
+                  className="w-full px-5 py-3.5 text-lg border-[1.5px] border-[var(--color-border)] rounded-xl outline-none focus:border-[var(--color-primary)] text-center font-bold tracking-[1px] text-[var(--color-text-strong)] transition-colors"
+                  required
+                />
+                {showSuggestions && citySuggestions.length > 0 && (
+                  <ul className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-[var(--color-border-soft)] rounded-xl shadow-lg overflow-hidden">
+                    {citySuggestions.map((item) => (
+                      <li
+                        key={item.postcode + item.city}
+                        onMouseDown={() => selectCity(item)}
+                        className="px-4 py-3 text-[14px] text-[var(--color-text-strong)] hover:bg-[var(--color-tint-blue)] cursor-pointer flex justify-between items-center"
+                      >
+                        <span className="font-semibold">{item.city}</span>
+                        <span className="text-[var(--color-muted)] text-[13px]">{item.postcode}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
               <motion.button
                 type="submit"
                 whileHover={{ y: -1, filter: "brightness(1.05)" }}

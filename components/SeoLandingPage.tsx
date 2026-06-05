@@ -248,12 +248,19 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
   /* ── Filtres ── */
   const [selectedSpecialty, setSelectedSpecialty] = useState<string | null>(null);
   const [selectedArr, setSelectedArr] = useState<number | null>(null);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
   const [nearState, setNearState] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [nearLabel, setNearLabel] = useState("");
 
   /* Arrondissements dispo dans les données */
   const availableArr = useMemo(() =>
     [...new Set(notaires.map(n => n.arrondissement).filter((a): a is number => !!a))].sort((a, b) => a - b),
+    [notaires]
+  );
+
+  /* Villes dispo dans les données */
+  const availableCities = useMemo(() =>
+    [...new Set(notaires.map(n => n.city).filter(Boolean))],
     [notaires]
   );
 
@@ -268,9 +275,10 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
     notaires.filter(n => {
       if (selectedSpecialty && !n.specialties.includes(selectedSpecialty)) return false;
       if (selectedArr && n.arrondissement !== selectedArr) return false;
+      if (selectedCity && n.city?.toLowerCase() !== selectedCity.toLowerCase()) return false;
       return true;
     }),
-    [notaires, selectedSpecialty, selectedArr]
+    [notaires, selectedSpecialty, selectedArr, selectedCity]
   );
 
   /* Géolocalisation → arrondissement */
@@ -297,15 +305,30 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
         setNearLabel(city);
         setNearState("done");
       } else {
-        setNearState("error");
+        /* Ville hors arrondissement (Neuilly 92200, Levallois 92300, etc.) */
+        const normalizedDetected = city.toLowerCase().trim();
+        const matchedCity = availableCities.find(c =>
+          c.toLowerCase() === normalizedDetected ||
+          c.toLowerCase().includes(normalizedDetected) ||
+          normalizedDetected.includes(c.toLowerCase())
+        );
+        if (matchedCity) {
+          setSelectedCity(matchedCity);
+          setNearLabel(matchedCity);
+        } else {
+          setSelectedCity(null);
+          setNearLabel(city);
+        }
+        setSelectedArr(null);
+        setNearState("done");
       }
     } catch {
       setNearState("error");
     }
-  }, [availableArr]);
+  }, [availableArr, availableCities]);
 
-  const clearAll = () => { setSelectedSpecialty(null); setSelectedArr(null); setNearState("idle"); setNearLabel(""); };
-  const hasFilter = selectedSpecialty !== null || selectedArr !== null;
+  const clearAll = () => { setSelectedSpecialty(null); setSelectedArr(null); setSelectedCity(null); setNearState("idle"); setNearLabel(""); };
+  const hasFilter = selectedSpecialty !== null || selectedArr !== null || selectedCity !== null;
 
   return (
     <>

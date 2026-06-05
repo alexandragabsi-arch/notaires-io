@@ -41,12 +41,17 @@ export default function Wizard() {
   const [q1, setQ1] = useState<BranchId | null>(null);
   const [q2, setQ2] = useState<string | null>(null);
   const [postal, setPostal] = useState("");
+  const [cityLabel, setCityLabel] = useState(""); // nom affiché de la ville sélectionnée
   const [enrich, setEnrich] = useState<Record<string, string>>({});
   const [currentNotary, setCurrentNotary] = useState<Notaire | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [mode, setMode] = useState<"office" | "video">("office");
   const [modalOpen, setModalOpen] = useState(false);
   const [bookAccept, setBookAccept] = useState(false);
+
+  // Notaires dynamiques selon la ville saisie
+  const [notaires, setNotaires] = useState<Notaire[]>(NOTAIRES);
+  const [notairesLoading, setNotairesLoading] = useState(false);
 
   // Autocomplete ville / CP
   const [citySuggestions, setCitySuggestions] = useState<{ city: string; postcode: string }[]>([]);
@@ -78,9 +83,10 @@ export default function Wizard() {
 
   function selectCity(item: { city: string; postcode: string }) {
     setPostal(item.postcode);
+    setCityLabel(item.city);
     setCitySuggestions([]);
     setShowSuggestions(false);
-    inputRef.current?.focus();
+    inputRef.current?.blur();
   }
 
   async function detectNearMe() {
@@ -94,6 +100,7 @@ export default function Wizard() {
       const props = geo.features?.[0]?.properties;
       if (props?.postcode) {
         setPostal(props.postcode);
+        setCityLabel(props.city ?? props.municipality ?? "");
         setCitySuggestions([]);
         setShowSuggestions(false);
       }
@@ -164,8 +171,21 @@ export default function Wizard() {
     setStep("postal");
   }
 
+  async function fetchNotairesByCity(city: string) {
+    if (!city) return;
+    setNotairesLoading(true);
+    try {
+      const res = await fetch(`/api/notaires-by-city?city=${encodeURIComponent(city)}`);
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) setNotaires(data);
+    } catch { /* garde les profils par défaut */ }
+    finally { setNotairesLoading(false); }
+  }
+
   function submitPostal() {
     if (postal.trim().length < 2) return;
+    const city = cityLabel || postal;
+    fetchNotairesByCity(city);
     const key = `${q1}:${q2}`;
     if (ENRICH[key]) {
       setStep("enrich");
@@ -195,6 +215,8 @@ export default function Wizard() {
     setQ1(null);
     setQ2(null);
     setPostal("");
+    setCityLabel("");
+    setNotaires(NOTAIRES);
     setEnrich({});
     setDescribe("");
     setDetectResult(null);
@@ -641,7 +663,7 @@ export default function Wizard() {
                 {getSpecialty(q1, q2)}
               </div>
               <div className="mt-2.5 text-xs opacity-90 flex items-center gap-2">
-                <span>4 notaires disponibles près de {postal}</span>
+                <span>4 notaires disponibles près de {cityLabel || postal}</span>
                 {Object.keys(enrich).length > 0 && (
                   <span className="bg-[var(--color-tint-green)] text-emerald-800 px-2 py-0.5 rounded-full text-[10px] font-semibold">
                     📋 Informations transmises
@@ -655,7 +677,13 @@ export default function Wizard() {
               </span>
             </div>
             <div className="flex flex-col gap-2.5">
-              {NOTAIRES.map((n, i) => (
+              {notairesLoading && (
+                <div className="flex items-center justify-center gap-2 py-6 text-[var(--color-muted)] text-sm">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Recherche en cours…
+                </div>
+              )}
+              {!notairesLoading && notaires.map((n, i) => (
                 <motion.div
                   key={n.initials}
                   initial={{ opacity: 0, y: 8 }}

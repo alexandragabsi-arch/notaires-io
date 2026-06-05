@@ -497,7 +497,7 @@ export default function Wizard() {
                 type="button"
                 onClick={detectNearMe}
                 disabled={geoLoading}
-                className="inline-flex items-center justify-center gap-2 text-[14px] text-[var(--color-accent)] font-semibold py-2 hover:underline disabled:opacity-50 transition"
+                className="inline-flex items-center justify-center gap-2 text-[13px] font-semibold text-[var(--color-primary)] border border-[var(--color-primary)] rounded-full px-4 py-2 hover:bg-[var(--color-tint-blue)] disabled:opacity-50 transition-colors w-full"
               >
                 {geoLoading
                   ? <><Loader2 className="w-4 h-4 animate-spin" /> Localisation…</>

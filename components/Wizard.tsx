@@ -1,21 +1,18 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Check, Bell, Loader2, Sparkles, MapPin, Video } from "lucide-react";
-import { generateRoomId, internalVisioUrl, slotDayToDate } from "@/lib/visio";
+import { ArrowRight, ArrowLeft, Loader2, Sparkles, MapPin } from "lucide-react";
 import {
   Q1_OPTIONS,
   Q2_TREE,
   ENRICH,
-  NOTAIRES,
-  SLOTS,
   getSpecialty,
   type BranchId,
-  type Notaire,
 } from "@/lib/wizard-data";
 
-type Step = "q1" | "q2" | "describe" | "postal" | "enrich" | "result" | "confirm";
+type Step = "q1" | "q2" | "describe" | "postal" | "enrich";
 
 type DetectResult = {
   branchId: BranchId;
@@ -38,21 +35,13 @@ const slideVariants = {
 };
 
 export default function Wizard() {
+  const router = useRouter();
   const [step, setStep] = useState<Step>("q1");
   const [q1, setQ1] = useState<BranchId | null>(null);
   const [q2, setQ2] = useState<string | null>(null);
   const [postal, setPostal] = useState("");
   const [cityLabel, setCityLabel] = useState(""); // nom affiché de la ville sélectionnée
   const [enrich, setEnrich] = useState<Record<string, string>>({});
-  const [currentNotary, setCurrentNotary] = useState<Notaire | null>(null);
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
-  const [mode, setMode] = useState<"office" | "video">("office");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [bookAccept, setBookAccept] = useState(false);
-
-  // Notaires dynamiques selon la ville saisie
-  const [notaires, setNotaires] = useState<Notaire[]>(NOTAIRES);
-  const [notairesLoading, setNotairesLoading] = useState(false);
 
   // Autocomplete ville / CP
   const [citySuggestions, setCitySuggestions] = useState<{ city: string; postcode: string }[]>([]);
@@ -159,12 +148,7 @@ export default function Wizard() {
     setQ1(detectResult.branchId);
     const q2val = detectResult.q2 ?? "_";
     setQ2(q2val);
-    const key = `${detectResult.branchId}:${q2val}`;
-    if (ENRICH[key]) {
-      setStep("enrich");
-    } else {
-      setStep("postal");
-    }
+    setStep("postal");
   }
 
   function answerQ2(id: string) {
@@ -172,26 +156,18 @@ export default function Wizard() {
     setStep("postal");
   }
 
-  async function fetchNotairesByCity(city: string) {
-    if (!city) return;
-    setNotairesLoading(true);
-    try {
-      const res = await fetch(`/api/notaires-by-city?city=${encodeURIComponent(city)}`);
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) setNotaires(data);
-    } catch { /* garde les profils par défaut */ }
-    finally { setNotairesLoading(false); }
+  function goToListing(city: string) {
+    router.push(`/annuaire?ville=${encodeURIComponent(city)}`);
   }
 
   function submitPostal() {
     if (postal.trim().length < 2) return;
     const city = cityLabel || postal;
-    fetchNotairesByCity(city);
     const key = `${q1}:${q2}`;
     if (ENRICH[key]) {
       setStep("enrich");
     } else {
-      setStep("result");
+      goToListing(city);
     }
   }
 
@@ -199,25 +175,11 @@ export default function Wizard() {
     setEnrich((prev) => ({ ...prev, [qId]: val }));
   }
 
-  function openModal(n: Notaire) {
-    setCurrentNotary(n);
-    setSelectedSlot(null);
-    setMode("office");
-    setBookAccept(false);
-    setModalOpen(true);
-  }
-
-  function confirmBooking() {
-    setModalOpen(false);
-    setStep("confirm");
-  }
-
   function resetAll() {
     setQ1(null);
     setQ2(null);
     setPostal("");
     setCityLabel("");
-    setNotaires(NOTAIRES);
     setEnrich({});
     setDescribe("");
     setDetectResult(null);
@@ -227,9 +189,8 @@ export default function Wizard() {
 
   // ===== Progress dots ===== (Q1/Q2/postal = routage)
   const dotState = (i: number) => {
-    if (step === "confirm") return "hidden";
     const routingStep = step === "q1" ? 1 : step === "q2" ? 2 : 3;
-    const postRouting = step === "enrich" || step === "result";
+    const postRouting = step === "enrich";
     if (postRouting) return "done";
     if (i < routingStep) return "done";
     if (i === routingStep) return "active";
@@ -238,8 +199,7 @@ export default function Wizard() {
 
   return (
     <div className="bg-white rounded-3xl shadow-[0_12px_40px_rgba(28,69,135,0.12)] border border-[var(--color-border-soft)] p-9 max-w-[480px] w-full relative">
-      {step !== "confirm" && (
-        <div className="flex gap-1.5 mb-6">
+      <div className="flex gap-1.5 mb-6">
           {[1, 2, 3].map((i) => {
             const state = dotState(i);
             return (
@@ -259,7 +219,6 @@ export default function Wizard() {
             );
           })}
         </div>
-      )}
 
       <AnimatePresence mode="wait">
         {step === "q1" && (
@@ -617,7 +576,7 @@ export default function Wizard() {
               <button
                 onClick={() => {
                   setEnrich({});
-                  setStep("result");
+                  goToListing(cityLabel || postal);
                 }}
                 className="flex-1 bg-white text-[var(--color-primary)] border-[1.5px] border-[var(--color-border)] px-4 py-3 rounded-xl text-sm font-semibold hover:bg-[var(--color-tint-blue)] hover:border-[var(--color-primary)] transition-colors"
               >
@@ -626,7 +585,7 @@ export default function Wizard() {
               <motion.button
                 whileHover={{ y: -1, filter: "brightness(1.05)" }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setStep("result")}
+                onClick={() => goToListing(cityLabel || postal)}
                 disabled={Object.keys(enrich).length === 0}
                 className="flex-1 bg-gradient-cta text-white border-none px-4 py-3 rounded-xl text-sm font-semibold shadow-[var(--shadow-cta)] disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
@@ -636,287 +595,6 @@ export default function Wizard() {
           </motion.div>
         )}
 
-        {step === "result" && (
-          <motion.div
-            key="result"
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.22 }}
-          >
-            <button
-              onClick={() => setStep("postal")}
-              className="inline-flex items-center gap-1.5 text-sm text-[var(--color-muted)] hover:text-[var(--color-primary)] mb-3 font-medium"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" /> Modifier ma recherche
-            </button>
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="bg-gradient-banner text-white p-5 rounded-2xl mb-4 shadow-[0_8px_30px_rgba(28,69,135,0.2)]"
-            >
-              <div className="text-[11px] uppercase tracking-[1.5px] opacity-85 mb-1.5 font-semibold">
-                Spécialité recommandée
-              </div>
-              <div className="serif text-2xl font-bold leading-tight">
-                {getSpecialty(q1, q2)}
-              </div>
-              <div className="mt-2.5 text-xs opacity-90 flex items-center gap-2">
-                <span>4 notaires disponibles près de {cityLabel || postal}</span>
-                {Object.keys(enrich).length > 0 && (
-                  <span className="bg-[var(--color-tint-green)] text-emerald-800 px-2 py-0.5 rounded-full text-[10px] font-semibold">
-                    📋 Informations transmises
-                  </span>
-                )}
-              </div>
-            </motion.div>
-            <div className="flex items-center gap-2 bg-[var(--color-tint-mint)] border border-teal-200 rounded-xl px-3.5 py-3 mb-4 text-xs">
-              <span className="text-emerald-800 font-semibold">
-                📋 Les honoraires (tarifs) vous seront communiqués par le notaire lors de votre premier rendez-vous
-              </span>
-            </div>
-            <div className="flex flex-col gap-2.5">
-              {notairesLoading && (
-                <div className="flex items-center justify-center gap-2 py-6 text-[var(--color-muted)] text-sm">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Recherche en cours…
-                </div>
-              )}
-              {!notairesLoading && notaires.map((n, i) => (
-                <motion.div
-                  key={n.initials}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.06 }}
-                  className="flex items-center gap-3 p-3 border-[1.5px] border-[var(--color-border)] rounded-xl hover:border-[var(--color-primary)] transition-colors"
-                >
-                  <div
-                    className={`w-11 h-11 rounded-full text-white flex items-center justify-center font-bold text-[13px] shrink-0 ${
-                      n.color === "green"
-                        ? "bg-gradient-green"
-                        : n.color === "purple"
-                        ? "bg-gradient-to-br from-purple-500 to-purple-700"
-                        : "bg-gradient-cta"
-                    }`}
-                  >
-                    {n.initials}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-sm text-[var(--color-text-strong)]">
-                      {n.name}
-                    </div>
-                    <div className="text-xs text-[var(--color-muted)] flex gap-2.5 mt-0.5">
-                      <span>{n.city}</span>
-                      <span className="text-emerald-600 font-semibold flex items-center gap-0.5">
-                        ✓ Notaire vérifié
-                      </span>
-                    </div>
-                    <div className="text-xs text-emerald-600 font-medium mt-1">
-                      ⏱ {n.next}
-                    </div>
-                  </div>
-                  <motion.button
-                    whileHover={{ y: -1, filter: "brightness(1.05)" }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={() => openModal(n)}
-                    className="bg-gradient-cta text-white border-none px-4 py-2 rounded-[9px] text-[13px] font-semibold shrink-0 shadow-[0_3px_10px_rgba(73,128,230,0.2)]"
-                  >
-                    Réserver
-                  </motion.button>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {step === "confirm" && currentNotary && (
-          <motion.div
-            key="confirm"
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
-            className="text-center py-5"
-          >
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-              className="w-[76px] h-[76px] rounded-full bg-gradient-green text-white inline-flex items-center justify-center text-[34px] mb-4 shadow-[0_8px_24px_rgba(16,185,129,0.3)]"
-            >
-              <Check className="w-9 h-9" strokeWidth={3} />
-            </motion.div>
-            <h2 className="serif text-2xl font-bold text-[var(--color-text-strong)] mb-2">
-              Rendez-vous confirmé
-            </h2>
-            <p className="text-sm text-[var(--color-muted)] mb-4">
-              <strong>{currentNotary.name}</strong> · {selectedSlot} ·{" "}
-              {mode === "video" ? "🎥 Visio" : "🏢 Cabinet"}
-            </p>
-            <div className="text-left bg-[var(--color-tint-blue)] rounded-xl px-4 py-3.5 mb-4 text-xs text-[var(--color-muted)] leading-relaxed flex flex-col gap-1.5">
-              <span>📧 Email de confirmation envoyé</span>
-              <span>📋 Vos réponses transmises au notaire pour préparer le RDV</span>
-              <span className="font-semibold text-[var(--color-success)]">Confirmation immédiate par email</span>
-              <span className="flex items-start gap-1.5 text-[var(--color-accent)] font-semibold">
-                <Bell className="w-3.5 h-3.5 shrink-0 mt-px" strokeWidth={2.5} />
-                Rappels e-mail : la veille et 2h avant le RDV
-              </span>
-            </div>
-
-            {/* Lien visio si mode vidéo */}
-            {mode === "video" && currentNotary && selectedSlot && (() => {
-              const day = selectedSlot.split(" ")[0]; // "Demain", "Vendredi"…
-              const rdvDate = slotDayToDate(day);
-              const roomId = generateRoomId(currentNotary.initials, selectedSlot, rdvDate);
-              const visioUrl = internalVisioUrl(roomId, rdvDate);
-              return (
-                <a
-                  href={visioUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 w-full bg-gradient-cta text-white px-5 py-3 rounded-xl text-sm font-semibold shadow-[var(--shadow-cta)] mb-3 hover:opacity-90 transition-opacity"
-                >
-                  <Video className="w-4 h-4" strokeWidth={2.5} />
-                  Rejoindre la visio
-                </a>
-              );
-            })()}
-
-            <button
-              onClick={resetAll}
-              className="bg-white text-[var(--color-primary)] border-[1.5px] border-[var(--color-border)] px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-[var(--color-tint-blue)] hover:border-[var(--color-primary)] transition-colors w-full"
-            >
-              Faire une autre recherche
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ===== MODAL BOOKING ===== */}
-      <AnimatePresence>
-        {modalOpen && currentNotary && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-[rgba(15,42,82,0.5)] backdrop-blur-md z-50 flex items-center justify-center p-5"
-            onClick={() => setModalOpen(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-3xl max-w-[500px] w-full p-8 shadow-[var(--shadow-strong)]"
-            >
-              <h2 className="serif text-[26px] font-bold mb-1.5 text-[var(--color-text-strong)] tracking-tight">
-                {currentNotary.name}
-              </h2>
-              <p className="text-[var(--color-muted)] text-sm mb-3">
-                {currentNotary.city} · Choisissez votre créneau
-              </p>
-              <div className="bg-[var(--color-tint-green)] text-emerald-700 text-[12px] font-semibold rounded-[10px] px-3.5 py-2 mb-4 flex items-center gap-1.5">
-                🎁 Premier rendez-vous offert — limité à 30 minutes
-              </div>
-              <div className="flex gap-2 mb-4">
-                <button
-                  onClick={() => setMode("office")}
-                  className={`flex-1 px-3 py-2.5 border-[1.5px] rounded-[10px] text-xs font-semibold transition-all ${
-                    mode === "office"
-                      ? "border-[var(--color-primary)] bg-[var(--color-accent-soft)] text-[var(--color-primary)]"
-                      : "border-[var(--color-border)] bg-white text-[var(--color-muted)]"
-                  }`}
-                >
-                  🏢 Au cabinet
-                </button>
-                <button
-                  onClick={() => setMode("video")}
-                  className={`flex-1 px-3 py-2.5 border-[1.5px] rounded-[10px] text-xs font-semibold transition-all ${
-                    mode === "video"
-                      ? "border-[var(--color-primary)] bg-[var(--color-accent-soft)] text-[var(--color-primary)]"
-                      : "border-[var(--color-border)] bg-white text-[var(--color-muted)]"
-                  }`}
-                >
-                  🎥 En visio
-                </button>
-              </div>
-              <AnimatePresence>
-                {mode === "video" && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="bg-[var(--color-tint-mint)] border border-teal-200 rounded-[10px] px-3.5 py-2.5 mb-3.5 text-xs text-emerald-800 flex gap-2 items-start overflow-hidden"
-                  >
-                    <span className="text-sm">✓</span>
-                    <div>
-                      <strong className="block mb-0.5">Lien visio auto-généré</strong>
-                      <span className="opacity-85">
-                        Vous recevrez un lien sécurisé Notaires.io (ou Zoom/Meet
-                        selon le choix du notaire) — aucune configuration à
-                        faire.
-                      </span>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <div className="grid grid-cols-3 gap-2 mb-5">
-                {SLOTS.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => setSelectedSlot(s)}
-                    className={`px-2.5 py-2.5 border-[1.5px] rounded-[10px] text-[13px] font-medium transition-all ${
-                      selectedSlot === s
-                        ? "border-[var(--color-primary)] bg-gradient-cta text-white shadow-[0_4px_12px_rgba(73,128,230,0.3)]"
-                        : "border-[var(--color-border)] text-[var(--color-text-strong)] hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)]"
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-              <label className="flex items-start gap-2.5 mb-4 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={bookAccept}
-                  onChange={(e) => setBookAccept(e.target.checked)}
-                  className="mt-0.5 w-4 h-4 shrink-0 accent-[var(--color-primary)] cursor-pointer"
-                />
-                <span className="text-[12px] text-[var(--color-muted)] leading-relaxed">
-                  J'accepte que mes informations soient transmises au notaire
-                  pour préparer ce rendez-vous, conformément à la{" "}
-                  <a
-                    href="/confidentialite"
-                    target="_blank"
-                    className="text-[var(--color-accent)] font-semibold hover:underline"
-                  >
-                    politique de confidentialité
-                  </a>
-                  .
-                </span>
-              </label>
-              <div className="flex gap-2.5">
-                <button
-                  onClick={() => setModalOpen(false)}
-                  className="flex-1 bg-white text-[var(--color-text-strong)] border-[1.5px] border-[var(--color-border)] px-5 py-3.5 rounded-xl text-sm font-semibold hover:bg-[var(--color-tint-blue)] transition-colors"
-                >
-                  Annuler
-                </button>
-                <motion.button
-                  whileHover={{ y: -1, filter: "brightness(1.05)" }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={confirmBooking}
-                  disabled={!selectedSlot || !bookAccept}
-                  className="flex-1 bg-gradient-cta text-white border-none px-5 py-3.5 rounded-xl text-sm font-semibold shadow-[var(--shadow-cta)] disabled:bg-gray-300 disabled:cursor-not-allowed"
-                >
-                  Confirmer le RDV
-                </motion.button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
       </AnimatePresence>
     </div>
   );

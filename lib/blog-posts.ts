@@ -80,6 +80,21 @@ export interface BlogPost {
     { question: "Combien de temps pour régler une succession sans testament ?", answer: "En moyenne 6 mois pour la déclaration fiscale, et 6 à 12 mois pour le règlement complet. Les délais varient selon la complexité du patrimoine et le nombre d&apos;héritiers." },
   ],
   },
+  {
+    slug: "desheriter-enfant-possible",
+    title: "Peut-on déshériter un enfant en France ? Règles 2025",
+    excerpt: "Peut-on déshériter un enfant en France ? Découvrez la réserve héréditaire, les exceptions et les solutions légales pour organiser votre succession.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["déshériter un enfant", "réserve héréditaire", "succession", "héritiers réservataires", "quotité disponible"],
+    canonicalUrl: `${BASE}/blog/desheriter-enfant-possible`,
+  faqs: [
+    { question: "Peut-on totalement déshériter un enfant en France ?", answer: "Non, le droit français interdit de déshériter totalement un enfant grâce à la réserve héréditaire qui lui garantit une part minimale du patrimoine." },
+    { question: "Dans quels cas un enfant peut-il être privé d&apos;héritage ?", answer: "Un enfant peut être déclaré indigne en cas de faute grave (meurtre, violences, faux témoignage) envers le défunt, sur décision judiciaire." },
+    { question: "Comment réduire la part d&apos;un enfant légalement ?", answer: "Vous pouvez avantager d&apos;autres héritiers via la quotité disponible, l&apos;assurance-vie ou des donations, tout en respectant la réserve héréditaire." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -226,6 +241,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Que se passe-t-il en cas de succession sans testament ?", answer: "La loi française détermine automatiquement les héritiers selon un ordre précis : descendants, ascendants, collatéraux. Le notaire applique les règles du Code civil pour répartir le patrimoine." },
     { question: "Le conjoint survivant hérite-t-il sans testament ?", answer: "Oui. En présence d&apos;enfants communs, il choisit entre 1/4 en pleine propriété ou la totalité en usufruit. Sans enfants, sa part est plus importante selon les autres héritiers présents." },
     { question: "Combien de temps pour régler une succession sans testament ?", answer: "En moyenne 6 mois pour la déclaration fiscale, et 6 à 12 mois pour le règlement complet. Les délais varient selon la complexité du patrimoine et le nombre d&apos;héritiers." },
+  ],
+  },
+  {
+    slug: "desheriter-enfant-possible",
+    title: "Peut-on déshériter un enfant en France ? Règles 2025",
+    excerpt: "Peut-on déshériter un enfant en France ? Découvrez la réserve héréditaire, les exceptions et les solutions légales pour organiser votre succession.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["déshériter un enfant", "réserve héréditaire", "succession", "héritiers réservataires", "quotité disponible"],
+    canonicalUrl: `${BASE}/blog/desheriter-enfant-possible`,
+  faqs: [
+    { question: "Peut-on totalement déshériter un enfant en France ?", answer: "Non, le droit français interdit de déshériter totalement un enfant grâce à la réserve héréditaire qui lui garantit une part minimale du patrimoine." },
+    { question: "Dans quels cas un enfant peut-il être privé d&apos;héritage ?", answer: "Un enfant peut être déclaré indigne en cas de faute grave (meurtre, violences, faux témoignage) envers le défunt, sur décision judiciaire." },
+    { question: "Comment réduire la part d&apos;un enfant légalement ?", answer: "Vous pouvez avantager d&apos;autres héritiers via la quotité disponible, l&apos;assurance-vie ou des donations, tout en respectant la réserve héréditaire." },
   ],
   },
 ];

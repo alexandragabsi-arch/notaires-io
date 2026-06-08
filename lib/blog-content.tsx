@@ -729,6 +729,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "heritiers-reservataires-quotite": () => <Article9 />,
   "declaration-succession-delais": () => <Article10 />,
   "succession-sans-testament": () => <Article11 />,
+  "desheriter-enfant-possible": () => <Article12 />,
 };
 
 
@@ -1071,6 +1072,78 @@ function Article11() {
     buttonText="Consulter un notaire"
     href="/notaires"
   />
+</>
+    </>
+  );
+}
+
+/* ── Article 12 ─────────────────────────────────────────────────────────── */
+
+function Article12() {
+  return (
+    <>
+      <>
+  <p className="lead">Peut-on déshériter un enfant en France ? La réponse courte est non : le droit français protège les enfants par un mécanisme appelé la réserve héréditaire. Toutefois, il existe des solutions légales pour organiser votre succession différemment et, dans des cas exceptionnels, écarter un enfant indigne. Cet article fait le point sur vos droits et options.</p>
+
+  <KeyPoints items={[
+    "En France, il est impossible de déshériter totalement un enfant grâce à la réserve héréditaire",
+    "La part réservée varie selon le nombre d&apos;enfants : 1/2 pour 1 enfant, 2/3 pour 2, 3/4 pour 3 ou plus",
+    "L&apos;indignité successorale permet d&apos;écarter un enfant en cas de faute grave",
+    "La quotité disponible et l&apos;assurance-vie offrent des marges de manœuvre pour avantager d&apos;autres héritiers"
+  ]} />
+
+  <h2>La réserve héréditaire : une protection incontournable</h2>
+  <p>Le Code civil français consacre le principe de la <strong>réserve héréditaire</strong>, qui rend impossible le fait de déshériter un enfant. Les enfants sont des héritiers dits « réservataires » : la loi leur garantit obligatoirement une portion du patrimoine du défunt, quelles que soient les volontés exprimées dans un testament.</p>
+  <p>Cette protection s&apos;applique à tous les enfants, qu&apos;ils soient légitimes, naturels, adoptés ou nés hors mariage. La répartition de la réserve dépend du nombre d&apos;enfants :</p>
+  <ul>
+    <li><strong>1 enfant</strong> : la réserve représente 1/2 du patrimoine</li>
+    <li><strong>2 enfants</strong> : la réserve représente 2/3 du patrimoine (1/3 chacun)</li>
+    <li><strong>3 enfants ou plus</strong> : la réserve représente 3/4 du patrimoine, partagés à parts égales</li>
+  </ul>
+  <p>Le reste, appelé <strong>quotité disponible</strong>, peut être librement attribué par testament ou donation à toute personne de votre choix.</p>
+
+  <h2>L&apos;indignité successorale : la seule véritable exception</h2>
+  <p>Le seul moyen d&apos;écarter totalement un enfant de la succession est de le faire déclarer <strong>indigne</strong> de succéder. Cette procédure est strictement encadrée par les articles 726 et 727 du Code civil.</p>
+  <p>L&apos;indignité peut être <strong>de plein droit</strong> en cas de :</p>
+  <ul>
+    <li>Condamnation pour meurtre ou tentative de meurtre du défunt</li>
+    <li>Condamnation pour coups mortels portés au défunt</li>
+  </ul>
+  <p>Elle peut également être <strong>prononcée par le juge</strong> en cas de :</p>
+  <ul>
+    <li>Violences volontaires graves envers le défunt</li>
+    <li>Faux témoignage dans une procédure criminelle contre lui</li>
+    <li>Dénonciation calomnieuse ayant entraîné une condamnation criminelle</li>
+  </ul>
+  <p>Il s&apos;agit de cas exceptionnels qui nécessitent une décision de justice. Un simple conflit familial, même profond, ne suffit jamais à justifier l&apos;indignité.</p>
+
+  <InternalCTA />
+
+  <h2>Comment réduire légalement la part d&apos;un enfant ?</h2>
+  <p>Si vous ne pouvez pas déshériter un enfant, plusieurs outils permettent de moduler votre succession et d&apos;avantager d&apos;autres personnes :</p>
+  <h3>1. Utiliser la quotité disponible</h3>
+  <p>Vous pouvez librement transmettre la quotité disponible (entre 1/4 et 1/2 selon le nombre d&apos;enfants) à votre conjoint, un autre enfant, un tiers ou une association via un testament authentique.</p>
+  <h3>2. Souscrire une assurance-vie</h3>
+  <p>L&apos;<strong>assurance-vie</strong> bénéficie d&apos;un régime juridique particulier : les capitaux versés au bénéficiaire désigné échappent en principe à la succession et donc à la réserve héréditaire, sauf primes manifestement exagérées.</p>
+  <h3>3. Réaliser des donations</h3>
+  <p>Des donations de votre vivant à d&apos;autres héritiers ou tiers permettent d&apos;anticiper la transmission. Attention : elles seront réintégrées au calcul de la réserve si elles excèdent la quotité disponible.</p>
+  <h3>4. Recourir au mandat à effet posthume</h3>
+  <p>Cet outil permet de confier la gestion d&apos;une partie de la succession à un tiers pour protéger un enfant vulnérable ou éviter une mauvaise gestion.</p>
+
+  <h2>Que faire en cas de conflit familial grave ?</h2>
+  <p>Si vos relations avec un enfant sont gravement détériorées, sachez que vous pouvez toujours :</p>
+  <ul>
+    <li>Limiter sa part à la stricte réserve héréditaire</li>
+    <li>Avantager vos autres enfants ou votre conjoint via la quotité disponible</li>
+    <li>Choisir un bénéficiaire d&apos;assurance-vie distinct</li>
+    <li>Préciser dans votre testament les motifs de votre décision</li>
+  </ul>
+  <p>Un <strong>notaire</strong> est l&apos;interlocuteur indispensable pour sécuriser votre démarche, rédiger un testament authentique opposable et éviter les contestations futures.</p>
+
+  <h2>Conclusion</h2>
+  <p>En France, déshériter un enfant est juridiquement impossible, sauf cas d&apos;indignité successorale prononcée par un juge. Toutefois, la loi offre des marges de manœuvre réelles pour organiser votre succession selon vos souhaits, via la quotité disponible, l&apos;assurance-vie et les donations. Pour éviter tout litige et optimiser la transmission de votre patrimoine, l&apos;accompagnement d&apos;un notaire est essentiel.</p>
+
+  <InternalCTA />
 </>
     </>
   );

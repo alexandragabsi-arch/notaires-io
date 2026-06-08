@@ -35,6 +35,21 @@ export interface BlogPost {
     { question: "Le notaire peut-il débloquer une assurance vie ?", answer: "Non, c&apos;est la compagnie d&apos;assurance qui verse les fonds directement aux bénéficiaires désignés, sur présentation de l&apos;acte de décès et des pièces justificatives." },
   ],
   },
+  {
+    slug: "heritiers-reservataires-quotite",
+    title: "Héritiers réservataires et quotité disponible : le guide",
+    excerpt: "Héritiers réservataires et quotité disponible : comprenez la part réservée par la loi et celle que vous pouvez transmettre librement par testament.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["héritiers réservataires", "quotité disponible", "réserve héréditaire", "succession", "testament"],
+    canonicalUrl: `${BASE}/blog/heritiers-reservataires-quotite`,,
+  faqs: [
+    { question: "Qui sont les héritiers réservataires ?", answer: "Les enfants du défunt (et leurs descendants par représentation) sont toujours réservataires. À défaut de descendants, le conjoint survivant devient réservataire à hauteur d&apos;un quart." },
+    { question: "Peut-on déshériter un enfant en France ?", answer: "Non, la loi française interdit de déshériter totalement un enfant. La réserve héréditaire lui garantit une part minimale de la succession, quelle que soit la volonté du défunt." },
+    { question: "Comment calculer la quotité disponible ?", answer: "Elle dépend du nombre d&apos;enfants : 1/2 avec un enfant, 1/3 avec deux enfants, 1/4 avec trois enfants ou plus. Le reste constitue la réserve héréditaire." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -136,6 +151,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Faut-il déclarer l&apos;assurance vie au notaire ?", answer: "Oui, même si elle est hors succession civile, le notaire doit en être informé pour vérifier l&apos;absence de primes manifestement exagérées et calculer la fiscalité éventuelle." },
     { question: "L&apos;assurance vie échappe-t-elle aux droits de succession ?", answer: "Partiellement. Les versements avant 70 ans bénéficient d&apos;un abattement de 152 500 € par bénéficiaire, puis taxation à 20% ou 31,25%. Après 70 ans, abattement global de 30 500 €." },
     { question: "Le notaire peut-il débloquer une assurance vie ?", answer: "Non, c&apos;est la compagnie d&apos;assurance qui verse les fonds directement aux bénéficiaires désignés, sur présentation de l&apos;acte de décès et des pièces justificatives." },
+  ],
+  },
+  {
+    slug: "heritiers-reservataires-quotite",
+    title: "Héritiers réservataires et quotité disponible : le guide",
+    excerpt: "Héritiers réservataires et quotité disponible : comprenez la part réservée par la loi et celle que vous pouvez transmettre librement par testament.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["héritiers réservataires", "quotité disponible", "réserve héréditaire", "succession", "testament"],
+    canonicalUrl: `${BASE}/blog/heritiers-reservataires-quotite`,,
+  faqs: [
+    { question: "Qui sont les héritiers réservataires ?", answer: "Les enfants du défunt (et leurs descendants par représentation) sont toujours réservataires. À défaut de descendants, le conjoint survivant devient réservataire à hauteur d&apos;un quart." },
+    { question: "Peut-on déshériter un enfant en France ?", answer: "Non, la loi française interdit de déshériter totalement un enfant. La réserve héréditaire lui garantit une part minimale de la succession, quelle que soit la volonté du défunt." },
+    { question: "Comment calculer la quotité disponible ?", answer: "Elle dépend du nombre d&apos;enfants : 1/2 avec un enfant, 1/3 avec deux enfants, 1/4 avec trois enfants ou plus. Le reste constitue la réserve héréditaire." },
   ],
   },
 ];

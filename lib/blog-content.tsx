@@ -726,6 +726,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "donation-enfants-avant-deces": () => <Article6 />,
   "testament-olographe-notarie": () => <Article7 />,
   "assurance-vie-succession-notaire": () => <Article8 />,
+  "heritiers-reservataires-quotite": () => <Article9 />,
 };
 
 
@@ -851,6 +852,75 @@ function Article8() {
     description="Nos notaires partenaires vous conseillent sur la rédaction de votre clause bénéficiaire et la fiscalité applicable. 1er rendez-vous offert."
     buttonText="Prendre rendez-vous"
   />
+</>
+    </>
+  );
+}
+
+/* ── Article 9 ─────────────────────────────────────────────────────────── */
+
+function Article9() {
+  return (
+    <>
+      <>
+<p>Les <strong>héritiers réservataires et la quotité disponible</strong> constituent deux notions fondamentales du droit successoral français. Elles déterminent la part de votre patrimoine que vous êtes libre de transmettre à qui vous le souhaitez, et celle que la loi réserve obligatoirement à certains proches. Comprendre ces règles est essentiel pour anticiper sereinement la transmission de vos biens.</p>
+
+<KeyPoints items={[
+  &quot;Les enfants sont toujours héritiers réservataires : on ne peut pas les déshériter.&quot;,
+  &quot;La quotité disponible varie selon le nombre d&apos;enfants : 1/2, 1/3 ou 1/4.&quot;,
+  &quot;Le conjoint survivant est réservataire uniquement en l&apos;absence d&apos;enfants.&quot;,
+  &quot;Le notaire est indispensable pour sécuriser une donation ou un testament.&quot;
+]} />
+
+<h2>Qu&apos;est-ce qu&apos;un héritier réservataire ?</h2>
+<p>Un héritier réservataire est une personne à qui la loi garantit une part minimale de la succession, appelée <strong>réserve héréditaire</strong>. Cette protection, héritée du Code civil napoléonien, vise à préserver la solidarité familiale et à éviter qu&apos;un défunt ne déshérite ses descendants directs au profit de tiers.</p>
+<p>En droit français, les héritiers réservataires sont :</p>
+<ul>
+  <li><strong>Les enfants du défunt</strong> (légitimes, naturels ou adoptifs), ainsi que leurs descendants par représentation en cas de prédécès ;</li>
+  <li><strong>Le conjoint survivant</strong>, mais uniquement en l&apos;absence d&apos;enfants ou de descendants.</li>
+</ul>
+<p>Depuis la réforme du 23 juin 2006, les ascendants (parents, grands-parents) ne sont plus réservataires. Les frères, sœurs, neveux et nièces ne le sont pas non plus : on peut donc parfaitement les écarter de sa succession par testament.</p>
+
+<h2>Comment se calcule la quotité disponible ?</h2>
+<p>La <strong>quotité disponible</strong> est la part de votre patrimoine que vous pouvez librement transmettre par testament ou donation à la personne de votre choix. Son montant dépend directement du nombre d&apos;héritiers réservataires.</p>
+<h3>En présence d&apos;enfants</h3>
+<p>Le Code civil (article 913) fixe les proportions suivantes :</p>
+<ul>
+  <li><strong>1 enfant</strong> : réserve = 1/2 ; quotité disponible = 1/2 ;</li>
+  <li><strong>2 enfants</strong> : réserve = 2/3 (soit 1/3 chacun) ; quotité disponible = 1/3 ;</li>
+  <li><strong>3 enfants ou plus</strong> : réserve = 3/4 ; quotité disponible = 1/4.</li>
+</ul>
+<h3>En l&apos;absence d&apos;enfants</h3>
+<p>Si le défunt n&apos;a pas de descendants mais laisse un conjoint, ce dernier bénéficie d&apos;une réserve de <strong>1/4 de la succession</strong>. La quotité disponible s&apos;élève alors à 3/4.</p>
+<h3>Exemple concret</h3>
+<p>Marie laisse à son décès un patrimoine de 400 000 €. Elle a deux enfants. La réserve héréditaire est de 2/3, soit environ 266 666 € à partager entre ses enfants (133 333 € chacun). La quotité disponible est de 1/3, soit 133 333 €, que Marie pouvait léguer librement, par exemple à son conjoint, un ami ou une association.</p>
+
+<h2>Que faire si la quotité disponible est dépassée ?</h2>
+<p>Lorsque le défunt a consenti des libéralités (donations de son vivant ou legs par testament) qui excèdent la quotité disponible, les héritiers réservataires lésés peuvent exercer une <strong>action en réduction</strong>. Cette procédure permet de reconstituer la réserve héréditaire en réduisant les libéralités excessives.</p>
+<p>Le notaire procède alors à un calcul rigoureux :</p>
+<ol>
+  <li>Reconstitution de la masse successorale (biens existants + donations antérieures rapportables) ;</li>
+  <li>Calcul de la réserve et de la quotité disponible ;</li>
+  <li>Vérification du non-dépassement ;</li>
+  <li>Réduction éventuelle des libéralités excessives, en commençant par les plus récentes.</li>
+</ol>
+<p>Les héritiers réservataires peuvent toutefois renoncer à l&apos;action en réduction par une <strong>renonciation anticipée à l&apos;action en réduction (RAAR)</strong>, un acte notarié solennel qui permet d&apos;organiser des transmissions atypiques (par exemple au profit d&apos;un enfant handicapé ou d&apos;un beau-fils).</p>
+
+<h2>Comment optimiser sa transmission avec un notaire ?</h2>
+<p>Plusieurs outils permettent d&apos;optimiser la transmission tout en respectant la réserve héréditaire :</p>
+<ul>
+  <li><strong>La donation-partage</strong> : fige la valeur des biens au jour de la donation et évite les conflits futurs ;</li>
+  <li><strong>Le testament</strong> : permet d&apos;utiliser la quotité disponible au profit d&apos;un proche ou d&apos;une œuvre ;</li>
+  <li><strong>L&apos;assurance-vie</strong> : hors succession dans la plupart des cas, elle permet de transmettre au-delà de la quotité disponible ;</li>
+  <li><strong>La SCI familiale</strong> : facilite la gestion et la transmission d&apos;un patrimoine immobilier.</li>
+</ul>
+<p>Chaque situation familiale étant unique, l&apos;accompagnement d&apos;un notaire est essentiel pour choisir les outils adaptés et éviter les écueils juridiques ou fiscaux.</p>
+
+<InternalCTA
+  title="Anticipez votre succession avec un notaire"
+  description="Réservez un premier rendez-vous gratuit, en visio ou en cabinet, pour faire le point sur votre situation familiale et patrimoniale."
+  buttonText="Prendre rendez-vous"
+/>
 </>
     </>
   );

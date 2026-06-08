@@ -94,5 +94,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
       { url: `${BASE}/blog/testament-olographe-notarie`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
         { url: `${BASE}/blog/assurance-vie-succession-notaire`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+        { url: `${BASE}/blog/heritiers-reservataires-quotite`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
     return [...staticPages, ...notairePages, ...seoLandingPages, ...blogPages];
 }

@@ -95,6 +95,21 @@ export interface BlogPost {
     { question: "Comment réduire la part d&apos;un enfant légalement ?", answer: "Vous pouvez avantager d&apos;autres héritiers via la quotité disponible, l&apos;assurance-vie ou des donations, tout en respectant la réserve héréditaire." },
   ],
   },
+  {
+    slug: "droits-succession-calcul",
+    title: "Droits de succession 2026 : calcul et barème actualisé",
+    excerpt: "Droits de succession calcul barème 2026 : découvrez les tranches, abattements et méthodes pour estimer précisément ce que vous devrez payer au fisc.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["droits de succession calcul", "barème succession 2026", "abattement succession", "calcul droits succession", "fiscalité héritage"],
+    canonicalUrl: `${BASE}/blog/droits-succession-calcul`,
+  faqs: [
+    { question: "Quel est l'abattement entre parent et enfant en 2026 ?", answer: "L&apos;abattement reste fixé à 100 000 € par parent et par enfant, renouvelable tous les 15 ans." },
+    { question: "Le conjoint survivant paie-t-il des droits de succession ?", answer: "Non, le conjoint marié ou pacsé est totalement exonéré de droits de succession depuis la loi TEPA de 2007." },
+    { question: "Quand faut-il payer les droits de succession ?", answer: "Les droits doivent être réglés dans les 6 mois suivant le décès (12 mois si décès à l&apos;étranger), en même temps que la déclaration." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -256,6 +271,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Peut-on totalement déshériter un enfant en France ?", answer: "Non, le droit français interdit de déshériter totalement un enfant grâce à la réserve héréditaire qui lui garantit une part minimale du patrimoine." },
     { question: "Dans quels cas un enfant peut-il être privé d&apos;héritage ?", answer: "Un enfant peut être déclaré indigne en cas de faute grave (meurtre, violences, faux témoignage) envers le défunt, sur décision judiciaire." },
     { question: "Comment réduire la part d&apos;un enfant légalement ?", answer: "Vous pouvez avantager d&apos;autres héritiers via la quotité disponible, l&apos;assurance-vie ou des donations, tout en respectant la réserve héréditaire." },
+  ],
+  },
+  {
+    slug: "droits-succession-calcul",
+    title: "Droits de succession 2026 : calcul et barème actualisé",
+    excerpt: "Droits de succession calcul barème 2026 : découvrez les tranches, abattements et méthodes pour estimer précisément ce que vous devrez payer au fisc.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["droits de succession calcul", "barème succession 2026", "abattement succession", "calcul droits succession", "fiscalité héritage"],
+    canonicalUrl: `${BASE}/blog/droits-succession-calcul`,
+  faqs: [
+    { question: "Quel est l'abattement entre parent et enfant en 2026 ?", answer: "L&apos;abattement reste fixé à 100 000 € par parent et par enfant, renouvelable tous les 15 ans." },
+    { question: "Le conjoint survivant paie-t-il des droits de succession ?", answer: "Non, le conjoint marié ou pacsé est totalement exonéré de droits de succession depuis la loi TEPA de 2007." },
+    { question: "Quand faut-il payer les droits de succession ?", answer: "Les droits doivent être réglés dans les 6 mois suivant le décès (12 mois si décès à l&apos;étranger), en même temps que la déclaration." },
   ],
   },
 ];

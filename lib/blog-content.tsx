@@ -730,6 +730,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "declaration-succession-delais": () => <Article10 />,
   "succession-sans-testament": () => <Article11 />,
   "desheriter-enfant-possible": () => <Article12 />,
+  "droits-succession-calcul": () => <Article13 />,
 };
 
 
@@ -1144,6 +1145,81 @@ function Article12() {
   <p>En France, déshériter un enfant est juridiquement impossible, sauf cas d&apos;indignité successorale prononcée par un juge. Toutefois, la loi offre des marges de manœuvre réelles pour organiser votre succession selon vos souhaits, via la quotité disponible, l&apos;assurance-vie et les donations. Pour éviter tout litige et optimiser la transmission de votre patrimoine, l&apos;accompagnement d&apos;un notaire est essentiel.</p>
 
   <InternalCTA />
+</>
+    </>
+  );
+}
+
+/* ── Article 13 ─────────────────────────────────────────────────────────── */
+
+function Article13() {
+  return (
+    <>
+      <>
+  <p className="lead">Le calcul des droits de succession selon le barème 2026 repose sur trois éléments clés : la valeur de l&apos;actif net taxable, le lien de parenté avec le défunt et les abattements applicables. Comprendre ce mécanisme permet d&apos;anticiper la facture fiscale et d&apos;optimiser la transmission de votre patrimoine.</p>
+
+  <KeyPoints points={[
+    "Abattement de 100 000 € par enfant, renouvelable tous les 15 ans",
+    "Barème progressif de 5 % à 45 % en ligne directe",
+    "Conjoint et partenaire de PACS totalement exonérés",
+    "Déclaration et paiement dans les 6 mois suivant le décès"
+  ]} />
+
+  <h2>Les abattements applicables avant calcul</h2>
+  <p>Avant d&apos;appliquer le barème, l&apos;administration fiscale déduit un abattement personnel sur la part nette revenant à chaque héritier. En 2026, ces montants restent stables :</p>
+  <ul>
+    <li><strong>Enfants, parents :</strong> 100 000 €</li>
+    <li><strong>Petits-enfants (en représentation) :</strong> 100 000 € (part du parent prédécédé)</li>
+    <li><strong>Frères et sœurs :</strong> 15 932 €</li>
+    <li><strong>Neveux et nièces :</strong> 7 967 €</li>
+    <li><strong>Personnes handicapées :</strong> 159 325 € cumulable</li>
+    <li><strong>Autres héritiers :</strong> 1 594 €</li>
+  </ul>
+  <p>Ces abattements se renouvellent tous les 15 ans, ce qui ouvre une stratégie d&apos;optimisation par les donations anticipées.</p>
+
+  <h2>Le barème 2026 en ligne directe</h2>
+  <p>Une fois l&apos;abattement déduit, le solde taxable est soumis à un barème progressif par tranches. Pour les transmissions entre parents et enfants (ou ascendants), les taux applicables sont :</p>
+  <ul>
+    <li>Jusqu&apos;à 8 072 € : <strong>5 %</strong></li>
+    <li>De 8 072 € à 12 109 € : <strong>10 %</strong></li>
+    <li>De 12 109 € à 15 932 € : <strong>15 %</strong></li>
+    <li>De 15 932 € à 552 324 € : <strong>20 %</strong></li>
+    <li>De 552 324 € à 902 838 € : <strong>30 %</strong></li>
+    <li>De 902 838 € à 1 805 677 € : <strong>40 %</strong></li>
+    <li>Au-delà de 1 805 677 € : <strong>45 %</strong></li>
+  </ul>
+  <p><strong>Exemple concret :</strong> un enfant hérite de 300 000 €. Après abattement de 100 000 €, la base taxable est de 200 000 €. Les droits s&apos;élèvent à environ 38 194 € après application du barème par tranches.</p>
+
+  <h2>Les barèmes spécifiques selon le lien de parenté</h2>
+  <p>Pour les <strong>frères et sœurs</strong>, deux tranches s&apos;appliquent après abattement : 35 % jusqu&apos;à 24 430 € et 45 % au-delà. Pour les <strong>neveux, nièces et parents jusqu&apos;au 4e degré</strong>, le taux unique est de 55 %. Enfin, pour les <strong>tiers ou parents au-delà du 4e degré</strong>, le taux atteint 60 %, ce qui rend toute transmission hors famille particulièrement coûteuse.</p>
+  <p>Le conjoint survivant marié et le partenaire de PACS bénéficient d&apos;une exonération totale depuis la loi TEPA de 2007. Le concubin, en revanche, est traité comme un tiers et taxé à 60 %.</p>
+
+  <InternalCTA
+    title="Besoin d&apos;une simulation précise ?"
+    description="Un notaire calcule vos droits de succession et vous conseille sur les stratégies d&apos;optimisation. 1er rendez-vous offert."
+    buttonText="Consulter un notaire"
+  />
+
+  <h2>Comment optimiser ses droits de succession</h2>
+  <p>Plusieurs leviers permettent de réduire la facture fiscale de vos héritiers :</p>
+  <ul>
+    <li><strong>Donations anticipées :</strong> profitez du renouvellement de l&apos;abattement tous les 15 ans</li>
+    <li><strong>Assurance-vie :</strong> abattement de 152 500 € par bénéficiaire pour les versements avant 70 ans</li>
+    <li><strong>Démembrement de propriété :</strong> transmettre la nue-propriété en conservant l&apos;usufruit</li>
+    <li><strong>Pacte Dutreil :</strong> abattement de 75 % sur la transmission d&apos;entreprise</li>
+    <li><strong>Dons familiaux de sommes d&apos;argent :</strong> exonération supplémentaire de 31 865 € sous conditions</li>
+  </ul>
+  <p>La déclaration de succession doit être déposée dans les <strong>6 mois suivant le décès</strong> (12 mois si décès à l&apos;étranger). Le paiement peut être fractionné ou différé sous conditions, notamment en cas de transmission d&apos;entreprise ou de nue-propriété.</p>
+
+  <h2>Foire aux questions</h2>
+  <div className="faq">
+    <h3>Quel est l&apos;abattement entre parent et enfant en 2026 ?</h3>
+    <p>L&apos;abattement reste fixé à 100 000 € par parent et par enfant, renouvelable tous les 15 ans.</p>
+    <h3>Le conjoint survivant paie-t-il des droits de succession ?</h3>
+    <p>Non, le conjoint marié ou pacsé est totalement exonéré de droits de succession depuis la loi TEPA de 2007.</p>
+    <h3>Quand faut-il payer les droits de succession ?</h3>
+    <p>Les droits doivent être réglés dans les 6 mois suivant le décès (12 mois si décès à l&apos;étranger), en même temps que la déclaration.</p>
+  </div>
 </>
     </>
   );

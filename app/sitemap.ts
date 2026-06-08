@@ -97,6 +97,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/blog/declaration-succession-delais`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/blog/succession-sans-testament`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/blog/desheriter-enfant-possible`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog/droits-succession-calcul`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
   ];
 
   // 95 pages départements

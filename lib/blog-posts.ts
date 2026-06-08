@@ -230,6 +230,21 @@ export interface BlogPost {
     { question: "Qu&apos;est-ce que le certificat successoral européen ?", answer: "C&apos;est un document délivré par le notaire qui prouve la qualité d&apos;héritier dans tous les pays de l&apos;Union européenne, sans formalité supplémentaire." },
   ],
   },
+  {
+    slug: "compromis-acte-de-vente-difference",
+    title: "Compromis vs acte de vente notaire : quelles différences ?",
+    excerpt: "Compromis vs acte de vente notaire : découvrez les différences clés, délais, engagements et rôle du notaire pour sécuriser votre achat immobilier.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["compromis vs acte de vente notaire", "compromis de vente", "acte authentique", "achat immobilier notaire"],
+    canonicalUrl: `${BASE}/blog/compromis-acte-de-vente-difference`,
+  faqs: [
+    { question: "Le compromis de vente doit-il être signé chez le notaire ?", answer: "Non, le compromis peut être signé chez un agent immobilier ou entre particuliers. Toutefois, le faire signer chez un notaire offre une sécurité juridique renforcée, sans surcoût dans la plupart des cas." },
+    { question: "Combien de temps entre le compromis et l&apos;acte de vente ?", answer: "Le délai habituel est de 3 à 4 mois. Ce temps permet de lever les conditions suspensives (prêt, urbanisme) et de réunir tous les documents nécessaires à la signature de l&apos;acte authentique." },
+    { question: "Peut-on annuler un compromis de vente ?", answer: "L&apos;acheteur dispose d&apos;un délai de rétractation de 10 jours après la signature. Au-delà, l&apos;annulation n&apos;est possible que si une condition suspensive n&apos;est pas remplie, sous peine de perdre le dépôt de garantie." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -526,6 +541,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Quelle loi s&apos;applique à une succession internationale ?", answer: "Depuis le règlement européen de 2015, la loi applicable est celle du dernier domicile du défunt, sauf choix exprès pour la loi de sa nationalité dans son testament." },
     { question: "Faut-il payer des droits de succession dans deux pays ?", answer: "Cela dépend des conventions fiscales bilatérales. La France a signé des conventions avec une trentaine de pays pour éviter la double imposition successorale." },
     { question: "Qu&apos;est-ce que le certificat successoral européen ?", answer: "C&apos;est un document délivré par le notaire qui prouve la qualité d&apos;héritier dans tous les pays de l&apos;Union européenne, sans formalité supplémentaire." },
+  ],
+  },
+  {
+    slug: "compromis-acte-de-vente-difference",
+    title: "Compromis vs acte de vente notaire : quelles différences ?",
+    excerpt: "Compromis vs acte de vente notaire : découvrez les différences clés, délais, engagements et rôle du notaire pour sécuriser votre achat immobilier.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["compromis vs acte de vente notaire", "compromis de vente", "acte authentique", "achat immobilier notaire"],
+    canonicalUrl: `${BASE}/blog/compromis-acte-de-vente-difference`,
+  faqs: [
+    { question: "Le compromis de vente doit-il être signé chez le notaire ?", answer: "Non, le compromis peut être signé chez un agent immobilier ou entre particuliers. Toutefois, le faire signer chez un notaire offre une sécurité juridique renforcée, sans surcoût dans la plupart des cas." },
+    { question: "Combien de temps entre le compromis et l&apos;acte de vente ?", answer: "Le délai habituel est de 3 à 4 mois. Ce temps permet de lever les conditions suspensives (prêt, urbanisme) et de réunir tous les documents nécessaires à la signature de l&apos;acte authentique." },
+    { question: "Peut-on annuler un compromis de vente ?", answer: "L&apos;acheteur dispose d&apos;un délai de rétractation de 10 jours après la signature. Au-delà, l&apos;annulation n&apos;est possible que si une condition suspensive n&apos;est pas remplie, sous peine de perdre le dépôt de garantie." },
   ],
   },
 ];

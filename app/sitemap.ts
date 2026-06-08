@@ -106,6 +106,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/blog/rapport-donation-succession`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/blog/legs-testament-notaire`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/blog/succession-internationale`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog/compromis-acte-de-vente-difference`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
   ];
 
   // 95 pages départements

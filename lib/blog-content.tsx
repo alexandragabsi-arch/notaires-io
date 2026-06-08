@@ -739,6 +739,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "rapport-donation-succession": () => <Article19 />,
   "legs-testament-notaire": () => <Article20 />,
   "succession-internationale": () => <Article21 />,
+  "compromis-acte-de-vente-difference": () => <Article22 />,
 };
 
 
@@ -1806,6 +1807,56 @@ function Article21() {
   <p><strong>4. Déclaration fiscale :</strong> dépôt de la déclaration de succession dans les 6 mois (12 mois si le défunt est décédé à l&apos;étranger) et paiement des droits.</p>
 
   <p><strong>5. Partage :</strong> répartition des biens entre les héritiers selon la loi applicable, avec éventuellement un partage transfrontalier coordonné.</p>
+
+  <InternalCTA />
+</>
+    </>
+  );
+}
+
+/* ── Article 22 ─────────────────────────────────────────────────────────── */
+
+function Article22() {
+  return (
+    <>
+      <>
+  <p className="lead">La différence entre <strong>compromis vs acte de vente notaire</strong> est essentielle à comprendre avant tout achat immobilier. Ces deux documents jalonnent la transaction mais n&apos;ont ni la même portée juridique, ni les mêmes effets. Le compromis engage les parties à conclure la vente, tandis que l&apos;acte authentique signé chez le notaire transfère effectivement la propriété. Décryptage complet pour sécuriser votre projet immobilier.</p>
+
+  <KeyPoints items={[
+    "Le compromis de vente est un avant-contrat qui engage vendeur et acheteur",
+    "L&apos;acte de vente notarié officialise le transfert de propriété",
+    "Le délai moyen entre les deux signatures est de 3 à 4 mois",
+    "Seul l&apos;acte authentique a force exécutoire et est publié au service de la publicité foncière"
+  ]} />
+
+  <h2>Qu&apos;est-ce que le compromis de vente ?</h2>
+  <p>Le compromis de vente, ou promesse synallagmatique de vente, est un avant-contrat par lequel le vendeur s&apos;engage à vendre son bien et l&apos;acheteur à l&apos;acquérir, à un prix convenu. Juridiquement, il vaut vente : &quot;promesse de vente vaut vente&quot; selon l&apos;article 1589 du Code civil.</p>
+  <p>Ce document contient des informations essentielles : identité des parties, description précise du bien, prix, conditions suspensives (obtention du prêt, absence de servitude, droit de préemption), date prévisionnelle de signature de l&apos;acte authentique et montant du dépôt de garantie (généralement 5 à 10 % du prix).</p>
+  <p>L&apos;acheteur bénéficie d&apos;un <strong>délai de rétractation de 10 jours</strong> à compter du lendemain de la première présentation de la notification. Passé ce délai, l&apos;engagement devient ferme.</p>
+
+  <h2>L&apos;acte de vente notarié : la concrétisation</h2>
+  <p>L&apos;acte de vente, dit aussi acte authentique, est le document signé chez le notaire qui formalise définitivement la transaction. Contrairement au compromis, il transfère la propriété du bien et donne lieu au paiement intégral du prix ainsi qu&apos;au versement des frais de notaire.</p>
+  <p>Le notaire procède à plusieurs vérifications cruciales avant la signature :</p>
+  <ul>
+    <li>Contrôle de l&apos;origine de propriété sur 30 ans</li>
+    <li>Purge des droits de préemption (commune, SAFER)</li>
+    <li>Vérification des hypothèques et servitudes</li>
+    <li>Conformité urbanistique et diagnostics techniques</li>
+    <li>Capacité juridique des parties</li>
+  </ul>
+  <p>Une fois signé, l&apos;acte est publié au service de la publicité foncière, ce qui le rend opposable aux tiers. Le notaire conserve la minute pendant 75 ans avant son transfert aux Archives nationales.</p>
+
+  <h2>Compromis vs acte de vente notaire : les différences essentielles</h2>
+  <p>Plusieurs points distinguent fondamentalement ces deux étapes :</p>
+  <p><strong>Force juridique :</strong> le compromis est un contrat sous seing privé (sauf s&apos;il est notarié), tandis que l&apos;acte de vente est authentique et a force exécutoire. En cas de litige, l&apos;acte authentique fait foi sans nécessité d&apos;autres preuves.</p>
+  <p><strong>Transfert de propriété :</strong> le compromis crée une obligation de conclure la vente, mais ne transfère pas la propriété. Seul l&apos;acte de vente opère ce transfert effectif, accompagné de la remise des clés.</p>
+  <p><strong>Paiement et fiscalité :</strong> au compromis, seul le dépôt de garantie est versé. À l&apos;acte authentique, le prix total est payé ainsi que les frais de notaire (7 à 8 % dans l&apos;ancien, 2 à 3 % dans le neuf).</p>
+  <p><strong>Délai :</strong> entre les deux signatures, comptez généralement 3 à 4 mois. Ce délai permet d&apos;obtenir le financement, de purger les conditions suspensives et de réunir tous les documents requis.</p>
+
+  <h2>Pourquoi faire signer son compromis chez le notaire ?</h2>
+  <p>Bien que non obligatoire, la signature du compromis chez un notaire présente de nombreux avantages. Le notaire rédige un acte sur mesure, intègre toutes les conditions suspensives adaptées à votre situation et vérifie en amont la situation juridique du bien.</p>
+  <p>Cette sécurité juridique évite de mauvaises surprises lors de la signature de l&apos;acte authentique. De plus, faire intervenir le notaire dès le compromis n&apos;entraîne généralement pas de surcoût : ses émoluments sont calculés globalement sur la transaction.</p>
+  <p>En cas de litige, de désaccord sur les conditions ou de complexité particulière (indivision, succession en cours, bien démembré), l&apos;accompagnement notarial dès le compromis est vivement recommandé.</p>
 
   <InternalCTA />
 </>

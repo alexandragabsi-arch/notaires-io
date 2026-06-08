@@ -185,6 +185,21 @@ export interface BlogPost {
     { question: "Quand consulter un notaire pour optimiser sa succession ?", answer: "Le plus tôt possible. Une planification anticipée permet d'étaler les donations et de maximiser les abattements fiscaux." },
   ],
   },
+  {
+    slug: "rapport-donation-succession",
+    title: "Rapport des donations à la succession : règles 2025",
+    excerpt: "Le rapport des donations à la succession garantit l'égalité entre héritiers. Découvrez les règles, calculs et exceptions à connaître.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["rapport donation succession", "rapport civil succession", "donation rapportable", "égalité héritiers"],
+    canonicalUrl: `${BASE}/blog/rapport-donation-succession`,
+  faqs: [
+    { question: "Toutes les donations sont-elles rapportables ?", answer: "Non. Seules les donations consenties à un héritier sont rapportables, sauf si elles ont été faites hors part successorale. Les présents d&apos;usage en sont également exclus." },
+    { question: "Comment évaluer un bien donné lors du rapport ?", answer: "Le bien est évalué à sa valeur au jour du partage, selon son état au jour de la donation. Cette règle protège l&apos;équité entre cohéritiers." },
+    { question: "Que se passe-t-il si la donation excède la part de l&apos;héritier ?", answer: "Si le rapport révèle un excédent, l&apos;héritier doit une indemnité de rapport à la succession, sauf disposition contraire de l&apos;acte de donation." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -436,6 +451,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Quel est l'abattement pour les enfants en 2025 ?", answer: "Chaque enfant bénéficie d'un abattement de 100 000 € par parent, renouvelable tous les 15 ans sur les donations." },
     { question: "L'assurance-vie est-elle vraiment hors succession ?", answer: "Oui, les capitaux versés avant 70 ans bénéficient d'un abattement de 152 500 € par bénéficiaire, hors actif successoral." },
     { question: "Quand consulter un notaire pour optimiser sa succession ?", answer: "Le plus tôt possible. Une planification anticipée permet d'étaler les donations et de maximiser les abattements fiscaux." },
+  ],
+  },
+  {
+    slug: "rapport-donation-succession",
+    title: "Rapport des donations à la succession : règles 2025",
+    excerpt: "Le rapport des donations à la succession garantit l'égalité entre héritiers. Découvrez les règles, calculs et exceptions à connaître.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["rapport donation succession", "rapport civil succession", "donation rapportable", "égalité héritiers"],
+    canonicalUrl: `${BASE}/blog/rapport-donation-succession`,
+  faqs: [
+    { question: "Toutes les donations sont-elles rapportables ?", answer: "Non. Seules les donations consenties à un héritier sont rapportables, sauf si elles ont été faites hors part successorale. Les présents d&apos;usage en sont également exclus." },
+    { question: "Comment évaluer un bien donné lors du rapport ?", answer: "Le bien est évalué à sa valeur au jour du partage, selon son état au jour de la donation. Cette règle protège l&apos;équité entre cohéritiers." },
+    { question: "Que se passe-t-il si la donation excède la part de l&apos;héritier ?", answer: "Si le rapport révèle un excédent, l&apos;héritier doit une indemnité de rapport à la succession, sauf disposition contraire de l&apos;acte de donation." },
   ],
   },
 ];

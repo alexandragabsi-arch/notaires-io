@@ -736,6 +736,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "renoncer-succession-notaire": () => <Article16 />,
   "succession-concubin-non-marie": () => <Article17 />,
   "optimisation-fiscale-succession": () => <Article18 />,
+  "rapport-donation-succession": () => <Article19 />,
 };
 
 
@@ -1595,6 +1596,83 @@ function Article18() {
     buttonText="Consulter un notaire"
     href="/rendez-vous"
   />
+</>
+    </>
+  );
+}
+
+/* ── Article 19 ─────────────────────────────────────────────────────────── */
+
+function Article19() {
+  return (
+    <>
+      <>
+<p className="lead">Le rapport des donations à la succession est un mécanisme juridique essentiel qui garantit l&apos;égalité entre les héritiers lors du règlement d&apos;une succession. Lorsqu&apos;un défunt a consenti des donations de son vivant à certains de ses héritiers, ces libéralités doivent en principe être réintégrées dans la masse successorale pour assurer un partage équitable.</p>
+
+<KeyPoints items={[
+  "Le rapport civil concerne les donations faites aux héritiers, sauf mention contraire dans l&apos;acte",
+  "Les biens sont évalués à leur valeur au jour du partage, dans leur état au jour de la donation",
+  "Les présents d&apos;usage et donations hors part successorale échappent au rapport",
+  "Le notaire calcule le rapport et veille à l&apos;équilibre entre cohéritiers"
+]} />
+
+<h2>Qu&apos;est-ce que le rapport des donations à la succession ?</h2>
+<p>Le rapport des donations est une opération juridique prévue par les articles 843 et suivants du Code civil. Il consiste à reconstituer fictivement le patrimoine du défunt en y réintégrant les donations consenties de son vivant à ses héritiers. L&apos;objectif est d&apos;assurer l&apos;égalité du partage entre les cohéritiers.</p>
+<p>Concrètement, un héritier qui a reçu une donation devra, lors de la succession, en tenir compte sur sa part d&apos;héritage. Si la donation dépasse la part qui lui revient, il pourra être amené à verser une indemnité de rapport aux autres héritiers.</p>
+<p>Ce mécanisme repose sur une présomption : sauf disposition contraire, une donation faite à un héritier est considérée comme une avance sur sa part d&apos;héritage, et non comme un avantage destiné à le favoriser.</p>
+
+<h2>Quelles donations sont rapportables à la succession ?</h2>
+<p>Toutes les donations ne sont pas soumises à l&apos;obligation de rapport. Plusieurs critères permettent de déterminer si une libéralité doit être réintégrée à la masse successorale.</p>
+
+<h3>Les donations rapportables</h3>
+<p>Sont rapportables les donations consenties à un héritier acceptant la succession, qu&apos;il s&apos;agisse :</p>
+<ul>
+  <li>Des donations notariées (donation simple, donation-partage incluse dans certains cas)</li>
+  <li>Des dons manuels (somme d&apos;argent, objets, bijoux)</li>
+  <li>Des donations indirectes (vente à prix minoré, abandon de créance)</li>
+  <li>Des donations déguisées</li>
+</ul>
+
+<h3>Les donations non rapportables</h3>
+<p>Certaines libéralités échappent au rapport :</p>
+<ul>
+  <li><strong>Les donations hors part successorale</strong> : expressément stipulées comme un avantage en plus de la part d&apos;héritage, elles s&apos;imputent sur la quotité disponible</li>
+  <li><strong>Les présents d&apos;usage</strong> : cadeaux remis lors d&apos;occasions particulières (mariage, anniversaire) dont la valeur reste proportionnée au train de vie du donateur</li>
+  <li><strong>Les donations faites à un non-héritier</strong> (un ami, par exemple)</li>
+  <li><strong>Les donations-partages</strong>, qui sont en principe définitives et non soumises au rapport</li>
+</ul>
+
+<h2>Comment évaluer une donation rapportable ?</h2>
+<p>L&apos;évaluation du rapport est une étape délicate qui obéit à des règles précises fixées par l&apos;article 860 du Code civil.</p>
+
+<h3>Le principe de la double référence</h3>
+<p>Le bien donné est évalué selon deux références :</p>
+<ul>
+  <li><strong>Sa valeur au jour du partage</strong> : pour tenir compte de l&apos;évolution du marché et de l&apos;inflation</li>
+  <li><strong>Son état au jour de la donation</strong> : les améliorations apportées par le donataire ne sont pas prises en compte dans le rapport</li>
+</ul>
+<p>Cette règle protège l&apos;équité : un héritier qui aurait reçu un terrain construit ensuite par ses soins ne sera pas pénalisé par la valeur ajoutée qu&apos;il a personnellement créée.</p>
+
+<h3>Cas particulier des sommes d&apos;argent</h3>
+<p>Pour les dons de sommes d&apos;argent, le rapport est en principe égal au montant nominal donné. Toutefois, si la somme a servi à acquérir un bien, le rapport est calculé sur la valeur de ce bien au jour du partage.</p>
+
+<h2>Le rôle du notaire dans le calcul du rapport</h2>
+<p>Le notaire joue un rôle central dans l&apos;application des règles de rapport. Il est chargé de :</p>
+<ul>
+  <li>Recenser toutes les donations consenties par le défunt</li>
+  <li>Qualifier juridiquement chaque libéralité (rapportable ou non)</li>
+  <li>Évaluer les biens donnés selon les règles légales</li>
+  <li>Calculer la masse successorale reconstituée</li>
+  <li>Déterminer les parts de chaque héritier et les éventuelles indemnités de rapport</li>
+</ul>
+<p>Cette mission requiert une grande rigueur, surtout lorsque les donations sont anciennes ou que des contestations surgissent entre cohéritiers. Le notaire veille également à vérifier que la réserve héréditaire de chaque héritier réservataire est respectée.</p>
+
+<InternalCTA
+  title="Besoin d&apos;un notaire pour votre succession ?"
+  description="Le rapport des donations est une opération technique qui demande l&apos;expertise d&apos;un professionnel. Échangez avec un notaire de Notaires.io, premier rendez-vous offert."
+  buttonText="Prendre rendez-vous"
+  buttonLink="/prendre-rendez-vous"
+/>
 </>
     </>
   );

@@ -728,6 +728,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "assurance-vie-succession-notaire": () => <Article8 />,
   "heritiers-reservataires-quotite": () => <Article9 />,
   "declaration-succession-delais": () => <Article10 />,
+  "succession-sans-testament": () => <Article11 />,
 };
 
 
@@ -985,6 +986,91 @@ function Article10() {
 
 <h2>En résumé</h2>
 <p>La <strong>déclaration de succession</strong> est une démarche obligatoire à effectuer dans un délai de 6 mois après le décès. Les droits dus dépendent du lien de parenté et de la part héritée, après application d&apos;abattements. Les retards entraînent des pénalités importantes, d&apos;où l&apos;intérêt de confier rapidement le dossier à un notaire qui sécurisera l&apos;ensemble des opérations.</p>
+</>
+    </>
+  );
+}
+
+/* ── Article 11 ─────────────────────────────────────────────────────────── */
+
+function Article11() {
+  return (
+    <>
+      <>
+  <p className="lead">Une <strong>succession sans testament héritiers</strong> légaux est régie entièrement par la loi française. Lorsqu&apos;une personne décède sans avoir rédigé de testament, on parle de succession &quot;ab intestat&quot;. Le Code civil prévoit alors un ordre précis pour désigner les héritiers et déterminer leurs parts respectives. Comprendre ces règles est essentiel pour anticiper les conséquences patrimoniales d&apos;un décès et éviter les conflits familiaux.</p>
+
+  <KeyPoints items={[
+    "Sans testament, la loi désigne automatiquement les héritiers selon 4 ordres successoraux",
+    "Les enfants héritent en priorité, à parts égales entre eux",
+    "Le conjoint survivant a des droits spécifiques selon la situation familiale",
+    "Le notaire est obligatoire pour régler la succession dès qu&apos;il y a un bien immobilier"
+  ]} />
+
+  <h2>L&apos;ordre légal des héritiers en l&apos;absence de testament</h2>
+  <p>Le Code civil français classe les héritiers en quatre ordres successifs. Chaque ordre exclut le suivant : tant qu&apos;il existe un héritier dans un ordre, les ordres suivants ne reçoivent rien.</p>
+
+  <h3>Premier ordre : les descendants</h3>
+  <p>Les enfants du défunt héritent en premier, à parts égales, qu&apos;ils soient issus du mariage, hors mariage ou adoptés. Si un enfant est prédécédé, ses propres enfants (les petits-enfants du défunt) viennent en représentation et se partagent la part de leur parent.</p>
+
+  <h3>Deuxième ordre : ascendants et collatéraux privilégiés</h3>
+  <p>En l&apos;absence de descendants, la succession revient aux parents du défunt et à ses frères et sœurs. Les parents reçoivent chacun 1/4, le reste étant partagé entre les frères et sœurs (ou leurs descendants par représentation).</p>
+
+  <h3>Troisième et quatrième ordres</h3>
+  <p>S&apos;il n&apos;y a ni descendants, ni parents, ni frères et sœurs, on remonte aux autres ascendants (grands-parents) puis aux collatéraux ordinaires (oncles, tantes, cousins) jusqu&apos;au 6e degré. Au-delà, la succession revient à l&apos;État.</p>
+
+  <h2>Les droits du conjoint survivant sans testament</h2>
+  <p>Le conjoint marié bénéficie de droits légaux importants, même sans testament. Attention : le partenaire de PACS et le concubin ne sont <strong>pas héritiers légaux</strong>. Seul un testament peut leur transmettre des biens.</p>
+
+  <p>En présence d&apos;enfants tous communs au couple, le conjoint choisit entre :</p>
+  <ul>
+    <li><strong>1/4 de la succession en pleine propriété</strong></li>
+    <li><strong>La totalité en usufruit</strong> (les enfants reçoivent la nue-propriété)</li>
+  </ul>
+
+  <p>En présence d&apos;enfants d&apos;une précédente union, le conjoint reçoit obligatoirement 1/4 en pleine propriété, sans option d&apos;usufruit. Sans enfants mais avec parents du défunt vivants, le conjoint recueille la moitié ou les trois quarts selon les cas. Sans descendants ni parents, il hérite de la totalité.</p>
+
+  <InternalCTA
+    title="Une succession à régler ?"
+    description="Nos notaires partenaires vous accompagnent dans le règlement complet de la succession, du bilan patrimonial au partage final."
+    buttonText="Prendre RDV avec un notaire"
+    href="/notaires"
+  />
+
+  <h2>Le rôle du notaire dans une succession sans testament</h2>
+  <p>Le recours au notaire est <strong>obligatoire</strong> dès lors que la succession comprend un bien immobilier, dépasse 5 000 € ou qu&apos;il existe un contrat de mariage. Dans la pratique, presque toutes les successions passent par un notaire.</p>
+
+  <h3>Les étapes du règlement</h3>
+  <ol>
+    <li><strong>Acte de notoriété</strong> : le notaire identifie officiellement les héritiers</li>
+    <li><strong>Bilan du patrimoine</strong> : inventaire des biens, comptes, dettes</li>
+    <li><strong>Déclaration de succession</strong> : à déposer dans les 6 mois auprès de l&apos;administration fiscale</li>
+    <li><strong>Paiement des droits</strong> de succession selon le lien de parenté</li>
+    <li><strong>Partage</strong> entre héritiers (à l&apos;amiable ou judiciaire)</li>
+  </ol>
+
+  <h3>Les droits de succession applicables</h3>
+  <p>Sans testament, les abattements et taux dépendent du lien de parenté : 100 000 € d&apos;abattement par enfant, exonération totale pour le conjoint survivant, 15 932 € entre frères et sœurs. Les neveux, cousins et tiers subissent une fiscalité bien plus lourde (jusqu&apos;à 60%).</p>
+
+  <h2>Comment anticiper une succession sans testament ?</h2>
+  <p>Si la loi prévoit tout, elle ne reflète pas toujours vos volontés. Plusieurs outils permettent d&apos;aménager la transmission sans rédiger un testament classique :</p>
+  <ul>
+    <li><strong>La donation entre époux</strong> (ou &quot;donation au dernier vivant&quot;) augmente la part du conjoint</li>
+    <li><strong>La donation-partage</strong> permet de transmettre de son vivant à ses enfants</li>
+    <li><strong>L&apos;assurance-vie</strong> échappe en grande partie aux règles successorales</li>
+    <li><strong>La SCI familiale</strong> facilite la transmission d&apos;un patrimoine immobilier</li>
+  </ul>
+
+  <p>Consulter un notaire en amont permet d&apos;identifier la stratégie la plus adaptée à votre situation familiale et patrimoniale, tout en optimisant la fiscalité pour vos héritiers.</p>
+
+  <h2>Questions fréquentes</h2>
+  <p>Vous trouverez ci-dessous les réponses aux questions les plus courantes sur les successions sans testament. Pour une analyse personnalisée, un échange avec un notaire reste indispensable.</p>
+
+  <InternalCTA
+    title="Besoin de conseils sur votre succession ?"
+    description="Premier rendez-vous offert avec un notaire de notre réseau, en visio ou en cabinet. Réponses claires et accompagnement personnalisé."
+    buttonText="Consulter un notaire"
+    href="/notaires"
+  />
 </>
     </>
   );

@@ -65,6 +65,21 @@ export interface BlogPost {
     { question: "Que se passe-t-il en cas de retard de déclaration ?", answer: "Un intérêt de retard de 0,20 % par mois s'applique dès le 7ème mois, plus une majoration de 10 % après 6 mois supplémentaires, et 40 % après mise en demeure." },
   ],
   },
+  {
+    slug: "succession-sans-testament",
+    title: "Succession sans testament : qui hérite et comment ?",
+    excerpt: "Succession sans testament : découvrez l'ordre des héritiers, les parts légales et le rôle du notaire pour régler une succession ab intestat en France.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["succession sans testament", "héritiers légaux", "succession ab intestat", "ordre des héritiers", "part réservataire"],
+    canonicalUrl: `${BASE}/blog/succession-sans-testament`,
+  faqs: [
+    { question: "Que se passe-t-il en cas de succession sans testament ?", answer: "La loi française détermine automatiquement les héritiers selon un ordre précis : descendants, ascendants, collatéraux. Le notaire applique les règles du Code civil pour répartir le patrimoine." },
+    { question: "Le conjoint survivant hérite-t-il sans testament ?", answer: "Oui. En présence d&apos;enfants communs, il choisit entre 1/4 en pleine propriété ou la totalité en usufruit. Sans enfants, sa part est plus importante selon les autres héritiers présents." },
+    { question: "Combien de temps pour régler une succession sans testament ?", answer: "En moyenne 6 mois pour la déclaration fiscale, et 6 à 12 mois pour le règlement complet. Les délais varient selon la complexité du patrimoine et le nombre d&apos;héritiers." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -196,6 +211,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Quel est le délai pour déclarer une succession ?", answer: "Le délai est de 6 mois à compter du décès si celui-ci a lieu en France, et de 12 mois s'il survient à l'étranger. Passé ce délai, des pénalités s'appliquent." },
     { question: "Qui doit payer les droits de succession ?", answer: "Chaque héritier paie les droits sur sa part. Le notaire calcule le montant en fonction du lien de parenté et des abattements applicables (100 000 € entre parent et enfant)." },
     { question: "Que se passe-t-il en cas de retard de déclaration ?", answer: "Un intérêt de retard de 0,20 % par mois s'applique dès le 7ème mois, plus une majoration de 10 % après 6 mois supplémentaires, et 40 % après mise en demeure." },
+  ],
+  },
+  {
+    slug: "succession-sans-testament",
+    title: "Succession sans testament : qui hérite et comment ?",
+    excerpt: "Succession sans testament : découvrez l'ordre des héritiers, les parts légales et le rôle du notaire pour régler une succession ab intestat en France.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["succession sans testament", "héritiers légaux", "succession ab intestat", "ordre des héritiers", "part réservataire"],
+    canonicalUrl: `${BASE}/blog/succession-sans-testament`,
+  faqs: [
+    { question: "Que se passe-t-il en cas de succession sans testament ?", answer: "La loi française détermine automatiquement les héritiers selon un ordre précis : descendants, ascendants, collatéraux. Le notaire applique les règles du Code civil pour répartir le patrimoine." },
+    { question: "Le conjoint survivant hérite-t-il sans testament ?", answer: "Oui. En présence d&apos;enfants communs, il choisit entre 1/4 en pleine propriété ou la totalité en usufruit. Sans enfants, sa part est plus importante selon les autres héritiers présents." },
+    { question: "Combien de temps pour régler une succession sans testament ?", answer: "En moyenne 6 mois pour la déclaration fiscale, et 6 à 12 mois pour le règlement complet. Les délais varient selon la complexité du patrimoine et le nombre d&apos;héritiers." },
   ],
   },
 ];

@@ -215,6 +215,21 @@ export interface BlogPost {
     { question: "Quels sont les frais fiscaux d&apos;un legs ?", answer: "Les droits de succession s&apos;appliquent selon le lien de parenté entre testateur et légataire. Un legs à un tiers est taxé à 60 %, tandis qu&apos;un legs à un enfant bénéficie d&apos;abattements." },
   ],
   },
+  {
+    slug: "succession-internationale",
+    title: "Succession internationale : rôle du notaire français",
+    excerpt: "Succession internationale et notaire français : règlement européen, loi applicable, fiscalité et démarches expliqués clairement par nos experts.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["succession internationale notaire français", "succession transfrontalière", "règlement européen succession", "certificat successoral européen"],
+    canonicalUrl: `${BASE}/blog/succession-internationale`,
+  faqs: [
+    { question: "Quelle loi s&apos;applique à une succession internationale ?", answer: "Depuis le règlement européen de 2015, la loi applicable est celle du dernier domicile du défunt, sauf choix exprès pour la loi de sa nationalité dans son testament." },
+    { question: "Faut-il payer des droits de succession dans deux pays ?", answer: "Cela dépend des conventions fiscales bilatérales. La France a signé des conventions avec une trentaine de pays pour éviter la double imposition successorale." },
+    { question: "Qu&apos;est-ce que le certificat successoral européen ?", answer: "C&apos;est un document délivré par le notaire qui prouve la qualité d&apos;héritier dans tous les pays de l&apos;Union européenne, sans formalité supplémentaire." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -496,6 +511,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Quelle est la différence entre legs particulier et universel ?", answer: "Le legs universel transmet l&apos;ensemble du patrimoine, le legs particulier porte sur un bien précis (somme, immeuble, objet). Le legs à titre universel concerne une quote-part du patrimoine." },
     { question: "Faut-il obligatoirement passer par un notaire pour un legs ?", answer: "Non, un testament olographe (écrit à la main) suffit légalement. Mais le testament authentique chez le notaire sécurise vos volontés et évite les contestations." },
     { question: "Quels sont les frais fiscaux d&apos;un legs ?", answer: "Les droits de succession s&apos;appliquent selon le lien de parenté entre testateur et légataire. Un legs à un tiers est taxé à 60 %, tandis qu&apos;un legs à un enfant bénéficie d&apos;abattements." },
+  ],
+  },
+  {
+    slug: "succession-internationale",
+    title: "Succession internationale : rôle du notaire français",
+    excerpt: "Succession internationale et notaire français : règlement européen, loi applicable, fiscalité et démarches expliqués clairement par nos experts.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["succession internationale notaire français", "succession transfrontalière", "règlement européen succession", "certificat successoral européen"],
+    canonicalUrl: `${BASE}/blog/succession-internationale`,
+  faqs: [
+    { question: "Quelle loi s&apos;applique à une succession internationale ?", answer: "Depuis le règlement européen de 2015, la loi applicable est celle du dernier domicile du défunt, sauf choix exprès pour la loi de sa nationalité dans son testament." },
+    { question: "Faut-il payer des droits de succession dans deux pays ?", answer: "Cela dépend des conventions fiscales bilatérales. La France a signé des conventions avec une trentaine de pays pour éviter la double imposition successorale." },
+    { question: "Qu&apos;est-ce que le certificat successoral européen ?", answer: "C&apos;est un document délivré par le notaire qui prouve la qualité d&apos;héritier dans tous les pays de l&apos;Union européenne, sans formalité supplémentaire." },
   ],
   },
 ];

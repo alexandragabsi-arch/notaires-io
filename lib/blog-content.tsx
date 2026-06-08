@@ -738,6 +738,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "optimisation-fiscale-succession": () => <Article18 />,
   "rapport-donation-succession": () => <Article19 />,
   "legs-testament-notaire": () => <Article20 />,
+  "succession-internationale": () => <Article21 />,
 };
 
 
@@ -1742,6 +1743,71 @@ function Article20() {
 
 <h2>En résumé</h2>
 <p>Choisir entre legs particulier, universel ou à titre universel dépend de vos objectifs : transmettre l&apos;ensemble de votre patrimoine, en répartir une part, ou attribuer un bien précis. Le recours au <strong>notaire pour rédiger un testament authentique</strong> est la meilleure garantie pour que vos volontés soient respectées, dans le strict cadre légal et fiscal.</p>
+</>
+    </>
+  );
+}
+
+/* ── Article 21 ─────────────────────────────────────────────────────────── */
+
+function Article21() {
+  return (
+    <>
+      <>
+  <p className="lead">La succession internationale avec un notaire français concerne toute succession comportant un élément d&apos;extranéité : défunt résidant à l&apos;étranger, héritiers expatriés ou biens situés hors de France. Ces dossiers complexes nécessitent une expertise juridique pointue pour déterminer la loi applicable, organiser le règlement et optimiser la fiscalité.</p>
+
+  <KeyPoints items={[
+    "Le règlement européen n°650/2012 régit les successions ouvertes depuis le 17 août 2015",
+    "La loi applicable est celle du dernier domicile du défunt, sauf choix contraire",
+    "Le certificat successoral européen facilite les démarches dans toute l&apos;UE",
+    "Des conventions fiscales évitent la double imposition dans 30+ pays",
+    "Le notaire français coordonne avec ses confrères étrangers"
+  ]} />
+
+  <h2>Quelle loi s&apos;applique à une succession internationale ?</h2>
+  <p>Depuis l&apos;entrée en vigueur du règlement européen du 4 juillet 2012, la règle a été profondément simplifiée. Auparavant, la France appliquait un système dualiste : la loi du domicile du défunt pour les biens mobiliers et la loi du lieu de situation pour les biens immobiliers. Désormais, une seule loi régit l&apos;ensemble de la succession.</p>
+
+  <p>Le principe est simple : la loi applicable est celle de la <strong>résidence habituelle du défunt</strong> au moment de son décès. Cette règle s&apos;applique à toutes les successions ouvertes depuis le 17 août 2015, même si le défunt n&apos;était pas ressortissant d&apos;un État membre.</p>
+
+  <p>Toutefois, toute personne peut, par testament, choisir que la loi de sa nationalité régisse sa succession. Ce choix, appelé <em>professio juris</em>, doit être explicite et formalisé. Pour un Français vivant à l&apos;étranger, cela permet par exemple de conserver les règles françaises de la réserve héréditaire qui protègent les enfants.</p>
+
+  <h2>Le rôle central du notaire français dans une succession transfrontalière</h2>
+  <p>Le notaire français intervient dès lors qu&apos;un élément rattache la succession à la France : nationalité française du défunt, biens immobiliers sur le territoire, héritier résidant en France ou compte bancaire français. Son rôle est multiple.</p>
+
+  <p><strong>Identification de la loi applicable :</strong> le notaire analyse le dossier pour déterminer la résidence habituelle du défunt, vérifier l&apos;existence d&apos;un choix de loi testamentaire et identifier les règles successorales à appliquer.</p>
+
+  <p><strong>Coordination internationale :</strong> il établit le contact avec les notaires, avocats ou autorités étrangères compétentes. Cette coordination est essentielle pour éviter les conflits de procédures et accélérer le règlement.</p>
+
+  <p><strong>Délivrance du certificat successoral européen :</strong> ce document, créé par le règlement européen, prouve la qualité d&apos;héritier, de légataire ou d&apos;exécuteur testamentaire dans tous les États membres (sauf Danemark et Irlande). Il évite des démarches longues et coûteuses dans chaque pays.</p>
+
+  <h2>La fiscalité d&apos;une succession internationale</h2>
+  <p>La question fiscale est souvent la plus complexe. Contrairement au règlement civil unifié, la fiscalité reste régie par le droit interne de chaque État. En France, le Code général des impôts prévoit une imposition large.</p>
+
+  <p>Les droits de succession français s&apos;appliquent si :</p>
+  <ul>
+    <li>Le défunt avait son domicile fiscal en France ;</li>
+    <li>L&apos;héritier est domicilié fiscalement en France (et l&apos;a été au moins 6 ans sur les 10 dernières années) ;</li>
+    <li>Les biens transmis sont situés en France (immeubles, comptes bancaires, parts de SCI, etc.).</li>
+  </ul>
+
+  <p>Pour éviter la double imposition, la France a signé des conventions fiscales bilatérales avec une trentaine de pays (États-Unis, Royaume-Uni, Allemagne, Italie, Belgique, Suisse, etc.). Ces conventions attribuent le droit d&apos;imposer à l&apos;un ou l&apos;autre État, ou prévoient un crédit d&apos;impôt.</p>
+
+  <p>En l&apos;absence de convention, l&apos;article 784 A du CGI permet d&apos;imputer l&apos;impôt étranger payé sur les biens situés hors de France sur les droits français correspondants. Une analyse fine est indispensable pour optimiser la transmission.</p>
+
+  <h2>Les étapes du règlement d&apos;une succession internationale</h2>
+  <p>Le règlement d&apos;une succession internationale suit plusieurs étapes coordonnées par le notaire.</p>
+
+  <p><strong>1. Ouverture du dossier :</strong> recueil des documents (acte de décès, livret de famille, testament éventuel, titres de propriété), identification des héritiers et inventaire du patrimoine mondial.</p>
+
+  <p><strong>2. Détermination de la loi applicable :</strong> analyse de la résidence habituelle, recherche d&apos;un choix de loi et qualification des biens.</p>
+
+  <p><strong>3. Établissement des actes :</strong> acte de notoriété, attestation immobilière pour les biens français, certificat successoral européen si nécessaire.</p>
+
+  <p><strong>4. Déclaration fiscale :</strong> dépôt de la déclaration de succession dans les 6 mois (12 mois si le défunt est décédé à l&apos;étranger) et paiement des droits.</p>
+
+  <p><strong>5. Partage :</strong> répartition des biens entre les héritiers selon la loi applicable, avec éventuellement un partage transfrontalier coordonné.</p>
+
+  <InternalCTA />
 </>
     </>
   );

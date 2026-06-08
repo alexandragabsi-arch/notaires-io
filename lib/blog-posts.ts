@@ -110,6 +110,21 @@ export interface BlogPost {
     { question: "Quand faut-il payer les droits de succession ?", answer: "Les droits doivent être réglés dans les 6 mois suivant le décès (12 mois si décès à l&apos;étranger), en même temps que la déclaration." },
   ],
   },
+  {
+    slug: "acte-notoriete-succession",
+    title: "Acte de notoriété succession : rôle du notaire",
+    excerpt: "Acte de notoriété succession notaire : définition, prix, délais et démarches. Découvrez son utilité pour prouver votre qualité d&apos;héritier.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["acte de notoriété succession", "notaire succession", "héritier", "preuve qualité héritier", "règlement succession"],
+    canonicalUrl: `${BASE}/blog/acte-notoriete-succession`,
+  faqs: [
+    { question: "Quel est le prix d&apos;un acte de notoriété ?", answer: "Le tarif est réglementé : environ 58 € HT pour l&apos;émolument du notaire, auxquels s&apos;ajoutent les frais de recherche, copies et débours. Comptez en pratique entre 200 € et 400 € TTC selon la complexité du dossier." },
+    { question: "L&apos;acte de notoriété est-il obligatoire ?", answer: "Il est obligatoire pour toute succession dépassant 5 910,57 € à débloquer auprès des banques, ou comportant un bien immobilier. En dessous, un certificat d&apos;hérédité ou une attestation signée des héritiers peut suffire." },
+    { question: "Combien de temps pour obtenir l&apos;acte de notoriété ?", answer: "Le délai est généralement de 1 à 3 mois après le décès. Il dépend de la rapidité à réunir les pièces d&apos;état civil, du livret de famille et de l&apos;identification de tous les héritiers." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -286,6 +301,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Quel est l'abattement entre parent et enfant en 2026 ?", answer: "L&apos;abattement reste fixé à 100 000 € par parent et par enfant, renouvelable tous les 15 ans." },
     { question: "Le conjoint survivant paie-t-il des droits de succession ?", answer: "Non, le conjoint marié ou pacsé est totalement exonéré de droits de succession depuis la loi TEPA de 2007." },
     { question: "Quand faut-il payer les droits de succession ?", answer: "Les droits doivent être réglés dans les 6 mois suivant le décès (12 mois si décès à l&apos;étranger), en même temps que la déclaration." },
+  ],
+  },
+  {
+    slug: "acte-notoriete-succession",
+    title: "Acte de notoriété succession : rôle du notaire",
+    excerpt: "Acte de notoriété succession notaire : définition, prix, délais et démarches. Découvrez son utilité pour prouver votre qualité d&apos;héritier.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["acte de notoriété succession", "notaire succession", "héritier", "preuve qualité héritier", "règlement succession"],
+    canonicalUrl: `${BASE}/blog/acte-notoriete-succession`,
+  faqs: [
+    { question: "Quel est le prix d&apos;un acte de notoriété ?", answer: "Le tarif est réglementé : environ 58 € HT pour l&apos;émolument du notaire, auxquels s&apos;ajoutent les frais de recherche, copies et débours. Comptez en pratique entre 200 € et 400 € TTC selon la complexité du dossier." },
+    { question: "L&apos;acte de notoriété est-il obligatoire ?", answer: "Il est obligatoire pour toute succession dépassant 5 910,57 € à débloquer auprès des banques, ou comportant un bien immobilier. En dessous, un certificat d&apos;hérédité ou une attestation signée des héritiers peut suffire." },
+    { question: "Combien de temps pour obtenir l&apos;acte de notoriété ?", answer: "Le délai est généralement de 1 à 3 mois après le décès. Il dépend de la rapidité à réunir les pièces d&apos;état civil, du livret de famille et de l&apos;identification de tous les héritiers." },
   ],
   },
 ];

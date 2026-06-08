@@ -731,6 +731,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "succession-sans-testament": () => <Article11 />,
   "desheriter-enfant-possible": () => <Article12 />,
   "droits-succession-calcul": () => <Article13 />,
+  "acte-notoriete-succession": () => <Article14 />,
 };
 
 
@@ -1220,6 +1221,95 @@ function Article13() {
     <h3>Quand faut-il payer les droits de succession ?</h3>
     <p>Les droits doivent être réglés dans les 6 mois suivant le décès (12 mois si décès à l&apos;étranger), en même temps que la déclaration.</p>
   </div>
+</>
+    </>
+  );
+}
+
+/* ── Article 14 ─────────────────────────────────────────────────────────── */
+
+function Article14() {
+  return (
+    <>
+      <>
+  <p className="lead">L&apos;acte de notoriété succession établi par un notaire est le document officiel qui prouve votre qualité d&apos;héritier après un décès. Indispensable pour débloquer les comptes bancaires, vendre un bien immobilier ou percevoir une pension de réversion, cet acte authentique constitue la première étape incontournable du règlement successoral.</p>
+
+  <KeyPoints items={[
+    "L&apos;acte de notoriété prouve officiellement la qualité d&apos;héritier",
+    "Obligatoire pour les successions supérieures à 5 910 € ou comportant un bien immobilier",
+    "Tarif réglementé : environ 200 à 400 € TTC tout compris",
+    "Délai d&apos;obtention : 1 à 3 mois selon la complexité",
+    "Seul un notaire est habilité à le rédiger depuis 2015"
+  ]} />
+
+  <h2>Qu&apos;est-ce qu&apos;un acte de notoriété succession ?</h2>
+  <p>L&apos;acte de notoriété est un acte authentique rédigé par le notaire qui identifie le défunt et désigne les personnes appelées à recueillir sa succession. Il établit la dévolution successorale, c&apos;est-à-dire la liste des héritiers et leurs droits respectifs dans l&apos;héritage.</p>
+  <p>Ce document, prévu par l&apos;article 730-1 du Code civil, fait foi jusqu&apos;à preuve du contraire. Depuis la loi du 16 février 2015, seul un notaire peut le délivrer : les anciens certificats d&apos;hérédité délivrés par les mairies ont été progressivement supprimés.</p>
+  <p>L&apos;acte mentionne notamment :</p>
+  <ul>
+    <li>L&apos;état civil complet du défunt et la date du décès</li>
+    <li>L&apos;existence ou non d&apos;un testament ou d&apos;une donation entre époux</li>
+    <li>L&apos;identité de chaque héritier et son lien de parenté</li>
+    <li>La quote-part revenant à chacun (en pleine propriété, usufruit ou nue-propriété)</li>
+    <li>L&apos;option successorale exercée (acceptation pure et simple, à concurrence de l&apos;actif net, ou renonciation)</li>
+  </ul>
+
+  <h2>Quand et pourquoi recourir à cet acte ?</h2>
+  <p>L&apos;acte de notoriété succession est nécessaire dans la majorité des dossiers. Il devient obligatoire dès lors que :</p>
+  <ul>
+    <li><strong>Le patrimoine bancaire dépasse 5 910,57 €</strong> : les banques exigent l&apos;acte pour débloquer les comptes du défunt</li>
+    <li><strong>La succession comporte un bien immobilier</strong> : indispensable pour l&apos;attestation immobilière et toute future vente</li>
+    <li><strong>Des prestations sociales doivent être perçues</strong> : pension de réversion, capital décès, assurance-vie</li>
+    <li><strong>Un testament existe</strong> : pour authentifier les volontés du défunt et leurs effets</li>
+  </ul>
+  <p>En pratique, dès qu&apos;une démarche officielle nécessite de prouver votre qualité d&apos;héritier, l&apos;acte de notoriété sera réclamé. Sans lui, impossible d&apos;agir au nom de la succession.</p>
+
+  <InternalCTA
+    title="Besoin d&apos;un notaire pour votre succession ?"
+    description="Obtenez votre acte de notoriété rapidement. Premier rendez-vous offert avec un notaire partenaire, en visio ou en cabinet."
+    buttonText="Prendre rendez-vous"
+    href="/rendez-vous"
+  />
+
+  <h2>Comment se déroule la rédaction chez le notaire ?</h2>
+  <p>La procédure d&apos;établissement de l&apos;acte se déroule en plusieurs étapes structurées par le notaire.</p>
+
+  <h3>1. Réunion des pièces nécessaires</h3>
+  <p>Vous devrez fournir au notaire :</p>
+  <ul>
+    <li>L&apos;acte de décès du défunt</li>
+    <li>Son livret de famille (et celui de ses précédentes unions le cas échéant)</li>
+    <li>Son acte de naissance et son contrat de mariage éventuel</li>
+    <li>Les pièces d&apos;identité de tous les héritiers</li>
+    <li>Les testaments, donations ou donations entre époux connus</li>
+  </ul>
+
+  <h3>2. Recherches et vérifications</h3>
+  <p>Le notaire interroge le <strong>Fichier central des dispositions de dernières volontés (FCDDV)</strong> pour vérifier l&apos;existence d&apos;un testament. Il analyse la situation familiale du défunt et identifie l&apos;ensemble des héritiers selon les règles légales de la dévolution successorale.</p>
+
+  <h3>3. Signature de l&apos;acte</h3>
+  <p>Tous les héritiers signent l&apos;acte chez le notaire (présence physique ou procuration). Chacun y déclare sa qualité et exerce son option successorale. Le notaire remet ensuite des copies authentiques que vous utiliserez auprès des banques, des administrations et des organismes sociaux.</p>
+
+  <h2>Tarifs et délais à prévoir</h2>
+  <p>Le tarif de l&apos;acte de notoriété est <strong>réglementé</strong> par décret. L&apos;émolument fixe du notaire s&apos;élève à environ 58 € HT. À cela s&apos;ajoutent :</p>
+  <ul>
+    <li>Les frais de formalités et débours (consultation du FCDDV, copies d&apos;actes d&apos;état civil)</li>
+    <li>La TVA de 20 %</li>
+    <li>Les éventuelles copies authentiques supplémentaires</li>
+  </ul>
+  <p>Au total, comptez généralement <strong>entre 200 € et 400 € TTC</strong> pour un acte standard. Ce coût est intégré dans les frais globaux de la succession et payé par la succession elle-même.</p>
+  <p>Côté délais, l&apos;acte est généralement disponible <strong>dans les 1 à 3 mois</strong> après votre première rencontre avec le notaire, en fonction du temps nécessaire pour réunir l&apos;ensemble des pièces d&apos;état civil et identifier tous les héritiers.</p>
+
+  <h2>Acte de notoriété ou attestation des héritiers ?</h2>
+  <p>Pour les petites successions de moins de 5 910,57 € sans bien immobilier, une <strong>attestation signée par l&apos;ensemble des héritiers</strong> peut suffire à débloquer les comptes bancaires. Elle est gratuite mais limitée dans son usage.</p>
+  <p>Dès que le patrimoine dépasse ce seuil ou qu&apos;un bien immobilier est en jeu, l&apos;acte de notoriété notarial devient incontournable. Il offre une sécurité juridique bien supérieure et reste valable pour toutes les démarches futures liées à la succession.</p>
+
+  <InternalCTA
+    title="Démarrez votre succession sereinement"
+    description="Nos notaires partenaires vous accompagnent à chaque étape : acte de notoriété, déclaration fiscale, partage. Consultation initiale offerte."
+    buttonText="Contacter un notaire"
+    href="/rendez-vous"
+  />
 </>
     </>
   );

@@ -260,6 +260,21 @@ export interface BlogPost {
     { question: "Une résidence secondaire peut-elle bénéficier d&apos;une exonération ?", answer: "Oui, dans certains cas : première cession d&apos;une résidence secondaire si le vendeur n&apos;a pas été propriétaire de sa résidence principale depuis 4 ans et réinvestit dans une résidence principale dans les 24 mois." },
   ],
   },
+  {
+    slug: "viager-notaire-guide",
+    title: "Viager, bouquet et rente : le guide notaire complet",
+    excerpt: "Viager bouquet rente notaire : comprenez le calcul, la fiscalité et les étapes clés pour vendre ou acheter en viager en toute sécurité.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["viager bouquet rente notaire", "vente en viager", "calcul rente viagère", "viager occupé"],
+    canonicalUrl: `${BASE}/blog/viager-notaire-guide`,
+  faqs: [
+    { question: "Quelle est la différence entre bouquet et rente ?", answer: "Le bouquet est la somme versée au comptant le jour de la signature. La rente est le versement périodique (souvent mensuel) dû au vendeur jusqu&apos;à son décès." },
+    { question: "Le passage chez le notaire est-il obligatoire ?", answer: "Oui. La vente en viager est un acte authentique obligatoire. Le notaire sécurise la transaction, calcule la rente et publie l&apos;acte au service de la publicité foncière." },
+    { question: "Que se passe-t-il si l&apos;acheteur ne paie plus la rente ?", answer: "Le contrat prévoit une clause résolutoire : le vendeur peut récupérer le bien et conserver les sommes déjà versées à titre de dommages-intérêts." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -586,6 +601,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Quelle est l&apos;exonération de plus-value pour une résidence principale ?", answer: "La vente de votre résidence principale est totalement exonérée de plus-value immobilière, sans condition de durée de détention, à condition qu&apos;elle constitue votre habitation effective et habituelle au jour de la cession." },
     { question: "Combien de temps pour vendre après avoir quitté sa résidence principale ?", answer: "L&apos;administration fiscale tolère un délai d&apos;environ 12 mois entre le déménagement et la vente, à condition que le bien soit mis en vente immédiatement et reste inoccupé." },
     { question: "Une résidence secondaire peut-elle bénéficier d&apos;une exonération ?", answer: "Oui, dans certains cas : première cession d&apos;une résidence secondaire si le vendeur n&apos;a pas été propriétaire de sa résidence principale depuis 4 ans et réinvestit dans une résidence principale dans les 24 mois." },
+  ],
+  },
+  {
+    slug: "viager-notaire-guide",
+    title: "Viager, bouquet et rente : le guide notaire complet",
+    excerpt: "Viager bouquet rente notaire : comprenez le calcul, la fiscalité et les étapes clés pour vendre ou acheter en viager en toute sécurité.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["viager bouquet rente notaire", "vente en viager", "calcul rente viagère", "viager occupé"],
+    canonicalUrl: `${BASE}/blog/viager-notaire-guide`,
+  faqs: [
+    { question: "Quelle est la différence entre bouquet et rente ?", answer: "Le bouquet est la somme versée au comptant le jour de la signature. La rente est le versement périodique (souvent mensuel) dû au vendeur jusqu&apos;à son décès." },
+    { question: "Le passage chez le notaire est-il obligatoire ?", answer: "Oui. La vente en viager est un acte authentique obligatoire. Le notaire sécurise la transaction, calcule la rente et publie l&apos;acte au service de la publicité foncière." },
+    { question: "Que se passe-t-il si l&apos;acheteur ne paie plus la rente ?", answer: "Le contrat prévoit une clause résolutoire : le vendeur peut récupérer le bien et conserver les sommes déjà versées à titre de dommages-intérêts." },
   ],
   },
 ];

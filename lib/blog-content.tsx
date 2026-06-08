@@ -741,6 +741,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "succession-internationale": () => <Article21 />,
   "compromis-acte-de-vente-difference": () => <Article22 />,
   "plus-value-immobiliere-exoneration": () => <Article23 />,
+  "viager-notaire-guide": () => <Article24 />,
 };
 
 
@@ -1946,6 +1947,70 @@ function Article23() {
     buttonText="Prendre rendez-vous"
     href="/trouver-notaire"
   />
+</>
+    </>
+  );
+}
+
+/* ── Article 24 ─────────────────────────────────────────────────────────── */
+
+function Article24() {
+  return (
+    <>
+      <>
+<p className="lead">Le viager bouquet rente notaire est un montage immobilier qui permet à un propriétaire de vendre son bien tout en percevant un capital initial (le bouquet) puis une rente viagère jusqu&apos;à son décès. Encadrée par le notaire, cette opération sécurise vendeur et acquéreur grâce à un acte authentique aux clauses précises.</p>
+
+<KeyPoints points={[
+  "Le viager se compose d&apos;un bouquet (capital versé au comptant) et d&apos;une rente viagère mensuelle ou trimestrielle.",
+  "L&apos;acte authentique chez le notaire est obligatoire pour sécuriser la vente.",
+  "Le calcul dépend de l&apos;âge du crédirentier, de la valeur du bien et de son occupation.",
+  "Le viager occupé décote le prix de 30 à 50 % par rapport à la valeur libre."
+]} />
+
+<h2>Comprendre le viager : bouquet et rente expliqués</h2>
+<p>La vente en viager repose sur un principe simple : le vendeur (appelé <strong>crédirentier</strong>) cède son bien immobilier à un acquéreur (le <strong>débirentier</strong>) qui s&apos;engage à lui verser une rente jusqu&apos;à son décès. À cela s&apos;ajoute généralement un capital initial, le bouquet, payé le jour de la signature de l&apos;acte chez le notaire.</p>
+<p>Il existe deux grandes formes de viager :</p>
+<ul>
+  <li><strong>Le viager occupé</strong> : le vendeur conserve un droit d&apos;usage et d&apos;habitation (DUH) ou un usufruit sur le bien. C&apos;est la formule la plus courante (environ 95 % des viagers).</li>
+  <li><strong>Le viager libre</strong> : l&apos;acquéreur dispose immédiatement du bien, qu&apos;il peut habiter ou louer. La rente est alors plus élevée.</li>
+</ul>
+<p>Le notaire joue un rôle central : il vérifie la capacité des parties, calcule la rente conformément aux barèmes en vigueur, intègre les clauses de revalorisation et de résolution, puis publie l&apos;acte au service de la publicité foncière.</p>
+
+<h2>Comment se calculent le bouquet et la rente ?</h2>
+<p>Le calcul du viager bouquet rente notaire s&apos;appuie sur plusieurs paramètres objectifs :</p>
+<ul>
+  <li><strong>La valeur vénale</strong> du bien (estimation au prix du marché libre).</li>
+  <li><strong>L&apos;âge et l&apos;espérance de vie</strong> du crédirentier, selon les tables de mortalité de l&apos;INSEE.</li>
+  <li><strong>L&apos;occupation du bien</strong> : un viager occupé subit une décote de 30 à 50 % (valeur du DUH).</li>
+  <li><strong>Le rendement attendu</strong> appliqué à la valeur restante après bouquet.</li>
+</ul>
+<p>Exemple simplifié : pour un bien estimé 300 000 € avec un vendeur de 75 ans en viager occupé, la décote d&apos;occupation peut représenter environ 40 %, soit une valeur économique de 180 000 €. Si le bouquet est fixé à 60 000 €, la rente viagère sera calculée sur les 120 000 € restants, soit environ 700 à 900 € par mois selon les barèmes.</p>
+<p>La rente est ensuite <strong>indexée annuellement</strong>, généralement sur l&apos;indice des prix à la consommation publié par l&apos;INSEE, pour préserver le pouvoir d&apos;achat du vendeur.</p>
+
+<h2>Le rôle protecteur du notaire dans la vente en viager</h2>
+<p>Le notaire intervient à chaque étape pour sécuriser l&apos;opération :</p>
+<ol>
+  <li><strong>Estimation et conseil</strong> : il vérifie la cohérence économique du montage et conseille sur la répartition optimale entre bouquet et rente.</li>
+  <li><strong>Rédaction de l&apos;acte authentique</strong> : il insère les clauses essentielles (résolutoire en cas de non-paiement, privilège du vendeur, interdiction de revente sans accord, indexation).</li>
+  <li><strong>Vérification de l&apos;aléa</strong> : le viager doit comporter un aléa réel sur la durée de vie du vendeur. Si celui-ci décède dans les 20 jours suivant la vente d&apos;une maladie connue, le contrat peut être annulé (article 1975 du Code civil).</li>
+  <li><strong>Publication et formalités fiscales</strong> : enregistrement, calcul des droits de mutation et déclarations.</li>
+</ol>
+<p>Côté fiscalité, le bouquet est exonéré d&apos;impôt pour le vendeur s&apos;il s&apos;agit de sa résidence principale. La rente bénéficie d&apos;un abattement selon l&apos;âge du crédirentier au premier versement : 70 % d&apos;abattement après 69 ans, 60 % entre 60 et 69 ans.</p>
+
+<h2>Avantages et points de vigilance</h2>
+<p>Le viager présente des intérêts forts pour les deux parties :</p>
+<ul>
+  <li><strong>Pour le vendeur</strong> : un complément de retraite régulier, le maintien dans son logement et une fiscalité allégée.</li>
+  <li><strong>Pour l&apos;acheteur</strong> : l&apos;acquisition d&apos;un bien à prix décoté, sans recours bancaire systématique, avec un effet de levier patrimonial.</li>
+</ul>
+<p>Quelques précautions s&apos;imposent toutefois : bien évaluer sa capacité à verser la rente sur le long terme, anticiper la répartition des charges et travaux (généralement l&apos;acheteur prend en charge le gros œuvre, le vendeur les charges d&apos;entretien courant), et faire attention aux clauses de réversion en cas de couple vendeur.</p>
+
+<InternalCTA
+  title="Vous envisagez un viager ?"
+  description="Nos notaires partenaires vous accompagnent dans le calcul du bouquet, de la rente et la rédaction de l&apos;acte. Premier rendez-vous offert en visio ou en cabinet."
+  buttonText="Prendre rendez-vous"
+  buttonLink="/rendez-vous"
+/>
 </>
     </>
   );

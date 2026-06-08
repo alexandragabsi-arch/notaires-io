@@ -213,6 +213,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   const [suggestions, setSuggestions] = useState<CitySugg[]>([]);
   const [showSugg, setShowSugg] = useState(false);
   const suggTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const skipNextFetch = useRef(false);   // bloque l'autocomplete après sélection
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [nameQuery, setNameQuery] = useState("");
@@ -235,6 +236,8 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   useEffect(() => {
     const q = cityInput.trim();
     if (q.length < 2) { setSuggestions([]); setShowSugg(false); return; }
+    // Ne pas relancer le fetch si on vient de sélectionner une suggestion
+    if (skipNextFetch.current) { skipNextFetch.current = false; return; }
     if (suggTimer.current) clearTimeout(suggTimer.current);
     suggTimer.current = setTimeout(async () => {
       try {
@@ -266,6 +269,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   useEffect(() => { setDisplayLimit(60); }, [city, nameQuery]);
 
   function selectSuggestion(item: CitySugg) {
+    skipNextFetch.current = true;   // empêche l'effet de relancer l'autocomplete
     setCityInput(`${item.city} (${item.postcode})`);
     setCity(extractBaseCity(item.city));
     setSuggestions([]);

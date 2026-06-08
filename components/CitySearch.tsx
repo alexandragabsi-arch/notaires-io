@@ -17,11 +17,13 @@ export default function CitySearch() {
   const [showSugg, setShowSugg] = useState(false);
   const [selectedCity, setSelectedCity] = useState("");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const skipNextFetch = useRef(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const q = query.trim();
     if (q.length < 2) { setSuggestions([]); setShowSugg(false); return; }
+    if (skipNextFetch.current) { skipNextFetch.current = false; return; }
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(async () => {
       try {
@@ -49,6 +51,7 @@ export default function CitySearch() {
   }, [query]);
 
   function select(item: Suggestion) {
+    skipNextFetch.current = true;
     setQuery(item.label);
     setSelectedCity(item.city);
     setSuggestions([]);

@@ -50,6 +50,21 @@ export interface BlogPost {
     { question: "Comment calculer la quotité disponible ?", answer: "Elle dépend du nombre d&apos;enfants : 1/2 avec un enfant, 1/3 avec deux enfants, 1/4 avec trois enfants ou plus. Le reste constitue la réserve héréditaire." },
   ],
   },
+  {
+    slug: "declaration-succession-delais",
+    title: "Déclaration de succession : délais et impôts à connaître",
+    excerpt: "Déclaration de succession : délais légaux, impôts à payer, pénalités de retard et démarches. Le guide complet pour éviter les sanctions fiscales.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["déclaration succession délais", "impôts succession", "droits de succession", "délai déclaration succession", "pénalités succession"],
+    canonicalUrl: `${BASE}/blog/declaration-succession-delais`,,
+  faqs: [
+    { question: "Quel est le délai pour déclarer une succession ?", answer: "Le délai est de 6 mois à compter du décès si celui-ci a lieu en France, et de 12 mois s'il survient à l'étranger. Passé ce délai, des pénalités s'appliquent." },
+    { question: "Qui doit payer les droits de succession ?", answer: "Chaque héritier paie les droits sur sa part. Le notaire calcule le montant en fonction du lien de parenté et des abattements applicables (100 000 € entre parent et enfant)." },
+    { question: "Que se passe-t-il en cas de retard de déclaration ?", answer: "Un intérêt de retard de 0,20 % par mois s'applique dès le 7ème mois, plus une majoration de 10 % après 6 mois supplémentaires, et 40 % après mise en demeure." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -166,6 +181,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Qui sont les héritiers réservataires ?", answer: "Les enfants du défunt (et leurs descendants par représentation) sont toujours réservataires. À défaut de descendants, le conjoint survivant devient réservataire à hauteur d&apos;un quart." },
     { question: "Peut-on déshériter un enfant en France ?", answer: "Non, la loi française interdit de déshériter totalement un enfant. La réserve héréditaire lui garantit une part minimale de la succession, quelle que soit la volonté du défunt." },
     { question: "Comment calculer la quotité disponible ?", answer: "Elle dépend du nombre d&apos;enfants : 1/2 avec un enfant, 1/3 avec deux enfants, 1/4 avec trois enfants ou plus. Le reste constitue la réserve héréditaire." },
+  ],
+  },
+  {
+    slug: "declaration-succession-delais",
+    title: "Déclaration de succession : délais et impôts à connaître",
+    excerpt: "Déclaration de succession : délais légaux, impôts à payer, pénalités de retard et démarches. Le guide complet pour éviter les sanctions fiscales.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["déclaration succession délais", "impôts succession", "droits de succession", "délai déclaration succession", "pénalités succession"],
+    canonicalUrl: `${BASE}/blog/declaration-succession-delais`,,
+  faqs: [
+    { question: "Quel est le délai pour déclarer une succession ?", answer: "Le délai est de 6 mois à compter du décès si celui-ci a lieu en France, et de 12 mois s'il survient à l'étranger. Passé ce délai, des pénalités s'appliquent." },
+    { question: "Qui doit payer les droits de succession ?", answer: "Chaque héritier paie les droits sur sa part. Le notaire calcule le montant en fonction du lien de parenté et des abattements applicables (100 000 € entre parent et enfant)." },
+    { question: "Que se passe-t-il en cas de retard de déclaration ?", answer: "Un intérêt de retard de 0,20 % par mois s'applique dès le 7ème mois, plus une majoration de 10 % après 6 mois supplémentaires, et 40 % après mise en demeure." },
   ],
   },
 ];

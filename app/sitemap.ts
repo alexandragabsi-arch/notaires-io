@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
+import { DEPARTEMENTS } from "@/lib/departements-data";
 
 const BASE = "https://notaires.io";
 const NOW = new Date();
@@ -83,17 +84,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const blogPages: MetadataRoute.Sitemap = [
-    { url: `${BASE}/blog`,                                                                      lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/blog`,                                                                      lastModified: NOW, changeFrequency: "weekly",  priority: 0.8 },
     { url: `${BASE}/blog/contrat-de-mariage-separation-de-biens-ou-communaute`,                 lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/blog/frais-de-notaire-achat-immobilier`,                                    lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/blog/delai-succession-notaire`,                                             lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/blog/pacs-ou-mariage-difference-notaire`,                                   lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/blog/premier-rendez-vous-notaire-gratuit`,                                  lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/blog/donation-enfants-avant-deces`,                                         lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog/testament-olographe-notarie`,                                          lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog/assurance-vie-succession-notaire`,                                     lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog/heritiers-reservataires-quotite`,                                      lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog/declaration-succession-delais`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
   ];
 
-      { url: `${BASE}/blog/testament-olographe-notarie`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-        { url: `${BASE}/blog/assurance-vie-succession-notaire`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-        { url: `${BASE}/blog/heritiers-reservataires-quotite`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    return [...staticPages, ...notairePages, ...seoLandingPages, ...blogPages];
+  // 95 pages départements
+  const departementPages: MetadataRoute.Sitemap = [
+    { url: `${BASE}/notaire-departement`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    ...DEPARTEMENTS.map((dep) => ({
+      url: `${BASE}/notaire-departement/${dep.slug}`,
+      lastModified: NOW,
+      changeFrequency: "monthly" as const,
+      priority: 0.72,
+    })),
+  ];
+
+  return [...staticPages, ...notairePages, ...seoLandingPages, ...blogPages, ...departementPages];
 }

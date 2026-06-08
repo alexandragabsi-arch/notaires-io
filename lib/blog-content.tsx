@@ -727,6 +727,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "testament-olographe-notarie": () => <Article7 />,
   "assurance-vie-succession-notaire": () => <Article8 />,
   "heritiers-reservataires-quotite": () => <Article9 />,
+  "declaration-succession-delais": () => <Article10 />,
 };
 
 
@@ -921,6 +922,69 @@ function Article9() {
   description="Réservez un premier rendez-vous gratuit, en visio ou en cabinet, pour faire le point sur votre situation familiale et patrimoniale."
   buttonText="Prendre rendez-vous"
 />
+</>
+    </>
+  );
+}
+
+/* ── Article 10 ─────────────────────────────────────────────────────────── */
+
+function Article10() {
+  return (
+    <>
+      <>
+<p className="lead">La <strong>déclaration de succession</strong> doit être déposée auprès de l&apos;administration fiscale dans un <strong>délai de 6 mois</strong> suivant le décès en France (12 mois à l&apos;étranger). Ce document obligatoire recense l&apos;actif et le passif du défunt et permet de calculer les droits de succession dus par chaque héritier. Respecter ce délai est essentiel pour éviter pénalités et intérêts de retard.</p>
+
+<KeyPoints points={[
+  "Délai de 6 mois pour déposer la déclaration (12 mois si décès à l&apos;étranger)",
+  "Pénalités de 0,20 % par mois de retard + majoration jusqu&apos;à 40 %",
+  "Abattement de 100 000 € par enfant et exonération totale entre époux",
+  "Le notaire prépare la déclaration et calcule les droits dus"
+]} />
+
+<h2>Quels sont les délais légaux pour déclarer une succession ?</h2>
+<p>Le Code général des impôts impose un calendrier strict pour la <strong>déclaration de succession</strong>. Le délai principal est de <strong>6 mois à compter du jour du décès</strong> lorsque celui-ci survient en France métropolitaine. Ce délai est porté à <strong>12 mois</strong> si le décès a lieu à l&apos;étranger ou dans certains DOM-TOM.</p>
+<p>La déclaration doit être déposée au service des impôts du domicile du défunt, accompagnée du paiement des droits de succession. En pratique, c&apos;est le notaire chargé du règlement qui s&apos;occupe de la rédaction et du dépôt de ce document complexe.</p>
+<p>Certains héritiers sont dispensés de déclaration : c&apos;est le cas si l&apos;actif brut successoral est inférieur à 50 000 € pour les héritiers en ligne directe et le conjoint survivant (à condition qu&apos;il n&apos;y ait pas eu de donation antérieure non enregistrée), ou inférieur à 3 000 € pour les autres héritiers.</p>
+
+<h2>Comment sont calculés les impôts de succession ?</h2>
+<p>Les droits de succession dépendent de deux éléments principaux : le <strong>lien de parenté</strong> avec le défunt et le <strong>montant de la part héritée</strong>. Chaque héritier bénéficie d&apos;un abattement personnel avant application du barème progressif.</p>
+<p>Les principaux abattements sont les suivants :</p>
+<ul>
+  <li><strong>Conjoint survivant ou partenaire de PACS</strong> : exonération totale</li>
+  <li><strong>Enfant ou parent</strong> : abattement de 100 000 €</li>
+  <li><strong>Frère ou sœur</strong> : abattement de 15 932 €</li>
+  <li><strong>Neveu ou nièce</strong> : abattement de 7 967 €</li>
+  <li><strong>Personne handicapée</strong> : abattement supplémentaire de 159 325 €</li>
+</ul>
+<p>Après application de l&apos;abattement, un barème progressif s&apos;applique, allant de 5 % à 45 % en ligne directe, 35 % à 45 % entre frères et sœurs, et jusqu&apos;à 60 % entre personnes non parentes.</p>
+
+<InternalCTA title="Besoin d&apos;aide pour votre déclaration de succession ?" description="Nos notaires partenaires vous accompagnent dans toutes les démarches successorales. Premier rendez-vous offert, en visio ou en cabinet." />
+
+<h2>Quelles sont les pénalités en cas de retard ?</h2>
+<p>Le non-respect du <strong>délai de déclaration de succession</strong> entraîne des sanctions financières qui peuvent rapidement s&apos;accumuler. Les conséquences sont les suivantes :</p>
+<ul>
+  <li><strong>Intérêt de retard</strong> : 0,20 % par mois (soit 2,4 % par an) dès le 7ème mois suivant le décès</li>
+  <li><strong>Majoration de 10 %</strong> à partir du 13ème mois (7ème mois de retard)</li>
+  <li><strong>Majoration de 40 %</strong> en cas de dépôt tardif après mise en demeure restée sans réponse pendant 90 jours</li>
+  <li><strong>Majoration de 80 %</strong> en cas de découverte d&apos;une activité occulte ou de manœuvres frauduleuses</li>
+</ul>
+<p>Il est possible de demander un <strong>paiement fractionné</strong> (sur 1 à 3 ans) ou <strong>différé</strong> (jusqu&apos;à 15 ans en cas de nue-propriété) des droits de succession, sous certaines conditions et moyennant le versement d&apos;intérêts.</p>
+
+<h2>Comment préparer sereinement sa déclaration de succession ?</h2>
+<p>Pour respecter les délais et éviter les erreurs coûteuses, il est vivement recommandé de <strong>consulter un notaire dès les premières semaines suivant le décès</strong>. Celui-ci se charge de :</p>
+<ul>
+  <li>Établir l&apos;<strong>acte de notoriété</strong> identifiant les héritiers</li>
+  <li>Réaliser l&apos;<strong>inventaire</strong> du patrimoine du défunt (biens, comptes, dettes)</li>
+  <li>Évaluer les biens immobiliers et mobiliers</li>
+  <li>Rédiger la <strong>déclaration de succession</strong> sur le formulaire Cerfa 2705</li>
+  <li>Calculer les droits dus par chaque héritier</li>
+  <li>Effectuer le dépôt auprès du service des impôts</li>
+</ul>
+<p>Anticiper la transmission de son patrimoine par une <strong>donation</strong>, un <strong>testament</strong> ou la souscription d&apos;une <strong>assurance-vie</strong> permet souvent de réduire significativement la facture fiscale pour les héritiers.</p>
+
+<h2>En résumé</h2>
+<p>La <strong>déclaration de succession</strong> est une démarche obligatoire à effectuer dans un délai de 6 mois après le décès. Les droits dus dépendent du lien de parenté et de la part héritée, après application d&apos;abattements. Les retards entraînent des pénalités importantes, d&apos;où l&apos;intérêt de confier rapidement le dossier à un notaire qui sécurisera l&apos;ensemble des opérations.</p>
 </>
     </>
   );

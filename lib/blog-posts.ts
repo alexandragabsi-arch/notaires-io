@@ -125,6 +125,21 @@ export interface BlogPost {
     { question: "Combien de temps pour obtenir l&apos;acte de notoriété ?", answer: "Le délai est généralement de 1 à 3 mois après le décès. Il dépend de la rapidité à réunir les pièces d&apos;état civil, du livret de famille et de l&apos;identification de tous les héritiers." },
   ],
   },
+  {
+    slug: "partage-succession-indivision",
+    title: "Partage succession indivision notaire : guide complet",
+    excerpt: "Partage succession indivision notaire : étapes, coûts et solutions en cas de blocage. Conseils d'experts pour sortir sereinement de l'indivision.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["partage succession indivision notaire", "sortir indivision succession", "acte de partage notaire", "indivision successorale", "partage amiable héritiers"],
+    canonicalUrl: `${BASE}/blog/partage-succession-indivision`,
+  faqs: [
+    { question: "Le recours au notaire est-il obligatoire pour un partage de succession ?", answer: "Oui, dès lors que la succession comprend un bien immobilier. Le notaire rédige l&apos;acte de partage authentique nécessaire à la publication au service de la publicité foncière." },
+    { question: "Combien coûte un partage successoral chez le notaire ?", answer: "Les frais comprennent un droit de partage de 2,5% sur l&apos;actif net partagé, les émoluments du notaire (environ 1 à 2%) et les débours. Comptez globalement entre 4 et 5% de la valeur des biens." },
+    { question: "Que faire si un héritier refuse le partage ?", answer: "Vous pouvez saisir le tribunal judiciaire pour demander un partage judiciaire. Le juge désignera un notaire pour procéder aux opérations et trancher les désaccords entre cohéritiers." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -316,6 +331,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Quel est le prix d&apos;un acte de notoriété ?", answer: "Le tarif est réglementé : environ 58 € HT pour l&apos;émolument du notaire, auxquels s&apos;ajoutent les frais de recherche, copies et débours. Comptez en pratique entre 200 € et 400 € TTC selon la complexité du dossier." },
     { question: "L&apos;acte de notoriété est-il obligatoire ?", answer: "Il est obligatoire pour toute succession dépassant 5 910,57 € à débloquer auprès des banques, ou comportant un bien immobilier. En dessous, un certificat d&apos;hérédité ou une attestation signée des héritiers peut suffire." },
     { question: "Combien de temps pour obtenir l&apos;acte de notoriété ?", answer: "Le délai est généralement de 1 à 3 mois après le décès. Il dépend de la rapidité à réunir les pièces d&apos;état civil, du livret de famille et de l&apos;identification de tous les héritiers." },
+  ],
+  },
+  {
+    slug: "partage-succession-indivision",
+    title: "Partage succession indivision notaire : guide complet",
+    excerpt: "Partage succession indivision notaire : étapes, coûts et solutions en cas de blocage. Conseils d'experts pour sortir sereinement de l'indivision.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["partage succession indivision notaire", "sortir indivision succession", "acte de partage notaire", "indivision successorale", "partage amiable héritiers"],
+    canonicalUrl: `${BASE}/blog/partage-succession-indivision`,
+  faqs: [
+    { question: "Le recours au notaire est-il obligatoire pour un partage de succession ?", answer: "Oui, dès lors que la succession comprend un bien immobilier. Le notaire rédige l&apos;acte de partage authentique nécessaire à la publication au service de la publicité foncière." },
+    { question: "Combien coûte un partage successoral chez le notaire ?", answer: "Les frais comprennent un droit de partage de 2,5% sur l&apos;actif net partagé, les émoluments du notaire (environ 1 à 2%) et les débours. Comptez globalement entre 4 et 5% de la valeur des biens." },
+    { question: "Que faire si un héritier refuse le partage ?", answer: "Vous pouvez saisir le tribunal judiciaire pour demander un partage judiciaire. Le juge désignera un notaire pour procéder aux opérations et trancher les désaccords entre cohéritiers." },
   ],
   },
 ];

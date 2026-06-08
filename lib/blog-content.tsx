@@ -732,6 +732,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "desheriter-enfant-possible": () => <Article12 />,
   "droits-succession-calcul": () => <Article13 />,
   "acte-notoriete-succession": () => <Article14 />,
+  "partage-succession-indivision": () => <Article15 />,
 };
 
 
@@ -1310,6 +1311,71 @@ function Article14() {
     buttonText="Contacter un notaire"
     href="/rendez-vous"
   />
+</>
+    </>
+  );
+}
+
+/* ── Article 15 ─────────────────────────────────────────────────────────── */
+
+function Article15() {
+  return (
+    <>
+      <>
+  <p className="lead">Le partage succession indivision notaire est l&apos;étape qui met fin à l&apos;indivision successorale entre héritiers et attribue à chacun sa part définitive. Souvent perçu comme complexe, ce processus encadré par le Code civil permet pourtant à chaque héritier de devenir pleinement propriétaire des biens qui lui reviennent. Que le partage soit amiable ou judiciaire, l&apos;intervention du notaire est essentielle, particulièrement lorsque la succession comporte un bien immobilier.</p>
+
+  <KeyPoints points={[
+    "Le partage met fin à l&apos;indivision et attribue à chaque héritier ses biens propres",
+    "Le notaire est obligatoire dès qu&apos;il existe un bien immobilier dans la succession",
+    "Le droit de partage s&apos;élève à 2,5% de l&apos;actif net partagé",
+    "En cas de désaccord, le partage judiciaire devient la seule solution"
+  ]} />
+
+  <h2>Comprendre l&apos;indivision successorale et son partage</h2>
+  <p>Au décès d&apos;une personne, les héritiers se retrouvent automatiquement en indivision sur l&apos;ensemble des biens de la succession. Chacun détient une quote-part abstraite (par exemple 1/3 ou 1/2) sur la totalité du patrimoine, sans qu&apos;aucun bien ne lui appartienne individuellement. Cette situation, encadrée par les articles 815 et suivants du Code civil, est conçue comme provisoire.</p>
+
+  <p>L&apos;indivision présente plusieurs inconvénients : les décisions importantes nécessitent l&apos;unanimité, les frais d&apos;entretien sont partagés, et tout héritier peut à tout moment demander le partage selon l&apos;adage &quot;nul ne peut être contraint à demeurer dans l&apos;indivision&quot;. C&apos;est pourquoi la majorité des successions débouche tôt ou tard sur un acte de partage.</p>
+
+  <p>Le partage transforme les droits abstraits en droits concrets : chaque héritier se voit attribuer des biens déterminés (un appartement, un compte bancaire, des meubles) en pleine propriété, à hauteur de sa part dans la succession.</p>
+
+  <h2>Les étapes du partage amiable chez le notaire</h2>
+  <p>Le partage amiable est la voie privilégiée lorsque tous les héritiers sont d&apos;accord. Il se déroule en plusieurs étapes auprès du notaire chargé de la succession.</p>
+
+  <h3>1. L&apos;inventaire et l&apos;évaluation des biens</h3>
+  <p>Le notaire dresse la liste exhaustive de l&apos;actif (biens immobiliers, comptes bancaires, placements, véhicules, mobilier) et du passif (dettes, impôts) de la succession. Chaque bien est évalué à sa valeur vénale au jour du partage, ce qui peut nécessiter l&apos;intervention d&apos;experts immobiliers.</p>
+
+  <h3>2. La composition des lots</h3>
+  <p>Le notaire constitue des lots de valeur équivalente correspondant aux droits de chaque héritier. Si certains biens ne peuvent être divisés (un immeuble, par exemple), une soulte peut être versée par l&apos;héritier qui reçoit le bien le plus important aux autres cohéritiers.</p>
+
+  <h3>3. La signature de l&apos;acte de partage</h3>
+  <p>L&apos;acte de partage est rédigé sous forme authentique par le notaire et signé par tous les héritiers. Il mentionne les biens attribués à chacun, les éventuelles soultes, et procède au calcul du droit de partage. Une fois signé, l&apos;acte est publié au service de la publicité foncière pour les biens immobiliers.</p>
+
+  <InternalCTA />
+
+  <h2>Coûts et fiscalité du partage successoral</h2>
+  <p>Le partage successoral engendre plusieurs catégories de frais qu&apos;il convient d&apos;anticiper :</p>
+
+  <ul>
+    <li><strong>Le droit de partage</strong> : taxe de 2,5% calculée sur l&apos;actif net partagé (valeur des biens diminuée des dettes). C&apos;est généralement le poste le plus important.</li>
+    <li><strong>Les émoluments du notaire</strong> : tarifs réglementés dégressifs selon la valeur, environ 1 à 2% de l&apos;actif partagé.</li>
+    <li><strong>La contribution de sécurité immobilière</strong> : 0,10% pour la publication foncière.</li>
+    <li><strong>Les débours</strong> : frais avancés par le notaire (cadastre, état hypothécaire, etc.).</li>
+  </ul>
+
+  <p>Pour une succession de 300 000 € sans dette, comptez environ 12 000 à 15 000 € de frais totaux. Une planification successorale anticipée (donation-partage, par exemple) permet souvent de réduire considérablement ces coûts.</p>
+
+  <h2>Que faire en cas de désaccord entre héritiers ?</h2>
+  <p>Lorsque les héritiers ne parviennent pas à s&apos;entendre sur la composition des lots ou la valeur des biens, plusieurs solutions existent avant d&apos;en arriver au contentieux.</p>
+
+  <p><strong>La médiation notariale</strong> : le notaire joue un rôle de conciliateur et propose des arrangements équitables. Sa neutralité et son expertise permettent souvent de débloquer les situations tendues.</p>
+
+  <p><strong>Le partage judiciaire</strong> : si aucun accord n&apos;est trouvé, un héritier peut saisir le tribunal judiciaire. Le juge ordonne alors l&apos;ouverture des opérations de partage et désigne un notaire pour les conduire. Cette procédure est longue (1 à 3 ans en moyenne) et coûteuse.</p>
+
+  <p><strong>La vente par licitation</strong> : lorsqu&apos;un bien immobilier ne peut être attribué à un seul héritier et que personne ne souhaite l&apos;acquérir, le tribunal peut ordonner sa vente aux enchères. Le prix est ensuite réparti entre les héritiers.</p>
+
+  <p>Pour éviter ces situations conflictuelles, il est vivement recommandé de consulter un notaire dès l&apos;ouverture de la succession afin d&apos;être conseillé sur la meilleure stratégie de partage.</p>
+
+  <InternalCTA />
 </>
     </>
   );

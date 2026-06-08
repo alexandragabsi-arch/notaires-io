@@ -245,6 +245,21 @@ export interface BlogPost {
     { question: "Peut-on annuler un compromis de vente ?", answer: "L&apos;acheteur dispose d&apos;un délai de rétractation de 10 jours après la signature. Au-delà, l&apos;annulation n&apos;est possible que si une condition suspensive n&apos;est pas remplie, sous peine de perdre le dépôt de garantie." },
   ],
   },
+  {
+    slug: "plus-value-immobiliere-exoneration",
+    title: "Plus-value immobilière : exonération résidence principale",
+    excerpt: "Plus-value immobilière et exonération résidence principale : conditions, calcul, abattements et pièges à éviter pour vendre sans impôt en 2024.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["plus-value immobilière exonération résidence principale", "exonération plus-value", "vente résidence principale", "impôt plus-value immobilière"],
+    canonicalUrl: `${BASE}/blog/plus-value-immobiliere-exoneration`,
+  faqs: [
+    { question: "Quelle est l&apos;exonération de plus-value pour une résidence principale ?", answer: "La vente de votre résidence principale est totalement exonérée de plus-value immobilière, sans condition de durée de détention, à condition qu&apos;elle constitue votre habitation effective et habituelle au jour de la cession." },
+    { question: "Combien de temps pour vendre après avoir quitté sa résidence principale ?", answer: "L&apos;administration fiscale tolère un délai d&apos;environ 12 mois entre le déménagement et la vente, à condition que le bien soit mis en vente immédiatement et reste inoccupé." },
+    { question: "Une résidence secondaire peut-elle bénéficier d&apos;une exonération ?", answer: "Oui, dans certains cas : première cession d&apos;une résidence secondaire si le vendeur n&apos;a pas été propriétaire de sa résidence principale depuis 4 ans et réinvestit dans une résidence principale dans les 24 mois." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -556,6 +571,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Le compromis de vente doit-il être signé chez le notaire ?", answer: "Non, le compromis peut être signé chez un agent immobilier ou entre particuliers. Toutefois, le faire signer chez un notaire offre une sécurité juridique renforcée, sans surcoût dans la plupart des cas." },
     { question: "Combien de temps entre le compromis et l&apos;acte de vente ?", answer: "Le délai habituel est de 3 à 4 mois. Ce temps permet de lever les conditions suspensives (prêt, urbanisme) et de réunir tous les documents nécessaires à la signature de l&apos;acte authentique." },
     { question: "Peut-on annuler un compromis de vente ?", answer: "L&apos;acheteur dispose d&apos;un délai de rétractation de 10 jours après la signature. Au-delà, l&apos;annulation n&apos;est possible que si une condition suspensive n&apos;est pas remplie, sous peine de perdre le dépôt de garantie." },
+  ],
+  },
+  {
+    slug: "plus-value-immobiliere-exoneration",
+    title: "Plus-value immobilière : exonération résidence principale",
+    excerpt: "Plus-value immobilière et exonération résidence principale : conditions, calcul, abattements et pièges à éviter pour vendre sans impôt en 2024.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["plus-value immobilière exonération résidence principale", "exonération plus-value", "vente résidence principale", "impôt plus-value immobilière"],
+    canonicalUrl: `${BASE}/blog/plus-value-immobiliere-exoneration`,
+  faqs: [
+    { question: "Quelle est l&apos;exonération de plus-value pour une résidence principale ?", answer: "La vente de votre résidence principale est totalement exonérée de plus-value immobilière, sans condition de durée de détention, à condition qu&apos;elle constitue votre habitation effective et habituelle au jour de la cession." },
+    { question: "Combien de temps pour vendre après avoir quitté sa résidence principale ?", answer: "L&apos;administration fiscale tolère un délai d&apos;environ 12 mois entre le déménagement et la vente, à condition que le bien soit mis en vente immédiatement et reste inoccupé." },
+    { question: "Une résidence secondaire peut-elle bénéficier d&apos;une exonération ?", answer: "Oui, dans certains cas : première cession d&apos;une résidence secondaire si le vendeur n&apos;a pas été propriétaire de sa résidence principale depuis 4 ans et réinvestit dans une résidence principale dans les 24 mois." },
   ],
   },
 ];

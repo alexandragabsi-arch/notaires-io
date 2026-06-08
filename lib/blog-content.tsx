@@ -740,6 +740,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "legs-testament-notaire": () => <Article20 />,
   "succession-internationale": () => <Article21 />,
   "compromis-acte-de-vente-difference": () => <Article22 />,
+  "plus-value-immobiliere-exoneration": () => <Article23 />,
 };
 
 
@@ -1859,6 +1860,92 @@ function Article22() {
   <p>En cas de litige, de désaccord sur les conditions ou de complexité particulière (indivision, succession en cours, bien démembré), l&apos;accompagnement notarial dès le compromis est vivement recommandé.</p>
 
   <InternalCTA />
+</>
+    </>
+  );
+}
+
+/* ── Article 23 ─────────────────────────────────────────────────────────── */
+
+function Article23() {
+  return (
+    <>
+      <>
+  <p className="lead">La plus-value immobilière et l&apos;exonération de la résidence principale constituent un avantage fiscal majeur en France : la vente de votre logement principal échappe totalement à l&apos;imposition. Mais cette exonération obéit à des conditions strictes qu&apos;il faut maîtriser pour éviter un redressement fiscal.</p>
+
+  <KeyPoints points={[
+    "Exonération totale de plus-value pour la vente de la résidence principale",
+    "Le bien doit être votre habitation effective au jour de la cession",
+    "Délai toléré d&apos;environ 12 mois entre départ et vente",
+    "Autres exonérations possibles : durée de détention, montant, première cession"
+  ]} />
+
+  <h2>Qu&apos;est-ce que la plus-value immobilière ?</h2>
+  <p>La plus-value immobilière correspond à la différence entre le prix de vente d&apos;un bien et son prix d&apos;acquisition. Lorsqu&apos;elle est positive, elle est en principe soumise à l&apos;impôt sur le revenu au taux de 19 % et aux prélèvements sociaux de 17,2 %, soit une taxation globale de 36,2 %.</p>
+  <p>Heureusement, plusieurs cas d&apos;exonération existent, et le plus connu concerne la résidence principale. Cette règle vise à ne pas pénaliser les ménages qui changent de logement au cours de leur vie.</p>
+
+  <h2>L&apos;exonération de la résidence principale : conditions</h2>
+  <p>L&apos;article 150 U-II-1° du Code général des impôts prévoit une exonération totale de plus-value pour la cession de la résidence principale. Trois conditions doivent être réunies.</p>
+
+  <h3>1. Le bien doit être votre habitation principale</h3>
+  <p>La résidence principale est définie comme le lieu où vous résidez habituellement et effectivement pendant la majeure partie de l&apos;année. L&apos;administration vérifie cette qualité à partir de plusieurs indices : déclarations fiscales, factures de consommation (eau, électricité), adresse de domiciliation bancaire, scolarisation des enfants, etc.</p>
+  <p>Une simple déclaration ne suffit pas : il faut prouver une occupation réelle. Un bien loué meublé ou vide ne peut pas être qualifié de résidence principale.</p>
+
+  <h3>2. L&apos;occupation au jour de la cession</h3>
+  <p>Le bien doit constituer votre résidence principale au jour de la vente. Si vous avez déménagé avant la signature de l&apos;acte authentique, l&apos;exonération peut être remise en cause.</p>
+  <p>Toutefois, l&apos;administration fiscale admet une tolérance : si le logement est mis en vente immédiatement après votre départ et reste inoccupé, l&apos;exonération est maintenue pendant un délai raisonnable, généralement estimé à 12 mois.</p>
+
+  <h3>3. Les dépendances immédiates</h3>
+  <p>L&apos;exonération s&apos;étend aux dépendances immédiates et nécessaires (garage, cave, jardin) vendues en même temps que la résidence principale. Un garage situé à moins d&apos;un kilomètre est généralement considéré comme une dépendance.</p>
+
+  <InternalCTA
+    title="Vendez votre bien en toute sécurité fiscale"
+    description="Nos notaires vous accompagnent pour sécuriser votre exonération de plus-value et éviter tout redressement."
+    buttonText="Consulter un notaire"
+    href="/trouver-notaire"
+  />
+
+  <h2>Les autres cas d&apos;exonération de plus-value</h2>
+  <p>Si votre bien n&apos;est pas votre résidence principale, d&apos;autres dispositifs peuvent vous exonérer totalement ou partiellement.</p>
+
+  <h3>Exonération pour durée de détention</h3>
+  <p>La plus-value bénéficie d&apos;abattements progressifs selon la durée de détention :</p>
+  <ul>
+    <li>Exonération totale d&apos;impôt sur le revenu après 22 ans de détention</li>
+    <li>Exonération totale des prélèvements sociaux après 30 ans</li>
+  </ul>
+
+  <h3>Première cession d&apos;une résidence secondaire</h3>
+  <p>Si vous n&apos;avez pas été propriétaire de votre résidence principale au cours des 4 années précédentes et que vous réinvestissez le prix de vente dans l&apos;achat de votre résidence principale dans les 24 mois, vous bénéficiez d&apos;une exonération.</p>
+
+  <h3>Petites cessions et situations particulières</h3>
+  <p>Sont également exonérées : les ventes inférieures à 15 000 €, les cessions par des retraités ou invalides à revenus modestes, les ventes au profit d&apos;organismes de logement social.</p>
+
+  <h2>Comment calculer la plus-value imposable ?</h2>
+  <p>Si votre bien n&apos;est pas exonéré, le calcul s&apos;effectue ainsi :</p>
+  <ul>
+    <li><strong>Prix de cession</strong> : prix de vente diminué des frais (diagnostics, mainlevée d&apos;hypothèque)</li>
+    <li><strong>Prix d&apos;acquisition</strong> : prix d&apos;achat majoré des frais de notaire (forfait 7,5 % possible) et des travaux (forfait 15 % après 5 ans de détention)</li>
+    <li><strong>Abattements pour durée de détention</strong> appliqués sur la différence</li>
+  </ul>
+  <p>Le notaire calcule et déclare la plus-value lors de la signature de l&apos;acte authentique. L&apos;impôt est prélevé directement sur le prix de vente.</p>
+
+  <h2>Les pièges à éviter</h2>
+  <p>Plusieurs situations peuvent compromettre l&apos;exonération :</p>
+  <ul>
+    <li><strong>Vente après déménagement</strong> : si vous attendez trop longtemps, l&apos;exonération tombe</li>
+    <li><strong>Bien loué récemment</strong> : la location, même brève, peut requalifier le bien</li>
+    <li><strong>Double résidence</strong> : un seul logement peut être qualifié de résidence principale</li>
+    <li><strong>Construction non terminée</strong> : un bien inachevé ne peut être une résidence principale</li>
+  </ul>
+  <p>En cas de doute, consultez un notaire avant la mise en vente. Une analyse préalable de votre situation permet d&apos;anticiper et de sécuriser l&apos;exonération.</p>
+
+  <InternalCTA
+    title="Une question sur votre plus-value immobilière ?"
+    description="Premier rendez-vous offert avec un notaire en visio ou en cabinet pour analyser votre situation."
+    buttonText="Prendre rendez-vous"
+    href="/trouver-notaire"
+  />
 </>
     </>
   );

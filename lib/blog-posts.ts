@@ -170,6 +170,21 @@ export interface BlogPost {
     { question: "Comment protéger son concubin sans se marier ?", answer: "Plusieurs outils existent : testament, assurance-vie, SCI, donation, ou conclusion d&apos;un PACS qui offre une fiscalité bien plus avantageuse." },
   ],
   },
+  {
+    slug: "optimisation-fiscale-succession",
+    title: "Optimisation fiscale succession : guide notaire 2025",
+    excerpt: "Optimisation fiscale succession notaire : découvrez les stratégies légales pour réduire les droits de succession et protéger votre patrimoine familial.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["optimisation fiscale succession", "droits de succession", "notaire succession", "donation", "assurance-vie"],
+    canonicalUrl: `${BASE}/blog/optimisation-fiscale-succession`,
+  faqs: [
+    { question: "Quel est l'abattement pour les enfants en 2025 ?", answer: "Chaque enfant bénéficie d'un abattement de 100 000 € par parent, renouvelable tous les 15 ans sur les donations." },
+    { question: "L'assurance-vie est-elle vraiment hors succession ?", answer: "Oui, les capitaux versés avant 70 ans bénéficient d'un abattement de 152 500 € par bénéficiaire, hors actif successoral." },
+    { question: "Quand consulter un notaire pour optimiser sa succession ?", answer: "Le plus tôt possible. Une planification anticipée permet d'étaler les donations et de maximiser les abattements fiscaux." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -406,6 +421,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Un concubin hérite-t-il automatiquement ?", answer: "Non, le concubin n&apos;a aucun droit successoral légal. Sans testament ni donation, il ne reçoit rien du patrimoine de son partenaire décédé." },
     { question: "Quels sont les droits de succession pour un concubin ?", answer: "Le concubin est taxé à 60% après un abattement très faible de 1 594 €, ce qui en fait le régime fiscal le plus défavorable." },
     { question: "Comment protéger son concubin sans se marier ?", answer: "Plusieurs outils existent : testament, assurance-vie, SCI, donation, ou conclusion d&apos;un PACS qui offre une fiscalité bien plus avantageuse." },
+  ],
+  },
+  {
+    slug: "optimisation-fiscale-succession",
+    title: "Optimisation fiscale succession : guide notaire 2025",
+    excerpt: "Optimisation fiscale succession notaire : découvrez les stratégies légales pour réduire les droits de succession et protéger votre patrimoine familial.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["optimisation fiscale succession", "droits de succession", "notaire succession", "donation", "assurance-vie"],
+    canonicalUrl: `${BASE}/blog/optimisation-fiscale-succession`,
+  faqs: [
+    { question: "Quel est l'abattement pour les enfants en 2025 ?", answer: "Chaque enfant bénéficie d'un abattement de 100 000 € par parent, renouvelable tous les 15 ans sur les donations." },
+    { question: "L'assurance-vie est-elle vraiment hors succession ?", answer: "Oui, les capitaux versés avant 70 ans bénéficient d'un abattement de 152 500 € par bénéficiaire, hors actif successoral." },
+    { question: "Quand consulter un notaire pour optimiser sa succession ?", answer: "Le plus tôt possible. Une planification anticipée permet d'étaler les donations et de maximiser les abattements fiscaux." },
   ],
   },
 ];

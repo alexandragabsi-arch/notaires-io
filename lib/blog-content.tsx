@@ -735,6 +735,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "partage-succession-indivision": () => <Article15 />,
   "renoncer-succession-notaire": () => <Article16 />,
   "succession-concubin-non-marie": () => <Article17 />,
+  "optimisation-fiscale-succession": () => <Article18 />,
 };
 
 
@@ -1532,6 +1533,68 @@ function Article17() {
 <p>Le premier rendez-vous chez nos notaires partenaires est offert et permet d&apos;identifier les leviers prioritaires pour protéger votre concubin.</p>
 
 <InternalCTA />
+</>
+    </>
+  );
+}
+
+/* ── Article 18 ─────────────────────────────────────────────────────────── */
+
+function Article18() {
+  return (
+    <>
+      <>
+  <p className="lead">L&apos;optimisation fiscale succession notaire est une démarche stratégique pour transmettre votre patrimoine dans les meilleures conditions. En France, les droits de succession peuvent atteindre 45 % en ligne directe et jusqu&apos;à 60 % entre non-parents. Anticiper avec un notaire permet de réduire significativement cette charge fiscale tout en respectant le cadre légal.</p>
+
+  <KeyPoints points={[
+    "Abattement de 100 000 € par enfant et par parent, renouvelable tous les 15 ans",
+    "L&apos;assurance-vie reste l&apos;outil le plus efficace de transmission hors succession",
+    "Le démembrement de propriété permet de transmettre à moindre coût fiscal",
+    "Une planification précoce avec un notaire maximise les économies fiscales"
+  ]} />
+
+  <h2>Comprendre les droits de succession en France</h2>
+  <p>Les droits de succession sont calculés selon un barème progressif qui dépend du lien de parenté entre le défunt et l&apos;héritier. En ligne directe (enfants, parents), le taux varie de 5 % à 45 % après application d&apos;un abattement de 100 000 € par héritier. Entre frères et sœurs, le taux atteint 35 % à 45 %, et entre personnes non parentes, il grimpe à 60 %.</p>
+  <p>Sans préparation, votre famille peut se retrouver avec une facture fiscale considérable, parfois supérieure aux liquidités disponibles. C&apos;est pourquoi l&apos;optimisation fiscale succession avec un notaire est essentielle pour préserver le patrimoine que vous avez constitué.</p>
+  <p>Le notaire dispose d&apos;une vision globale de votre situation : composition du patrimoine, situation familiale, objectifs de transmission. Il peut ainsi proposer une stratégie sur mesure combinant plusieurs outils juridiques et fiscaux.</p>
+
+  <h2>Les donations : un levier d&apos;optimisation puissant</h2>
+  <p>La donation est l&apos;outil principal d&apos;optimisation fiscale successorale. Chaque parent peut donner jusqu&apos;à 100 000 € à chaque enfant en franchise de droits, et ce tous les 15 ans. Un couple avec deux enfants peut donc transmettre 400 000 € sans fiscalité, et renouveler l&apos;opération après 15 ans.</p>
+  <p>Plusieurs formes de donation existent :</p>
+  <ul>
+    <li><strong>La donation simple</strong> : transmission immédiate d&apos;un bien ou d&apos;une somme d&apos;argent</li>
+    <li><strong>La donation-partage</strong> : permet de répartir équitablement entre héritiers et de figer les valeurs au jour de la donation</li>
+    <li><strong>Le don familial de somme d&apos;argent</strong> : abattement supplémentaire de 31 865 € si le donateur a moins de 80 ans et le donataire plus de 18 ans</li>
+    <li><strong>La donation avec réserve d&apos;usufruit</strong> : vous transmettez la nue-propriété tout en conservant l&apos;usage du bien</li>
+  </ul>
+
+  <InternalCTA
+    title="Préparez votre succession avec un notaire"
+    description="Bénéficiez d&apos;un premier rendez-vous offert pour analyser votre situation patrimoniale et identifier les meilleures stratégies d&apos;optimisation fiscale."
+    buttonText="Prendre rendez-vous"
+    href="/rendez-vous"
+  />
+
+  <h2>L&apos;assurance-vie et le démembrement : les stratégies avancées</h2>
+  <p>L&apos;assurance-vie reste l&apos;outil de transmission le plus avantageux fiscalement. Les capitaux versés avant 70 ans bénéficient d&apos;un abattement de 152 500 € par bénéficiaire, puis d&apos;une taxation forfaitaire de 20 % jusqu&apos;à 700 000 € et 31,25 % au-delà. Pour les versements après 70 ans, l&apos;abattement global est de 30 500 €, mais les intérêts restent exonérés.</p>
+  <p>Le démembrement de propriété consiste à séparer la nue-propriété de l&apos;usufruit. En donnant la nue-propriété de votre vivant, vous transmettez à un coût fiscal réduit : la valeur taxable est calculée selon un barème lié à votre âge. À 60 ans, la nue-propriété ne représente que 50 % de la valeur du bien.</p>
+  <p>Au décès de l&apos;usufruitier, le nu-propriétaire récupère la pleine propriété sans aucun droit supplémentaire à payer. C&apos;est une stratégie particulièrement efficace pour transmettre l&apos;immobilier.</p>
+
+  <h2>Structures juridiques et stratégies patrimoniales</h2>
+  <p>Pour les patrimoines importants ou immobiliers, la création d&apos;une SCI (Société Civile Immobilière) facilite la transmission. Les parts sociales peuvent être données progressivement, en profitant des abattements renouvelables, et le démembrement des parts amplifie l&apos;effet fiscal.</p>
+  <p>Le pacte Dutreil, quant à lui, permet de transmettre une entreprise familiale avec une exonération de 75 % de sa valeur, sous conditions d&apos;engagement de conservation. Combiné à une donation en pleine propriété avant 70 ans avec réduction de 50 %, l&apos;économie peut être spectaculaire.</p>
+  <p>Enfin, le changement de régime matrimonial vers une communauté universelle avec clause d&apos;attribution intégrale peut protéger le conjoint survivant, même si cette stratégie reporte la fiscalité sur la génération suivante. Votre notaire évaluera son opportunité selon votre situation.</p>
+
+  <h2>Conclusion</h2>
+  <p>L&apos;optimisation fiscale d&apos;une succession ne s&apos;improvise pas. Elle nécessite une analyse approfondie de votre patrimoine, de votre situation familiale et de vos objectifs. Les outils existent : donations, assurance-vie, démembrement, structures sociétaires. Encore faut-il les combiner intelligemment et anticiper.</p>
+  <p>Le notaire est votre interlocuteur privilégié pour bâtir une stratégie cohérente, sécurisée juridiquement et optimisée fiscalement. Plus vous anticipez, plus les économies seront importantes pour vos héritiers.</p>
+
+  <InternalCTA
+    title="Optimisez votre succession dès aujourd&apos;hui"
+    description="Nos notaires partenaires vous accompagnent dans la planification de votre transmission patrimoniale. Premier rendez-vous offert, en visio ou au cabinet."
+    buttonText="Consulter un notaire"
+    href="/rendez-vous"
+  />
 </>
     </>
   );

@@ -733,6 +733,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "droits-succession-calcul": () => <Article13 />,
   "acte-notoriete-succession": () => <Article14 />,
   "partage-succession-indivision": () => <Article15 />,
+  "renoncer-succession-notaire": () => <Article16 />,
 };
 
 
@@ -1376,6 +1377,95 @@ function Article15() {
   <p>Pour éviter ces situations conflictuelles, il est vivement recommandé de consulter un notaire dès l&apos;ouverture de la succession afin d&apos;être conseillé sur la meilleure stratégie de partage.</p>
 
   <InternalCTA />
+</>
+    </>
+  );
+}
+
+/* ── Article 16 ─────────────────────────────────────────────────────────── */
+
+function Article16() {
+  return (
+    <>
+      <>
+  <p className="lead">Renoncer à une succession devant notaire est une décision lourde de conséquences, souvent envisagée lorsque le défunt laisse plus de dettes que d&apos;actifs. Cette procédure encadrée par le Code civil vous permet de refuser totalement votre part d&apos;héritage et d&apos;échapper aux créanciers. Voici tout ce qu&apos;il faut savoir pour renoncer en toute sécurité.</p>
+
+  <KeyPoints items={[
+    "La renonciation est gratuite au greffe du tribunal, payante chez le notaire (15-30 €)",
+    "Vous disposez de 10 ans pour renoncer, mais un créancier peut vous obliger à choisir en 4 mois",
+    "Le renonçant est considéré comme n&apos;ayant jamais été héritier : ses enfants peuvent hériter par représentation",
+    "La renonciation est révocable tant que la succession n&apos;a pas été acceptée par d&apos;autres héritiers"
+  ]} />
+
+  <h2>Pourquoi renoncer à une succession ?</h2>
+  <p>La renonciation à succession est l&apos;une des trois options successorales offertes à l&apos;héritier, aux côtés de l&apos;acceptation pure et simple et de l&apos;acceptation à concurrence de l&apos;actif net. Elle se justifie principalement dans plusieurs situations.</p>
+
+  <p>Le cas le plus fréquent est celui de la <strong>succession déficitaire</strong> : le défunt laisse plus de dettes (prêts bancaires, dettes fiscales, crédits à la consommation) que d&apos;actifs (immobilier, comptes, mobilier). Accepter la succession reviendrait alors à payer ces dettes sur votre propre patrimoine.</p>
+
+  <p>D&apos;autres motifs peuvent justifier la renonciation :</p>
+  <ul>
+    <li>Favoriser ses propres enfants qui hériteront par représentation</li>
+    <li>Éviter des conflits familiaux complexes</li>
+    <li>Refuser un bien grevé de contraintes (indivision difficile, bien immobilier coûteux)</li>
+    <li>Optimiser une transmission patrimoniale entre générations</li>
+  </ul>
+
+  <p>Attention : renoncer signifie renoncer à <strong>tout</strong>. Vous ne pouvez pas choisir de garder certains biens et refuser les dettes. C&apos;est pourquoi un bilan complet de la succession avec un notaire est indispensable avant toute décision.</p>
+
+  <h2>La procédure de renonciation chez le notaire</h2>
+  <p>Renoncer à une succession nécessite une démarche formelle. Deux options s&apos;offrent à vous : la déclaration au greffe du tribunal judiciaire du lieu d&apos;ouverture de la succession, ou l&apos;acte authentique chez un notaire.</p>
+
+  <h3>Étape 1 : le bilan successoral</h3>
+  <p>Avant toute renonciation, le notaire dresse un inventaire précis de l&apos;actif et du passif successoral. Il consulte le fichier FICOBA pour identifier les comptes bancaires, interroge les organismes de crédit et vérifie les éventuelles dettes fiscales. Cette analyse vous permet de prendre une décision éclairée.</p>
+
+  <h3>Étape 2 : la rédaction de l&apos;acte de renonciation</h3>
+  <p>Si vous décidez de renoncer, le notaire rédige un acte authentique de renonciation. Vous devez fournir :</p>
+  <ul>
+    <li>Une pièce d&apos;identité en cours de validité</li>
+    <li>Un acte de naissance de moins de 3 mois</li>
+    <li>L&apos;acte de décès du défunt</li>
+    <li>Le formulaire Cerfa n°15828*05 dûment rempli</li>
+  </ul>
+
+  <h3>Étape 3 : l&apos;enregistrement officiel</h3>
+  <p>L&apos;acte est ensuite transmis au tribunal judiciaire pour enregistrement. La renonciation devient alors opposable aux tiers, notamment aux créanciers du défunt qui ne pourront plus vous poursuivre.</p>
+
+  <InternalCTA 
+    title="Besoin d&apos;un notaire pour renoncer à une succession ?"
+    description="Nos notaires partenaires vous accompagnent dans toute la procédure de renonciation. Premier rendez-vous offert en visio ou en cabinet."
+    buttonText="Prendre rendez-vous"
+    buttonLink="/rendez-vous"
+  />
+
+  <h2>Délais et conséquences de la renonciation</h2>
+  <p>Le délai légal pour exercer votre option successorale est de <strong>10 ans</strong> à compter de l&apos;ouverture de la succession (date du décès). Passé ce délai sans manifestation de votre part, vous êtes réputé avoir renoncé.</p>
+
+  <p>Cependant, ce délai peut être considérablement raccourci. Tout intéressé (créancier, cohéritier, État) peut vous sommer de prendre parti après l&apos;expiration d&apos;un délai de 4 mois suivant le décès. Vous disposez alors de <strong>2 mois supplémentaires</strong> pour vous décider, sous peine d&apos;être considéré comme acceptant purement et simplement la succession.</p>
+
+  <h3>Les effets juridiques de la renonciation</h3>
+  <p>Le renonçant est considéré comme n&apos;ayant <em>jamais été héritier</em>. Cette fiction juridique entraîne plusieurs conséquences importantes :</p>
+  <ul>
+    <li><strong>Aucune dette ne peut vous être réclamée</strong> au titre de la succession</li>
+    <li><strong>Vos enfants peuvent hériter par représentation</strong> (depuis la loi du 23 juin 2006)</li>
+    <li>Votre part accroît celle des autres héritiers de même rang</li>
+    <li>Vous ne pouvez plus revendiquer aucun bien de la succession</li>
+  </ul>
+
+  <p>Attention aux <strong>actes équivalant à acceptation tacite</strong> : prélever de l&apos;argent sur les comptes du défunt, vendre un bien ou même payer une dette successorale peuvent être interprétés comme une acceptation, vous empêchant ensuite de renoncer.</p>
+
+  <h2>Coût et révocation de la renonciation</h2>
+  <p>La déclaration de renonciation directement au greffe du tribunal est <strong>gratuite</strong>. Toutefois, passer par un notaire offre plusieurs avantages : sécurité juridique, conseil personnalisé et accompagnement dans les démarches connexes (déclaration fiscale, information des autres héritiers).</p>
+
+  <p>Les frais notariaux pour un acte de renonciation s&apos;élèvent généralement entre <strong>15 et 30 euros</strong>, auxquels peuvent s&apos;ajouter des honoraires de conseil si une analyse approfondie de la succession est nécessaire.</p>
+
+  <h3>Peut-on revenir sur sa décision ?</h3>
+  <p>La renonciation n&apos;est pas définitive. L&apos;article 807 du Code civil permet la <strong>révocation de la renonciation</strong> sous deux conditions cumulatives :</p>
+  <ul>
+    <li>Le délai de 10 ans pour accepter ne doit pas être écoulé</li>
+    <li>La succession ne doit pas avoir été acceptée par un autre héritier</li>
+  </ul>
+
+  <p>Cette révocation se fait par déclaration au greffe ou par acte notarié. L&apos;héritier devient alors acceptant pur et simple ou à concurrence de l&apos;actif net, selon son choix.</p>
 </>
     </>
   );

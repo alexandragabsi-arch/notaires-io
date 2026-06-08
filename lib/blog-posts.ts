@@ -140,6 +140,21 @@ export interface BlogPost {
     { question: "Que faire si un héritier refuse le partage ?", answer: "Vous pouvez saisir le tribunal judiciaire pour demander un partage judiciaire. Le juge désignera un notaire pour procéder aux opérations et trancher les désaccords entre cohéritiers." },
   ],
   },
+  {
+    slug: "renoncer-succession-notaire",
+    title: "Renoncer à une succession : procédure notaire 2025",
+    excerpt: "Renoncer à une succession chez le notaire : procédure, délais, coût et conséquences. Guide complet pour protéger votre patrimoine en cas de dettes.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["renoncer succession notaire", "renonciation succession procédure", "refuser héritage notaire", "succession déficitaire"],
+    canonicalUrl: `${BASE}/blog/renoncer-succession-notaire`,
+  faqs: [
+    { question: "Combien coûte une renonciation à succession chez le notaire ?", answer: "La déclaration de renonciation au greffe est gratuite. Chez le notaire, comptez environ 15 à 30 € pour l&apos;acte authentique, hors honoraires de conseil éventuels." },
+    { question: "Quel est le délai pour renoncer à une succession ?", answer: "Vous disposez de 10 ans à compter de l&apos;ouverture de la succession. Toutefois, un créancier ou cohéritier peut vous sommer de choisir après 4 mois, vous laissant alors 2 mois pour vous décider." },
+    { question: "Peut-on revenir sur une renonciation à succession ?", answer: "Oui, tant que la succession n&apos;a pas été acceptée par un autre héritier et dans la limite de 10 ans. Cette rétractation s&apos;appelle la révocation de la renonciation." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -346,6 +361,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Le recours au notaire est-il obligatoire pour un partage de succession ?", answer: "Oui, dès lors que la succession comprend un bien immobilier. Le notaire rédige l&apos;acte de partage authentique nécessaire à la publication au service de la publicité foncière." },
     { question: "Combien coûte un partage successoral chez le notaire ?", answer: "Les frais comprennent un droit de partage de 2,5% sur l&apos;actif net partagé, les émoluments du notaire (environ 1 à 2%) et les débours. Comptez globalement entre 4 et 5% de la valeur des biens." },
     { question: "Que faire si un héritier refuse le partage ?", answer: "Vous pouvez saisir le tribunal judiciaire pour demander un partage judiciaire. Le juge désignera un notaire pour procéder aux opérations et trancher les désaccords entre cohéritiers." },
+  ],
+  },
+  {
+    slug: "renoncer-succession-notaire",
+    title: "Renoncer à une succession : procédure notaire 2025",
+    excerpt: "Renoncer à une succession chez le notaire : procédure, délais, coût et conséquences. Guide complet pour protéger votre patrimoine en cas de dettes.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["renoncer succession notaire", "renonciation succession procédure", "refuser héritage notaire", "succession déficitaire"],
+    canonicalUrl: `${BASE}/blog/renoncer-succession-notaire`,
+  faqs: [
+    { question: "Combien coûte une renonciation à succession chez le notaire ?", answer: "La déclaration de renonciation au greffe est gratuite. Chez le notaire, comptez environ 15 à 30 € pour l&apos;acte authentique, hors honoraires de conseil éventuels." },
+    { question: "Quel est le délai pour renoncer à une succession ?", answer: "Vous disposez de 10 ans à compter de l&apos;ouverture de la succession. Toutefois, un créancier ou cohéritier peut vous sommer de choisir après 4 mois, vous laissant alors 2 mois pour vous décider." },
+    { question: "Peut-on revenir sur une renonciation à succession ?", answer: "Oui, tant que la succession n&apos;a pas été acceptée par un autre héritier et dans la limite de 10 ans. Cette rétractation s&apos;appelle la révocation de la renonciation." },
   ],
   },
 ];

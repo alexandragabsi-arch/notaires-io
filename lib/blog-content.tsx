@@ -734,6 +734,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "acte-notoriete-succession": () => <Article14 />,
   "partage-succession-indivision": () => <Article15 />,
   "renoncer-succession-notaire": () => <Article16 />,
+  "succession-concubin-non-marie": () => <Article17 />,
 };
 
 
@@ -1466,6 +1467,71 @@ function Article16() {
   </ul>
 
   <p>Cette révocation se fait par déclaration au greffe ou par acte notarié. L&apos;héritier devient alors acceptant pur et simple ou à concurrence de l&apos;actif net, selon son choix.</p>
+</>
+    </>
+  );
+}
+
+/* ── Article 17 ─────────────────────────────────────────────────────────── */
+
+function Article17() {
+  return (
+    <>
+      <>
+<p className="lead">La succession d&apos;un concubin non marié soulève des enjeux majeurs en France : juridiquement, le concubin survivant est considéré comme un parfait étranger par la loi successorale. Sans anticipation chez un notaire, il risque de ne rien recevoir du patrimoine commun, voire d&apos;être expulsé du logement familial. Voici les solutions concrètes pour protéger votre partenaire.</p>
+
+<KeyPoints points={[
+  "Le concubin n&apos;a aucun droit successoral légal en France",
+  "La fiscalité est de 60% après un abattement de seulement 1 594 €",
+  "Le testament, la donation et l&apos;assurance-vie sont les principaux outils de protection",
+  "Un rendez-vous notaire permet de bâtir une stratégie sur-mesure"
+]} />
+
+<h2>Concubinage et succession : un vide juridique total</h2>
+<p>Contrairement aux époux ou aux partenaires de PACS, les concubins n&apos;ont aucun lien juridique reconnu en matière successorale. L&apos;article 515-8 du Code civil définit le concubinage comme une simple « union de fait », ce qui exclut tout droit à la succession.</p>
+<p>Concrètement, si votre concubin décède sans avoir pris de dispositions, l&apos;intégralité de son patrimoine reviendra à ses héritiers légaux : enfants, parents, frères et sœurs. Vous ne recevrez rien, même après des décennies de vie commune.</p>
+<p>Cette situation peut avoir des conséquences dramatiques, notamment concernant le logement. Si la résidence principale appartenait à votre concubin, ses héritiers peuvent exiger votre départ ou le rachat de leur part.</p>
+
+<h2>Une fiscalité successorale très lourde pour le concubin</h2>
+<p>Même lorsque le concubin reçoit quelque chose par testament ou donation, la fiscalité applicable est particulièrement punitive :</p>
+<ul>
+  <li><strong>Abattement :</strong> seulement 1 594 € (contre 100 000 € entre parent et enfant)</li>
+  <li><strong>Taux d&apos;imposition :</strong> 60% sur la totalité de la part nette</li>
+  <li><strong>Aucun barème progressif :</strong> contrairement aux héritiers en ligne directe</li>
+</ul>
+<p>Exemple : pour un legs de 200 000 € à votre concubin, les droits de succession s&apos;élèvent à environ 119 044 €. Votre partenaire ne touche en réalité que 80 956 €.</p>
+<p>Cette fiscalité confiscatoire impose de structurer la transmission avec un notaire pour limiter au maximum l&apos;impact fiscal.</p>
+
+<InternalCTA />
+
+<h2>Les solutions notariales pour protéger son concubin</h2>
+<p>Heureusement, plusieurs outils juridiques permettent d&apos;organiser efficacement la transmission au profit du concubin survivant.</p>
+
+<h3>Le testament authentique</h3>
+<p>Rédigé devant notaire, le testament permet de léguer à votre concubin la quotité disponible de votre patrimoine. Si vous avez des enfants, vous devez respecter leur réserve héréditaire, mais vous pouvez transmettre 1/2, 1/3 ou 1/4 selon le nombre d&apos;enfants.</p>
+
+<h3>L&apos;assurance-vie : l&apos;outil le plus efficace</h3>
+<p>L&apos;assurance-vie échappe aux règles successorales classiques. Vous pouvez désigner votre concubin comme bénéficiaire et lui transmettre jusqu&apos;à 152 500 € en franchise totale d&apos;impôt (pour les primes versées avant 70 ans).</p>
+
+<h3>La donation au dernier vivant : impossible</h3>
+<p>Attention, contrairement aux époux, les concubins ne peuvent pas bénéficier d&apos;une donation au dernier vivant. C&apos;est une raison majeure d&apos;envisager le mariage ou le PACS.</p>
+
+<h3>La SCI familiale</h3>
+<p>Créer une SCI permet d&apos;organiser la détention du logement et de prévoir des clauses statutaires protectrices (démembrement croisé des parts, droit de préemption).</p>
+
+<h2>PACS ou mariage : pourquoi y penser ?</h2>
+<p>Avant d&apos;engager des stratégies complexes, il faut savoir que le PACS et le mariage offrent des avantages successoraux considérables :</p>
+<ul>
+  <li><strong>Mariage :</strong> exonération totale des droits de succession entre époux + droits légaux du conjoint survivant</li>
+  <li><strong>PACS :</strong> exonération totale des droits de succession (mais nécessite un testament pour hériter)</li>
+</ul>
+<p>Le simple fait de signer un PACS et de rédiger un testament chez le notaire suffit à transformer radicalement la situation patrimoniale du survivant.</p>
+
+<h2>Pourquoi consulter un notaire ?</h2>
+<p>Chaque situation de concubinage est unique : enfants d&apos;une précédente union, patrimoine immobilier en indivision, entreprise familiale, écart de patrimoine entre concubins... Seul un notaire peut bâtir une stratégie patrimoniale adaptée combinant testament, assurance-vie, donations et structures juridiques.</p>
+<p>Le premier rendez-vous chez nos notaires partenaires est offert et permet d&apos;identifier les leviers prioritaires pour protéger votre concubin.</p>
+
+<InternalCTA />
 </>
     </>
   );

@@ -155,6 +155,21 @@ export interface BlogPost {
     { question: "Peut-on revenir sur une renonciation à succession ?", answer: "Oui, tant que la succession n&apos;a pas été acceptée par un autre héritier et dans la limite de 10 ans. Cette rétractation s&apos;appelle la révocation de la renonciation." },
   ],
   },
+  {
+    slug: "succession-concubin-non-marie",
+    title: "Succession concubin non marié : guide notaire 2025",
+    excerpt: "Succession concubin non marié : droits, fiscalité à 60%, solutions notariales pour protéger votre partenaire. Conseils d&apos;un notaire expert.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["succession concubin non marié", "héritage concubinage", "protéger concubin", "donation concubin", "testament concubin"],
+    canonicalUrl: `${BASE}/blog/succession-concubin-non-marie`,
+  faqs: [
+    { question: "Un concubin hérite-t-il automatiquement ?", answer: "Non, le concubin n&apos;a aucun droit successoral légal. Sans testament ni donation, il ne reçoit rien du patrimoine de son partenaire décédé." },
+    { question: "Quels sont les droits de succession pour un concubin ?", answer: "Le concubin est taxé à 60% après un abattement très faible de 1 594 €, ce qui en fait le régime fiscal le plus défavorable." },
+    { question: "Comment protéger son concubin sans se marier ?", answer: "Plusieurs outils existent : testament, assurance-vie, SCI, donation, ou conclusion d&apos;un PACS qui offre une fiscalité bien plus avantageuse." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -376,6 +391,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Combien coûte une renonciation à succession chez le notaire ?", answer: "La déclaration de renonciation au greffe est gratuite. Chez le notaire, comptez environ 15 à 30 € pour l&apos;acte authentique, hors honoraires de conseil éventuels." },
     { question: "Quel est le délai pour renoncer à une succession ?", answer: "Vous disposez de 10 ans à compter de l&apos;ouverture de la succession. Toutefois, un créancier ou cohéritier peut vous sommer de choisir après 4 mois, vous laissant alors 2 mois pour vous décider." },
     { question: "Peut-on revenir sur une renonciation à succession ?", answer: "Oui, tant que la succession n&apos;a pas été acceptée par un autre héritier et dans la limite de 10 ans. Cette rétractation s&apos;appelle la révocation de la renonciation." },
+  ],
+  },
+  {
+    slug: "succession-concubin-non-marie",
+    title: "Succession concubin non marié : guide notaire 2025",
+    excerpt: "Succession concubin non marié : droits, fiscalité à 60%, solutions notariales pour protéger votre partenaire. Conseils d&apos;un notaire expert.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["succession concubin non marié", "héritage concubinage", "protéger concubin", "donation concubin", "testament concubin"],
+    canonicalUrl: `${BASE}/blog/succession-concubin-non-marie`,
+  faqs: [
+    { question: "Un concubin hérite-t-il automatiquement ?", answer: "Non, le concubin n&apos;a aucun droit successoral légal. Sans testament ni donation, il ne reçoit rien du patrimoine de son partenaire décédé." },
+    { question: "Quels sont les droits de succession pour un concubin ?", answer: "Le concubin est taxé à 60% après un abattement très faible de 1 594 €, ce qui en fait le régime fiscal le plus défavorable." },
+    { question: "Comment protéger son concubin sans se marier ?", answer: "Plusieurs outils existent : testament, assurance-vie, SCI, donation, ou conclusion d&apos;un PACS qui offre une fiscalité bien plus avantageuse." },
   ],
   },
 ];

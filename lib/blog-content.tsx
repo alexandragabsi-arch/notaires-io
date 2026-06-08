@@ -737,6 +737,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "succession-concubin-non-marie": () => <Article17 />,
   "optimisation-fiscale-succession": () => <Article18 />,
   "rapport-donation-succession": () => <Article19 />,
+  "legs-testament-notaire": () => <Article20 />,
 };
 
 
@@ -1673,6 +1674,74 @@ function Article19() {
   buttonText="Prendre rendez-vous"
   buttonLink="/prendre-rendez-vous"
 />
+</>
+    </>
+  );
+}
+
+/* ── Article 20 ─────────────────────────────────────────────────────────── */
+
+function Article20() {
+  return (
+    <>
+      <>
+<p className="lead">Le <strong>legs particulier, universel ou à titre universel inscrit dans un testament rédigé chez le notaire</strong> permet d&apos;organiser sereinement la transmission de votre patrimoine. Comprendre ces trois catégories est essentiel pour exprimer vos volontés avec précision et éviter tout litige successoral.</p>
+
+<KeyPoints items={[
+  "Le legs universel transmet l&apos;intégralité du patrimoine à un ou plusieurs bénéficiaires",
+  "Le legs à titre universel attribue une quote-part ou une catégorie de biens",
+  "Le legs particulier vise un bien précis identifié dans le testament",
+  "Le testament authentique notarié offre la sécurité juridique maximale"
+]} />
+
+<h2>Comprendre les trois types de legs dans un testament</h2>
+<p>En droit français, le Code civil distingue trois formes de legs que vous pouvez intégrer dans votre testament. Chacune répond à un objectif patrimonial différent et entraîne des conséquences juridiques spécifiques pour vos héritiers et légataires.</p>
+
+<h3>Le legs universel</h3>
+<p>Le legs universel désigne un ou plusieurs bénéficiaires destinés à recevoir <strong>l&apos;ensemble des biens</strong> que vous laisserez à votre décès. Le légataire universel est traité comme un véritable héritier : il reçoit l&apos;actif, mais doit aussi assumer le passif (dettes, charges). En présence d&apos;héritiers réservataires (enfants, conjoint dans certains cas), le legs universel ne peut porter que sur la quotité disponible.</p>
+
+<h3>Le legs à titre universel</h3>
+<p>Le legs à titre universel porte sur <strong>une fraction du patrimoine</strong> : la moitié, le tiers, tous les immeubles, ou tous les meubles. Le légataire reçoit donc une quote-part proportionnelle de l&apos;actif et du passif. C&apos;est une solution intermédiaire utile pour répartir précisément votre succession entre plusieurs personnes.</p>
+
+<h3>Le legs particulier</h3>
+<p>Le legs particulier concerne <strong>un ou plusieurs biens identifiés</strong> : une somme d&apos;argent, un appartement, un véhicule, une œuvre d&apos;art, des bijoux. Contrairement aux autres legs, le légataire particulier n&apos;est pas tenu des dettes successorales (sauf clause contraire) et n&apos;a pas la qualité d&apos;héritier.</p>
+
+<h2>Pourquoi rédiger son testament devant un notaire ?</h2>
+<p>Si le testament olographe (entièrement écrit, daté et signé de votre main) reste valable, le <strong>testament authentique reçu par un notaire</strong> présente des avantages décisifs. Il garantit le respect des règles de forme, évite les contestations sur l&apos;état mental du testateur et sécurise l&apos;interprétation des volontés.</p>
+<p>Le notaire vérifie également que vos legs respectent la réserve héréditaire, conseille sur les conséquences fiscales et inscrit le testament au <strong>Fichier Central des Dispositions de Dernières Volontés (FCDDV)</strong>, garantissant qu&apos;il sera retrouvé et exécuté.</p>
+
+<InternalCTA 
+  title="Rédigez votre testament avec un notaire"
+  description="Sécurisez la transmission de votre patrimoine. Premier rendez-vous offert, en visio ou en cabinet."
+  buttonText="Prendre rendez-vous"
+  href="/rendez-vous"
+/>
+
+<h2>Fiscalité des legs : ce qu&apos;il faut anticiper</h2>
+<p>Les droits de succession applicables aux legs dépendent du lien de parenté entre vous et le légataire. Voici les principaux barèmes à connaître :</p>
+<ul>
+  <li><strong>Enfants et parents</strong> : abattement de 100 000 €, puis barème progressif de 5 % à 45 %</li>
+  <li><strong>Frères et sœurs</strong> : abattement de 15 932 €, taux de 35 % ou 45 %</li>
+  <li><strong>Neveux et nièces</strong> : abattement de 7 967 €, taux de 55 %</li>
+  <li><strong>Tiers (non parents)</strong> : abattement de 1 594 €, taux de 60 %</li>
+  <li><strong>Conjoint et partenaire de PACS</strong> : exonération totale</li>
+  <li><strong>Associations reconnues d&apos;utilité publique</strong> : exonération possible</li>
+</ul>
+<p>Un notaire vous aidera à structurer vos legs pour optimiser la transmission, par exemple en démembrant la propriété ou en combinant donations du vivant et legs testamentaires.</p>
+
+<h2>Conseils pratiques pour rédiger vos legs</h2>
+<p>Pour que vos volontés soient pleinement respectées, suivez ces recommandations :</p>
+<ul>
+  <li><strong>Identifiez précisément les bénéficiaires</strong> : nom, prénom, date et lieu de naissance pour éviter toute ambiguïté</li>
+  <li><strong>Décrivez les biens avec exactitude</strong> dans le cas d&apos;un legs particulier (références cadastrales, numéros de compte)</li>
+  <li><strong>Prévoyez un légataire de substitution</strong> au cas où le premier décède avant vous ou renonce au legs</li>
+  <li><strong>Anticipez les charges et conditions</strong> éventuelles attachées au legs</li>
+  <li><strong>Mettez à jour régulièrement</strong> votre testament en cas d&apos;évolution familiale ou patrimoniale</li>
+</ul>
+<p>N&apos;oubliez pas que vous pouvez révoquer ou modifier votre testament à tout moment, tant que vous êtes vivant et capable juridiquement.</p>
+
+<h2>En résumé</h2>
+<p>Choisir entre legs particulier, universel ou à titre universel dépend de vos objectifs : transmettre l&apos;ensemble de votre patrimoine, en répartir une part, ou attribuer un bien précis. Le recours au <strong>notaire pour rédiger un testament authentique</strong> est la meilleure garantie pour que vos volontés soient respectées, dans le strict cadre légal et fiscal.</p>
 </>
     </>
   );

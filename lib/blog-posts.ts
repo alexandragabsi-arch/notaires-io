@@ -200,6 +200,21 @@ export interface BlogPost {
     { question: "Que se passe-t-il si la donation excède la part de l&apos;héritier ?", answer: "Si le rapport révèle un excédent, l&apos;héritier doit une indemnité de rapport à la succession, sauf disposition contraire de l&apos;acte de donation." },
   ],
   },
+  {
+    slug: "legs-testament-notaire",
+    title: "Legs particulier ou universel : guide testament notaire",
+    excerpt: "Legs particulier, universel ou à titre universel dans un testament chez le notaire : différences, fiscalité et conseils pratiques pour bien transmettre.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["legs particulier", "legs universel", "testament notaire", "legs à titre universel", "succession"],
+    canonicalUrl: `${BASE}/blog/legs-testament-notaire`,
+  faqs: [
+    { question: "Quelle est la différence entre legs particulier et universel ?", answer: "Le legs universel transmet l&apos;ensemble du patrimoine, le legs particulier porte sur un bien précis (somme, immeuble, objet). Le legs à titre universel concerne une quote-part du patrimoine." },
+    { question: "Faut-il obligatoirement passer par un notaire pour un legs ?", answer: "Non, un testament olographe (écrit à la main) suffit légalement. Mais le testament authentique chez le notaire sécurise vos volontés et évite les contestations." },
+    { question: "Quels sont les frais fiscaux d&apos;un legs ?", answer: "Les droits de succession s&apos;appliquent selon le lien de parenté entre testateur et légataire. Un legs à un tiers est taxé à 60 %, tandis qu&apos;un legs à un enfant bénéficie d&apos;abattements." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -466,6 +481,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Toutes les donations sont-elles rapportables ?", answer: "Non. Seules les donations consenties à un héritier sont rapportables, sauf si elles ont été faites hors part successorale. Les présents d&apos;usage en sont également exclus." },
     { question: "Comment évaluer un bien donné lors du rapport ?", answer: "Le bien est évalué à sa valeur au jour du partage, selon son état au jour de la donation. Cette règle protège l&apos;équité entre cohéritiers." },
     { question: "Que se passe-t-il si la donation excède la part de l&apos;héritier ?", answer: "Si le rapport révèle un excédent, l&apos;héritier doit une indemnité de rapport à la succession, sauf disposition contraire de l&apos;acte de donation." },
+  ],
+  },
+  {
+    slug: "legs-testament-notaire",
+    title: "Legs particulier ou universel : guide testament notaire",
+    excerpt: "Legs particulier, universel ou à titre universel dans un testament chez le notaire : différences, fiscalité et conseils pratiques pour bien transmettre.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["legs particulier", "legs universel", "testament notaire", "legs à titre universel", "succession"],
+    canonicalUrl: `${BASE}/blog/legs-testament-notaire`,
+  faqs: [
+    { question: "Quelle est la différence entre legs particulier et universel ?", answer: "Le legs universel transmet l&apos;ensemble du patrimoine, le legs particulier porte sur un bien précis (somme, immeuble, objet). Le legs à titre universel concerne une quote-part du patrimoine." },
+    { question: "Faut-il obligatoirement passer par un notaire pour un legs ?", answer: "Non, un testament olographe (écrit à la main) suffit légalement. Mais le testament authentique chez le notaire sécurise vos volontés et évite les contestations." },
+    { question: "Quels sont les frais fiscaux d&apos;un legs ?", answer: "Les droits de succession s&apos;appliquent selon le lien de parenté entre testateur et légataire. Un legs à un tiers est taxé à 60 %, tandis qu&apos;un legs à un enfant bénéficie d&apos;abattements." },
   ],
   },
 ];

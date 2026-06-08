@@ -5,7 +5,22 @@ export interface BlogPost {
   date: string; // "YYYY-MM-DD"
   readingTime: number; // minutes
   category: string;
-  keywords: string[];
+  keywords: string[  {
+    slug: "testament-olographe-notarie",
+    title: "Testament olographe ou notarié : lequel choisir ?",
+    excerpt: "Testament olographe ou notarié : découvrez les différences, avantages et inconvénients pour choisir la forme adaptée à votre succession.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["testament olographe ou notarié", "testament notaire", "rédiger testament", "succession"],
+    canonicalUrl: `${BASE}/blog/testament-olographe-notarie`,,
+  faqs: [
+    { question: "Un testament olographe a-t-il la même valeur qu&apos;un testament notarié ?", answer: "Oui, les deux ont la même valeur juridique s&apos;ils respectent les conditions de forme. Le testament notarié offre toutefois une sécurité juridique supérieure et un risque de contestation moindre." },
+    { question: "Combien coûte un testament chez le notaire ?", answer: "Un testament authentique coûte environ 115 à 140 € HT, auxquels s&apos;ajoutent les frais d&apos;enregistrement au fichier central des dispositions de dernières volontés (environ 30 €)." },
+    { question: "Peut-on modifier un testament olographe ou notarié ?", answer: "Oui, vous pouvez à tout moment révoquer ou modifier votre testament, qu&apos;il soit olographe ou notarié, en rédigeant un nouveau document daté et signé." },
+  ],
+  },
+];
   canonicalUrl: string;
 }
 
@@ -77,6 +92,21 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Donation",
     keywords: ["donation enfants notaire", "transmettre patrimoine vivant", "abattement donation enfants"],
     canonicalUrl: `${BASE}/blog/donation-enfants-avant-deces`,
+  },
+  {
+    slug: "testament-olographe-notarie",
+    title: "Testament olographe ou notarié : lequel choisir ?",
+    excerpt: "Testament olographe ou notarié : découvrez les différences, avantages et inconvénients pour choisir la forme adaptée à votre succession.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["testament olographe ou notarié", "testament notaire", "rédiger testament", "succession"],
+    canonicalUrl: `${BASE}/blog/testament-olographe-notarie`,,
+  faqs: [
+    { question: "Un testament olographe a-t-il la même valeur qu&apos;un testament notarié ?", answer: "Oui, les deux ont la même valeur juridique s&apos;ils respectent les conditions de forme. Le testament notarié offre toutefois une sécurité juridique supérieure et un risque de contestation moindre." },
+    { question: "Combien coûte un testament chez le notaire ?", answer: "Un testament authentique coûte environ 115 à 140 € HT, auxquels s&apos;ajoutent les frais d&apos;enregistrement au fichier central des dispositions de dernières volontés (environ 30 €)." },
+    { question: "Peut-on modifier un testament olographe ou notarié ?", answer: "Oui, vous pouvez à tout moment révoquer ou modifier votre testament, qu&apos;il soit olographe ou notarié, en rédigeant un nouveau document daté et signé." },
+  ],
   },
 ];
 

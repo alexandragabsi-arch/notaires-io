@@ -724,8 +724,68 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "pacs-ou-mariage-difference-notaire": () => <Article4 />,
   "premier-rendez-vous-notaire-gratuit": () => <Article5 />,
   "donation-enfants-avant-deces": () => <Article6 />,
+  "testament-olographe-notarie": () => <Article7 />,
 };
 
+
+/* ── Article 7 ─────────────────────────────────────────────────────────── */
+
+function Article7() {
+  return (
+    <>
+      <>
+  <p className="lead">Choisir entre un testament olographe ou notarié est une décision essentielle pour organiser sa succession et protéger ses proches. Ces deux formes de testament reconnues par le droit français présentent des avantages et inconvénients spécifiques qu&apos;il convient de bien comprendre avant de se décider.</p>
+
+  <KeyPoints points={[
+    "Le testament olographe est rédigé seul, à la main, sans coût mais avec un risque de contestation plus élevé",
+    "Le testament notarié (authentique) est rédigé par un notaire devant témoins, offrant une sécurité juridique maximale",
+    "Les deux ont la même valeur juridique mais diffèrent en termes de conservation, coût et fiabilité",
+    "Le testament notarié coûte environ 115 à 140 € HT et est automatiquement inscrit au fichier central des dispositions de dernières volontés"
+  ]} />
+
+  <h2>Le testament olographe : simplicité et liberté</h2>
+  <p>Le testament olographe est la forme la plus répandue en France en raison de sa simplicité de rédaction et de son coût nul. Pour être valide, il doit respecter trois conditions strictes prévues par l&apos;article 970 du Code civil : être entièrement écrit à la main par le testateur, daté précisément (jour, mois, année) et signé de sa main.</p>
+
+  <p>Aucune intervention extérieure n&apos;est requise. Vous pouvez le rédiger chez vous, sur papier libre, à tout moment. Cette liberté constitue son principal atout, mais aussi sa principale faiblesse. En effet, un testament olographe mal rédigé ou imprécis peut être source de contestations longues et coûteuses pour vos héritiers.</p>
+
+  <p>Les risques sont nombreux : perte du document, destruction accidentelle, contestation de l&apos;écriture ou de la signature, formulations ambiguës entraînant des interprétations divergentes, voire annulation pure et simple si une condition de forme n&apos;est pas respectée. Pour limiter ces risques, il est fortement recommandé de déposer votre testament olographe chez un notaire, qui l&apos;inscrira au fichier central des dispositions de dernières volontés (FCDDV) pour environ 30 €.</p>
+
+  <h2>Le testament notarié : sécurité juridique maximale</h2>
+  <p>Le testament notarié, également appelé testament authentique, est rédigé par un notaire en présence de deux témoins ou d&apos;un second notaire. Le testateur dicte ses volontés au notaire qui les retranscrit dans un acte authentique, puis lit le testament au testateur avant signature de toutes les parties.</p>
+
+  <p>Cette forme offre une sécurité juridique inégalée. Le notaire vous conseille sur la validité de vos dispositions, vérifie leur conformité avec les règles successorales (notamment la réserve héréditaire), et s&apos;assure que vos volontés sont exprimées de manière claire et exécutable. Il garantit également votre consentement libre et éclairé, ce qui rend le testament quasi impossible à contester pour vice de forme ou incapacité.</p>
+
+  <p>Le testament authentique est conservé en l&apos;étude notariale et automatiquement inscrit au FCDDV, garantissant qu&apos;il sera retrouvé au moment de la succession. Il est particulièrement recommandé dans les situations complexes : familles recomposées, présence d&apos;un héritier handicapé, transmission d&apos;entreprise, ou volonté de déshériter partiellement un héritier non réservataire.</p>
+
+  <h2>Comparatif : olographe ou notarié, comment choisir ?</h2>
+  <p>Le choix entre un testament olographe ou notarié dépend de votre situation patrimoniale et familiale. Voici les critères déterminants :</p>
+
+  <ul>
+    <li><strong>Coût</strong> : l&apos;olographe est gratuit, le notarié coûte 115 à 140 € HT (hors frais d&apos;inscription au FCDDV).</li>
+    <li><strong>Sécurité juridique</strong> : le notarié est quasi incontestable, l&apos;olographe peut être attaqué pour vice de forme ou interprétation.</li>
+    <li><strong>Conservation</strong> : le notarié est conservé en l&apos;étude, l&apos;olographe peut être perdu ou détruit.</li>
+    <li><strong>Conseil juridique</strong> : seul le notarié bénéficie de l&apos;expertise du notaire pour valider les dispositions.</li>
+    <li><strong>Confidentialité</strong> : l&apos;olographe reste totalement secret, le notarié est connu du notaire et des témoins.</li>
+  </ul>
+
+  <p>Pour un patrimoine modeste et des dispositions simples (par exemple léguer un bien précis à un proche), un testament olographe bien rédigé peut suffire. En revanche, dès que la situation se complique ou que les enjeux financiers sont importants, le testament notarié s&apos;impose comme la solution la plus prudente.</p>
+
+  <h2>Les cas où le testament notarié est indispensable</h2>
+  <p>Certaines dispositions ne peuvent légalement être prises que par testament authentique. C&apos;est notamment le cas de la reconnaissance d&apos;un enfant naturel, de la révocation d&apos;une reconnaissance, ou encore du mandat à effet posthume permettant de désigner un mandataire pour gérer la succession.</p>
+
+  <p>Le testament notarié est également obligatoire lorsque le testateur ne peut pas écrire (handicap, maladie) ou ne parle pas français. Dans ces situations, le notaire adapte la procédure (interprète, témoins supplémentaires) pour garantir la validité de l&apos;acte.</p>
+
+  <p>Enfin, si vous souhaitez prévoir des legs complexes (legs graduels ou résiduels, legs à des associations avec conditions particulières, démembrement de propriété), le recours au notaire est vivement conseillé pour éviter toute ambiguïté qui pourrait conduire à l&apos;invalidation partielle du testament.</p>
+
+  <InternalCTA
+    title="Besoin de conseils pour rédiger votre testament ?"
+    description="Nos notaires partenaires vous accompagnent dans le choix de la forme adaptée et la rédaction de vos dispositions de dernières volontés. Premier rendez-vous offert, en visio ou au cabinet."
+    buttonText="Prendre rendez-vous"
+  />
+</>
+    </>
+  );
+}
 export function getPostContent(slug: string): ReactNode {
   const fn = CONTENT_MAP[slug];
   if (!fn) return null;

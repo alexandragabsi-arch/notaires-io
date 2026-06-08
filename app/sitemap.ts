@@ -92,5 +92,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/blog/donation-enfants-avant-deces`,                                         lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
   ];
 
-  return [...staticPages, ...notairePages, ...seoLandingPages, ...blogPages];
+      { url: `${BASE}/blog/testament-olographe-notarie`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    return [...staticPages, ...notairePages, ...seoLandingPages, ...blogPages];
 }

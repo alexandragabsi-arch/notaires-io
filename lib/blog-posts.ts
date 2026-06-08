@@ -20,6 +20,21 @@ export interface BlogPost {
     { question: "Peut-on modifier un testament olographe ou notarié ?", answer: "Oui, vous pouvez à tout moment révoquer ou modifier votre testament, qu&apos;il soit olographe ou notarié, en rédigeant un nouveau document daté et signé." },
   ],
   },
+  {
+    slug: "assurance-vie-succession-notaire",
+    title: "Assurance vie et succession : rôle du notaire",
+    excerpt: "Assurance vie succession notaire : découvrez quand le notaire intervient, la fiscalité applicable et comment optimiser la transmission à vos bénéficiaires.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["assurance vie succession notaire", "fiscalité assurance vie", "bénéficiaire assurance vie", "transmission patrimoine"],
+    canonicalUrl: `${BASE}/blog/assurance-vie-succession-notaire`,,
+  faqs: [
+    { question: "Faut-il déclarer l&apos;assurance vie au notaire ?", answer: "Oui, même si elle est hors succession civile, le notaire doit en être informé pour vérifier l&apos;absence de primes manifestement exagérées et calculer la fiscalité éventuelle." },
+    { question: "L&apos;assurance vie échappe-t-elle aux droits de succession ?", answer: "Partiellement. Les versements avant 70 ans bénéficient d&apos;un abattement de 152 500 € par bénéficiaire, puis taxation à 20% ou 31,25%. Après 70 ans, abattement global de 30 500 €." },
+    { question: "Le notaire peut-il débloquer une assurance vie ?", answer: "Non, c&apos;est la compagnie d&apos;assurance qui verse les fonds directement aux bénéficiaires désignés, sur présentation de l&apos;acte de décès et des pièces justificatives." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -106,6 +121,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Un testament olographe a-t-il la même valeur qu&apos;un testament notarié ?", answer: "Oui, les deux ont la même valeur juridique s&apos;ils respectent les conditions de forme. Le testament notarié offre toutefois une sécurité juridique supérieure et un risque de contestation moindre." },
     { question: "Combien coûte un testament chez le notaire ?", answer: "Un testament authentique coûte environ 115 à 140 € HT, auxquels s&apos;ajoutent les frais d&apos;enregistrement au fichier central des dispositions de dernières volontés (environ 30 €)." },
     { question: "Peut-on modifier un testament olographe ou notarié ?", answer: "Oui, vous pouvez à tout moment révoquer ou modifier votre testament, qu&apos;il soit olographe ou notarié, en rédigeant un nouveau document daté et signé." },
+  ],
+  },
+  {
+    slug: "assurance-vie-succession-notaire",
+    title: "Assurance vie et succession : rôle du notaire",
+    excerpt: "Assurance vie succession notaire : découvrez quand le notaire intervient, la fiscalité applicable et comment optimiser la transmission à vos bénéficiaires.",
+    date: "2026-06-08",
+    readingTime: 7,
+    category: "Succession",
+    keywords: ["assurance vie succession notaire", "fiscalité assurance vie", "bénéficiaire assurance vie", "transmission patrimoine"],
+    canonicalUrl: `${BASE}/blog/assurance-vie-succession-notaire`,,
+  faqs: [
+    { question: "Faut-il déclarer l&apos;assurance vie au notaire ?", answer: "Oui, même si elle est hors succession civile, le notaire doit en être informé pour vérifier l&apos;absence de primes manifestement exagérées et calculer la fiscalité éventuelle." },
+    { question: "L&apos;assurance vie échappe-t-elle aux droits de succession ?", answer: "Partiellement. Les versements avant 70 ans bénéficient d&apos;un abattement de 152 500 € par bénéficiaire, puis taxation à 20% ou 31,25%. Après 70 ans, abattement global de 30 500 €." },
+    { question: "Le notaire peut-il débloquer une assurance vie ?", answer: "Non, c&apos;est la compagnie d&apos;assurance qui verse les fonds directement aux bénéficiaires désignés, sur présentation de l&apos;acte de décès et des pièces justificatives." },
   ],
   },
 ];

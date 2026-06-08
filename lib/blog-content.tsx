@@ -725,6 +725,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "premier-rendez-vous-notaire-gratuit": () => <Article5 />,
   "donation-enfants-avant-deces": () => <Article6 />,
   "testament-olographe-notarie": () => <Article7 />,
+  "assurance-vie-succession-notaire": () => <Article8 />,
 };
 
 
@@ -780,6 +781,74 @@ function Article7() {
   <InternalCTA
     title="Besoin de conseils pour rédiger votre testament ?"
     description="Nos notaires partenaires vous accompagnent dans le choix de la forme adaptée et la rédaction de vos dispositions de dernières volontés. Premier rendez-vous offert, en visio ou au cabinet."
+    buttonText="Prendre rendez-vous"
+  />
+</>
+    </>
+  );
+}
+
+/* ── Article 8 ─────────────────────────────────────────────────────────── */
+
+function Article8() {
+  return (
+    <>
+      <>
+  <p className="lead">L&apos;assurance vie succession notaire est un sujet incontournable pour quiconque souhaite transmettre un patrimoine de manière optimisée. Bien que l&apos;assurance vie soit juridiquement hors succession, le notaire joue un rôle essentiel dans sa déclaration, sa fiscalité et la protection des héritiers réservataires.</p>
+
+  <KeyPoints items={[
+    "L&apos;assurance vie est hors succession civile mais doit être déclarée au notaire",
+    "Abattement de 152 500 € par bénéficiaire pour les versements avant 70 ans",
+    "Le notaire vérifie l&apos;absence de primes manifestement exagérées",
+    "La clause bénéficiaire conditionne la transmission et la fiscalité"
+  ]} />
+
+  <h2>Le rôle du notaire dans la transmission d&apos;une assurance vie</h2>
+  <p>Contrairement à une idée répandue, l&apos;assurance vie ne fait pas partie de la succession civile du défunt. Les capitaux sont versés directement aux bénéficiaires désignés dans la clause bénéficiaire, sans passer par le notaire. Pourtant, ce dernier conserve un rôle central dans plusieurs situations.</p>
+  <p>Le notaire doit être informé de l&apos;existence des contrats d&apos;assurance vie afin de :</p>
+  <ul>
+    <li>Vérifier que les primes versées ne sont pas <strong>manifestement exagérées</strong> au regard du patrimoine et des revenus du défunt</li>
+    <li>Contrôler le respect de la <strong>réserve héréditaire</strong> des enfants ou du conjoint</li>
+    <li>Établir la <strong>déclaration fiscale</strong> nécessaire au calcul des droits éventuels</li>
+    <li>Délivrer aux bénéficiaires une <strong>attestation</strong> pour la compagnie d&apos;assurance</li>
+  </ul>
+  <p>En cas de litige entre héritiers, le notaire peut être amené à proposer une réintégration des primes dans la succession si elles sont jugées excessives par rapport au train de vie du défunt.</p>
+
+  <h2>La fiscalité de l&apos;assurance vie en succession</h2>
+  <p>La fiscalité dépend essentiellement de l&apos;âge du souscripteur au moment des versements. Cette distinction est fondamentale pour anticiper la transmission.</p>
+
+  <h3>Versements effectués avant 70 ans (article 990 I du CGI)</h3>
+  <p>Chaque bénéficiaire profite d&apos;un abattement individuel de <strong>152 500 €</strong>. Au-delà :</p>
+  <ul>
+    <li>Taxation à <strong>20%</strong> jusqu&apos;à 700 000 € après abattement</li>
+    <li>Taxation à <strong>31,25%</strong> au-delà de 700 000 €</li>
+  </ul>
+  <p>Cet avantage explique pourquoi l&apos;assurance vie reste l&apos;un des outils de transmission les plus utilisés en France.</p>
+
+  <h3>Versements effectués après 70 ans (article 757 B du CGI)</h3>
+  <p>L&apos;abattement est cette fois <strong>global</strong> de 30 500 € à partager entre tous les bénéficiaires. La fraction des primes excédant ce seuil est réintégrée dans l&apos;actif successoral et soumise aux droits de succession classiques. En revanche, les <strong>intérêts et plus-values</strong> restent totalement exonérés.</p>
+
+  <h2>La clause bénéficiaire : un élément stratégique</h2>
+  <p>La rédaction de la clause bénéficiaire conditionne toute la transmission. Une clause mal rédigée peut entraîner des conséquences fiscales lourdes ou des conflits familiaux. Le notaire peut vous aider à rédiger une clause adaptée à votre situation :</p>
+  <ul>
+    <li><strong>Clause standard</strong> : &quot;mon conjoint, à défaut mes enfants nés ou à naître, vivants ou représentés, à défaut mes héritiers&quot;</li>
+    <li><strong>Clause démembrée</strong> : usufruit au conjoint, nue-propriété aux enfants — optimise la fiscalité</li>
+    <li><strong>Clause à options</strong> : permet au bénéficiaire principal de choisir la quotité qu&apos;il accepte</li>
+  </ul>
+  <p>Il est également possible de déposer la clause bénéficiaire chez le notaire pour garantir sa confidentialité et éviter qu&apos;elle soit modifiée frauduleusement.</p>
+
+  <h2>Primes manifestement exagérées : attention au piège</h2>
+  <p>L&apos;article L132-13 du Code des assurances permet aux héritiers réservataires de demander la <strong>réintégration des primes</strong> dans la succession si elles sont jugées disproportionnées. Les juges apprécient ce caractère au cas par cas en fonction de :</p>
+  <ul>
+    <li>L&apos;âge du souscripteur au moment des versements</li>
+    <li>Sa situation patrimoniale et familiale</li>
+    <li>L&apos;utilité économique de l&apos;opération</li>
+  </ul>
+  <p>Si la disproportion est avérée, les primes excessives réintègrent l&apos;actif successoral et sont soumises aux règles de la <strong>réserve héréditaire</strong> et aux droits de succession. Un conseil notarial préventif évite ce risque.</p>
+
+  <InternalCTA
+    title="Optimisez la transmission de votre assurance vie"
+    description="Nos notaires partenaires vous conseillent sur la rédaction de votre clause bénéficiaire et la fiscalité applicable. 1er rendez-vous offert."
     buttonText="Prendre rendez-vous"
   />
 </>

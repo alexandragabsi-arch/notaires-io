@@ -1,13 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
   User,
-  Mail,
-  Phone,
-  MapPin,
   Plus,
   Trash2,
   ChevronRight,
@@ -16,7 +13,12 @@ import {
   CalendarClock,
   Users,
   Download,
+  FileText,
+  Upload,
+  FolderOpen,
+  Archive,
 } from "lucide-react";
+import JSZip from "jszip";
 
 /* ─── Types ──────────────────────────────────────────────────────────────── */
 export type Participant = {
@@ -86,7 +88,61 @@ function defaultRoles(dossier: string): [string, string] {
   return [roles[0], roles[1] ?? roles[0]];
 }
 
-type Step = "dossier" | "participants" | "confirm" | "success";
+type Step = "dossier" | "participants" | "documents" | "confirm" | "success";
+
+/* ─── Documents requis par type de dossier ───────────────────────────────── */
+type DocType = { id: string; label: string; required: boolean; accept: string };
+
+const DOCS_COMMUNS: DocType[] = [
+  { id: "cni", label: "Pièce d'identité (CNI / passeport)", required: true, accept: "image/*,.pdf" },
+  { id: "domicile", label: "Justificatif de domicile -3 mois", required: true, accept: "image/*,.pdf" },
+];
+
+const DOCS_BY_DOSSIER: Record<string, DocType[]> = {
+  "Acquisition immobilière": [
+    ...DOCS_COMMUNS,
+    { id: "compromis", label: "Compromis / promesse de vente", required: false, accept: ".pdf,.doc,.docx" },
+    { id: "financement", label: "Plan de financement / accord de prêt", required: false, accept: ".pdf" },
+  ],
+  "Vente immobilière": [
+    ...DOCS_COMMUNS,
+    { id: "titre", label: "Titre de propriété", required: true, accept: ".pdf" },
+    { id: "diagnostics", label: "Diagnostics immobiliers (DPE, amiante…)", required: false, accept: ".pdf,.zip" },
+  ],
+  "Succession / héritage": [
+    ...DOCS_COMMUNS,
+    { id: "deces", label: "Acte de décès", required: true, accept: ".pdf,image/*" },
+    { id: "livret", label: "Livret de famille", required: true, accept: ".pdf,image/*" },
+    { id: "testament", label: "Testament (si existant)", required: false, accept: ".pdf,image/*" },
+  ],
+  "Donation": [
+    ...DOCS_COMMUNS,
+    { id: "titre", label: "Titre de propriété (si donation immo.)", required: false, accept: ".pdf" },
+  ],
+  "Mariage / PACS": [
+    ...DOCS_COMMUNS,
+    { id: "naissance", label: "Acte de naissance -3 mois", required: true, accept: ".pdf,image/*" },
+    { id: "livret", label: "Livret de famille (si existant)", required: false, accept: ".pdf,image/*" },
+  ],
+  "Divorce": [
+    ...DOCS_COMMUNS,
+    { id: "livret", label: "Livret de famille", required: true, accept: ".pdf,image/*" },
+    { id: "mariage", label: "Acte de mariage", required: true, accept: ".pdf,image/*" },
+    { id: "convention", label: "Convention de divorce (si établie)", required: false, accept: ".pdf" },
+  ],
+  "Création de société": [
+    ...DOCS_COMMUNS,
+    { id: "statuts", label: "Projet de statuts", required: false, accept: ".pdf,.doc,.docx" },
+    { id: "kbis", label: "Kbis société existante (si apport)", required: false, accept: ".pdf" },
+  ],
+  "Cession de parts sociales": [
+    ...DOCS_COMMUNS,
+    { id: "statuts", label: "Statuts de la société", required: true, accept: ".pdf" },
+    { id: "kbis", label: "Kbis récent (-3 mois)", required: true, accept: ".pdf" },
+  ],
+  "Rédaction d'acte": DOCS_COMMUNS,
+  "Conseil juridique": DOCS_COMMUNS,
+};
 
 /* ─── Champ de saisie ────────────────────────────────────────────────────── */
 function Field({
@@ -206,6 +262,43 @@ function downloadCSV(content: string, filename: string) {
   URL.revokeObjectURL(url);
 }
 
+async function downloadZip(
+  participants: Participant[],
+  docs: Record<string, File>,
+  meta: { dossier: string; slot: string; notaire: string }
+) {
+  const zip = new JSZip();
+  const nomPrincipal = participants[0]?.nom?.toUpperCase() || "CLIENT";
+
+  // CSV fiches clients
+  const headers = "Civilité;Prénom;Nom;Date de naissance;Adresse;Email;Téléphone;Rôle;Nature du dossier;Rendez-vous;Notaire";
+  const rows = participants.map((p) =>
+    [p.civilite, p.prenom, p.nom.toUpperCase(), p.dateNaissance,
+      p.adresse, p.email, p.telephone, p.role, meta.dossier, meta.slot, meta.notaire]
+      .map((v) => `"${(v ?? "").replace(/"/g, '""')}"`)
+      .join(";")
+  );
+  const csvContent = "﻿" + headers + "\n" + rows.join("\n");
+  zip.file(`fiches-clients-${nomPrincipal}.csv`, csvContent);
+
+  // Documents — nommés au format Genapi : TYPE_NOM_Prénom.ext
+  const docFolder = zip.folder("documents");
+  for (const [docId, file] of Object.entries(docs)) {
+    const p = participants[0];
+    const ext = file.name.split(".").pop() ?? "pdf";
+    const safeName = `${docId.toUpperCase()}_${(p?.nom || "CLIENT").toUpperCase()}_${p?.prenom || ""}.${ext}`;
+    docFolder?.file(safeName, file);
+  }
+
+  const blob = await zip.generateAsync({ type: "blob" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `dossier-${nomPrincipal}-${meta.dossier.replace(/ /g, "-").toLowerCase()}.zip`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 /* ─── Composant principal ────────────────────────────────────────────────── */
 export default function BookingModal({
   notaireId,
@@ -227,6 +320,8 @@ export default function BookingModal({
     const [r1, r2] = defaultRoles(DOSSIERS[0]);
     return [newParticipant(r1), newParticipant(r2)];
   });
+  const [docs, setDocs] = useState<Record<string, File>>({});
+  const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   function changeDossier(d: string) {
     setDossier(d);
@@ -253,22 +348,7 @@ export default function BookingModal({
 
   function exportAll() {
     const meta = { dossier, slot: slotLabel, notaire: notaireNom };
-    if (participants.length === 1) {
-      const p = participants[0];
-      downloadCSV(participantToCSV(p, meta), `fiche-${p.nom || "client"}.csv`);
-    } else {
-      // Plusieurs participants → fichier ZIP via JSZip si dispo, sinon CSV groupé
-      // Pour l'instant : CSV multi-lignes
-      const headers = "Civilité;Prénom;Nom;Date de naissance;Adresse;Email;Téléphone;Rôle;Nature du dossier;Rendez-vous;Notaire";
-      const rows = participants.map((p) =>
-        [p.civilite, p.prenom, p.nom.toUpperCase(), p.dateNaissance,
-          p.adresse, p.email, p.telephone, p.role, dossier, slotLabel, notaireNom]
-          .map((v) => `"${(v ?? "").replace(/"/g, '""')}"`)
-          .join(";")
-      );
-      const csv = headers + "\n" + rows.join("\n");
-      downloadCSV(csv, `dossier-${dossier.replace(/ /g, "-").toLowerCase()}.csv`);
-    }
+    downloadZip(participants, docs, meta);
   }
 
   return (
@@ -294,11 +374,12 @@ export default function BookingModal({
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-[var(--color-border-soft)] shrink-0">
           <div>
             <div className="text-[11px] font-bold text-[var(--color-accent)] uppercase tracking-wide mb-0.5">
-              {step === "dossier" ? "Étape 1 / 3" : step === "participants" ? "Étape 2 / 3" : step === "confirm" ? "Étape 3 / 3" : "✓ Confirmé"}
+              {step === "dossier" ? "Étape 1 / 4" : step === "participants" ? "Étape 2 / 4" : step === "documents" ? "Étape 3 / 4" : step === "confirm" ? "Étape 4 / 4" : "✓ Confirmé"}
             </div>
             <div className="text-[16px] font-bold text-[var(--color-text-strong)]">
               {step === "dossier" && "Nature du dossier"}
               {step === "participants" && "Participants au rendez-vous"}
+              {step === "documents" && "Documents à fournir"}
               {step === "confirm" && "Récapitulatif"}
               {step === "success" && "Rendez-vous confirmé !"}
             </div>
@@ -406,7 +487,88 @@ export default function BookingModal({
               </motion.div>
             )}
 
-            {/* ── Étape 3 : Récap ── */}
+            {/* ── Étape 3 : Documents ── */}
+            {step === "documents" && (
+              <motion.div key="documents" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                <div className="flex items-center gap-2 mb-1 text-[12px] text-[var(--color-muted)]">
+                  <FolderOpen className="w-4 h-4 shrink-0" strokeWidth={2} />
+                  Documents pour <strong className="text-[var(--color-text-strong)] ml-1">{dossier}</strong>
+                </div>
+                <p className="text-[12px] text-[var(--color-muted)] mb-4">
+                  Ces fichiers seront transmis au notaire et nommés automatiquement au format Genapi / Inot / Fichorga.
+                </p>
+
+                <div className="flex flex-col gap-3">
+                  {(DOCS_BY_DOSSIER[dossier] ?? DOCS_COMMUNS).map((doc) => {
+                    const file = docs[doc.id];
+                    return (
+                      <div key={doc.id} className={`rounded-2xl border p-4 transition-colors ${file ? "border-[var(--color-success)] bg-[var(--color-tint-green)]" : "border-[var(--color-border-soft)] bg-white"}`}>
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                            {file
+                              ? <Check className="w-5 h-5 text-[var(--color-success)] shrink-0" strokeWidth={2.5} />
+                              : <FileText className="w-5 h-5 text-[var(--color-muted)] shrink-0" strokeWidth={2} />
+                            }
+                            <div className="min-w-0">
+                              <div className="text-[13px] font-semibold text-[var(--color-text-strong)] truncate">
+                                {doc.label}
+                                {doc.required && <span className="text-red-400 ml-1 text-[10px]">obligatoire</span>}
+                              </div>
+                              {file && (
+                                <div className="text-[11px] text-[var(--color-success)] truncate">{file.name}</div>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 shrink-0">
+                            {file && (
+                              <button
+                                type="button"
+                                onClick={() => setDocs(prev => { const n = {...prev}; delete n[doc.id]; return n; })}
+                                className="w-7 h-7 rounded-full flex items-center justify-center text-[var(--color-muted)] hover:bg-red-50 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" strokeWidth={2.5} />
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => fileInputRefs.current[doc.id]?.click()}
+                              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] text-[12px] font-semibold transition-colors ${
+                                file
+                                  ? "bg-white text-[var(--color-success)] border border-[var(--color-success)]"
+                                  : "bg-[var(--color-accent)] text-white"
+                              }`}
+                            >
+                              <Upload className="w-3.5 h-3.5" strokeWidth={2.5} />
+                              {file ? "Remplacer" : "Choisir"}
+                            </button>
+                            <input
+                              ref={el => { fileInputRefs.current[doc.id] = el; }}
+                              type="file"
+                              accept={doc.accept}
+                              className="hidden"
+                              onChange={(e) => {
+                                const f = e.target.files?.[0];
+                                if (f) setDocs(prev => ({ ...prev, [doc.id]: f }));
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-4 flex items-start gap-2 text-[12px] text-[var(--color-muted)] bg-[var(--color-tint-blue)] rounded-xl px-3 py-2.5">
+                  <Archive className="w-4 h-4 text-[var(--color-accent)] shrink-0 mt-0.5" strokeWidth={2} />
+                  <span>
+                    Les fichiers seront nommés automatiquement <strong>TYPE_NOM_Prénom.pdf</strong> pour import direct dans Genapi, Inot ou Fichorga.
+                  </span>
+                </div>
+              </motion.div>
+            )}
+
+            {/* ── Étape 4 : Récap ── */}
             {step === "confirm" && (
               <motion.div key="confirm" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                 <div className="flex flex-col gap-3">
@@ -448,13 +610,13 @@ export default function BookingModal({
                 <button
                   type="button"
                   onClick={exportAll}
-                  className="inline-flex items-center gap-2 bg-[var(--color-tint-blue)] text-[var(--color-primary)] px-5 py-2.5 rounded-[10px] text-[13px] font-semibold hover:bg-[var(--color-accent-soft)] transition-colors"
+                  className="inline-flex items-center gap-2 bg-[var(--color-primary)] text-white px-5 py-3 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-all"
                 >
                   <Download className="w-4 h-4" strokeWidth={2.5} />
-                  Télécharger {participants.length > 1 ? "les fiches participants" : "la fiche client"}
+                  Télécharger le dossier complet (.zip)
                 </button>
                 <p className="text-[11px] text-[var(--color-muted)] mt-2">
-                  Format CSV · compatible Genapi / Inot / Fichorga
+                  Fiches CSV + {Object.keys(docs).length} document{Object.keys(docs).length > 1 ? "s" : ""} · nommés Genapi / Inot / Fichorga
                 </p>
               </motion.div>
             )}
@@ -468,7 +630,11 @@ export default function BookingModal({
             {step !== "dossier" && (
               <button
                 type="button"
-                onClick={() => setStep(step === "participants" ? "dossier" : "participants")}
+                onClick={() => {
+                  if (step === "participants") setStep("dossier");
+                  else if (step === "documents") setStep("participants");
+                  else if (step === "confirm") setStep("documents");
+                }}
                 className="flex items-center gap-1.5 px-4 py-3 rounded-[10px] border border-[var(--color-border)] text-[13px] font-semibold text-[var(--color-muted)] hover:bg-[var(--color-surface)] transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
@@ -480,13 +646,15 @@ export default function BookingModal({
               disabled={step === "participants" && !mainOk}
               onClick={() => {
                 if (step === "dossier") setStep("participants");
-                else if (step === "participants") setStep("confirm");
+                else if (step === "participants") setStep("documents");
+                else if (step === "documents") setStep("confirm");
                 else if (step === "confirm") setStep("success");
               }}
               className="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)] disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:-translate-y-0.5"
             >
               {step === "dossier" && <>Participants <ChevronRight className="w-4 h-4" strokeWidth={2.5} /></>}
-              {step === "participants" && <>Récapitulatif <ChevronRight className="w-4 h-4" strokeWidth={2.5} /></>}
+              {step === "participants" && <>Documents <ChevronRight className="w-4 h-4" strokeWidth={2.5} /></>}
+              {step === "documents" && <>Récapitulatif <ChevronRight className="w-4 h-4" strokeWidth={2.5} /></>}
               {step === "confirm" && <>Confirmer le rendez-vous <Check className="w-4 h-4" strokeWidth={2.5} /></>}
             </button>
           </div>

@@ -89,3 +89,61 @@ html {
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+
+/* ============================================
+   ARTICLES DE BLOG — Mise en forme améliorée
+   ============================================ */
+
+/* H2 : titres de section principaux */
+.prose-article h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.1rem;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    padding-bottom: 0.5rem;
+    border-bottom: 2.5px solid var(--color-accent);
+    display: block;
+}
+
+/* H3 : sous-titres (ex: étapes numérotées) */
+.prose-article h3 {
+    margin-top: 2rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    padding: 0.5rem 0.9rem;
+    background: var(--color-tint-blue);
+    border-left: 4px solid var(--color-accent);
+    border-radius: 6px;
+    display: block;
+}
+
+/* Paragraphes : respiration et interligne */
+.prose-article p {
+    margin-bottom: 1.1rem;
+    line-height: 1.85;
+    font-size: 1rem;
+}
+
+/* Listes à puces : espacement entre les items */
+.prose-article ul {
+    margin-top: 0.6rem;
+    margin-bottom: 1.3rem;
+    padding-left: 1.4rem;
+}
+
+.prose-article ul li {
+    margin-bottom: 0.6rem;
+    line-height: 1.75;
+    list-style-type: disc;
+}
+
+/* Paragraphe d'intro (lead) */
+.prose-article p.lead {
+    font-size: 1.08rem;
+    line-height: 1.9;
+    margin-bottom: 1.6rem;
+}

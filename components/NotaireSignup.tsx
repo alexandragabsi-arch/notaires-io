@@ -11,6 +11,7 @@ import {
   Lock,
   Landmark,
   MapPin,
+  Globe,
   Camera,
   ArrowRight,
   ArrowLeft,
@@ -22,12 +23,15 @@ import {
   MessageCircle,
   Copy,
   QrCode,
+  CreditCard,
+  Loader2,
+  ShieldCheck,
 } from "lucide-react";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://notaires.io";
 
-const STEPS = ["Votre compte", "Votre étude", "Votre profil", "Récapitulatif"];
+const STEPS = ["Votre compte", "Votre étude", "Votre profil", "Récapitulatif", "Paiement"];
 
 const SPECIALTIES = [
   "Immobilier",
@@ -44,6 +48,8 @@ export default function NotaireSignup() {
   const [step, setStep] = useState(0);
   const [done, setDone] = useState(false);
   const [savedProfile, setSavedProfile] = useState<ListingNotaire | null>(null);
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState("");
 
   // Compte
   const [prenom, setPrenom] = useState("");
@@ -56,12 +62,14 @@ export default function NotaireSignup() {
   const [etude, setEtude] = useState("");
   const [adresse, setAdresse] = useState("");
   const [ville, setVille] = useState("");
+  const [website, setWebsite] = useState("");
   const [specs, setSpecs] = useState<string[]>([]);
   const [langs, setLangs] = useState<string[]>([]);
   const [role, setRole] = useState<"associé" | "salarié" | "">("");
 
   // Profil public
-  const [photo, setPhoto] = useState<string | null>(null);
+  const [photo, setPhoto] = useState<string | null>(null);    // data URL pour l'aperçu
+  const [photoFile, setPhotoFile] = useState<File | null>(null); // fichier brut pour upload Storage
   const [bio, setBio] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -90,28 +98,56 @@ export default function NotaireSignup() {
   function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    setPhotoFile(file);  // garde le fichier brut pour l'upload Supabase Storage
     const reader = new FileReader();
-    reader.onload = () => setPhoto(reader.result as string);
+    reader.onload = () => setPhoto(reader.result as string);  // aperçu local immédiat
     reader.readAsDataURL(file);
   }
 
   const isLast = step === STEPS.length - 1;
 
-  async function finalize() {
-    // Enregistre dans localStorage (instantané) ET Supabase (visible par tous).
-    const profile = await addProfile({
-      prenom,
-      nom,
-      ville,
-      etude,
-      specialties: specs,
-      languages: langs,
-      photo,
-      bio,
-      role: role || undefined,
-    });
-    setSavedProfile(profile);
-    setDone(true);
+  async function goToPayment() {
+    setPaying(true);
+    setPayError("");
+    try {
+      // 1. Enregistre le profil dans Supabase (upload photo vers Storage si dispo)
+      const profile = await addProfile({
+        prenom,
+        nom,
+        ville,
+        etude,
+        website: website.trim() || undefined,
+        specialties: specs,
+        languages: langs,
+        photo,                              // data URL base64 — fallback si upload échoue
+        photoFile: photoFile ?? undefined,  // fichier brut → Supabase Storage
+        bio,
+        role: role || undefined,
+      });
+      setSavedProfile(profile);
+
+      // 2. Crée la session Stripe Checkout
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          notaire: fullName,
+          etude,
+          email,
+        }),
+      });
+      const data = (await res.json()) as { url?: string; error?: string };
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setPayError(data.error ?? "Erreur lors de la création du paiement. Veuillez réessayer.");
+        setPaying(false);
+      }
+    } catch {
+      setPayError("Une erreur réseau est survenue. Veuillez réessayer.");
+      setPaying(false);
+    }
   }
 
   return (
@@ -287,6 +323,15 @@ export default function NotaireSignup() {
                           placeholder="Paris 8ème"
                         />
                       </Field>
+                      <Field label="Site web de l'étude (facultatif)">
+                        <IconInput
+                          icon={Globe}
+                          type="url"
+                          value={website}
+                          onChange={setWebsite}
+                          placeholder="https://www.mon-etude.fr"
+                        />
+                      </Field>
                       <div>
                         <span className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-2 block">
                           Vos spécialités
@@ -380,7 +425,7 @@ export default function NotaireSignup() {
                             {photo && (
                               <button
                                 type="button"
-                                onClick={() => setPhoto(null)}
+                                onClick={() => { setPhoto(null); setPhotoFile(null); }}
                                 className="inline-flex items-center gap-2 text-[13px] font-medium text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors"
                               >
                                 <Trash2 className="w-4 h-4" strokeWidth={2} />
@@ -422,6 +467,7 @@ export default function NotaireSignup() {
                           [adresse, ville].filter(Boolean).join(", ") || "—"
                         }
                       />
+                      {website.trim() && <Recap label="Site web" value={website.trim()} />}
                       <Recap
                         label="Spécialités"
                         value={specs.length ? specs.join(" · ") : "—"}
@@ -435,10 +481,8 @@ export default function NotaireSignup() {
                         value={photo ? "Ajoutée" : "À ajouter plus tard"}
                       />
                       <p className="text-[13px] text-[var(--color-muted)] leading-relaxed mt-2 text-justify hyphens-auto">
-                        En finalisant, vous créez votre profil. L'activation du
-                        référencement et l'espace sécurisé arrivent très
-                        bientôt — notre équipe vous contacte pour la mise en
-                        ligne de votre étude.
+                        Vérifiez vos informations puis passez au paiement.
+                        Votre profil sera activé dès la confirmation de votre abonnement.
                       </p>
                       <label className="flex items-start gap-2.5 mt-2 cursor-pointer">
                         <input
@@ -470,41 +514,135 @@ export default function NotaireSignup() {
                       </label>
                     </div>
                   )}
+
+                  {/* Étape 5 — Paiement */}
+                  {step === 4 && (
+                    <div className="flex flex-col gap-5">
+                      {/* Badge offre */}
+                      <div className="text-center">
+                        <span className="inline-flex items-center gap-1.5 bg-[var(--color-tint-green)] text-[var(--color-success)] text-[12px] font-bold px-3 py-1.5 rounded-full">
+                          🎉 Offre de lancement
+                        </span>
+                      </div>
+
+                      {/* Carte tarif */}
+                      <div className="bg-[var(--color-tint-blue)] rounded-2xl p-5 border border-[var(--color-border-soft)]">
+                        <div className="flex items-baseline justify-between mb-1">
+                          <div className="flex items-baseline gap-1">
+                            <span className="serif text-[36px] font-bold text-[var(--color-primary)] leading-none">99</span>
+                            <span className="text-[18px] font-bold text-[var(--color-primary)]">€</span>
+                            <span className="text-[13px] text-[var(--color-muted)] ml-1">HT/mois</span>
+                          </div>
+                          <span className="text-[13px] text-[var(--color-muted)] font-semibold">pendant 3 mois</span>
+                        </div>
+                        <p className="text-[13px] text-[var(--color-muted)]">
+                          puis <strong className="text-[var(--color-text-strong)]">119 € HT/mois</strong> · résiliable à tout moment
+                        </p>
+                      </div>
+
+                      {/* Ce qui est inclus */}
+                      <ul className="flex flex-col gap-2.5">
+                        {[
+                          "Profil référencé dans l'annuaire",
+                          "Prise de RDV en ligne (visio ou cabinet)",
+                          "QR code personnalisé inclus",
+                          "Tableau de bord des rendez-vous",
+                          "Rappels e-mail automatiques clients",
+                          "Proposition d'honoraires intégrée",
+                        ].map((item) => (
+                          <li key={item} className="flex items-center gap-2.5 text-[14px] text-[var(--color-text-strong)]">
+                            <Check className="w-4 h-4 text-[var(--color-success)] shrink-0" strokeWidth={2.5} />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+
+                      {/* Erreur paiement */}
+                      {payError && (
+                        <p className="text-[13px] text-red-600 bg-red-50 rounded-xl px-4 py-3 border border-red-200">
+                          {payError}
+                        </p>
+                      )}
+
+                      {/* Bouton paiement */}
+                      <button
+                        type="button"
+                        onClick={goToPayment}
+                        disabled={paying}
+                        className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-4 rounded-[12px] text-[16px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                      >
+                        {paying ? (
+                          <>
+                            <Loader2 className="w-5 h-5 animate-spin" strokeWidth={2.5} />
+                            Redirection vers le paiement…
+                          </>
+                        ) : (
+                          <>
+                            <CreditCard className="w-5 h-5" strokeWidth={2.5} />
+                            Payer et activer mon profil
+                          </>
+                        )}
+                      </button>
+
+                      {/* Sécurité */}
+                      <div className="flex items-center justify-center gap-2 text-[12px] text-[var(--color-muted)]">
+                        <ShieldCheck className="w-4 h-4 shrink-0" strokeWidth={2} />
+                        Paiement 100 % sécurisé par Stripe · Aucun engagement
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
               </AnimatePresence>
 
-              {/* Navigation */}
-              <div className="flex items-center justify-between gap-3 mt-8">
-                <button
-                  type="button"
-                  onClick={() => setStep((s) => Math.max(0, s - 1))}
-                  disabled={step === 0}
-                  className="inline-flex items-center gap-2 text-[14px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors disabled:opacity-0"
-                >
-                  <ArrowLeft className="w-[17px] h-[17px]" strokeWidth={2.5} />
-                  Retour
-                </button>
-                {isLast ? (
+              {/* Navigation (masquée à l'étape paiement — le bouton est dans le contenu) */}
+              {!isLast && (
+                <div className="flex items-center justify-between gap-3 mt-8">
                   <button
                     type="button"
-                    onClick={finalize}
-                    disabled={!accept}
-                    className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                    onClick={() => setStep((s) => Math.max(0, s - 1))}
+                    disabled={step === 0}
+                    className="inline-flex items-center gap-2 text-[14px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors disabled:opacity-0"
                   >
-                    Finaliser mon inscription
-                    <Check className="w-[18px] h-[18px]" strokeWidth={2.5} />
+                    <ArrowLeft className="w-[17px] h-[17px]" strokeWidth={2.5} />
+                    Retour
                   </button>
-                ) : (
+                  {step === 3 ? (
+                    // Récapitulatif → vers paiement
+                    <button
+                      type="button"
+                      onClick={() => setStep(4)}
+                      disabled={!accept}
+                      className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                    >
+                      Continuer vers le paiement
+                      <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setStep((s) => s + 1)}
+                      className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+                    >
+                      Continuer
+                      <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+                    </button>
+                  )}
+                </div>
+              )}
+              {/* Retour depuis l'étape paiement */}
+              {isLast && (
+                <div className="mt-4 flex justify-start">
                   <button
                     type="button"
-                    onClick={() => setStep((s) => s + 1)}
-                    className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+                    onClick={() => setStep(3)}
+                    disabled={paying}
+                    className="inline-flex items-center gap-2 text-[14px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors disabled:opacity-0"
                   >
-                    Continuer
-                    <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+                    <ArrowLeft className="w-[17px] h-[17px]" strokeWidth={2.5} />
+                    Retour au récapitulatif
                   </button>
-                )}
-              </div>
+                </div>
+              )}
             </div>
 
             {/* Colonne aperçu profil (en direct) */}

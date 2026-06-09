@@ -12,11 +12,35 @@ export interface SignupProfile {
   nom: string;
   ville: string;
   etude?: string;
+  website?: string;          // URL du site de l'étude
   specialties: string[];
   languages?: string[];
-  photo?: string | null;
+  photo?: string | null;    // data URL (preview) ou URL publique Supabase Storage
+  photoFile?: File;          // fichier brut → uploadé vers Supabase Storage
   bio?: string;
   role?: "associé" | "salarié";
+}
+
+/**
+ * Upload une photo vers le bucket Supabase Storage "notaire-photos".
+ * Retourne l'URL publique si succès, null sinon (le bucket n'existe pas encore, etc.).
+ *
+ * ⚠️  Créer le bucket manuellement dans Supabase Dashboard :
+ *     Storage → New bucket → "notaire-photos" → ✅ Public bucket
+ */
+async function uploadPhoto(id: string, file: File): Promise<string | null> {
+  try {
+    const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
+    const path = `${id}.${ext}`;
+    const { error } = await supabase.storage
+      .from("notaire-photos")
+      .upload(path, file, { upsert: true, contentType: file.type });
+    if (error) return null;
+    const { data } = supabase.storage.from("notaire-photos").getPublicUrl(path);
+    return data.publicUrl ?? null;
+  } catch {
+    return null;
+  }
 }
 
 const COLORS: ListingNotaire["color"][] = ["default", "green", "purple"];
@@ -53,6 +77,7 @@ export async function getRemoteProfiles(): Promise<ListingNotaire[]> {
     color: (row.color as ListingNotaire["color"]) || "default",
     city: row.city as string,
     officeName: row.office_name as string | undefined,
+    website: row.website as string | undefined,
     address: row.address as string | undefined,
     phone: row.phone as string | undefined,
     role: row.role as "associé" | "salarié" | undefined,
@@ -80,6 +105,7 @@ function toListing(p: SignupProfile): ListingNotaire {
     name: fullName ? `Me ${fullName}` : "Me Nouveau notaire",
     city: p.ville.trim() || "France",
     officeName: p.etude?.trim() || undefined,
+    website: p.website?.trim() || undefined,
     specialties: p.specialties.length ? p.specialties : ["Notariat"],
     languages: p.languages?.length ? p.languages : undefined,
     next: "Sur demande",
@@ -93,6 +119,13 @@ function toListing(p: SignupProfile): ListingNotaire {
 // Enregistre un nouveau profil : localStorage (instantané) + Supabase (persistant).
 export async function addProfile(p: SignupProfile): Promise<ListingNotaire> {
   const entry = toListing(p);
+
+  // Upload photo vers Supabase Storage si un fichier est fourni
+  if (p.photoFile) {
+    const url = await uploadPhoto(entry.id, p.photoFile);
+    if (url) entry.photo = url; // remplace le base64 par l'URL publique
+    // sinon entry.photo reste le data URL base64 (fallback)
+  }
 
   // 1. localStorage pour affichage immédiat
   if (typeof window !== "undefined") {
@@ -121,6 +154,7 @@ export async function addProfile(p: SignupProfile): Promise<ListingNotaire> {
     color: entry.color,
     city: entry.city,
     office_name: entry.officeName ?? null,
+    website: entry.website ?? null,
     address: null,
     phone: null,
     role: entry.role ?? null,
@@ -135,12 +169,14 @@ export async function addProfile(p: SignupProfile): Promise<ListingNotaire> {
 
 // ── Revendication / enrichissement d'un profil existant ─────────────────────
 export interface ClaimData {
-  photo?: string | null;
+  photo?: string | null;    // URL ou data URL (fallback)
+  photoFile?: File;          // fichier brut → upload Storage
   bio?: string;
   specialties?: string[];
   languages?: string[];
   phone?: string;
   address?: string;
+  website?: string;
 }
 
 /**
@@ -148,6 +184,14 @@ export interface ClaimData {
  * Upsert dans Supabase avec l'ID d'origine → priorité sur la fiche scrappée.
  */
 export async function claimProfile(id: string, name: string, city: string, data: ClaimData): Promise<void> {
+  let photoUrl: string | null = data.photo ?? null;
+
+  // Upload photo si un fichier est fourni
+  if (data.photoFile) {
+    const url = await uploadPhoto(id, data.photoFile);
+    if (url) photoUrl = url;
+  }
+
   await supabase.from("notaire_profiles").upsert({
     id,
     name,
@@ -155,13 +199,14 @@ export async function claimProfile(id: string, name: string, city: string, data:
     initials: name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map((w: string) => w[0]).join("").toUpperCase() || "N",
     color: "default",
     office_name: null,
-    address: data.address ?? null,
-    phone: data.phone ?? null,
+    website: data.website?.trim() ?? null,
+    address: data.address?.trim() ?? null,
+    phone: data.phone?.trim() ?? null,
     role: null,
     specialties: data.specialties ?? [],
     languages: data.languages ?? [],
     bio: data.bio ?? null,
-    photo: data.photo ?? null,
+    photo: photoUrl,
   });
 }
 

@@ -242,12 +242,19 @@ export default function NotairePitch() {
           >
             {/* Prix principal */}
             <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-1.5 bg-[var(--color-tint-green)] text-[var(--color-success)] text-[12px] font-bold px-3 py-1.5 rounded-full mb-3">
+                🎉 Offre de lancement
+              </div>
               <div className="inline-flex items-baseline gap-1.5 mb-1">
-                <span className="serif text-[52px] font-bold text-[var(--color-primary)] leading-none">129</span>
+                <span className="serif text-[52px] font-bold text-[var(--color-primary)] leading-none">99</span>
                 <span className="text-[22px] font-bold text-[var(--color-primary)]">€</span>
                 <span className="text-[15px] text-[var(--color-muted)] ml-1">HT / mois</span>
               </div>
-              <p className="text-[14px] text-[var(--color-muted)]">par notaire · sans engagement</p>
+              <p className="text-[13px] text-[var(--color-muted)] mb-1">
+                pendant 3 mois · puis{" "}
+                <strong className="text-[var(--color-text-strong)]">119 € HT/mois</strong>
+              </p>
+              <p className="text-[13px] text-[var(--color-muted)]">par notaire · sans engagement</p>
             </div>
 
             {/* Inclus */}

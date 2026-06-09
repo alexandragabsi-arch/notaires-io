@@ -10,6 +10,7 @@ export interface ListingNotaire {
   area?: string;
   address?: string;
   phone?: string;
+  website?: string;        // URL du site de l'étude
   officeName?: string;
   arrondissement?: number;
   role?: "associé" | "salarié";

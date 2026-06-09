@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   MapPin,
   BadgeCheck,
   Globe,
+  ExternalLink,
   ArrowRight,
   ArrowLeft,
   Sparkles,
@@ -16,9 +17,12 @@ import {
   PhoneCall,
   CalendarDays,
   Award,
+  Camera,
+  ImagePlus,
+  Trash2,
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
-import { getStoredProfiles, getRemoteProfiles, claimProfile } from "@/lib/notaire-profiles";
+import { getStoredProfiles, getRemoteProfiles, claimProfile, type ClaimData } from "@/lib/notaire-profiles";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 
 const ALL_SPECIALTIES = [
@@ -147,11 +151,26 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
 
-  const [photo, setPhoto] = useState(notaire.photo ?? "");
+  // Photo : fichier + aperçu
+  const [photoPreview, setPhotoPreview] = useState<string>(notaire.photo ?? "");
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
   const [bio, setBio] = useState(notaire.bio ?? "");
   const [phone, setPhone] = useState(notaire.phone ?? "");
+  const [address, setAddress] = useState(notaire.address ?? "");
+  const [website, setWebsite] = useState(notaire.website ?? "");
   const [specs, setSpecs] = useState<string[]>(notaire.specialties ?? []);
   const [langs, setLangs] = useState<string[]>(notaire.languages ?? []);
+
+  function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPhotoFile(file);
+    const reader = new FileReader();
+    reader.onload = () => setPhotoPreview(reader.result as string);
+    reader.readAsDataURL(file);
+  }
 
   function toggleSpec(s: string) {
     setSpecs(prev => prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]);
@@ -164,13 +183,17 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
     e.preventDefault();
     setSaving(true);
     try {
-      await claimProfile(notaire.id, notaire.name, notaire.city, {
-        photo: photo.trim() || null,
+      const data: ClaimData = {
+        photo: photoPreview || null,
+        photoFile: photoFile ?? undefined,
         bio: bio.trim() || undefined,
         phone: phone.trim() || undefined,
+        address: address.trim() || undefined,
+        website: website.trim() || undefined,
         specialties: specs,
         languages: langs,
-      });
+      };
+      await claimProfile(notaire.id, notaire.name, notaire.city, data);
       setDone(true);
     } finally {
       setSaving(false);
@@ -217,22 +240,45 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
             </button>
           </div>
 
-          {/* Photo */}
+          {/* Photo — upload fichier */}
           <div>
-            <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-2">
-              Photo (URL)
+            <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-3">
+              Photo de profil
             </label>
-            <input
-              type="url"
-              value={photo}
-              onChange={e => setPhoto(e.target.value)}
-              placeholder="https://…/votre-photo.jpg"
-              className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] transition"
-            />
-            {photo && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={photo} alt="Aperçu" className="mt-2 w-16 h-16 rounded-full object-cover border-2 border-[var(--color-border-soft)]" />
-            )}
+            <div className="flex items-center gap-4">
+              {/* Aperçu */}
+              <div className="w-16 h-16 shrink-0 rounded-2xl overflow-hidden bg-[var(--color-tint-blue)] flex items-center justify-center text-[var(--color-primary)] font-bold text-[20px]">
+                {photoPreview ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={photoPreview} alt="Aperçu photo" className="w-full h-full object-cover" />
+                ) : (
+                  (notaire.initials || "N")
+                )}
+              </div>
+              <div className="flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  className="inline-flex items-center gap-2 border border-[var(--color-border)] text-[var(--color-text-strong)] px-4 py-2 rounded-[10px] text-[13px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+                >
+                  {photoPreview
+                    ? <Camera className="w-4 h-4" strokeWidth={2} />
+                    : <ImagePlus className="w-4 h-4" strokeWidth={2} />}
+                  {photoPreview ? "Changer la photo" : "Ajouter une photo"}
+                </button>
+                {photoPreview && (
+                  <button
+                    type="button"
+                    onClick={() => { setPhotoPreview(""); setPhotoFile(null); }}
+                    className="inline-flex items-center gap-2 text-[13px] font-medium text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" strokeWidth={2} />
+                    Retirer
+                  </button>
+                )}
+              </div>
+              <input ref={fileRef} type="file" accept="image/*" onChange={onPhoto} className="hidden" />
+            </div>
           </div>
 
           {/* Téléphone */}
@@ -249,19 +295,47 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
             />
           </div>
 
+          {/* Adresse */}
+          <div>
+            <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-2">
+              Adresse de l'étude
+            </label>
+            <input
+              type="text"
+              value={address}
+              onChange={e => setAddress(e.target.value)}
+              placeholder="12 rue de la Paix, 75001 Paris"
+              className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] transition"
+            />
+          </div>
+
+          {/* Site web */}
+          <div>
+            <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-2">
+              Site web de l'étude
+            </label>
+            <input
+              type="url"
+              value={website}
+              onChange={e => setWebsite(e.target.value)}
+              placeholder="https://www.mon-etude.fr"
+              className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] transition"
+            />
+          </div>
+
           {/* Bio */}
           <div>
             <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-2">
-              Présentation <span className="normal-case font-normal">(max 400 caractères)</span>
+              Présentation <span className="normal-case font-normal">(max 500 caractères)</span>
             </label>
             <textarea
               value={bio}
-              onChange={e => setBio(e.target.value.slice(0, 400))}
+              onChange={e => setBio(e.target.value.slice(0, 500))}
               rows={4}
               placeholder="Notaire à … depuis …, je vous accompagne dans vos projets immobiliers, familiaux et patrimoniaux…"
               className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] transition resize-none"
             />
-            <p className="text-[11px] text-[var(--color-muted)] text-right mt-1">{bio.length}/400</p>
+            <p className="text-[11px] text-[var(--color-muted)] text-right mt-1">{bio.length}/500</p>
           </div>
 
           {/* Spécialités */}
@@ -286,7 +360,7 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
           {/* Langues */}
           <div>
             <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-3">
-              Langues de travail (hors français)
+              Langues de travail <span className="normal-case font-normal">(hors français)</span>
             </label>
             <div className="flex flex-wrap gap-2">
               {ALL_LANGUAGES.map(l => (
@@ -473,7 +547,19 @@ export default function NotaireProfileClient({
                   {notaire.phone}
                 </a>
               )}
-              {!notaire.address && !notaire.phone && (
+              {notaire.website && (
+                <a
+                  href={notaire.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[13px] text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors"
+                >
+                  <Globe className="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
+                  {notaire.website.replace(/^https?:\/\/(www\.)?/, "")}
+                  <ExternalLink className="w-2.5 h-2.5 opacity-50" strokeWidth={2} />
+                </a>
+              )}
+              {!notaire.address && !notaire.phone && !notaire.website && (
                 <span className="inline-flex items-center gap-1.5 text-[13px] text-[var(--color-muted)]">
                   <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
                   {notaire.city}{notaire.area ? ` · ${notaire.area}` : ""}
@@ -682,12 +768,12 @@ export default function NotaireProfileClient({
             </p>
           </div>
 
-          {/* Localisation */}
-          {(notaire.address || notaire.city) && (
-            <div className="bg-white border border-[var(--color-border-soft)] rounded-2xl p-5">
-              <div className="flex items-center gap-2 font-semibold text-[var(--color-text-strong)] text-[13px] mb-2">
+          {/* Localisation + contact */}
+          {(notaire.address || notaire.city || notaire.phone || notaire.website) && (
+            <div className="bg-white border border-[var(--color-border-soft)] rounded-2xl p-5 flex flex-col gap-2.5">
+              <div className="flex items-center gap-2 font-semibold text-[var(--color-text-strong)] text-[13px]">
                 <MapPin className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
-                Localisation
+                Coordonnées
               </div>
               <p className="text-[13px] text-[var(--color-muted)] leading-relaxed">
                 {notaire.address ?? `${notaire.city}${notaire.area ? ` · ${notaire.area}` : ""}`}
@@ -695,10 +781,22 @@ export default function NotaireProfileClient({
               {notaire.phone && (
                 <a
                   href={`tel:${notaire.phone.replace(/\s/g, "")}`}
-                  className="mt-2 flex items-center gap-1.5 text-[13px] text-[var(--color-accent)] font-semibold hover:underline"
+                  className="flex items-center gap-1.5 text-[13px] text-[var(--color-accent)] font-semibold hover:underline"
                 >
                   <Phone className="w-3.5 h-3.5" strokeWidth={2} />
                   {notaire.phone}
+                </a>
+              )}
+              {notaire.website && (
+                <a
+                  href={notaire.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-[13px] text-[var(--color-accent)] font-semibold hover:underline"
+                >
+                  <Globe className="w-3.5 h-3.5" strokeWidth={2} />
+                  {notaire.website.replace(/^https?:\/\/(www\.)?/, "")}
+                  <ExternalLink className="w-2.5 h-2.5 opacity-60" strokeWidth={2} />
                 </a>
               )}
             </div>

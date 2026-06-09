@@ -308,83 +308,170 @@ export default function NotairePitch() {
       </section>
 
       {/* Bientôt — l'application mobile */}
-      <section className="py-16 sm:py-20 lg:py-24 bg-[var(--color-surface)]">
-        <div className="max-w-[920px] mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
-            className="bg-gradient-to-br from-[var(--color-primary)] to-[#2a52b0] rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden"
-          >
-            {/* Motif de fond */}
-            <div
-              className="absolute inset-0 opacity-10 pointer-events-none"
-              style={{
-                backgroundImage:
-                  "radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 1px)",
-                backgroundSize: "24px 24px",
-              }}
-            />
+      <section className="py-16 sm:py-20 lg:py-28 overflow-hidden" style={{ background: "linear-gradient(135deg, #0f1f5c 0%, #1a3a9e 50%, #2a52b0 100%)" }}>
+        <div className="max-w-[1200px] mx-auto px-6">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
 
-            <div className="relative flex flex-col lg:flex-row items-center gap-10">
-              {/* Icône + badge */}
-              <div className="flex-shrink-0 flex flex-col items-center gap-4">
-                <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center shadow-lg">
-                  <Smartphone className="w-12 h-12 text-white" strokeWidth={1.5} />
-                </div>
-                <div className="inline-flex items-center gap-1.5 bg-white/20 text-white text-[12px] font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">
-                  🚀 Bientôt disponible
-                </div>
-              </div>
-
-              {/* Texte */}
-              <div className="flex-1 text-center lg:text-left">
-                <h2 className="serif text-[24px] sm:text-[30px] lg:text-[34px] font-bold leading-[1.15] mb-3 text-balance">
-                  L'application Notaires.io arrive.
-                </h2>
-                <p className="text-white/75 text-[16px] leading-relaxed mb-7 max-w-[520px]">
-                  Gérez vos rendez-vous, recevez vos notifications et consultez vos dossiers depuis votre téléphone — où que vous soyez.
-                </p>
-
-                {/* Features app */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                  {[
-                    { icon: Bell, label: "Notifications push pour chaque nouveau RDV" },
-                    { icon: CalendarCheck, label: "Agenda synchronisé en temps réel" },
-                    { icon: MessageSquare, label: "Messagerie sécurisée avec vos clients" },
-                  ].map(({ icon: Icon, label }) => (
-                    <div key={label} className="flex items-start gap-3 bg-white/10 rounded-xl p-4">
-                      <Icon className="w-5 h-5 mt-0.5 shrink-0 text-white/80" strokeWidth={2} />
-                      <span className="text-[13px] text-white/90 leading-snug">{label}</span>
+            {/* ── Téléphone mockup ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="flex-shrink-0 flex justify-center"
+            >
+              {/* Cadre iPhone */}
+              <div className="relative w-[240px] sm:w-[268px]">
+                {/* Ombre portée */}
+                <div className="absolute inset-0 rounded-[44px] blur-2xl opacity-40 bg-blue-400 translate-y-4 scale-90" />
+                {/* Corps du téléphone */}
+                <div className="relative bg-[#0a0a0f] rounded-[44px] border-[6px] border-white/20 shadow-2xl overflow-hidden" style={{ aspectRatio: "9/19.5" }}>
+                  {/* Notch */}
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[90px] h-[28px] bg-[#0a0a0f] rounded-b-2xl z-10 flex items-center justify-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-[#1a1a2e]" />
+                    <div className="w-[10px] h-[10px] rounded-full bg-[#1a1a2e]" />
+                  </div>
+                  {/* Écran — contenu app */}
+                  <div className="absolute inset-0 bg-[#f0f4ff] flex flex-col overflow-hidden">
+                    {/* Status bar */}
+                    <div className="bg-white h-8 flex items-center justify-between px-5 pt-1 shrink-0">
+                      <span className="text-[9px] font-bold text-gray-800">9:41</span>
+                      <div className="flex items-center gap-1">
+                        <div className="flex gap-[2px] items-end h-3">
+                          {[3,5,7,9].map((h,i) => <div key={i} className="w-[3px] bg-gray-800 rounded-sm" style={{height:`${h}px`}}/>)}
+                        </div>
+                        <svg className="w-3 h-3 text-gray-800" fill="currentColor" viewBox="0 0 24 24"><path d="M1.5 8.5a13 13 0 0121 0M5 12a10 10 0 0114 0M8.5 15.5a6 6 0 017 0M12 19h.01"/></svg>
+                        <div className="w-5 h-2.5 rounded-sm border border-gray-700 flex items-center px-[2px]"><div className="w-3 h-1.5 bg-gray-800 rounded-[1px]"/><div className="w-[2px] h-1.5 bg-gray-800 rounded-r-[1px] -mr-[1px] ml-auto opacity-40"/></div>
+                      </div>
                     </div>
-                  ))}
-                </div>
-
-                {/* Store badges (placeholders) */}
-                <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-                  <div className="inline-flex items-center gap-2.5 bg-white/15 hover:bg-white/25 transition-colors border border-white/20 rounded-xl px-5 py-3 cursor-not-allowed opacity-80">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                    </svg>
-                    <div>
-                      <div className="text-[10px] text-white/70 leading-none">Disponible sur</div>
-                      <div className="text-[14px] font-semibold leading-tight">App Store</div>
+                    {/* Header app */}
+                    <div className="bg-white px-4 pt-2 pb-3 shrink-0 border-b border-gray-100">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="text-[10px] text-gray-500">Bonjour,</div>
+                          <div className="text-[13px] font-bold text-gray-900">Me Dupont</div>
+                        </div>
+                        <div className="w-8 h-8 rounded-full bg-[#3b5fd9] flex items-center justify-center">
+                          <span className="text-[11px] font-bold text-white">ND</span>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Notif push */}
+                    <div className="mx-3 mt-3 bg-white rounded-2xl p-3 shadow-sm border border-blue-100 shrink-0">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <div className="w-5 h-5 rounded-md bg-[#3b5fd9] flex items-center justify-center shrink-0">
+                          <Bell className="w-2.5 h-2.5 text-white" strokeWidth={2.5}/>
+                        </div>
+                        <span className="text-[9px] font-bold text-[#3b5fd9] uppercase tracking-wide">Nouveau RDV</span>
+                        <span className="text-[8px] text-gray-400 ml-auto">maintenant</span>
+                      </div>
+                      <div className="text-[10px] font-semibold text-gray-900">M. Martin — Acquisition</div>
+                      <div className="text-[9px] text-gray-500">Mer. 11 juin · 10h00 · Visio</div>
+                    </div>
+                    {/* Section agenda */}
+                    <div className="px-3 mt-3 shrink-0">
+                      <div className="text-[9px] font-bold text-gray-500 uppercase tracking-wide mb-2">Aujourd'hui</div>
+                      {[
+                        { time: "09:30", nom: "Mme Leroy", type: "Succession", color: "bg-purple-100 text-purple-700" },
+                        { time: "11:00", nom: "M. Bernard", type: "Vente immo.", color: "bg-blue-100 text-[#3b5fd9]" },
+                        { time: "14:30", nom: "Mme Chen", type: "Donation", color: "bg-green-100 text-green-700" },
+                      ].map((rdv) => (
+                        <div key={rdv.time} className="flex items-center gap-2.5 bg-white rounded-xl px-3 py-2 mb-1.5 border border-gray-100">
+                          <span className="text-[9px] font-bold text-gray-400 w-[28px] shrink-0">{rdv.time}</span>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-[10px] font-semibold text-gray-900 truncate">{rdv.nom}</div>
+                          </div>
+                          <span className={`text-[8px] font-semibold px-1.5 py-0.5 rounded-full shrink-0 ${rdv.color}`}>{rdv.type}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {/* Bottom nav */}
+                    <div className="mt-auto bg-white border-t border-gray-100 flex justify-around py-2 shrink-0">
+                      {[
+                        { icon: CalendarCheck, label: "Agenda", active: true },
+                        { icon: MessageSquare, label: "Messages", active: false },
+                        { icon: Bell, label: "Notifs", active: false },
+                        { icon: Smartphone, label: "Profil", active: false },
+                      ].map(({ icon: Icon, label, active }) => (
+                        <div key={label} className="flex flex-col items-center gap-0.5">
+                          <Icon className={`w-4 h-4 ${active ? "text-[#3b5fd9]" : "text-gray-400"}`} strokeWidth={2} />
+                          <span className={`text-[7px] font-semibold ${active ? "text-[#3b5fd9]" : "text-gray-400"}`}>{label}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <div className="inline-flex items-center gap-2.5 bg-white/15 hover:bg-white/25 transition-colors border border-white/20 rounded-xl px-5 py-3 cursor-not-allowed opacity-80">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M3.18 23.76c.3.17.64.19.96.07l13.08-7.56-2.76-2.76L3.18 23.76zm-1.98-20.1C1.08 3.9 1 4.14 1 4.44v15.12c0 .3.08.54.2.76l.1.1 8.46-8.46v-.2L1.2 3.56l-.0.1zM20.1 10.5l-2.88-1.66-3.06 3.06 3.06 3.06 2.9-1.68c.82-.48.82-1.28-.02-1.78zM3.18.24L14.46 7.8 11.7 10.56 3.18.24z"/>
-                    </svg>
+                </div>
+                {/* Bouton latéral */}
+                <div className="absolute right-[-8px] top-[80px] w-[4px] h-[36px] bg-white/30 rounded-r-full" />
+                <div className="absolute left-[-8px] top-[70px] w-[4px] h-[24px] bg-white/30 rounded-l-full" />
+                <div className="absolute left-[-8px] top-[104px] w-[4px] h-[24px] bg-white/30 rounded-l-full" />
+              </div>
+            </motion.div>
+
+            {/* ── Texte + features ── */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="flex-1 text-white text-center lg:text-left"
+            >
+              <div className="inline-flex items-center gap-1.5 bg-white/15 text-white text-[12px] font-bold px-3 py-1.5 rounded-full mb-5 backdrop-blur-sm">
+                🚀 Bientôt disponible
+              </div>
+              <h2 className="serif text-[28px] sm:text-[36px] lg:text-[42px] font-bold leading-[1.1] mb-4 text-balance">
+                L'application<br />
+                <span className="text-blue-200">Notaires.io</span> arrive.
+              </h2>
+              <p className="text-white/70 text-[16px] leading-relaxed mb-8 max-w-[460px]">
+                Gérez vos rendez-vous, recevez vos notifications et consultez vos dossiers depuis votre téléphone — où que vous soyez.
+              </p>
+
+              {/* Features */}
+              <div className="flex flex-col gap-4 mb-10">
+                {[
+                  { icon: Bell, title: "Notifications push instantanées", desc: "Nouveau RDV, message client ou rappel — tout en temps réel." },
+                  { icon: CalendarCheck, title: "Agenda synchronisé", desc: "Votre planning complet sur mobile, toujours à jour." },
+                  { icon: MessageSquare, title: "Messagerie sécurisée", desc: "Échangez avec vos clients dans un espace confidentiel." },
+                ].map(({ icon: Icon, title, desc }) => (
+                  <div key={title} className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0 mt-0.5">
+                      <Icon className="w-5 h-5 text-white" strokeWidth={2} />
+                    </div>
                     <div>
-                      <div className="text-[10px] text-white/70 leading-none">Disponible sur</div>
-                      <div className="text-[14px] font-semibold leading-tight">Google Play</div>
+                      <div className="text-[15px] font-semibold text-white">{title}</div>
+                      <div className="text-[13px] text-white/60 mt-0.5">{desc}</div>
                     </div>
                   </div>
-                </div>
+                ))}
               </div>
-            </div>
-          </motion.div>
+
+              {/* Store badges */}
+              <div className="flex flex-wrap justify-center lg:justify-start gap-3">
+                {[
+                  {
+                    label: "App Store",
+                    sub: "Disponible sur",
+                    icon: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>,
+                  },
+                  {
+                    label: "Google Play",
+                    sub: "Disponible sur",
+                    icon: <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.64.19.96.07l13.08-7.56-2.76-2.76L3.18 23.76zm-1.98-20.1C1.08 3.9 1 4.14 1 4.44v15.12c0 .3.08.54.2.76l.1.1 8.46-8.46v-.2L1.2 3.56l-.0.1zM20.1 10.5l-2.88-1.66-3.06 3.06 3.06 3.06 2.9-1.68c.82-.48.82-1.28-.02-1.78zM3.18.24L14.46 7.8 11.7 10.56 3.18.24z"/></svg>,
+                  },
+                ].map(({ label, sub, icon }) => (
+                  <div key={label} className="inline-flex items-center gap-3 bg-white/10 hover:bg-white/20 transition-colors border border-white/20 rounded-2xl px-5 py-3 cursor-not-allowed">
+                    {icon}
+                    <div>
+                      <div className="text-[10px] text-white/60 leading-none">{sub}</div>
+                      <div className="text-[15px] font-semibold leading-tight">{label}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+          </div>
         </div>
       </section>
 

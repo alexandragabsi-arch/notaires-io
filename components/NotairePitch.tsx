@@ -7,6 +7,10 @@ import {
   ListChecks,
   ScrollText,
   ArrowRight,
+  Smartphone,
+  Bell,
+  CalendarCheck,
+  MessageSquare,
 } from "lucide-react";
 import QRCard from "@/components/QRCard";
 import CardDesigner from "@/components/CardDesigner";
@@ -299,6 +303,87 @@ export default function NotairePitch() {
             <p className="text-center text-[12px] text-[var(--color-muted)] mt-3">
               Démo gratuite de 20 min · Aucun engagement · Résiliable à tout moment
             </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Bientôt — l'application mobile */}
+      <section className="py-16 sm:py-20 lg:py-24 bg-[var(--color-surface)]">
+        <div className="max-w-[920px] mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
+            className="bg-gradient-to-br from-[var(--color-primary)] to-[#2a52b0] rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden"
+          >
+            {/* Motif de fond */}
+            <div
+              className="absolute inset-0 opacity-10 pointer-events-none"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 1px)",
+                backgroundSize: "24px 24px",
+              }}
+            />
+
+            <div className="relative flex flex-col lg:flex-row items-center gap-10">
+              {/* Icône + badge */}
+              <div className="flex-shrink-0 flex flex-col items-center gap-4">
+                <div className="w-24 h-24 bg-white/15 rounded-3xl flex items-center justify-center shadow-lg">
+                  <Smartphone className="w-12 h-12 text-white" strokeWidth={1.5} />
+                </div>
+                <div className="inline-flex items-center gap-1.5 bg-white/20 text-white text-[12px] font-bold px-3 py-1.5 rounded-full backdrop-blur-sm">
+                  🚀 Bientôt disponible
+                </div>
+              </div>
+
+              {/* Texte */}
+              <div className="flex-1 text-center lg:text-left">
+                <h2 className="serif text-[24px] sm:text-[30px] lg:text-[34px] font-bold leading-[1.15] mb-3 text-balance">
+                  L'application Notaires.io arrive.
+                </h2>
+                <p className="text-white/75 text-[16px] leading-relaxed mb-7 max-w-[520px]">
+                  Gérez vos rendez-vous, recevez vos notifications et consultez vos dossiers depuis votre téléphone — où que vous soyez.
+                </p>
+
+                {/* Features app */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                  {[
+                    { icon: Bell, label: "Notifications push pour chaque nouveau RDV" },
+                    { icon: CalendarCheck, label: "Agenda synchronisé en temps réel" },
+                    { icon: MessageSquare, label: "Messagerie sécurisée avec vos clients" },
+                  ].map(({ icon: Icon, label }) => (
+                    <div key={label} className="flex items-start gap-3 bg-white/10 rounded-xl p-4">
+                      <Icon className="w-5 h-5 mt-0.5 shrink-0 text-white/80" strokeWidth={2} />
+                      <span className="text-[13px] text-white/90 leading-snug">{label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Store badges (placeholders) */}
+                <div className="flex flex-wrap justify-center lg:justify-start gap-3">
+                  <div className="inline-flex items-center gap-2.5 bg-white/15 hover:bg-white/25 transition-colors border border-white/20 rounded-xl px-5 py-3 cursor-not-allowed opacity-80">
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                    <div>
+                      <div className="text-[10px] text-white/70 leading-none">Disponible sur</div>
+                      <div className="text-[14px] font-semibold leading-tight">App Store</div>
+                    </div>
+                  </div>
+                  <div className="inline-flex items-center gap-2.5 bg-white/15 hover:bg-white/25 transition-colors border border-white/20 rounded-xl px-5 py-3 cursor-not-allowed opacity-80">
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M3.18 23.76c.3.17.64.19.96.07l13.08-7.56-2.76-2.76L3.18 23.76zm-1.98-20.1C1.08 3.9 1 4.14 1 4.44v15.12c0 .3.08.54.2.76l.1.1 8.46-8.46v-.2L1.2 3.56l-.0.1zM20.1 10.5l-2.88-1.66-3.06 3.06 3.06 3.06 2.9-1.68c.82-.48.82-1.28-.02-1.78zM3.18.24L14.46 7.8 11.7 10.56 3.18.24z"/>
+                    </svg>
+                    <div>
+                      <div className="text-[10px] text-white/70 leading-none">Disponible sur</div>
+                      <div className="text-[14px] font-semibold leading-tight">Google Play</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>

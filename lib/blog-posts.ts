@@ -290,6 +290,21 @@ export interface BlogPost {
     { question: "Combien d&apos;associés faut-il pour créer une SCI familiale ?", answer: "Une SCI requiert au minimum deux associés, souvent des membres d&apos;une même famille (parents, enfants, conjoints). Aucun capital minimum n&apos;est imposé par la loi." },
   ],
   },
+  {
+    slug: "achat-immobilier-indivision",
+    title: "Achat immobilier en indivision : le rôle du notaire",
+    excerpt: "Achat immobilier en indivision notaire : règles, quote-parts, convention et conseils pour sécuriser votre acquisition à plusieurs en toute sérénité.",
+    date: "2026-06-09",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["achat immobilier en indivision notaire", "indivision immobilière", "convention indivision", "quote-part indivision"],
+    canonicalUrl: `${BASE}/blog/achat-immobilier-indivision`,
+  faqs: [
+    { question: "Faut-il obligatoirement passer par un notaire pour acheter en indivision ?", answer: "Oui, tout achat immobilier nécessite un acte authentique rédigé par un notaire, qu&apos;il s&apos;agisse d&apos;un achat seul ou en indivision." },
+    { question: "Peut-on fixer des quotes-parts différentes des apports ?", answer: "Oui, mais cela peut être requalifié en donation déguisée par l&apos;administration fiscale. Le notaire vous conseillera la répartition la plus adaptée." },
+    { question: "Que se passe-t-il si un indivisaire veut vendre sa part ?", answer: "Chaque indivisaire peut céder sa quote-part, mais les autres bénéficient d&apos;un droit de préemption. À défaut d&apos;accord, le partage judiciaire peut être demandé." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -646,6 +661,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Faut-il obligatoirement un notaire pour créer une SCI familiale ?", answer: "Le notaire n&apos;est pas obligatoire si la SCI ne reçoit aucun apport immobilier. En revanche, dès qu&apos;un bien immobilier est apporté au capital, l&apos;acte notarié devient impératif." },
     { question: "Quel est le coût de création d&apos;une SCI familiale ?", answer: "Comptez entre 1 500 € et 3 000 € avec un notaire, incluant la rédaction des statuts, les frais d&apos;enregistrement et la publication légale. Le coût varie selon les apports." },
     { question: "Combien d&apos;associés faut-il pour créer une SCI familiale ?", answer: "Une SCI requiert au minimum deux associés, souvent des membres d&apos;une même famille (parents, enfants, conjoints). Aucun capital minimum n&apos;est imposé par la loi." },
+  ],
+  },
+  {
+    slug: "achat-immobilier-indivision",
+    title: "Achat immobilier en indivision : le rôle du notaire",
+    excerpt: "Achat immobilier en indivision notaire : règles, quote-parts, convention et conseils pour sécuriser votre acquisition à plusieurs en toute sérénité.",
+    date: "2026-06-09",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["achat immobilier en indivision notaire", "indivision immobilière", "convention indivision", "quote-part indivision"],
+    canonicalUrl: `${BASE}/blog/achat-immobilier-indivision`,
+  faqs: [
+    { question: "Faut-il obligatoirement passer par un notaire pour acheter en indivision ?", answer: "Oui, tout achat immobilier nécessite un acte authentique rédigé par un notaire, qu&apos;il s&apos;agisse d&apos;un achat seul ou en indivision." },
+    { question: "Peut-on fixer des quotes-parts différentes des apports ?", answer: "Oui, mais cela peut être requalifié en donation déguisée par l&apos;administration fiscale. Le notaire vous conseillera la répartition la plus adaptée." },
+    { question: "Que se passe-t-il si un indivisaire veut vendre sa part ?", answer: "Chaque indivisaire peut céder sa quote-part, mais les autres bénéficient d&apos;un droit de préemption. À défaut d&apos;accord, le partage judiciaire peut être demandé." },
   ],
   },
 ];

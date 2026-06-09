@@ -743,6 +743,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "plus-value-immobiliere-exoneration": () => <Article23 />,
   "viager-notaire-guide": () => <Article24 />,
   "sci-familiale-creation-notaire": () => <Article25 />,
+  "achat-immobilier-indivision": () => <Article26 />,
 };
 
 
@@ -2088,6 +2089,54 @@ function Article25() {
   description="Nos notaires partenaires vous accompagnent dans la création et l&apos;optimisation de votre SCI. Premier rendez-vous offert."
   buttonText="Contacter un notaire"
 />
+</>
+    </>
+  );
+}
+
+/* ── Article 26 ─────────────────────────────────────────────────────────── */
+
+function Article26() {
+  return (
+    <>
+      <>
+  <p className="lead">L&apos;achat immobilier en indivision avec un notaire est une solution courante pour acquérir un bien à plusieurs, que ce soit en couple non marié, entre amis, en famille ou avec des investisseurs. Cette formule juridique souple permet de partager la propriété d&apos;un bien selon des quotes-parts définies, mais elle nécessite une préparation rigoureuse pour éviter les conflits futurs.</p>
+
+  <KeyPoints points={[
+    "L&apos;indivision permet à plusieurs personnes d&apos;acquérir un bien ensemble avec des quotes-parts définies",
+    "Le notaire rédige l&apos;acte authentique et conseille sur la répartition des droits",
+    "Une convention d&apos;indivision sécurise les rapports entre coïndivisaires",
+    "Chaque indivisaire peut sortir de l&apos;indivision, ce qui constitue son principal risque"
+  ]} />
+
+  <h2>Qu&apos;est-ce que l&apos;achat en indivision ?</h2>
+  <p>L&apos;indivision est la situation juridique dans laquelle plusieurs personnes, appelées indivisaires, sont propriétaires d&apos;un même bien immobilier. Chacun détient une quote-part, exprimée en pourcentage ou en fraction, qui correspond généralement à sa participation financière dans l&apos;acquisition.</p>
+  <p>Cette formule est particulièrement adaptée aux couples non mariés ou non pacsés, aux fratries héritant d&apos;un bien, ou encore aux groupes d&apos;amis ou d&apos;investisseurs souhaitant acquérir un bien commun. Contrairement à la SCI, l&apos;indivision ne crée pas de personne morale : chaque indivisaire reste directement propriétaire d&apos;une fraction du bien.</p>
+  <p>Le notaire joue un rôle central dans ce dispositif. Il rédige l&apos;acte authentique de vente, mentionne précisément les quotes-parts de chaque acquéreur et procède aux formalités de publicité foncière.</p>
+
+  <h2>Le rôle du notaire dans l&apos;achat en indivision</h2>
+  <p>Le notaire intervient à plusieurs niveaux lors d&apos;un achat immobilier en indivision. Sa mission ne se limite pas à la rédaction de l&apos;acte de vente : il vous conseille en amont sur la structuration juridique de votre acquisition.</p>
+  <h3>La détermination des quotes-parts</h3>
+  <p>Le notaire vérifie que la répartition des quotes-parts correspond bien aux apports financiers de chaque indivisaire. Une répartition inéquitable par rapport aux apports réels peut être qualifiée de donation déguisée par l&apos;administration fiscale, avec des conséquences lourdes en termes de droits de mutation.</p>
+  <h3>La sécurisation par une convention d&apos;indivision</h3>
+  <p>Au-delà de l&apos;acte de vente, le notaire peut rédiger une convention d&apos;indivision. Ce document, conclu pour une durée maximale de 5 ans renouvelable, organise les rapports entre indivisaires : gestion du bien, répartition des charges, désignation d&apos;un gérant, conditions de cession des parts, etc.</p>
+  <h3>Le financement et les garanties</h3>
+  <p>Si l&apos;achat est financé par un prêt, le notaire s&apos;assure de la cohérence entre les emprunts souscrits et les quotes-parts détenues. Il peut également conseiller sur la souscription d&apos;assurances décès croisées entre concubins pour protéger le survivant.</p>
+
+  <h2>Avantages et inconvénients de l&apos;indivision</h2>
+  <p>L&apos;achat en indivision présente plusieurs avantages : simplicité de mise en place, coûts réduits par rapport à une SCI, souplesse dans la répartition des droits. C&apos;est la formule la plus rapide pour acquérir à plusieurs.</p>
+  <p>Cependant, l&apos;indivision comporte des risques bien identifiés. Le principal réside dans l&apos;adage juridique « nul n&apos;est tenu de rester dans l&apos;indivision » : tout indivisaire peut, à tout moment, demander le partage du bien et donc forcer sa vente. De plus, les décisions importantes nécessitent l&apos;accord unanime ou à la majorité des deux tiers selon les actes concernés, ce qui peut bloquer la gestion en cas de désaccord.</p>
+  <p>En cas de décès d&apos;un indivisaire, sa quote-part est transmise à ses héritiers, qui deviennent à leur tour indivisaires. Cette situation peut créer des configurations complexes, notamment pour les couples non mariés.</p>
+
+  <h2>Indivision ou SCI : que choisir ?</h2>
+  <p>Le choix entre indivision et SCI dépend de votre projet et de votre situation. L&apos;indivision convient parfaitement pour un achat simple, entre personnes proches, avec une vision à court ou moyen terme. La SCI sera préférable pour un investissement locatif structuré, une transmission patrimoniale optimisée ou un projet impliquant plusieurs investisseurs sur le long terme.</p>
+  <p>Votre notaire est le mieux placé pour vous orienter vers la solution adaptée à vos objectifs patrimoniaux, fiscaux et familiaux. Un entretien préalable permet d&apos;analyser votre situation et de comparer les implications de chaque option.</p>
+
+  <InternalCTA
+    title="Vous projetez un achat immobilier en indivision ?"
+    description="Nos notaires vous accompagnent dans la structuration de votre acquisition et la rédaction de la convention d&apos;indivision. Premier rendez-vous offert, en visio ou en cabinet."
+    buttonText="Prendre rendez-vous"
+  />
 </>
     </>
   );

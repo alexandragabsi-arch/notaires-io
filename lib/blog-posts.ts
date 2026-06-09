@@ -5,39 +5,9 @@ export interface BlogPost {
   date: string; // "YYYY-MM-DD"
   readingTime: number; // minutes
   category: string;
-  keywords: string[  {
-    slug: "promesse-vente-unilaterale",
-    title: "Promesse de vente unilatérale chez le notaire : guide complet",
-    excerpt: "La promesse de vente unilatérale notaire engage le vendeur seul. Découvrez son fonctionnement, ses coûts et son intérêt pour sécuriser votre achat immobilier.",
-    date: "2026-06-09",
-    readingTime: 7,
-    category: "Immobilier",
-    keywords: ["promesse de vente unilatérale notaire", "promesse unilatérale de vente", "indemnité d'immobilisation", "avant-contrat immobilier"],
-    canonicalUrl: `${BASE}/blog/promesse-vente-unilaterale`,
-  faqs: [
-    { question: "Quelle est la différence entre promesse unilatérale et compromis de vente ?", answer: "La promesse unilatérale engage uniquement le vendeur qui réserve son bien à l&apos;acheteur. Le compromis engage les deux parties à conclure la vente." },
-    { question: "Combien coûte une promesse unilatérale de vente chez le notaire ?", answer: "Comptez entre 250 et 500 € de frais de rédaction et d&apos;enregistrement, à la charge de l&apos;acquéreur sauf accord contraire." },
-    { question: "L'indemnité d'immobilisation est-elle remboursable ?", answer: "Oui, si l&apos;acquéreur renonce dans le délai de rétractation de 10 jours ou si une condition suspensive (prêt refusé) ne se réalise pas." },
-  ],
-  },
-];
+  keywords: string[];
   canonicalUrl: string;
-  faqs?: { question: string; answer: string }[  {
-    slug: "promesse-vente-unilaterale",
-    title: "Promesse de vente unilatérale chez le notaire : guide complet",
-    excerpt: "La promesse de vente unilatérale notaire engage le vendeur seul. Découvrez son fonctionnement, ses coûts et son intérêt pour sécuriser votre achat immobilier.",
-    date: "2026-06-09",
-    readingTime: 7,
-    category: "Immobilier",
-    keywords: ["promesse de vente unilatérale notaire", "promesse unilatérale de vente", "indemnité d'immobilisation", "avant-contrat immobilier"],
-    canonicalUrl: `${BASE}/blog/promesse-vente-unilaterale`,
-  faqs: [
-    { question: "Quelle est la différence entre promesse unilatérale et compromis de vente ?", answer: "La promesse unilatérale engage uniquement le vendeur qui réserve son bien à l&apos;acheteur. Le compromis engage les deux parties à conclure la vente." },
-    { question: "Combien coûte une promesse unilatérale de vente chez le notaire ?", answer: "Comptez entre 250 et 500 € de frais de rédaction et d&apos;enregistrement, à la charge de l&apos;acquéreur sauf accord contraire." },
-    { question: "L'indemnité d'immobilisation est-elle remboursable ?", answer: "Oui, si l&apos;acquéreur renonce dans le délai de rétractation de 10 jours ou si une condition suspensive (prêt refusé) ne se réalise pas." },
-  ],
-  },
-];
+  faqs?: { question: string; answer: string }[];
 }
 
 const BASE = "https://notaires.io";
@@ -749,9 +719,24 @@ export const BLOG_POSTS: BlogPost[] = [
     keywords: ["promesse de vente unilatérale notaire", "promesse unilatérale de vente", "indemnité d'immobilisation", "avant-contrat immobilier"],
     canonicalUrl: `${BASE}/blog/promesse-vente-unilaterale`,
   faqs: [
-    { question: "Quelle est la différence entre promesse unilatérale et compromis de vente ?", answer: "La promesse unilatérale engage uniquement le vendeur qui réserve son bien à l&apos;acheteur. Le compromis engage les deux parties à conclure la vente." },
-    { question: "Combien coûte une promesse unilatérale de vente chez le notaire ?", answer: "Comptez entre 250 et 500 € de frais de rédaction et d&apos;enregistrement, à la charge de l&apos;acquéreur sauf accord contraire." },
-    { question: "L'indemnité d'immobilisation est-elle remboursable ?", answer: "Oui, si l&apos;acquéreur renonce dans le délai de rétractation de 10 jours ou si une condition suspensive (prêt refusé) ne se réalise pas." },
+    { question: "Quelle est la différence entre promesse unilatérale et compromis de vente ?", answer: "La promesse unilatérale engage uniquement le vendeur qui réserve son bien à l'acheteur. Le compromis engage les deux parties à conclure la vente." },
+    { question: "Combien coûte une promesse unilatérale de vente chez le notaire ?", answer: "Comptez entre 250 et 500 € de frais de rédaction et d'enregistrement, à la charge de l'acquéreur sauf accord contraire." },
+    { question: "L'indemnité d'immobilisation est-elle remboursable ?", answer: "Oui, si l'acquéreur renonce dans le délai de rétractation de 10 jours ou si une condition suspensive (prêt refusé) ne se réalise pas." },
+  ],
+  },
+  {
+    slug: "frais-notaire-neuf-vefa",
+    title: "Frais de notaire achat neuf VEFA : guide complet 2025",
+    excerpt: "Frais de notaire achat neuf VEFA : taux réduits 2-3%, calcul détaillé, exemples chiffrés et conseils pour optimiser votre acquisition immobilière.",
+    date: "2026-06-09",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["frais de notaire achat neuf VEFA", "frais notaire VEFA", "achat immobilier neuf", "frais réduits notaire"],
+    canonicalUrl: `${BASE}/blog/frais-notaire-neuf-vefa`,
+  faqs: [
+    { question: "Quel est le taux des frais de notaire pour un achat en VEFA ?", answer: "Les frais de notaire pour un achat neuf en VEFA représentent environ 2 à 3% du prix d&apos;achat, contre 7 à 8% dans l&apos;ancien, grâce à des droits d&apos;enregistrement réduits." },
+    { question: "Quand paie-t-on les frais de notaire en VEFA ?", answer: "Les frais de notaire sont réglés intégralement le jour de la signature de l&apos;acte authentique chez le notaire, soit au moment de l&apos;acquisition du terrain et des fondations." },
+    { question: "Les frais de notaire VEFA incluent-ils la TVA ?", answer: "Non, la TVA à 20% est incluse dans le prix de vente du bien neuf, mais elle n&apos;entre pas dans l&apos;assiette de calcul des frais de notaire en VEFA." },
   ],
   },
 ];

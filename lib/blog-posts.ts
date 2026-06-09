@@ -6,6 +6,44 @@ export interface BlogPost {
   readingTime: number; // minutes
   category: string;
   keywords: string[  {
+    slug: "promesse-vente-unilaterale",
+    title: "Promesse de vente unilatérale chez le notaire : guide complet",
+    excerpt: "La promesse de vente unilatérale notaire engage le vendeur seul. Découvrez son fonctionnement, ses coûts et son intérêt pour sécuriser votre achat immobilier.",
+    date: "2026-06-09",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["promesse de vente unilatérale notaire", "promesse unilatérale de vente", "indemnité d'immobilisation", "avant-contrat immobilier"],
+    canonicalUrl: `${BASE}/blog/promesse-vente-unilaterale`,
+  faqs: [
+    { question: "Quelle est la différence entre promesse unilatérale et compromis de vente ?", answer: "La promesse unilatérale engage uniquement le vendeur qui réserve son bien à l&apos;acheteur. Le compromis engage les deux parties à conclure la vente." },
+    { question: "Combien coûte une promesse unilatérale de vente chez le notaire ?", answer: "Comptez entre 250 et 500 € de frais de rédaction et d&apos;enregistrement, à la charge de l&apos;acquéreur sauf accord contraire." },
+    { question: "L'indemnité d'immobilisation est-elle remboursable ?", answer: "Oui, si l&apos;acquéreur renonce dans le délai de rétractation de 10 jours ou si une condition suspensive (prêt refusé) ne se réalise pas." },
+  ],
+  },
+];
+  canonicalUrl: string;
+  faqs?: { question: string; answer: string }[  {
+    slug: "promesse-vente-unilaterale",
+    title: "Promesse de vente unilatérale chez le notaire : guide complet",
+    excerpt: "La promesse de vente unilatérale notaire engage le vendeur seul. Découvrez son fonctionnement, ses coûts et son intérêt pour sécuriser votre achat immobilier.",
+    date: "2026-06-09",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["promesse de vente unilatérale notaire", "promesse unilatérale de vente", "indemnité d'immobilisation", "avant-contrat immobilier"],
+    canonicalUrl: `${BASE}/blog/promesse-vente-unilaterale`,
+  faqs: [
+    { question: "Quelle est la différence entre promesse unilatérale et compromis de vente ?", answer: "La promesse unilatérale engage uniquement le vendeur qui réserve son bien à l&apos;acheteur. Le compromis engage les deux parties à conclure la vente." },
+    { question: "Combien coûte une promesse unilatérale de vente chez le notaire ?", answer: "Comptez entre 250 et 500 € de frais de rédaction et d&apos;enregistrement, à la charge de l&apos;acquéreur sauf accord contraire." },
+    { question: "L'indemnité d'immobilisation est-elle remboursable ?", answer: "Oui, si l&apos;acquéreur renonce dans le délai de rétractation de 10 jours ou si une condition suspensive (prêt refusé) ne se réalise pas." },
+  ],
+  },
+];
+}
+
+const BASE = "https://notaires.io";
+
+export const BLOG_POSTS: BlogPost[] = [
+  {
     slug: "testament-olographe-notarie",
     title: "Testament olographe ou notarié : lequel choisir ?",
     excerpt: "Testament olographe ou notarié : découvrez les différences, avantages et inconvénients pour choisir la forme adaptée à votre succession.",
@@ -13,11 +51,11 @@ export interface BlogPost {
     readingTime: 7,
     category: "Succession",
     keywords: ["testament olographe ou notarié", "testament notaire", "rédiger testament", "succession"],
-    canonicalUrl: `${BASE}/blog/testament-olographe-notarie`,,
-  faqs: [
-    { question: "Un testament olographe a-t-il la même valeur qu&apos;un testament notarié ?", answer: "Oui, les deux ont la même valeur juridique s&apos;ils respectent les conditions de forme. Le testament notarié offre toutefois une sécurité juridique supérieure et un risque de contestation moindre." },
-    { question: "Combien coûte un testament chez le notaire ?", answer: "Un testament authentique coûte environ 115 à 140 € HT, auxquels s&apos;ajoutent les frais d&apos;enregistrement au fichier central des dispositions de dernières volontés (environ 30 €)." },
-    { question: "Peut-on modifier un testament olographe ou notarié ?", answer: "Oui, vous pouvez à tout moment révoquer ou modifier votre testament, qu&apos;il soit olographe ou notarié, en rédigeant un nouveau document daté et signé." },
+    canonicalUrl: `${BASE}/blog/testament-olographe-notarie`,
+    faqs: [
+    { question: "Un testament olographe a-t-il la même valeur qu'un testament notarié ?", answer: "Oui, les deux ont la même valeur juridique s'ils respectent les conditions de forme. Le testament notarié offre toutefois une sécurité juridique supérieure et un risque de contestation moindre." },
+    { question: "Combien coûte un testament chez le notaire ?", answer: "Un testament authentique coûte environ 115 à 140 € HT, auxquels s'ajoutent les frais d'enregistrement au fichier central des dispositions de dernières volontés (environ 30 €)." },
+    { question: "Peut-on modifier un testament olographe ou notarié ?", answer: "Oui, vous pouvez à tout moment révoquer ou modifier votre testament, qu'il soit olographe ou notarié, en rédigeant un nouveau document daté et signé." },
   ],
   },
   {
@@ -28,11 +66,11 @@ export interface BlogPost {
     readingTime: 7,
     category: "Succession",
     keywords: ["assurance vie succession notaire", "fiscalité assurance vie", "bénéficiaire assurance vie", "transmission patrimoine"],
-    canonicalUrl: `${BASE}/blog/assurance-vie-succession-notaire`,,
-  faqs: [
-    { question: "Faut-il déclarer l&apos;assurance vie au notaire ?", answer: "Oui, même si elle est hors succession civile, le notaire doit en être informé pour vérifier l&apos;absence de primes manifestement exagérées et calculer la fiscalité éventuelle." },
-    { question: "L&apos;assurance vie échappe-t-elle aux droits de succession ?", answer: "Partiellement. Les versements avant 70 ans bénéficient d&apos;un abattement de 152 500 € par bénéficiaire, puis taxation à 20% ou 31,25%. Après 70 ans, abattement global de 30 500 €." },
-    { question: "Le notaire peut-il débloquer une assurance vie ?", answer: "Non, c&apos;est la compagnie d&apos;assurance qui verse les fonds directement aux bénéficiaires désignés, sur présentation de l&apos;acte de décès et des pièces justificatives." },
+    canonicalUrl: `${BASE}/blog/assurance-vie-succession-notaire`,
+    faqs: [
+    { question: "Faut-il déclarer l'assurance vie au notaire ?", answer: "Oui, même si elle est hors succession civile, le notaire doit en être informé pour vérifier l'absence de primes manifestement exagérées et calculer la fiscalité éventuelle." },
+    { question: "L'assurance vie échappe-t-elle aux droits de succession ?", answer: "Partiellement. Les versements avant 70 ans bénéficient d'un abattement de 152 500 € par bénéficiaire, puis taxation à 20% ou 31,25%. Après 70 ans, abattement global de 30 500 €." },
+    { question: "Le notaire peut-il débloquer une assurance vie ?", answer: "Non, c'est la compagnie d'assurance qui verse les fonds directement aux bénéficiaires désignés, sur présentation de l'acte de décès et des pièces justificatives." },
   ],
   },
   {
@@ -43,11 +81,11 @@ export interface BlogPost {
     readingTime: 7,
     category: "Succession",
     keywords: ["héritiers réservataires", "quotité disponible", "réserve héréditaire", "succession", "testament"],
-    canonicalUrl: `${BASE}/blog/heritiers-reservataires-quotite`,,
-  faqs: [
-    { question: "Qui sont les héritiers réservataires ?", answer: "Les enfants du défunt (et leurs descendants par représentation) sont toujours réservataires. À défaut de descendants, le conjoint survivant devient réservataire à hauteur d&apos;un quart." },
+    canonicalUrl: `${BASE}/blog/heritiers-reservataires-quotite`,
+    faqs: [
+    { question: "Qui sont les héritiers réservataires ?", answer: "Les enfants du défunt (et leurs descendants par représentation) sont toujours réservataires. À défaut de descendants, le conjoint survivant devient réservataire à hauteur d'un quart." },
     { question: "Peut-on déshériter un enfant en France ?", answer: "Non, la loi française interdit de déshériter totalement un enfant. La réserve héréditaire lui garantit une part minimale de la succession, quelle que soit la volonté du défunt." },
-    { question: "Comment calculer la quotité disponible ?", answer: "Elle dépend du nombre d&apos;enfants : 1/2 avec un enfant, 1/3 avec deux enfants, 1/4 avec trois enfants ou plus. Le reste constitue la réserve héréditaire." },
+    { question: "Comment calculer la quotité disponible ?", answer: "Elle dépend du nombre d'enfants : 1/2 avec un enfant, 1/3 avec deux enfants, 1/4 avec trois enfants ou plus. Le reste constitue la réserve héréditaire." },
   ],
   },
   {
@@ -58,8 +96,8 @@ export interface BlogPost {
     readingTime: 7,
     category: "Succession",
     keywords: ["déclaration succession délais", "impôts succession", "droits de succession", "délai déclaration succession", "pénalités succession"],
-    canonicalUrl: `${BASE}/blog/declaration-succession-delais`,,
-  faqs: [
+    canonicalUrl: `${BASE}/blog/declaration-succession-delais`,
+    faqs: [
     { question: "Quel est le délai pour déclarer une succession ?", answer: "Le délai est de 6 mois à compter du décès si celui-ci a lieu en France, et de 12 mois s'il survient à l'étranger. Passé ce délai, des pénalités s'appliquent." },
     { question: "Qui doit payer les droits de succession ?", answer: "Chaque héritier paie les droits sur sa part. Le notaire calcule le montant en fonction du lien de parenté et des abattements applicables (100 000 € entre parent et enfant)." },
     { question: "Que se passe-t-il en cas de retard de déclaration ?", answer: "Un intérêt de retard de 0,20 % par mois s'applique dès le 7ème mois, plus une majoration de 10 % après 6 mois supplémentaires, et 40 % après mise en demeure." },
@@ -74,10 +112,10 @@ export interface BlogPost {
     category: "Succession",
     keywords: ["succession sans testament", "héritiers légaux", "succession ab intestat", "ordre des héritiers", "part réservataire"],
     canonicalUrl: `${BASE}/blog/succession-sans-testament`,
-  faqs: [
+    faqs: [
     { question: "Que se passe-t-il en cas de succession sans testament ?", answer: "La loi française détermine automatiquement les héritiers selon un ordre précis : descendants, ascendants, collatéraux. Le notaire applique les règles du Code civil pour répartir le patrimoine." },
-    { question: "Le conjoint survivant hérite-t-il sans testament ?", answer: "Oui. En présence d&apos;enfants communs, il choisit entre 1/4 en pleine propriété ou la totalité en usufruit. Sans enfants, sa part est plus importante selon les autres héritiers présents." },
-    { question: "Combien de temps pour régler une succession sans testament ?", answer: "En moyenne 6 mois pour la déclaration fiscale, et 6 à 12 mois pour le règlement complet. Les délais varient selon la complexité du patrimoine et le nombre d&apos;héritiers." },
+    { question: "Le conjoint survivant hérite-t-il sans testament ?", answer: "Oui. En présence d'enfants communs, il choisit entre 1/4 en pleine propriété ou la totalité en usufruit. Sans enfants, sa part est plus importante selon les autres héritiers présents." },
+    { question: "Combien de temps pour régler une succession sans testament ?", answer: "En moyenne 6 mois pour la déclaration fiscale, et 6 à 12 mois pour le règlement complet. Les délais varient selon la complexité du patrimoine et le nombre d'héritiers." },
   ],
   },
   {
@@ -89,10 +127,10 @@ export interface BlogPost {
     category: "Succession",
     keywords: ["déshériter un enfant", "réserve héréditaire", "succession", "héritiers réservataires", "quotité disponible"],
     canonicalUrl: `${BASE}/blog/desheriter-enfant-possible`,
-  faqs: [
+    faqs: [
     { question: "Peut-on totalement déshériter un enfant en France ?", answer: "Non, le droit français interdit de déshériter totalement un enfant grâce à la réserve héréditaire qui lui garantit une part minimale du patrimoine." },
-    { question: "Dans quels cas un enfant peut-il être privé d&apos;héritage ?", answer: "Un enfant peut être déclaré indigne en cas de faute grave (meurtre, violences, faux témoignage) envers le défunt, sur décision judiciaire." },
-    { question: "Comment réduire la part d&apos;un enfant légalement ?", answer: "Vous pouvez avantager d&apos;autres héritiers via la quotité disponible, l&apos;assurance-vie ou des donations, tout en respectant la réserve héréditaire." },
+    { question: "Dans quels cas un enfant peut-il être privé d'héritage ?", answer: "Un enfant peut être déclaré indigne en cas de faute grave (meurtre, violences, faux témoignage) envers le défunt, sur décision judiciaire." },
+    { question: "Comment réduire la part d'un enfant légalement ?", answer: "Vous pouvez avantager d'autres héritiers via la quotité disponible, l'assurance-vie ou des donations, tout en respectant la réserve héréditaire." },
   ],
   },
   {
@@ -104,25 +142,25 @@ export interface BlogPost {
     category: "Succession",
     keywords: ["droits de succession calcul", "barème succession 2026", "abattement succession", "calcul droits succession", "fiscalité héritage"],
     canonicalUrl: `${BASE}/blog/droits-succession-calcul`,
-  faqs: [
-    { question: "Quel est l'abattement entre parent et enfant en 2026 ?", answer: "L&apos;abattement reste fixé à 100 000 € par parent et par enfant, renouvelable tous les 15 ans." },
+    faqs: [
+    { question: "Quel est l'abattement entre parent et enfant en 2026 ?", answer: "L'abattement reste fixé à 100 000 € par parent et par enfant, renouvelable tous les 15 ans." },
     { question: "Le conjoint survivant paie-t-il des droits de succession ?", answer: "Non, le conjoint marié ou pacsé est totalement exonéré de droits de succession depuis la loi TEPA de 2007." },
-    { question: "Quand faut-il payer les droits de succession ?", answer: "Les droits doivent être réglés dans les 6 mois suivant le décès (12 mois si décès à l&apos;étranger), en même temps que la déclaration." },
+    { question: "Quand faut-il payer les droits de succession ?", answer: "Les droits doivent être réglés dans les 6 mois suivant le décès (12 mois si décès à l'étranger), en même temps que la déclaration." },
   ],
   },
   {
     slug: "acte-notoriete-succession",
     title: "Acte de notoriété succession : rôle du notaire",
-    excerpt: "Acte de notoriété succession notaire : définition, prix, délais et démarches. Découvrez son utilité pour prouver votre qualité d&apos;héritier.",
+    excerpt: "Acte de notoriété succession notaire : définition, prix, délais et démarches. Découvrez son utilité pour prouver votre qualité d'héritier.",
     date: "2026-06-08",
     readingTime: 7,
     category: "Succession",
     keywords: ["acte de notoriété succession", "notaire succession", "héritier", "preuve qualité héritier", "règlement succession"],
     canonicalUrl: `${BASE}/blog/acte-notoriete-succession`,
-  faqs: [
-    { question: "Quel est le prix d&apos;un acte de notoriété ?", answer: "Le tarif est réglementé : environ 58 € HT pour l&apos;émolument du notaire, auxquels s&apos;ajoutent les frais de recherche, copies et débours. Comptez en pratique entre 200 € et 400 € TTC selon la complexité du dossier." },
-    { question: "L&apos;acte de notoriété est-il obligatoire ?", answer: "Il est obligatoire pour toute succession dépassant 5 910,57 € à débloquer auprès des banques, ou comportant un bien immobilier. En dessous, un certificat d&apos;hérédité ou une attestation signée des héritiers peut suffire." },
-    { question: "Combien de temps pour obtenir l&apos;acte de notoriété ?", answer: "Le délai est généralement de 1 à 3 mois après le décès. Il dépend de la rapidité à réunir les pièces d&apos;état civil, du livret de famille et de l&apos;identification de tous les héritiers." },
+    faqs: [
+    { question: "Quel est le prix d'un acte de notoriété ?", answer: "Le tarif est réglementé : environ 58 € HT pour l'émolument du notaire, auxquels s'ajoutent les frais de recherche, copies et débours. Comptez en pratique entre 200 € et 400 € TTC selon la complexité du dossier." },
+    { question: "L'acte de notoriété est-il obligatoire ?", answer: "Il est obligatoire pour toute succession dépassant 5 910,57 € à débloquer auprès des banques, ou comportant un bien immobilier. En dessous, un certificat d'hérédité ou une attestation signée des héritiers peut suffire." },
+    { question: "Combien de temps pour obtenir l'acte de notoriété ?", answer: "Le délai est généralement de 1 à 3 mois après le décès. Il dépend de la rapidité à réunir les pièces d'état civil, du livret de famille et de l'identification de tous les héritiers." },
   ],
   },
   {
@@ -134,9 +172,9 @@ export interface BlogPost {
     category: "Succession",
     keywords: ["partage succession indivision notaire", "sortir indivision succession", "acte de partage notaire", "indivision successorale", "partage amiable héritiers"],
     canonicalUrl: `${BASE}/blog/partage-succession-indivision`,
-  faqs: [
-    { question: "Le recours au notaire est-il obligatoire pour un partage de succession ?", answer: "Oui, dès lors que la succession comprend un bien immobilier. Le notaire rédige l&apos;acte de partage authentique nécessaire à la publication au service de la publicité foncière." },
-    { question: "Combien coûte un partage successoral chez le notaire ?", answer: "Les frais comprennent un droit de partage de 2,5% sur l&apos;actif net partagé, les émoluments du notaire (environ 1 à 2%) et les débours. Comptez globalement entre 4 et 5% de la valeur des biens." },
+    faqs: [
+    { question: "Le recours au notaire est-il obligatoire pour un partage de succession ?", answer: "Oui, dès lors que la succession comprend un bien immobilier. Le notaire rédige l'acte de partage authentique nécessaire à la publication au service de la publicité foncière." },
+    { question: "Combien coûte un partage successoral chez le notaire ?", answer: "Les frais comprennent un droit de partage de 2,5% sur l'actif net partagé, les émoluments du notaire (environ 1 à 2%) et les débours. Comptez globalement entre 4 et 5% de la valeur des biens." },
     { question: "Que faire si un héritier refuse le partage ?", answer: "Vous pouvez saisir le tribunal judiciaire pour demander un partage judiciaire. Le juge désignera un notaire pour procéder aux opérations et trancher les désaccords entre cohéritiers." },
   ],
   },
@@ -149,25 +187,25 @@ export interface BlogPost {
     category: "Succession",
     keywords: ["renoncer succession notaire", "renonciation succession procédure", "refuser héritage notaire", "succession déficitaire"],
     canonicalUrl: `${BASE}/blog/renoncer-succession-notaire`,
-  faqs: [
-    { question: "Combien coûte une renonciation à succession chez le notaire ?", answer: "La déclaration de renonciation au greffe est gratuite. Chez le notaire, comptez environ 15 à 30 € pour l&apos;acte authentique, hors honoraires de conseil éventuels." },
-    { question: "Quel est le délai pour renoncer à une succession ?", answer: "Vous disposez de 10 ans à compter de l&apos;ouverture de la succession. Toutefois, un créancier ou cohéritier peut vous sommer de choisir après 4 mois, vous laissant alors 2 mois pour vous décider." },
-    { question: "Peut-on revenir sur une renonciation à succession ?", answer: "Oui, tant que la succession n&apos;a pas été acceptée par un autre héritier et dans la limite de 10 ans. Cette rétractation s&apos;appelle la révocation de la renonciation." },
+    faqs: [
+    { question: "Combien coûte une renonciation à succession chez le notaire ?", answer: "La déclaration de renonciation au greffe est gratuite. Chez le notaire, comptez environ 15 à 30 € pour l'acte authentique, hors honoraires de conseil éventuels." },
+    { question: "Quel est le délai pour renoncer à une succession ?", answer: "Vous disposez de 10 ans à compter de l'ouverture de la succession. Toutefois, un créancier ou cohéritier peut vous sommer de choisir après 4 mois, vous laissant alors 2 mois pour vous décider." },
+    { question: "Peut-on revenir sur une renonciation à succession ?", answer: "Oui, tant que la succession n'a pas été acceptée par un autre héritier et dans la limite de 10 ans. Cette rétractation s'appelle la révocation de la renonciation." },
   ],
   },
   {
     slug: "succession-concubin-non-marie",
     title: "Succession concubin non marié : guide notaire 2025",
-    excerpt: "Succession concubin non marié : droits, fiscalité à 60%, solutions notariales pour protéger votre partenaire. Conseils d&apos;un notaire expert.",
+    excerpt: "Succession concubin non marié : droits, fiscalité à 60%, solutions notariales pour protéger votre partenaire. Conseils d'un notaire expert.",
     date: "2026-06-08",
     readingTime: 7,
     category: "Succession",
     keywords: ["succession concubin non marié", "héritage concubinage", "protéger concubin", "donation concubin", "testament concubin"],
     canonicalUrl: `${BASE}/blog/succession-concubin-non-marie`,
-  faqs: [
-    { question: "Un concubin hérite-t-il automatiquement ?", answer: "Non, le concubin n&apos;a aucun droit successoral légal. Sans testament ni donation, il ne reçoit rien du patrimoine de son partenaire décédé." },
+    faqs: [
+    { question: "Un concubin hérite-t-il automatiquement ?", answer: "Non, le concubin n'a aucun droit successoral légal. Sans testament ni donation, il ne reçoit rien du patrimoine de son partenaire décédé." },
     { question: "Quels sont les droits de succession pour un concubin ?", answer: "Le concubin est taxé à 60% après un abattement très faible de 1 594 €, ce qui en fait le régime fiscal le plus défavorable." },
-    { question: "Comment protéger son concubin sans se marier ?", answer: "Plusieurs outils existent : testament, assurance-vie, SCI, donation, ou conclusion d&apos;un PACS qui offre une fiscalité bien plus avantageuse." },
+    { question: "Comment protéger son concubin sans se marier ?", answer: "Plusieurs outils existent : testament, assurance-vie, SCI, donation, ou conclusion d'un PACS qui offre une fiscalité bien plus avantageuse." },
   ],
   },
   {
@@ -179,7 +217,7 @@ export interface BlogPost {
     category: "Succession",
     keywords: ["optimisation fiscale succession", "droits de succession", "notaire succession", "donation", "assurance-vie"],
     canonicalUrl: `${BASE}/blog/optimisation-fiscale-succession`,
-  faqs: [
+    faqs: [
     { question: "Quel est l'abattement pour les enfants en 2025 ?", answer: "Chaque enfant bénéficie d'un abattement de 100 000 € par parent, renouvelable tous les 15 ans sur les donations." },
     { question: "L'assurance-vie est-elle vraiment hors succession ?", answer: "Oui, les capitaux versés avant 70 ans bénéficient d'un abattement de 152 500 € par bénéficiaire, hors actif successoral." },
     { question: "Quand consulter un notaire pour optimiser sa succession ?", answer: "Le plus tôt possible. Une planification anticipée permet d'étaler les donations et de maximiser les abattements fiscaux." },
@@ -194,10 +232,10 @@ export interface BlogPost {
     category: "Succession",
     keywords: ["rapport donation succession", "rapport civil succession", "donation rapportable", "égalité héritiers"],
     canonicalUrl: `${BASE}/blog/rapport-donation-succession`,
-  faqs: [
-    { question: "Toutes les donations sont-elles rapportables ?", answer: "Non. Seules les donations consenties à un héritier sont rapportables, sauf si elles ont été faites hors part successorale. Les présents d&apos;usage en sont également exclus." },
-    { question: "Comment évaluer un bien donné lors du rapport ?", answer: "Le bien est évalué à sa valeur au jour du partage, selon son état au jour de la donation. Cette règle protège l&apos;équité entre cohéritiers." },
-    { question: "Que se passe-t-il si la donation excède la part de l&apos;héritier ?", answer: "Si le rapport révèle un excédent, l&apos;héritier doit une indemnité de rapport à la succession, sauf disposition contraire de l&apos;acte de donation." },
+    faqs: [
+    { question: "Toutes les donations sont-elles rapportables ?", answer: "Non. Seules les donations consenties à un héritier sont rapportables, sauf si elles ont été faites hors part successorale. Les présents d'usage en sont également exclus." },
+    { question: "Comment évaluer un bien donné lors du rapport ?", answer: "Le bien est évalué à sa valeur au jour du partage, selon son état au jour de la donation. Cette règle protège l'équité entre cohéritiers." },
+    { question: "Que se passe-t-il si la donation excède la part de l'héritier ?", answer: "Si le rapport révèle un excédent, l'héritier doit une indemnité de rapport à la succession, sauf disposition contraire de l'acte de donation." },
   ],
   },
   {
@@ -209,10 +247,10 @@ export interface BlogPost {
     category: "Succession",
     keywords: ["legs particulier", "legs universel", "testament notaire", "legs à titre universel", "succession"],
     canonicalUrl: `${BASE}/blog/legs-testament-notaire`,
-  faqs: [
-    { question: "Quelle est la différence entre legs particulier et universel ?", answer: "Le legs universel transmet l&apos;ensemble du patrimoine, le legs particulier porte sur un bien précis (somme, immeuble, objet). Le legs à titre universel concerne une quote-part du patrimoine." },
+    faqs: [
+    { question: "Quelle est la différence entre legs particulier et universel ?", answer: "Le legs universel transmet l'ensemble du patrimoine, le legs particulier porte sur un bien précis (somme, immeuble, objet). Le legs à titre universel concerne une quote-part du patrimoine." },
     { question: "Faut-il obligatoirement passer par un notaire pour un legs ?", answer: "Non, un testament olographe (écrit à la main) suffit légalement. Mais le testament authentique chez le notaire sécurise vos volontés et évite les contestations." },
-    { question: "Quels sont les frais fiscaux d&apos;un legs ?", answer: "Les droits de succession s&apos;appliquent selon le lien de parenté entre testateur et légataire. Un legs à un tiers est taxé à 60 %, tandis qu&apos;un legs à un enfant bénéficie d&apos;abattements." },
+    { question: "Quels sont les frais fiscaux d'un legs ?", answer: "Les droits de succession s'appliquent selon le lien de parenté entre testateur et légataire. Un legs à un tiers est taxé à 60 %, tandis qu'un legs à un enfant bénéficie d'abattements." },
   ],
   },
   {
@@ -224,10 +262,10 @@ export interface BlogPost {
     category: "Succession",
     keywords: ["succession internationale notaire français", "succession transfrontalière", "règlement européen succession", "certificat successoral européen"],
     canonicalUrl: `${BASE}/blog/succession-internationale`,
-  faqs: [
-    { question: "Quelle loi s&apos;applique à une succession internationale ?", answer: "Depuis le règlement européen de 2015, la loi applicable est celle du dernier domicile du défunt, sauf choix exprès pour la loi de sa nationalité dans son testament." },
+    faqs: [
+    { question: "Quelle loi s'applique à une succession internationale ?", answer: "Depuis le règlement européen de 2015, la loi applicable est celle du dernier domicile du défunt, sauf choix exprès pour la loi de sa nationalité dans son testament." },
     { question: "Faut-il payer des droits de succession dans deux pays ?", answer: "Cela dépend des conventions fiscales bilatérales. La France a signé des conventions avec une trentaine de pays pour éviter la double imposition successorale." },
-    { question: "Qu&apos;est-ce que le certificat successoral européen ?", answer: "C&apos;est un document délivré par le notaire qui prouve la qualité d&apos;héritier dans tous les pays de l&apos;Union européenne, sans formalité supplémentaire." },
+    { question: "Qu'est-ce que le certificat successoral européen ?", answer: "C'est un document délivré par le notaire qui prouve la qualité d'héritier dans tous les pays de l'Union européenne, sans formalité supplémentaire." },
   ],
   },
   {
@@ -239,10 +277,10 @@ export interface BlogPost {
     category: "Immobilier",
     keywords: ["compromis vs acte de vente notaire", "compromis de vente", "acte authentique", "achat immobilier notaire"],
     canonicalUrl: `${BASE}/blog/compromis-acte-de-vente-difference`,
-  faqs: [
+    faqs: [
     { question: "Le compromis de vente doit-il être signé chez le notaire ?", answer: "Non, le compromis peut être signé chez un agent immobilier ou entre particuliers. Toutefois, le faire signer chez un notaire offre une sécurité juridique renforcée, sans surcoût dans la plupart des cas." },
-    { question: "Combien de temps entre le compromis et l&apos;acte de vente ?", answer: "Le délai habituel est de 3 à 4 mois. Ce temps permet de lever les conditions suspensives (prêt, urbanisme) et de réunir tous les documents nécessaires à la signature de l&apos;acte authentique." },
-    { question: "Peut-on annuler un compromis de vente ?", answer: "L&apos;acheteur dispose d&apos;un délai de rétractation de 10 jours après la signature. Au-delà, l&apos;annulation n&apos;est possible que si une condition suspensive n&apos;est pas remplie, sous peine de perdre le dépôt de garantie." },
+    { question: "Combien de temps entre le compromis et l'acte de vente ?", answer: "Le délai habituel est de 3 à 4 mois. Ce temps permet de lever les conditions suspensives (prêt, urbanisme) et de réunir tous les documents nécessaires à la signature de l'acte authentique." },
+    { question: "Peut-on annuler un compromis de vente ?", answer: "L'acheteur dispose d'un délai de rétractation de 10 jours après la signature. Au-delà, l'annulation n'est possible que si une condition suspensive n'est pas remplie, sous peine de perdre le dépôt de garantie." },
   ],
   },
   {
@@ -254,10 +292,10 @@ export interface BlogPost {
     category: "Immobilier",
     keywords: ["plus-value immobilière exonération résidence principale", "exonération plus-value", "vente résidence principale", "impôt plus-value immobilière"],
     canonicalUrl: `${BASE}/blog/plus-value-immobiliere-exoneration`,
-  faqs: [
-    { question: "Quelle est l&apos;exonération de plus-value pour une résidence principale ?", answer: "La vente de votre résidence principale est totalement exonérée de plus-value immobilière, sans condition de durée de détention, à condition qu&apos;elle constitue votre habitation effective et habituelle au jour de la cession." },
-    { question: "Combien de temps pour vendre après avoir quitté sa résidence principale ?", answer: "L&apos;administration fiscale tolère un délai d&apos;environ 12 mois entre le déménagement et la vente, à condition que le bien soit mis en vente immédiatement et reste inoccupé." },
-    { question: "Une résidence secondaire peut-elle bénéficier d&apos;une exonération ?", answer: "Oui, dans certains cas : première cession d&apos;une résidence secondaire si le vendeur n&apos;a pas été propriétaire de sa résidence principale depuis 4 ans et réinvestit dans une résidence principale dans les 24 mois." },
+    faqs: [
+    { question: "Quelle est l'exonération de plus-value pour une résidence principale ?", answer: "La vente de votre résidence principale est totalement exonérée de plus-value immobilière, sans condition de durée de détention, à condition qu'elle constitue votre habitation effective et habituelle au jour de la cession." },
+    { question: "Combien de temps pour vendre après avoir quitté sa résidence principale ?", answer: "L'administration fiscale tolère un délai d'environ 12 mois entre le déménagement et la vente, à condition que le bien soit mis en vente immédiatement et reste inoccupé." },
+    { question: "Une résidence secondaire peut-elle bénéficier d'une exonération ?", answer: "Oui, dans certains cas : première cession d'une résidence secondaire si le vendeur n'a pas été propriétaire de sa résidence principale depuis 4 ans et réinvestit dans une résidence principale dans les 24 mois." },
   ],
   },
   {
@@ -269,10 +307,10 @@ export interface BlogPost {
     category: "Immobilier",
     keywords: ["viager bouquet rente notaire", "vente en viager", "calcul rente viagère", "viager occupé"],
     canonicalUrl: `${BASE}/blog/viager-notaire-guide`,
-  faqs: [
-    { question: "Quelle est la différence entre bouquet et rente ?", answer: "Le bouquet est la somme versée au comptant le jour de la signature. La rente est le versement périodique (souvent mensuel) dû au vendeur jusqu&apos;à son décès." },
-    { question: "Le passage chez le notaire est-il obligatoire ?", answer: "Oui. La vente en viager est un acte authentique obligatoire. Le notaire sécurise la transaction, calcule la rente et publie l&apos;acte au service de la publicité foncière." },
-    { question: "Que se passe-t-il si l&apos;acheteur ne paie plus la rente ?", answer: "Le contrat prévoit une clause résolutoire : le vendeur peut récupérer le bien et conserver les sommes déjà versées à titre de dommages-intérêts." },
+    faqs: [
+    { question: "Quelle est la différence entre bouquet et rente ?", answer: "Le bouquet est la somme versée au comptant le jour de la signature. La rente est le versement périodique (souvent mensuel) dû au vendeur jusqu'à son décès." },
+    { question: "Le passage chez le notaire est-il obligatoire ?", answer: "Oui. La vente en viager est un acte authentique obligatoire. Le notaire sécurise la transaction, calcule la rente et publie l'acte au service de la publicité foncière." },
+    { question: "Que se passe-t-il si l'acheteur ne paie plus la rente ?", answer: "Le contrat prévoit une clause résolutoire : le vendeur peut récupérer le bien et conserver les sommes déjà versées à titre de dommages-intérêts." },
   ],
   },
   {
@@ -284,10 +322,10 @@ export interface BlogPost {
     category: "Immobilier",
     keywords: ["SCI familiale", "création SCI notaire", "société civile immobilière", "transmission patrimoine", "avantages SCI"],
     canonicalUrl: `${BASE}/blog/sci-familiale-creation-notaire`,
-  faqs: [
-    { question: "Faut-il obligatoirement un notaire pour créer une SCI familiale ?", answer: "Le notaire n&apos;est pas obligatoire si la SCI ne reçoit aucun apport immobilier. En revanche, dès qu&apos;un bien immobilier est apporté au capital, l&apos;acte notarié devient impératif." },
-    { question: "Quel est le coût de création d&apos;une SCI familiale ?", answer: "Comptez entre 1 500 € et 3 000 € avec un notaire, incluant la rédaction des statuts, les frais d&apos;enregistrement et la publication légale. Le coût varie selon les apports." },
-    { question: "Combien d&apos;associés faut-il pour créer une SCI familiale ?", answer: "Une SCI requiert au minimum deux associés, souvent des membres d&apos;une même famille (parents, enfants, conjoints). Aucun capital minimum n&apos;est imposé par la loi." },
+    faqs: [
+    { question: "Faut-il obligatoirement un notaire pour créer une SCI familiale ?", answer: "Le notaire n'est pas obligatoire si la SCI ne reçoit aucun apport immobilier. En revanche, dès qu'un bien immobilier est apporté au capital, l'acte notarié devient impératif." },
+    { question: "Quel est le coût de création d'une SCI familiale ?", answer: "Comptez entre 1 500 € et 3 000 € avec un notaire, incluant la rédaction des statuts, les frais d'enregistrement et la publication légale. Le coût varie selon les apports." },
+    { question: "Combien d'associés faut-il pour créer une SCI familiale ?", answer: "Une SCI requiert au minimum deux associés, souvent des membres d'une même famille (parents, enfants, conjoints). Aucun capital minimum n'est imposé par la loi." },
   ],
   },
   {
@@ -299,10 +337,10 @@ export interface BlogPost {
     category: "Immobilier",
     keywords: ["achat immobilier en indivision notaire", "indivision immobilière", "convention indivision", "quote-part indivision"],
     canonicalUrl: `${BASE}/blog/achat-immobilier-indivision`,
-  faqs: [
-    { question: "Faut-il obligatoirement passer par un notaire pour acheter en indivision ?", answer: "Oui, tout achat immobilier nécessite un acte authentique rédigé par un notaire, qu&apos;il s&apos;agisse d&apos;un achat seul ou en indivision." },
-    { question: "Peut-on fixer des quotes-parts différentes des apports ?", answer: "Oui, mais cela peut être requalifié en donation déguisée par l&apos;administration fiscale. Le notaire vous conseillera la répartition la plus adaptée." },
-    { question: "Que se passe-t-il si un indivisaire veut vendre sa part ?", answer: "Chaque indivisaire peut céder sa quote-part, mais les autres bénéficient d&apos;un droit de préemption. À défaut d&apos;accord, le partage judiciaire peut être demandé." },
+    faqs: [
+    { question: "Faut-il obligatoirement passer par un notaire pour acheter en indivision ?", answer: "Oui, tout achat immobilier nécessite un acte authentique rédigé par un notaire, qu'il s'agisse d'un achat seul ou en indivision." },
+    { question: "Peut-on fixer des quotes-parts différentes des apports ?", answer: "Oui, mais cela peut être requalifié en donation déguisée par l'administration fiscale. Le notaire vous conseillera la répartition la plus adaptée." },
+    { question: "Que se passe-t-il si un indivisaire veut vendre sa part ?", answer: "Chaque indivisaire peut céder sa quote-part, mais les autres bénéficient d'un droit de préemption. À défaut d'accord, le partage judiciaire peut être demandé." },
   ],
   },
   {
@@ -314,19 +352,12 @@ export interface BlogPost {
     category: "Immobilier",
     keywords: ["servitude de passage notaire", "acte de servitude", "droit de passage", "enclavement", "servitude conventionnelle"],
     canonicalUrl: `${BASE}/blog/servitude-passage-notaire`,
-  faqs: [
-    { question: "Faut-il obligatoirement un notaire pour une servitude de passage ?", answer: "Oui, dès lors que la servitude est conventionnelle et destinée à être publiée au service de la publicité foncière, l&apos;acte notarié est obligatoire pour la rendre opposable aux tiers." },
-    { question: "Combien coûte la création d&apos;une servitude de passage chez le notaire ?", answer: "Les frais varient généralement entre 800 et 2 000 €, incluant les émoluments du notaire, les droits d&apos;enregistrement et les frais de publication foncière." },
-    { question: "Une servitude de passage peut-elle être supprimée ?", answer: "Oui, par accord amiable entre les propriétaires via un acte notarié, par non-usage pendant 30 ans, ou si l&apos;état d&apos;enclavement cesse." },
+    faqs: [
+    { question: "Faut-il obligatoirement un notaire pour une servitude de passage ?", answer: "Oui, dès lors que la servitude est conventionnelle et destinée à être publiée au service de la publicité foncière, l'acte notarié est obligatoire pour la rendre opposable aux tiers." },
+    { question: "Combien coûte la création d'une servitude de passage chez le notaire ?", answer: "Les frais varient généralement entre 800 et 2 000 €, incluant les émoluments du notaire, les droits d'enregistrement et les frais de publication foncière." },
+    { question: "Une servitude de passage peut-elle être supprimée ?", answer: "Oui, par accord amiable entre les propriétaires via un acte notarié, par non-usage pendant 30 ans, ou si l'état d'enclavement cesse." },
   ],
   },
-];
-  canonicalUrl: string;
-}
-
-const BASE = "https://notaires.io";
-
-export const BLOG_POSTS: BlogPost[] = [
   {
     slug: "contrat-de-mariage-separation-de-biens-ou-communaute",
     title: "Contrat de mariage : séparation de biens ou communauté ?",
@@ -401,11 +432,11 @@ export const BLOG_POSTS: BlogPost[] = [
     readingTime: 7,
     category: "Succession",
     keywords: ["testament olographe ou notarié", "testament notaire", "rédiger testament", "succession"],
-    canonicalUrl: `${BASE}/blog/testament-olographe-notarie`,,
-  faqs: [
-    { question: "Un testament olographe a-t-il la même valeur qu&apos;un testament notarié ?", answer: "Oui, les deux ont la même valeur juridique s&apos;ils respectent les conditions de forme. Le testament notarié offre toutefois une sécurité juridique supérieure et un risque de contestation moindre." },
-    { question: "Combien coûte un testament chez le notaire ?", answer: "Un testament authentique coûte environ 115 à 140 € HT, auxquels s&apos;ajoutent les frais d&apos;enregistrement au fichier central des dispositions de dernières volontés (environ 30 €)." },
-    { question: "Peut-on modifier un testament olographe ou notarié ?", answer: "Oui, vous pouvez à tout moment révoquer ou modifier votre testament, qu&apos;il soit olographe ou notarié, en rédigeant un nouveau document daté et signé." },
+    canonicalUrl: `${BASE}/blog/testament-olographe-notarie`,
+    faqs: [
+    { question: "Un testament olographe a-t-il la même valeur qu'un testament notarié ?", answer: "Oui, les deux ont la même valeur juridique s'ils respectent les conditions de forme. Le testament notarié offre toutefois une sécurité juridique supérieure et un risque de contestation moindre." },
+    { question: "Combien coûte un testament chez le notaire ?", answer: "Un testament authentique coûte environ 115 à 140 € HT, auxquels s'ajoutent les frais d'enregistrement au fichier central des dispositions de dernières volontés (environ 30 €)." },
+    { question: "Peut-on modifier un testament olographe ou notarié ?", answer: "Oui, vous pouvez à tout moment révoquer ou modifier votre testament, qu'il soit olographe ou notarié, en rédigeant un nouveau document daté et signé." },
   ],
   },
   {
@@ -416,11 +447,11 @@ export const BLOG_POSTS: BlogPost[] = [
     readingTime: 7,
     category: "Succession",
     keywords: ["assurance vie succession notaire", "fiscalité assurance vie", "bénéficiaire assurance vie", "transmission patrimoine"],
-    canonicalUrl: `${BASE}/blog/assurance-vie-succession-notaire`,,
-  faqs: [
-    { question: "Faut-il déclarer l&apos;assurance vie au notaire ?", answer: "Oui, même si elle est hors succession civile, le notaire doit en être informé pour vérifier l&apos;absence de primes manifestement exagérées et calculer la fiscalité éventuelle." },
-    { question: "L&apos;assurance vie échappe-t-elle aux droits de succession ?", answer: "Partiellement. Les versements avant 70 ans bénéficient d&apos;un abattement de 152 500 € par bénéficiaire, puis taxation à 20% ou 31,25%. Après 70 ans, abattement global de 30 500 €." },
-    { question: "Le notaire peut-il débloquer une assurance vie ?", answer: "Non, c&apos;est la compagnie d&apos;assurance qui verse les fonds directement aux bénéficiaires désignés, sur présentation de l&apos;acte de décès et des pièces justificatives." },
+    canonicalUrl: `${BASE}/blog/assurance-vie-succession-notaire`,
+    faqs: [
+    { question: "Faut-il déclarer l'assurance vie au notaire ?", answer: "Oui, même si elle est hors succession civile, le notaire doit en être informé pour vérifier l'absence de primes manifestement exagérées et calculer la fiscalité éventuelle." },
+    { question: "L'assurance vie échappe-t-elle aux droits de succession ?", answer: "Partiellement. Les versements avant 70 ans bénéficient d'un abattement de 152 500 € par bénéficiaire, puis taxation à 20% ou 31,25%. Après 70 ans, abattement global de 30 500 €." },
+    { question: "Le notaire peut-il débloquer une assurance vie ?", answer: "Non, c'est la compagnie d'assurance qui verse les fonds directement aux bénéficiaires désignés, sur présentation de l'acte de décès et des pièces justificatives." },
   ],
   },
   {
@@ -431,11 +462,11 @@ export const BLOG_POSTS: BlogPost[] = [
     readingTime: 7,
     category: "Succession",
     keywords: ["héritiers réservataires", "quotité disponible", "réserve héréditaire", "succession", "testament"],
-    canonicalUrl: `${BASE}/blog/heritiers-reservataires-quotite`,,
-  faqs: [
-    { question: "Qui sont les héritiers réservataires ?", answer: "Les enfants du défunt (et leurs descendants par représentation) sont toujours réservataires. À défaut de descendants, le conjoint survivant devient réservataire à hauteur d&apos;un quart." },
+    canonicalUrl: `${BASE}/blog/heritiers-reservataires-quotite`,
+    faqs: [
+    { question: "Qui sont les héritiers réservataires ?", answer: "Les enfants du défunt (et leurs descendants par représentation) sont toujours réservataires. À défaut de descendants, le conjoint survivant devient réservataire à hauteur d'un quart." },
     { question: "Peut-on déshériter un enfant en France ?", answer: "Non, la loi française interdit de déshériter totalement un enfant. La réserve héréditaire lui garantit une part minimale de la succession, quelle que soit la volonté du défunt." },
-    { question: "Comment calculer la quotité disponible ?", answer: "Elle dépend du nombre d&apos;enfants : 1/2 avec un enfant, 1/3 avec deux enfants, 1/4 avec trois enfants ou plus. Le reste constitue la réserve héréditaire." },
+    { question: "Comment calculer la quotité disponible ?", answer: "Elle dépend du nombre d'enfants : 1/2 avec un enfant, 1/3 avec deux enfants, 1/4 avec trois enfants ou plus. Le reste constitue la réserve héréditaire." },
   ],
   },
   {
@@ -446,8 +477,8 @@ export const BLOG_POSTS: BlogPost[] = [
     readingTime: 7,
     category: "Succession",
     keywords: ["déclaration succession délais", "impôts succession", "droits de succession", "délai déclaration succession", "pénalités succession"],
-    canonicalUrl: `${BASE}/blog/declaration-succession-delais`,,
-  faqs: [
+    canonicalUrl: `${BASE}/blog/declaration-succession-delais`,
+    faqs: [
     { question: "Quel est le délai pour déclarer une succession ?", answer: "Le délai est de 6 mois à compter du décès si celui-ci a lieu en France, et de 12 mois s'il survient à l'étranger. Passé ce délai, des pénalités s'appliquent." },
     { question: "Qui doit payer les droits de succession ?", answer: "Chaque héritier paie les droits sur sa part. Le notaire calcule le montant en fonction du lien de parenté et des abattements applicables (100 000 € entre parent et enfant)." },
     { question: "Que se passe-t-il en cas de retard de déclaration ?", answer: "Un intérêt de retard de 0,20 % par mois s'applique dès le 7ème mois, plus une majoration de 10 % après 6 mois supplémentaires, et 40 % après mise en demeure." },
@@ -462,10 +493,10 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Succession",
     keywords: ["succession sans testament", "héritiers légaux", "succession ab intestat", "ordre des héritiers", "part réservataire"],
     canonicalUrl: `${BASE}/blog/succession-sans-testament`,
-  faqs: [
+    faqs: [
     { question: "Que se passe-t-il en cas de succession sans testament ?", answer: "La loi française détermine automatiquement les héritiers selon un ordre précis : descendants, ascendants, collatéraux. Le notaire applique les règles du Code civil pour répartir le patrimoine." },
-    { question: "Le conjoint survivant hérite-t-il sans testament ?", answer: "Oui. En présence d&apos;enfants communs, il choisit entre 1/4 en pleine propriété ou la totalité en usufruit. Sans enfants, sa part est plus importante selon les autres héritiers présents." },
-    { question: "Combien de temps pour régler une succession sans testament ?", answer: "En moyenne 6 mois pour la déclaration fiscale, et 6 à 12 mois pour le règlement complet. Les délais varient selon la complexité du patrimoine et le nombre d&apos;héritiers." },
+    { question: "Le conjoint survivant hérite-t-il sans testament ?", answer: "Oui. En présence d'enfants communs, il choisit entre 1/4 en pleine propriété ou la totalité en usufruit. Sans enfants, sa part est plus importante selon les autres héritiers présents." },
+    { question: "Combien de temps pour régler une succession sans testament ?", answer: "En moyenne 6 mois pour la déclaration fiscale, et 6 à 12 mois pour le règlement complet. Les délais varient selon la complexité du patrimoine et le nombre d'héritiers." },
   ],
   },
   {
@@ -477,10 +508,10 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Succession",
     keywords: ["déshériter un enfant", "réserve héréditaire", "succession", "héritiers réservataires", "quotité disponible"],
     canonicalUrl: `${BASE}/blog/desheriter-enfant-possible`,
-  faqs: [
+    faqs: [
     { question: "Peut-on totalement déshériter un enfant en France ?", answer: "Non, le droit français interdit de déshériter totalement un enfant grâce à la réserve héréditaire qui lui garantit une part minimale du patrimoine." },
-    { question: "Dans quels cas un enfant peut-il être privé d&apos;héritage ?", answer: "Un enfant peut être déclaré indigne en cas de faute grave (meurtre, violences, faux témoignage) envers le défunt, sur décision judiciaire." },
-    { question: "Comment réduire la part d&apos;un enfant légalement ?", answer: "Vous pouvez avantager d&apos;autres héritiers via la quotité disponible, l&apos;assurance-vie ou des donations, tout en respectant la réserve héréditaire." },
+    { question: "Dans quels cas un enfant peut-il être privé d'héritage ?", answer: "Un enfant peut être déclaré indigne en cas de faute grave (meurtre, violences, faux témoignage) envers le défunt, sur décision judiciaire." },
+    { question: "Comment réduire la part d'un enfant légalement ?", answer: "Vous pouvez avantager d'autres héritiers via la quotité disponible, l'assurance-vie ou des donations, tout en respectant la réserve héréditaire." },
   ],
   },
   {
@@ -492,25 +523,25 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Succession",
     keywords: ["droits de succession calcul", "barème succession 2026", "abattement succession", "calcul droits succession", "fiscalité héritage"],
     canonicalUrl: `${BASE}/blog/droits-succession-calcul`,
-  faqs: [
-    { question: "Quel est l'abattement entre parent et enfant en 2026 ?", answer: "L&apos;abattement reste fixé à 100 000 € par parent et par enfant, renouvelable tous les 15 ans." },
+    faqs: [
+    { question: "Quel est l'abattement entre parent et enfant en 2026 ?", answer: "L'abattement reste fixé à 100 000 € par parent et par enfant, renouvelable tous les 15 ans." },
     { question: "Le conjoint survivant paie-t-il des droits de succession ?", answer: "Non, le conjoint marié ou pacsé est totalement exonéré de droits de succession depuis la loi TEPA de 2007." },
-    { question: "Quand faut-il payer les droits de succession ?", answer: "Les droits doivent être réglés dans les 6 mois suivant le décès (12 mois si décès à l&apos;étranger), en même temps que la déclaration." },
+    { question: "Quand faut-il payer les droits de succession ?", answer: "Les droits doivent être réglés dans les 6 mois suivant le décès (12 mois si décès à l'étranger), en même temps que la déclaration." },
   ],
   },
   {
     slug: "acte-notoriete-succession",
     title: "Acte de notoriété succession : rôle du notaire",
-    excerpt: "Acte de notoriété succession notaire : définition, prix, délais et démarches. Découvrez son utilité pour prouver votre qualité d&apos;héritier.",
+    excerpt: "Acte de notoriété succession notaire : définition, prix, délais et démarches. Découvrez son utilité pour prouver votre qualité d'héritier.",
     date: "2026-06-08",
     readingTime: 7,
     category: "Succession",
     keywords: ["acte de notoriété succession", "notaire succession", "héritier", "preuve qualité héritier", "règlement succession"],
     canonicalUrl: `${BASE}/blog/acte-notoriete-succession`,
-  faqs: [
-    { question: "Quel est le prix d&apos;un acte de notoriété ?", answer: "Le tarif est réglementé : environ 58 € HT pour l&apos;émolument du notaire, auxquels s&apos;ajoutent les frais de recherche, copies et débours. Comptez en pratique entre 200 € et 400 € TTC selon la complexité du dossier." },
-    { question: "L&apos;acte de notoriété est-il obligatoire ?", answer: "Il est obligatoire pour toute succession dépassant 5 910,57 € à débloquer auprès des banques, ou comportant un bien immobilier. En dessous, un certificat d&apos;hérédité ou une attestation signée des héritiers peut suffire." },
-    { question: "Combien de temps pour obtenir l&apos;acte de notoriété ?", answer: "Le délai est généralement de 1 à 3 mois après le décès. Il dépend de la rapidité à réunir les pièces d&apos;état civil, du livret de famille et de l&apos;identification de tous les héritiers." },
+    faqs: [
+    { question: "Quel est le prix d'un acte de notoriété ?", answer: "Le tarif est réglementé : environ 58 € HT pour l'émolument du notaire, auxquels s'ajoutent les frais de recherche, copies et débours. Comptez en pratique entre 200 € et 400 € TTC selon la complexité du dossier." },
+    { question: "L'acte de notoriété est-il obligatoire ?", answer: "Il est obligatoire pour toute succession dépassant 5 910,57 € à débloquer auprès des banques, ou comportant un bien immobilier. En dessous, un certificat d'hérédité ou une attestation signée des héritiers peut suffire." },
+    { question: "Combien de temps pour obtenir l'acte de notoriété ?", answer: "Le délai est généralement de 1 à 3 mois après le décès. Il dépend de la rapidité à réunir les pièces d'état civil, du livret de famille et de l'identification de tous les héritiers." },
   ],
   },
   {
@@ -522,9 +553,9 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Succession",
     keywords: ["partage succession indivision notaire", "sortir indivision succession", "acte de partage notaire", "indivision successorale", "partage amiable héritiers"],
     canonicalUrl: `${BASE}/blog/partage-succession-indivision`,
-  faqs: [
-    { question: "Le recours au notaire est-il obligatoire pour un partage de succession ?", answer: "Oui, dès lors que la succession comprend un bien immobilier. Le notaire rédige l&apos;acte de partage authentique nécessaire à la publication au service de la publicité foncière." },
-    { question: "Combien coûte un partage successoral chez le notaire ?", answer: "Les frais comprennent un droit de partage de 2,5% sur l&apos;actif net partagé, les émoluments du notaire (environ 1 à 2%) et les débours. Comptez globalement entre 4 et 5% de la valeur des biens." },
+    faqs: [
+    { question: "Le recours au notaire est-il obligatoire pour un partage de succession ?", answer: "Oui, dès lors que la succession comprend un bien immobilier. Le notaire rédige l'acte de partage authentique nécessaire à la publication au service de la publicité foncière." },
+    { question: "Combien coûte un partage successoral chez le notaire ?", answer: "Les frais comprennent un droit de partage de 2,5% sur l'actif net partagé, les émoluments du notaire (environ 1 à 2%) et les débours. Comptez globalement entre 4 et 5% de la valeur des biens." },
     { question: "Que faire si un héritier refuse le partage ?", answer: "Vous pouvez saisir le tribunal judiciaire pour demander un partage judiciaire. Le juge désignera un notaire pour procéder aux opérations et trancher les désaccords entre cohéritiers." },
   ],
   },
@@ -537,25 +568,25 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Succession",
     keywords: ["renoncer succession notaire", "renonciation succession procédure", "refuser héritage notaire", "succession déficitaire"],
     canonicalUrl: `${BASE}/blog/renoncer-succession-notaire`,
-  faqs: [
-    { question: "Combien coûte une renonciation à succession chez le notaire ?", answer: "La déclaration de renonciation au greffe est gratuite. Chez le notaire, comptez environ 15 à 30 € pour l&apos;acte authentique, hors honoraires de conseil éventuels." },
-    { question: "Quel est le délai pour renoncer à une succession ?", answer: "Vous disposez de 10 ans à compter de l&apos;ouverture de la succession. Toutefois, un créancier ou cohéritier peut vous sommer de choisir après 4 mois, vous laissant alors 2 mois pour vous décider." },
-    { question: "Peut-on revenir sur une renonciation à succession ?", answer: "Oui, tant que la succession n&apos;a pas été acceptée par un autre héritier et dans la limite de 10 ans. Cette rétractation s&apos;appelle la révocation de la renonciation." },
+    faqs: [
+    { question: "Combien coûte une renonciation à succession chez le notaire ?", answer: "La déclaration de renonciation au greffe est gratuite. Chez le notaire, comptez environ 15 à 30 € pour l'acte authentique, hors honoraires de conseil éventuels." },
+    { question: "Quel est le délai pour renoncer à une succession ?", answer: "Vous disposez de 10 ans à compter de l'ouverture de la succession. Toutefois, un créancier ou cohéritier peut vous sommer de choisir après 4 mois, vous laissant alors 2 mois pour vous décider." },
+    { question: "Peut-on revenir sur une renonciation à succession ?", answer: "Oui, tant que la succession n'a pas été acceptée par un autre héritier et dans la limite de 10 ans. Cette rétractation s'appelle la révocation de la renonciation." },
   ],
   },
   {
     slug: "succession-concubin-non-marie",
     title: "Succession concubin non marié : guide notaire 2025",
-    excerpt: "Succession concubin non marié : droits, fiscalité à 60%, solutions notariales pour protéger votre partenaire. Conseils d&apos;un notaire expert.",
+    excerpt: "Succession concubin non marié : droits, fiscalité à 60%, solutions notariales pour protéger votre partenaire. Conseils d'un notaire expert.",
     date: "2026-06-08",
     readingTime: 7,
     category: "Succession",
     keywords: ["succession concubin non marié", "héritage concubinage", "protéger concubin", "donation concubin", "testament concubin"],
     canonicalUrl: `${BASE}/blog/succession-concubin-non-marie`,
-  faqs: [
-    { question: "Un concubin hérite-t-il automatiquement ?", answer: "Non, le concubin n&apos;a aucun droit successoral légal. Sans testament ni donation, il ne reçoit rien du patrimoine de son partenaire décédé." },
+    faqs: [
+    { question: "Un concubin hérite-t-il automatiquement ?", answer: "Non, le concubin n'a aucun droit successoral légal. Sans testament ni donation, il ne reçoit rien du patrimoine de son partenaire décédé." },
     { question: "Quels sont les droits de succession pour un concubin ?", answer: "Le concubin est taxé à 60% après un abattement très faible de 1 594 €, ce qui en fait le régime fiscal le plus défavorable." },
-    { question: "Comment protéger son concubin sans se marier ?", answer: "Plusieurs outils existent : testament, assurance-vie, SCI, donation, ou conclusion d&apos;un PACS qui offre une fiscalité bien plus avantageuse." },
+    { question: "Comment protéger son concubin sans se marier ?", answer: "Plusieurs outils existent : testament, assurance-vie, SCI, donation, ou conclusion d'un PACS qui offre une fiscalité bien plus avantageuse." },
   ],
   },
   {
@@ -567,7 +598,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Succession",
     keywords: ["optimisation fiscale succession", "droits de succession", "notaire succession", "donation", "assurance-vie"],
     canonicalUrl: `${BASE}/blog/optimisation-fiscale-succession`,
-  faqs: [
+    faqs: [
     { question: "Quel est l'abattement pour les enfants en 2025 ?", answer: "Chaque enfant bénéficie d'un abattement de 100 000 € par parent, renouvelable tous les 15 ans sur les donations." },
     { question: "L'assurance-vie est-elle vraiment hors succession ?", answer: "Oui, les capitaux versés avant 70 ans bénéficient d'un abattement de 152 500 € par bénéficiaire, hors actif successoral." },
     { question: "Quand consulter un notaire pour optimiser sa succession ?", answer: "Le plus tôt possible. Une planification anticipée permet d'étaler les donations et de maximiser les abattements fiscaux." },
@@ -582,10 +613,10 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Succession",
     keywords: ["rapport donation succession", "rapport civil succession", "donation rapportable", "égalité héritiers"],
     canonicalUrl: `${BASE}/blog/rapport-donation-succession`,
-  faqs: [
-    { question: "Toutes les donations sont-elles rapportables ?", answer: "Non. Seules les donations consenties à un héritier sont rapportables, sauf si elles ont été faites hors part successorale. Les présents d&apos;usage en sont également exclus." },
-    { question: "Comment évaluer un bien donné lors du rapport ?", answer: "Le bien est évalué à sa valeur au jour du partage, selon son état au jour de la donation. Cette règle protège l&apos;équité entre cohéritiers." },
-    { question: "Que se passe-t-il si la donation excède la part de l&apos;héritier ?", answer: "Si le rapport révèle un excédent, l&apos;héritier doit une indemnité de rapport à la succession, sauf disposition contraire de l&apos;acte de donation." },
+    faqs: [
+    { question: "Toutes les donations sont-elles rapportables ?", answer: "Non. Seules les donations consenties à un héritier sont rapportables, sauf si elles ont été faites hors part successorale. Les présents d'usage en sont également exclus." },
+    { question: "Comment évaluer un bien donné lors du rapport ?", answer: "Le bien est évalué à sa valeur au jour du partage, selon son état au jour de la donation. Cette règle protège l'équité entre cohéritiers." },
+    { question: "Que se passe-t-il si la donation excède la part de l'héritier ?", answer: "Si le rapport révèle un excédent, l'héritier doit une indemnité de rapport à la succession, sauf disposition contraire de l'acte de donation." },
   ],
   },
   {
@@ -597,10 +628,10 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Succession",
     keywords: ["legs particulier", "legs universel", "testament notaire", "legs à titre universel", "succession"],
     canonicalUrl: `${BASE}/blog/legs-testament-notaire`,
-  faqs: [
-    { question: "Quelle est la différence entre legs particulier et universel ?", answer: "Le legs universel transmet l&apos;ensemble du patrimoine, le legs particulier porte sur un bien précis (somme, immeuble, objet). Le legs à titre universel concerne une quote-part du patrimoine." },
+    faqs: [
+    { question: "Quelle est la différence entre legs particulier et universel ?", answer: "Le legs universel transmet l'ensemble du patrimoine, le legs particulier porte sur un bien précis (somme, immeuble, objet). Le legs à titre universel concerne une quote-part du patrimoine." },
     { question: "Faut-il obligatoirement passer par un notaire pour un legs ?", answer: "Non, un testament olographe (écrit à la main) suffit légalement. Mais le testament authentique chez le notaire sécurise vos volontés et évite les contestations." },
-    { question: "Quels sont les frais fiscaux d&apos;un legs ?", answer: "Les droits de succession s&apos;appliquent selon le lien de parenté entre testateur et légataire. Un legs à un tiers est taxé à 60 %, tandis qu&apos;un legs à un enfant bénéficie d&apos;abattements." },
+    { question: "Quels sont les frais fiscaux d'un legs ?", answer: "Les droits de succession s'appliquent selon le lien de parenté entre testateur et légataire. Un legs à un tiers est taxé à 60 %, tandis qu'un legs à un enfant bénéficie d'abattements." },
   ],
   },
   {
@@ -612,10 +643,10 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Succession",
     keywords: ["succession internationale notaire français", "succession transfrontalière", "règlement européen succession", "certificat successoral européen"],
     canonicalUrl: `${BASE}/blog/succession-internationale`,
-  faqs: [
-    { question: "Quelle loi s&apos;applique à une succession internationale ?", answer: "Depuis le règlement européen de 2015, la loi applicable est celle du dernier domicile du défunt, sauf choix exprès pour la loi de sa nationalité dans son testament." },
+    faqs: [
+    { question: "Quelle loi s'applique à une succession internationale ?", answer: "Depuis le règlement européen de 2015, la loi applicable est celle du dernier domicile du défunt, sauf choix exprès pour la loi de sa nationalité dans son testament." },
     { question: "Faut-il payer des droits de succession dans deux pays ?", answer: "Cela dépend des conventions fiscales bilatérales. La France a signé des conventions avec une trentaine de pays pour éviter la double imposition successorale." },
-    { question: "Qu&apos;est-ce que le certificat successoral européen ?", answer: "C&apos;est un document délivré par le notaire qui prouve la qualité d&apos;héritier dans tous les pays de l&apos;Union européenne, sans formalité supplémentaire." },
+    { question: "Qu'est-ce que le certificat successoral européen ?", answer: "C'est un document délivré par le notaire qui prouve la qualité d'héritier dans tous les pays de l'Union européenne, sans formalité supplémentaire." },
   ],
   },
   {
@@ -627,10 +658,10 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Immobilier",
     keywords: ["compromis vs acte de vente notaire", "compromis de vente", "acte authentique", "achat immobilier notaire"],
     canonicalUrl: `${BASE}/blog/compromis-acte-de-vente-difference`,
-  faqs: [
+    faqs: [
     { question: "Le compromis de vente doit-il être signé chez le notaire ?", answer: "Non, le compromis peut être signé chez un agent immobilier ou entre particuliers. Toutefois, le faire signer chez un notaire offre une sécurité juridique renforcée, sans surcoût dans la plupart des cas." },
-    { question: "Combien de temps entre le compromis et l&apos;acte de vente ?", answer: "Le délai habituel est de 3 à 4 mois. Ce temps permet de lever les conditions suspensives (prêt, urbanisme) et de réunir tous les documents nécessaires à la signature de l&apos;acte authentique." },
-    { question: "Peut-on annuler un compromis de vente ?", answer: "L&apos;acheteur dispose d&apos;un délai de rétractation de 10 jours après la signature. Au-delà, l&apos;annulation n&apos;est possible que si une condition suspensive n&apos;est pas remplie, sous peine de perdre le dépôt de garantie." },
+    { question: "Combien de temps entre le compromis et l'acte de vente ?", answer: "Le délai habituel est de 3 à 4 mois. Ce temps permet de lever les conditions suspensives (prêt, urbanisme) et de réunir tous les documents nécessaires à la signature de l'acte authentique." },
+    { question: "Peut-on annuler un compromis de vente ?", answer: "L'acheteur dispose d'un délai de rétractation de 10 jours après la signature. Au-delà, l'annulation n'est possible que si une condition suspensive n'est pas remplie, sous peine de perdre le dépôt de garantie." },
   ],
   },
   {
@@ -642,10 +673,10 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Immobilier",
     keywords: ["plus-value immobilière exonération résidence principale", "exonération plus-value", "vente résidence principale", "impôt plus-value immobilière"],
     canonicalUrl: `${BASE}/blog/plus-value-immobiliere-exoneration`,
-  faqs: [
-    { question: "Quelle est l&apos;exonération de plus-value pour une résidence principale ?", answer: "La vente de votre résidence principale est totalement exonérée de plus-value immobilière, sans condition de durée de détention, à condition qu&apos;elle constitue votre habitation effective et habituelle au jour de la cession." },
-    { question: "Combien de temps pour vendre après avoir quitté sa résidence principale ?", answer: "L&apos;administration fiscale tolère un délai d&apos;environ 12 mois entre le déménagement et la vente, à condition que le bien soit mis en vente immédiatement et reste inoccupé." },
-    { question: "Une résidence secondaire peut-elle bénéficier d&apos;une exonération ?", answer: "Oui, dans certains cas : première cession d&apos;une résidence secondaire si le vendeur n&apos;a pas été propriétaire de sa résidence principale depuis 4 ans et réinvestit dans une résidence principale dans les 24 mois." },
+    faqs: [
+    { question: "Quelle est l'exonération de plus-value pour une résidence principale ?", answer: "La vente de votre résidence principale est totalement exonérée de plus-value immobilière, sans condition de durée de détention, à condition qu'elle constitue votre habitation effective et habituelle au jour de la cession." },
+    { question: "Combien de temps pour vendre après avoir quitté sa résidence principale ?", answer: "L'administration fiscale tolère un délai d'environ 12 mois entre le déménagement et la vente, à condition que le bien soit mis en vente immédiatement et reste inoccupé." },
+    { question: "Une résidence secondaire peut-elle bénéficier d'une exonération ?", answer: "Oui, dans certains cas : première cession d'une résidence secondaire si le vendeur n'a pas été propriétaire de sa résidence principale depuis 4 ans et réinvestit dans une résidence principale dans les 24 mois." },
   ],
   },
   {
@@ -657,10 +688,10 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Immobilier",
     keywords: ["viager bouquet rente notaire", "vente en viager", "calcul rente viagère", "viager occupé"],
     canonicalUrl: `${BASE}/blog/viager-notaire-guide`,
-  faqs: [
-    { question: "Quelle est la différence entre bouquet et rente ?", answer: "Le bouquet est la somme versée au comptant le jour de la signature. La rente est le versement périodique (souvent mensuel) dû au vendeur jusqu&apos;à son décès." },
-    { question: "Le passage chez le notaire est-il obligatoire ?", answer: "Oui. La vente en viager est un acte authentique obligatoire. Le notaire sécurise la transaction, calcule la rente et publie l&apos;acte au service de la publicité foncière." },
-    { question: "Que se passe-t-il si l&apos;acheteur ne paie plus la rente ?", answer: "Le contrat prévoit une clause résolutoire : le vendeur peut récupérer le bien et conserver les sommes déjà versées à titre de dommages-intérêts." },
+    faqs: [
+    { question: "Quelle est la différence entre bouquet et rente ?", answer: "Le bouquet est la somme versée au comptant le jour de la signature. La rente est le versement périodique (souvent mensuel) dû au vendeur jusqu'à son décès." },
+    { question: "Le passage chez le notaire est-il obligatoire ?", answer: "Oui. La vente en viager est un acte authentique obligatoire. Le notaire sécurise la transaction, calcule la rente et publie l'acte au service de la publicité foncière." },
+    { question: "Que se passe-t-il si l'acheteur ne paie plus la rente ?", answer: "Le contrat prévoit une clause résolutoire : le vendeur peut récupérer le bien et conserver les sommes déjà versées à titre de dommages-intérêts." },
   ],
   },
   {
@@ -672,10 +703,10 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Immobilier",
     keywords: ["SCI familiale", "création SCI notaire", "société civile immobilière", "transmission patrimoine", "avantages SCI"],
     canonicalUrl: `${BASE}/blog/sci-familiale-creation-notaire`,
-  faqs: [
-    { question: "Faut-il obligatoirement un notaire pour créer une SCI familiale ?", answer: "Le notaire n&apos;est pas obligatoire si la SCI ne reçoit aucun apport immobilier. En revanche, dès qu&apos;un bien immobilier est apporté au capital, l&apos;acte notarié devient impératif." },
-    { question: "Quel est le coût de création d&apos;une SCI familiale ?", answer: "Comptez entre 1 500 € et 3 000 € avec un notaire, incluant la rédaction des statuts, les frais d&apos;enregistrement et la publication légale. Le coût varie selon les apports." },
-    { question: "Combien d&apos;associés faut-il pour créer une SCI familiale ?", answer: "Une SCI requiert au minimum deux associés, souvent des membres d&apos;une même famille (parents, enfants, conjoints). Aucun capital minimum n&apos;est imposé par la loi." },
+    faqs: [
+    { question: "Faut-il obligatoirement un notaire pour créer une SCI familiale ?", answer: "Le notaire n'est pas obligatoire si la SCI ne reçoit aucun apport immobilier. En revanche, dès qu'un bien immobilier est apporté au capital, l'acte notarié devient impératif." },
+    { question: "Quel est le coût de création d'une SCI familiale ?", answer: "Comptez entre 1 500 € et 3 000 € avec un notaire, incluant la rédaction des statuts, les frais d'enregistrement et la publication légale. Le coût varie selon les apports." },
+    { question: "Combien d'associés faut-il pour créer une SCI familiale ?", answer: "Une SCI requiert au minimum deux associés, souvent des membres d'une même famille (parents, enfants, conjoints). Aucun capital minimum n'est imposé par la loi." },
   ],
   },
   {
@@ -687,10 +718,10 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Immobilier",
     keywords: ["achat immobilier en indivision notaire", "indivision immobilière", "convention indivision", "quote-part indivision"],
     canonicalUrl: `${BASE}/blog/achat-immobilier-indivision`,
-  faqs: [
-    { question: "Faut-il obligatoirement passer par un notaire pour acheter en indivision ?", answer: "Oui, tout achat immobilier nécessite un acte authentique rédigé par un notaire, qu&apos;il s&apos;agisse d&apos;un achat seul ou en indivision." },
-    { question: "Peut-on fixer des quotes-parts différentes des apports ?", answer: "Oui, mais cela peut être requalifié en donation déguisée par l&apos;administration fiscale. Le notaire vous conseillera la répartition la plus adaptée." },
-    { question: "Que se passe-t-il si un indivisaire veut vendre sa part ?", answer: "Chaque indivisaire peut céder sa quote-part, mais les autres bénéficient d&apos;un droit de préemption. À défaut d&apos;accord, le partage judiciaire peut être demandé." },
+    faqs: [
+    { question: "Faut-il obligatoirement passer par un notaire pour acheter en indivision ?", answer: "Oui, tout achat immobilier nécessite un acte authentique rédigé par un notaire, qu'il s'agisse d'un achat seul ou en indivision." },
+    { question: "Peut-on fixer des quotes-parts différentes des apports ?", answer: "Oui, mais cela peut être requalifié en donation déguisée par l'administration fiscale. Le notaire vous conseillera la répartition la plus adaptée." },
+    { question: "Que se passe-t-il si un indivisaire veut vendre sa part ?", answer: "Chaque indivisaire peut céder sa quote-part, mais les autres bénéficient d'un droit de préemption. À défaut d'accord, le partage judiciaire peut être demandé." },
   ],
   },
   {
@@ -702,10 +733,25 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Immobilier",
     keywords: ["servitude de passage notaire", "acte de servitude", "droit de passage", "enclavement", "servitude conventionnelle"],
     canonicalUrl: `${BASE}/blog/servitude-passage-notaire`,
+    faqs: [
+    { question: "Faut-il obligatoirement un notaire pour une servitude de passage ?", answer: "Oui, dès lors que la servitude est conventionnelle et destinée à être publiée au service de la publicité foncière, l'acte notarié est obligatoire pour la rendre opposable aux tiers." },
+    { question: "Combien coûte la création d'une servitude de passage chez le notaire ?", answer: "Les frais varient généralement entre 800 et 2 000 €, incluant les émoluments du notaire, les droits d'enregistrement et les frais de publication foncière." },
+    { question: "Une servitude de passage peut-elle être supprimée ?", answer: "Oui, par accord amiable entre les propriétaires via un acte notarié, par non-usage pendant 30 ans, ou si l'état d'enclavement cesse." },
+  ],
+  },
+  {
+    slug: "promesse-vente-unilaterale",
+    title: "Promesse de vente unilatérale chez le notaire : guide complet",
+    excerpt: "La promesse de vente unilatérale notaire engage le vendeur seul. Découvrez son fonctionnement, ses coûts et son intérêt pour sécuriser votre achat immobilier.",
+    date: "2026-06-09",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["promesse de vente unilatérale notaire", "promesse unilatérale de vente", "indemnité d'immobilisation", "avant-contrat immobilier"],
+    canonicalUrl: `${BASE}/blog/promesse-vente-unilaterale`,
   faqs: [
-    { question: "Faut-il obligatoirement un notaire pour une servitude de passage ?", answer: "Oui, dès lors que la servitude est conventionnelle et destinée à être publiée au service de la publicité foncière, l&apos;acte notarié est obligatoire pour la rendre opposable aux tiers." },
-    { question: "Combien coûte la création d&apos;une servitude de passage chez le notaire ?", answer: "Les frais varient généralement entre 800 et 2 000 €, incluant les émoluments du notaire, les droits d&apos;enregistrement et les frais de publication foncière." },
-    { question: "Une servitude de passage peut-elle être supprimée ?", answer: "Oui, par accord amiable entre les propriétaires via un acte notarié, par non-usage pendant 30 ans, ou si l&apos;état d&apos;enclavement cesse." },
+    { question: "Quelle est la différence entre promesse unilatérale et compromis de vente ?", answer: "La promesse unilatérale engage uniquement le vendeur qui réserve son bien à l&apos;acheteur. Le compromis engage les deux parties à conclure la vente." },
+    { question: "Combien coûte une promesse unilatérale de vente chez le notaire ?", answer: "Comptez entre 250 et 500 € de frais de rédaction et d&apos;enregistrement, à la charge de l&apos;acquéreur sauf accord contraire." },
+    { question: "L'indemnité d'immobilisation est-elle remboursable ?", answer: "Oui, si l&apos;acquéreur renonce dans le délai de rétractation de 10 jours ou si une condition suspensive (prêt refusé) ne se réalise pas." },
   ],
   },
 ];

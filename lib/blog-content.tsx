@@ -26,7 +26,7 @@ function InternalCTA() {
   return (
     <div className="mt-12 bg-[var(--color-tint-blue)] rounded-2xl p-7 text-center">
       <p className="text-lg font-bold text-[var(--color-primary)] mb-2">
-        Besoin de l&apos;avis d&apos;un notaire ?
+        Besoin de l'avis d'un notaire ?
       </p>
       <p className="text-sm text-[var(--color-muted)] mb-5">
         Le premier rendez-vous est offert. En visio ou au cabinet, en moins de 48 h.
@@ -745,6 +745,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "sci-familiale-creation-notaire": () => <Article25 />,
   "achat-immobilier-indivision": () => <Article26 />,
   "servitude-passage-notaire": () => <Article27 />,
+  "promesse-vente-unilaterale": () => <Article28 />,
 };
 
 
@@ -754,7 +755,7 @@ function Article7() {
   return (
     <>
       <>
-  <p className="lead">Choisir entre un testament olographe ou notarié est une décision essentielle pour organiser sa succession et protéger ses proches. Ces deux formes de testament reconnues par le droit français présentent des avantages et inconvénients spécifiques qu&apos;il convient de bien comprendre avant de se décider.</p>
+  <p className="lead">Choisir entre un testament olographe ou notarié est une décision essentielle pour organiser sa succession et protéger ses proches. Ces deux formes de testament reconnues par le droit français présentent des avantages et inconvénients spécifiques qu'il convient de bien comprendre avant de se décider.</p>
 
   <KeyPoints points={[
     "Le testament olographe est rédigé seul, à la main, sans coût mais avec un risque de contestation plus élevé",
@@ -764,44 +765,40 @@ function Article7() {
   ]} />
 
   <h2>Le testament olographe : simplicité et liberté</h2>
-  <p>Le testament olographe est la forme la plus répandue en France en raison de sa simplicité de rédaction et de son coût nul. Pour être valide, il doit respecter trois conditions strictes prévues par l&apos;article 970 du Code civil : être entièrement écrit à la main par le testateur, daté précisément (jour, mois, année) et signé de sa main.</p>
+  <p>Le testament olographe est la forme la plus répandue en France en raison de sa simplicité de rédaction et de son coût nul. Pour être valide, il doit respecter trois conditions strictes prévues par l'article 970 du Code civil : être entièrement écrit à la main par le testateur, daté précisément (jour, mois, année) et signé de sa main.</p>
 
-  <p>Aucune intervention extérieure n&apos;est requise. Vous pouvez le rédiger chez vous, sur papier libre, à tout moment. Cette liberté constitue son principal atout, mais aussi sa principale faiblesse. En effet, un testament olographe mal rédigé ou imprécis peut être source de contestations longues et coûteuses pour vos héritiers.</p>
+  <p>Aucune intervention extérieure n'est requise. Vous pouvez le rédiger chez vous, sur papier libre, à tout moment. Cette liberté constitue son principal atout, mais aussi sa principale faiblesse. En effet, un testament olographe mal rédigé ou imprécis peut être source de contestations longues et coûteuses pour vos héritiers.</p>
 
-  <p>Les risques sont nombreux : perte du document, destruction accidentelle, contestation de l&apos;écriture ou de la signature, formulations ambiguës entraînant des interprétations divergentes, voire annulation pure et simple si une condition de forme n&apos;est pas respectée. Pour limiter ces risques, il est fortement recommandé de déposer votre testament olographe chez un notaire, qui l&apos;inscrira au fichier central des dispositions de dernières volontés (FCDDV) pour environ 30 €.</p>
+  <p>Les risques sont nombreux : perte du document, destruction accidentelle, contestation de l'écriture ou de la signature, formulations ambiguës entraînant des interprétations divergentes, voire annulation pure et simple si une condition de forme n'est pas respectée. Pour limiter ces risques, il est fortement recommandé de déposer votre testament olographe chez un notaire, qui l'inscrira au fichier central des dispositions de dernières volontés (FCDDV) pour environ 30 €.</p>
 
   <h2>Le testament notarié : sécurité juridique maximale</h2>
-  <p>Le testament notarié, également appelé testament authentique, est rédigé par un notaire en présence de deux témoins ou d&apos;un second notaire. Le testateur dicte ses volontés au notaire qui les retranscrit dans un acte authentique, puis lit le testament au testateur avant signature de toutes les parties.</p>
+  <p>Le testament notarié, également appelé testament authentique, est rédigé par un notaire en présence de deux témoins ou d'un second notaire. Le testateur dicte ses volontés au notaire qui les retranscrit dans un acte authentique, puis lit le testament au testateur avant signature de toutes les parties.</p>
 
-  <p>Cette forme offre une sécurité juridique inégalée. Le notaire vous conseille sur la validité de vos dispositions, vérifie leur conformité avec les règles successorales (notamment la réserve héréditaire), et s&apos;assure que vos volontés sont exprimées de manière claire et exécutable. Il garantit également votre consentement libre et éclairé, ce qui rend le testament quasi impossible à contester pour vice de forme ou incapacité.</p>
+  <p>Cette forme offre une sécurité juridique inégalée. Le notaire vous conseille sur la validité de vos dispositions, vérifie leur conformité avec les règles successorales (notamment la réserve héréditaire), et s'assure que vos volontés sont exprimées de manière claire et exécutable. Il garantit également votre consentement libre et éclairé, ce qui rend le testament quasi impossible à contester pour vice de forme ou incapacité.</p>
 
-  <p>Le testament authentique est conservé en l&apos;étude notariale et automatiquement inscrit au FCDDV, garantissant qu&apos;il sera retrouvé au moment de la succession. Il est particulièrement recommandé dans les situations complexes : familles recomposées, présence d&apos;un héritier handicapé, transmission d&apos;entreprise, ou volonté de déshériter partiellement un héritier non réservataire.</p>
+  <p>Le testament authentique est conservé en l'étude notariale et automatiquement inscrit au FCDDV, garantissant qu'il sera retrouvé au moment de la succession. Il est particulièrement recommandé dans les situations complexes : familles recomposées, présence d'un héritier handicapé, transmission d'entreprise, ou volonté de déshériter partiellement un héritier non réservataire.</p>
 
   <h2>Comparatif : olographe ou notarié, comment choisir ?</h2>
   <p>Le choix entre un testament olographe ou notarié dépend de votre situation patrimoniale et familiale. Voici les critères déterminants :</p>
 
   <ul>
-    <li><strong>Coût</strong> : l&apos;olographe est gratuit, le notarié coûte 115 à 140 € HT (hors frais d&apos;inscription au FCDDV).</li>
-    <li><strong>Sécurité juridique</strong> : le notarié est quasi incontestable, l&apos;olographe peut être attaqué pour vice de forme ou interprétation.</li>
-    <li><strong>Conservation</strong> : le notarié est conservé en l&apos;étude, l&apos;olographe peut être perdu ou détruit.</li>
-    <li><strong>Conseil juridique</strong> : seul le notarié bénéficie de l&apos;expertise du notaire pour valider les dispositions.</li>
-    <li><strong>Confidentialité</strong> : l&apos;olographe reste totalement secret, le notarié est connu du notaire et des témoins.</li>
+    <li><strong>Coût</strong> : l'olographe est gratuit, le notarié coûte 115 à 140 € HT (hors frais d'inscription au FCDDV).</li>
+    <li><strong>Sécurité juridique</strong> : le notarié est quasi incontestable, l'olographe peut être attaqué pour vice de forme ou interprétation.</li>
+    <li><strong>Conservation</strong> : le notarié est conservé en l'étude, l'olographe peut être perdu ou détruit.</li>
+    <li><strong>Conseil juridique</strong> : seul le notarié bénéficie de l'expertise du notaire pour valider les dispositions.</li>
+    <li><strong>Confidentialité</strong> : l'olographe reste totalement secret, le notarié est connu du notaire et des témoins.</li>
   </ul>
 
-  <p>Pour un patrimoine modeste et des dispositions simples (par exemple léguer un bien précis à un proche), un testament olographe bien rédigé peut suffire. En revanche, dès que la situation se complique ou que les enjeux financiers sont importants, le testament notarié s&apos;impose comme la solution la plus prudente.</p>
+  <p>Pour un patrimoine modeste et des dispositions simples (par exemple léguer un bien précis à un proche), un testament olographe bien rédigé peut suffire. En revanche, dès que la situation se complique ou que les enjeux financiers sont importants, le testament notarié s'impose comme la solution la plus prudente.</p>
 
   <h2>Les cas où le testament notarié est indispensable</h2>
-  <p>Certaines dispositions ne peuvent légalement être prises que par testament authentique. C&apos;est notamment le cas de la reconnaissance d&apos;un enfant naturel, de la révocation d&apos;une reconnaissance, ou encore du mandat à effet posthume permettant de désigner un mandataire pour gérer la succession.</p>
+  <p>Certaines dispositions ne peuvent légalement être prises que par testament authentique. C'est notamment le cas de la reconnaissance d'un enfant naturel, de la révocation d'une reconnaissance, ou encore du mandat à effet posthume permettant de désigner un mandataire pour gérer la succession.</p>
 
-  <p>Le testament notarié est également obligatoire lorsque le testateur ne peut pas écrire (handicap, maladie) ou ne parle pas français. Dans ces situations, le notaire adapte la procédure (interprète, témoins supplémentaires) pour garantir la validité de l&apos;acte.</p>
+  <p>Le testament notarié est également obligatoire lorsque le testateur ne peut pas écrire (handicap, maladie) ou ne parle pas français. Dans ces situations, le notaire adapte la procédure (interprète, témoins supplémentaires) pour garantir la validité de l'acte.</p>
 
-  <p>Enfin, si vous souhaitez prévoir des legs complexes (legs graduels ou résiduels, legs à des associations avec conditions particulières, démembrement de propriété), le recours au notaire est vivement conseillé pour éviter toute ambiguïté qui pourrait conduire à l&apos;invalidation partielle du testament.</p>
+  <p>Enfin, si vous souhaitez prévoir des legs complexes (legs graduels ou résiduels, legs à des associations avec conditions particulières, démembrement de propriété), le recours au notaire est vivement conseillé pour éviter toute ambiguïté qui pourrait conduire à l'invalidation partielle du testament.</p>
 
-  <InternalCTA
-    title="Besoin de conseils pour rédiger votre testament ?"
-    description="Nos notaires partenaires vous accompagnent dans le choix de la forme adaptée et la rédaction de vos dispositions de dernières volontés. Premier rendez-vous offert, en visio ou au cabinet."
-    buttonText="Prendre rendez-vous"
-  />
+  <InternalCTA />
 </>
     </>
   );
@@ -813,63 +810,59 @@ function Article8() {
   return (
     <>
       <>
-  <p className="lead">L&apos;assurance vie succession notaire est un sujet incontournable pour quiconque souhaite transmettre un patrimoine de manière optimisée. Bien que l&apos;assurance vie soit juridiquement hors succession, le notaire joue un rôle essentiel dans sa déclaration, sa fiscalité et la protection des héritiers réservataires.</p>
+  <p className="lead">L'assurance vie succession notaire est un sujet incontournable pour quiconque souhaite transmettre un patrimoine de manière optimisée. Bien que l'assurance vie soit juridiquement hors succession, le notaire joue un rôle essentiel dans sa déclaration, sa fiscalité et la protection des héritiers réservataires.</p>
 
-  <KeyPoints items={[
-    "L&apos;assurance vie est hors succession civile mais doit être déclarée au notaire",
+  <KeyPoints points={[
+    "L'assurance vie est hors succession civile mais doit être déclarée au notaire",
     "Abattement de 152 500 € par bénéficiaire pour les versements avant 70 ans",
-    "Le notaire vérifie l&apos;absence de primes manifestement exagérées",
+    "Le notaire vérifie l'absence de primes manifestement exagérées",
     "La clause bénéficiaire conditionne la transmission et la fiscalité"
   ]} />
 
-  <h2>Le rôle du notaire dans la transmission d&apos;une assurance vie</h2>
-  <p>Contrairement à une idée répandue, l&apos;assurance vie ne fait pas partie de la succession civile du défunt. Les capitaux sont versés directement aux bénéficiaires désignés dans la clause bénéficiaire, sans passer par le notaire. Pourtant, ce dernier conserve un rôle central dans plusieurs situations.</p>
-  <p>Le notaire doit être informé de l&apos;existence des contrats d&apos;assurance vie afin de :</p>
+  <h2>Le rôle du notaire dans la transmission d'une assurance vie</h2>
+  <p>Contrairement à une idée répandue, l'assurance vie ne fait pas partie de la succession civile du défunt. Les capitaux sont versés directement aux bénéficiaires désignés dans la clause bénéficiaire, sans passer par le notaire. Pourtant, ce dernier conserve un rôle central dans plusieurs situations.</p>
+  <p>Le notaire doit être informé de l'existence des contrats d'assurance vie afin de :</p>
   <ul>
     <li>Vérifier que les primes versées ne sont pas <strong>manifestement exagérées</strong> au regard du patrimoine et des revenus du défunt</li>
     <li>Contrôler le respect de la <strong>réserve héréditaire</strong> des enfants ou du conjoint</li>
     <li>Établir la <strong>déclaration fiscale</strong> nécessaire au calcul des droits éventuels</li>
-    <li>Délivrer aux bénéficiaires une <strong>attestation</strong> pour la compagnie d&apos;assurance</li>
+    <li>Délivrer aux bénéficiaires une <strong>attestation</strong> pour la compagnie d'assurance</li>
   </ul>
   <p>En cas de litige entre héritiers, le notaire peut être amené à proposer une réintégration des primes dans la succession si elles sont jugées excessives par rapport au train de vie du défunt.</p>
 
-  <h2>La fiscalité de l&apos;assurance vie en succession</h2>
-  <p>La fiscalité dépend essentiellement de l&apos;âge du souscripteur au moment des versements. Cette distinction est fondamentale pour anticiper la transmission.</p>
+  <h2>La fiscalité de l'assurance vie en succession</h2>
+  <p>La fiscalité dépend essentiellement de l'âge du souscripteur au moment des versements. Cette distinction est fondamentale pour anticiper la transmission.</p>
 
   <h3>Versements effectués avant 70 ans (article 990 I du CGI)</h3>
-  <p>Chaque bénéficiaire profite d&apos;un abattement individuel de <strong>152 500 €</strong>. Au-delà :</p>
+  <p>Chaque bénéficiaire profite d'un abattement individuel de <strong>152 500 €</strong>. Au-delà :</p>
   <ul>
-    <li>Taxation à <strong>20%</strong> jusqu&apos;à 700 000 € après abattement</li>
+    <li>Taxation à <strong>20%</strong> jusqu'à 700 000 € après abattement</li>
     <li>Taxation à <strong>31,25%</strong> au-delà de 700 000 €</li>
   </ul>
-  <p>Cet avantage explique pourquoi l&apos;assurance vie reste l&apos;un des outils de transmission les plus utilisés en France.</p>
+  <p>Cet avantage explique pourquoi l'assurance vie reste l'un des outils de transmission les plus utilisés en France.</p>
 
   <h3>Versements effectués après 70 ans (article 757 B du CGI)</h3>
-  <p>L&apos;abattement est cette fois <strong>global</strong> de 30 500 € à partager entre tous les bénéficiaires. La fraction des primes excédant ce seuil est réintégrée dans l&apos;actif successoral et soumise aux droits de succession classiques. En revanche, les <strong>intérêts et plus-values</strong> restent totalement exonérés.</p>
+  <p>L'abattement est cette fois <strong>global</strong> de 30 500 € à partager entre tous les bénéficiaires. La fraction des primes excédant ce seuil est réintégrée dans l'actif successoral et soumise aux droits de succession classiques. En revanche, les <strong>intérêts et plus-values</strong> restent totalement exonérés.</p>
 
   <h2>La clause bénéficiaire : un élément stratégique</h2>
   <p>La rédaction de la clause bénéficiaire conditionne toute la transmission. Une clause mal rédigée peut entraîner des conséquences fiscales lourdes ou des conflits familiaux. Le notaire peut vous aider à rédiger une clause adaptée à votre situation :</p>
   <ul>
-    <li><strong>Clause standard</strong> : &quot;mon conjoint, à défaut mes enfants nés ou à naître, vivants ou représentés, à défaut mes héritiers&quot;</li>
+    <li><strong>Clause standard</strong> : "mon conjoint, à défaut mes enfants nés ou à naître, vivants ou représentés, à défaut mes héritiers"</li>
     <li><strong>Clause démembrée</strong> : usufruit au conjoint, nue-propriété aux enfants — optimise la fiscalité</li>
-    <li><strong>Clause à options</strong> : permet au bénéficiaire principal de choisir la quotité qu&apos;il accepte</li>
+    <li><strong>Clause à options</strong> : permet au bénéficiaire principal de choisir la quotité qu'il accepte</li>
   </ul>
-  <p>Il est également possible de déposer la clause bénéficiaire chez le notaire pour garantir sa confidentialité et éviter qu&apos;elle soit modifiée frauduleusement.</p>
+  <p>Il est également possible de déposer la clause bénéficiaire chez le notaire pour garantir sa confidentialité et éviter qu'elle soit modifiée frauduleusement.</p>
 
   <h2>Primes manifestement exagérées : attention au piège</h2>
-  <p>L&apos;article L132-13 du Code des assurances permet aux héritiers réservataires de demander la <strong>réintégration des primes</strong> dans la succession si elles sont jugées disproportionnées. Les juges apprécient ce caractère au cas par cas en fonction de :</p>
+  <p>L'article L132-13 du Code des assurances permet aux héritiers réservataires de demander la <strong>réintégration des primes</strong> dans la succession si elles sont jugées disproportionnées. Les juges apprécient ce caractère au cas par cas en fonction de :</p>
   <ul>
-    <li>L&apos;âge du souscripteur au moment des versements</li>
+    <li>L'âge du souscripteur au moment des versements</li>
     <li>Sa situation patrimoniale et familiale</li>
-    <li>L&apos;utilité économique de l&apos;opération</li>
+    <li>L'utilité économique de l'opération</li>
   </ul>
-  <p>Si la disproportion est avérée, les primes excessives réintègrent l&apos;actif successoral et sont soumises aux règles de la <strong>réserve héréditaire</strong> et aux droits de succession. Un conseil notarial préventif évite ce risque.</p>
+  <p>Si la disproportion est avérée, les primes excessives réintègrent l'actif successoral et sont soumises aux règles de la <strong>réserve héréditaire</strong> et aux droits de succession. Un conseil notarial préventif évite ce risque.</p>
 
-  <InternalCTA
-    title="Optimisez la transmission de votre assurance vie"
-    description="Nos notaires partenaires vous conseillent sur la rédaction de votre clause bénéficiaire et la fiscalité applicable. 1er rendez-vous offert."
-    buttonText="Prendre rendez-vous"
-  />
+  <InternalCTA />
 </>
     </>
   );
@@ -883,33 +876,33 @@ function Article9() {
       <>
 <p>Les <strong>héritiers réservataires et la quotité disponible</strong> constituent deux notions fondamentales du droit successoral français. Elles déterminent la part de votre patrimoine que vous êtes libre de transmettre à qui vous le souhaitez, et celle que la loi réserve obligatoirement à certains proches. Comprendre ces règles est essentiel pour anticiper sereinement la transmission de vos biens.</p>
 
-<KeyPoints items={[
-  &quot;Les enfants sont toujours héritiers réservataires : on ne peut pas les déshériter.&quot;,
-  &quot;La quotité disponible varie selon le nombre d&apos;enfants : 1/2, 1/3 ou 1/4.&quot;,
-  &quot;Le conjoint survivant est réservataire uniquement en l&apos;absence d&apos;enfants.&quot;,
-  &quot;Le notaire est indispensable pour sécuriser une donation ou un testament.&quot;
+<KeyPoints points={[
+  "Les enfants sont toujours héritiers réservataires : on ne peut pas les déshériter.",
+  "La quotité disponible varie selon le nombre d'enfants : 1/2, 1/3 ou 1/4.",
+  "Le conjoint survivant est réservataire uniquement en l'absence d'enfants.",
+  "Le notaire est indispensable pour sécuriser une donation ou un testament."
 ]} />
 
-<h2>Qu&apos;est-ce qu&apos;un héritier réservataire ?</h2>
-<p>Un héritier réservataire est une personne à qui la loi garantit une part minimale de la succession, appelée <strong>réserve héréditaire</strong>. Cette protection, héritée du Code civil napoléonien, vise à préserver la solidarité familiale et à éviter qu&apos;un défunt ne déshérite ses descendants directs au profit de tiers.</p>
+<h2>Qu'est-ce qu'un héritier réservataire ?</h2>
+<p>Un héritier réservataire est une personne à qui la loi garantit une part minimale de la succession, appelée <strong>réserve héréditaire</strong>. Cette protection, héritée du Code civil napoléonien, vise à préserver la solidarité familiale et à éviter qu'un défunt ne déshérite ses descendants directs au profit de tiers.</p>
 <p>En droit français, les héritiers réservataires sont :</p>
 <ul>
   <li><strong>Les enfants du défunt</strong> (légitimes, naturels ou adoptifs), ainsi que leurs descendants par représentation en cas de prédécès ;</li>
-  <li><strong>Le conjoint survivant</strong>, mais uniquement en l&apos;absence d&apos;enfants ou de descendants.</li>
+  <li><strong>Le conjoint survivant</strong>, mais uniquement en l'absence d'enfants ou de descendants.</li>
 </ul>
 <p>Depuis la réforme du 23 juin 2006, les ascendants (parents, grands-parents) ne sont plus réservataires. Les frères, sœurs, neveux et nièces ne le sont pas non plus : on peut donc parfaitement les écarter de sa succession par testament.</p>
 
 <h2>Comment se calcule la quotité disponible ?</h2>
-<p>La <strong>quotité disponible</strong> est la part de votre patrimoine que vous pouvez librement transmettre par testament ou donation à la personne de votre choix. Son montant dépend directement du nombre d&apos;héritiers réservataires.</p>
-<h3>En présence d&apos;enfants</h3>
+<p>La <strong>quotité disponible</strong> est la part de votre patrimoine que vous pouvez librement transmettre par testament ou donation à la personne de votre choix. Son montant dépend directement du nombre d'héritiers réservataires.</p>
+<h3>En présence d'enfants</h3>
 <p>Le Code civil (article 913) fixe les proportions suivantes :</p>
 <ul>
   <li><strong>1 enfant</strong> : réserve = 1/2 ; quotité disponible = 1/2 ;</li>
   <li><strong>2 enfants</strong> : réserve = 2/3 (soit 1/3 chacun) ; quotité disponible = 1/3 ;</li>
   <li><strong>3 enfants ou plus</strong> : réserve = 3/4 ; quotité disponible = 1/4.</li>
 </ul>
-<h3>En l&apos;absence d&apos;enfants</h3>
-<p>Si le défunt n&apos;a pas de descendants mais laisse un conjoint, ce dernier bénéficie d&apos;une réserve de <strong>1/4 de la succession</strong>. La quotité disponible s&apos;élève alors à 3/4.</p>
+<h3>En l'absence d'enfants</h3>
+<p>Si le défunt n'a pas de descendants mais laisse un conjoint, ce dernier bénéficie d'une réserve de <strong>1/4 de la succession</strong>. La quotité disponible s'élève alors à 3/4.</p>
 <h3>Exemple concret</h3>
 <p>Marie laisse à son décès un patrimoine de 400 000 €. Elle a deux enfants. La réserve héréditaire est de 2/3, soit environ 266 666 € à partager entre ses enfants (133 333 € chacun). La quotité disponible est de 1/3, soit 133 333 €, que Marie pouvait léguer librement, par exemple à son conjoint, un ami ou une association.</p>
 
@@ -922,23 +915,19 @@ function Article9() {
   <li>Vérification du non-dépassement ;</li>
   <li>Réduction éventuelle des libéralités excessives, en commençant par les plus récentes.</li>
 </ol>
-<p>Les héritiers réservataires peuvent toutefois renoncer à l&apos;action en réduction par une <strong>renonciation anticipée à l&apos;action en réduction (RAAR)</strong>, un acte notarié solennel qui permet d&apos;organiser des transmissions atypiques (par exemple au profit d&apos;un enfant handicapé ou d&apos;un beau-fils).</p>
+<p>Les héritiers réservataires peuvent toutefois renoncer à l'action en réduction par une <strong>renonciation anticipée à l'action en réduction (RAAR)</strong>, un acte notarié solennel qui permet d'organiser des transmissions atypiques (par exemple au profit d'un enfant handicapé ou d'un beau-fils).</p>
 
 <h2>Comment optimiser sa transmission avec un notaire ?</h2>
-<p>Plusieurs outils permettent d&apos;optimiser la transmission tout en respectant la réserve héréditaire :</p>
+<p>Plusieurs outils permettent d'optimiser la transmission tout en respectant la réserve héréditaire :</p>
 <ul>
   <li><strong>La donation-partage</strong> : fige la valeur des biens au jour de la donation et évite les conflits futurs ;</li>
-  <li><strong>Le testament</strong> : permet d&apos;utiliser la quotité disponible au profit d&apos;un proche ou d&apos;une œuvre ;</li>
-  <li><strong>L&apos;assurance-vie</strong> : hors succession dans la plupart des cas, elle permet de transmettre au-delà de la quotité disponible ;</li>
-  <li><strong>La SCI familiale</strong> : facilite la gestion et la transmission d&apos;un patrimoine immobilier.</li>
+  <li><strong>Le testament</strong> : permet d'utiliser la quotité disponible au profit d'un proche ou d'une œuvre ;</li>
+  <li><strong>L'assurance-vie</strong> : hors succession dans la plupart des cas, elle permet de transmettre au-delà de la quotité disponible ;</li>
+  <li><strong>La SCI familiale</strong> : facilite la gestion et la transmission d'un patrimoine immobilier.</li>
 </ul>
-<p>Chaque situation familiale étant unique, l&apos;accompagnement d&apos;un notaire est essentiel pour choisir les outils adaptés et éviter les écueils juridiques ou fiscaux.</p>
+<p>Chaque situation familiale étant unique, l'accompagnement d'un notaire est essentiel pour choisir les outils adaptés et éviter les écueils juridiques ou fiscaux.</p>
 
-<InternalCTA
-  title="Anticipez votre succession avec un notaire"
-  description="Réservez un premier rendez-vous gratuit, en visio ou en cabinet, pour faire le point sur votre situation familiale et patrimoniale."
-  buttonText="Prendre rendez-vous"
-/>
+<InternalCTA />
 </>
     </>
   );
@@ -950,22 +939,22 @@ function Article10() {
   return (
     <>
       <>
-<p className="lead">La <strong>déclaration de succession</strong> doit être déposée auprès de l&apos;administration fiscale dans un <strong>délai de 6 mois</strong> suivant le décès en France (12 mois à l&apos;étranger). Ce document obligatoire recense l&apos;actif et le passif du défunt et permet de calculer les droits de succession dus par chaque héritier. Respecter ce délai est essentiel pour éviter pénalités et intérêts de retard.</p>
+<p className="lead">La <strong>déclaration de succession</strong> doit être déposée auprès de l'administration fiscale dans un <strong>délai de 6 mois</strong> suivant le décès en France (12 mois à l'étranger). Ce document obligatoire recense l'actif et le passif du défunt et permet de calculer les droits de succession dus par chaque héritier. Respecter ce délai est essentiel pour éviter pénalités et intérêts de retard.</p>
 
 <KeyPoints points={[
-  "Délai de 6 mois pour déposer la déclaration (12 mois si décès à l&apos;étranger)",
-  "Pénalités de 0,20 % par mois de retard + majoration jusqu&apos;à 40 %",
+  "Délai de 6 mois pour déposer la déclaration (12 mois si décès à l'étranger)",
+  "Pénalités de 0,20 % par mois de retard + majoration jusqu'à 40 %",
   "Abattement de 100 000 € par enfant et exonération totale entre époux",
   "Le notaire prépare la déclaration et calcule les droits dus"
 ]} />
 
 <h2>Quels sont les délais légaux pour déclarer une succession ?</h2>
-<p>Le Code général des impôts impose un calendrier strict pour la <strong>déclaration de succession</strong>. Le délai principal est de <strong>6 mois à compter du jour du décès</strong> lorsque celui-ci survient en France métropolitaine. Ce délai est porté à <strong>12 mois</strong> si le décès a lieu à l&apos;étranger ou dans certains DOM-TOM.</p>
-<p>La déclaration doit être déposée au service des impôts du domicile du défunt, accompagnée du paiement des droits de succession. En pratique, c&apos;est le notaire chargé du règlement qui s&apos;occupe de la rédaction et du dépôt de ce document complexe.</p>
-<p>Certains héritiers sont dispensés de déclaration : c&apos;est le cas si l&apos;actif brut successoral est inférieur à 50 000 € pour les héritiers en ligne directe et le conjoint survivant (à condition qu&apos;il n&apos;y ait pas eu de donation antérieure non enregistrée), ou inférieur à 3 000 € pour les autres héritiers.</p>
+<p>Le Code général des impôts impose un calendrier strict pour la <strong>déclaration de succession</strong>. Le délai principal est de <strong>6 mois à compter du jour du décès</strong> lorsque celui-ci survient en France métropolitaine. Ce délai est porté à <strong>12 mois</strong> si le décès a lieu à l'étranger ou dans certains DOM-TOM.</p>
+<p>La déclaration doit être déposée au service des impôts du domicile du défunt, accompagnée du paiement des droits de succession. En pratique, c'est le notaire chargé du règlement qui s'occupe de la rédaction et du dépôt de ce document complexe.</p>
+<p>Certains héritiers sont dispensés de déclaration : c'est le cas si l'actif brut successoral est inférieur à 50 000 € pour les héritiers en ligne directe et le conjoint survivant (à condition qu'il n'y ait pas eu de donation antérieure non enregistrée), ou inférieur à 3 000 € pour les autres héritiers.</p>
 
 <h2>Comment sont calculés les impôts de succession ?</h2>
-<p>Les droits de succession dépendent de deux éléments principaux : le <strong>lien de parenté</strong> avec le défunt et le <strong>montant de la part héritée</strong>. Chaque héritier bénéficie d&apos;un abattement personnel avant application du barème progressif.</p>
+<p>Les droits de succession dépendent de deux éléments principaux : le <strong>lien de parenté</strong> avec le défunt et le <strong>montant de la part héritée</strong>. Chaque héritier bénéficie d'un abattement personnel avant application du barème progressif.</p>
 <p>Les principaux abattements sont les suivants :</p>
 <ul>
   <li><strong>Conjoint survivant ou partenaire de PACS</strong> : exonération totale</li>
@@ -974,34 +963,34 @@ function Article10() {
   <li><strong>Neveu ou nièce</strong> : abattement de 7 967 €</li>
   <li><strong>Personne handicapée</strong> : abattement supplémentaire de 159 325 €</li>
 </ul>
-<p>Après application de l&apos;abattement, un barème progressif s&apos;applique, allant de 5 % à 45 % en ligne directe, 35 % à 45 % entre frères et sœurs, et jusqu&apos;à 60 % entre personnes non parentes.</p>
+<p>Après application de l'abattement, un barème progressif s'applique, allant de 5 % à 45 % en ligne directe, 35 % à 45 % entre frères et sœurs, et jusqu'à 60 % entre personnes non parentes.</p>
 
-<InternalCTA title="Besoin d&apos;aide pour votre déclaration de succession ?" description="Nos notaires partenaires vous accompagnent dans toutes les démarches successorales. Premier rendez-vous offert, en visio ou en cabinet." />
+<InternalCTA />
 
 <h2>Quelles sont les pénalités en cas de retard ?</h2>
-<p>Le non-respect du <strong>délai de déclaration de succession</strong> entraîne des sanctions financières qui peuvent rapidement s&apos;accumuler. Les conséquences sont les suivantes :</p>
+<p>Le non-respect du <strong>délai de déclaration de succession</strong> entraîne des sanctions financières qui peuvent rapidement s'accumuler. Les conséquences sont les suivantes :</p>
 <ul>
   <li><strong>Intérêt de retard</strong> : 0,20 % par mois (soit 2,4 % par an) dès le 7ème mois suivant le décès</li>
   <li><strong>Majoration de 10 %</strong> à partir du 13ème mois (7ème mois de retard)</li>
   <li><strong>Majoration de 40 %</strong> en cas de dépôt tardif après mise en demeure restée sans réponse pendant 90 jours</li>
-  <li><strong>Majoration de 80 %</strong> en cas de découverte d&apos;une activité occulte ou de manœuvres frauduleuses</li>
+  <li><strong>Majoration de 80 %</strong> en cas de découverte d'une activité occulte ou de manœuvres frauduleuses</li>
 </ul>
-<p>Il est possible de demander un <strong>paiement fractionné</strong> (sur 1 à 3 ans) ou <strong>différé</strong> (jusqu&apos;à 15 ans en cas de nue-propriété) des droits de succession, sous certaines conditions et moyennant le versement d&apos;intérêts.</p>
+<p>Il est possible de demander un <strong>paiement fractionné</strong> (sur 1 à 3 ans) ou <strong>différé</strong> (jusqu'à 15 ans en cas de nue-propriété) des droits de succession, sous certaines conditions et moyennant le versement d'intérêts.</p>
 
 <h2>Comment préparer sereinement sa déclaration de succession ?</h2>
 <p>Pour respecter les délais et éviter les erreurs coûteuses, il est vivement recommandé de <strong>consulter un notaire dès les premières semaines suivant le décès</strong>. Celui-ci se charge de :</p>
 <ul>
-  <li>Établir l&apos;<strong>acte de notoriété</strong> identifiant les héritiers</li>
-  <li>Réaliser l&apos;<strong>inventaire</strong> du patrimoine du défunt (biens, comptes, dettes)</li>
+  <li>Établir l'<strong>acte de notoriété</strong> identifiant les héritiers</li>
+  <li>Réaliser l'<strong>inventaire</strong> du patrimoine du défunt (biens, comptes, dettes)</li>
   <li>Évaluer les biens immobiliers et mobiliers</li>
   <li>Rédiger la <strong>déclaration de succession</strong> sur le formulaire Cerfa 2705</li>
   <li>Calculer les droits dus par chaque héritier</li>
   <li>Effectuer le dépôt auprès du service des impôts</li>
 </ul>
-<p>Anticiper la transmission de son patrimoine par une <strong>donation</strong>, un <strong>testament</strong> ou la souscription d&apos;une <strong>assurance-vie</strong> permet souvent de réduire significativement la facture fiscale pour les héritiers.</p>
+<p>Anticiper la transmission de son patrimoine par une <strong>donation</strong>, un <strong>testament</strong> ou la souscription d'une <strong>assurance-vie</strong> permet souvent de réduire significativement la facture fiscale pour les héritiers.</p>
 
 <h2>En résumé</h2>
-<p>La <strong>déclaration de succession</strong> est une démarche obligatoire à effectuer dans un délai de 6 mois après le décès. Les droits dus dépendent du lien de parenté et de la part héritée, après application d&apos;abattements. Les retards entraînent des pénalités importantes, d&apos;où l&apos;intérêt de confier rapidement le dossier à un notaire qui sécurisera l&apos;ensemble des opérations.</p>
+<p>La <strong>déclaration de succession</strong> est une démarche obligatoire à effectuer dans un délai de 6 mois après le décès. Les droits dus dépendent du lien de parenté et de la part héritée, après application d'abattements. Les retards entraînent des pénalités importantes, d'où l'intérêt de confier rapidement le dossier à un notaire qui sécurisera l'ensemble des opérations.</p>
 </>
     </>
   );
@@ -1013,80 +1002,70 @@ function Article11() {
   return (
     <>
       <>
-  <p className="lead">Une <strong>succession sans testament héritiers</strong> légaux est régie entièrement par la loi française. Lorsqu&apos;une personne décède sans avoir rédigé de testament, on parle de succession &quot;ab intestat&quot;. Le Code civil prévoit alors un ordre précis pour désigner les héritiers et déterminer leurs parts respectives. Comprendre ces règles est essentiel pour anticiper les conséquences patrimoniales d&apos;un décès et éviter les conflits familiaux.</p>
+  <p className="lead">Une <strong>succession sans testament héritiers</strong> légaux est régie entièrement par la loi française. Lorsqu'une personne décède sans avoir rédigé de testament, on parle de succession "ab intestat". Le Code civil prévoit alors un ordre précis pour désigner les héritiers et déterminer leurs parts respectives. Comprendre ces règles est essentiel pour anticiper les conséquences patrimoniales d'un décès et éviter les conflits familiaux.</p>
 
-  <KeyPoints items={[
+  <KeyPoints points={[
     "Sans testament, la loi désigne automatiquement les héritiers selon 4 ordres successoraux",
     "Les enfants héritent en priorité, à parts égales entre eux",
     "Le conjoint survivant a des droits spécifiques selon la situation familiale",
-    "Le notaire est obligatoire pour régler la succession dès qu&apos;il y a un bien immobilier"
+    "Le notaire est obligatoire pour régler la succession dès qu'il y a un bien immobilier"
   ]} />
 
-  <h2>L&apos;ordre légal des héritiers en l&apos;absence de testament</h2>
-  <p>Le Code civil français classe les héritiers en quatre ordres successifs. Chaque ordre exclut le suivant : tant qu&apos;il existe un héritier dans un ordre, les ordres suivants ne reçoivent rien.</p>
+  <h2>L'ordre légal des héritiers en l'absence de testament</h2>
+  <p>Le Code civil français classe les héritiers en quatre ordres successifs. Chaque ordre exclut le suivant : tant qu'il existe un héritier dans un ordre, les ordres suivants ne reçoivent rien.</p>
 
   <h3>Premier ordre : les descendants</h3>
-  <p>Les enfants du défunt héritent en premier, à parts égales, qu&apos;ils soient issus du mariage, hors mariage ou adoptés. Si un enfant est prédécédé, ses propres enfants (les petits-enfants du défunt) viennent en représentation et se partagent la part de leur parent.</p>
+  <p>Les enfants du défunt héritent en premier, à parts égales, qu'ils soient issus du mariage, hors mariage ou adoptés. Si un enfant est prédécédé, ses propres enfants (les petits-enfants du défunt) viennent en représentation et se partagent la part de leur parent.</p>
 
   <h3>Deuxième ordre : ascendants et collatéraux privilégiés</h3>
-  <p>En l&apos;absence de descendants, la succession revient aux parents du défunt et à ses frères et sœurs. Les parents reçoivent chacun 1/4, le reste étant partagé entre les frères et sœurs (ou leurs descendants par représentation).</p>
+  <p>En l'absence de descendants, la succession revient aux parents du défunt et à ses frères et sœurs. Les parents reçoivent chacun 1/4, le reste étant partagé entre les frères et sœurs (ou leurs descendants par représentation).</p>
 
   <h3>Troisième et quatrième ordres</h3>
-  <p>S&apos;il n&apos;y a ni descendants, ni parents, ni frères et sœurs, on remonte aux autres ascendants (grands-parents) puis aux collatéraux ordinaires (oncles, tantes, cousins) jusqu&apos;au 6e degré. Au-delà, la succession revient à l&apos;État.</p>
+  <p>S'il n'y a ni descendants, ni parents, ni frères et sœurs, on remonte aux autres ascendants (grands-parents) puis aux collatéraux ordinaires (oncles, tantes, cousins) jusqu'au 6e degré. Au-delà, la succession revient à l'État.</p>
 
   <h2>Les droits du conjoint survivant sans testament</h2>
   <p>Le conjoint marié bénéficie de droits légaux importants, même sans testament. Attention : le partenaire de PACS et le concubin ne sont <strong>pas héritiers légaux</strong>. Seul un testament peut leur transmettre des biens.</p>
 
-  <p>En présence d&apos;enfants tous communs au couple, le conjoint choisit entre :</p>
+  <p>En présence d'enfants tous communs au couple, le conjoint choisit entre :</p>
   <ul>
     <li><strong>1/4 de la succession en pleine propriété</strong></li>
     <li><strong>La totalité en usufruit</strong> (les enfants reçoivent la nue-propriété)</li>
   </ul>
 
-  <p>En présence d&apos;enfants d&apos;une précédente union, le conjoint reçoit obligatoirement 1/4 en pleine propriété, sans option d&apos;usufruit. Sans enfants mais avec parents du défunt vivants, le conjoint recueille la moitié ou les trois quarts selon les cas. Sans descendants ni parents, il hérite de la totalité.</p>
+  <p>En présence d'enfants d'une précédente union, le conjoint reçoit obligatoirement 1/4 en pleine propriété, sans option d'usufruit. Sans enfants mais avec parents du défunt vivants, le conjoint recueille la moitié ou les trois quarts selon les cas. Sans descendants ni parents, il hérite de la totalité.</p>
 
-  <InternalCTA
-    title="Une succession à régler ?"
-    description="Nos notaires partenaires vous accompagnent dans le règlement complet de la succession, du bilan patrimonial au partage final."
-    buttonText="Prendre RDV avec un notaire"
-    href="/notaires"
-  />
+  <InternalCTA />
 
   <h2>Le rôle du notaire dans une succession sans testament</h2>
-  <p>Le recours au notaire est <strong>obligatoire</strong> dès lors que la succession comprend un bien immobilier, dépasse 5 000 € ou qu&apos;il existe un contrat de mariage. Dans la pratique, presque toutes les successions passent par un notaire.</p>
+  <p>Le recours au notaire est <strong>obligatoire</strong> dès lors que la succession comprend un bien immobilier, dépasse 5 000 € ou qu'il existe un contrat de mariage. Dans la pratique, presque toutes les successions passent par un notaire.</p>
 
   <h3>Les étapes du règlement</h3>
   <ol>
     <li><strong>Acte de notoriété</strong> : le notaire identifie officiellement les héritiers</li>
     <li><strong>Bilan du patrimoine</strong> : inventaire des biens, comptes, dettes</li>
-    <li><strong>Déclaration de succession</strong> : à déposer dans les 6 mois auprès de l&apos;administration fiscale</li>
+    <li><strong>Déclaration de succession</strong> : à déposer dans les 6 mois auprès de l'administration fiscale</li>
     <li><strong>Paiement des droits</strong> de succession selon le lien de parenté</li>
-    <li><strong>Partage</strong> entre héritiers (à l&apos;amiable ou judiciaire)</li>
+    <li><strong>Partage</strong> entre héritiers (à l'amiable ou judiciaire)</li>
   </ol>
 
   <h3>Les droits de succession applicables</h3>
-  <p>Sans testament, les abattements et taux dépendent du lien de parenté : 100 000 € d&apos;abattement par enfant, exonération totale pour le conjoint survivant, 15 932 € entre frères et sœurs. Les neveux, cousins et tiers subissent une fiscalité bien plus lourde (jusqu&apos;à 60%).</p>
+  <p>Sans testament, les abattements et taux dépendent du lien de parenté : 100 000 € d'abattement par enfant, exonération totale pour le conjoint survivant, 15 932 € entre frères et sœurs. Les neveux, cousins et tiers subissent une fiscalité bien plus lourde (jusqu'à 60%).</p>
 
   <h2>Comment anticiper une succession sans testament ?</h2>
-  <p>Si la loi prévoit tout, elle ne reflète pas toujours vos volontés. Plusieurs outils permettent d&apos;aménager la transmission sans rédiger un testament classique :</p>
+  <p>Si la loi prévoit tout, elle ne reflète pas toujours vos volontés. Plusieurs outils permettent d'aménager la transmission sans rédiger un testament classique :</p>
   <ul>
-    <li><strong>La donation entre époux</strong> (ou &quot;donation au dernier vivant&quot;) augmente la part du conjoint</li>
+    <li><strong>La donation entre époux</strong> (ou "donation au dernier vivant") augmente la part du conjoint</li>
     <li><strong>La donation-partage</strong> permet de transmettre de son vivant à ses enfants</li>
-    <li><strong>L&apos;assurance-vie</strong> échappe en grande partie aux règles successorales</li>
-    <li><strong>La SCI familiale</strong> facilite la transmission d&apos;un patrimoine immobilier</li>
+    <li><strong>L'assurance-vie</strong> échappe en grande partie aux règles successorales</li>
+    <li><strong>La SCI familiale</strong> facilite la transmission d'un patrimoine immobilier</li>
   </ul>
 
-  <p>Consulter un notaire en amont permet d&apos;identifier la stratégie la plus adaptée à votre situation familiale et patrimoniale, tout en optimisant la fiscalité pour vos héritiers.</p>
+  <p>Consulter un notaire en amont permet d'identifier la stratégie la plus adaptée à votre situation familiale et patrimoniale, tout en optimisant la fiscalité pour vos héritiers.</p>
 
   <h2>Questions fréquentes</h2>
   <p>Vous trouverez ci-dessous les réponses aux questions les plus courantes sur les successions sans testament. Pour une analyse personnalisée, un échange avec un notaire reste indispensable.</p>
 
-  <InternalCTA
-    title="Besoin de conseils sur votre succession ?"
-    description="Premier rendez-vous offert avec un notaire de notre réseau, en visio ou en cabinet. Réponses claires et accompagnement personnalisé."
-    buttonText="Consulter un notaire"
-    href="/notaires"
-  />
+  <InternalCTA />
 </>
     </>
   );
@@ -1100,16 +1079,16 @@ function Article12() {
       <>
   <p className="lead">Peut-on déshériter un enfant en France ? La réponse courte est non : le droit français protège les enfants par un mécanisme appelé la réserve héréditaire. Toutefois, il existe des solutions légales pour organiser votre succession différemment et, dans des cas exceptionnels, écarter un enfant indigne. Cet article fait le point sur vos droits et options.</p>
 
-  <KeyPoints items={[
+  <KeyPoints points={[
     "En France, il est impossible de déshériter totalement un enfant grâce à la réserve héréditaire",
-    "La part réservée varie selon le nombre d&apos;enfants : 1/2 pour 1 enfant, 2/3 pour 2, 3/4 pour 3 ou plus",
-    "L&apos;indignité successorale permet d&apos;écarter un enfant en cas de faute grave",
-    "La quotité disponible et l&apos;assurance-vie offrent des marges de manœuvre pour avantager d&apos;autres héritiers"
+    "La part réservée varie selon le nombre d'enfants : 1/2 pour 1 enfant, 2/3 pour 2, 3/4 pour 3 ou plus",
+    "L'indignité successorale permet d'écarter un enfant en cas de faute grave",
+    "La quotité disponible et l'assurance-vie offrent des marges de manœuvre pour avantager d'autres héritiers"
   ]} />
 
   <h2>La réserve héréditaire : une protection incontournable</h2>
   <p>Le Code civil français consacre le principe de la <strong>réserve héréditaire</strong>, qui rend impossible le fait de déshériter un enfant. Les enfants sont des héritiers dits « réservataires » : la loi leur garantit obligatoirement une portion du patrimoine du défunt, quelles que soient les volontés exprimées dans un testament.</p>
-  <p>Cette protection s&apos;applique à tous les enfants, qu&apos;ils soient légitimes, naturels, adoptés ou nés hors mariage. La répartition de la réserve dépend du nombre d&apos;enfants :</p>
+  <p>Cette protection s'applique à tous les enfants, qu'ils soient légitimes, naturels, adoptés ou nés hors mariage. La répartition de la réserve dépend du nombre d'enfants :</p>
   <ul>
     <li><strong>1 enfant</strong> : la réserve représente 1/2 du patrimoine</li>
     <li><strong>2 enfants</strong> : la réserve représente 2/3 du patrimoine (1/3 chacun)</li>
@@ -1117,9 +1096,9 @@ function Article12() {
   </ul>
   <p>Le reste, appelé <strong>quotité disponible</strong>, peut être librement attribué par testament ou donation à toute personne de votre choix.</p>
 
-  <h2>L&apos;indignité successorale : la seule véritable exception</h2>
-  <p>Le seul moyen d&apos;écarter totalement un enfant de la succession est de le faire déclarer <strong>indigne</strong> de succéder. Cette procédure est strictement encadrée par les articles 726 et 727 du Code civil.</p>
-  <p>L&apos;indignité peut être <strong>de plein droit</strong> en cas de :</p>
+  <h2>L'indignité successorale : la seule véritable exception</h2>
+  <p>Le seul moyen d'écarter totalement un enfant de la succession est de le faire déclarer <strong>indigne</strong> de succéder. Cette procédure est strictement encadrée par les articles 726 et 727 du Code civil.</p>
+  <p>L'indignité peut être <strong>de plein droit</strong> en cas de :</p>
   <ul>
     <li>Condamnation pour meurtre ou tentative de meurtre du défunt</li>
     <li>Condamnation pour coups mortels portés au défunt</li>
@@ -1130,33 +1109,33 @@ function Article12() {
     <li>Faux témoignage dans une procédure criminelle contre lui</li>
     <li>Dénonciation calomnieuse ayant entraîné une condamnation criminelle</li>
   </ul>
-  <p>Il s&apos;agit de cas exceptionnels qui nécessitent une décision de justice. Un simple conflit familial, même profond, ne suffit jamais à justifier l&apos;indignité.</p>
+  <p>Il s'agit de cas exceptionnels qui nécessitent une décision de justice. Un simple conflit familial, même profond, ne suffit jamais à justifier l'indignité.</p>
 
   <InternalCTA />
 
-  <h2>Comment réduire légalement la part d&apos;un enfant ?</h2>
-  <p>Si vous ne pouvez pas déshériter un enfant, plusieurs outils permettent de moduler votre succession et d&apos;avantager d&apos;autres personnes :</p>
+  <h2>Comment réduire légalement la part d'un enfant ?</h2>
+  <p>Si vous ne pouvez pas déshériter un enfant, plusieurs outils permettent de moduler votre succession et d'avantager d'autres personnes :</p>
   <h3>1. Utiliser la quotité disponible</h3>
-  <p>Vous pouvez librement transmettre la quotité disponible (entre 1/4 et 1/2 selon le nombre d&apos;enfants) à votre conjoint, un autre enfant, un tiers ou une association via un testament authentique.</p>
+  <p>Vous pouvez librement transmettre la quotité disponible (entre 1/4 et 1/2 selon le nombre d'enfants) à votre conjoint, un autre enfant, un tiers ou une association via un testament authentique.</p>
   <h3>2. Souscrire une assurance-vie</h3>
-  <p>L&apos;<strong>assurance-vie</strong> bénéficie d&apos;un régime juridique particulier : les capitaux versés au bénéficiaire désigné échappent en principe à la succession et donc à la réserve héréditaire, sauf primes manifestement exagérées.</p>
+  <p>L'<strong>assurance-vie</strong> bénéficie d'un régime juridique particulier : les capitaux versés au bénéficiaire désigné échappent en principe à la succession et donc à la réserve héréditaire, sauf primes manifestement exagérées.</p>
   <h3>3. Réaliser des donations</h3>
-  <p>Des donations de votre vivant à d&apos;autres héritiers ou tiers permettent d&apos;anticiper la transmission. Attention : elles seront réintégrées au calcul de la réserve si elles excèdent la quotité disponible.</p>
+  <p>Des donations de votre vivant à d'autres héritiers ou tiers permettent d'anticiper la transmission. Attention : elles seront réintégrées au calcul de la réserve si elles excèdent la quotité disponible.</p>
   <h3>4. Recourir au mandat à effet posthume</h3>
-  <p>Cet outil permet de confier la gestion d&apos;une partie de la succession à un tiers pour protéger un enfant vulnérable ou éviter une mauvaise gestion.</p>
+  <p>Cet outil permet de confier la gestion d'une partie de la succession à un tiers pour protéger un enfant vulnérable ou éviter une mauvaise gestion.</p>
 
   <h2>Que faire en cas de conflit familial grave ?</h2>
   <p>Si vos relations avec un enfant sont gravement détériorées, sachez que vous pouvez toujours :</p>
   <ul>
     <li>Limiter sa part à la stricte réserve héréditaire</li>
     <li>Avantager vos autres enfants ou votre conjoint via la quotité disponible</li>
-    <li>Choisir un bénéficiaire d&apos;assurance-vie distinct</li>
+    <li>Choisir un bénéficiaire d'assurance-vie distinct</li>
     <li>Préciser dans votre testament les motifs de votre décision</li>
   </ul>
-  <p>Un <strong>notaire</strong> est l&apos;interlocuteur indispensable pour sécuriser votre démarche, rédiger un testament authentique opposable et éviter les contestations futures.</p>
+  <p>Un <strong>notaire</strong> est l'interlocuteur indispensable pour sécuriser votre démarche, rédiger un testament authentique opposable et éviter les contestations futures.</p>
 
   <h2>Conclusion</h2>
-  <p>En France, déshériter un enfant est juridiquement impossible, sauf cas d&apos;indignité successorale prononcée par un juge. Toutefois, la loi offre des marges de manœuvre réelles pour organiser votre succession selon vos souhaits, via la quotité disponible, l&apos;assurance-vie et les donations. Pour éviter tout litige et optimiser la transmission de votre patrimoine, l&apos;accompagnement d&apos;un notaire est essentiel.</p>
+  <p>En France, déshériter un enfant est juridiquement impossible, sauf cas d'indignité successorale prononcée par un juge. Toutefois, la loi offre des marges de manœuvre réelles pour organiser votre succession selon vos souhaits, via la quotité disponible, l'assurance-vie et les donations. Pour éviter tout litige et optimiser la transmission de votre patrimoine, l'accompagnement d'un notaire est essentiel.</p>
 
   <InternalCTA />
 </>
@@ -1170,7 +1149,7 @@ function Article13() {
   return (
     <>
       <>
-  <p className="lead">Le calcul des droits de succession selon le barème 2026 repose sur trois éléments clés : la valeur de l&apos;actif net taxable, le lien de parenté avec le défunt et les abattements applicables. Comprendre ce mécanisme permet d&apos;anticiper la facture fiscale et d&apos;optimiser la transmission de votre patrimoine.</p>
+  <p className="lead">Le calcul des droits de succession selon le barème 2026 repose sur trois éléments clés : la valeur de l'actif net taxable, le lien de parenté avec le défunt et les abattements applicables. Comprendre ce mécanisme permet d'anticiper la facture fiscale et d'optimiser la transmission de votre patrimoine.</p>
 
   <KeyPoints points={[
     "Abattement de 100 000 € par enfant, renouvelable tous les 15 ans",
@@ -1180,7 +1159,7 @@ function Article13() {
   ]} />
 
   <h2>Les abattements applicables avant calcul</h2>
-  <p>Avant d&apos;appliquer le barème, l&apos;administration fiscale déduit un abattement personnel sur la part nette revenant à chaque héritier. En 2026, ces montants restent stables :</p>
+  <p>Avant d'appliquer le barème, l'administration fiscale déduit un abattement personnel sur la part nette revenant à chaque héritier. En 2026, ces montants restent stables :</p>
   <ul>
     <li><strong>Enfants, parents :</strong> 100 000 €</li>
     <li><strong>Petits-enfants (en représentation) :</strong> 100 000 € (part du parent prédécédé)</li>
@@ -1189,12 +1168,12 @@ function Article13() {
     <li><strong>Personnes handicapées :</strong> 159 325 € cumulable</li>
     <li><strong>Autres héritiers :</strong> 1 594 €</li>
   </ul>
-  <p>Ces abattements se renouvellent tous les 15 ans, ce qui ouvre une stratégie d&apos;optimisation par les donations anticipées.</p>
+  <p>Ces abattements se renouvellent tous les 15 ans, ce qui ouvre une stratégie d'optimisation par les donations anticipées.</p>
 
   <h2>Le barème 2026 en ligne directe</h2>
-  <p>Une fois l&apos;abattement déduit, le solde taxable est soumis à un barème progressif par tranches. Pour les transmissions entre parents et enfants (ou ascendants), les taux applicables sont :</p>
+  <p>Une fois l'abattement déduit, le solde taxable est soumis à un barème progressif par tranches. Pour les transmissions entre parents et enfants (ou ascendants), les taux applicables sont :</p>
   <ul>
-    <li>Jusqu&apos;à 8 072 € : <strong>5 %</strong></li>
+    <li>Jusqu'à 8 072 € : <strong>5 %</strong></li>
     <li>De 8 072 € à 12 109 € : <strong>10 %</strong></li>
     <li>De 12 109 € à 15 932 € : <strong>15 %</strong></li>
     <li>De 15 932 € à 552 324 € : <strong>20 %</strong></li>
@@ -1202,37 +1181,33 @@ function Article13() {
     <li>De 902 838 € à 1 805 677 € : <strong>40 %</strong></li>
     <li>Au-delà de 1 805 677 € : <strong>45 %</strong></li>
   </ul>
-  <p><strong>Exemple concret :</strong> un enfant hérite de 300 000 €. Après abattement de 100 000 €, la base taxable est de 200 000 €. Les droits s&apos;élèvent à environ 38 194 € après application du barème par tranches.</p>
+  <p><strong>Exemple concret :</strong> un enfant hérite de 300 000 €. Après abattement de 100 000 €, la base taxable est de 200 000 €. Les droits s'élèvent à environ 38 194 € après application du barème par tranches.</p>
 
   <h2>Les barèmes spécifiques selon le lien de parenté</h2>
-  <p>Pour les <strong>frères et sœurs</strong>, deux tranches s&apos;appliquent après abattement : 35 % jusqu&apos;à 24 430 € et 45 % au-delà. Pour les <strong>neveux, nièces et parents jusqu&apos;au 4e degré</strong>, le taux unique est de 55 %. Enfin, pour les <strong>tiers ou parents au-delà du 4e degré</strong>, le taux atteint 60 %, ce qui rend toute transmission hors famille particulièrement coûteuse.</p>
-  <p>Le conjoint survivant marié et le partenaire de PACS bénéficient d&apos;une exonération totale depuis la loi TEPA de 2007. Le concubin, en revanche, est traité comme un tiers et taxé à 60 %.</p>
+  <p>Pour les <strong>frères et sœurs</strong>, deux tranches s'appliquent après abattement : 35 % jusqu'à 24 430 € et 45 % au-delà. Pour les <strong>neveux, nièces et parents jusqu'au 4e degré</strong>, le taux unique est de 55 %. Enfin, pour les <strong>tiers ou parents au-delà du 4e degré</strong>, le taux atteint 60 %, ce qui rend toute transmission hors famille particulièrement coûteuse.</p>
+  <p>Le conjoint survivant marié et le partenaire de PACS bénéficient d'une exonération totale depuis la loi TEPA de 2007. Le concubin, en revanche, est traité comme un tiers et taxé à 60 %.</p>
 
-  <InternalCTA
-    title="Besoin d&apos;une simulation précise ?"
-    description="Un notaire calcule vos droits de succession et vous conseille sur les stratégies d&apos;optimisation. 1er rendez-vous offert."
-    buttonText="Consulter un notaire"
-  />
+  <InternalCTA />
 
   <h2>Comment optimiser ses droits de succession</h2>
   <p>Plusieurs leviers permettent de réduire la facture fiscale de vos héritiers :</p>
   <ul>
-    <li><strong>Donations anticipées :</strong> profitez du renouvellement de l&apos;abattement tous les 15 ans</li>
+    <li><strong>Donations anticipées :</strong> profitez du renouvellement de l'abattement tous les 15 ans</li>
     <li><strong>Assurance-vie :</strong> abattement de 152 500 € par bénéficiaire pour les versements avant 70 ans</li>
-    <li><strong>Démembrement de propriété :</strong> transmettre la nue-propriété en conservant l&apos;usufruit</li>
-    <li><strong>Pacte Dutreil :</strong> abattement de 75 % sur la transmission d&apos;entreprise</li>
-    <li><strong>Dons familiaux de sommes d&apos;argent :</strong> exonération supplémentaire de 31 865 € sous conditions</li>
+    <li><strong>Démembrement de propriété :</strong> transmettre la nue-propriété en conservant l'usufruit</li>
+    <li><strong>Pacte Dutreil :</strong> abattement de 75 % sur la transmission d'entreprise</li>
+    <li><strong>Dons familiaux de sommes d'argent :</strong> exonération supplémentaire de 31 865 € sous conditions</li>
   </ul>
-  <p>La déclaration de succession doit être déposée dans les <strong>6 mois suivant le décès</strong> (12 mois si décès à l&apos;étranger). Le paiement peut être fractionné ou différé sous conditions, notamment en cas de transmission d&apos;entreprise ou de nue-propriété.</p>
+  <p>La déclaration de succession doit être déposée dans les <strong>6 mois suivant le décès</strong> (12 mois si décès à l'étranger). Le paiement peut être fractionné ou différé sous conditions, notamment en cas de transmission d'entreprise ou de nue-propriété.</p>
 
   <h2>Foire aux questions</h2>
   <div className="faq">
-    <h3>Quel est l&apos;abattement entre parent et enfant en 2026 ?</h3>
-    <p>L&apos;abattement reste fixé à 100 000 € par parent et par enfant, renouvelable tous les 15 ans.</p>
+    <h3>Quel est l'abattement entre parent et enfant en 2026 ?</h3>
+    <p>L'abattement reste fixé à 100 000 € par parent et par enfant, renouvelable tous les 15 ans.</p>
     <h3>Le conjoint survivant paie-t-il des droits de succession ?</h3>
     <p>Non, le conjoint marié ou pacsé est totalement exonéré de droits de succession depuis la loi TEPA de 2007.</p>
     <h3>Quand faut-il payer les droits de succession ?</h3>
-    <p>Les droits doivent être réglés dans les 6 mois suivant le décès (12 mois si décès à l&apos;étranger), en même temps que la déclaration.</p>
+    <p>Les droits doivent être réglés dans les 6 mois suivant le décès (12 mois si décès à l'étranger), en même temps que la déclaration.</p>
   </div>
 </>
     </>
@@ -1245,84 +1220,74 @@ function Article14() {
   return (
     <>
       <>
-  <p className="lead">L&apos;acte de notoriété succession établi par un notaire est le document officiel qui prouve votre qualité d&apos;héritier après un décès. Indispensable pour débloquer les comptes bancaires, vendre un bien immobilier ou percevoir une pension de réversion, cet acte authentique constitue la première étape incontournable du règlement successoral.</p>
+  <p className="lead">L'acte de notoriété succession établi par un notaire est le document officiel qui prouve votre qualité d'héritier après un décès. Indispensable pour débloquer les comptes bancaires, vendre un bien immobilier ou percevoir une pension de réversion, cet acte authentique constitue la première étape incontournable du règlement successoral.</p>
 
-  <KeyPoints items={[
-    "L&apos;acte de notoriété prouve officiellement la qualité d&apos;héritier",
+  <KeyPoints points={[
+    "L'acte de notoriété prouve officiellement la qualité d'héritier",
     "Obligatoire pour les successions supérieures à 5 910 € ou comportant un bien immobilier",
     "Tarif réglementé : environ 200 à 400 € TTC tout compris",
-    "Délai d&apos;obtention : 1 à 3 mois selon la complexité",
+    "Délai d'obtention : 1 à 3 mois selon la complexité",
     "Seul un notaire est habilité à le rédiger depuis 2015"
   ]} />
 
-  <h2>Qu&apos;est-ce qu&apos;un acte de notoriété succession ?</h2>
-  <p>L&apos;acte de notoriété est un acte authentique rédigé par le notaire qui identifie le défunt et désigne les personnes appelées à recueillir sa succession. Il établit la dévolution successorale, c&apos;est-à-dire la liste des héritiers et leurs droits respectifs dans l&apos;héritage.</p>
-  <p>Ce document, prévu par l&apos;article 730-1 du Code civil, fait foi jusqu&apos;à preuve du contraire. Depuis la loi du 16 février 2015, seul un notaire peut le délivrer : les anciens certificats d&apos;hérédité délivrés par les mairies ont été progressivement supprimés.</p>
-  <p>L&apos;acte mentionne notamment :</p>
+  <h2>Qu'est-ce qu'un acte de notoriété succession ?</h2>
+  <p>L'acte de notoriété est un acte authentique rédigé par le notaire qui identifie le défunt et désigne les personnes appelées à recueillir sa succession. Il établit la dévolution successorale, c'est-à-dire la liste des héritiers et leurs droits respectifs dans l'héritage.</p>
+  <p>Ce document, prévu par l'article 730-1 du Code civil, fait foi jusqu'à preuve du contraire. Depuis la loi du 16 février 2015, seul un notaire peut le délivrer : les anciens certificats d'hérédité délivrés par les mairies ont été progressivement supprimés.</p>
+  <p>L'acte mentionne notamment :</p>
   <ul>
-    <li>L&apos;état civil complet du défunt et la date du décès</li>
-    <li>L&apos;existence ou non d&apos;un testament ou d&apos;une donation entre époux</li>
-    <li>L&apos;identité de chaque héritier et son lien de parenté</li>
+    <li>L'état civil complet du défunt et la date du décès</li>
+    <li>L'existence ou non d'un testament ou d'une donation entre époux</li>
+    <li>L'identité de chaque héritier et son lien de parenté</li>
     <li>La quote-part revenant à chacun (en pleine propriété, usufruit ou nue-propriété)</li>
-    <li>L&apos;option successorale exercée (acceptation pure et simple, à concurrence de l&apos;actif net, ou renonciation)</li>
+    <li>L'option successorale exercée (acceptation pure et simple, à concurrence de l'actif net, ou renonciation)</li>
   </ul>
 
   <h2>Quand et pourquoi recourir à cet acte ?</h2>
-  <p>L&apos;acte de notoriété succession est nécessaire dans la majorité des dossiers. Il devient obligatoire dès lors que :</p>
+  <p>L'acte de notoriété succession est nécessaire dans la majorité des dossiers. Il devient obligatoire dès lors que :</p>
   <ul>
-    <li><strong>Le patrimoine bancaire dépasse 5 910,57 €</strong> : les banques exigent l&apos;acte pour débloquer les comptes du défunt</li>
-    <li><strong>La succession comporte un bien immobilier</strong> : indispensable pour l&apos;attestation immobilière et toute future vente</li>
+    <li><strong>Le patrimoine bancaire dépasse 5 910,57 €</strong> : les banques exigent l'acte pour débloquer les comptes du défunt</li>
+    <li><strong>La succession comporte un bien immobilier</strong> : indispensable pour l'attestation immobilière et toute future vente</li>
     <li><strong>Des prestations sociales doivent être perçues</strong> : pension de réversion, capital décès, assurance-vie</li>
     <li><strong>Un testament existe</strong> : pour authentifier les volontés du défunt et leurs effets</li>
   </ul>
-  <p>En pratique, dès qu&apos;une démarche officielle nécessite de prouver votre qualité d&apos;héritier, l&apos;acte de notoriété sera réclamé. Sans lui, impossible d&apos;agir au nom de la succession.</p>
+  <p>En pratique, dès qu'une démarche officielle nécessite de prouver votre qualité d'héritier, l'acte de notoriété sera réclamé. Sans lui, impossible d'agir au nom de la succession.</p>
 
-  <InternalCTA
-    title="Besoin d&apos;un notaire pour votre succession ?"
-    description="Obtenez votre acte de notoriété rapidement. Premier rendez-vous offert avec un notaire partenaire, en visio ou en cabinet."
-    buttonText="Prendre rendez-vous"
-    href="/rendez-vous"
-  />
+  <InternalCTA />
 
   <h2>Comment se déroule la rédaction chez le notaire ?</h2>
-  <p>La procédure d&apos;établissement de l&apos;acte se déroule en plusieurs étapes structurées par le notaire.</p>
+  <p>La procédure d'établissement de l'acte se déroule en plusieurs étapes structurées par le notaire.</p>
 
   <h3>1. Réunion des pièces nécessaires</h3>
   <p>Vous devrez fournir au notaire :</p>
   <ul>
-    <li>L&apos;acte de décès du défunt</li>
+    <li>L'acte de décès du défunt</li>
     <li>Son livret de famille (et celui de ses précédentes unions le cas échéant)</li>
     <li>Son acte de naissance et son contrat de mariage éventuel</li>
-    <li>Les pièces d&apos;identité de tous les héritiers</li>
+    <li>Les pièces d'identité de tous les héritiers</li>
     <li>Les testaments, donations ou donations entre époux connus</li>
   </ul>
 
   <h3>2. Recherches et vérifications</h3>
-  <p>Le notaire interroge le <strong>Fichier central des dispositions de dernières volontés (FCDDV)</strong> pour vérifier l&apos;existence d&apos;un testament. Il analyse la situation familiale du défunt et identifie l&apos;ensemble des héritiers selon les règles légales de la dévolution successorale.</p>
+  <p>Le notaire interroge le <strong>Fichier central des dispositions de dernières volontés (FCDDV)</strong> pour vérifier l'existence d'un testament. Il analyse la situation familiale du défunt et identifie l'ensemble des héritiers selon les règles légales de la dévolution successorale.</p>
 
-  <h3>3. Signature de l&apos;acte</h3>
-  <p>Tous les héritiers signent l&apos;acte chez le notaire (présence physique ou procuration). Chacun y déclare sa qualité et exerce son option successorale. Le notaire remet ensuite des copies authentiques que vous utiliserez auprès des banques, des administrations et des organismes sociaux.</p>
+  <h3>3. Signature de l'acte</h3>
+  <p>Tous les héritiers signent l'acte chez le notaire (présence physique ou procuration). Chacun y déclare sa qualité et exerce son option successorale. Le notaire remet ensuite des copies authentiques que vous utiliserez auprès des banques, des administrations et des organismes sociaux.</p>
 
   <h2>Tarifs et délais à prévoir</h2>
-  <p>Le tarif de l&apos;acte de notoriété est <strong>réglementé</strong> par décret. L&apos;émolument fixe du notaire s&apos;élève à environ 58 € HT. À cela s&apos;ajoutent :</p>
+  <p>Le tarif de l'acte de notoriété est <strong>réglementé</strong> par décret. L'émolument fixe du notaire s'élève à environ 58 € HT. À cela s'ajoutent :</p>
   <ul>
-    <li>Les frais de formalités et débours (consultation du FCDDV, copies d&apos;actes d&apos;état civil)</li>
+    <li>Les frais de formalités et débours (consultation du FCDDV, copies d'actes d'état civil)</li>
     <li>La TVA de 20 %</li>
     <li>Les éventuelles copies authentiques supplémentaires</li>
   </ul>
   <p>Au total, comptez généralement <strong>entre 200 € et 400 € TTC</strong> pour un acte standard. Ce coût est intégré dans les frais globaux de la succession et payé par la succession elle-même.</p>
-  <p>Côté délais, l&apos;acte est généralement disponible <strong>dans les 1 à 3 mois</strong> après votre première rencontre avec le notaire, en fonction du temps nécessaire pour réunir l&apos;ensemble des pièces d&apos;état civil et identifier tous les héritiers.</p>
+  <p>Côté délais, l'acte est généralement disponible <strong>dans les 1 à 3 mois</strong> après votre première rencontre avec le notaire, en fonction du temps nécessaire pour réunir l'ensemble des pièces d'état civil et identifier tous les héritiers.</p>
 
   <h2>Acte de notoriété ou attestation des héritiers ?</h2>
-  <p>Pour les petites successions de moins de 5 910,57 € sans bien immobilier, une <strong>attestation signée par l&apos;ensemble des héritiers</strong> peut suffire à débloquer les comptes bancaires. Elle est gratuite mais limitée dans son usage.</p>
-  <p>Dès que le patrimoine dépasse ce seuil ou qu&apos;un bien immobilier est en jeu, l&apos;acte de notoriété notarial devient incontournable. Il offre une sécurité juridique bien supérieure et reste valable pour toutes les démarches futures liées à la succession.</p>
+  <p>Pour les petites successions de moins de 5 910,57 € sans bien immobilier, une <strong>attestation signée par l'ensemble des héritiers</strong> peut suffire à débloquer les comptes bancaires. Elle est gratuite mais limitée dans son usage.</p>
+  <p>Dès que le patrimoine dépasse ce seuil ou qu'un bien immobilier est en jeu, l'acte de notoriété notarial devient incontournable. Il offre une sécurité juridique bien supérieure et reste valable pour toutes les démarches futures liées à la succession.</p>
 
-  <InternalCTA
-    title="Démarrez votre succession sereinement"
-    description="Nos notaires partenaires vous accompagnent à chaque étape : acte de notoriété, déclaration fiscale, partage. Consultation initiale offerte."
-    buttonText="Contacter un notaire"
-    href="/rendez-vous"
-  />
+  <InternalCTA />
 </>
     </>
   );
@@ -1334,42 +1299,42 @@ function Article15() {
   return (
     <>
       <>
-  <p className="lead">Le partage succession indivision notaire est l&apos;étape qui met fin à l&apos;indivision successorale entre héritiers et attribue à chacun sa part définitive. Souvent perçu comme complexe, ce processus encadré par le Code civil permet pourtant à chaque héritier de devenir pleinement propriétaire des biens qui lui reviennent. Que le partage soit amiable ou judiciaire, l&apos;intervention du notaire est essentielle, particulièrement lorsque la succession comporte un bien immobilier.</p>
+  <p className="lead">Le partage succession indivision notaire est l'étape qui met fin à l'indivision successorale entre héritiers et attribue à chacun sa part définitive. Souvent perçu comme complexe, ce processus encadré par le Code civil permet pourtant à chaque héritier de devenir pleinement propriétaire des biens qui lui reviennent. Que le partage soit amiable ou judiciaire, l'intervention du notaire est essentielle, particulièrement lorsque la succession comporte un bien immobilier.</p>
 
   <KeyPoints points={[
-    "Le partage met fin à l&apos;indivision et attribue à chaque héritier ses biens propres",
-    "Le notaire est obligatoire dès qu&apos;il existe un bien immobilier dans la succession",
-    "Le droit de partage s&apos;élève à 2,5% de l&apos;actif net partagé",
+    "Le partage met fin à l'indivision et attribue à chaque héritier ses biens propres",
+    "Le notaire est obligatoire dès qu'il existe un bien immobilier dans la succession",
+    "Le droit de partage s'élève à 2,5% de l'actif net partagé",
     "En cas de désaccord, le partage judiciaire devient la seule solution"
   ]} />
 
-  <h2>Comprendre l&apos;indivision successorale et son partage</h2>
-  <p>Au décès d&apos;une personne, les héritiers se retrouvent automatiquement en indivision sur l&apos;ensemble des biens de la succession. Chacun détient une quote-part abstraite (par exemple 1/3 ou 1/2) sur la totalité du patrimoine, sans qu&apos;aucun bien ne lui appartienne individuellement. Cette situation, encadrée par les articles 815 et suivants du Code civil, est conçue comme provisoire.</p>
+  <h2>Comprendre l'indivision successorale et son partage</h2>
+  <p>Au décès d'une personne, les héritiers se retrouvent automatiquement en indivision sur l'ensemble des biens de la succession. Chacun détient une quote-part abstraite (par exemple 1/3 ou 1/2) sur la totalité du patrimoine, sans qu'aucun bien ne lui appartienne individuellement. Cette situation, encadrée par les articles 815 et suivants du Code civil, est conçue comme provisoire.</p>
 
-  <p>L&apos;indivision présente plusieurs inconvénients : les décisions importantes nécessitent l&apos;unanimité, les frais d&apos;entretien sont partagés, et tout héritier peut à tout moment demander le partage selon l&apos;adage &quot;nul ne peut être contraint à demeurer dans l&apos;indivision&quot;. C&apos;est pourquoi la majorité des successions débouche tôt ou tard sur un acte de partage.</p>
+  <p>L'indivision présente plusieurs inconvénients : les décisions importantes nécessitent l'unanimité, les frais d'entretien sont partagés, et tout héritier peut à tout moment demander le partage selon l'adage "nul ne peut être contraint à demeurer dans l'indivision". C'est pourquoi la majorité des successions débouche tôt ou tard sur un acte de partage.</p>
 
   <p>Le partage transforme les droits abstraits en droits concrets : chaque héritier se voit attribuer des biens déterminés (un appartement, un compte bancaire, des meubles) en pleine propriété, à hauteur de sa part dans la succession.</p>
 
   <h2>Les étapes du partage amiable chez le notaire</h2>
-  <p>Le partage amiable est la voie privilégiée lorsque tous les héritiers sont d&apos;accord. Il se déroule en plusieurs étapes auprès du notaire chargé de la succession.</p>
+  <p>Le partage amiable est la voie privilégiée lorsque tous les héritiers sont d'accord. Il se déroule en plusieurs étapes auprès du notaire chargé de la succession.</p>
 
-  <h3>1. L&apos;inventaire et l&apos;évaluation des biens</h3>
-  <p>Le notaire dresse la liste exhaustive de l&apos;actif (biens immobiliers, comptes bancaires, placements, véhicules, mobilier) et du passif (dettes, impôts) de la succession. Chaque bien est évalué à sa valeur vénale au jour du partage, ce qui peut nécessiter l&apos;intervention d&apos;experts immobiliers.</p>
+  <h3>1. L'inventaire et l'évaluation des biens</h3>
+  <p>Le notaire dresse la liste exhaustive de l'actif (biens immobiliers, comptes bancaires, placements, véhicules, mobilier) et du passif (dettes, impôts) de la succession. Chaque bien est évalué à sa valeur vénale au jour du partage, ce qui peut nécessiter l'intervention d'experts immobiliers.</p>
 
   <h3>2. La composition des lots</h3>
-  <p>Le notaire constitue des lots de valeur équivalente correspondant aux droits de chaque héritier. Si certains biens ne peuvent être divisés (un immeuble, par exemple), une soulte peut être versée par l&apos;héritier qui reçoit le bien le plus important aux autres cohéritiers.</p>
+  <p>Le notaire constitue des lots de valeur équivalente correspondant aux droits de chaque héritier. Si certains biens ne peuvent être divisés (un immeuble, par exemple), une soulte peut être versée par l'héritier qui reçoit le bien le plus important aux autres cohéritiers.</p>
 
-  <h3>3. La signature de l&apos;acte de partage</h3>
-  <p>L&apos;acte de partage est rédigé sous forme authentique par le notaire et signé par tous les héritiers. Il mentionne les biens attribués à chacun, les éventuelles soultes, et procède au calcul du droit de partage. Une fois signé, l&apos;acte est publié au service de la publicité foncière pour les biens immobiliers.</p>
+  <h3>3. La signature de l'acte de partage</h3>
+  <p>L'acte de partage est rédigé sous forme authentique par le notaire et signé par tous les héritiers. Il mentionne les biens attribués à chacun, les éventuelles soultes, et procède au calcul du droit de partage. Une fois signé, l'acte est publié au service de la publicité foncière pour les biens immobiliers.</p>
 
   <InternalCTA />
 
   <h2>Coûts et fiscalité du partage successoral</h2>
-  <p>Le partage successoral engendre plusieurs catégories de frais qu&apos;il convient d&apos;anticiper :</p>
+  <p>Le partage successoral engendre plusieurs catégories de frais qu'il convient d'anticiper :</p>
 
   <ul>
-    <li><strong>Le droit de partage</strong> : taxe de 2,5% calculée sur l&apos;actif net partagé (valeur des biens diminuée des dettes). C&apos;est généralement le poste le plus important.</li>
-    <li><strong>Les émoluments du notaire</strong> : tarifs réglementés dégressifs selon la valeur, environ 1 à 2% de l&apos;actif partagé.</li>
+    <li><strong>Le droit de partage</strong> : taxe de 2,5% calculée sur l'actif net partagé (valeur des biens diminuée des dettes). C'est généralement le poste le plus important.</li>
+    <li><strong>Les émoluments du notaire</strong> : tarifs réglementés dégressifs selon la valeur, environ 1 à 2% de l'actif partagé.</li>
     <li><strong>La contribution de sécurité immobilière</strong> : 0,10% pour la publication foncière.</li>
     <li><strong>Les débours</strong> : frais avancés par le notaire (cadastre, état hypothécaire, etc.).</li>
   </ul>
@@ -1377,15 +1342,15 @@ function Article15() {
   <p>Pour une succession de 300 000 € sans dette, comptez environ 12 000 à 15 000 € de frais totaux. Une planification successorale anticipée (donation-partage, par exemple) permet souvent de réduire considérablement ces coûts.</p>
 
   <h2>Que faire en cas de désaccord entre héritiers ?</h2>
-  <p>Lorsque les héritiers ne parviennent pas à s&apos;entendre sur la composition des lots ou la valeur des biens, plusieurs solutions existent avant d&apos;en arriver au contentieux.</p>
+  <p>Lorsque les héritiers ne parviennent pas à s'entendre sur la composition des lots ou la valeur des biens, plusieurs solutions existent avant d'en arriver au contentieux.</p>
 
   <p><strong>La médiation notariale</strong> : le notaire joue un rôle de conciliateur et propose des arrangements équitables. Sa neutralité et son expertise permettent souvent de débloquer les situations tendues.</p>
 
-  <p><strong>Le partage judiciaire</strong> : si aucun accord n&apos;est trouvé, un héritier peut saisir le tribunal judiciaire. Le juge ordonne alors l&apos;ouverture des opérations de partage et désigne un notaire pour les conduire. Cette procédure est longue (1 à 3 ans en moyenne) et coûteuse.</p>
+  <p><strong>Le partage judiciaire</strong> : si aucun accord n'est trouvé, un héritier peut saisir le tribunal judiciaire. Le juge ordonne alors l'ouverture des opérations de partage et désigne un notaire pour les conduire. Cette procédure est longue (1 à 3 ans en moyenne) et coûteuse.</p>
 
-  <p><strong>La vente par licitation</strong> : lorsqu&apos;un bien immobilier ne peut être attribué à un seul héritier et que personne ne souhaite l&apos;acquérir, le tribunal peut ordonner sa vente aux enchères. Le prix est ensuite réparti entre les héritiers.</p>
+  <p><strong>La vente par licitation</strong> : lorsqu'un bien immobilier ne peut être attribué à un seul héritier et que personne ne souhaite l'acquérir, le tribunal peut ordonner sa vente aux enchères. Le prix est ensuite réparti entre les héritiers.</p>
 
-  <p>Pour éviter ces situations conflictuelles, il est vivement recommandé de consulter un notaire dès l&apos;ouverture de la succession afin d&apos;être conseillé sur la meilleure stratégie de partage.</p>
+  <p>Pour éviter ces situations conflictuelles, il est vivement recommandé de consulter un notaire dès l'ouverture de la succession afin d'être conseillé sur la meilleure stratégie de partage.</p>
 
   <InternalCTA />
 </>
@@ -1399,21 +1364,21 @@ function Article16() {
   return (
     <>
       <>
-  <p className="lead">Renoncer à une succession devant notaire est une décision lourde de conséquences, souvent envisagée lorsque le défunt laisse plus de dettes que d&apos;actifs. Cette procédure encadrée par le Code civil vous permet de refuser totalement votre part d&apos;héritage et d&apos;échapper aux créanciers. Voici tout ce qu&apos;il faut savoir pour renoncer en toute sécurité.</p>
+  <p className="lead">Renoncer à une succession devant notaire est une décision lourde de conséquences, souvent envisagée lorsque le défunt laisse plus de dettes que d'actifs. Cette procédure encadrée par le Code civil vous permet de refuser totalement votre part d'héritage et d'échapper aux créanciers. Voici tout ce qu'il faut savoir pour renoncer en toute sécurité.</p>
 
-  <KeyPoints items={[
+  <KeyPoints points={[
     "La renonciation est gratuite au greffe du tribunal, payante chez le notaire (15-30 €)",
     "Vous disposez de 10 ans pour renoncer, mais un créancier peut vous obliger à choisir en 4 mois",
-    "Le renonçant est considéré comme n&apos;ayant jamais été héritier : ses enfants peuvent hériter par représentation",
-    "La renonciation est révocable tant que la succession n&apos;a pas été acceptée par d&apos;autres héritiers"
+    "Le renonçant est considéré comme n'ayant jamais été héritier : ses enfants peuvent hériter par représentation",
+    "La renonciation est révocable tant que la succession n'a pas été acceptée par d'autres héritiers"
   ]} />
 
   <h2>Pourquoi renoncer à une succession ?</h2>
-  <p>La renonciation à succession est l&apos;une des trois options successorales offertes à l&apos;héritier, aux côtés de l&apos;acceptation pure et simple et de l&apos;acceptation à concurrence de l&apos;actif net. Elle se justifie principalement dans plusieurs situations.</p>
+  <p>La renonciation à succession est l'une des trois options successorales offertes à l'héritier, aux côtés de l'acceptation pure et simple et de l'acceptation à concurrence de l'actif net. Elle se justifie principalement dans plusieurs situations.</p>
 
-  <p>Le cas le plus fréquent est celui de la <strong>succession déficitaire</strong> : le défunt laisse plus de dettes (prêts bancaires, dettes fiscales, crédits à la consommation) que d&apos;actifs (immobilier, comptes, mobilier). Accepter la succession reviendrait alors à payer ces dettes sur votre propre patrimoine.</p>
+  <p>Le cas le plus fréquent est celui de la <strong>succession déficitaire</strong> : le défunt laisse plus de dettes (prêts bancaires, dettes fiscales, crédits à la consommation) que d'actifs (immobilier, comptes, mobilier). Accepter la succession reviendrait alors à payer ces dettes sur votre propre patrimoine.</p>
 
-  <p>D&apos;autres motifs peuvent justifier la renonciation :</p>
+  <p>D'autres motifs peuvent justifier la renonciation :</p>
   <ul>
     <li>Favoriser ses propres enfants qui hériteront par représentation</li>
     <li>Éviter des conflits familiaux complexes</li>
@@ -1421,40 +1386,35 @@ function Article16() {
     <li>Optimiser une transmission patrimoniale entre générations</li>
   </ul>
 
-  <p>Attention : renoncer signifie renoncer à <strong>tout</strong>. Vous ne pouvez pas choisir de garder certains biens et refuser les dettes. C&apos;est pourquoi un bilan complet de la succession avec un notaire est indispensable avant toute décision.</p>
+  <p>Attention : renoncer signifie renoncer à <strong>tout</strong>. Vous ne pouvez pas choisir de garder certains biens et refuser les dettes. C'est pourquoi un bilan complet de la succession avec un notaire est indispensable avant toute décision.</p>
 
   <h2>La procédure de renonciation chez le notaire</h2>
-  <p>Renoncer à une succession nécessite une démarche formelle. Deux options s&apos;offrent à vous : la déclaration au greffe du tribunal judiciaire du lieu d&apos;ouverture de la succession, ou l&apos;acte authentique chez un notaire.</p>
+  <p>Renoncer à une succession nécessite une démarche formelle. Deux options s'offrent à vous : la déclaration au greffe du tribunal judiciaire du lieu d'ouverture de la succession, ou l'acte authentique chez un notaire.</p>
 
   <h3>Étape 1 : le bilan successoral</h3>
-  <p>Avant toute renonciation, le notaire dresse un inventaire précis de l&apos;actif et du passif successoral. Il consulte le fichier FICOBA pour identifier les comptes bancaires, interroge les organismes de crédit et vérifie les éventuelles dettes fiscales. Cette analyse vous permet de prendre une décision éclairée.</p>
+  <p>Avant toute renonciation, le notaire dresse un inventaire précis de l'actif et du passif successoral. Il consulte le fichier FICOBA pour identifier les comptes bancaires, interroge les organismes de crédit et vérifie les éventuelles dettes fiscales. Cette analyse vous permet de prendre une décision éclairée.</p>
 
-  <h3>Étape 2 : la rédaction de l&apos;acte de renonciation</h3>
+  <h3>Étape 2 : la rédaction de l'acte de renonciation</h3>
   <p>Si vous décidez de renoncer, le notaire rédige un acte authentique de renonciation. Vous devez fournir :</p>
   <ul>
-    <li>Une pièce d&apos;identité en cours de validité</li>
+    <li>Une pièce d'identité en cours de validité</li>
     <li>Un acte de naissance de moins de 3 mois</li>
-    <li>L&apos;acte de décès du défunt</li>
+    <li>L'acte de décès du défunt</li>
     <li>Le formulaire Cerfa n°15828*05 dûment rempli</li>
   </ul>
 
-  <h3>Étape 3 : l&apos;enregistrement officiel</h3>
-  <p>L&apos;acte est ensuite transmis au tribunal judiciaire pour enregistrement. La renonciation devient alors opposable aux tiers, notamment aux créanciers du défunt qui ne pourront plus vous poursuivre.</p>
+  <h3>Étape 3 : l'enregistrement officiel</h3>
+  <p>L'acte est ensuite transmis au tribunal judiciaire pour enregistrement. La renonciation devient alors opposable aux tiers, notamment aux créanciers du défunt qui ne pourront plus vous poursuivre.</p>
 
-  <InternalCTA 
-    title="Besoin d&apos;un notaire pour renoncer à une succession ?"
-    description="Nos notaires partenaires vous accompagnent dans toute la procédure de renonciation. Premier rendez-vous offert en visio ou en cabinet."
-    buttonText="Prendre rendez-vous"
-    buttonLink="/rendez-vous"
-  />
+  <InternalCTA />
 
   <h2>Délais et conséquences de la renonciation</h2>
-  <p>Le délai légal pour exercer votre option successorale est de <strong>10 ans</strong> à compter de l&apos;ouverture de la succession (date du décès). Passé ce délai sans manifestation de votre part, vous êtes réputé avoir renoncé.</p>
+  <p>Le délai légal pour exercer votre option successorale est de <strong>10 ans</strong> à compter de l'ouverture de la succession (date du décès). Passé ce délai sans manifestation de votre part, vous êtes réputé avoir renoncé.</p>
 
-  <p>Cependant, ce délai peut être considérablement raccourci. Tout intéressé (créancier, cohéritier, État) peut vous sommer de prendre parti après l&apos;expiration d&apos;un délai de 4 mois suivant le décès. Vous disposez alors de <strong>2 mois supplémentaires</strong> pour vous décider, sous peine d&apos;être considéré comme acceptant purement et simplement la succession.</p>
+  <p>Cependant, ce délai peut être considérablement raccourci. Tout intéressé (créancier, cohéritier, État) peut vous sommer de prendre parti après l'expiration d'un délai de 4 mois suivant le décès. Vous disposez alors de <strong>2 mois supplémentaires</strong> pour vous décider, sous peine d'être considéré comme acceptant purement et simplement la succession.</p>
 
   <h3>Les effets juridiques de la renonciation</h3>
-  <p>Le renonçant est considéré comme n&apos;ayant <em>jamais été héritier</em>. Cette fiction juridique entraîne plusieurs conséquences importantes :</p>
+  <p>Le renonçant est considéré comme n'ayant <em>jamais été héritier</em>. Cette fiction juridique entraîne plusieurs conséquences importantes :</p>
   <ul>
     <li><strong>Aucune dette ne peut vous être réclamée</strong> au titre de la succession</li>
     <li><strong>Vos enfants peuvent hériter par représentation</strong> (depuis la loi du 23 juin 2006)</li>
@@ -1462,21 +1422,21 @@ function Article16() {
     <li>Vous ne pouvez plus revendiquer aucun bien de la succession</li>
   </ul>
 
-  <p>Attention aux <strong>actes équivalant à acceptation tacite</strong> : prélever de l&apos;argent sur les comptes du défunt, vendre un bien ou même payer une dette successorale peuvent être interprétés comme une acceptation, vous empêchant ensuite de renoncer.</p>
+  <p>Attention aux <strong>actes équivalant à acceptation tacite</strong> : prélever de l'argent sur les comptes du défunt, vendre un bien ou même payer une dette successorale peuvent être interprétés comme une acceptation, vous empêchant ensuite de renoncer.</p>
 
   <h2>Coût et révocation de la renonciation</h2>
   <p>La déclaration de renonciation directement au greffe du tribunal est <strong>gratuite</strong>. Toutefois, passer par un notaire offre plusieurs avantages : sécurité juridique, conseil personnalisé et accompagnement dans les démarches connexes (déclaration fiscale, information des autres héritiers).</p>
 
-  <p>Les frais notariaux pour un acte de renonciation s&apos;élèvent généralement entre <strong>15 et 30 euros</strong>, auxquels peuvent s&apos;ajouter des honoraires de conseil si une analyse approfondie de la succession est nécessaire.</p>
+  <p>Les frais notariaux pour un acte de renonciation s'élèvent généralement entre <strong>15 et 30 euros</strong>, auxquels peuvent s'ajouter des honoraires de conseil si une analyse approfondie de la succession est nécessaire.</p>
 
   <h3>Peut-on revenir sur sa décision ?</h3>
-  <p>La renonciation n&apos;est pas définitive. L&apos;article 807 du Code civil permet la <strong>révocation de la renonciation</strong> sous deux conditions cumulatives :</p>
+  <p>La renonciation n'est pas définitive. L'article 807 du Code civil permet la <strong>révocation de la renonciation</strong> sous deux conditions cumulatives :</p>
   <ul>
     <li>Le délai de 10 ans pour accepter ne doit pas être écoulé</li>
     <li>La succession ne doit pas avoir été acceptée par un autre héritier</li>
   </ul>
 
-  <p>Cette révocation se fait par déclaration au greffe ou par acte notarié. L&apos;héritier devient alors acceptant pur et simple ou à concurrence de l&apos;actif net, selon son choix.</p>
+  <p>Cette révocation se fait par déclaration au greffe ou par acte notarié. L'héritier devient alors acceptant pur et simple ou à concurrence de l'actif net, selon son choix.</p>
 </>
     </>
   );
@@ -1488,49 +1448,49 @@ function Article17() {
   return (
     <>
       <>
-<p className="lead">La succession d&apos;un concubin non marié soulève des enjeux majeurs en France : juridiquement, le concubin survivant est considéré comme un parfait étranger par la loi successorale. Sans anticipation chez un notaire, il risque de ne rien recevoir du patrimoine commun, voire d&apos;être expulsé du logement familial. Voici les solutions concrètes pour protéger votre partenaire.</p>
+<p className="lead">La succession d'un concubin non marié soulève des enjeux majeurs en France : juridiquement, le concubin survivant est considéré comme un parfait étranger par la loi successorale. Sans anticipation chez un notaire, il risque de ne rien recevoir du patrimoine commun, voire d'être expulsé du logement familial. Voici les solutions concrètes pour protéger votre partenaire.</p>
 
 <KeyPoints points={[
-  "Le concubin n&apos;a aucun droit successoral légal en France",
+  "Le concubin n'a aucun droit successoral légal en France",
   "La fiscalité est de 60% après un abattement de seulement 1 594 €",
-  "Le testament, la donation et l&apos;assurance-vie sont les principaux outils de protection",
+  "Le testament, la donation et l'assurance-vie sont les principaux outils de protection",
   "Un rendez-vous notaire permet de bâtir une stratégie sur-mesure"
 ]} />
 
 <h2>Concubinage et succession : un vide juridique total</h2>
-<p>Contrairement aux époux ou aux partenaires de PACS, les concubins n&apos;ont aucun lien juridique reconnu en matière successorale. L&apos;article 515-8 du Code civil définit le concubinage comme une simple « union de fait », ce qui exclut tout droit à la succession.</p>
-<p>Concrètement, si votre concubin décède sans avoir pris de dispositions, l&apos;intégralité de son patrimoine reviendra à ses héritiers légaux : enfants, parents, frères et sœurs. Vous ne recevrez rien, même après des décennies de vie commune.</p>
+<p>Contrairement aux époux ou aux partenaires de PACS, les concubins n'ont aucun lien juridique reconnu en matière successorale. L'article 515-8 du Code civil définit le concubinage comme une simple « union de fait », ce qui exclut tout droit à la succession.</p>
+<p>Concrètement, si votre concubin décède sans avoir pris de dispositions, l'intégralité de son patrimoine reviendra à ses héritiers légaux : enfants, parents, frères et sœurs. Vous ne recevrez rien, même après des décennies de vie commune.</p>
 <p>Cette situation peut avoir des conséquences dramatiques, notamment concernant le logement. Si la résidence principale appartenait à votre concubin, ses héritiers peuvent exiger votre départ ou le rachat de leur part.</p>
 
 <h2>Une fiscalité successorale très lourde pour le concubin</h2>
 <p>Même lorsque le concubin reçoit quelque chose par testament ou donation, la fiscalité applicable est particulièrement punitive :</p>
 <ul>
   <li><strong>Abattement :</strong> seulement 1 594 € (contre 100 000 € entre parent et enfant)</li>
-  <li><strong>Taux d&apos;imposition :</strong> 60% sur la totalité de la part nette</li>
+  <li><strong>Taux d'imposition :</strong> 60% sur la totalité de la part nette</li>
   <li><strong>Aucun barème progressif :</strong> contrairement aux héritiers en ligne directe</li>
 </ul>
-<p>Exemple : pour un legs de 200 000 € à votre concubin, les droits de succession s&apos;élèvent à environ 119 044 €. Votre partenaire ne touche en réalité que 80 956 €.</p>
-<p>Cette fiscalité confiscatoire impose de structurer la transmission avec un notaire pour limiter au maximum l&apos;impact fiscal.</p>
+<p>Exemple : pour un legs de 200 000 € à votre concubin, les droits de succession s'élèvent à environ 119 044 €. Votre partenaire ne touche en réalité que 80 956 €.</p>
+<p>Cette fiscalité confiscatoire impose de structurer la transmission avec un notaire pour limiter au maximum l'impact fiscal.</p>
 
 <InternalCTA />
 
 <h2>Les solutions notariales pour protéger son concubin</h2>
-<p>Heureusement, plusieurs outils juridiques permettent d&apos;organiser efficacement la transmission au profit du concubin survivant.</p>
+<p>Heureusement, plusieurs outils juridiques permettent d'organiser efficacement la transmission au profit du concubin survivant.</p>
 
 <h3>Le testament authentique</h3>
-<p>Rédigé devant notaire, le testament permet de léguer à votre concubin la quotité disponible de votre patrimoine. Si vous avez des enfants, vous devez respecter leur réserve héréditaire, mais vous pouvez transmettre 1/2, 1/3 ou 1/4 selon le nombre d&apos;enfants.</p>
+<p>Rédigé devant notaire, le testament permet de léguer à votre concubin la quotité disponible de votre patrimoine. Si vous avez des enfants, vous devez respecter leur réserve héréditaire, mais vous pouvez transmettre 1/2, 1/3 ou 1/4 selon le nombre d'enfants.</p>
 
-<h3>L&apos;assurance-vie : l&apos;outil le plus efficace</h3>
-<p>L&apos;assurance-vie échappe aux règles successorales classiques. Vous pouvez désigner votre concubin comme bénéficiaire et lui transmettre jusqu&apos;à 152 500 € en franchise totale d&apos;impôt (pour les primes versées avant 70 ans).</p>
+<h3>L'assurance-vie : l'outil le plus efficace</h3>
+<p>L'assurance-vie échappe aux règles successorales classiques. Vous pouvez désigner votre concubin comme bénéficiaire et lui transmettre jusqu'à 152 500 € en franchise totale d'impôt (pour les primes versées avant 70 ans).</p>
 
 <h3>La donation au dernier vivant : impossible</h3>
-<p>Attention, contrairement aux époux, les concubins ne peuvent pas bénéficier d&apos;une donation au dernier vivant. C&apos;est une raison majeure d&apos;envisager le mariage ou le PACS.</p>
+<p>Attention, contrairement aux époux, les concubins ne peuvent pas bénéficier d'une donation au dernier vivant. C'est une raison majeure d'envisager le mariage ou le PACS.</p>
 
 <h3>La SCI familiale</h3>
-<p>Créer une SCI permet d&apos;organiser la détention du logement et de prévoir des clauses statutaires protectrices (démembrement croisé des parts, droit de préemption).</p>
+<p>Créer une SCI permet d'organiser la détention du logement et de prévoir des clauses statutaires protectrices (démembrement croisé des parts, droit de préemption).</p>
 
 <h2>PACS ou mariage : pourquoi y penser ?</h2>
-<p>Avant d&apos;engager des stratégies complexes, il faut savoir que le PACS et le mariage offrent des avantages successoraux considérables :</p>
+<p>Avant d'engager des stratégies complexes, il faut savoir que le PACS et le mariage offrent des avantages successoraux considérables :</p>
 <ul>
   <li><strong>Mariage :</strong> exonération totale des droits de succession entre époux + droits légaux du conjoint survivant</li>
   <li><strong>PACS :</strong> exonération totale des droits de succession (mais nécessite un testament pour hériter)</li>
@@ -1538,8 +1498,8 @@ function Article17() {
 <p>Le simple fait de signer un PACS et de rédiger un testament chez le notaire suffit à transformer radicalement la situation patrimoniale du survivant.</p>
 
 <h2>Pourquoi consulter un notaire ?</h2>
-<p>Chaque situation de concubinage est unique : enfants d&apos;une précédente union, patrimoine immobilier en indivision, entreprise familiale, écart de patrimoine entre concubins... Seul un notaire peut bâtir une stratégie patrimoniale adaptée combinant testament, assurance-vie, donations et structures juridiques.</p>
-<p>Le premier rendez-vous chez nos notaires partenaires est offert et permet d&apos;identifier les leviers prioritaires pour protéger votre concubin.</p>
+<p>Chaque situation de concubinage est unique : enfants d'une précédente union, patrimoine immobilier en indivision, entreprise familiale, écart de patrimoine entre concubins... Seul un notaire peut bâtir une stratégie patrimoniale adaptée combinant testament, assurance-vie, donations et structures juridiques.</p>
+<p>Le premier rendez-vous chez nos notaires partenaires est offert et permet d'identifier les leviers prioritaires pour protéger votre concubin.</p>
 
 <InternalCTA />
 </>
@@ -1553,57 +1513,47 @@ function Article18() {
   return (
     <>
       <>
-  <p className="lead">L&apos;optimisation fiscale succession notaire est une démarche stratégique pour transmettre votre patrimoine dans les meilleures conditions. En France, les droits de succession peuvent atteindre 45 % en ligne directe et jusqu&apos;à 60 % entre non-parents. Anticiper avec un notaire permet de réduire significativement cette charge fiscale tout en respectant le cadre légal.</p>
+  <p className="lead">L'optimisation fiscale succession notaire est une démarche stratégique pour transmettre votre patrimoine dans les meilleures conditions. En France, les droits de succession peuvent atteindre 45 % en ligne directe et jusqu'à 60 % entre non-parents. Anticiper avec un notaire permet de réduire significativement cette charge fiscale tout en respectant le cadre légal.</p>
 
   <KeyPoints points={[
     "Abattement de 100 000 € par enfant et par parent, renouvelable tous les 15 ans",
-    "L&apos;assurance-vie reste l&apos;outil le plus efficace de transmission hors succession",
+    "L'assurance-vie reste l'outil le plus efficace de transmission hors succession",
     "Le démembrement de propriété permet de transmettre à moindre coût fiscal",
     "Une planification précoce avec un notaire maximise les économies fiscales"
   ]} />
 
   <h2>Comprendre les droits de succession en France</h2>
-  <p>Les droits de succession sont calculés selon un barème progressif qui dépend du lien de parenté entre le défunt et l&apos;héritier. En ligne directe (enfants, parents), le taux varie de 5 % à 45 % après application d&apos;un abattement de 100 000 € par héritier. Entre frères et sœurs, le taux atteint 35 % à 45 %, et entre personnes non parentes, il grimpe à 60 %.</p>
-  <p>Sans préparation, votre famille peut se retrouver avec une facture fiscale considérable, parfois supérieure aux liquidités disponibles. C&apos;est pourquoi l&apos;optimisation fiscale succession avec un notaire est essentielle pour préserver le patrimoine que vous avez constitué.</p>
-  <p>Le notaire dispose d&apos;une vision globale de votre situation : composition du patrimoine, situation familiale, objectifs de transmission. Il peut ainsi proposer une stratégie sur mesure combinant plusieurs outils juridiques et fiscaux.</p>
+  <p>Les droits de succession sont calculés selon un barème progressif qui dépend du lien de parenté entre le défunt et l'héritier. En ligne directe (enfants, parents), le taux varie de 5 % à 45 % après application d'un abattement de 100 000 € par héritier. Entre frères et sœurs, le taux atteint 35 % à 45 %, et entre personnes non parentes, il grimpe à 60 %.</p>
+  <p>Sans préparation, votre famille peut se retrouver avec une facture fiscale considérable, parfois supérieure aux liquidités disponibles. C'est pourquoi l'optimisation fiscale succession avec un notaire est essentielle pour préserver le patrimoine que vous avez constitué.</p>
+  <p>Le notaire dispose d'une vision globale de votre situation : composition du patrimoine, situation familiale, objectifs de transmission. Il peut ainsi proposer une stratégie sur mesure combinant plusieurs outils juridiques et fiscaux.</p>
 
-  <h2>Les donations : un levier d&apos;optimisation puissant</h2>
-  <p>La donation est l&apos;outil principal d&apos;optimisation fiscale successorale. Chaque parent peut donner jusqu&apos;à 100 000 € à chaque enfant en franchise de droits, et ce tous les 15 ans. Un couple avec deux enfants peut donc transmettre 400 000 € sans fiscalité, et renouveler l&apos;opération après 15 ans.</p>
+  <h2>Les donations : un levier d'optimisation puissant</h2>
+  <p>La donation est l'outil principal d'optimisation fiscale successorale. Chaque parent peut donner jusqu'à 100 000 € à chaque enfant en franchise de droits, et ce tous les 15 ans. Un couple avec deux enfants peut donc transmettre 400 000 € sans fiscalité, et renouveler l'opération après 15 ans.</p>
   <p>Plusieurs formes de donation existent :</p>
   <ul>
-    <li><strong>La donation simple</strong> : transmission immédiate d&apos;un bien ou d&apos;une somme d&apos;argent</li>
+    <li><strong>La donation simple</strong> : transmission immédiate d'un bien ou d'une somme d'argent</li>
     <li><strong>La donation-partage</strong> : permet de répartir équitablement entre héritiers et de figer les valeurs au jour de la donation</li>
-    <li><strong>Le don familial de somme d&apos;argent</strong> : abattement supplémentaire de 31 865 € si le donateur a moins de 80 ans et le donataire plus de 18 ans</li>
-    <li><strong>La donation avec réserve d&apos;usufruit</strong> : vous transmettez la nue-propriété tout en conservant l&apos;usage du bien</li>
+    <li><strong>Le don familial de somme d'argent</strong> : abattement supplémentaire de 31 865 € si le donateur a moins de 80 ans et le donataire plus de 18 ans</li>
+    <li><strong>La donation avec réserve d'usufruit</strong> : vous transmettez la nue-propriété tout en conservant l'usage du bien</li>
   </ul>
 
-  <InternalCTA
-    title="Préparez votre succession avec un notaire"
-    description="Bénéficiez d&apos;un premier rendez-vous offert pour analyser votre situation patrimoniale et identifier les meilleures stratégies d&apos;optimisation fiscale."
-    buttonText="Prendre rendez-vous"
-    href="/rendez-vous"
-  />
+  <InternalCTA />
 
-  <h2>L&apos;assurance-vie et le démembrement : les stratégies avancées</h2>
-  <p>L&apos;assurance-vie reste l&apos;outil de transmission le plus avantageux fiscalement. Les capitaux versés avant 70 ans bénéficient d&apos;un abattement de 152 500 € par bénéficiaire, puis d&apos;une taxation forfaitaire de 20 % jusqu&apos;à 700 000 € et 31,25 % au-delà. Pour les versements après 70 ans, l&apos;abattement global est de 30 500 €, mais les intérêts restent exonérés.</p>
-  <p>Le démembrement de propriété consiste à séparer la nue-propriété de l&apos;usufruit. En donnant la nue-propriété de votre vivant, vous transmettez à un coût fiscal réduit : la valeur taxable est calculée selon un barème lié à votre âge. À 60 ans, la nue-propriété ne représente que 50 % de la valeur du bien.</p>
-  <p>Au décès de l&apos;usufruitier, le nu-propriétaire récupère la pleine propriété sans aucun droit supplémentaire à payer. C&apos;est une stratégie particulièrement efficace pour transmettre l&apos;immobilier.</p>
+  <h2>L'assurance-vie et le démembrement : les stratégies avancées</h2>
+  <p>L'assurance-vie reste l'outil de transmission le plus avantageux fiscalement. Les capitaux versés avant 70 ans bénéficient d'un abattement de 152 500 € par bénéficiaire, puis d'une taxation forfaitaire de 20 % jusqu'à 700 000 € et 31,25 % au-delà. Pour les versements après 70 ans, l'abattement global est de 30 500 €, mais les intérêts restent exonérés.</p>
+  <p>Le démembrement de propriété consiste à séparer la nue-propriété de l'usufruit. En donnant la nue-propriété de votre vivant, vous transmettez à un coût fiscal réduit : la valeur taxable est calculée selon un barème lié à votre âge. À 60 ans, la nue-propriété ne représente que 50 % de la valeur du bien.</p>
+  <p>Au décès de l'usufruitier, le nu-propriétaire récupère la pleine propriété sans aucun droit supplémentaire à payer. C'est une stratégie particulièrement efficace pour transmettre l'immobilier.</p>
 
   <h2>Structures juridiques et stratégies patrimoniales</h2>
-  <p>Pour les patrimoines importants ou immobiliers, la création d&apos;une SCI (Société Civile Immobilière) facilite la transmission. Les parts sociales peuvent être données progressivement, en profitant des abattements renouvelables, et le démembrement des parts amplifie l&apos;effet fiscal.</p>
-  <p>Le pacte Dutreil, quant à lui, permet de transmettre une entreprise familiale avec une exonération de 75 % de sa valeur, sous conditions d&apos;engagement de conservation. Combiné à une donation en pleine propriété avant 70 ans avec réduction de 50 %, l&apos;économie peut être spectaculaire.</p>
-  <p>Enfin, le changement de régime matrimonial vers une communauté universelle avec clause d&apos;attribution intégrale peut protéger le conjoint survivant, même si cette stratégie reporte la fiscalité sur la génération suivante. Votre notaire évaluera son opportunité selon votre situation.</p>
+  <p>Pour les patrimoines importants ou immobiliers, la création d'une SCI (Société Civile Immobilière) facilite la transmission. Les parts sociales peuvent être données progressivement, en profitant des abattements renouvelables, et le démembrement des parts amplifie l'effet fiscal.</p>
+  <p>Le pacte Dutreil, quant à lui, permet de transmettre une entreprise familiale avec une exonération de 75 % de sa valeur, sous conditions d'engagement de conservation. Combiné à une donation en pleine propriété avant 70 ans avec réduction de 50 %, l'économie peut être spectaculaire.</p>
+  <p>Enfin, le changement de régime matrimonial vers une communauté universelle avec clause d'attribution intégrale peut protéger le conjoint survivant, même si cette stratégie reporte la fiscalité sur la génération suivante. Votre notaire évaluera son opportunité selon votre situation.</p>
 
   <h2>Conclusion</h2>
-  <p>L&apos;optimisation fiscale d&apos;une succession ne s&apos;improvise pas. Elle nécessite une analyse approfondie de votre patrimoine, de votre situation familiale et de vos objectifs. Les outils existent : donations, assurance-vie, démembrement, structures sociétaires. Encore faut-il les combiner intelligemment et anticiper.</p>
+  <p>L'optimisation fiscale d'une succession ne s'improvise pas. Elle nécessite une analyse approfondie de votre patrimoine, de votre situation familiale et de vos objectifs. Les outils existent : donations, assurance-vie, démembrement, structures sociétaires. Encore faut-il les combiner intelligemment et anticiper.</p>
   <p>Le notaire est votre interlocuteur privilégié pour bâtir une stratégie cohérente, sécurisée juridiquement et optimisée fiscalement. Plus vous anticipez, plus les économies seront importantes pour vos héritiers.</p>
 
-  <InternalCTA
-    title="Optimisez votre succession dès aujourd&apos;hui"
-    description="Nos notaires partenaires vous accompagnent dans la planification de votre transmission patrimoniale. Premier rendez-vous offert, en visio ou au cabinet."
-    buttonText="Consulter un notaire"
-    href="/rendez-vous"
-  />
+  <InternalCTA />
 </>
     </>
   );
@@ -1615,28 +1565,28 @@ function Article19() {
   return (
     <>
       <>
-<p className="lead">Le rapport des donations à la succession est un mécanisme juridique essentiel qui garantit l&apos;égalité entre les héritiers lors du règlement d&apos;une succession. Lorsqu&apos;un défunt a consenti des donations de son vivant à certains de ses héritiers, ces libéralités doivent en principe être réintégrées dans la masse successorale pour assurer un partage équitable.</p>
+<p className="lead">Le rapport des donations à la succession est un mécanisme juridique essentiel qui garantit l'égalité entre les héritiers lors du règlement d'une succession. Lorsqu'un défunt a consenti des donations de son vivant à certains de ses héritiers, ces libéralités doivent en principe être réintégrées dans la masse successorale pour assurer un partage équitable.</p>
 
-<KeyPoints items={[
-  "Le rapport civil concerne les donations faites aux héritiers, sauf mention contraire dans l&apos;acte",
+<KeyPoints points={[
+  "Le rapport civil concerne les donations faites aux héritiers, sauf mention contraire dans l'acte",
   "Les biens sont évalués à leur valeur au jour du partage, dans leur état au jour de la donation",
-  "Les présents d&apos;usage et donations hors part successorale échappent au rapport",
-  "Le notaire calcule le rapport et veille à l&apos;équilibre entre cohéritiers"
+  "Les présents d'usage et donations hors part successorale échappent au rapport",
+  "Le notaire calcule le rapport et veille à l'équilibre entre cohéritiers"
 ]} />
 
-<h2>Qu&apos;est-ce que le rapport des donations à la succession ?</h2>
-<p>Le rapport des donations est une opération juridique prévue par les articles 843 et suivants du Code civil. Il consiste à reconstituer fictivement le patrimoine du défunt en y réintégrant les donations consenties de son vivant à ses héritiers. L&apos;objectif est d&apos;assurer l&apos;égalité du partage entre les cohéritiers.</p>
-<p>Concrètement, un héritier qui a reçu une donation devra, lors de la succession, en tenir compte sur sa part d&apos;héritage. Si la donation dépasse la part qui lui revient, il pourra être amené à verser une indemnité de rapport aux autres héritiers.</p>
-<p>Ce mécanisme repose sur une présomption : sauf disposition contraire, une donation faite à un héritier est considérée comme une avance sur sa part d&apos;héritage, et non comme un avantage destiné à le favoriser.</p>
+<h2>Qu'est-ce que le rapport des donations à la succession ?</h2>
+<p>Le rapport des donations est une opération juridique prévue par les articles 843 et suivants du Code civil. Il consiste à reconstituer fictivement le patrimoine du défunt en y réintégrant les donations consenties de son vivant à ses héritiers. L'objectif est d'assurer l'égalité du partage entre les cohéritiers.</p>
+<p>Concrètement, un héritier qui a reçu une donation devra, lors de la succession, en tenir compte sur sa part d'héritage. Si la donation dépasse la part qui lui revient, il pourra être amené à verser une indemnité de rapport aux autres héritiers.</p>
+<p>Ce mécanisme repose sur une présomption : sauf disposition contraire, une donation faite à un héritier est considérée comme une avance sur sa part d'héritage, et non comme un avantage destiné à le favoriser.</p>
 
 <h2>Quelles donations sont rapportables à la succession ?</h2>
-<p>Toutes les donations ne sont pas soumises à l&apos;obligation de rapport. Plusieurs critères permettent de déterminer si une libéralité doit être réintégrée à la masse successorale.</p>
+<p>Toutes les donations ne sont pas soumises à l'obligation de rapport. Plusieurs critères permettent de déterminer si une libéralité doit être réintégrée à la masse successorale.</p>
 
 <h3>Les donations rapportables</h3>
-<p>Sont rapportables les donations consenties à un héritier acceptant la succession, qu&apos;il s&apos;agisse :</p>
+<p>Sont rapportables les donations consenties à un héritier acceptant la succession, qu'il s'agisse :</p>
 <ul>
   <li>Des donations notariées (donation simple, donation-partage incluse dans certains cas)</li>
-  <li>Des dons manuels (somme d&apos;argent, objets, bijoux)</li>
+  <li>Des dons manuels (somme d'argent, objets, bijoux)</li>
   <li>Des donations indirectes (vente à prix minoré, abandon de créance)</li>
   <li>Des donations déguisées</li>
 </ul>
@@ -1644,28 +1594,28 @@ function Article19() {
 <h3>Les donations non rapportables</h3>
 <p>Certaines libéralités échappent au rapport :</p>
 <ul>
-  <li><strong>Les donations hors part successorale</strong> : expressément stipulées comme un avantage en plus de la part d&apos;héritage, elles s&apos;imputent sur la quotité disponible</li>
-  <li><strong>Les présents d&apos;usage</strong> : cadeaux remis lors d&apos;occasions particulières (mariage, anniversaire) dont la valeur reste proportionnée au train de vie du donateur</li>
+  <li><strong>Les donations hors part successorale</strong> : expressément stipulées comme un avantage en plus de la part d'héritage, elles s'imputent sur la quotité disponible</li>
+  <li><strong>Les présents d'usage</strong> : cadeaux remis lors d'occasions particulières (mariage, anniversaire) dont la valeur reste proportionnée au train de vie du donateur</li>
   <li><strong>Les donations faites à un non-héritier</strong> (un ami, par exemple)</li>
   <li><strong>Les donations-partages</strong>, qui sont en principe définitives et non soumises au rapport</li>
 </ul>
 
 <h2>Comment évaluer une donation rapportable ?</h2>
-<p>L&apos;évaluation du rapport est une étape délicate qui obéit à des règles précises fixées par l&apos;article 860 du Code civil.</p>
+<p>L'évaluation du rapport est une étape délicate qui obéit à des règles précises fixées par l'article 860 du Code civil.</p>
 
 <h3>Le principe de la double référence</h3>
 <p>Le bien donné est évalué selon deux références :</p>
 <ul>
-  <li><strong>Sa valeur au jour du partage</strong> : pour tenir compte de l&apos;évolution du marché et de l&apos;inflation</li>
+  <li><strong>Sa valeur au jour du partage</strong> : pour tenir compte de l'évolution du marché et de l'inflation</li>
   <li><strong>Son état au jour de la donation</strong> : les améliorations apportées par le donataire ne sont pas prises en compte dans le rapport</li>
 </ul>
-<p>Cette règle protège l&apos;équité : un héritier qui aurait reçu un terrain construit ensuite par ses soins ne sera pas pénalisé par la valeur ajoutée qu&apos;il a personnellement créée.</p>
+<p>Cette règle protège l'équité : un héritier qui aurait reçu un terrain construit ensuite par ses soins ne sera pas pénalisé par la valeur ajoutée qu'il a personnellement créée.</p>
 
-<h3>Cas particulier des sommes d&apos;argent</h3>
-<p>Pour les dons de sommes d&apos;argent, le rapport est en principe égal au montant nominal donné. Toutefois, si la somme a servi à acquérir un bien, le rapport est calculé sur la valeur de ce bien au jour du partage.</p>
+<h3>Cas particulier des sommes d'argent</h3>
+<p>Pour les dons de sommes d'argent, le rapport est en principe égal au montant nominal donné. Toutefois, si la somme a servi à acquérir un bien, le rapport est calculé sur la valeur de ce bien au jour du partage.</p>
 
 <h2>Le rôle du notaire dans le calcul du rapport</h2>
-<p>Le notaire joue un rôle central dans l&apos;application des règles de rapport. Il est chargé de :</p>
+<p>Le notaire joue un rôle central dans l'application des règles de rapport. Il est chargé de :</p>
 <ul>
   <li>Recenser toutes les donations consenties par le défunt</li>
   <li>Qualifier juridiquement chaque libéralité (rapportable ou non)</li>
@@ -1675,12 +1625,7 @@ function Article19() {
 </ul>
 <p>Cette mission requiert une grande rigueur, surtout lorsque les donations sont anciennes ou que des contestations surgissent entre cohéritiers. Le notaire veille également à vérifier que la réserve héréditaire de chaque héritier réservataire est respectée.</p>
 
-<InternalCTA
-  title="Besoin d&apos;un notaire pour votre succession ?"
-  description="Le rapport des donations est une opération technique qui demande l&apos;expertise d&apos;un professionnel. Échangez avec un notaire de Notaires.io, premier rendez-vous offert."
-  buttonText="Prendre rendez-vous"
-  buttonLink="/prendre-rendez-vous"
-/>
+<InternalCTA />
 </>
     </>
   );
@@ -1692,10 +1637,10 @@ function Article20() {
   return (
     <>
       <>
-<p className="lead">Le <strong>legs particulier, universel ou à titre universel inscrit dans un testament rédigé chez le notaire</strong> permet d&apos;organiser sereinement la transmission de votre patrimoine. Comprendre ces trois catégories est essentiel pour exprimer vos volontés avec précision et éviter tout litige successoral.</p>
+<p className="lead">Le <strong>legs particulier, universel ou à titre universel inscrit dans un testament rédigé chez le notaire</strong> permet d'organiser sereinement la transmission de votre patrimoine. Comprendre ces trois catégories est essentiel pour exprimer vos volontés avec précision et éviter tout litige successoral.</p>
 
-<KeyPoints items={[
-  "Le legs universel transmet l&apos;intégralité du patrimoine à un ou plusieurs bénéficiaires",
+<KeyPoints points={[
+  "Le legs universel transmet l'intégralité du patrimoine à un ou plusieurs bénéficiaires",
   "Le legs à titre universel attribue une quote-part ou une catégorie de biens",
   "Le legs particulier vise un bien précis identifié dans le testament",
   "Le testament authentique notarié offre la sécurité juridique maximale"
@@ -1705,26 +1650,21 @@ function Article20() {
 <p>En droit français, le Code civil distingue trois formes de legs que vous pouvez intégrer dans votre testament. Chacune répond à un objectif patrimonial différent et entraîne des conséquences juridiques spécifiques pour vos héritiers et légataires.</p>
 
 <h3>Le legs universel</h3>
-<p>Le legs universel désigne un ou plusieurs bénéficiaires destinés à recevoir <strong>l&apos;ensemble des biens</strong> que vous laisserez à votre décès. Le légataire universel est traité comme un véritable héritier : il reçoit l&apos;actif, mais doit aussi assumer le passif (dettes, charges). En présence d&apos;héritiers réservataires (enfants, conjoint dans certains cas), le legs universel ne peut porter que sur la quotité disponible.</p>
+<p>Le legs universel désigne un ou plusieurs bénéficiaires destinés à recevoir <strong>l'ensemble des biens</strong> que vous laisserez à votre décès. Le légataire universel est traité comme un véritable héritier : il reçoit l'actif, mais doit aussi assumer le passif (dettes, charges). En présence d'héritiers réservataires (enfants, conjoint dans certains cas), le legs universel ne peut porter que sur la quotité disponible.</p>
 
 <h3>Le legs à titre universel</h3>
-<p>Le legs à titre universel porte sur <strong>une fraction du patrimoine</strong> : la moitié, le tiers, tous les immeubles, ou tous les meubles. Le légataire reçoit donc une quote-part proportionnelle de l&apos;actif et du passif. C&apos;est une solution intermédiaire utile pour répartir précisément votre succession entre plusieurs personnes.</p>
+<p>Le legs à titre universel porte sur <strong>une fraction du patrimoine</strong> : la moitié, le tiers, tous les immeubles, ou tous les meubles. Le légataire reçoit donc une quote-part proportionnelle de l'actif et du passif. C'est une solution intermédiaire utile pour répartir précisément votre succession entre plusieurs personnes.</p>
 
 <h3>Le legs particulier</h3>
-<p>Le legs particulier concerne <strong>un ou plusieurs biens identifiés</strong> : une somme d&apos;argent, un appartement, un véhicule, une œuvre d&apos;art, des bijoux. Contrairement aux autres legs, le légataire particulier n&apos;est pas tenu des dettes successorales (sauf clause contraire) et n&apos;a pas la qualité d&apos;héritier.</p>
+<p>Le legs particulier concerne <strong>un ou plusieurs biens identifiés</strong> : une somme d'argent, un appartement, un véhicule, une œuvre d'art, des bijoux. Contrairement aux autres legs, le légataire particulier n'est pas tenu des dettes successorales (sauf clause contraire) et n'a pas la qualité d'héritier.</p>
 
 <h2>Pourquoi rédiger son testament devant un notaire ?</h2>
-<p>Si le testament olographe (entièrement écrit, daté et signé de votre main) reste valable, le <strong>testament authentique reçu par un notaire</strong> présente des avantages décisifs. Il garantit le respect des règles de forme, évite les contestations sur l&apos;état mental du testateur et sécurise l&apos;interprétation des volontés.</p>
-<p>Le notaire vérifie également que vos legs respectent la réserve héréditaire, conseille sur les conséquences fiscales et inscrit le testament au <strong>Fichier Central des Dispositions de Dernières Volontés (FCDDV)</strong>, garantissant qu&apos;il sera retrouvé et exécuté.</p>
+<p>Si le testament olographe (entièrement écrit, daté et signé de votre main) reste valable, le <strong>testament authentique reçu par un notaire</strong> présente des avantages décisifs. Il garantit le respect des règles de forme, évite les contestations sur l'état mental du testateur et sécurise l'interprétation des volontés.</p>
+<p>Le notaire vérifie également que vos legs respectent la réserve héréditaire, conseille sur les conséquences fiscales et inscrit le testament au <strong>Fichier Central des Dispositions de Dernières Volontés (FCDDV)</strong>, garantissant qu'il sera retrouvé et exécuté.</p>
 
-<InternalCTA 
-  title="Rédigez votre testament avec un notaire"
-  description="Sécurisez la transmission de votre patrimoine. Premier rendez-vous offert, en visio ou en cabinet."
-  buttonText="Prendre rendez-vous"
-  href="/rendez-vous"
-/>
+<InternalCTA />
 
-<h2>Fiscalité des legs : ce qu&apos;il faut anticiper</h2>
+<h2>Fiscalité des legs : ce qu'il faut anticiper</h2>
 <p>Les droits de succession applicables aux legs dépendent du lien de parenté entre vous et le légataire. Voici les principaux barèmes à connaître :</p>
 <ul>
   <li><strong>Enfants et parents</strong> : abattement de 100 000 €, puis barème progressif de 5 % à 45 %</li>
@@ -1732,7 +1672,7 @@ function Article20() {
   <li><strong>Neveux et nièces</strong> : abattement de 7 967 €, taux de 55 %</li>
   <li><strong>Tiers (non parents)</strong> : abattement de 1 594 €, taux de 60 %</li>
   <li><strong>Conjoint et partenaire de PACS</strong> : exonération totale</li>
-  <li><strong>Associations reconnues d&apos;utilité publique</strong> : exonération possible</li>
+  <li><strong>Associations reconnues d'utilité publique</strong> : exonération possible</li>
 </ul>
 <p>Un notaire vous aidera à structurer vos legs pour optimiser la transmission, par exemple en démembrant la propriété ou en combinant donations du vivant et legs testamentaires.</p>
 
@@ -1740,15 +1680,15 @@ function Article20() {
 <p>Pour que vos volontés soient pleinement respectées, suivez ces recommandations :</p>
 <ul>
   <li><strong>Identifiez précisément les bénéficiaires</strong> : nom, prénom, date et lieu de naissance pour éviter toute ambiguïté</li>
-  <li><strong>Décrivez les biens avec exactitude</strong> dans le cas d&apos;un legs particulier (références cadastrales, numéros de compte)</li>
+  <li><strong>Décrivez les biens avec exactitude</strong> dans le cas d'un legs particulier (références cadastrales, numéros de compte)</li>
   <li><strong>Prévoyez un légataire de substitution</strong> au cas où le premier décède avant vous ou renonce au legs</li>
   <li><strong>Anticipez les charges et conditions</strong> éventuelles attachées au legs</li>
-  <li><strong>Mettez à jour régulièrement</strong> votre testament en cas d&apos;évolution familiale ou patrimoniale</li>
+  <li><strong>Mettez à jour régulièrement</strong> votre testament en cas d'évolution familiale ou patrimoniale</li>
 </ul>
-<p>N&apos;oubliez pas que vous pouvez révoquer ou modifier votre testament à tout moment, tant que vous êtes vivant et capable juridiquement.</p>
+<p>N'oubliez pas que vous pouvez révoquer ou modifier votre testament à tout moment, tant que vous êtes vivant et capable juridiquement.</p>
 
 <h2>En résumé</h2>
-<p>Choisir entre legs particulier, universel ou à titre universel dépend de vos objectifs : transmettre l&apos;ensemble de votre patrimoine, en répartir une part, ou attribuer un bien précis. Le recours au <strong>notaire pour rédiger un testament authentique</strong> est la meilleure garantie pour que vos volontés soient respectées, dans le strict cadre légal et fiscal.</p>
+<p>Choisir entre legs particulier, universel ou à titre universel dépend de vos objectifs : transmettre l'ensemble de votre patrimoine, en répartir une part, ou attribuer un bien précis. Le recours au <strong>notaire pour rédiger un testament authentique</strong> est la meilleure garantie pour que vos volontés soient respectées, dans le strict cadre légal et fiscal.</p>
 </>
     </>
   );
@@ -1760,56 +1700,56 @@ function Article21() {
   return (
     <>
       <>
-  <p className="lead">La succession internationale avec un notaire français concerne toute succession comportant un élément d&apos;extranéité : défunt résidant à l&apos;étranger, héritiers expatriés ou biens situés hors de France. Ces dossiers complexes nécessitent une expertise juridique pointue pour déterminer la loi applicable, organiser le règlement et optimiser la fiscalité.</p>
+  <p className="lead">La succession internationale avec un notaire français concerne toute succession comportant un élément d'extranéité : défunt résidant à l'étranger, héritiers expatriés ou biens situés hors de France. Ces dossiers complexes nécessitent une expertise juridique pointue pour déterminer la loi applicable, organiser le règlement et optimiser la fiscalité.</p>
 
-  <KeyPoints items={[
+  <KeyPoints points={[
     "Le règlement européen n°650/2012 régit les successions ouvertes depuis le 17 août 2015",
     "La loi applicable est celle du dernier domicile du défunt, sauf choix contraire",
-    "Le certificat successoral européen facilite les démarches dans toute l&apos;UE",
+    "Le certificat successoral européen facilite les démarches dans toute l'UE",
     "Des conventions fiscales évitent la double imposition dans 30+ pays",
     "Le notaire français coordonne avec ses confrères étrangers"
   ]} />
 
-  <h2>Quelle loi s&apos;applique à une succession internationale ?</h2>
-  <p>Depuis l&apos;entrée en vigueur du règlement européen du 4 juillet 2012, la règle a été profondément simplifiée. Auparavant, la France appliquait un système dualiste : la loi du domicile du défunt pour les biens mobiliers et la loi du lieu de situation pour les biens immobiliers. Désormais, une seule loi régit l&apos;ensemble de la succession.</p>
+  <h2>Quelle loi s'applique à une succession internationale ?</h2>
+  <p>Depuis l'entrée en vigueur du règlement européen du 4 juillet 2012, la règle a été profondément simplifiée. Auparavant, la France appliquait un système dualiste : la loi du domicile du défunt pour les biens mobiliers et la loi du lieu de situation pour les biens immobiliers. Désormais, une seule loi régit l'ensemble de la succession.</p>
 
-  <p>Le principe est simple : la loi applicable est celle de la <strong>résidence habituelle du défunt</strong> au moment de son décès. Cette règle s&apos;applique à toutes les successions ouvertes depuis le 17 août 2015, même si le défunt n&apos;était pas ressortissant d&apos;un État membre.</p>
+  <p>Le principe est simple : la loi applicable est celle de la <strong>résidence habituelle du défunt</strong> au moment de son décès. Cette règle s'applique à toutes les successions ouvertes depuis le 17 août 2015, même si le défunt n'était pas ressortissant d'un État membre.</p>
 
-  <p>Toutefois, toute personne peut, par testament, choisir que la loi de sa nationalité régisse sa succession. Ce choix, appelé <em>professio juris</em>, doit être explicite et formalisé. Pour un Français vivant à l&apos;étranger, cela permet par exemple de conserver les règles françaises de la réserve héréditaire qui protègent les enfants.</p>
+  <p>Toutefois, toute personne peut, par testament, choisir que la loi de sa nationalité régisse sa succession. Ce choix, appelé <em>professio juris</em>, doit être explicite et formalisé. Pour un Français vivant à l'étranger, cela permet par exemple de conserver les règles françaises de la réserve héréditaire qui protègent les enfants.</p>
 
   <h2>Le rôle central du notaire français dans une succession transfrontalière</h2>
-  <p>Le notaire français intervient dès lors qu&apos;un élément rattache la succession à la France : nationalité française du défunt, biens immobiliers sur le territoire, héritier résidant en France ou compte bancaire français. Son rôle est multiple.</p>
+  <p>Le notaire français intervient dès lors qu'un élément rattache la succession à la France : nationalité française du défunt, biens immobiliers sur le territoire, héritier résidant en France ou compte bancaire français. Son rôle est multiple.</p>
 
-  <p><strong>Identification de la loi applicable :</strong> le notaire analyse le dossier pour déterminer la résidence habituelle du défunt, vérifier l&apos;existence d&apos;un choix de loi testamentaire et identifier les règles successorales à appliquer.</p>
+  <p><strong>Identification de la loi applicable :</strong> le notaire analyse le dossier pour déterminer la résidence habituelle du défunt, vérifier l'existence d'un choix de loi testamentaire et identifier les règles successorales à appliquer.</p>
 
   <p><strong>Coordination internationale :</strong> il établit le contact avec les notaires, avocats ou autorités étrangères compétentes. Cette coordination est essentielle pour éviter les conflits de procédures et accélérer le règlement.</p>
 
-  <p><strong>Délivrance du certificat successoral européen :</strong> ce document, créé par le règlement européen, prouve la qualité d&apos;héritier, de légataire ou d&apos;exécuteur testamentaire dans tous les États membres (sauf Danemark et Irlande). Il évite des démarches longues et coûteuses dans chaque pays.</p>
+  <p><strong>Délivrance du certificat successoral européen :</strong> ce document, créé par le règlement européen, prouve la qualité d'héritier, de légataire ou d'exécuteur testamentaire dans tous les États membres (sauf Danemark et Irlande). Il évite des démarches longues et coûteuses dans chaque pays.</p>
 
-  <h2>La fiscalité d&apos;une succession internationale</h2>
+  <h2>La fiscalité d'une succession internationale</h2>
   <p>La question fiscale est souvent la plus complexe. Contrairement au règlement civil unifié, la fiscalité reste régie par le droit interne de chaque État. En France, le Code général des impôts prévoit une imposition large.</p>
 
-  <p>Les droits de succession français s&apos;appliquent si :</p>
+  <p>Les droits de succession français s'appliquent si :</p>
   <ul>
     <li>Le défunt avait son domicile fiscal en France ;</li>
-    <li>L&apos;héritier est domicilié fiscalement en France (et l&apos;a été au moins 6 ans sur les 10 dernières années) ;</li>
+    <li>L'héritier est domicilié fiscalement en France (et l'a été au moins 6 ans sur les 10 dernières années) ;</li>
     <li>Les biens transmis sont situés en France (immeubles, comptes bancaires, parts de SCI, etc.).</li>
   </ul>
 
-  <p>Pour éviter la double imposition, la France a signé des conventions fiscales bilatérales avec une trentaine de pays (États-Unis, Royaume-Uni, Allemagne, Italie, Belgique, Suisse, etc.). Ces conventions attribuent le droit d&apos;imposer à l&apos;un ou l&apos;autre État, ou prévoient un crédit d&apos;impôt.</p>
+  <p>Pour éviter la double imposition, la France a signé des conventions fiscales bilatérales avec une trentaine de pays (États-Unis, Royaume-Uni, Allemagne, Italie, Belgique, Suisse, etc.). Ces conventions attribuent le droit d'imposer à l'un ou l'autre État, ou prévoient un crédit d'impôt.</p>
 
-  <p>En l&apos;absence de convention, l&apos;article 784 A du CGI permet d&apos;imputer l&apos;impôt étranger payé sur les biens situés hors de France sur les droits français correspondants. Une analyse fine est indispensable pour optimiser la transmission.</p>
+  <p>En l'absence de convention, l'article 784 A du CGI permet d'imputer l'impôt étranger payé sur les biens situés hors de France sur les droits français correspondants. Une analyse fine est indispensable pour optimiser la transmission.</p>
 
-  <h2>Les étapes du règlement d&apos;une succession internationale</h2>
-  <p>Le règlement d&apos;une succession internationale suit plusieurs étapes coordonnées par le notaire.</p>
+  <h2>Les étapes du règlement d'une succession internationale</h2>
+  <p>Le règlement d'une succession internationale suit plusieurs étapes coordonnées par le notaire.</p>
 
   <p><strong>1. Ouverture du dossier :</strong> recueil des documents (acte de décès, livret de famille, testament éventuel, titres de propriété), identification des héritiers et inventaire du patrimoine mondial.</p>
 
-  <p><strong>2. Détermination de la loi applicable :</strong> analyse de la résidence habituelle, recherche d&apos;un choix de loi et qualification des biens.</p>
+  <p><strong>2. Détermination de la loi applicable :</strong> analyse de la résidence habituelle, recherche d'un choix de loi et qualification des biens.</p>
 
   <p><strong>3. Établissement des actes :</strong> acte de notoriété, attestation immobilière pour les biens français, certificat successoral européen si nécessaire.</p>
 
-  <p><strong>4. Déclaration fiscale :</strong> dépôt de la déclaration de succession dans les 6 mois (12 mois si le défunt est décédé à l&apos;étranger) et paiement des droits.</p>
+  <p><strong>4. Déclaration fiscale :</strong> dépôt de la déclaration de succession dans les 6 mois (12 mois si le défunt est décédé à l'étranger) et paiement des droits.</p>
 
   <p><strong>5. Partage :</strong> répartition des biens entre les héritiers selon la loi applicable, avec éventuellement un partage transfrontalier coordonné.</p>
 
@@ -1825,43 +1765,43 @@ function Article22() {
   return (
     <>
       <>
-  <p className="lead">La différence entre <strong>compromis vs acte de vente notaire</strong> est essentielle à comprendre avant tout achat immobilier. Ces deux documents jalonnent la transaction mais n&apos;ont ni la même portée juridique, ni les mêmes effets. Le compromis engage les parties à conclure la vente, tandis que l&apos;acte authentique signé chez le notaire transfère effectivement la propriété. Décryptage complet pour sécuriser votre projet immobilier.</p>
+  <p className="lead">La différence entre <strong>compromis vs acte de vente notaire</strong> est essentielle à comprendre avant tout achat immobilier. Ces deux documents jalonnent la transaction mais n'ont ni la même portée juridique, ni les mêmes effets. Le compromis engage les parties à conclure la vente, tandis que l'acte authentique signé chez le notaire transfère effectivement la propriété. Décryptage complet pour sécuriser votre projet immobilier.</p>
 
-  <KeyPoints items={[
+  <KeyPoints points={[
     "Le compromis de vente est un avant-contrat qui engage vendeur et acheteur",
-    "L&apos;acte de vente notarié officialise le transfert de propriété",
+    "L'acte de vente notarié officialise le transfert de propriété",
     "Le délai moyen entre les deux signatures est de 3 à 4 mois",
-    "Seul l&apos;acte authentique a force exécutoire et est publié au service de la publicité foncière"
+    "Seul l'acte authentique a force exécutoire et est publié au service de la publicité foncière"
   ]} />
 
-  <h2>Qu&apos;est-ce que le compromis de vente ?</h2>
-  <p>Le compromis de vente, ou promesse synallagmatique de vente, est un avant-contrat par lequel le vendeur s&apos;engage à vendre son bien et l&apos;acheteur à l&apos;acquérir, à un prix convenu. Juridiquement, il vaut vente : &quot;promesse de vente vaut vente&quot; selon l&apos;article 1589 du Code civil.</p>
-  <p>Ce document contient des informations essentielles : identité des parties, description précise du bien, prix, conditions suspensives (obtention du prêt, absence de servitude, droit de préemption), date prévisionnelle de signature de l&apos;acte authentique et montant du dépôt de garantie (généralement 5 à 10 % du prix).</p>
-  <p>L&apos;acheteur bénéficie d&apos;un <strong>délai de rétractation de 10 jours</strong> à compter du lendemain de la première présentation de la notification. Passé ce délai, l&apos;engagement devient ferme.</p>
+  <h2>Qu'est-ce que le compromis de vente ?</h2>
+  <p>Le compromis de vente, ou promesse synallagmatique de vente, est un avant-contrat par lequel le vendeur s'engage à vendre son bien et l'acheteur à l'acquérir, à un prix convenu. Juridiquement, il vaut vente : "promesse de vente vaut vente" selon l'article 1589 du Code civil.</p>
+  <p>Ce document contient des informations essentielles : identité des parties, description précise du bien, prix, conditions suspensives (obtention du prêt, absence de servitude, droit de préemption), date prévisionnelle de signature de l'acte authentique et montant du dépôt de garantie (généralement 5 à 10 % du prix).</p>
+  <p>L'acheteur bénéficie d'un <strong>délai de rétractation de 10 jours</strong> à compter du lendemain de la première présentation de la notification. Passé ce délai, l'engagement devient ferme.</p>
 
-  <h2>L&apos;acte de vente notarié : la concrétisation</h2>
-  <p>L&apos;acte de vente, dit aussi acte authentique, est le document signé chez le notaire qui formalise définitivement la transaction. Contrairement au compromis, il transfère la propriété du bien et donne lieu au paiement intégral du prix ainsi qu&apos;au versement des frais de notaire.</p>
+  <h2>L'acte de vente notarié : la concrétisation</h2>
+  <p>L'acte de vente, dit aussi acte authentique, est le document signé chez le notaire qui formalise définitivement la transaction. Contrairement au compromis, il transfère la propriété du bien et donne lieu au paiement intégral du prix ainsi qu'au versement des frais de notaire.</p>
   <p>Le notaire procède à plusieurs vérifications cruciales avant la signature :</p>
   <ul>
-    <li>Contrôle de l&apos;origine de propriété sur 30 ans</li>
+    <li>Contrôle de l'origine de propriété sur 30 ans</li>
     <li>Purge des droits de préemption (commune, SAFER)</li>
     <li>Vérification des hypothèques et servitudes</li>
     <li>Conformité urbanistique et diagnostics techniques</li>
     <li>Capacité juridique des parties</li>
   </ul>
-  <p>Une fois signé, l&apos;acte est publié au service de la publicité foncière, ce qui le rend opposable aux tiers. Le notaire conserve la minute pendant 75 ans avant son transfert aux Archives nationales.</p>
+  <p>Une fois signé, l'acte est publié au service de la publicité foncière, ce qui le rend opposable aux tiers. Le notaire conserve la minute pendant 75 ans avant son transfert aux Archives nationales.</p>
 
   <h2>Compromis vs acte de vente notaire : les différences essentielles</h2>
   <p>Plusieurs points distinguent fondamentalement ces deux étapes :</p>
-  <p><strong>Force juridique :</strong> le compromis est un contrat sous seing privé (sauf s&apos;il est notarié), tandis que l&apos;acte de vente est authentique et a force exécutoire. En cas de litige, l&apos;acte authentique fait foi sans nécessité d&apos;autres preuves.</p>
-  <p><strong>Transfert de propriété :</strong> le compromis crée une obligation de conclure la vente, mais ne transfère pas la propriété. Seul l&apos;acte de vente opère ce transfert effectif, accompagné de la remise des clés.</p>
-  <p><strong>Paiement et fiscalité :</strong> au compromis, seul le dépôt de garantie est versé. À l&apos;acte authentique, le prix total est payé ainsi que les frais de notaire (7 à 8 % dans l&apos;ancien, 2 à 3 % dans le neuf).</p>
-  <p><strong>Délai :</strong> entre les deux signatures, comptez généralement 3 à 4 mois. Ce délai permet d&apos;obtenir le financement, de purger les conditions suspensives et de réunir tous les documents requis.</p>
+  <p><strong>Force juridique :</strong> le compromis est un contrat sous seing privé (sauf s'il est notarié), tandis que l'acte de vente est authentique et a force exécutoire. En cas de litige, l'acte authentique fait foi sans nécessité d'autres preuves.</p>
+  <p><strong>Transfert de propriété :</strong> le compromis crée une obligation de conclure la vente, mais ne transfère pas la propriété. Seul l'acte de vente opère ce transfert effectif, accompagné de la remise des clés.</p>
+  <p><strong>Paiement et fiscalité :</strong> au compromis, seul le dépôt de garantie est versé. À l'acte authentique, le prix total est payé ainsi que les frais de notaire (7 à 8 % dans l'ancien, 2 à 3 % dans le neuf).</p>
+  <p><strong>Délai :</strong> entre les deux signatures, comptez généralement 3 à 4 mois. Ce délai permet d'obtenir le financement, de purger les conditions suspensives et de réunir tous les documents requis.</p>
 
   <h2>Pourquoi faire signer son compromis chez le notaire ?</h2>
   <p>Bien que non obligatoire, la signature du compromis chez un notaire présente de nombreux avantages. Le notaire rédige un acte sur mesure, intègre toutes les conditions suspensives adaptées à votre situation et vérifie en amont la situation juridique du bien.</p>
-  <p>Cette sécurité juridique évite de mauvaises surprises lors de la signature de l&apos;acte authentique. De plus, faire intervenir le notaire dès le compromis n&apos;entraîne généralement pas de surcoût : ses émoluments sont calculés globalement sur la transaction.</p>
-  <p>En cas de litige, de désaccord sur les conditions ou de complexité particulière (indivision, succession en cours, bien démembré), l&apos;accompagnement notarial dès le compromis est vivement recommandé.</p>
+  <p>Cette sécurité juridique évite de mauvaises surprises lors de la signature de l'acte authentique. De plus, faire intervenir le notaire dès le compromis n'entraîne généralement pas de surcoût : ses émoluments sont calculés globalement sur la transaction.</p>
+  <p>En cas de litige, de désaccord sur les conditions ou de complexité particulière (indivision, succession en cours, bien démembré), l'accompagnement notarial dès le compromis est vivement recommandé.</p>
 
   <InternalCTA />
 </>
@@ -1875,81 +1815,71 @@ function Article23() {
   return (
     <>
       <>
-  <p className="lead">La plus-value immobilière et l&apos;exonération de la résidence principale constituent un avantage fiscal majeur en France : la vente de votre logement principal échappe totalement à l&apos;imposition. Mais cette exonération obéit à des conditions strictes qu&apos;il faut maîtriser pour éviter un redressement fiscal.</p>
+  <p className="lead">La plus-value immobilière et l'exonération de la résidence principale constituent un avantage fiscal majeur en France : la vente de votre logement principal échappe totalement à l'imposition. Mais cette exonération obéit à des conditions strictes qu'il faut maîtriser pour éviter un redressement fiscal.</p>
 
   <KeyPoints points={[
     "Exonération totale de plus-value pour la vente de la résidence principale",
     "Le bien doit être votre habitation effective au jour de la cession",
-    "Délai toléré d&apos;environ 12 mois entre départ et vente",
+    "Délai toléré d'environ 12 mois entre départ et vente",
     "Autres exonérations possibles : durée de détention, montant, première cession"
   ]} />
 
-  <h2>Qu&apos;est-ce que la plus-value immobilière ?</h2>
-  <p>La plus-value immobilière correspond à la différence entre le prix de vente d&apos;un bien et son prix d&apos;acquisition. Lorsqu&apos;elle est positive, elle est en principe soumise à l&apos;impôt sur le revenu au taux de 19 % et aux prélèvements sociaux de 17,2 %, soit une taxation globale de 36,2 %.</p>
-  <p>Heureusement, plusieurs cas d&apos;exonération existent, et le plus connu concerne la résidence principale. Cette règle vise à ne pas pénaliser les ménages qui changent de logement au cours de leur vie.</p>
+  <h2>Qu'est-ce que la plus-value immobilière ?</h2>
+  <p>La plus-value immobilière correspond à la différence entre le prix de vente d'un bien et son prix d'acquisition. Lorsqu'elle est positive, elle est en principe soumise à l'impôt sur le revenu au taux de 19 % et aux prélèvements sociaux de 17,2 %, soit une taxation globale de 36,2 %.</p>
+  <p>Heureusement, plusieurs cas d'exonération existent, et le plus connu concerne la résidence principale. Cette règle vise à ne pas pénaliser les ménages qui changent de logement au cours de leur vie.</p>
 
-  <h2>L&apos;exonération de la résidence principale : conditions</h2>
-  <p>L&apos;article 150 U-II-1° du Code général des impôts prévoit une exonération totale de plus-value pour la cession de la résidence principale. Trois conditions doivent être réunies.</p>
+  <h2>L'exonération de la résidence principale : conditions</h2>
+  <p>L'article 150 U-II-1° du Code général des impôts prévoit une exonération totale de plus-value pour la cession de la résidence principale. Trois conditions doivent être réunies.</p>
 
   <h3>1. Le bien doit être votre habitation principale</h3>
-  <p>La résidence principale est définie comme le lieu où vous résidez habituellement et effectivement pendant la majeure partie de l&apos;année. L&apos;administration vérifie cette qualité à partir de plusieurs indices : déclarations fiscales, factures de consommation (eau, électricité), adresse de domiciliation bancaire, scolarisation des enfants, etc.</p>
+  <p>La résidence principale est définie comme le lieu où vous résidez habituellement et effectivement pendant la majeure partie de l'année. L'administration vérifie cette qualité à partir de plusieurs indices : déclarations fiscales, factures de consommation (eau, électricité), adresse de domiciliation bancaire, scolarisation des enfants, etc.</p>
   <p>Une simple déclaration ne suffit pas : il faut prouver une occupation réelle. Un bien loué meublé ou vide ne peut pas être qualifié de résidence principale.</p>
 
-  <h3>2. L&apos;occupation au jour de la cession</h3>
-  <p>Le bien doit constituer votre résidence principale au jour de la vente. Si vous avez déménagé avant la signature de l&apos;acte authentique, l&apos;exonération peut être remise en cause.</p>
-  <p>Toutefois, l&apos;administration fiscale admet une tolérance : si le logement est mis en vente immédiatement après votre départ et reste inoccupé, l&apos;exonération est maintenue pendant un délai raisonnable, généralement estimé à 12 mois.</p>
+  <h3>2. L'occupation au jour de la cession</h3>
+  <p>Le bien doit constituer votre résidence principale au jour de la vente. Si vous avez déménagé avant la signature de l'acte authentique, l'exonération peut être remise en cause.</p>
+  <p>Toutefois, l'administration fiscale admet une tolérance : si le logement est mis en vente immédiatement après votre départ et reste inoccupé, l'exonération est maintenue pendant un délai raisonnable, généralement estimé à 12 mois.</p>
 
   <h3>3. Les dépendances immédiates</h3>
-  <p>L&apos;exonération s&apos;étend aux dépendances immédiates et nécessaires (garage, cave, jardin) vendues en même temps que la résidence principale. Un garage situé à moins d&apos;un kilomètre est généralement considéré comme une dépendance.</p>
+  <p>L'exonération s'étend aux dépendances immédiates et nécessaires (garage, cave, jardin) vendues en même temps que la résidence principale. Un garage situé à moins d'un kilomètre est généralement considéré comme une dépendance.</p>
 
-  <InternalCTA
-    title="Vendez votre bien en toute sécurité fiscale"
-    description="Nos notaires vous accompagnent pour sécuriser votre exonération de plus-value et éviter tout redressement."
-    buttonText="Consulter un notaire"
-    href="/trouver-notaire"
-  />
+  <InternalCTA />
 
-  <h2>Les autres cas d&apos;exonération de plus-value</h2>
-  <p>Si votre bien n&apos;est pas votre résidence principale, d&apos;autres dispositifs peuvent vous exonérer totalement ou partiellement.</p>
+  <h2>Les autres cas d'exonération de plus-value</h2>
+  <p>Si votre bien n'est pas votre résidence principale, d'autres dispositifs peuvent vous exonérer totalement ou partiellement.</p>
 
   <h3>Exonération pour durée de détention</h3>
-  <p>La plus-value bénéficie d&apos;abattements progressifs selon la durée de détention :</p>
+  <p>La plus-value bénéficie d'abattements progressifs selon la durée de détention :</p>
   <ul>
-    <li>Exonération totale d&apos;impôt sur le revenu après 22 ans de détention</li>
+    <li>Exonération totale d'impôt sur le revenu après 22 ans de détention</li>
     <li>Exonération totale des prélèvements sociaux après 30 ans</li>
   </ul>
 
-  <h3>Première cession d&apos;une résidence secondaire</h3>
-  <p>Si vous n&apos;avez pas été propriétaire de votre résidence principale au cours des 4 années précédentes et que vous réinvestissez le prix de vente dans l&apos;achat de votre résidence principale dans les 24 mois, vous bénéficiez d&apos;une exonération.</p>
+  <h3>Première cession d'une résidence secondaire</h3>
+  <p>Si vous n'avez pas été propriétaire de votre résidence principale au cours des 4 années précédentes et que vous réinvestissez le prix de vente dans l'achat de votre résidence principale dans les 24 mois, vous bénéficiez d'une exonération.</p>
 
   <h3>Petites cessions et situations particulières</h3>
-  <p>Sont également exonérées : les ventes inférieures à 15 000 €, les cessions par des retraités ou invalides à revenus modestes, les ventes au profit d&apos;organismes de logement social.</p>
+  <p>Sont également exonérées : les ventes inférieures à 15 000 €, les cessions par des retraités ou invalides à revenus modestes, les ventes au profit d'organismes de logement social.</p>
 
   <h2>Comment calculer la plus-value imposable ?</h2>
-  <p>Si votre bien n&apos;est pas exonéré, le calcul s&apos;effectue ainsi :</p>
+  <p>Si votre bien n'est pas exonéré, le calcul s'effectue ainsi :</p>
   <ul>
-    <li><strong>Prix de cession</strong> : prix de vente diminué des frais (diagnostics, mainlevée d&apos;hypothèque)</li>
-    <li><strong>Prix d&apos;acquisition</strong> : prix d&apos;achat majoré des frais de notaire (forfait 7,5 % possible) et des travaux (forfait 15 % après 5 ans de détention)</li>
+    <li><strong>Prix de cession</strong> : prix de vente diminué des frais (diagnostics, mainlevée d'hypothèque)</li>
+    <li><strong>Prix d'acquisition</strong> : prix d'achat majoré des frais de notaire (forfait 7,5 % possible) et des travaux (forfait 15 % après 5 ans de détention)</li>
     <li><strong>Abattements pour durée de détention</strong> appliqués sur la différence</li>
   </ul>
-  <p>Le notaire calcule et déclare la plus-value lors de la signature de l&apos;acte authentique. L&apos;impôt est prélevé directement sur le prix de vente.</p>
+  <p>Le notaire calcule et déclare la plus-value lors de la signature de l'acte authentique. L'impôt est prélevé directement sur le prix de vente.</p>
 
   <h2>Les pièges à éviter</h2>
-  <p>Plusieurs situations peuvent compromettre l&apos;exonération :</p>
+  <p>Plusieurs situations peuvent compromettre l'exonération :</p>
   <ul>
-    <li><strong>Vente après déménagement</strong> : si vous attendez trop longtemps, l&apos;exonération tombe</li>
+    <li><strong>Vente après déménagement</strong> : si vous attendez trop longtemps, l'exonération tombe</li>
     <li><strong>Bien loué récemment</strong> : la location, même brève, peut requalifier le bien</li>
     <li><strong>Double résidence</strong> : un seul logement peut être qualifié de résidence principale</li>
     <li><strong>Construction non terminée</strong> : un bien inachevé ne peut être une résidence principale</li>
   </ul>
-  <p>En cas de doute, consultez un notaire avant la mise en vente. Une analyse préalable de votre situation permet d&apos;anticiper et de sécuriser l&apos;exonération.</p>
+  <p>En cas de doute, consultez un notaire avant la mise en vente. Une analyse préalable de votre situation permet d'anticiper et de sécuriser l'exonération.</p>
 
-  <InternalCTA
-    title="Une question sur votre plus-value immobilière ?"
-    description="Premier rendez-vous offert avec un notaire en visio ou en cabinet pour analyser votre situation."
-    buttonText="Prendre rendez-vous"
-    href="/trouver-notaire"
-  />
+  <InternalCTA />
 </>
     </>
   );
@@ -1961,59 +1891,54 @@ function Article24() {
   return (
     <>
       <>
-<p className="lead">Le viager bouquet rente notaire est un montage immobilier qui permet à un propriétaire de vendre son bien tout en percevant un capital initial (le bouquet) puis une rente viagère jusqu&apos;à son décès. Encadrée par le notaire, cette opération sécurise vendeur et acquéreur grâce à un acte authentique aux clauses précises.</p>
+<p className="lead">Le viager bouquet rente notaire est un montage immobilier qui permet à un propriétaire de vendre son bien tout en percevant un capital initial (le bouquet) puis une rente viagère jusqu'à son décès. Encadrée par le notaire, cette opération sécurise vendeur et acquéreur grâce à un acte authentique aux clauses précises.</p>
 
 <KeyPoints points={[
-  "Le viager se compose d&apos;un bouquet (capital versé au comptant) et d&apos;une rente viagère mensuelle ou trimestrielle.",
-  "L&apos;acte authentique chez le notaire est obligatoire pour sécuriser la vente.",
-  "Le calcul dépend de l&apos;âge du crédirentier, de la valeur du bien et de son occupation.",
+  "Le viager se compose d'un bouquet (capital versé au comptant) et d'une rente viagère mensuelle ou trimestrielle.",
+  "L'acte authentique chez le notaire est obligatoire pour sécuriser la vente.",
+  "Le calcul dépend de l'âge du crédirentier, de la valeur du bien et de son occupation.",
   "Le viager occupé décote le prix de 30 à 50 % par rapport à la valeur libre."
 ]} />
 
 <h2>Comprendre le viager : bouquet et rente expliqués</h2>
-<p>La vente en viager repose sur un principe simple : le vendeur (appelé <strong>crédirentier</strong>) cède son bien immobilier à un acquéreur (le <strong>débirentier</strong>) qui s&apos;engage à lui verser une rente jusqu&apos;à son décès. À cela s&apos;ajoute généralement un capital initial, le bouquet, payé le jour de la signature de l&apos;acte chez le notaire.</p>
+<p>La vente en viager repose sur un principe simple : le vendeur (appelé <strong>crédirentier</strong>) cède son bien immobilier à un acquéreur (le <strong>débirentier</strong>) qui s'engage à lui verser une rente jusqu'à son décès. À cela s'ajoute généralement un capital initial, le bouquet, payé le jour de la signature de l'acte chez le notaire.</p>
 <p>Il existe deux grandes formes de viager :</p>
 <ul>
-  <li><strong>Le viager occupé</strong> : le vendeur conserve un droit d&apos;usage et d&apos;habitation (DUH) ou un usufruit sur le bien. C&apos;est la formule la plus courante (environ 95 % des viagers).</li>
-  <li><strong>Le viager libre</strong> : l&apos;acquéreur dispose immédiatement du bien, qu&apos;il peut habiter ou louer. La rente est alors plus élevée.</li>
+  <li><strong>Le viager occupé</strong> : le vendeur conserve un droit d'usage et d'habitation (DUH) ou un usufruit sur le bien. C'est la formule la plus courante (environ 95 % des viagers).</li>
+  <li><strong>Le viager libre</strong> : l'acquéreur dispose immédiatement du bien, qu'il peut habiter ou louer. La rente est alors plus élevée.</li>
 </ul>
-<p>Le notaire joue un rôle central : il vérifie la capacité des parties, calcule la rente conformément aux barèmes en vigueur, intègre les clauses de revalorisation et de résolution, puis publie l&apos;acte au service de la publicité foncière.</p>
+<p>Le notaire joue un rôle central : il vérifie la capacité des parties, calcule la rente conformément aux barèmes en vigueur, intègre les clauses de revalorisation et de résolution, puis publie l'acte au service de la publicité foncière.</p>
 
 <h2>Comment se calculent le bouquet et la rente ?</h2>
-<p>Le calcul du viager bouquet rente notaire s&apos;appuie sur plusieurs paramètres objectifs :</p>
+<p>Le calcul du viager bouquet rente notaire s'appuie sur plusieurs paramètres objectifs :</p>
 <ul>
   <li><strong>La valeur vénale</strong> du bien (estimation au prix du marché libre).</li>
-  <li><strong>L&apos;âge et l&apos;espérance de vie</strong> du crédirentier, selon les tables de mortalité de l&apos;INSEE.</li>
-  <li><strong>L&apos;occupation du bien</strong> : un viager occupé subit une décote de 30 à 50 % (valeur du DUH).</li>
+  <li><strong>L'âge et l'espérance de vie</strong> du crédirentier, selon les tables de mortalité de l'INSEE.</li>
+  <li><strong>L'occupation du bien</strong> : un viager occupé subit une décote de 30 à 50 % (valeur du DUH).</li>
   <li><strong>Le rendement attendu</strong> appliqué à la valeur restante après bouquet.</li>
 </ul>
-<p>Exemple simplifié : pour un bien estimé 300 000 € avec un vendeur de 75 ans en viager occupé, la décote d&apos;occupation peut représenter environ 40 %, soit une valeur économique de 180 000 €. Si le bouquet est fixé à 60 000 €, la rente viagère sera calculée sur les 120 000 € restants, soit environ 700 à 900 € par mois selon les barèmes.</p>
-<p>La rente est ensuite <strong>indexée annuellement</strong>, généralement sur l&apos;indice des prix à la consommation publié par l&apos;INSEE, pour préserver le pouvoir d&apos;achat du vendeur.</p>
+<p>Exemple simplifié : pour un bien estimé 300 000 € avec un vendeur de 75 ans en viager occupé, la décote d'occupation peut représenter environ 40 %, soit une valeur économique de 180 000 €. Si le bouquet est fixé à 60 000 €, la rente viagère sera calculée sur les 120 000 € restants, soit environ 700 à 900 € par mois selon les barèmes.</p>
+<p>La rente est ensuite <strong>indexée annuellement</strong>, généralement sur l'indice des prix à la consommation publié par l'INSEE, pour préserver le pouvoir d'achat du vendeur.</p>
 
 <h2>Le rôle protecteur du notaire dans la vente en viager</h2>
-<p>Le notaire intervient à chaque étape pour sécuriser l&apos;opération :</p>
+<p>Le notaire intervient à chaque étape pour sécuriser l'opération :</p>
 <ol>
   <li><strong>Estimation et conseil</strong> : il vérifie la cohérence économique du montage et conseille sur la répartition optimale entre bouquet et rente.</li>
-  <li><strong>Rédaction de l&apos;acte authentique</strong> : il insère les clauses essentielles (résolutoire en cas de non-paiement, privilège du vendeur, interdiction de revente sans accord, indexation).</li>
-  <li><strong>Vérification de l&apos;aléa</strong> : le viager doit comporter un aléa réel sur la durée de vie du vendeur. Si celui-ci décède dans les 20 jours suivant la vente d&apos;une maladie connue, le contrat peut être annulé (article 1975 du Code civil).</li>
+  <li><strong>Rédaction de l'acte authentique</strong> : il insère les clauses essentielles (résolutoire en cas de non-paiement, privilège du vendeur, interdiction de revente sans accord, indexation).</li>
+  <li><strong>Vérification de l'aléa</strong> : le viager doit comporter un aléa réel sur la durée de vie du vendeur. Si celui-ci décède dans les 20 jours suivant la vente d'une maladie connue, le contrat peut être annulé (article 1975 du Code civil).</li>
   <li><strong>Publication et formalités fiscales</strong> : enregistrement, calcul des droits de mutation et déclarations.</li>
 </ol>
-<p>Côté fiscalité, le bouquet est exonéré d&apos;impôt pour le vendeur s&apos;il s&apos;agit de sa résidence principale. La rente bénéficie d&apos;un abattement selon l&apos;âge du crédirentier au premier versement : 70 % d&apos;abattement après 69 ans, 60 % entre 60 et 69 ans.</p>
+<p>Côté fiscalité, le bouquet est exonéré d'impôt pour le vendeur s'il s'agit de sa résidence principale. La rente bénéficie d'un abattement selon l'âge du crédirentier au premier versement : 70 % d'abattement après 69 ans, 60 % entre 60 et 69 ans.</p>
 
 <h2>Avantages et points de vigilance</h2>
 <p>Le viager présente des intérêts forts pour les deux parties :</p>
 <ul>
   <li><strong>Pour le vendeur</strong> : un complément de retraite régulier, le maintien dans son logement et une fiscalité allégée.</li>
-  <li><strong>Pour l&apos;acheteur</strong> : l&apos;acquisition d&apos;un bien à prix décoté, sans recours bancaire systématique, avec un effet de levier patrimonial.</li>
+  <li><strong>Pour l'acheteur</strong> : l'acquisition d'un bien à prix décoté, sans recours bancaire systématique, avec un effet de levier patrimonial.</li>
 </ul>
-<p>Quelques précautions s&apos;imposent toutefois : bien évaluer sa capacité à verser la rente sur le long terme, anticiper la répartition des charges et travaux (généralement l&apos;acheteur prend en charge le gros œuvre, le vendeur les charges d&apos;entretien courant), et faire attention aux clauses de réversion en cas de couple vendeur.</p>
+<p>Quelques précautions s'imposent toutefois : bien évaluer sa capacité à verser la rente sur le long terme, anticiper la répartition des charges et travaux (généralement l'acheteur prend en charge le gros œuvre, le vendeur les charges d'entretien courant), et faire attention aux clauses de réversion en cas de couple vendeur.</p>
 
-<InternalCTA
-  title="Vous envisagez un viager ?"
-  description="Nos notaires partenaires vous accompagnent dans le calcul du bouquet, de la rente et la rédaction de l&apos;acte. Premier rendez-vous offert en visio ou en cabinet."
-  buttonText="Prendre rendez-vous"
-  buttonLink="/rendez-vous"
-/>
+<InternalCTA />
 </>
     </>
   );
@@ -2027,69 +1952,61 @@ function Article25() {
       <>
 <p className="lead">La SCI familiale création notaire est une démarche stratégique pour organiser, protéger et transmettre un patrimoine immobilier en famille. Cette structure juridique séduit de plus en plus de Français souhaitant optimiser la gestion de leurs biens tout en anticipant leur succession dans un cadre sécurisé.</p>
 
-<KeyPoints items={[
+<KeyPoints points={[
   "La SCI familiale facilite la transmission du patrimoine immobilier aux héritiers",
-  "Le recours au notaire est obligatoire en cas d&apos;apport d&apos;un bien immobilier",
+  "Le recours au notaire est obligatoire en cas d'apport d'un bien immobilier",
   "Les statuts notariés offrent une sécurité juridique optimale",
   "Avantages fiscaux : abattements sur les donations de parts tous les 15 ans"
 ]} />
 
-<h2>Qu&apos;est-ce qu&apos;une SCI familiale et pourquoi la créer ?</h2>
-<p>La Société Civile Immobilière (SCI) familiale est une structure juridique permettant à plusieurs membres d&apos;une même famille de détenir et gérer ensemble un ou plusieurs biens immobiliers. Contrairement à l&apos;indivision, qui peut générer des blocages, la SCI offre un cadre souple et stable pour la gestion patrimoniale.</p>
+<h2>Qu'est-ce qu'une SCI familiale et pourquoi la créer ?</h2>
+<p>La Société Civile Immobilière (SCI) familiale est une structure juridique permettant à plusieurs membres d'une même famille de détenir et gérer ensemble un ou plusieurs biens immobiliers. Contrairement à l'indivision, qui peut générer des blocages, la SCI offre un cadre souple et stable pour la gestion patrimoniale.</p>
 <p>Les motivations principales sont multiples : faciliter la transmission aux enfants, éviter les conflits successoraux, optimiser la fiscalité ou encore protéger le conjoint survivant. La SCI permet également de séparer le patrimoine immobilier du patrimoine personnel, offrant ainsi une meilleure organisation financière.</p>
-<p>Le notaire joue un rôle central dans la création de la SCI familiale, particulièrement lorsqu&apos;un bien immobilier est apporté au capital. Son intervention garantit la sécurité juridique de l&apos;opération et l&apos;adaptation des statuts aux objectifs familiaux.</p>
+<p>Le notaire joue un rôle central dans la création de la SCI familiale, particulièrement lorsqu'un bien immobilier est apporté au capital. Son intervention garantit la sécurité juridique de l'opération et l'adaptation des statuts aux objectifs familiaux.</p>
 
 <h2>Les avantages majeurs de la SCI familiale</h2>
 <p>La SCI familiale présente de nombreux atouts qui en font un outil patrimonial particulièrement prisé :</p>
 <ul>
   <li><strong>Transmission facilitée</strong> : les parents peuvent donner progressivement des parts sociales à leurs enfants, en profitant des abattements fiscaux de 100 000 € par parent et par enfant, renouvelables tous les 15 ans.</li>
-  <li><strong>Réduction des droits de succession</strong> : la valorisation des parts peut intégrer une décote pour absence de liquidité, réduisant ainsi l&apos;assiette taxable.</li>
+  <li><strong>Réduction des droits de succession</strong> : la valorisation des parts peut intégrer une décote pour absence de liquidité, réduisant ainsi l'assiette taxable.</li>
   <li><strong>Gestion simplifiée</strong> : le gérant désigné dans les statuts dispose des pouvoirs nécessaires pour administrer les biens sans avoir à solliciter chaque associé.</li>
   <li><strong>Protection du conjoint</strong> : grâce au démembrement de propriété ou aux clauses statutaires spécifiques, le conjoint survivant peut être protégé.</li>
-  <li><strong>Évitement de l&apos;indivision</strong> : la SCI permet de contourner les règles contraignantes de l&apos;indivision successorale.</li>
+  <li><strong>Évitement de l'indivision</strong> : la SCI permet de contourner les règles contraignantes de l'indivision successorale.</li>
 </ul>
-<p>Ces avantages sont d&apos;autant plus efficaces lorsque les statuts sont rédigés sur mesure par un notaire, en tenant compte de la situation familiale et patrimoniale précise.</p>
+<p>Ces avantages sont d'autant plus efficaces lorsque les statuts sont rédigés sur mesure par un notaire, en tenant compte de la situation familiale et patrimoniale précise.</p>
 
-<InternalCTA
-  title="Créez votre SCI familiale avec un notaire"
-  description="Bénéficiez d&apos;un accompagnement personnalisé pour structurer votre patrimoine. Premier rendez-vous offert en visio ou en cabinet."
-  buttonText="Prendre rendez-vous"
-/>
+<InternalCTA />
 
-<h2>Les étapes de création d&apos;une SCI familiale chez le notaire</h2>
-<p>Créer une SCI familiale avec l&apos;assistance d&apos;un notaire suit un processus structuré, garantissant la solidité juridique de la société :</p>
+<h2>Les étapes de création d'une SCI familiale chez le notaire</h2>
+<p>Créer une SCI familiale avec l'assistance d'un notaire suit un processus structuré, garantissant la solidité juridique de la société :</p>
 <ol>
   <li><strong>Définition du projet</strong> : objectifs patrimoniaux, identité des associés, biens à apporter, répartition des parts.</li>
   <li><strong>Rédaction des statuts</strong> : le notaire élabore les statuts en intégrant les clauses adaptées (gérance, cession de parts, agrément, démembrement).</li>
-  <li><strong>Apports au capital</strong> : numéraire ou immobilier. En cas d&apos;apport d&apos;un bien, l&apos;acte notarié est obligatoire.</li>
-  <li><strong>Publication d&apos;un avis de constitution</strong> dans un journal d&apos;annonces légales.</li>
+  <li><strong>Apports au capital</strong> : numéraire ou immobilier. En cas d'apport d'un bien, l'acte notarié est obligatoire.</li>
+  <li><strong>Publication d'un avis de constitution</strong> dans un journal d'annonces légales.</li>
   <li><strong>Immatriculation au RCS</strong> : dépôt du dossier complet au greffe du tribunal de commerce pour obtenir le Kbis.</li>
   <li><strong>Déclaration fiscale</strong> : enregistrement auprès des impôts et choix du régime fiscal (IR ou IS).</li>
 </ol>
-<p>L&apos;accompagnement notarial est précieux pour anticiper les évolutions futures : entrée de nouveaux associés, cession de parts, donation progressive ou même dissolution.</p>
+<p>L'accompagnement notarial est précieux pour anticiper les évolutions futures : entrée de nouveaux associés, cession de parts, donation progressive ou même dissolution.</p>
 
 <h2>Fiscalité et choix stratégiques de la SCI familiale</h2>
-<p>Le choix du régime fiscal est une décision cruciale lors de la création. La SCI familiale peut opter pour l&apos;impôt sur le revenu (IR), régime par défaut, ou pour l&apos;impôt sur les sociétés (IS), qui peut être plus avantageux dans certains cas de location meublée ou de revenus importants.</p>
-<p>À l&apos;IR, les associés sont imposés directement sur leur quote-part des revenus fonciers. À l&apos;IS, la SCI paie l&apos;impôt sur ses bénéfices, mais perd certains avantages comme les abattements pour durée de détention en cas de revente. Le notaire saura vous orienter vers le régime le plus adapté à votre situation.</p>
-<p>La transmission des parts bénéficie d&apos;une fiscalité attractive : donations échelonnées, démembrement (usufruit/nue-propriété), pacte Dutreil dans certains cas. Une stratégie bien pensée peut considérablement réduire la charge fiscale lors de la transmission.</p>
+<p>Le choix du régime fiscal est une décision cruciale lors de la création. La SCI familiale peut opter pour l'impôt sur le revenu (IR), régime par défaut, ou pour l'impôt sur les sociétés (IS), qui peut être plus avantageux dans certains cas de location meublée ou de revenus importants.</p>
+<p>À l'IR, les associés sont imposés directement sur leur quote-part des revenus fonciers. À l'IS, la SCI paie l'impôt sur ses bénéfices, mais perd certains avantages comme les abattements pour durée de détention en cas de revente. Le notaire saura vous orienter vers le régime le plus adapté à votre situation.</p>
+<p>La transmission des parts bénéficie d'une fiscalité attractive : donations échelonnées, démembrement (usufruit/nue-propriété), pacte Dutreil dans certains cas. Une stratégie bien pensée peut considérablement réduire la charge fiscale lors de la transmission.</p>
 
 <h2>FAQ : vos questions sur la SCI familiale</h2>
 <div className="faq">
   <h3>Faut-il obligatoirement un notaire pour créer une SCI familiale ?</h3>
-  <p>Le notaire n&apos;est pas obligatoire si la SCI ne reçoit aucun apport immobilier. En revanche, dès qu&apos;un bien immobilier est apporté au capital, l&apos;acte notarié devient impératif.</p>
+  <p>Le notaire n'est pas obligatoire si la SCI ne reçoit aucun apport immobilier. En revanche, dès qu'un bien immobilier est apporté au capital, l'acte notarié devient impératif.</p>
 
-  <h3>Quel est le coût de création d&apos;une SCI familiale ?</h3>
-  <p>Comptez entre 1 500 € et 3 000 € avec un notaire, incluant la rédaction des statuts, les frais d&apos;enregistrement et la publication légale. Le coût varie selon les apports.</p>
+  <h3>Quel est le coût de création d'une SCI familiale ?</h3>
+  <p>Comptez entre 1 500 € et 3 000 € avec un notaire, incluant la rédaction des statuts, les frais d'enregistrement et la publication légale. Le coût varie selon les apports.</p>
 
-  <h3>Combien d&apos;associés faut-il pour créer une SCI familiale ?</h3>
-  <p>Une SCI requiert au minimum deux associés, souvent des membres d&apos;une même famille (parents, enfants, conjoints). Aucun capital minimum n&apos;est imposé par la loi.</p>
+  <h3>Combien d'associés faut-il pour créer une SCI familiale ?</h3>
+  <p>Une SCI requiert au minimum deux associés, souvent des membres d'une même famille (parents, enfants, conjoints). Aucun capital minimum n'est imposé par la loi.</p>
 </div>
 
-<InternalCTA
-  title="Besoin de conseils pour votre SCI familiale ?"
-  description="Nos notaires partenaires vous accompagnent dans la création et l&apos;optimisation de votre SCI. Premier rendez-vous offert."
-  buttonText="Contacter un notaire"
-/>
+<InternalCTA />
 </>
     </>
   );
@@ -2101,43 +2018,39 @@ function Article26() {
   return (
     <>
       <>
-  <p className="lead">L&apos;achat immobilier en indivision avec un notaire est une solution courante pour acquérir un bien à plusieurs, que ce soit en couple non marié, entre amis, en famille ou avec des investisseurs. Cette formule juridique souple permet de partager la propriété d&apos;un bien selon des quotes-parts définies, mais elle nécessite une préparation rigoureuse pour éviter les conflits futurs.</p>
+  <p className="lead">L'achat immobilier en indivision avec un notaire est une solution courante pour acquérir un bien à plusieurs, que ce soit en couple non marié, entre amis, en famille ou avec des investisseurs. Cette formule juridique souple permet de partager la propriété d'un bien selon des quotes-parts définies, mais elle nécessite une préparation rigoureuse pour éviter les conflits futurs.</p>
 
   <KeyPoints points={[
-    "L&apos;indivision permet à plusieurs personnes d&apos;acquérir un bien ensemble avec des quotes-parts définies",
-    "Le notaire rédige l&apos;acte authentique et conseille sur la répartition des droits",
-    "Une convention d&apos;indivision sécurise les rapports entre coïndivisaires",
-    "Chaque indivisaire peut sortir de l&apos;indivision, ce qui constitue son principal risque"
+    "L'indivision permet à plusieurs personnes d'acquérir un bien ensemble avec des quotes-parts définies",
+    "Le notaire rédige l'acte authentique et conseille sur la répartition des droits",
+    "Une convention d'indivision sécurise les rapports entre coïndivisaires",
+    "Chaque indivisaire peut sortir de l'indivision, ce qui constitue son principal risque"
   ]} />
 
-  <h2>Qu&apos;est-ce que l&apos;achat en indivision ?</h2>
-  <p>L&apos;indivision est la situation juridique dans laquelle plusieurs personnes, appelées indivisaires, sont propriétaires d&apos;un même bien immobilier. Chacun détient une quote-part, exprimée en pourcentage ou en fraction, qui correspond généralement à sa participation financière dans l&apos;acquisition.</p>
-  <p>Cette formule est particulièrement adaptée aux couples non mariés ou non pacsés, aux fratries héritant d&apos;un bien, ou encore aux groupes d&apos;amis ou d&apos;investisseurs souhaitant acquérir un bien commun. Contrairement à la SCI, l&apos;indivision ne crée pas de personne morale : chaque indivisaire reste directement propriétaire d&apos;une fraction du bien.</p>
-  <p>Le notaire joue un rôle central dans ce dispositif. Il rédige l&apos;acte authentique de vente, mentionne précisément les quotes-parts de chaque acquéreur et procède aux formalités de publicité foncière.</p>
+  <h2>Qu'est-ce que l'achat en indivision ?</h2>
+  <p>L'indivision est la situation juridique dans laquelle plusieurs personnes, appelées indivisaires, sont propriétaires d'un même bien immobilier. Chacun détient une quote-part, exprimée en pourcentage ou en fraction, qui correspond généralement à sa participation financière dans l'acquisition.</p>
+  <p>Cette formule est particulièrement adaptée aux couples non mariés ou non pacsés, aux fratries héritant d'un bien, ou encore aux groupes d'amis ou d'investisseurs souhaitant acquérir un bien commun. Contrairement à la SCI, l'indivision ne crée pas de personne morale : chaque indivisaire reste directement propriétaire d'une fraction du bien.</p>
+  <p>Le notaire joue un rôle central dans ce dispositif. Il rédige l'acte authentique de vente, mentionne précisément les quotes-parts de chaque acquéreur et procède aux formalités de publicité foncière.</p>
 
-  <h2>Le rôle du notaire dans l&apos;achat en indivision</h2>
-  <p>Le notaire intervient à plusieurs niveaux lors d&apos;un achat immobilier en indivision. Sa mission ne se limite pas à la rédaction de l&apos;acte de vente : il vous conseille en amont sur la structuration juridique de votre acquisition.</p>
+  <h2>Le rôle du notaire dans l'achat en indivision</h2>
+  <p>Le notaire intervient à plusieurs niveaux lors d'un achat immobilier en indivision. Sa mission ne se limite pas à la rédaction de l'acte de vente : il vous conseille en amont sur la structuration juridique de votre acquisition.</p>
   <h3>La détermination des quotes-parts</h3>
-  <p>Le notaire vérifie que la répartition des quotes-parts correspond bien aux apports financiers de chaque indivisaire. Une répartition inéquitable par rapport aux apports réels peut être qualifiée de donation déguisée par l&apos;administration fiscale, avec des conséquences lourdes en termes de droits de mutation.</p>
-  <h3>La sécurisation par une convention d&apos;indivision</h3>
-  <p>Au-delà de l&apos;acte de vente, le notaire peut rédiger une convention d&apos;indivision. Ce document, conclu pour une durée maximale de 5 ans renouvelable, organise les rapports entre indivisaires : gestion du bien, répartition des charges, désignation d&apos;un gérant, conditions de cession des parts, etc.</p>
+  <p>Le notaire vérifie que la répartition des quotes-parts correspond bien aux apports financiers de chaque indivisaire. Une répartition inéquitable par rapport aux apports réels peut être qualifiée de donation déguisée par l'administration fiscale, avec des conséquences lourdes en termes de droits de mutation.</p>
+  <h3>La sécurisation par une convention d'indivision</h3>
+  <p>Au-delà de l'acte de vente, le notaire peut rédiger une convention d'indivision. Ce document, conclu pour une durée maximale de 5 ans renouvelable, organise les rapports entre indivisaires : gestion du bien, répartition des charges, désignation d'un gérant, conditions de cession des parts, etc.</p>
   <h3>Le financement et les garanties</h3>
-  <p>Si l&apos;achat est financé par un prêt, le notaire s&apos;assure de la cohérence entre les emprunts souscrits et les quotes-parts détenues. Il peut également conseiller sur la souscription d&apos;assurances décès croisées entre concubins pour protéger le survivant.</p>
+  <p>Si l'achat est financé par un prêt, le notaire s'assure de la cohérence entre les emprunts souscrits et les quotes-parts détenues. Il peut également conseiller sur la souscription d'assurances décès croisées entre concubins pour protéger le survivant.</p>
 
-  <h2>Avantages et inconvénients de l&apos;indivision</h2>
-  <p>L&apos;achat en indivision présente plusieurs avantages : simplicité de mise en place, coûts réduits par rapport à une SCI, souplesse dans la répartition des droits. C&apos;est la formule la plus rapide pour acquérir à plusieurs.</p>
-  <p>Cependant, l&apos;indivision comporte des risques bien identifiés. Le principal réside dans l&apos;adage juridique « nul n&apos;est tenu de rester dans l&apos;indivision » : tout indivisaire peut, à tout moment, demander le partage du bien et donc forcer sa vente. De plus, les décisions importantes nécessitent l&apos;accord unanime ou à la majorité des deux tiers selon les actes concernés, ce qui peut bloquer la gestion en cas de désaccord.</p>
-  <p>En cas de décès d&apos;un indivisaire, sa quote-part est transmise à ses héritiers, qui deviennent à leur tour indivisaires. Cette situation peut créer des configurations complexes, notamment pour les couples non mariés.</p>
+  <h2>Avantages et inconvénients de l'indivision</h2>
+  <p>L'achat en indivision présente plusieurs avantages : simplicité de mise en place, coûts réduits par rapport à une SCI, souplesse dans la répartition des droits. C'est la formule la plus rapide pour acquérir à plusieurs.</p>
+  <p>Cependant, l'indivision comporte des risques bien identifiés. Le principal réside dans l'adage juridique « nul n'est tenu de rester dans l'indivision » : tout indivisaire peut, à tout moment, demander le partage du bien et donc forcer sa vente. De plus, les décisions importantes nécessitent l'accord unanime ou à la majorité des deux tiers selon les actes concernés, ce qui peut bloquer la gestion en cas de désaccord.</p>
+  <p>En cas de décès d'un indivisaire, sa quote-part est transmise à ses héritiers, qui deviennent à leur tour indivisaires. Cette situation peut créer des configurations complexes, notamment pour les couples non mariés.</p>
 
   <h2>Indivision ou SCI : que choisir ?</h2>
-  <p>Le choix entre indivision et SCI dépend de votre projet et de votre situation. L&apos;indivision convient parfaitement pour un achat simple, entre personnes proches, avec une vision à court ou moyen terme. La SCI sera préférable pour un investissement locatif structuré, une transmission patrimoniale optimisée ou un projet impliquant plusieurs investisseurs sur le long terme.</p>
-  <p>Votre notaire est le mieux placé pour vous orienter vers la solution adaptée à vos objectifs patrimoniaux, fiscaux et familiaux. Un entretien préalable permet d&apos;analyser votre situation et de comparer les implications de chaque option.</p>
+  <p>Le choix entre indivision et SCI dépend de votre projet et de votre situation. L'indivision convient parfaitement pour un achat simple, entre personnes proches, avec une vision à court ou moyen terme. La SCI sera préférable pour un investissement locatif structuré, une transmission patrimoniale optimisée ou un projet impliquant plusieurs investisseurs sur le long terme.</p>
+  <p>Votre notaire est le mieux placé pour vous orienter vers la solution adaptée à vos objectifs patrimoniaux, fiscaux et familiaux. Un entretien préalable permet d'analyser votre situation et de comparer les implications de chaque option.</p>
 
-  <InternalCTA
-    title="Vous projetez un achat immobilier en indivision ?"
-    description="Nos notaires vous accompagnent dans la structuration de votre acquisition et la rédaction de la convention d&apos;indivision. Premier rendez-vous offert, en visio ou en cabinet."
-    buttonText="Prendre rendez-vous"
-  />
+  <InternalCTA />
 </>
     </>
   );
@@ -2149,72 +2062,135 @@ function Article27() {
   return (
     <>
       <>
-<p className="lead">La <strong>servitude de passage notaire</strong> est un droit réel immobilier qui permet au propriétaire d&apos;un terrain enclavé d&apos;accéder à la voie publique en traversant le fonds voisin. Son établissement, sa modification ou sa suppression nécessitent l&apos;intervention d&apos;un notaire pour garantir sa validité juridique et son opposabilité aux tiers.</p>
+<p className="lead">La <strong>servitude de passage notaire</strong> est un droit réel immobilier qui permet au propriétaire d'un terrain enclavé d'accéder à la voie publique en traversant le fonds voisin. Son établissement, sa modification ou sa suppression nécessitent l'intervention d'un notaire pour garantir sa validité juridique et son opposabilité aux tiers.</p>
 
-<KeyPoints items={[
+<KeyPoints points={[
   "La servitude de passage est régie par les articles 682 à 685-1 du Code civil",
-  "L&apos;acte notarié est obligatoire pour les servitudes conventionnelles",
+  "L'acte notarié est obligatoire pour les servitudes conventionnelles",
   "La publication au service de la publicité foncière la rend opposable aux tiers",
-  "Le notaire vérifie l&apos;enclavement et négocie l&apos;indemnité éventuelle",
+  "Le notaire vérifie l'enclavement et négocie l'indemnité éventuelle",
   "Les frais oscillent entre 800 et 2 000 € selon la complexité du dossier"
 ]} />
 
-<h2>Qu&apos;est-ce qu&apos;une servitude de passage ?</h2>
-<p>La servitude de passage est une charge imposée à un fonds (le fonds servant) au profit d&apos;un autre fonds (le fonds dominant). Elle permet au propriétaire du terrain enclavé de circuler sur la propriété voisine pour rejoindre la voie publique.</p>
+<h2>Qu'est-ce qu'une servitude de passage ?</h2>
+<p>La servitude de passage est une charge imposée à un fonds (le fonds servant) au profit d'un autre fonds (le fonds dominant). Elle permet au propriétaire du terrain enclavé de circuler sur la propriété voisine pour rejoindre la voie publique.</p>
 
 <p>On distingue trois types de servitudes de passage :</p>
 <ul>
-  <li><strong>La servitude légale</strong> : imposée par la loi en cas d&apos;enclavement total (article 682 du Code civil)</li>
+  <li><strong>La servitude légale</strong> : imposée par la loi en cas d'enclavement total (article 682 du Code civil)</li>
   <li><strong>La servitude conventionnelle</strong> : créée par accord entre les propriétaires, même sans enclavement</li>
-  <li><strong>La servitude par destination du père de famille</strong> : résultant d&apos;une division d&apos;un fonds initialement unique</li>
+  <li><strong>La servitude par destination du père de famille</strong> : résultant d'une division d'un fonds initialement unique</li>
 </ul>
 
 <p>Dans tous les cas, le recours à un notaire est fortement recommandé, voire obligatoire, pour formaliser le droit et le rendre opposable aux futurs propriétaires.</p>
 
-<h2>Le rôle du notaire dans l&apos;établissement d&apos;une servitude de passage</h2>
-<p>Le notaire intervient à plusieurs niveaux pour sécuriser la création d&apos;une servitude de passage :</p>
+<h2>Le rôle du notaire dans l'établissement d'une servitude de passage</h2>
+<p>Le notaire intervient à plusieurs niveaux pour sécuriser la création d'une servitude de passage :</p>
 
 <h3>Vérification préalable</h3>
-<p>Avant la rédaction de l&apos;acte, le notaire procède à plusieurs vérifications essentielles : analyse du titre de propriété des deux fonds, consultation du cadastre, examen du plan local d&apos;urbanisme et vérification de l&apos;existence d&apos;un véritable enclavement le cas échéant.</p>
+<p>Avant la rédaction de l'acte, le notaire procède à plusieurs vérifications essentielles : analyse du titre de propriété des deux fonds, consultation du cadastre, examen du plan local d'urbanisme et vérification de l'existence d'un véritable enclavement le cas échéant.</p>
 
-<h3>Rédaction de l&apos;acte authentique</h3>
-<p>Le notaire rédige l&apos;acte de servitude en précisant : l&apos;identification précise des fonds servant et dominant, l&apos;assiette exacte du passage (tracé, largeur, longueur), les modalités d&apos;usage (piéton, véhicule, engins agricoles), l&apos;indemnité éventuelle versée au propriétaire du fonds servant, ainsi que les obligations d&apos;entretien.</p>
+<h3>Rédaction de l'acte authentique</h3>
+<p>Le notaire rédige l'acte de servitude en précisant : l'identification précise des fonds servant et dominant, l'assiette exacte du passage (tracé, largeur, longueur), les modalités d'usage (piéton, véhicule, engins agricoles), l'indemnité éventuelle versée au propriétaire du fonds servant, ainsi que les obligations d'entretien.</p>
 
 <h3>Publication foncière</h3>
-<p>Une fois signé, l&apos;acte est publié au service de la publicité foncière. Cette formalité est cruciale : elle rend la servitude opposable aux tiers, notamment aux futurs acquéreurs des deux propriétés.</p>
+<p>Une fois signé, l'acte est publié au service de la publicité foncière. Cette formalité est cruciale : elle rend la servitude opposable aux tiers, notamment aux futurs acquéreurs des deux propriétés.</p>
 
 <InternalCTA />
 
 <h2>Les modalités pratiques et le coût</h2>
-<p>L&apos;établissement d&apos;une servitude de passage chez le notaire suit plusieurs étapes. Tout commence par un rendez-vous au cours duquel les parties exposent leur situation. Le notaire analyse la faisabilité juridique et propose une rédaction adaptée.</p>
+<p>L'établissement d'une servitude de passage chez le notaire suit plusieurs étapes. Tout commence par un rendez-vous au cours duquel les parties exposent leur situation. Le notaire analyse la faisabilité juridique et propose une rédaction adaptée.</p>
 
 <p>Les frais à prévoir comprennent :</p>
 <ul>
   <li><strong>Les émoluments du notaire</strong> : proportionnels à la valeur de la servitude ou forfaitaires</li>
-  <li><strong>Les droits d&apos;enregistrement</strong> : généralement de 125 € pour un acte de servitude</li>
+  <li><strong>Les droits d'enregistrement</strong> : généralement de 125 € pour un acte de servitude</li>
   <li><strong>Les frais de publication foncière</strong> : environ 0,10 % de la valeur</li>
-  <li><strong>L&apos;indemnité au propriétaire du fonds servant</strong> : variable selon la gêne occasionnée</li>
+  <li><strong>L'indemnité au propriétaire du fonds servant</strong> : variable selon la gêne occasionnée</li>
 </ul>
 
-<p>En cas d&apos;enclavement, l&apos;indemnité est obligatoire et calculée en fonction du préjudice subi : perte de surface utile, dépréciation du bien, nuisances liées au passage. À l&apos;inverse, une servitude conventionnelle peut être gratuite si les parties en conviennent.</p>
+<p>En cas d'enclavement, l'indemnité est obligatoire et calculée en fonction du préjudice subi : perte de surface utile, dépréciation du bien, nuisances liées au passage. À l'inverse, une servitude conventionnelle peut être gratuite si les parties en conviennent.</p>
 
 <h2>Modifier ou supprimer une servitude de passage</h2>
-<p>Une servitude de passage n&apos;est pas figée dans le temps. Plusieurs situations peuvent justifier sa modification ou son extinction.</p>
+<p>Une servitude de passage n'est pas figée dans le temps. Plusieurs situations peuvent justifier sa modification ou son extinction.</p>
 
-<p><strong>La modification</strong> peut intervenir pour déplacer l&apos;assiette du passage, élargir ou restreindre son usage. Elle nécessite l&apos;accord des deux propriétaires et un nouvel acte notarié, lui-même publié au service de la publicité foncière.</p>
+<p><strong>La modification</strong> peut intervenir pour déplacer l'assiette du passage, élargir ou restreindre son usage. Elle nécessite l'accord des deux propriétaires et un nouvel acte notarié, lui-même publié au service de la publicité foncière.</p>
 
-<p><strong>L&apos;extinction</strong> peut résulter de plusieurs causes : la réunion des deux fonds dans le patrimoine d&apos;un même propriétaire, le non-usage pendant 30 ans, la cessation de l&apos;état d&apos;enclavement (création d&apos;une nouvelle voie publique par exemple) ou un accord amiable entre les parties.</p>
+<p><strong>L'extinction</strong> peut résulter de plusieurs causes : la réunion des deux fonds dans le patrimoine d'un même propriétaire, le non-usage pendant 30 ans, la cessation de l'état d'enclavement (création d'une nouvelle voie publique par exemple) ou un accord amiable entre les parties.</p>
 
 <p>Dans tous les cas, le passage devant notaire reste indispensable pour officialiser ces changements et mettre à jour la situation juridique des biens concernés.</p>
 
 <h2>Conseils pratiques pour éviter les litiges</h2>
-<p>Les conflits liés aux servitudes de passage sont fréquents. Pour les prévenir, plusieurs précautions s&apos;imposent. Faites établir un plan précis annexé à l&apos;acte notarié, idéalement par un géomètre-expert. Définissez clairement les usages autorisés (véhicules légers uniquement, engins agricoles, piétons) et les horaires éventuels.</p>
+<p>Les conflits liés aux servitudes de passage sont fréquents. Pour les prévenir, plusieurs précautions s'imposent. Faites établir un plan précis annexé à l'acte notarié, idéalement par un géomètre-expert. Définissez clairement les usages autorisés (véhicules légers uniquement, engins agricoles, piétons) et les horaires éventuels.</p>
 
-<p>Précisez les obligations d&apos;entretien : qui finance la réfection du chemin, le déneigement, l&apos;élagage ? Anticipez également les évolutions futures : que se passe-t-il en cas de division parcellaire, de construction nouvelle, de changement d&apos;activité ?</p>
+<p>Précisez les obligations d'entretien : qui finance la réfection du chemin, le déneigement, l'élagage ? Anticipez également les évolutions futures : que se passe-t-il en cas de division parcellaire, de construction nouvelle, de changement d'activité ?</p>
 
-<p>Un acte notarié bien rédigé constitue votre meilleure protection juridique. N&apos;hésitez pas à consulter un notaire dès les premières discussions avec votre voisin.</p>
+<p>Un acte notarié bien rédigé constitue votre meilleure protection juridique. N'hésitez pas à consulter un notaire dès les premières discussions avec votre voisin.</p>
 
 <InternalCTA />
+</>
+    </>
+  );
+}
+
+/* ── Article 28 ─────────────────────────────────────────────────────────── */
+
+function Article28() {
+  return (
+    <>
+      <>
+  <p className="lead">La <strong>promesse de vente unilatérale notaire</strong> est un avant-contrat immobilier par lequel le vendeur s&apos;engage seul à vendre son bien à un acquéreur potentiel, qui dispose d&apos;une option d&apos;achat pendant une durée déterminée. Cet acte, souvent rédigé par un notaire, sécurise la transaction tout en laissant à l&apos;acheteur le temps de finaliser son projet.</p>
+
+  <KeyPoints items={[
+    "La promesse unilatérale engage uniquement le vendeur, l&apos;acheteur dispose d&apos;une option",
+    "L&apos;acquéreur verse une indemnité d&apos;immobilisation (5 à 10 % du prix)",
+    "La rédaction par notaire offre une sécurité juridique maximale",
+    "Délai de rétractation légal de 10 jours pour l&apos;acquéreur particulier",
+    "Enregistrement obligatoire dans les 10 jours auprès des impôts"
+  ]} />
+
+  <h2>Qu&apos;est-ce qu&apos;une promesse de vente unilatérale ?</h2>
+  <p>La promesse unilatérale de vente, parfois appelée &quot;option d&apos;achat&quot;, est un contrat par lequel un propriétaire (le promettant) s&apos;engage à vendre son bien immobilier à un bénéficiaire désigné, à un prix fixé, pendant un délai déterminé. Contrairement au compromis de vente, l&apos;acheteur n&apos;est pas tenu d&apos;acquérir le bien : il dispose simplement d&apos;une faculté de l&apos;acheter, qu&apos;il peut lever ou non.</p>
+  <p>Cet avant-contrat est particulièrement utile lorsque l&apos;acquéreur souhaite se donner le temps de la réflexion, d&apos;obtenir un financement ou de vérifier certains éléments du bien (urbanisme, servitudes, diagnostics) avant de s&apos;engager définitivement.</p>
+  <p>En contrepartie de l&apos;immobilisation du bien, l&apos;acheteur verse une <strong>indemnité d&apos;immobilisation</strong>, généralement comprise entre 5 % et 10 % du prix de vente. Cette somme est conservée par le notaire jusqu&apos;à la levée d&apos;option ou son abandon.</p>
+
+  <h2>Pourquoi faire rédiger sa promesse unilatérale par un notaire ?</h2>
+  <p>Bien que la promesse unilatérale puisse être rédigée sous seing privé, l&apos;intervention d&apos;un notaire présente plusieurs avantages déterminants :</p>
+  <ul>
+    <li><strong>Sécurité juridique</strong> : le notaire vérifie la situation du bien, son urbanisme, l&apos;absence de servitudes cachées et la capacité juridique des parties.</li>
+    <li><strong>Force exécutoire</strong> : l&apos;acte authentique a la même valeur qu&apos;un jugement, ce qui facilite son exécution forcée en cas de litige.</li>
+    <li><strong>Conseil personnalisé</strong> : le notaire rédige des clauses sur-mesure (conditions suspensives, modalités de financement, état du bien).</li>
+    <li><strong>Enregistrement automatique</strong> : le notaire se charge de toutes les formalités fiscales et administratives.</li>
+  </ul>
+  <p>Par ailleurs, la promesse unilatérale supérieure à 18 mois doit obligatoirement être conclue par acte authentique notarié, sous peine de nullité (article L. 290-1 du Code de la construction).</p>
+
+  <h2>Le fonctionnement de l&apos;indemnité d&apos;immobilisation</h2>
+  <p>L&apos;indemnité d&apos;immobilisation est la contrepartie financière de l&apos;engagement du vendeur. Son sort dépend de la suite donnée à la promesse :</p>
+  <ul>
+    <li>Si l&apos;acquéreur <strong>lève l&apos;option</strong> et achète le bien, l&apos;indemnité s&apos;impute sur le prix de vente.</li>
+    <li>Si l&apos;acquéreur <strong>renonce</strong> sans motif légitime à l&apos;expiration du délai, l&apos;indemnité reste acquise au vendeur à titre de dédommagement.</li>
+    <li>Si une <strong>condition suspensive</strong> ne se réalise pas (refus de prêt, droit de préemption exercé), l&apos;indemnité est restituée à l&apos;acheteur.</li>
+    <li>En cas de <strong>rétractation</strong> dans les 10 jours (acquéreur particulier), l&apos;indemnité est intégralement remboursée.</li>
+  </ul>
+  <p>Cette somme est en principe consignée chez le notaire, garantissant ainsi la neutralité et la sécurité des fonds pendant toute la durée de la promesse.</p>
+
+  <h2>Délais, formalités et coûts à prévoir</h2>
+  <p>La promesse unilatérale doit être <strong>enregistrée auprès de l&apos;administration fiscale dans les 10 jours</strong> suivant sa signature, sous peine de nullité. Cette formalité est systématiquement assurée par le notaire lorsqu&apos;il rédige l&apos;acte.</p>
+  <p>La durée d&apos;option est librement fixée entre les parties, généralement entre 2 et 4 mois, le temps pour l&apos;acquéreur d&apos;obtenir son financement et de réaliser les vérifications nécessaires.</p>
+  <p>Côté budget, prévoyez :</p>
+  <ul>
+    <li>Les <strong>frais de rédaction</strong> du notaire : entre 250 et 500 € en moyenne</li>
+    <li>Les <strong>droits d&apos;enregistrement</strong> : 125 € forfaitaires</li>
+    <li>Ces frais sont traditionnellement à la charge de l&apos;acquéreur, sauf accord contraire</li>
+  </ul>
+  <p>À la levée d&apos;option, l&apos;acte authentique de vente sera signé dans un délai de 2 à 3 mois, et les frais de notaire classiques (7 à 8 % dans l&apos;ancien) s&apos;appliqueront.</p>
+
+  <InternalCTA
+    title="Sécurisez votre promesse de vente avec un notaire"
+    description="Bénéficiez d&apos;un premier rendez-vous offert avec un notaire pour rédiger votre promesse unilatérale de vente en toute sérénité."
+    buttonText="Trouver un notaire"
+    href="/trouver-notaire"
+  />
 </>
     </>
   );

@@ -744,6 +744,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "viager-notaire-guide": () => <Article24 />,
   "sci-familiale-creation-notaire": () => <Article25 />,
   "achat-immobilier-indivision": () => <Article26 />,
+  "servitude-passage-notaire": () => <Article27 />,
 };
 
 
@@ -2137,6 +2138,83 @@ function Article26() {
     description="Nos notaires vous accompagnent dans la structuration de votre acquisition et la rédaction de la convention d&apos;indivision. Premier rendez-vous offert, en visio ou en cabinet."
     buttonText="Prendre rendez-vous"
   />
+</>
+    </>
+  );
+}
+
+/* ── Article 27 ─────────────────────────────────────────────────────────── */
+
+function Article27() {
+  return (
+    <>
+      <>
+<p className="lead">La <strong>servitude de passage notaire</strong> est un droit réel immobilier qui permet au propriétaire d&apos;un terrain enclavé d&apos;accéder à la voie publique en traversant le fonds voisin. Son établissement, sa modification ou sa suppression nécessitent l&apos;intervention d&apos;un notaire pour garantir sa validité juridique et son opposabilité aux tiers.</p>
+
+<KeyPoints items={[
+  "La servitude de passage est régie par les articles 682 à 685-1 du Code civil",
+  "L&apos;acte notarié est obligatoire pour les servitudes conventionnelles",
+  "La publication au service de la publicité foncière la rend opposable aux tiers",
+  "Le notaire vérifie l&apos;enclavement et négocie l&apos;indemnité éventuelle",
+  "Les frais oscillent entre 800 et 2 000 € selon la complexité du dossier"
+]} />
+
+<h2>Qu&apos;est-ce qu&apos;une servitude de passage ?</h2>
+<p>La servitude de passage est une charge imposée à un fonds (le fonds servant) au profit d&apos;un autre fonds (le fonds dominant). Elle permet au propriétaire du terrain enclavé de circuler sur la propriété voisine pour rejoindre la voie publique.</p>
+
+<p>On distingue trois types de servitudes de passage :</p>
+<ul>
+  <li><strong>La servitude légale</strong> : imposée par la loi en cas d&apos;enclavement total (article 682 du Code civil)</li>
+  <li><strong>La servitude conventionnelle</strong> : créée par accord entre les propriétaires, même sans enclavement</li>
+  <li><strong>La servitude par destination du père de famille</strong> : résultant d&apos;une division d&apos;un fonds initialement unique</li>
+</ul>
+
+<p>Dans tous les cas, le recours à un notaire est fortement recommandé, voire obligatoire, pour formaliser le droit et le rendre opposable aux futurs propriétaires.</p>
+
+<h2>Le rôle du notaire dans l&apos;établissement d&apos;une servitude de passage</h2>
+<p>Le notaire intervient à plusieurs niveaux pour sécuriser la création d&apos;une servitude de passage :</p>
+
+<h3>Vérification préalable</h3>
+<p>Avant la rédaction de l&apos;acte, le notaire procède à plusieurs vérifications essentielles : analyse du titre de propriété des deux fonds, consultation du cadastre, examen du plan local d&apos;urbanisme et vérification de l&apos;existence d&apos;un véritable enclavement le cas échéant.</p>
+
+<h3>Rédaction de l&apos;acte authentique</h3>
+<p>Le notaire rédige l&apos;acte de servitude en précisant : l&apos;identification précise des fonds servant et dominant, l&apos;assiette exacte du passage (tracé, largeur, longueur), les modalités d&apos;usage (piéton, véhicule, engins agricoles), l&apos;indemnité éventuelle versée au propriétaire du fonds servant, ainsi que les obligations d&apos;entretien.</p>
+
+<h3>Publication foncière</h3>
+<p>Une fois signé, l&apos;acte est publié au service de la publicité foncière. Cette formalité est cruciale : elle rend la servitude opposable aux tiers, notamment aux futurs acquéreurs des deux propriétés.</p>
+
+<InternalCTA />
+
+<h2>Les modalités pratiques et le coût</h2>
+<p>L&apos;établissement d&apos;une servitude de passage chez le notaire suit plusieurs étapes. Tout commence par un rendez-vous au cours duquel les parties exposent leur situation. Le notaire analyse la faisabilité juridique et propose une rédaction adaptée.</p>
+
+<p>Les frais à prévoir comprennent :</p>
+<ul>
+  <li><strong>Les émoluments du notaire</strong> : proportionnels à la valeur de la servitude ou forfaitaires</li>
+  <li><strong>Les droits d&apos;enregistrement</strong> : généralement de 125 € pour un acte de servitude</li>
+  <li><strong>Les frais de publication foncière</strong> : environ 0,10 % de la valeur</li>
+  <li><strong>L&apos;indemnité au propriétaire du fonds servant</strong> : variable selon la gêne occasionnée</li>
+</ul>
+
+<p>En cas d&apos;enclavement, l&apos;indemnité est obligatoire et calculée en fonction du préjudice subi : perte de surface utile, dépréciation du bien, nuisances liées au passage. À l&apos;inverse, une servitude conventionnelle peut être gratuite si les parties en conviennent.</p>
+
+<h2>Modifier ou supprimer une servitude de passage</h2>
+<p>Une servitude de passage n&apos;est pas figée dans le temps. Plusieurs situations peuvent justifier sa modification ou son extinction.</p>
+
+<p><strong>La modification</strong> peut intervenir pour déplacer l&apos;assiette du passage, élargir ou restreindre son usage. Elle nécessite l&apos;accord des deux propriétaires et un nouvel acte notarié, lui-même publié au service de la publicité foncière.</p>
+
+<p><strong>L&apos;extinction</strong> peut résulter de plusieurs causes : la réunion des deux fonds dans le patrimoine d&apos;un même propriétaire, le non-usage pendant 30 ans, la cessation de l&apos;état d&apos;enclavement (création d&apos;une nouvelle voie publique par exemple) ou un accord amiable entre les parties.</p>
+
+<p>Dans tous les cas, le passage devant notaire reste indispensable pour officialiser ces changements et mettre à jour la situation juridique des biens concernés.</p>
+
+<h2>Conseils pratiques pour éviter les litiges</h2>
+<p>Les conflits liés aux servitudes de passage sont fréquents. Pour les prévenir, plusieurs précautions s&apos;imposent. Faites établir un plan précis annexé à l&apos;acte notarié, idéalement par un géomètre-expert. Définissez clairement les usages autorisés (véhicules légers uniquement, engins agricoles, piétons) et les horaires éventuels.</p>
+
+<p>Précisez les obligations d&apos;entretien : qui finance la réfection du chemin, le déneigement, l&apos;élagage ? Anticipez également les évolutions futures : que se passe-t-il en cas de division parcellaire, de construction nouvelle, de changement d&apos;activité ?</p>
+
+<p>Un acte notarié bien rédigé constitue votre meilleure protection juridique. N&apos;hésitez pas à consulter un notaire dès les premières discussions avec votre voisin.</p>
+
+<InternalCTA />
 </>
     </>
   );

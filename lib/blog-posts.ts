@@ -305,6 +305,21 @@ export interface BlogPost {
     { question: "Que se passe-t-il si un indivisaire veut vendre sa part ?", answer: "Chaque indivisaire peut céder sa quote-part, mais les autres bénéficient d&apos;un droit de préemption. À défaut d&apos;accord, le partage judiciaire peut être demandé." },
   ],
   },
+  {
+    slug: "servitude-passage-notaire",
+    title: "Servitude de passage : rôle du notaire et démarches",
+    excerpt: "Servitude de passage et notaire : découvrez comment l'établir, la modifier ou la contester. Conseils pratiques et démarches détaillées.",
+    date: "2026-06-09",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["servitude de passage notaire", "acte de servitude", "droit de passage", "enclavement", "servitude conventionnelle"],
+    canonicalUrl: `${BASE}/blog/servitude-passage-notaire`,
+  faqs: [
+    { question: "Faut-il obligatoirement un notaire pour une servitude de passage ?", answer: "Oui, dès lors que la servitude est conventionnelle et destinée à être publiée au service de la publicité foncière, l&apos;acte notarié est obligatoire pour la rendre opposable aux tiers." },
+    { question: "Combien coûte la création d&apos;une servitude de passage chez le notaire ?", answer: "Les frais varient généralement entre 800 et 2 000 €, incluant les émoluments du notaire, les droits d&apos;enregistrement et les frais de publication foncière." },
+    { question: "Une servitude de passage peut-elle être supprimée ?", answer: "Oui, par accord amiable entre les propriétaires via un acte notarié, par non-usage pendant 30 ans, ou si l&apos;état d&apos;enclavement cesse." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -676,6 +691,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Faut-il obligatoirement passer par un notaire pour acheter en indivision ?", answer: "Oui, tout achat immobilier nécessite un acte authentique rédigé par un notaire, qu&apos;il s&apos;agisse d&apos;un achat seul ou en indivision." },
     { question: "Peut-on fixer des quotes-parts différentes des apports ?", answer: "Oui, mais cela peut être requalifié en donation déguisée par l&apos;administration fiscale. Le notaire vous conseillera la répartition la plus adaptée." },
     { question: "Que se passe-t-il si un indivisaire veut vendre sa part ?", answer: "Chaque indivisaire peut céder sa quote-part, mais les autres bénéficient d&apos;un droit de préemption. À défaut d&apos;accord, le partage judiciaire peut être demandé." },
+  ],
+  },
+  {
+    slug: "servitude-passage-notaire",
+    title: "Servitude de passage : rôle du notaire et démarches",
+    excerpt: "Servitude de passage et notaire : découvrez comment l'établir, la modifier ou la contester. Conseils pratiques et démarches détaillées.",
+    date: "2026-06-09",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["servitude de passage notaire", "acte de servitude", "droit de passage", "enclavement", "servitude conventionnelle"],
+    canonicalUrl: `${BASE}/blog/servitude-passage-notaire`,
+  faqs: [
+    { question: "Faut-il obligatoirement un notaire pour une servitude de passage ?", answer: "Oui, dès lors que la servitude est conventionnelle et destinée à être publiée au service de la publicité foncière, l&apos;acte notarié est obligatoire pour la rendre opposable aux tiers." },
+    { question: "Combien coûte la création d&apos;une servitude de passage chez le notaire ?", answer: "Les frais varient généralement entre 800 et 2 000 €, incluant les émoluments du notaire, les droits d&apos;enregistrement et les frais de publication foncière." },
+    { question: "Une servitude de passage peut-elle être supprimée ?", answer: "Oui, par accord amiable entre les propriétaires via un acte notarié, par non-usage pendant 30 ans, ou si l&apos;état d&apos;enclavement cesse." },
   ],
   },
 ];

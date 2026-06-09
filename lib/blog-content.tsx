@@ -2140,58 +2140,53 @@ function Article28() {
   return (
     <>
       <>
-  <p className="lead">La <strong>promesse de vente unilatérale notaire</strong> est un avant-contrat immobilier par lequel le vendeur s&apos;engage seul à vendre son bien à un acquéreur potentiel, qui dispose d&apos;une option d&apos;achat pendant une durée déterminée. Cet acte, souvent rédigé par un notaire, sécurise la transaction tout en laissant à l&apos;acheteur le temps de finaliser son projet.</p>
+  <p className="lead">La <strong>promesse de vente unilatérale notaire</strong> est un avant-contrat immobilier par lequel le vendeur s'engage seul à vendre son bien à un acquéreur potentiel, qui dispose d'une option d'achat pendant une durée déterminée. Cet acte, souvent rédigé par un notaire, sécurise la transaction tout en laissant à l'acheteur le temps de finaliser son projet.</p>
 
-  <KeyPoints items={[
-    "La promesse unilatérale engage uniquement le vendeur, l&apos;acheteur dispose d&apos;une option",
-    "L&apos;acquéreur verse une indemnité d&apos;immobilisation (5 à 10 % du prix)",
+  <KeyPoints points={[
+    "La promesse unilatérale engage uniquement le vendeur, l'acheteur dispose d'une option",
+    "L'acquéreur verse une indemnité d'immobilisation (5 à 10 % du prix)",
     "La rédaction par notaire offre une sécurité juridique maximale",
-    "Délai de rétractation légal de 10 jours pour l&apos;acquéreur particulier",
+    "Délai de rétractation légal de 10 jours pour l'acquéreur particulier",
     "Enregistrement obligatoire dans les 10 jours auprès des impôts"
   ]} />
 
-  <h2>Qu&apos;est-ce qu&apos;une promesse de vente unilatérale ?</h2>
-  <p>La promesse unilatérale de vente, parfois appelée &quot;option d&apos;achat&quot;, est un contrat par lequel un propriétaire (le promettant) s&apos;engage à vendre son bien immobilier à un bénéficiaire désigné, à un prix fixé, pendant un délai déterminé. Contrairement au compromis de vente, l&apos;acheteur n&apos;est pas tenu d&apos;acquérir le bien : il dispose simplement d&apos;une faculté de l&apos;acheter, qu&apos;il peut lever ou non.</p>
-  <p>Cet avant-contrat est particulièrement utile lorsque l&apos;acquéreur souhaite se donner le temps de la réflexion, d&apos;obtenir un financement ou de vérifier certains éléments du bien (urbanisme, servitudes, diagnostics) avant de s&apos;engager définitivement.</p>
-  <p>En contrepartie de l&apos;immobilisation du bien, l&apos;acheteur verse une <strong>indemnité d&apos;immobilisation</strong>, généralement comprise entre 5 % et 10 % du prix de vente. Cette somme est conservée par le notaire jusqu&apos;à la levée d&apos;option ou son abandon.</p>
+  <h2>Qu'est-ce qu'une promesse de vente unilatérale ?</h2>
+  <p>La promesse unilatérale de vente, parfois appelée "option d'achat", est un contrat par lequel un propriétaire (le promettant) s'engage à vendre son bien immobilier à un bénéficiaire désigné, à un prix fixé, pendant un délai déterminé. Contrairement au compromis de vente, l'acheteur n'est pas tenu d'acquérir le bien : il dispose simplement d'une faculté de l'acheter, qu'il peut lever ou non.</p>
+  <p>Cet avant-contrat est particulièrement utile lorsque l'acquéreur souhaite se donner le temps de la réflexion, d'obtenir un financement ou de vérifier certains éléments du bien (urbanisme, servitudes, diagnostics) avant de s'engager définitivement.</p>
+  <p>En contrepartie de l'immobilisation du bien, l'acheteur verse une <strong>indemnité d'immobilisation</strong>, généralement comprise entre 5 % et 10 % du prix de vente. Cette somme est conservée par le notaire jusqu'à la levée d'option ou son abandon.</p>
 
   <h2>Pourquoi faire rédiger sa promesse unilatérale par un notaire ?</h2>
-  <p>Bien que la promesse unilatérale puisse être rédigée sous seing privé, l&apos;intervention d&apos;un notaire présente plusieurs avantages déterminants :</p>
+  <p>Bien que la promesse unilatérale puisse être rédigée sous seing privé, l'intervention d'un notaire présente plusieurs avantages déterminants :</p>
   <ul>
-    <li><strong>Sécurité juridique</strong> : le notaire vérifie la situation du bien, son urbanisme, l&apos;absence de servitudes cachées et la capacité juridique des parties.</li>
-    <li><strong>Force exécutoire</strong> : l&apos;acte authentique a la même valeur qu&apos;un jugement, ce qui facilite son exécution forcée en cas de litige.</li>
+    <li><strong>Sécurité juridique</strong> : le notaire vérifie la situation du bien, son urbanisme, l'absence de servitudes cachées et la capacité juridique des parties.</li>
+    <li><strong>Force exécutoire</strong> : l'acte authentique a la même valeur qu'un jugement, ce qui facilite son exécution forcée en cas de litige.</li>
     <li><strong>Conseil personnalisé</strong> : le notaire rédige des clauses sur-mesure (conditions suspensives, modalités de financement, état du bien).</li>
     <li><strong>Enregistrement automatique</strong> : le notaire se charge de toutes les formalités fiscales et administratives.</li>
   </ul>
   <p>Par ailleurs, la promesse unilatérale supérieure à 18 mois doit obligatoirement être conclue par acte authentique notarié, sous peine de nullité (article L. 290-1 du Code de la construction).</p>
 
-  <h2>Le fonctionnement de l&apos;indemnité d&apos;immobilisation</h2>
-  <p>L&apos;indemnité d&apos;immobilisation est la contrepartie financière de l&apos;engagement du vendeur. Son sort dépend de la suite donnée à la promesse :</p>
+  <h2>Le fonctionnement de l'indemnité d'immobilisation</h2>
+  <p>L'indemnité d'immobilisation est la contrepartie financière de l'engagement du vendeur. Son sort dépend de la suite donnée à la promesse :</p>
   <ul>
-    <li>Si l&apos;acquéreur <strong>lève l&apos;option</strong> et achète le bien, l&apos;indemnité s&apos;impute sur le prix de vente.</li>
-    <li>Si l&apos;acquéreur <strong>renonce</strong> sans motif légitime à l&apos;expiration du délai, l&apos;indemnité reste acquise au vendeur à titre de dédommagement.</li>
-    <li>Si une <strong>condition suspensive</strong> ne se réalise pas (refus de prêt, droit de préemption exercé), l&apos;indemnité est restituée à l&apos;acheteur.</li>
-    <li>En cas de <strong>rétractation</strong> dans les 10 jours (acquéreur particulier), l&apos;indemnité est intégralement remboursée.</li>
+    <li>Si l'acquéreur <strong>lève l'option</strong> et achète le bien, l'indemnité s'impute sur le prix de vente.</li>
+    <li>Si l'acquéreur <strong>renonce</strong> sans motif légitime à l'expiration du délai, l'indemnité reste acquise au vendeur à titre de dédommagement.</li>
+    <li>Si une <strong>condition suspensive</strong> ne se réalise pas (refus de prêt, droit de préemption exercé), l'indemnité est restituée à l'acheteur.</li>
+    <li>En cas de <strong>rétractation</strong> dans les 10 jours (acquéreur particulier), l'indemnité est intégralement remboursée.</li>
   </ul>
   <p>Cette somme est en principe consignée chez le notaire, garantissant ainsi la neutralité et la sécurité des fonds pendant toute la durée de la promesse.</p>
 
   <h2>Délais, formalités et coûts à prévoir</h2>
-  <p>La promesse unilatérale doit être <strong>enregistrée auprès de l&apos;administration fiscale dans les 10 jours</strong> suivant sa signature, sous peine de nullité. Cette formalité est systématiquement assurée par le notaire lorsqu&apos;il rédige l&apos;acte.</p>
-  <p>La durée d&apos;option est librement fixée entre les parties, généralement entre 2 et 4 mois, le temps pour l&apos;acquéreur d&apos;obtenir son financement et de réaliser les vérifications nécessaires.</p>
+  <p>La promesse unilatérale doit être <strong>enregistrée auprès de l'administration fiscale dans les 10 jours</strong> suivant sa signature, sous peine de nullité. Cette formalité est systématiquement assurée par le notaire lorsqu'il rédige l'acte.</p>
+  <p>La durée d'option est librement fixée entre les parties, généralement entre 2 et 4 mois, le temps pour l'acquéreur d'obtenir son financement et de réaliser les vérifications nécessaires.</p>
   <p>Côté budget, prévoyez :</p>
   <ul>
     <li>Les <strong>frais de rédaction</strong> du notaire : entre 250 et 500 € en moyenne</li>
-    <li>Les <strong>droits d&apos;enregistrement</strong> : 125 € forfaitaires</li>
-    <li>Ces frais sont traditionnellement à la charge de l&apos;acquéreur, sauf accord contraire</li>
+    <li>Les <strong>droits d'enregistrement</strong> : 125 € forfaitaires</li>
+    <li>Ces frais sont traditionnellement à la charge de l'acquéreur, sauf accord contraire</li>
   </ul>
-  <p>À la levée d&apos;option, l&apos;acte authentique de vente sera signé dans un délai de 2 à 3 mois, et les frais de notaire classiques (7 à 8 % dans l&apos;ancien) s&apos;appliqueront.</p>
+  <p>À la levée d'option, l'acte authentique de vente sera signé dans un délai de 2 à 3 mois, et les frais de notaire classiques (7 à 8 % dans l'ancien) s'appliqueront.</p>
 
-  <InternalCTA
-    title="Sécurisez votre promesse de vente avec un notaire"
-    description="Bénéficiez d&apos;un premier rendez-vous offert avec un notaire pour rédiger votre promesse unilatérale de vente en toute sérénité."
-    buttonText="Trouver un notaire"
-    href="/trouver-notaire"
-  />
+  <InternalCTA />
 </>
     </>
   );
@@ -2203,53 +2198,49 @@ function Article29() {
   return (
     <>
       <>
-  <p className="lead">Les <strong>frais de notaire achat neuf VEFA</strong> (Vente en l&apos;État Futur d&apos;Achèvement) bénéficient d&apos;un régime fiscal avantageux : ils s&apos;élèvent à seulement 2 à 3% du prix du bien, contre 7 à 8% dans l&apos;ancien. Cette réduction représente une économie substantielle pour les acquéreurs d&apos;un logement neuf, mais leur calcul reste complexe et mérite d&apos;être bien compris avant de signer.</p>
+  <p className="lead">Les <strong>frais de notaire achat neuf VEFA</strong> (Vente en l'État Futur d'Achèvement) bénéficient d'un régime fiscal avantageux : ils s'élèvent à seulement 2 à 3% du prix du bien, contre 7 à 8% dans l'ancien. Cette réduction représente une économie substantielle pour les acquéreurs d'un logement neuf, mais leur calcul reste complexe et mérite d'être bien compris avant de signer.</p>
 
   <KeyPoints points={[
-    "Frais de notaire réduits : 2 à 3% du prix d&apos;achat en VEFA",
-    "Composés d&apos;émoluments, droits d&apos;enregistrement et débours",
-    "Payés intégralement à la signature de l&apos;acte authentique",
+    "Frais de notaire réduits : 2 à 3% du prix d'achat en VEFA",
+    "Composés d'émoluments, droits d'enregistrement et débours",
+    "Payés intégralement à la signature de l'acte authentique",
     "TVA à 20% incluse dans le prix mais hors assiette de calcul"
   ]} />
 
   <h2>Pourquoi les frais de notaire sont-ils réduits en VEFA ?</h2>
-  <p>L&apos;achat d&apos;un logement neuf en VEFA bénéficie de frais de notaire réduits car les <strong>droits de mutation</strong> sont allégés. Dans l&apos;ancien, ces droits représentent environ 5,80% du prix de vente et constituent la majeure partie des frais de notaire. En VEFA, ils sont remplacés par une taxe de publicité foncière limitée à 0,715%.</p>
-  <p>Cette différence s&apos;explique par le fait que la TVA à 20% est déjà perçue par l&apos;État sur le prix de vente du logement neuf. Pour éviter une double imposition, le législateur a instauré ce régime fiscal favorable. Concrètement, sur un appartement neuf à 300 000 €, vous économiserez environ 15 000 € de frais de notaire par rapport à un bien ancien équivalent.</p>
+  <p>L'achat d'un logement neuf en VEFA bénéficie de frais de notaire réduits car les <strong>droits de mutation</strong> sont allégés. Dans l'ancien, ces droits représentent environ 5,80% du prix de vente et constituent la majeure partie des frais de notaire. En VEFA, ils sont remplacés par une taxe de publicité foncière limitée à 0,715%.</p>
+  <p>Cette différence s'explique par le fait que la TVA à 20% est déjà perçue par l'État sur le prix de vente du logement neuf. Pour éviter une double imposition, le législateur a instauré ce régime fiscal favorable. Concrètement, sur un appartement neuf à 300 000 €, vous économiserez environ 15 000 € de frais de notaire par rapport à un bien ancien équivalent.</p>
 
   <h2>Composition détaillée des frais de notaire en VEFA</h2>
   <p>Les <strong>frais de notaire achat neuf VEFA</strong> se décomposent en quatre éléments principaux :</p>
   <ul>
     <li><strong>Les émoluments du notaire</strong> (environ 1% HT) : rémunération réglementée calculée selon un barème dégressif fixé par décret.</li>
-    <li><strong>Les droits d&apos;enregistrement et taxe de publicité foncière</strong> (0,715%) : versés à l&apos;État et aux collectivités locales.</li>
+    <li><strong>Les droits d'enregistrement et taxe de publicité foncière</strong> (0,715%) : versés à l'État et aux collectivités locales.</li>
     <li><strong>La contribution de sécurité immobilière</strong> (0,10%) : finance les services de publicité foncière.</li>
-    <li><strong>Les débours et frais divers</strong> (quelques centaines d&apos;euros) : avances faites par le notaire pour obtenir des documents administratifs.</li>
+    <li><strong>Les débours et frais divers</strong> (quelques centaines d'euros) : avances faites par le notaire pour obtenir des documents administratifs.</li>
   </ul>
   <p>Pour un bien neuf à 250 000 €, comptez environ 5 500 à 7 500 € de frais de notaire, soit 2,2 à 3% du prix.</p>
 
   <h2>Exemples de calcul concrets pour votre achat VEFA</h2>
   <p>Voici trois exemples chiffrés pour vous aider à estimer vos <strong>frais de notaire en VEFA</strong> :</p>
   <ul>
-    <li><strong>Studio à 150 000 €</strong> : frais de notaire d&apos;environ 4 500 € (3%)</li>
-    <li><strong>Appartement T3 à 300 000 €</strong> : frais de notaire d&apos;environ 7 800 € (2,6%)</li>
-    <li><strong>Maison neuve à 500 000 €</strong> : frais de notaire d&apos;environ 12 500 € (2,5%)</li>
+    <li><strong>Studio à 150 000 €</strong> : frais de notaire d'environ 4 500 € (3%)</li>
+    <li><strong>Appartement T3 à 300 000 €</strong> : frais de notaire d'environ 7 800 € (2,6%)</li>
+    <li><strong>Maison neuve à 500 000 €</strong> : frais de notaire d'environ 12 500 € (2,5%)</li>
   </ul>
-  <p>Plus le prix du bien augmente, plus le pourcentage des frais diminue grâce à la dégressivité des émoluments. Notez également que les frais de garantie hypothécaire (PPD ou hypothèque) liés à votre prêt immobilier viennent s&apos;ajouter à ces frais.</p>
+  <p>Plus le prix du bien augmente, plus le pourcentage des frais diminue grâce à la dégressivité des émoluments. Notez également que les frais de garantie hypothécaire (PPD ou hypothèque) liés à votre prêt immobilier viennent s'ajouter à ces frais.</p>
 
   <h2>Comment optimiser les frais de notaire en VEFA ?</h2>
   <p>Plusieurs leviers permettent de réduire la facture finale :</p>
   <ul>
-    <li><strong>Négocier les meubles et équipements</strong> : la valeur du mobilier (cuisine équipée, placards) peut être déduite de l&apos;assiette de calcul si elle est mentionnée séparément.</li>
-    <li><strong>Bénéficier de la remise notariale</strong> : depuis 2021, les notaires peuvent accorder jusqu&apos;à 20% de remise sur leurs émoluments pour les biens de plus de 100 000 €.</li>
-    <li><strong>Vérifier l&apos;éligibilité au PTZ</strong> : le prêt à taux zéro peut financer une partie des frais annexes.</li>
-    <li><strong>Comparer les offres de garantie</strong> : la caution mutuelle est souvent moins coûteuse que l&apos;hypothèque.</li>
+    <li><strong>Négocier les meubles et équipements</strong> : la valeur du mobilier (cuisine équipée, placards) peut être déduite de l'assiette de calcul si elle est mentionnée séparément.</li>
+    <li><strong>Bénéficier de la remise notariale</strong> : depuis 2021, les notaires peuvent accorder jusqu'à 20% de remise sur leurs émoluments pour les biens de plus de 100 000 €.</li>
+    <li><strong>Vérifier l'éligibilité au PTZ</strong> : le prêt à taux zéro peut financer une partie des frais annexes.</li>
+    <li><strong>Comparer les offres de garantie</strong> : la caution mutuelle est souvent moins coûteuse que l'hypothèque.</li>
   </ul>
   <p>Un notaire expérimenté saura vous conseiller sur les meilleures options selon votre situation patrimoniale et le projet immobilier envisagé.</p>
 
-  <InternalCTA
-    title="Vous projetez un achat en VEFA ?"
-    description="Consultez un notaire spécialisé en immobilier neuf. 1er rendez-vous offert en visio ou en cabinet."
-    buttonText="Prendre RDV avec un notaire"
-  />
+  <InternalCTA />
 </>
     </>
   );

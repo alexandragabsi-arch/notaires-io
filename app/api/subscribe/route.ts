@@ -63,9 +63,9 @@ export async function POST(req: NextRequest) {
     "line_items[0][price_data][currency]": "eur",
     "line_items[0][price_data][unit_amount]": "11900",  // 119 € en centimes
     "line_items[0][price_data][recurring][interval]": "month",
-    "line_items[0][price_data][product_data][name]": "Notaires.io — Abonnement mensuel",
+    "line_items[0][price_data][product_data][name]": "Notaires.io — Abonnement mensuel HT",
     "line_items[0][price_data][product_data][description]":
-      "Plateforme de prise de RDV notariale · Profil, agenda en ligne, visio, rappels automatiques",
+      "Prix HT · TVA 20% en sus · Plateforme de prise de RDV notariale · Profil, agenda en ligne, visio, rappels automatiques",
     "line_items[0][quantity]": "1",
 
     // Coupon promo 3 mois appliqué

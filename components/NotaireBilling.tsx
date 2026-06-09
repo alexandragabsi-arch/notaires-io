@@ -11,6 +11,7 @@ import {
   FolderOpen,
   HandshakeIcon,
   X,
+  ChevronDown,
 } from "lucide-react";
 
 /* ─── Proposition d'honoraires ─────────────────────────────────────────────── */
@@ -97,6 +98,7 @@ function Stepper<T extends string>({
 
 /* ─── Composant principal ───────────────────────────────────────────────────── */
 export default function NotaireBilling() {
+  const [open, setOpen] = useState(false);
   const [pClient, setPClient] = useState("");
   const [pDossier, setPDossier] = useState(DOSSIERS[0]);
   const [pMontant, setPMontant] = useState("");
@@ -150,11 +152,16 @@ export default function NotaireBilling() {
             transition={{ duration: 0.4 }}
             className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-7"
           >
-            <div className="flex items-center gap-3 mb-5">
+            {/* En-tête cliquable */}
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              className="w-full flex items-center gap-3 text-left group"
+            >
               <div className="w-11 h-11 shrink-0 rounded-xl bg-[var(--color-tint-green)] flex items-center justify-center text-[var(--color-success)]">
                 <HandshakeIcon className="w-[22px] h-[22px]" strokeWidth={2} />
               </div>
-              <div>
+              <div className="flex-1 min-w-0">
                 <h3 className="font-bold text-[18px] text-[var(--color-text-strong)] leading-tight">
                   Proposition d'honoraires
                 </h3>
@@ -162,15 +169,29 @@ export default function NotaireBilling() {
                   Prise en charge du dossier suite au 1er rendez-vous
                 </p>
               </div>
-            </div>
+              <div className="flex items-center gap-1.5 shrink-0 text-[13px] font-semibold text-[var(--color-accent)] group-hover:text-[var(--color-primary)] transition-colors">
+                <span>{open ? "Réduire" : "Voir la démo"}</span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+                  strokeWidth={2.5}
+                />
+              </div>
+            </button>
 
-            <Stepper
-              steps={PROP_STEPS}
-              current={propStatus === "refusee" ? "acceptee" : propStatus}
-              isRefused={propStatus === "refusee"}
-            />
-
-            <div className="grid sm:grid-cols-2 gap-5">
+            {/* Contenu dépliable */}
+            <motion.div
+              initial={false}
+              animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
+              transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+              style={{ overflow: "hidden" }}
+            >
+              <div className="pt-5">
+                <Stepper
+                  steps={PROP_STEPS}
+                  current={propStatus === "refusee" ? "acceptee" : propStatus}
+                  isRefused={propStatus === "refusee"}
+                />
+                <div className="grid sm:grid-cols-2 gap-5">
               {/* Formulaire */}
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-2 text-[12px] text-[var(--color-muted)] bg-[var(--color-tint-green)] rounded-[10px] px-3 py-2">
@@ -366,7 +387,9 @@ export default function NotaireBilling() {
                   </div>
                 )}
               </div>
-            </div>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>

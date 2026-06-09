@@ -24,6 +24,7 @@ import {
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getStoredProfiles, getRemoteProfiles, claimProfile, type ClaimData } from "@/lib/notaire-profiles";
 import type { ListingNotaire } from "@/lib/notaires-listing";
+import BookingModal from "@/components/BookingModal";
 
 const ALL_SPECIALTIES = [
   "Droit immobilier", "Successions", "Droit de la famille",
@@ -58,9 +59,16 @@ function formatMonth(date: Date) {
 }
 
 /* ── Sous-composant : grille de créneaux ────────────────────────────────── */
-function SlotCalendar({ slotMatrix }: { slotMatrix: string[][] }) {
+function SlotCalendar({
+  slotMatrix, notaireId, notaireNom,
+}: {
+  slotMatrix: string[][];
+  notaireId: string;
+  notaireNom: string;
+}) {
   const days = getNextWorkdays(7);
   const [selected, setSelected] = useState<string | null>(null);
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   return (
     <div>
@@ -129,18 +137,37 @@ function SlotCalendar({ slotMatrix }: { slotMatrix: string[][] }) {
           animate={{ opacity: 1, y: 0 }}
           className="mt-4 flex flex-col gap-2"
         >
-          <a
-            href="/#hero"
+          <button
+            type="button"
+            onClick={() => setBookingOpen(true)}
             className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-5 py-3 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
           >
             Confirmer ce créneau
             <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
-          </a>
+          </button>
           <p className="text-[11px] text-[var(--color-muted)] text-center">
-            visio ou cabinet
+            visio ou cabinet · renseignement des parties en 2 min
           </p>
         </motion.div>
       )}
+
+      {/* Modal de réservation */}
+      {bookingOpen && selected && (() => {
+        const [dayIdx, slotTime] = selected.split("-");
+        const day = days[parseInt(dayIdx)];
+        const dayLabel = day
+          ? `${formatDayShort(day)} ${formatDayNum(day)} ${formatMonth(day)} · ${slotTime}`
+          : slotTime;
+        return (
+          <BookingModal
+            notaireId={notaireId}
+            notaireNom={notaireNom}
+            slotKey={selected}
+            slotLabel={dayLabel}
+            onClose={() => setBookingOpen(false)}
+          />
+        );
+      })()}
     </div>
   );
 }
@@ -711,7 +738,11 @@ export default function NotaireProfileClient({
           </div>
 
           {notaire.slotMatrix ? (
-            <SlotCalendar slotMatrix={notaire.slotMatrix} />
+            <SlotCalendar
+              slotMatrix={notaire.slotMatrix}
+              notaireId={notaire.id}
+              notaireNom={notaire.name || notaire.officeName || "Notaire"}
+            />
           ) : (
             <div className="text-center py-8">
               <p className="text-[14px] text-[var(--color-muted)] mb-4">

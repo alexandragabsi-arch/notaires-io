@@ -742,6 +742,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "compromis-acte-de-vente-difference": () => <Article22 />,
   "plus-value-immobiliere-exoneration": () => <Article23 />,
   "viager-notaire-guide": () => <Article24 />,
+  "sci-familiale-creation-notaire": () => <Article25 />,
 };
 
 
@@ -2010,6 +2011,82 @@ function Article24() {
   description="Nos notaires partenaires vous accompagnent dans le calcul du bouquet, de la rente et la rédaction de l&apos;acte. Premier rendez-vous offert en visio ou en cabinet."
   buttonText="Prendre rendez-vous"
   buttonLink="/rendez-vous"
+/>
+</>
+    </>
+  );
+}
+
+/* ── Article 25 ─────────────────────────────────────────────────────────── */
+
+function Article25() {
+  return (
+    <>
+      <>
+<p className="lead">La SCI familiale création notaire est une démarche stratégique pour organiser, protéger et transmettre un patrimoine immobilier en famille. Cette structure juridique séduit de plus en plus de Français souhaitant optimiser la gestion de leurs biens tout en anticipant leur succession dans un cadre sécurisé.</p>
+
+<KeyPoints items={[
+  "La SCI familiale facilite la transmission du patrimoine immobilier aux héritiers",
+  "Le recours au notaire est obligatoire en cas d&apos;apport d&apos;un bien immobilier",
+  "Les statuts notariés offrent une sécurité juridique optimale",
+  "Avantages fiscaux : abattements sur les donations de parts tous les 15 ans"
+]} />
+
+<h2>Qu&apos;est-ce qu&apos;une SCI familiale et pourquoi la créer ?</h2>
+<p>La Société Civile Immobilière (SCI) familiale est une structure juridique permettant à plusieurs membres d&apos;une même famille de détenir et gérer ensemble un ou plusieurs biens immobiliers. Contrairement à l&apos;indivision, qui peut générer des blocages, la SCI offre un cadre souple et stable pour la gestion patrimoniale.</p>
+<p>Les motivations principales sont multiples : faciliter la transmission aux enfants, éviter les conflits successoraux, optimiser la fiscalité ou encore protéger le conjoint survivant. La SCI permet également de séparer le patrimoine immobilier du patrimoine personnel, offrant ainsi une meilleure organisation financière.</p>
+<p>Le notaire joue un rôle central dans la création de la SCI familiale, particulièrement lorsqu&apos;un bien immobilier est apporté au capital. Son intervention garantit la sécurité juridique de l&apos;opération et l&apos;adaptation des statuts aux objectifs familiaux.</p>
+
+<h2>Les avantages majeurs de la SCI familiale</h2>
+<p>La SCI familiale présente de nombreux atouts qui en font un outil patrimonial particulièrement prisé :</p>
+<ul>
+  <li><strong>Transmission facilitée</strong> : les parents peuvent donner progressivement des parts sociales à leurs enfants, en profitant des abattements fiscaux de 100 000 € par parent et par enfant, renouvelables tous les 15 ans.</li>
+  <li><strong>Réduction des droits de succession</strong> : la valorisation des parts peut intégrer une décote pour absence de liquidité, réduisant ainsi l&apos;assiette taxable.</li>
+  <li><strong>Gestion simplifiée</strong> : le gérant désigné dans les statuts dispose des pouvoirs nécessaires pour administrer les biens sans avoir à solliciter chaque associé.</li>
+  <li><strong>Protection du conjoint</strong> : grâce au démembrement de propriété ou aux clauses statutaires spécifiques, le conjoint survivant peut être protégé.</li>
+  <li><strong>Évitement de l&apos;indivision</strong> : la SCI permet de contourner les règles contraignantes de l&apos;indivision successorale.</li>
+</ul>
+<p>Ces avantages sont d&apos;autant plus efficaces lorsque les statuts sont rédigés sur mesure par un notaire, en tenant compte de la situation familiale et patrimoniale précise.</p>
+
+<InternalCTA
+  title="Créez votre SCI familiale avec un notaire"
+  description="Bénéficiez d&apos;un accompagnement personnalisé pour structurer votre patrimoine. Premier rendez-vous offert en visio ou en cabinet."
+  buttonText="Prendre rendez-vous"
+/>
+
+<h2>Les étapes de création d&apos;une SCI familiale chez le notaire</h2>
+<p>Créer une SCI familiale avec l&apos;assistance d&apos;un notaire suit un processus structuré, garantissant la solidité juridique de la société :</p>
+<ol>
+  <li><strong>Définition du projet</strong> : objectifs patrimoniaux, identité des associés, biens à apporter, répartition des parts.</li>
+  <li><strong>Rédaction des statuts</strong> : le notaire élabore les statuts en intégrant les clauses adaptées (gérance, cession de parts, agrément, démembrement).</li>
+  <li><strong>Apports au capital</strong> : numéraire ou immobilier. En cas d&apos;apport d&apos;un bien, l&apos;acte notarié est obligatoire.</li>
+  <li><strong>Publication d&apos;un avis de constitution</strong> dans un journal d&apos;annonces légales.</li>
+  <li><strong>Immatriculation au RCS</strong> : dépôt du dossier complet au greffe du tribunal de commerce pour obtenir le Kbis.</li>
+  <li><strong>Déclaration fiscale</strong> : enregistrement auprès des impôts et choix du régime fiscal (IR ou IS).</li>
+</ol>
+<p>L&apos;accompagnement notarial est précieux pour anticiper les évolutions futures : entrée de nouveaux associés, cession de parts, donation progressive ou même dissolution.</p>
+
+<h2>Fiscalité et choix stratégiques de la SCI familiale</h2>
+<p>Le choix du régime fiscal est une décision cruciale lors de la création. La SCI familiale peut opter pour l&apos;impôt sur le revenu (IR), régime par défaut, ou pour l&apos;impôt sur les sociétés (IS), qui peut être plus avantageux dans certains cas de location meublée ou de revenus importants.</p>
+<p>À l&apos;IR, les associés sont imposés directement sur leur quote-part des revenus fonciers. À l&apos;IS, la SCI paie l&apos;impôt sur ses bénéfices, mais perd certains avantages comme les abattements pour durée de détention en cas de revente. Le notaire saura vous orienter vers le régime le plus adapté à votre situation.</p>
+<p>La transmission des parts bénéficie d&apos;une fiscalité attractive : donations échelonnées, démembrement (usufruit/nue-propriété), pacte Dutreil dans certains cas. Une stratégie bien pensée peut considérablement réduire la charge fiscale lors de la transmission.</p>
+
+<h2>FAQ : vos questions sur la SCI familiale</h2>
+<div className="faq">
+  <h3>Faut-il obligatoirement un notaire pour créer une SCI familiale ?</h3>
+  <p>Le notaire n&apos;est pas obligatoire si la SCI ne reçoit aucun apport immobilier. En revanche, dès qu&apos;un bien immobilier est apporté au capital, l&apos;acte notarié devient impératif.</p>
+
+  <h3>Quel est le coût de création d&apos;une SCI familiale ?</h3>
+  <p>Comptez entre 1 500 € et 3 000 € avec un notaire, incluant la rédaction des statuts, les frais d&apos;enregistrement et la publication légale. Le coût varie selon les apports.</p>
+
+  <h3>Combien d&apos;associés faut-il pour créer une SCI familiale ?</h3>
+  <p>Une SCI requiert au minimum deux associés, souvent des membres d&apos;une même famille (parents, enfants, conjoints). Aucun capital minimum n&apos;est imposé par la loi.</p>
+</div>
+
+<InternalCTA
+  title="Besoin de conseils pour votre SCI familiale ?"
+  description="Nos notaires partenaires vous accompagnent dans la création et l&apos;optimisation de votre SCI. Premier rendez-vous offert."
+  buttonText="Contacter un notaire"
 />
 </>
     </>

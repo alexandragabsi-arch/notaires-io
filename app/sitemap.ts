@@ -109,6 +109,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/blog/compromis-acte-de-vente-difference`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/blog/plus-value-immobiliere-exoneration`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
     { url: `${BASE}/blog/viager-notaire-guide`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog/sci-familiale-creation-notaire`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
   ];
 
   // 95 pages départements

@@ -275,6 +275,21 @@ export interface BlogPost {
     { question: "Que se passe-t-il si l&apos;acheteur ne paie plus la rente ?", answer: "Le contrat prévoit une clause résolutoire : le vendeur peut récupérer le bien et conserver les sommes déjà versées à titre de dommages-intérêts." },
   ],
   },
+  {
+    slug: "sci-familiale-creation-notaire",
+    title: "SCI familiale : création chez le notaire et avantages",
+    excerpt: "SCI familiale : création chez le notaire, avantages fiscaux, transmission patrimoniale et étapes clés. Guide complet pour bien démarrer votre projet.",
+    date: "2026-06-09",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["SCI familiale", "création SCI notaire", "société civile immobilière", "transmission patrimoine", "avantages SCI"],
+    canonicalUrl: `${BASE}/blog/sci-familiale-creation-notaire`,
+  faqs: [
+    { question: "Faut-il obligatoirement un notaire pour créer une SCI familiale ?", answer: "Le notaire n&apos;est pas obligatoire si la SCI ne reçoit aucun apport immobilier. En revanche, dès qu&apos;un bien immobilier est apporté au capital, l&apos;acte notarié devient impératif." },
+    { question: "Quel est le coût de création d&apos;une SCI familiale ?", answer: "Comptez entre 1 500 € et 3 000 € avec un notaire, incluant la rédaction des statuts, les frais d&apos;enregistrement et la publication légale. Le coût varie selon les apports." },
+    { question: "Combien d&apos;associés faut-il pour créer une SCI familiale ?", answer: "Une SCI requiert au minimum deux associés, souvent des membres d&apos;une même famille (parents, enfants, conjoints). Aucun capital minimum n&apos;est imposé par la loi." },
+  ],
+  },
 ];
   canonicalUrl: string;
 }
@@ -616,6 +631,21 @@ export const BLOG_POSTS: BlogPost[] = [
     { question: "Quelle est la différence entre bouquet et rente ?", answer: "Le bouquet est la somme versée au comptant le jour de la signature. La rente est le versement périodique (souvent mensuel) dû au vendeur jusqu&apos;à son décès." },
     { question: "Le passage chez le notaire est-il obligatoire ?", answer: "Oui. La vente en viager est un acte authentique obligatoire. Le notaire sécurise la transaction, calcule la rente et publie l&apos;acte au service de la publicité foncière." },
     { question: "Que se passe-t-il si l&apos;acheteur ne paie plus la rente ?", answer: "Le contrat prévoit une clause résolutoire : le vendeur peut récupérer le bien et conserver les sommes déjà versées à titre de dommages-intérêts." },
+  ],
+  },
+  {
+    slug: "sci-familiale-creation-notaire",
+    title: "SCI familiale : création chez le notaire et avantages",
+    excerpt: "SCI familiale : création chez le notaire, avantages fiscaux, transmission patrimoniale et étapes clés. Guide complet pour bien démarrer votre projet.",
+    date: "2026-06-09",
+    readingTime: 7,
+    category: "Immobilier",
+    keywords: ["SCI familiale", "création SCI notaire", "société civile immobilière", "transmission patrimoine", "avantages SCI"],
+    canonicalUrl: `${BASE}/blog/sci-familiale-creation-notaire`,
+  faqs: [
+    { question: "Faut-il obligatoirement un notaire pour créer une SCI familiale ?", answer: "Le notaire n&apos;est pas obligatoire si la SCI ne reçoit aucun apport immobilier. En revanche, dès qu&apos;un bien immobilier est apporté au capital, l&apos;acte notarié devient impératif." },
+    { question: "Quel est le coût de création d&apos;une SCI familiale ?", answer: "Comptez entre 1 500 € et 3 000 € avec un notaire, incluant la rédaction des statuts, les frais d&apos;enregistrement et la publication légale. Le coût varie selon les apports." },
+    { question: "Combien d&apos;associés faut-il pour créer une SCI familiale ?", answer: "Une SCI requiert au minimum deux associés, souvent des membres d&apos;une même famille (parents, enfants, conjoints). Aucun capital minimum n&apos;est imposé par la loi." },
   ],
   },
 ];

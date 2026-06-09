@@ -82,6 +82,15 @@ export async function POST(req: NextRequest) {
     // Pré-remplir l'email si fourni
     ...(body.email ? { customer_email: body.email } : {}),
 
+    // TVA 20% calculée automatiquement par Stripe Tax
+    "automatic_tax[enabled]": "true",
+
+    // Checkbox consentement prélèvement automatique sur cette carte
+    "consent_collection[payment_method_reuse_agreement][position]": "auto",
+    "consent_collection[terms_of_service]": "required",
+    "custom_text[terms_of_service_acceptance][message]":
+      "J'accepte le prélèvement mensuel automatique sur cette carte conformément aux [CGV](https://notaires.io/cgv).",
+
     // Afficher le récap prix
     "payment_method_types[0]": "card",
     locale: "fr",

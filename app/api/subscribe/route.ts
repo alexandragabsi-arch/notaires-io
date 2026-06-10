@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
 
     // Redirection
     success_url: `${SITE_URL}/espace-notaire?bienvenue=1`,
-    cancel_url: `${SITE_URL}/notaires#tarifs`,
+    cancel_url: `${SITE_URL}/inscription`,
 
     // Pré-remplir l'email si fourni
     ...(body.email ? { customer_email: body.email } : {}),

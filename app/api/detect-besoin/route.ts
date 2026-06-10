@@ -10,14 +10,20 @@ function detectFromKeywords(text: string): Detected | null {
     return { branchId: "famille", q2: "mariage", message: "Votre situation concerne un mariage ou un PACS. Voici les notaires spécialisés en régimes matrimoniaux." };
   if (/divorc|separa|rupture|dissolution.*pacs|quitter.*conjoint/.test(t))
     return { branchId: "famille", q2: "separation", message: "Votre situation concerne une séparation. Un notaire spécialisé vous accompagnera pour le partage des biens." };
-  if (/donn[ae]|transmet|legu|don.*enfant|enfant.*don|donation/.test(t))
+  if (/\bdonn[ae]\b|transmet|legu|don.*enfant|enfant.*don|donation/.test(t))
     return { branchId: "famille", q2: "donation", message: "Votre situation concerne une donation. Voici les notaires spécialisés en droit des libéralités." };
+  if (/copropriete|copro|syndic|charges.*prop|ag.*immeuble/.test(t))
+    return { branchId: "immo", q2: "copro", message: "Votre situation concerne la copropriété. Voici les notaires spécialisés en droit immobilier." };
+  if (/vefa|construc.*maison|ccmi|achat.*plan|maison.*neuve|promoteur|maitre.*ouvrage/.test(t))
+    return { branchId: "immo", q2: "construction", message: "Votre projet concerne la construction ou un achat sur plan. Voici les notaires spécialisés." };
+  if (/hypotheque|mainlevee|preteur.*denier|privilege.*preteur|ppd|pret.*immobilier|caution.*notari|surete.*reelle/.test(t))
+    return { branchId: "immo", q2: null, message: "Votre situation concerne une garantie ou un financement immobilier notarié. Voici les notaires spécialisés." };
   if (/achet|acqueri|acquisition|compromis|acte.*vente|achat.*appartement|achat.*maison/.test(t))
     return { branchId: "immo", q2: "achat", message: "Votre projet concerne un achat immobilier. Voici les notaires disponibles en transactions immobilières." };
   if (/\bvend|ceder|mise en vente|vente.*bien|bien.*vente/.test(t))
     return { branchId: "immo", q2: "vente", message: "Votre projet concerne une vente immobilière. Voici les notaires disponibles." };
-  if (/immo|appartement|maison|terrain|bien immobilier/.test(t))
-    return { branchId: "immo", q2: "achat", message: "Votre situation concerne l'immobilier. Voici les notaires spécialisés." };
+  if (/immo|appartement|maison|terrain|bien immobilier|foncier/.test(t))
+    return { branchId: "immo", q2: null, message: "Votre situation concerne l'immobilier. Voici les notaires spécialisés." };
   if (/soci[eé]t[eé]|sas|sarl|sci|holding|creer.*soci|associe|parts sociales|statuts/.test(t))
     return { branchId: "societe", q2: "creation", message: "Votre situation concerne votre société. Voici les notaires spécialisés en droit des sociétés." };
   if (/procuration|legalis|authenti|certifi|signature/.test(t))
@@ -43,23 +49,33 @@ export async function POST(req: NextRequest) {
 Analyse la situation décrite et détermine la catégorie notariale correspondante.
 
 CATÉGORIES :
-- immo  : achat, vente, donation de bien immobilier, transmission, indivision, litige immobilier
-- famille : succession/décès, mariage, PACS, divorce, séparation, donation à un proche
-- societe : création de société (SAS, SARL, SCI, holding), cession de parts, modification statutaire, dissolution
-- document : procuration, légalisation de signature, authentification d'acte
+- immo     : achat, vente, transmission, indivision, litige immobilier, copropriété, construction/VEFA, hypothèque, mainlevée, privilège de prêteur de deniers (PPD), prêt notarié, garantie immobilière
+- famille  : succession/décès, mariage, PACS, divorce/séparation, donation à un proche, testament
+- societe  : création de société (SAS, SARL, SCI, holding), cession de parts, modification statutaire, dissolution
+- document : procuration, légalisation de signature, authentification d'acte, certifications
+- idk      : à utiliser UNIQUEMENT si la situation est trop vague ou ne correspond à aucune catégorie notariale
 
 SOUS-CATÉGORIES (q2) :
-- immo    → vente | achat | transmission | litige
-- famille → deces | mariage | separation | donation
+- immo    → vente | achat | transmission | litige | copro | construction
+  • copro        : copropriété, syndic, charges, AG, règlement de copropriété
+  • construction : VEFA, achat sur plan, CCMI, maison neuve, promoteur
+  • litige       : PPD, hypothèque, mainlevée, indivision, contentieux, bien à plusieurs
+  • vente        : cession, mise en vente, compromis vendeur
+  • achat        : acquisition, compromis acheteur, crédit immobilier
+  • transmission : donation immobilière, succession avec bien
+- famille → deces | mariage | separation | donation | testament
 - societe → creation | cession | modification | dissolution
 - document → null
+- idk      → null
 
 Réponds UNIQUEMENT avec un objet JSON valide, sans aucun autre texte :
 {
-  "branchId": "immo" | "famille" | "societe" | "document",
-  "q2": "vente"|"achat"|"transmission"|"litige"|"deces"|"mariage"|"separation"|"donation"|"creation"|"cession"|"modification"|"dissolution"|null,
+  "branchId": "immo" | "famille" | "societe" | "document" | "idk",
+  "q2": "vente"|"achat"|"transmission"|"litige"|"copro"|"construction"|"deces"|"mariage"|"separation"|"donation"|"testament"|"creation"|"cession"|"modification"|"dissolution"|null,
   "message": "1 phrase simple expliquant pourquoi — sans jargon juridique"
-}`;
+}
+
+En cas de doute, préfère "idk" plutôt que de forcer une catégorie incorrecte.`;
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",

@@ -184,22 +184,13 @@ export default function Header() {
               </a>
             ))}
 
-            {hasProfile ? (
-              <a
-                href="/espace-notaire"
-                className="flex items-center gap-1.5 text-[var(--color-accent)] hover:text-[var(--color-primary)] transition-colors font-semibold"
-              >
-                <LayoutDashboard className="w-3.5 h-3.5" strokeWidth={2.5} />
-                Mon espace
-              </a>
-            ) : (
-              <a
-                href="/connexion"
-                className="text-[12px] text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors border border-[var(--color-border)] rounded-full px-3 py-1"
-              >
-                Espace notaire
-              </a>
-            )}
+            <a
+              href={hasProfile ? "/espace-notaire" : "/connexion"}
+              className="flex items-center gap-1.5 text-[var(--color-accent)] hover:text-[var(--color-primary)] transition-colors font-semibold text-[13px]"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5" strokeWidth={2.5} />
+              Espace notaire
+            </a>
           </nav>
 
           <div className="flex gap-3 items-center">
@@ -298,17 +289,15 @@ export default function Header() {
                     {label}
                   </a>
                 ))}
-                {/* Mon espace dans le menu mobile */}
-                {hasProfile && (
-                  <a
-                    href="/espace-notaire"
-                    onClick={() => setOpen(false)}
-                    className="py-3 text-[15px] font-semibold text-[var(--color-accent)] flex items-center gap-2 hover:text-[var(--color-primary)] transition-colors border-b border-[var(--color-border-soft)]"
-                  >
-                    <LayoutDashboard className="w-4 h-4" strokeWidth={2.5} />
-                    Mon espace
-                  </a>
-                )}
+                {/* Espace notaire dans le menu mobile */}
+                <a
+                  href={hasProfile ? "/espace-notaire" : "/connexion"}
+                  onClick={() => setOpen(false)}
+                  className="py-3 text-[15px] font-semibold text-[var(--color-accent)] flex items-center gap-2 hover:text-[var(--color-primary)] transition-colors border-b border-[var(--color-border-soft)]"
+                >
+                  <LayoutDashboard className="w-4 h-4" strokeWidth={2.5} />
+                  Espace notaire
+                </a>
 
                 {/* Assistant IA dans le menu mobile */}
                 <button
@@ -326,15 +315,6 @@ export default function Header() {
                 >
                   Connexion
                 </a>
-                {!hasProfile && (
-                  <a
-                    href="/connexion"
-                    onClick={() => setOpen(false)}
-                    className="py-3 text-[13px] text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors"
-                  >
-                    Espace notaire
-                  </a>
-                )}
               </div>
             </motion.nav>
           )}

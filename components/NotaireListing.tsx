@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
-  Search, MapPin, X, Video, Phone, Globe,
-  BadgeCheck, ArrowRight, Sparkles, ChevronRight,
+  Search, MapPin, X, Video, Phone,
+  BadgeCheck, ArrowRight, Sparkles, ChevronLeft, ChevronRight,
   Lock, Building2, Home, Users, Scale, Heart,
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
@@ -38,206 +38,214 @@ const POPULAR_CITIES = [
 
 interface CitySugg { city: string; postcode: string; }
 
-const DAY_SHORT = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
-const MONTH_SHORT = ["janv.", "févr.", "mars", "avr.", "mai", "juin",
-  "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+const DAYS_VISIBLE = 5;
+
+const colorMap: Record<string, string> = {
+  default: "bg-[var(--color-tint-blue)] text-[var(--color-primary)]",
+  green: "bg-emerald-100 text-emerald-700",
+  purple: "bg-purple-100 text-purple-700",
+};
 
 /** "Paris 18e Arrondissement" → "Paris" */
 function extractBaseCity(city: string): string {
   return city.replace(/\s+\d+e[r]?\s+arrondissement$/i, "").trim();
 }
 
-/** Construit les colonnes de jours pour le calendrier */
-function buildDayColumns(slotMatrix: string[][] | undefined, maxDays = 5) {
-  if (!slotMatrix) return [];
-  const today = new Date();
-  return slotMatrix
-    .map((slots, idx) => {
-      const d = new Date(today);
-      d.setDate(today.getDate() + idx);
-      return {
-        dayShort: DAY_SHORT[d.getDay()],
-        date: d.getDate(),
-        month: MONTH_SHORT[d.getMonth()],
-        slots,
-        idx,
-      };
-    })
-    .filter((d) => d.slots.length > 0)
-    .slice(0, maxDays);
+function getNextWorkdays(n: number): Date[] {
+  const days: Date[] = [];
+  const d = new Date();
+  while (days.length < n) {
+    d.setDate(d.getDate() + 1);
+    if (d.getDay() !== 0 && d.getDay() !== 6) days.push(new Date(d));
+  }
+  return days;
 }
 
-/* ── Carte notaire style neonotario ────────────────────── */
+function formatDayLabel(d: Date): { short: string; date: string } {
+  const shorts = ["Dim.", "Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam."];
+  const months = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+  return { short: shorts[d.getDay()], date: `${d.getDate()} ${months[d.getMonth()]}` };
+}
+
+/* ── Carte notaire ─────────────────────────────────────── */
 function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
-  const columns = useMemo(() => buildDayColumns(n.slotMatrix, 5), [n.slotMatrix]);
+  const [offset, setOffset] = useState(0);
+  const workdays = useMemo(() => getNextWorkdays(30), []);
+  const maxOffset = Math.max(0, workdays.length - DAYS_VISIBLE);
+  const visibleDays = workdays.slice(offset, offset + DAYS_VISIBLE);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, delay: Math.min(i * 0.025, 0.4) }}
-      className="bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-[var(--shadow-card)] p-5 flex flex-col sm:flex-row gap-5 hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-strong)] transition-all"
     >
-      {/* ── Gauche : fiche notaire ───────────────────────── */}
-      <div className="sm:w-[260px] shrink-0 flex flex-col gap-2.5">
+      <div className="rounded-2xl border border-[var(--color-border-soft)] bg-white shadow-sm hover:shadow-md transition-all overflow-hidden">
+        <div className="flex flex-col lg:flex-row">
 
-        {/* Avatar + nom */}
-        <div className="flex items-center gap-3">
-          {n.photo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={n.photo} alt={n.name} loading="lazy"
-              className="w-14 h-14 rounded-full object-cover shrink-0 border-2 border-[var(--color-border-soft)]" />
-          ) : (
-            <div className={`w-14 h-14 rounded-full flex items-center justify-center font-bold text-white text-[16px] shrink-0 ${
-              n.color === "green"
-                ? "bg-gradient-green"
-                : n.color === "purple"
-                  ? "bg-gradient-to-br from-purple-500 to-purple-700"
-                  : "bg-gradient-cta"
-            }`}>
-              {n.initials}
-            </div>
-          )}
-          <div className="min-w-0">
-            <div className="font-bold text-[15px] text-[var(--color-text-strong)] leading-tight">
-              {n.name}
-            </div>
-            <div className="text-[12px] text-[var(--color-muted)] mt-0.5">
-              {n.role === "salarié" ? "Notaire Salarié" : "Notaire Associé"}
-              {n.isNew && (
-                <span className="ml-1.5 inline-flex items-center gap-0.5 text-[10px] font-bold text-[var(--color-success)]">
-                  <Sparkles className="w-2.5 h-2.5" strokeWidth={2.5} /> Nouveau
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
+          {/* ── Gauche : fiche notaire ── */}
+          <div className="lg:w-[280px] shrink-0 p-5 border-b lg:border-b-0 lg:border-r border-[var(--color-border-soft)] flex flex-col gap-3">
 
-        {/* Adresse */}
-        {n.address && (
-          <div className="flex items-start gap-1.5 text-[12px] text-[var(--color-muted)]">
-            <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--color-accent)]" strokeWidth={2} />
-            <span className="leading-snug">{n.address}</span>
-          </div>
-        )}
-        {!n.address && (
-          <div className="flex items-center gap-1.5 text-[12px] text-[var(--color-muted)]">
-            <MapPin className="w-3.5 h-3.5 shrink-0 text-[var(--color-accent)]" strokeWidth={2} />
-            {n.city}
-          </div>
-        )}
-
-        {/* Téléphone — flou si non revendiqué */}
-        {n.phone && (
-          n.claimed ? (
-            <div className="flex items-center gap-1.5 text-[12px] text-[var(--color-muted)]">
-              <Phone className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
-              {n.phone}
-            </div>
-          ) : (
-            <div className="relative flex items-center gap-1.5 text-[12px] text-[var(--color-muted)]">
-              <Phone className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
-              <span className="blur-[5px] select-none pointer-events-none">
-                {n.phone}
-              </span>
-            </div>
-          )
-        )}
-
-        {/* Accepte les RDVs / Profil non activé */}
-        {n.claimed ? (
-          <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-accent)]">
-            <Video className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
-            Visio &amp; cabinet disponibles
-          </div>
-        ) : (
-          <div className="flex items-center gap-1.5 text-[12px] font-semibold text-green-500">
-            <Lock className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
-            Profil non revendiqué
-          </div>
-        )}
-
-        {/* Badge vérifié / non revendiqué */}
-        {n.claimed ? (
-          !n.isNew && (
-            <div className="flex items-center gap-1 text-[12px] text-[var(--color-success)] font-semibold">
-              <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} /> Notaire vérifié
-            </div>
-          )
-        ) : (
-          <div className="flex items-center gap-1 text-[12px] text-green-500 font-semibold">
-            <Lock className="w-3 h-3" strokeWidth={2} /> Non revendiqué
-          </div>
-        )}
-
-        {/* Domaines */}
-        <div className="flex flex-wrap gap-1.5">
-          {n.specialties.map((s) => (
-            <span key={s}
-              className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
-              {s}
-            </span>
-          ))}
-          {(n.languages ?? []).map((l) => (
-            <span key={l}
-              className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[var(--color-tint-green)] text-[var(--color-success)] flex items-center gap-1">
-              <Globe className="w-3 h-3" strokeWidth={2.5} />{l}
-            </span>
-          ))}
-        </div>
-
-        {/* CTA */}
-        <a href={`/notaires/${n.id}`}
-          className="mt-auto inline-flex items-center justify-center gap-1.5 bg-gradient-cta text-white px-4 py-2.5 rounded-[10px] text-[13px] font-semibold shadow-[var(--shadow-cta)] w-full">
-          Voir la page de {n.name.replace(/^Me\s+/, "")}
-          <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
-        </a>
-      </div>
-
-      {/* ── Droite : calendrier colonnes ─────────────────── */}
-      <div className="flex-1 border-t sm:border-t-0 sm:border-l border-[var(--color-border-soft)] pt-4 sm:pt-0 sm:pl-5 flex flex-col gap-3 min-w-0">
-        {columns.length > 0 ? (
-          <>
-            <div className="flex gap-3 overflow-x-auto pb-1">
-              {columns.map((day) => (
-                <div key={day.idx} className="flex flex-col items-center gap-1.5 min-w-[72px]">
-                  {/* En-tête jour */}
-                  <div className="text-center">
-                    <div className="text-[11px] font-semibold text-[var(--color-muted)] uppercase tracking-wide">
-                      {day.dayShort}.
-                    </div>
-                    <div className="text-[11px] text-[var(--color-muted)]">
-                      {String(day.date).padStart(2, "0")} {day.month}
-                    </div>
-                  </div>
-                  {/* Créneaux */}
-                  {day.slots.map((slot) => (
-                    <a
-                      key={slot}
-                      href={`/notaires/${n.id}`}
-                      className="w-full text-center px-2 py-2 rounded-lg text-[12px] font-semibold bg-[var(--color-accent-soft)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-all"
-                    >
-                      {slot}
-                    </a>
-                  ))}
+            {/* Avatar + nom */}
+            <div className="flex items-center gap-3">
+              {n.photo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={n.photo} alt={n.name} loading="lazy"
+                  className="w-14 h-14 rounded-full object-cover shrink-0 border-2 border-[var(--color-border-soft)]" />
+              ) : (
+                <div className={`w-14 h-14 rounded-full flex items-center justify-center font-extrabold text-[17px] shrink-0 ${colorMap[n.color] ?? colorMap.default}`}>
+                  {n.initials}
                 </div>
+              )}
+              <div className="min-w-0">
+                <div className="font-bold text-[15px] text-[var(--color-text-strong)] leading-snug">{n.name}</div>
+                <div className="text-[12px] text-[var(--color-muted)] mt-0.5">
+                  {n.role === "salarié" ? "Notaire Salarié" : "Notaire Associé"}
+                  {n.isNew && (
+                    <span className="ml-1.5 inline-flex items-center gap-0.5 text-[10px] font-bold text-[var(--color-success)]">
+                      <Sparkles className="w-2.5 h-2.5" strokeWidth={2.5} /> Nouveau
+                    </span>
+                  )}
+                </div>
+                {n.officeName && (
+                  <div className="text-[11px] text-[var(--color-muted)] mt-0.5 truncate max-w-[170px]" title={n.officeName}>
+                    {n.officeName}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Adresse */}
+            {n.address ? (
+              <div className="flex items-start gap-1.5 text-[12px] text-[var(--color-muted)]">
+                <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--color-accent)]" strokeWidth={2} />
+                <span className="leading-snug">{n.address}</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 text-[12px] text-[var(--color-muted)]">
+                <MapPin className="w-3.5 h-3.5 shrink-0 text-[var(--color-accent)]" strokeWidth={2} />
+                {n.city}
+              </div>
+            )}
+
+            {/* Téléphone — flou si non revendiqué */}
+            {n.phone && (
+              n.claimed ? (
+                <div className="flex items-center gap-1.5 text-[12px] text-[var(--color-muted)]">
+                  <Phone className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
+                  {n.phone}
+                </div>
+              ) : (
+                <div className="relative flex items-center gap-1.5 text-[12px] text-[var(--color-muted)]">
+                  <Phone className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
+                  <span className="blur-[5px] select-none pointer-events-none">{n.phone}</span>
+                </div>
+              )
+            )}
+
+            {/* Statut RDV */}
+            {n.claimed ? (
+              <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-accent)]">
+                <Video className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
+                Visio &amp; cabinet disponibles
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 text-[12px] font-semibold text-green-500">
+                <Lock className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
+                Profil non revendiqué
+              </div>
+            )}
+
+            {/* Badge vérifié */}
+            {n.claimed && !n.isNew && (
+              <div className="flex items-center gap-1 text-[12px] text-[var(--color-success)] font-semibold">
+                <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} /> Notaire vérifié
+              </div>
+            )}
+
+            {/* Domaines + langues */}
+            <div className="flex flex-wrap gap-1.5">
+              {n.specialties.map((s) => (
+                <span key={s} className="text-[11px] px-2.5 py-1 rounded-full border border-[var(--color-border)] text-[var(--color-text-strong)]">
+                  {s}
+                </span>
+              ))}
+              {(n.languages ?? []).map((l) => (
+                <span key={l} className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">
+                  🌐 {l}
+                </span>
               ))}
             </div>
 
-            {/* Voir plus */}
+            {/* CTA */}
             <a href={`/notaires/${n.id}`}
-              className="inline-flex items-center gap-1 text-[12px] font-semibold text-[var(--color-accent)] hover:underline self-start">
-              <ChevronRight className="w-3.5 h-3.5" strokeWidth={2.5} />
-              Voir plus d'horaires
+              className="mt-auto block text-center text-[13px] font-bold text-white bg-[var(--color-primary)] hover:bg-[var(--color-accent)] px-4 py-2.5 rounded-xl transition-colors">
+              Voir la page de {n.name.replace(/^Me\s+/, "")}
             </a>
-          </>
-        ) : (
-          <div className="flex-1 flex items-center justify-center">
-            <p className="text-[13px] text-[var(--color-muted)] italic">
-              Disponible sur demande — <a href={`/notaires/${n.id}`} className="text-[var(--color-accent)] font-semibold hover:underline">contacter</a>
-            </p>
           </div>
-        )}
+
+          {/* ── Droite : calendrier ── */}
+          <div className="flex-1 p-4 lg:p-5 flex flex-col gap-3">
+            <div className="flex items-center gap-1.5 lg:gap-2">
+              <button
+                type="button"
+                onClick={() => setOffset((o) => Math.max(0, o - 1))}
+                disabled={offset === 0}
+                className="w-7 h-7 shrink-0 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-30 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
+              </button>
+
+              <div className="flex-1 overflow-x-auto scrollbar-none -mx-0.5 px-0.5">
+                <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${DAYS_VISIBLE}, minmax(62px, 1fr))` }}>
+                  {visibleDays.map((day, di) => {
+                    const times = n.slotMatrix?.[offset + di] ?? [];
+                    const label = formatDayLabel(day);
+                    return (
+                      <div key={di} className="flex flex-col gap-1.5 min-w-[62px]">
+                        <div className="text-center pb-1.5 border-b border-[var(--color-border-soft)]">
+                          <div className="text-[10px] font-bold text-[var(--color-muted)] uppercase tracking-wide">{label.short}</div>
+                          <div className="text-[11px] text-[var(--color-text-strong)] font-semibold whitespace-nowrap">{label.date}</div>
+                        </div>
+                        {times.length === 0 ? (
+                          <div className="text-[11px] text-[var(--color-muted)] text-center py-2 opacity-40">—</div>
+                        ) : (
+                          times.slice(0, 3).map((t) => (
+                            <a key={t} href={`/notaires/${n.id}`}
+                              className="block text-center text-[12px] font-bold text-white bg-[var(--color-primary)] hover:bg-[var(--color-accent)] rounded-lg py-2 transition-colors">
+                              {t}
+                            </a>
+                          ))
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setOffset((o) => Math.min(maxOffset, o + 1))}
+                disabled={offset >= maxOffset}
+                className="w-7 h-7 shrink-0 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-30 transition-colors"
+              >
+                <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
+              </button>
+            </div>
+
+            <a href={`/notaires/${n.id}`}
+              className="self-center text-[12px] font-semibold text-[var(--color-accent)] hover:underline flex items-center gap-1 mt-1">
+              + Voir plus d&apos;horaires
+            </a>
+
+            {/* Badge réservation */}
+            <div className="mt-auto pt-3 border-t border-[var(--color-border-soft)] flex items-center gap-1.5 text-[11px] text-emerald-600 font-medium">
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
+              Réservation en ligne · Confirmation immédiate · 30 min · visio ou cabinet
+            </div>
+          </div>
+
+        </div>
       </div>
     </motion.div>
   );

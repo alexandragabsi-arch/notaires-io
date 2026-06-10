@@ -107,7 +107,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.18 }}
-          className="text-[12px] text-[var(--color-muted)] italic mb-8 !text-center"
+          className="text-[12px] text-[var(--color-muted)] italic font-semibold mb-8 !text-center"
         >
           Créé par un Notaire, au service des Notaires.
         </motion.p>

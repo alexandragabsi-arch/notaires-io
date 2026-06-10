@@ -109,6 +109,12 @@ export const Q2_TREE: Record<string, Q2Tree> = {
         label: "Construction / VEFA",
         desc: "Maison neuve, contrat de construction, achat sur plan (VEFA), permis",
       },
+      {
+        id: "mainlevee",
+        icon: "🔓",
+        label: "Mainlevée d'hypothèque",
+        desc: "Supprimer l'hypothèque ou le PPD sur un bien vendu ou prêt remboursé",
+      },
     ],
   },
   offre: {
@@ -205,6 +211,7 @@ export const SPECIALTY: Record<string, Record<string, string>> = {
     litige: "Droit immobilier & contentieux",
     copro: "Droit de la copropriété",
     construction: "Construction & VEFA",
+    mainlevee: "Mainlevée d'hypothèque / PPD",
   },
   famille: {
     deces: "Successions",
@@ -235,6 +242,7 @@ export const ESTIM: Record<string, Record<string, string>> = {
     litige: "2 500 € — 4 800 €",
     copro: "800 € — 2 000 €",
     construction: "1 500 € — 3 000 €",
+    mainlevee: "400 € — 900 €",
   },
   famille: {
     deces: "2 400 € — 3 200 €",
@@ -317,6 +325,25 @@ export const ENRICH: Record<string, EnrichQuestion[]> = {
       id: "credit",
       label: "Comment financez-vous cet achat ?",
       options: ["Avec un crédit bancaire", "Comptant (sans crédit)", "Crédit + apport personnel", "Pas encore décidé"],
+    },
+  ],
+  "immo:mainlevee": [
+    {
+      id: "type_garantie",
+      label: "De quelle garantie s'agit-il ?",
+      options: ["Hypothèque conventionnelle", "Privilège de prêteur de deniers (PPD)", "Je ne sais pas exactement"],
+    },
+    {
+      id: "motif",
+      label: "Pourquoi souhaitez-vous la mainlevée ?",
+      options: ["J'ai vendu le bien", "J'ai remboursé le prêt en totalité", "Je renégocie mon crédit", "Autre raison"],
+    },
+    {
+      id: "lieu_bien",
+      label: "Où se situe le bien concerné ?",
+      type: "text",
+      placeholder: "Ex : Paris 8ème, Lyon, Bordeaux…",
+      options: [],
     },
   ],
   "immo:copro": [

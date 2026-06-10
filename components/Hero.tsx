@@ -12,7 +12,8 @@ const benefits = [
 
 const trust = [
   ["4,9★", "sur 2 814 avis"],
-  ["17 000", "notaires référencés"],
+  ["17 000+", "notaires référencés"],
+  ["< 2 min", "pour trouver le bon"],
 ];
 
 const container = {
@@ -23,6 +24,12 @@ const container = {
 const item = {
   hidden: { opacity: 0, y: 16 },
   show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+};
+
+// LCP-friendly variant: h1 starts visible so browsers measure paint immediately
+const h1Item = {
+  hidden: { opacity: 1, y: 12 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.35 } },
 };
 
 export default function Hero() {
@@ -47,7 +54,7 @@ export default function Hero() {
             </motion.div>
 
             <motion.h1
-              variants={item}
+              variants={h1Item}
               className="serif text-[30px] sm:text-[40px] lg:text-6xl font-bold leading-[1.1] sm:leading-[1.05] tracking-[-0.5px] sm:tracking-[-1.5px] text-balance text-[var(--color-text-strong)] mb-6"
             >
               Trouvez le bon notaire{" "}
@@ -56,7 +63,7 @@ export default function Hero() {
 
             <motion.p
               variants={item}
-              className="text-[16px] sm:text-[17px] lg:text-[19px] text-[var(--color-muted)] mb-8 max-w-[520px] leading-relaxed text-justify hyphens-auto"
+              className="text-[16px] sm:text-[17px] lg:text-[19px] text-[var(--color-muted)] mb-8 max-w-[520px] leading-relaxed"
             >
               Sans appel, sans se tromper de spécialité, sans perdre 1h en RDV.
               Notaires.io vous oriente vers le notaire spécialisé dans votre
@@ -82,11 +89,11 @@ export default function Hero() {
 
             <motion.div
               variants={item}
-              className="grid grid-cols-3 gap-4 max-w-[420px] mb-6"
+              className="grid grid-cols-3 gap-6 max-w-[440px] mb-6 pt-2 border-t border-[var(--color-border-soft)]"
             >
               {trust.map(([num, label]) => (
                 <div key={label} className="text-[13px] text-[var(--color-muted)]">
-                  <strong className="block serif text-xl font-bold text-[var(--color-text-strong)]">
+                  <strong className="block serif text-[22px] font-bold text-[var(--color-text-strong)] leading-none mb-0.5">
                     {num}
                   </strong>
                   {label}

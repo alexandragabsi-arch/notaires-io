@@ -1,11 +1,14 @@
 import { MetadataRoute } from "next";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { DEPARTEMENTS } from "@/lib/departements-data";
+import { getDynamicArticles } from "@/lib/blog-supabase";
 
 const BASE = "https://notaires.io";
-const NOW = new Date();
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 3600; // Refresh sitemap hourly so new articles appear
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const NOW = new Date();
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE,                            lastModified: NOW, changeFrequency: "weekly",  priority: 1.0 },
     { url: `${BASE}/annuaire`,              lastModified: NOW, changeFrequency: "daily",   priority: 0.95 },
@@ -127,5 +130,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  return [...staticPages, ...notairePages, ...seoLandingPages, ...blogPages, ...departementPages];
+  // Dynamic blog articles published autonomously by N8N agent
+  const dynamicArticles = await getDynamicArticles();
+  const staticBlogSlugs = new Set(blogPages.map((p) => p.url));
+  const dynamicBlogPages: MetadataRoute.Sitemap = dynamicArticles
+    .filter((a) => !staticBlogSlugs.has(`${BASE}/blog/${a.slug}`))
+    .map((a) => ({
+      url: `${BASE}/blog/${a.slug}`,
+      lastModified: new Date(a.published_at),
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    }));
+
+  return [...staticPages, ...notairePages, ...seoLandingPages, ...blogPages, ...dynamicBlogPages, ...departementPages];
 }

@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles, ChevronDown, MapPin, Scale } from "lucide-react";
+import { Menu, X, Sparkles, ChevronDown, MapPin, Scale, LayoutDashboard } from "lucide-react";
+import { getStoredProfiles } from "@/lib/notaire-profiles";
+import { supabase } from "@/lib/supabase";
 import dynamic from "next/dynamic";
 
 const AIAssistantPanel = dynamic(() => import("./AIAssistantPanel"), { ssr: false });
@@ -57,7 +59,24 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
   const [dropOpen, setDropOpen] = useState(false);
+  const [hasProfile, setHasProfile] = useState(false);
   const dropRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // localStorage instantané (inscription sur ce navigateur)
+    if (getStoredProfiles().length > 0) setHasProfile(true);
+
+    // Session Supabase Auth (connexion réelle, multi-navigateur)
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) setHasProfile(true);
+    });
+
+    // Réactif : mise à jour au login / logout
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setHasProfile(!!session || getStoredProfiles().length > 0);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <>
@@ -165,6 +184,16 @@ export default function Header() {
                 {label}
               </a>
             ))}
+
+            {hasProfile && (
+              <a
+                href="/espace-notaire"
+                className="flex items-center gap-1.5 text-[var(--color-accent)] hover:text-[var(--color-primary)] transition-colors font-semibold"
+              >
+                <LayoutDashboard className="w-3.5 h-3.5" strokeWidth={2.5} />
+                Mon espace
+              </a>
+            )}
           </nav>
 
           <div className="flex gap-3 items-center">
@@ -263,6 +292,18 @@ export default function Header() {
                     {label}
                   </a>
                 ))}
+                {/* Mon espace dans le menu mobile */}
+                {hasProfile && (
+                  <a
+                    href="/espace-notaire"
+                    onClick={() => setOpen(false)}
+                    className="py-3 text-[15px] font-semibold text-[var(--color-accent)] flex items-center gap-2 hover:text-[var(--color-primary)] transition-colors border-b border-[var(--color-border-soft)]"
+                  >
+                    <LayoutDashboard className="w-4 h-4" strokeWidth={2.5} />
+                    Mon espace
+                  </a>
+                )}
+
                 {/* Assistant IA dans le menu mobile */}
                 <button
                   type="button"

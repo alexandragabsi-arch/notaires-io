@@ -1,8 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { addProfile } from "@/lib/notaire-profiles";
+import { addProfile, claimProfile } from "@/lib/notaire-profiles";
+import { supabase } from "@/lib/supabase";
+import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import {
   User,
@@ -45,6 +48,10 @@ const SPECIALTIES = [
 ];
 
 export default function NotaireSignup() {
+  const searchParams = useSearchParams();
+  const claimId = searchParams.get("claim");
+  const claimedNotaire = claimId ? (LISTING_NOTAIRES.find(n => n.id === claimId) ?? null) : null;
+
   const [step, setStep] = useState(0);
   const [done, setDone] = useState(false);
   const [savedProfile, setSavedProfile] = useState<ListingNotaire | null>(null);
@@ -110,20 +117,68 @@ export default function NotaireSignup() {
     setPaying(true);
     setPayError("");
     try {
-      // 1. Enregistre le profil dans Supabase (upload photo vers Storage si dispo)
-      const profile = await addProfile({
-        prenom,
-        nom,
-        ville,
-        etude,
-        website: website.trim() || undefined,
-        specialties: specs,
-        languages: langs,
-        photo,                              // data URL base64 — fallback si upload échoue
-        photoFile: photoFile ?? undefined,  // fichier brut → Supabase Storage
-        bio,
-        role: role || undefined,
-      });
+      // 0. Créer ou connecter le compte Supabase Auth
+      let userId: string | undefined;
+      if (email.trim() && password.trim()) {
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+          email: email.trim(),
+          password: password.trim(),
+        });
+
+        if (signUpError) {
+          // Email déjà enregistré → essayer de se connecter avec le même mot de passe
+          if (signUpError.message.toLowerCase().includes("already registered") ||
+              signUpError.message.toLowerCase().includes("already been registered")) {
+            const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+              email: email.trim(),
+              password: password.trim(),
+            });
+            if (signInError) {
+              setPayError("Un compte existe déjà avec cet e-mail. Vérifiez votre mot de passe ou connectez-vous via la page Connexion.");
+              setPaying(false);
+              return;
+            }
+            userId = signInData.user?.id;
+          } else {
+            setPayError("Erreur lors de la création du compte : " + signUpError.message);
+            setPaying(false);
+            return;
+          }
+        } else {
+          userId = signUpData.user?.id;
+        }
+      }
+
+      // 1. Enregistre / revendique le profil dans Supabase
+      let profile: ListingNotaire;
+
+      if (claimId && claimedNotaire) {
+        // Mode claim : lie l'auth à l'ID de listing existant
+        await claimProfile(
+          claimId,
+          claimedNotaire.name,
+          claimedNotaire.city,
+          {},        // pas d'enrichissement ici — l'espace permettra de modifier plus tard
+          userId,
+        );
+        profile = { ...claimedNotaire, claimed: true };
+      } else {
+        // Mode inscription standard
+        profile = await addProfile({
+          prenom,
+          nom,
+          ville,
+          etude,
+          website: website.trim() || undefined,
+          specialties: specs,
+          languages: langs,
+          photo,
+          photoFile: photoFile ?? undefined,
+          bio,
+          role: role || undefined,
+          userId,
+        });
+      }
       setSavedProfile(profile);
 
       // 2. Crée la session Stripe Checkout
@@ -148,6 +203,121 @@ export default function NotaireSignup() {
       setPayError("Une erreur réseau est survenue. Veuillez réessayer.");
       setPaying(false);
     }
+  }
+
+  /* ── Mode "Activer mon profil" (claim d'un profil listing existant) ────── */
+  if (claimId) {
+    const displayName = claimedNotaire?.name ?? claimId;
+    const claimSteps = ["Votre compte", "Paiement"];
+    const claimStep = step === 0 ? 0 : 1; // step 0 = compte, tout autre = paiement
+
+    return (
+      <section className="py-12 sm:py-20 bg-white">
+        <div className="max-w-[560px] mx-auto px-6">
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-[13px] font-semibold mb-4">
+              Activation du profil
+            </div>
+            <h1 className="serif text-[26px] sm:text-[34px] font-bold text-[var(--color-text-strong)] tracking-tight mb-2">
+              Bienvenue, {displayName.replace(/^Me\s+/, "Me ")}
+            </h1>
+            <p className="text-[var(--color-muted)] text-[15px] max-w-[400px] mx-auto">
+              Créez votre compte pour activer votre profil et recevoir vos rendez-vous en ligne.
+            </p>
+          </motion.div>
+
+          <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6 sm:p-8">
+            {/* Barre 2 étapes */}
+            <div className="flex items-center gap-1.5 mb-8">
+              {claimSteps.map((label, i) => {
+                const reached = i <= claimStep;
+                return (
+                  <div key={label} className="flex items-center gap-1.5 flex-1">
+                    <span className={`flex items-center gap-1.5 text-[12px] font-semibold whitespace-nowrap ${reached ? "text-[var(--color-primary)]" : "text-[var(--color-muted)]"}`}>
+                      <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] ${reached ? "bg-[var(--color-accent)] text-white" : "bg-[var(--color-border-soft)] text-[var(--color-muted)]"}`}>
+                        {i < claimStep ? <Check className="w-3 h-3" strokeWidth={3} /> : i + 1}
+                      </span>
+                      {label}
+                    </span>
+                    {i < claimSteps.length - 1 && (
+                      <span className={`h-px flex-1 ${i < claimStep ? "bg-[var(--color-accent)]" : "bg-[var(--color-border-soft)]"}`} />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <AnimatePresence mode="wait">
+              <motion.div key={claimStep} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -12 }} transition={{ duration: 0.25 }} className="flex flex-col gap-4">
+                {claimStep === 0 && (
+                  <>
+                    <Field label="E-mail professionnel">
+                      <IconInput icon={Mail} type="email" value={email} onChange={setEmail} placeholder="maitre@etude.fr" />
+                    </Field>
+                    <Field label="Mot de passe">
+                      <IconInput icon={Lock} type="password" value={password} onChange={setPassword} placeholder="••••••••" />
+                    </Field>
+                    <label className="flex items-start gap-2.5 mt-1 cursor-pointer">
+                      <input type="checkbox" checked={accept} onChange={e => setAccept(e.target.checked)} className="mt-0.5 w-4 h-4 shrink-0 accent-[var(--color-accent)] cursor-pointer" />
+                      <span className="text-[13px] text-[var(--color-muted)] leading-relaxed">
+                        J&apos;accepte les <a href="/cgu" target="_blank" className="text-[var(--color-accent)] font-semibold hover:underline">CGU</a> et la <a href="/confidentialite" target="_blank" className="text-[var(--color-accent)] font-semibold hover:underline">politique de confidentialité</a>.
+                      </span>
+                    </label>
+                  </>
+                )}
+
+                {claimStep === 1 && (
+                  <div className="flex flex-col gap-5">
+                    <div className="bg-[var(--color-tint-green)] rounded-xl px-4 py-3 text-center">
+                      <span className="text-[13px] font-bold text-[var(--color-success)]">🎉 Offre de lancement</span>
+                    </div>
+                    <div className="bg-[var(--color-tint-blue)] rounded-2xl p-5 border border-[var(--color-border-soft)]">
+                      <div className="flex items-baseline gap-1 mb-1">
+                        <span className="serif text-[36px] font-bold text-[var(--color-primary)] leading-none">99</span>
+                        <span className="text-[18px] font-bold text-[var(--color-primary)]">€</span>
+                        <span className="text-[13px] text-[var(--color-muted)] ml-1">HT/mois</span>
+                        <span className="text-[13px] text-[var(--color-muted)] ml-2">pendant 3 mois</span>
+                      </div>
+                      <p className="text-[13px] text-[var(--color-muted)]">puis <strong className="text-[var(--color-text-strong)]">119 € HT/mois</strong> · résiliable à tout moment</p>
+                    </div>
+                    <ul className="flex flex-col gap-2.5">
+                      {["QR code personnalisé + lien de prise de RDV", "Profil activé dans l'annuaire", "Agenda en ligne (visio ou cabinet)", "Rappels e-mail automatiques clients"].map(item => (
+                        <li key={item} className="flex items-center gap-2.5 text-[14px] text-[var(--color-text-strong)]">
+                          <Check className="w-4 h-4 text-[var(--color-success)] shrink-0" strokeWidth={2.5} />{item}
+                        </li>
+                      ))}
+                    </ul>
+                    {payError && <p className="text-[13px] text-red-600 bg-red-50 rounded-xl px-4 py-3 border border-red-200">{payError}</p>}
+                    <button type="button" onClick={goToPayment} disabled={paying} className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-4 rounded-[12px] text-[16px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed">
+                      {paying ? <><Loader2 className="w-5 h-5 animate-spin" strokeWidth={2.5} />Redirection…</> : <><CreditCard className="w-5 h-5" strokeWidth={2.5} />Payer et activer mon profil</>}
+                    </button>
+                    <div className="flex items-center justify-center gap-2 text-[12px] text-[var(--color-muted)]">
+                      <ShieldCheck className="w-4 h-4 shrink-0" strokeWidth={2} />Paiement 100 % sécurisé par Stripe · Aucun engagement
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
+
+            {claimStep === 0 && (
+              <div className="mt-8 flex justify-end">
+                <button type="button" disabled={!email.trim() || !password.trim() || !accept} onClick={() => setStep(4)} className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0">
+                  Continuer vers le paiement
+                  <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+                </button>
+              </div>
+            )}
+            {claimStep === 1 && (
+              <div className="mt-4">
+                <button type="button" onClick={() => setStep(0)} disabled={paying} className="inline-flex items-center gap-2 text-[14px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors disabled:opacity-0">
+                  <ArrowLeft className="w-[17px] h-[17px]" strokeWidth={2.5} />Retour
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (

@@ -19,6 +19,9 @@ export interface SignupProfile {
   photoFile?: File;          // fichier brut → uploadé vers Supabase Storage
   bio?: string;
   role?: "associé" | "salarié";
+  userId?: string;           // Supabase auth.users.id — lié au compte notaire
+                             // ⚠️ SQL requis : ALTER TABLE notaire_profiles ADD COLUMN user_id UUID REFERENCES auth.users(id);
+                             //                 CREATE INDEX ON notaire_profiles (user_id);
 }
 
 /**
@@ -162,6 +165,7 @@ export async function addProfile(p: SignupProfile): Promise<ListingNotaire> {
     languages: entry.languages ?? [],
     bio: entry.bio ?? null,
     photo: entry.photo ?? null,
+    user_id: p.userId ?? null,
   });
 
   return entry;
@@ -177,13 +181,22 @@ export interface ClaimData {
   phone?: string;
   address?: string;
   website?: string;
+  slotMatrix?: string[][];   // disponibilités sur 91 jours (13 semaines)
 }
 
 /**
  * Un notaire revendique son profil existant (id = membres.json) et l'enrichit.
  * Upsert dans Supabase avec l'ID d'origine → priorité sur la fiche scrappée.
+ * Si userId est fourni (flow "Activer mon profil"), lie le compte auth au profil
+ * et sauvegarde dans localStorage pour un accès immédiat à l'espace.
  */
-export async function claimProfile(id: string, name: string, city: string, data: ClaimData): Promise<void> {
+export async function claimProfile(
+  id: string,
+  name: string,
+  city: string,
+  data: ClaimData,
+  userId?: string,
+): Promise<void> {
   let photoUrl: string | null = data.photo ?? null;
 
   // Upload photo si un fichier est fourni
@@ -192,11 +205,13 @@ export async function claimProfile(id: string, name: string, city: string, data:
     if (url) photoUrl = url;
   }
 
+  const initials = name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map((w: string) => w[0]).join("").toUpperCase() || "N";
+
   await supabase.from("notaire_profiles").upsert({
     id,
     name,
     city,
-    initials: name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map((w: string) => w[0]).join("").toUpperCase() || "N",
+    initials,
     color: "default",
     office_name: null,
     website: data.website?.trim() ?? null,
@@ -207,7 +222,64 @@ export async function claimProfile(id: string, name: string, city: string, data:
     languages: data.languages ?? [],
     bio: data.bio ?? null,
     photo: photoUrl,
+    slot_matrix: data.slotMatrix ?? null,
+    user_id: userId ?? null,
   });
+
+  // Sauvegarde localStorage → accès immédiat à /espace-notaire après paiement
+  if (userId && typeof window !== "undefined") {
+    const entry: ListingNotaire = {
+      id,
+      name,
+      city,
+      initials,
+      color: "default",
+      specialties: data.specialties ?? [],
+      languages: data.languages,
+      photo: photoUrl ?? undefined,
+      bio: data.bio,
+      phone: data.phone,
+      address: data.address,
+      website: data.website,
+      next: "Sur demande",
+      isNew: false,
+      claimed: true,
+    };
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify([entry]));
+    } catch { /* quota / mode privé */ }
+  }
+}
+
+// Récupère le profil d'un notaire à partir de son Supabase auth user_id.
+export async function getProfileByUserId(userId: string): Promise<ListingNotaire | null> {
+  const { data, error } = await supabase
+    .from("notaire_profiles")
+    .select("*")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error || !data) return null;
+
+  return {
+    id: data.id as string,
+    name: data.name as string,
+    initials: (data.initials as string) || "N",
+    color: (data.color as ListingNotaire["color"]) || "default",
+    city: data.city as string,
+    officeName: data.office_name as string | undefined,
+    website: data.website as string | undefined,
+    address: data.address as string | undefined,
+    phone: data.phone as string | undefined,
+    role: data.role as "associé" | "salarié" | undefined,
+    specialties: (data.specialties as string[]) || [],
+    languages: (data.languages as string[]) || undefined,
+    bio: data.bio as string | undefined,
+    photo: data.photo as string | undefined,
+    next: "Sur demande",
+    isNew: false,
+    claimed: true,
+  };
 }
 
 // Compat : ancienne API synchrone (garde localStorage seul pour rétrocompatibilité)

@@ -809,6 +809,7 @@ const CONTENT_MAP: Record<string, () => ReactNode> = {
   "combien-temps-rdv-notaire": () => <Article88 />,
   "notaire-urgence-succession": () => <Article89 />,
   "notaire-urgence-achat": () => <Article90 />,
+  "emoluments-notaire-calcul-tarifs-reglementes": () => <Article91 />,
 };
 
 
@@ -5000,6 +5001,166 @@ function Article90() {
 <p className="text-[var(--color-muted)] mb-4 leading-relaxed">Expliquez dès le premier appel votre contrainte de délai. Un notaire qui sait qu'une offre de prêt expire dans 6 semaines priorisera votre dossier différemment de celui d'un achat standard. Précisez les dates butoirs et demandez explicitement si l'étude peut respecter ce délai.</p>
 <p className="text-[var(--color-muted)] mb-4 leading-relaxed">La <strong className="text-[var(--color-text-strong)]">visioconférence</strong> supprime les contraintes de déplacement et d'agenda. Si l'une des parties est éloignée géographiquement, proposer une signature à distance peut décoincer un calendrier bloqué.</p>
 <p className="text-[var(--color-muted)] leading-relaxed">Enfin, transmettez un dossier complet dès le premier contact : copie de la pièce d'identité, RIB, justificatif de domicile, attestation de l'offre de prêt ou relevés pour un achat comptant. Un dossier complet dès le départ supprime les allers-retours qui font perdre plusieurs jours précieux.</p>
+
+<InternalCTA />
+    </>
+  );
+}
+
+/* ── Article 91 ─────────────────────────────────────────────────────────── */
+
+function Article91() {
+  return (
+    <>
+<p className="lead">Le notaire ne fixe pas librement ses tarifs sur la plupart des actes. Ses <strong className="text-[var(--color-text-strong)]">émoluments</strong> sont encadrés par un décret qui prévoit un barème proportionnel par tranches. Résultat : deux notaires calculent le même acte au même prix. Voici comment fonctionne concrètement ce système — et comment lire votre facture.</p>
+
+<KeyPoints points={[
+  "Les émoluments sont fixés par le décret du 26 février 2016 : mêmes tarifs dans toute la France.",
+  "Le calcul se fait par tranches de valeur, avec des taux dégressifs (de 3,945 % à 0,814 %).",
+  "Les émoluments sont soumis à la TVA à 20 %, contrairement aux droits de mutation.",
+  "Une remise facultative jusqu'à 20 % est possible sur la part > 100 000 € depuis 2021.",
+  "Débours, formalités et droits de mutation s'ajoutent aux émoluments dans la note finale.",
+]} />
+
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Émoluments, honoraires, débours : les trois composantes de la facture notariale</h2>
+<p className="text-[var(--color-muted)] mb-4 leading-relaxed">
+  La note du notaire comprend trois lignes bien distinctes que beaucoup de clients confondent :
+</p>
+<ul className="list-none flex flex-col gap-3 mb-6">
+  <li className="flex items-start gap-3 p-4 bg-[var(--color-tint-blue)] rounded-xl">
+    <span className="mt-0.5 w-5 h-5 rounded-full bg-[var(--color-accent)] text-white text-[11px] font-bold flex items-center justify-center shrink-0">1</span>
+    <div><strong className="text-[var(--color-text-strong)]">Les émoluments</strong> — la rémunération du notaire pour les actes tarifés (vente immobilière, donation, succession…). Tarifs fixés par décret, identiques partout en France.</div>
+  </li>
+  <li className="flex items-start gap-3 p-4 bg-[var(--color-tint-blue)] rounded-xl">
+    <span className="mt-0.5 w-5 h-5 rounded-full bg-[var(--color-accent)] text-white text-[11px] font-bold flex items-center justify-center shrink-0">2</span>
+    <div><strong className="text-[var(--color-text-strong)]">Les honoraires</strong> — librement fixés pour les prestations de conseil, les actes non tarifés (rédaction d'un bail commercial, consultation juridique…). Le notaire peut négocier leur montant.</div>
+  </li>
+  <li className="flex items-start gap-3 p-4 bg-[var(--color-tint-blue)] rounded-xl">
+    <span className="mt-0.5 w-5 h-5 rounded-full bg-[var(--color-accent)] text-white text-[11px] font-bold flex items-center justify-center shrink-0">3</span>
+    <div><strong className="text-[var(--color-text-strong)]">Les débours</strong> — sommes avancées par le notaire pour le compte du client : frais de cadastre, de géomètre, de publication hypothécaire, extraits d'état civil… Ils sont remboursés à l'euro près.</div>
+  </li>
+</ul>
+<p className="text-[var(--color-muted)] mb-6 leading-relaxed">
+  À ces trois postes s'ajoutent les <strong className="text-[var(--color-text-strong)]">droits et taxes</strong> perçus pour le compte de l'État et des collectivités (droits de mutation, taxe de publicité foncière). Ces prélèvements fiscaux constituent la plus grande part de la facture dans l'immobilier — environ 5,8 % du prix dans l'ancien — mais ils ne constituent pas un revenu pour le notaire.
+</p>
+
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Le barème officiel des émoluments proportionnels</h2>
+<p className="text-[var(--color-muted)] mb-4 leading-relaxed">
+  Le décret n° 2016-230 du 26 février 2016 (modifié par le décret du 20 janvier 2021) fixe quatre tranches de valeur avec des taux dégressifs. Plus la valeur de l'acte est élevée, plus le taux marginal est faible.
+</p>
+
+<div className="overflow-x-auto mb-6">
+  <table className="w-full text-[13px] border-collapse">
+    <thead>
+      <tr className="bg-[var(--color-accent)] text-white">
+        <th className="text-left px-4 py-3 rounded-tl-xl font-semibold">Tranche de valeur</th>
+        <th className="text-right px-4 py-3 font-semibold">Taux HT</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="border-b border-[var(--color-border-soft)] bg-[var(--color-tint-blue)]">
+        <td className="px-4 py-3 text-[var(--color-text-strong)]">De 0 à 6 500 €</td>
+        <td className="px-4 py-3 text-right font-bold text-[var(--color-accent)]">3,945 %</td>
+      </tr>
+      <tr className="border-b border-[var(--color-border-soft)]">
+        <td className="px-4 py-3 text-[var(--color-text-strong)]">De 6 500 € à 17 000 €</td>
+        <td className="px-4 py-3 text-right font-bold text-[var(--color-accent)]">1,627 %</td>
+      </tr>
+      <tr className="border-b border-[var(--color-border-soft)] bg-[var(--color-tint-blue)]">
+        <td className="px-4 py-3 text-[var(--color-text-strong)]">De 17 000 € à 60 000 €</td>
+        <td className="px-4 py-3 text-right font-bold text-[var(--color-accent)]">1,085 %</td>
+      </tr>
+      <tr>
+        <td className="px-4 py-3 text-[var(--color-text-strong)]">Au-delà de 60 000 €</td>
+        <td className="px-4 py-3 text-right font-bold text-[var(--color-accent)]">0,814 %</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<p className="text-[var(--color-muted)] mb-6 leading-relaxed">
+  Ces taux s'appliquent à la <strong className="text-[var(--color-text-strong)]">valeur de l'acte</strong> (prix de vente pour un immeuble, actif net pour une succession, montant de la donation…). On additionne ensuite le résultat de chaque tranche pour obtenir l'émolument proportionnel total hors taxes.
+</p>
+
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Exemple chiffré : vente d'un appartement à 250 000 €</h2>
+<p className="text-[var(--color-muted)] mb-4 leading-relaxed">
+  Prenons un achat dans l'ancien à 250 000 €. Voici le calcul de l'émolument du notaire, tranche par tranche :
+</p>
+
+<div className="overflow-x-auto mb-6">
+  <table className="w-full text-[13px] border-collapse">
+    <thead>
+      <tr className="bg-[var(--color-tint-blue)] text-[var(--color-text-strong)]">
+        <th className="text-left px-4 py-3 rounded-tl-xl font-semibold">Tranche</th>
+        <th className="text-right px-4 py-3 font-semibold">Base</th>
+        <th className="text-right px-4 py-3 font-semibold">Taux</th>
+        <th className="text-right px-4 py-3 rounded-tr-xl font-semibold">Montant HT</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr className="border-b border-[var(--color-border-soft)]">
+        <td className="px-4 py-3 text-[var(--color-muted)]">0 → 6 500 €</td>
+        <td className="px-4 py-3 text-right text-[var(--color-muted)]">6 500 €</td>
+        <td className="px-4 py-3 text-right text-[var(--color-muted)]">3,945 %</td>
+        <td className="px-4 py-3 text-right font-semibold text-[var(--color-text-strong)]">256,43 €</td>
+      </tr>
+      <tr className="border-b border-[var(--color-border-soft)] bg-[var(--color-tint-blue)]">
+        <td className="px-4 py-3 text-[var(--color-muted)]">6 500 → 17 000 €</td>
+        <td className="px-4 py-3 text-right text-[var(--color-muted)]">10 500 €</td>
+        <td className="px-4 py-3 text-right text-[var(--color-muted)]">1,627 %</td>
+        <td className="px-4 py-3 text-right font-semibold text-[var(--color-text-strong)]">170,84 €</td>
+      </tr>
+      <tr className="border-b border-[var(--color-border-soft)]">
+        <td className="px-4 py-3 text-[var(--color-muted)]">17 000 → 60 000 €</td>
+        <td className="px-4 py-3 text-right text-[var(--color-muted)]">43 000 €</td>
+        <td className="px-4 py-3 text-right text-[var(--color-muted)]">1,085 %</td>
+        <td className="px-4 py-3 text-right font-semibold text-[var(--color-text-strong)]">466,55 €</td>
+      </tr>
+      <tr className="border-b border-[var(--color-border-soft)] bg-[var(--color-tint-blue)]">
+        <td className="px-4 py-3 text-[var(--color-muted)]">60 000 → 250 000 €</td>
+        <td className="px-4 py-3 text-right text-[var(--color-muted)]">190 000 €</td>
+        <td className="px-4 py-3 text-right text-[var(--color-muted)]">0,814 %</td>
+        <td className="px-4 py-3 text-right font-semibold text-[var(--color-text-strong)]">1 546,60 €</td>
+      </tr>
+      <tr className="bg-[var(--color-accent)] text-white">
+        <td className="px-4 py-3 font-bold rounded-bl-xl" colSpan={3}>Total émoluments HT</td>
+        <td className="px-4 py-3 text-right font-bold rounded-br-xl">2 440,42 €</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<p className="text-[var(--color-muted)] mb-4 leading-relaxed">
+  On ajoute ensuite la TVA à 20 % : <strong className="text-[var(--color-text-strong)]">2 928,50 € TTC</strong> pour l'émolument de l'acte de vente. À cela viennent s'additionner les <strong className="text-[var(--color-text-strong)]">émoluments de formalités</strong> (environ 500 à 800 € selon le dossier) et les débours (200 à 400 €), soit un total de rémunération du notaire de l'ordre de <strong className="text-[var(--color-text-strong)]">3 600 à 4 100 € TTC</strong>.
+</p>
+<p className="text-[var(--color-muted)] mb-6 leading-relaxed">
+  La part fiscale (droits de mutation : taxe départementale à 4,5 % + taxe communale à 1,2 % + frais d'assiette) représente en revanche environ <strong className="text-[var(--color-text-strong)]">14 500 € pour une vente à 250 000 €</strong>. C'est ce poste qui explique que les « frais de notaire » dépassent 7 % dans l'ancien : leur essentiel est en réalité reversé à l'État et aux collectivités.
+</p>
+
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Les émoluments de formalités (tarifs fixes)</h2>
+<p className="text-[var(--color-muted)] mb-4 leading-relaxed">
+  En parallèle des émoluments proportionnels, le décret fixe des <strong className="text-[var(--color-text-strong)]">émoluments de formalités</strong> forfaitaires pour chaque démarche administrative que le notaire accomplit : demande d'état hypothécaire, formalité de publicité foncière, vérification auprès du cadastre, obtention d'un acte d'état civil…
+</p>
+<p className="text-[var(--color-muted)] mb-6 leading-relaxed">
+  Ces forfaits vont de <strong className="text-[var(--color-text-strong)]">quelques euros à une centaine d'euros par formalité</strong>. Ils sont listés en annexe du décret et consultables sur le site du Conseil Supérieur du Notariat. Pour un acte de vente standard, comptez entre 10 et 20 lignes de formalités, pour un total de 500 à 800 € HT.
+</p>
+
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">La remise tarifaire : jusqu'à 20 % sur la partie haute</h2>
+<p className="text-[var(--color-muted)] mb-4 leading-relaxed">
+  Depuis le décret du 20 janvier 2021, le notaire peut accorder une <strong className="text-[var(--color-text-strong)]">remise facultative allant jusqu'à 20 %</strong> sur la part d'émoluments calculée sur la fraction du prix qui dépasse 100 000 €. Cette remise est encadrée : elle ne peut pas excéder 20 % et elle est la même pour tous les clients dans une même étude (interdiction de discrimination).
+</p>
+<p className="text-[var(--color-muted)] mb-6 leading-relaxed">
+  Dans notre exemple à 250 000 €, la base éligible est de 150 000 € (250 000 − 100 000). L'émolument sur cette tranche est de 150 000 × 0,814 % = 1 221 € HT. La remise maximale serait donc de 244,20 € HT, soit 293 € TTC — une économie modeste mais réelle sur un gros dossier.
+</p>
+
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Neuf actes, deux notaires, un seul tarif</h2>
+<p className="text-[var(--color-muted)] mb-4 leading-relaxed">
+  Un point souvent méconnu : choisir un notaire « moins cher » qu'un autre pour un acte tarifé est impossible. Que vous fassiez appel au notaire du quartier ou à celui recommandé par votre agence, l'émolument sera identique. Le critère de choix doit donc porter sur la <strong className="text-[var(--color-text-strong)]">disponibilité, la spécialité et la réactivité</strong> du professionnel — pas sur un hypothétique écart de prix.
+</p>
+<p className="text-[var(--color-muted)] mb-4 leading-relaxed">
+  En revanche, si l'acte comporte une part de conseil ou de montage juridique complexe (démembrement de propriété, acte mixte vente + donation, SCI familiale adossée à l'acquisition…), le notaire peut facturer des honoraires libres en complément. Ceux-ci doivent obligatoirement faire l'objet d'une <strong className="text-[var(--color-text-strong)]">convention d'honoraires signée avant la réalisation de la prestation</strong>.
+</p>
+<p className="text-[var(--color-muted)] mb-6 leading-relaxed">
+  Enfin, sachez que lorsque deux notaires interviennent dans un acte (un pour le vendeur, un pour l'acheteur par exemple), ils se <strong className="text-[var(--color-text-strong)]">partagent l'émolument</strong> : vous ne payez pas deux fois. L'émolument est unique et réparti entre les deux études selon une clé de partage définie par la profession.
+</p>
 
 <InternalCTA />
     </>

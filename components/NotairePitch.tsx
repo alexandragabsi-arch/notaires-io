@@ -12,6 +12,7 @@ import {
   CalendarCheck,
   MessageSquare,
   Download,
+  Check,
 } from "lucide-react";
 import QRCard from "@/components/QRCard";
 import CardDesigner from "@/components/CardDesigner";
@@ -273,8 +274,8 @@ export default function NotairePitch() {
                 "Proposition d'honoraires intégrée",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2.5 text-[15px] text-[var(--color-text-strong)]">
-                  <span className="w-5 h-5 mt-px rounded-full bg-[var(--color-success)] text-white inline-flex items-center justify-center shrink-0">
-                    <ArrowRight className="w-2.5 h-2.5" strokeWidth={3} />
+                  <span className="w-5 h-5 mt-[2px] rounded-full bg-[var(--color-success)] text-white inline-flex items-center justify-center shrink-0">
+                    <Check className="w-3 h-3" strokeWidth={3} />
                   </span>
                   {item}
                 </li>

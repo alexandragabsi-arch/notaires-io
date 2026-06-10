@@ -1311,6 +1311,39 @@ export const BLOG_POSTS: BlogPost[] = [
     ]
   },
 
+  {
+    slug: "emoluments-notaire-calcul-tarifs-reglementes",
+    title: "Émoluments du notaire : comment sont calculés vos frais ?",
+    excerpt:
+      "Les émoluments du notaire sont fixés par décret et calculés selon des tranches de valeur. Comprendre cette grille tarifaire officielle vous permet d'anticiper le coût exact de votre acte — avec un exemple chiffré pour une vente à 250 000 €.",
+    date: "2026-06-10",
+    readingTime: 7,
+    category: "Guide tarifaire",
+    keywords: [
+      "émoluments notaire calcul",
+      "tarifs réglementés notaire décret",
+      "comment sont calculés les frais de notaire",
+    ],
+    canonicalUrl: `${BASE}/blog/emoluments-notaire-calcul-tarifs-reglementes`,
+    faqs: [
+      {
+        question: "Quelle est la différence entre émoluments et honoraires de notaire ?",
+        answer:
+          "Les émoluments sont des tarifs fixés par décret pour les actes courants (vente immobilière, succession, donation). Les honoraires sont librement fixés pour les prestations de conseil et les actes non tarifés.",
+      },
+      {
+        question: "Le notaire peut-il faire une remise sur ses émoluments ?",
+        answer:
+          "Oui, depuis 2021, le notaire peut accorder une remise allant jusqu'à 20 % sur la part d'émoluments calculée sur la fraction du prix qui dépasse 100 000 €. Cette remise est fixe et non négociable au-delà.",
+      },
+      {
+        question: "Les émoluments incluent-ils la TVA ?",
+        answer:
+          "Les émoluments sont soumis à la TVA au taux de 20 %. En revanche, les droits de mutation (taxe départementale, taxe de publicité foncière) ne sont pas assujettis à la TVA — ils sont collectés par le notaire pour le compte des collectivités publiques.",
+      },
+    ],
+  },
+
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {

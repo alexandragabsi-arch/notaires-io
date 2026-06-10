@@ -4,7 +4,7 @@
   /* LegalCorners palette */
   --color-primary: #1c4587;
   --color-primary-hover: #163769;
-  --color-accent: #4980e6;
+  --color-accent: #2d5dbf;
   --color-accent-soft: #eef4ff;
   --color-text-strong: #0f2a52;
   --color-muted: #64748b;
@@ -25,8 +25,8 @@
   /* Shadows */
   --shadow-card: 0 4px 24px rgba(28, 69, 135, 0.08);
   --shadow-strong: 0 12px 40px rgba(28, 69, 135, 0.12);
-  --shadow-cta: 0 4px 14px rgba(73, 128, 230, 0.25);
-  --shadow-cta-hover: 0 6px 20px rgba(73, 128, 230, 0.35);
+  --shadow-cta: 0 4px 14px rgba(45, 93, 191, 0.25);
+  --shadow-cta-hover: 0 6px 20px rgba(45, 93, 191, 0.35);
 }
 
 :root {
@@ -36,7 +36,7 @@
     #447ce6,
     #767af9
   );
-  --gradient-banner: linear-gradient(135deg, #1c4587 0%, #4980e6 100%);
+  --gradient-banner: linear-gradient(135deg, #1c4587 0%, #2d5dbf 100%);
   --gradient-green: linear-gradient(135deg, #10b981, #059669);
 }
 

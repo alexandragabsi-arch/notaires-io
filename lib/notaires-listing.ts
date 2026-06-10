@@ -21,6 +21,7 @@ export interface ListingNotaire {
   photo?: string;
   isNew?: boolean;
   bio?: string;
+  claimed?: boolean; // true = abonné actif ; false/undefined = profil fantôme
 }
 
 export const LISTING_NOTAIRES: ListingNotaire[] = [

@@ -5,13 +5,36 @@ import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   Search, MapPin, X, Video, Phone, Globe,
-  BadgeCheck, ArrowRight, Sparkles, ChevronRight
+  BadgeCheck, ArrowRight, Sparkles, ChevronRight,
+  Lock, Building2, Home, Users, Scale, Heart,
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { getStoredProfiles, getRemoteProfiles } from "@/lib/notaire-profiles";
 
 const ALL = "Toutes";
+
+const SPECIALTIES = [
+  { label: "Immobilier", icon: Home },
+  { label: "Successions", icon: Scale },
+  { label: "Droit de la famille", icon: Heart },
+  { label: "Mariage / PACS", icon: Heart },
+  { label: "Droit des sociétés", icon: Building2 },
+  { label: "Donations", icon: Users },
+];
+
+const POPULAR_CITIES = [
+  { name: "Paris", count: 12 },
+  { name: "Lyon", count: 8 },
+  { name: "Marseille", count: 6 },
+  { name: "Bordeaux", count: 5 },
+  { name: "Toulouse", count: 4 },
+  { name: "Nantes", count: 4 },
+  { name: "Strasbourg", count: 4 },
+  { name: "Nice", count: 4 },
+  { name: "Grenoble", count: 4 },
+  { name: "Montpellier", count: 4 },
+];
 
 interface CitySugg { city: string; postcode: string; }
 
@@ -62,7 +85,7 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
         <div className="flex items-center gap-3">
           {n.photo ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={n.photo} alt={n.name}
+            <img src={n.photo} alt={n.name} loading="lazy"
               className="w-14 h-14 rounded-full object-cover shrink-0 border-2 border-[var(--color-border-soft)]" />
           ) : (
             <div className={`w-14 h-14 rounded-full flex items-center justify-center font-bold text-white text-[16px] shrink-0 ${
@@ -104,28 +127,46 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
           </div>
         )}
 
-        {/* Téléphone */}
+        {/* Téléphone — flou si non revendiqué */}
         {n.phone && (
-          <div className="flex items-center gap-1.5 text-[12px] text-[var(--color-muted)]">
-            <Phone className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
-            {n.phone}
+          n.claimed ? (
+            <div className="flex items-center gap-1.5 text-[12px] text-[var(--color-muted)]">
+              <Phone className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
+              {n.phone}
+            </div>
+          ) : (
+            <div className="relative flex items-center gap-1.5 text-[12px] text-[var(--color-muted)]">
+              <Phone className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
+              <span className="blur-[5px] select-none pointer-events-none">
+                {n.phone}
+              </span>
+            </div>
+          )
+        )}
+
+        {/* Accepte les RDVs / Profil non activé */}
+        {n.claimed ? (
+          <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-accent)]">
+            <Video className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
+            Visio &amp; cabinet disponibles
+          </div>
+        ) : (
+          <div className="flex items-center gap-1.5 text-[12px] font-semibold text-green-500">
+            <Lock className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
+            Profil non revendiqué
           </div>
         )}
 
-        {/* Accepte les RDVs */}
-        <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-accent)]">
-          <Video className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
-          Accepte les RDVs :
-          <span className="flex items-center gap-1">
-            <Video className="w-3.5 h-3.5" strokeWidth={2} />
-            <Phone className="w-3.5 h-3.5" strokeWidth={2} />
-          </span>
-        </div>
-
-        {/* Vérifié */}
-        {!n.isNew && (
-          <div className="flex items-center gap-1 text-[12px] text-[var(--color-success)] font-semibold">
-            <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} /> Notaire vérifié
+        {/* Badge vérifié / non revendiqué */}
+        {n.claimed ? (
+          !n.isNew && (
+            <div className="flex items-center gap-1 text-[12px] text-[var(--color-success)] font-semibold">
+              <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} /> Notaire vérifié
+            </div>
+          )
+        ) : (
+          <div className="flex items-center gap-1 text-[12px] text-green-500 font-semibold">
+            <Lock className="w-3 h-3" strokeWidth={2} /> Non revendiqué
           </div>
         )}
 
@@ -174,7 +215,7 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
                     <a
                       key={slot}
                       href={`/notaires/${n.id}`}
-                      className="w-full text-center px-2 py-2 rounded-lg text-[13px] font-bold bg-[var(--color-accent)] text-white hover:opacity-80 transition-opacity"
+                      className="w-full text-center px-2 py-2 rounded-lg text-[12px] font-semibold bg-[var(--color-accent-soft)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-all"
                     >
                       {slot}
                     </a>
@@ -207,6 +248,7 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
 function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[] }) {
   const searchParams = useSearchParams();
   const urlVille = searchParams.get("ville") ?? "";
+  const urlNom = searchParams.get("nom") ?? "";
 
   const [cityInput, setCityInput] = useState(urlVille);
   const [city, setCity] = useState<string>(urlVille || ALL);
@@ -216,8 +258,9 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   const skipNextFetch = useRef(false);   // bloque l'autocomplete après sélection
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [nameQuery, setNameQuery] = useState("");
+  const [nameQuery, setNameQuery] = useState(urlNom);
   const [language, setLanguage] = useState<string>(ALL);
+  const [specialty, setSpecialty] = useState<string>(ALL);
   const [displayLimit, setDisplayLimit] = useState(60);
 
   const [stored, setStored] = useState<ListingNotaire[]>([]);
@@ -262,11 +305,12 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
 
   useEffect(() => {
     if (!urlVille) return;
+    skipNextFetch.current = true; // évite de relancer l'autocomplete depuis la sync URL
     setCityInput(urlVille);
     setCity(urlVille);
   }, [urlVille]);
 
-  useEffect(() => { setDisplayLimit(60); }, [city, nameQuery]);
+  useEffect(() => { setDisplayLimit(60); }, [city, nameQuery, specialty]);
 
   function selectSuggestion(item: CitySugg) {
     skipNextFetch.current = true;   // empêche l'effet de relancer l'autocomplete
@@ -296,14 +340,15 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
       const matchCity = !norm || n.city.toLowerCase().includes(norm);
       const matchName = !nq || n.name.toLowerCase().includes(nq);
       const matchLang = language === ALL || (n.languages ?? []).includes(language);
-      return matchCity && matchName && matchLang;
+      const matchSpec = specialty === ALL || n.specialties.some(s => s.toLowerCase().includes(specialty.toLowerCase()));
+      return matchCity && matchName && matchLang && matchSpec;
     });
-  }, [all, city, nameQuery, language]);
+  }, [all, city, nameQuery, language, specialty]);
 
   const displayed = useMemo(() => results.slice(0, displayLimit), [results, displayLimit]);
 
-  /** Vrai dès qu'une ville OU un nom est saisi */
-  const hasSearch = city !== ALL || nameQuery.trim().length > 0;
+  /** Vrai dès qu'une ville, un nom ou une spécialité est saisi */
+  const hasSearch = city !== ALL || nameQuery.trim().length > 0 || specialty !== ALL;
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
@@ -384,6 +429,29 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
           </div>
         </motion.div>
 
+        {/* Filtres spécialité */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="flex flex-wrap gap-2 mb-4 max-w-[860px] mx-auto"
+        >
+          {SPECIALTIES.map(({ label, icon: Icon }) => (
+            <button
+              key={label}
+              type="button"
+              onClick={() => setSpecialty(specialty === label ? ALL : label)}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12px] font-semibold border transition-all ${
+                specialty === label
+                  ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-sm"
+                  : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              }`}
+            >
+              <Icon className="w-3.5 h-3.5" strokeWidth={2} />
+              {label}
+            </button>
+          ))}
+        </motion.div>
+
         {/* Filtre langues */}
         {languages.length > 0 && city !== ALL && (
           <div className="flex flex-wrap gap-2 mb-4 max-w-[860px] mx-auto">
@@ -419,7 +487,36 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
           </div>
         )}
 
-        {/* ── Liste ── */}
+        {/* ── État initial : villes populaires ── */}
+        {!hasSearch && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+          >
+            <p className="text-[13px] font-bold uppercase tracking-[0.8px] text-[var(--color-muted)] mb-4 max-w-[860px] mx-auto">
+              Villes populaires
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 max-w-[860px] mx-auto">
+              {POPULAR_CITIES.map((c, i) => (
+                <motion.button
+                  key={c.name}
+                  type="button"
+                  onClick={() => { setCityInput(c.name); setCity(c.name); }}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: i * 0.03 }}
+                  className="flex flex-col items-center gap-1.5 p-4 bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-[var(--shadow-card)] hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-strong)] transition-all group text-center"
+                >
+                  <MapPin className="w-5 h-5 text-[var(--color-accent)] group-hover:scale-110 transition-transform" strokeWidth={2} />
+                  <span className="font-semibold text-[13px] text-[var(--color-text-strong)]">{c.name}</span>
+                  <span className="text-[11px] text-[var(--color-muted)]">{c.count} notaires</span>
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* ── Liste résultats ── */}
         {hasSearch && results.length > 0 && (
           <div className="flex flex-col gap-4">
             {displayed.map((n, i) => <NotaireCard key={n.id} n={n} i={i} />)}

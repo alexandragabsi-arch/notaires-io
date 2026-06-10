@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { BLOG_POSTS } from "@/lib/blog-posts";
+import { getDynamicArticles } from "@/lib/blog-supabase";
+
+// Revalidate every 5 minutes so new N8N articles appear quickly
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Conseils notariaux — Guides pratiques · Notaires.io",
@@ -13,10 +17,12 @@ export const metadata: Metadata = {
 const CATEGORY_COLORS: Record<string, string> = {
   Mariage: "bg-pink-50 text-pink-700",
   Immobilier: "bg-blue-50 text-blue-700",
-  Succession: "bg-amber-50 text-amber-700",
+  Succession: "bg-green-50 text-green-800",
   Famille: "bg-purple-50 text-purple-700",
   Guide: "bg-emerald-50 text-emerald-700",
   Donation: "bg-orange-50 text-orange-700",
+  FAQ: "bg-teal-50 text-teal-700",
+  Local: "bg-violet-50 text-violet-700",
 };
 
 function formatDate(dateStr: string): string {
@@ -24,7 +30,25 @@ function formatDate(dateStr: string): string {
   return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 }
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  // Merge static posts with dynamic Supabase articles, newest first
+  const dynamic = await getDynamicArticles();
+
+  const staticPosts = BLOG_POSTS.map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt,
+    category: p.category,
+    reading_time: p.readingTime,
+    published_at: p.date,
+  }));
+
+  const dynamicSlugs = new Set(dynamic.map((d) => d.slug));
+  const merged = [
+    ...dynamic,
+    ...staticPosts.filter((p) => !dynamicSlugs.has(p.slug)),
+  ].sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime());
+
   return (
     <>
       <Header />
@@ -41,48 +65,41 @@ export default function BlogPage() {
             <p className="text-[var(--color-muted)] text-lg max-w-[560px] mx-auto">
               Tout ce que vous devez savoir avant votre rendez-vous : immobilier, succession, mariage, donation.
             </p>
+            <p className="text-[13px] text-[var(--color-muted)] mt-3">
+              {merged.length} guides disponibles
+            </p>
           </div>
         </section>
 
         {/* Grid */}
         <section className="max-w-[1200px] mx-auto px-6 py-14">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
-            {BLOG_POSTS.map((post) => {
+            {merged.map((post) => {
               const catColor = CATEGORY_COLORS[post.category] ?? "bg-gray-100 text-gray-600";
               return (
                 <article
                   key={post.slug}
                   className="bg-white border border-[var(--color-border)] rounded-2xl p-6 flex flex-col hover:shadow-[var(--shadow-strong)] transition-shadow duration-200"
                 >
-                  {/* Category pill */}
-                  <span
-                    className={`inline-block self-start text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-4 ${catColor}`}
-                  >
+                  <span className={`inline-block self-start text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-4 ${catColor}`}>
                     {post.category}
                   </span>
 
-                  {/* Title */}
                   <h2 className="text-[17px] font-bold text-[var(--color-text-strong)] leading-snug mb-3 flex-1">
-                    <a
-                      href={`/blog/${post.slug}`}
-                      className="hover:text-[var(--color-accent)] transition-colors"
-                    >
+                    <a href={`/blog/${post.slug}`} className="hover:text-[var(--color-accent)] transition-colors">
                       {post.title}
                     </a>
                   </h2>
 
-                  {/* Excerpt */}
                   <p className="text-sm text-[var(--color-muted)] leading-relaxed mb-5 line-clamp-3">
                     {post.excerpt}
                   </p>
 
-                  {/* Meta */}
                   <div className="flex items-center justify-between text-[12px] text-[var(--color-muted)] border-t border-[var(--color-border-soft)] pt-4">
-                    <time dateTime={post.date}>{formatDate(post.date)}</time>
-                    <span>{post.readingTime} min de lecture</span>
+                    <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
+                    <span>{post.reading_time} min de lecture</span>
                   </div>
 
-                  {/* CTA */}
                   <a
                     href={`/blog/${post.slug}`}
                     className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-accent)] hover:underline"

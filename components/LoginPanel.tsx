@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Lock, ArrowRight, Building2, User, ShieldCheck } from "lucide-react";
+import { Mail, Lock, ArrowRight, Building2, User, ShieldCheck, Loader2 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 type Role = "particulier" | "notaire";
 
@@ -11,13 +12,35 @@ export default function LoginPanel() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [notice, setNotice] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const isNotaire = role === "notaire";
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // Pas encore de backend d'authentification : on affiche un message.
-    setNotice(true);
+    setError("");
+
+    if (!isNotaire) {
+      // Espace particulier : pas encore disponible
+      setNotice(true);
+      return;
+    }
+
+    setLoading(true);
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password: password.trim(),
+    });
+    setLoading(false);
+
+    if (authError) {
+      setError("E-mail ou mot de passe incorrect. Vérifiez vos identifiants.");
+      return;
+    }
+
+    // Connexion réussie → espace notaire
+    window.location.href = "/espace-notaire";
   }
 
   return (
@@ -97,7 +120,7 @@ export default function LoginPanel() {
                   Mot de passe
                 </span>
                 <a
-                  href="#"
+                  href="/mot-de-passe-oublie"
                   className="text-[12px] text-[var(--color-accent)] font-medium hover:underline"
                 >
                   Mot de passe oublié ?
@@ -122,11 +145,27 @@ export default function LoginPanel() {
 
             <button
               type="submit"
-              className="mt-1 w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+              disabled={loading}
+              className="mt-1 w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0"
             >
-              Se connecter
-              <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+              {loading ? (
+                <>
+                  <Loader2 className="w-[18px] h-[18px] animate-spin" strokeWidth={2.5} />
+                  Connexion…
+                </>
+              ) : (
+                <>
+                  Se connecter
+                  <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+                </>
+              )}
             </button>
+
+            {error && (
+              <div className="flex items-start gap-2 text-[13px] text-red-700 bg-red-50 rounded-[10px] px-3.5 py-3 border border-red-200">
+                <span>{error}</span>
+              </div>
+            )}
 
             {notice && (
               <div className="flex items-start gap-2 text-[13px] text-[var(--color-muted)] bg-[var(--color-tint-blue)] rounded-[10px] px-3.5 py-3">
@@ -135,8 +174,7 @@ export default function LoginPanel() {
                   strokeWidth={2}
                 />
                 <span>
-                  L&apos;espace sécurisé arrive très bientôt. La connexion sera
-                  bientôt active.
+                  L&apos;espace particulier arrive très bientôt.
                 </span>
               </div>
             )}

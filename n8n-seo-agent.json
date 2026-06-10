@@ -1,0 +1,206 @@
+{
+  "name": "🔍 SEO Agent Notaires.io — Quotidien",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "0 7 * * *" }]
+        }
+      },
+      "id": "n1",
+      "name": "⏰ Déclenchement 7h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [140, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://searchconsole.googleapis.com/webmasters/v3/sites/https%3A%2F%2Fnotaires.io%2F/searchAnalytics/query",
+        "authentication": "oAuth2",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n  \"startDate\": \"{{ $now.minus({days: 10}).toFormat('yyyy-MM-dd') }}\",\n  \"endDate\": \"{{ $now.minus({days: 3}).toFormat('yyyy-MM-dd') }}\",\n  \"dimensions\": [\"query\"],\n  \"rowLimit\": 100,\n  \"dataState\": \"final\"\n}"
+      },
+      "id": "n2",
+      "name": "📊 Google Search Console — requêtes",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [360, 300],
+      "credentials": {
+        "oAuth2Api": {
+          "id": "REPLACE_WITH_GSC_CRED_ID",
+          "name": "Google Search Console OAuth2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// === ANALYSE GSC + SÉLECTION DU MOT-CLÉ ===\n\nconst gscData = $input.item.json;\nconst today = new Date();\nconst startOfYear = new Date(today.getFullYear(), 0, 1);\nconst dayOfYear = Math.floor((today - startOfYear) / 86400000);\n\n// Liste de secours si GSC a peu de données\nconst fallbackKeywords = [\n  { keyword: 'combien coûte un notaire', intention: 'tarifs et honoraires notaire', category: 'FAQ' },\n  { keyword: 'délai succession notaire', intention: 'durée d une succession chez le notaire', category: 'FAQ' },\n  { keyword: 'testament chez le notaire', intention: 'rédiger son testament chez un notaire', category: 'Service' },\n  { keyword: 'notaire PACS', intention: 'signer un PACS chez le notaire', category: 'Service' },\n  { keyword: 'donation enfant notaire', intention: 'faire une donation à ses enfants', category: 'Service' },\n  { keyword: 'frais de notaire achat immobilier', intention: 'calculer les frais de notaire', category: 'FAQ' },\n  { keyword: 'notaire divorce consentement mutuel', intention: 'divorce par acte notarié', category: 'Service' },\n  { keyword: 'notaire Lyon', intention: 'trouver un notaire à Lyon', category: 'Local' },\n  { keyword: 'notaire Marseille', intention: 'trouver un notaire à Marseille', category: 'Local' },\n  { keyword: 'notaire Bordeaux', intention: 'trouver un notaire à Bordeaux', category: 'Local' },\n  { keyword: 'notaire Toulouse', intention: 'trouver un notaire à Toulouse', category: 'Local' },\n  { keyword: 'notaire Nantes', intention: 'trouver un notaire à Nantes', category: 'Local' },\n  { keyword: 'notaire Lille', intention: 'trouver un notaire à Lille', category: 'Local' },\n  { keyword: 'notaire Rennes', intention: 'trouver un notaire à Rennes', category: 'Local' },\n  { keyword: 'notaire Nice', intention: 'trouver un notaire à Nice', category: 'Local' },\n  { keyword: 'notaire Strasbourg', intention: 'trouver un notaire à Strasbourg', category: 'Local' },\n  { keyword: 'notaire Montpellier', intention: 'trouver un notaire à Montpellier', category: 'Local' },\n  { keyword: 'SCI notaire', intention: 'créer une SCI chez le notaire', category: 'Service' },\n  { keyword: 'contrat de mariage notaire', intention: 'choisir son régime matrimonial', category: 'Service' },\n  { keyword: 'notaire en ligne visio', intention: 'RDV notaire à distance', category: 'Service' },\n  { keyword: 'héritage notaire', intention: 'comment se passe un héritage chez le notaire', category: 'Service' },\n  { keyword: 'acte de vente notaire', intention: 'signature acte définitif notaire', category: 'Service' },\n  { keyword: 'compromis de vente notaire', intention: 'signer compromis de vente', category: 'Service' },\n  { keyword: 'prendre RDV notaire en ligne', intention: 'plateforme rdv notaire digital', category: 'Service' },\n  { keyword: 'notaire succession Lyon', intention: 'notaire héritage succession à Lyon', category: 'Local' },\n  { keyword: 'notaire immobilier Paris', intention: 'notaire spécialisé achat vente immobilier Paris', category: 'Local' },\n  { keyword: 'notaire droit des sociétés', intention: 'notaire pour créer ou céder son entreprise', category: 'Service' },\n  { keyword: 'notaire Grenoble', intention: 'trouver un notaire à Grenoble', category: 'Local' },\n  { keyword: 'notaire Aix-en-Provence', intention: 'trouver un notaire à Aix-en-Provence', category: 'Local' },\n  { keyword: 'notaire Toulon', intention: 'trouver un notaire à Toulon', category: 'Local' },\n];\n\n// Analyse des données GSC\nconst rows = gscData.rows || [];\nlet selectedKeyword = null;\nlet gscContext = '';\nlet source = 'fallback';\n\nif (rows.length >= 3) {\n  // Trier par opportunité : position 4-30 avec impressions > 1\n  // (striking distance = presque en page 1, juste besoin de contenu de qualité)\n  const opportunities = rows\n    .filter(r => r.position >= 4 && r.position <= 30 && r.impressions >= 2)\n    .sort((a, b) => {\n      // Score = impressions × (31 - position) — plus impressions et plus proche du top, meilleur\n      const scoreA = a.impressions * (31 - a.position);\n      const scoreB = b.impressions * (31 - b.position);\n      return scoreB - scoreA;\n    });\n\n  if (opportunities.length > 0) {\n    const best = opportunities[dayOfYear % opportunities.length];\n    selectedKeyword = {\n      keyword: best.keys[0],\n      intention: `améliorer le ranking sur \"${best.keys[0]}\"`,\n      category: 'FAQ',\n      gsc_position: Math.round(best.position * 10) / 10,\n      gsc_impressions: best.impressions,\n      gsc_clicks: best.clicks,\n      gsc_ctr: Math.round(best.ctr * 1000) / 10,\n    };\n    source = 'gsc';\n    gscContext = `\\n\\nDonnées Google Search Console réelles pour ce mot-clé :\\n- Position actuelle : ${selectedKeyword.gsc_position} (objectif : top 3)\\n- Impressions / 7j : ${selectedKeyword.gsc_impressions}\\n- Clics / 7j : ${selectedKeyword.gsc_clicks}\\n- CTR : ${selectedKeyword.gsc_ctr}%\\nCe mot-clé est en striking distance — du contenu de qualité peut le faire passer en page 1.`;\n  }\n}\n\n// Fallback si GSC ne donne pas assez de données (site récent)\nif (!selectedKeyword) {\n  const fb = fallbackKeywords[dayOfYear % fallbackKeywords.length];\n  selectedKeyword = { ...fb, gsc_position: null, gsc_impressions: 0, gsc_clicks: 0, gsc_ctr: 0 };\n}\n\nreturn [{ json: { ...selectedKeyword, gscContext, source, date: today.toISOString().split('T')[0], dayOfYear } }];"
+      },
+      "id": "n3",
+      "name": "🎯 Analyser GSC + choisir mot-clé",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [580, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const kw = $input.item.json;\n\nconst gscLine = kw.source === 'gsc'\n  ? `\\n\\n📊 DONNÉES GOOGLE SEARCH CONSOLE RÉELLES :\\n- Position actuelle : ${kw.gsc_position} → objectif top 3\\n- Impressions (7j) : ${kw.gsc_impressions}\\n- Clics (7j) : ${kw.gsc_clicks}\\n- CTR : ${kw.gsc_ctr}%\\nGoogle montre déjà ce site pour ce mot-clé — un article de qualité peut le faire passer en page 1.`\n  : '';\n\nconst prompt = `Tu es un expert SEO spécialisé en droit notarial français, rédacteur senior pour Notaires.io.\\n\\nNotaires.io est une plateforme digitale qui permet aux particuliers de trouver le bon notaire en 3 questions et prendre rendez-vous en visio ou au cabinet. 1er RDV offert. 17 000+ notaires référencés en France.${gscLine}\\n\\nGénère un article SEO complet en français ciblant :\\n- Mot-clé principal : ${kw.keyword}\\n- Intention de recherche : ${kw.intention}\\n- Catégorie : ${kw.category}\\n\\nRéponds UNIQUEMENT avec un objet JSON valide (sans markdown ni texte autour) :\\n{\\n  \"meta_title\": \"titre <title>, 55-60 caractères, mot-clé en début\",\\n  \"meta_description\": \"meta desc 140-155 car avec appel à l'action clair\",\\n  \"h1\": \"titre H1 engageant et naturel\",\\n  \"slug\": \"slug-url-kebab-sans-accents-ni-caracteres-speciaux\",\\n  \"excerpt\": \"résumé 120-150 mots accrocheur, mot-clé dans les 50 premiers mots\",\\n  \"intro\": \"intro 80-100 mots, pose le problème et annonce la réponse\",\\n  \"content_html\": \"article HTML complet avec <h2>, <h3>, <p>, <ul><li>, <strong> — 1300 à 1700 mots\",\\n  \"faq\": [{ \"q\": \"question naturelle posée sur Google\", \"r\": \"réponse 60-80 mots, précise et actionnable\" }],\\n  \"category\": \"une de : Succession, Immobilier, Mariage, Famille, Donation, Guide, FAQ, Local\",\\n  \"reading_time\": 6\\n}\\n\\nRègles impératives :\\n- 4 à 6 sections H2 dans content_html\\n- 3 à 5 questions FAQ\\n- Ton expert mais accessible, jamais jargonneux sans explication\\n- Mentionner Notaires.io naturellement comme solution (sans forcer)\\n- Le slug ne doit pas déjà exister : évite ces slugs courants (succession, immobilier, mariage, testament, pacs, frais-notaire)`;\n\nconst body = JSON.stringify({\n  model: 'claude-opus-4-7',\n  max_tokens: 4096,\n  messages: [{ role: 'user', content: prompt }]\n});\n\nreturn [{ json: { body, keyword: kw } }];"
+      },
+      "id": "n4",
+      "name": "🧠 Construire prompt Claude",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.body }}"
+      },
+      "id": "n5",
+      "name": "🤖 Claude — Génère l'article",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1020, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_ANTHROPIC_CRED_ID",
+          "name": "Anthropic API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.item.json;\nconst kw = $('🧠 Construire prompt Claude').item.json.keyword;\n\nlet rawText;\ntry {\n  rawText = response.content[0].text;\n} catch(e) {\n  throw new Error('Réponse Claude illisible: ' + JSON.stringify(response).substring(0, 200));\n}\n\nlet art;\ntry {\n  const cleaned = rawText.replace(/^```json\\s*/i, '').replace(/\\s*```$/i, '').trim();\n  art = JSON.parse(cleaned);\n} catch(e) {\n  throw new Error('JSON invalide dans réponse Claude: ' + rawText.substring(0, 400));\n}\n\n// Slugifier proprement (précaution)\nconst slug = (art.slug || '')\n  .toLowerCase()\n  .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')\n  .replace(/[^a-z0-9-]/g, '-')\n  .replace(/-+/g, '-')\n  .replace(/^-|-$/g, '');\n\nconst article = {\n  slug,\n  title: art.h1 || art.meta_title || kw.keyword,\n  meta_title: art.meta_title || null,\n  meta_description: art.meta_description || null,\n  excerpt: art.excerpt || null,\n  h1: art.h1 || null,\n  intro: art.intro || null,\n  content_html: art.content_html || '',\n  faq_json: art.faq || null,\n  category: art.category || kw.category || 'Guide',\n  keyword: kw.keyword,\n  keyword_type: kw.source || 'fallback',\n  reading_time: art.reading_time || 6,\n  published: true,\n};\n\nreturn [{ json: { article, keyword: kw } }];"
+      },
+      "id": "n6",
+      "name": "🔍 Parser réponse Claude",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1240, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://{{ $vars.SUPABASE_PROJECT_REF }}.supabase.co/rest/v1/blog_articles",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "apikey", "value": "={{ $vars.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Authorization", "value": "=Bearer {{ $vars.SUPABASE_SERVICE_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Prefer", "value": "resolution=merge-duplicates,return=representation" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json.article) }}"
+      },
+      "id": "n7",
+      "name": "💾 Publier dans Supabase",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://notaires.io/api/blog-revalidate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $vars.BLOG_REVALIDATE_SECRET }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ slug: $('🔍 Parser réponse Claude').item.json.article.slug }) }}"
+      },
+      "id": "n8",
+      "name": "🔄 Revalidate cache Next.js",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const article = $('🔍 Parser réponse Claude').item.json.article;\nconst kw = $('🔍 Parser réponse Claude').item.json.keyword;\nconst date = new Date().toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });\nconst url = `https://notaires.io/blog/${article.slug}`;\n\nconst gscBadge = kw.source === 'gsc'\n  ? `<div style=\"background:#dcfce7;border:1px solid #86efac;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px\">\n      📊 <strong>Données GSC</strong> — Position actuelle : <strong>${kw.gsc_position}</strong> · ${kw.gsc_impressions} impressions · ${kw.gsc_ctr}% CTR\n     </div>`\n  : `<div style=\"background:#fef9c3;border:1px solid #fde047;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px\">\n      📋 Source : liste de mots-clés prédéfinie (données GSC pas encore suffisantes)\n     </div>`;\n\nconst html = `<!DOCTYPE html><html><head><meta charset=\"utf-8\"></head>\n<body style=\"font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:640px;margin:0 auto;padding:20px;background:#fff;color:#1f2937\">\n\n<div style=\"background:linear-gradient(135deg,#1c4587,#2d5dbf);color:white;padding:20px 24px;border-radius:12px;margin-bottom:18px\">\n  <div style=\"font-size:12px;opacity:.75;margin-bottom:4px\">✅ SEO Agent Notaires.io · ${date}</div>\n  <div style=\"font-size:20px;font-weight:700\">Article publié automatiquement</div>\n  <div style=\"font-size:13px;opacity:.9;margin-top:4px\">🎯 <strong>${kw.keyword}</strong> · ${article.category}</div>\n</div>\n\n${gscBadge}\n\n<div style=\"background:#f0f7ff;border:1px solid #bfdbfe;border-radius:10px;padding:14px 18px;margin-bottom:14px\">\n  <div style=\"font-size:11px;font-weight:700;text-transform:uppercase;color:#2d5dbf;margin-bottom:8px\">📌 BALISES SEO</div>\n  <div style=\"margin-bottom:6px\"><span style=\"font-size:11px;color:#6b7280\">TITLE (${(article.meta_title||'').length} car)</span><br><strong style=\"color:#1c4587\">${article.meta_title}</strong></div>\n  <div style=\"margin-bottom:6px\"><span style=\"font-size:11px;color:#6b7280\">META DESC (${(article.meta_description||'').length} car)</span><br>${article.meta_description}</div>\n  <div><span style=\"font-size:11px;color:#6b7280\">URL</span><br><a href=\"${url}\" style=\"color:#2d5dbf;font-family:monospace\">${url}</a></div>\n</div>\n\n<div style=\"background:#ecfdf5;border:1px solid #6ee7b7;border-radius:10px;padding:14px 18px;margin-bottom:14px;text-align:center\">\n  <div style=\"font-size:15px;font-weight:700;color:#065f46;margin-bottom:8px\">🚀 Article en ligne maintenant</div>\n  <a href=\"${url}\" style=\"display:inline-block;background:#059669;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px\">Voir l'article →</a>\n</div>\n\n<div style=\"background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:14px 18px;margin-bottom:14px\">\n  <div style=\"font-size:11px;font-weight:700;text-transform:uppercase;color:#6b7280;margin-bottom:8px\">📝 APERÇU</div>\n  <h3 style=\"color:#1c4587;margin:0 0 6px;font-size:17px\">${article.h1}</h3>\n  <p style=\"color:#374151;font-size:14px;line-height:1.6;margin:0\">${article.excerpt || article.intro || ''}</p>\n</div>\n\n<div style=\"text-align:center;color:#9ca3af;font-size:11px;border-top:1px solid #f3f4f6;padding-top:12px\">\n  Agent SEO autonome · <a href=\"https://notaires.io/blog\" style=\"color:#2d5dbf\">notaires.io/blog</a>\n</div>\n</body></html>`;\n\nreturn [{ json: {\n  subject: `✅ Article publié : \"${kw.keyword}\" — notaires.io/blog/${article.slug}`,\n  html\n} }];"
+      },
+      "id": "n9",
+      "name": "💌 Email de confirmation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1900, 300]
+    },
+    {
+      "parameters": {
+        "sendTo": "alexandra.gabsi@gmail.com",
+        "subject": "={{ $json.subject }}",
+        "emailType": "html",
+        "message": "={{ $json.html }}",
+        "options": {}
+      },
+      "id": "n10",
+      "name": "📧 Gmail — Confirmation",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [2120, 300],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_GMAIL_CRED_ID",
+          "name": "Gmail Account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "⏰ Déclenchement 7h": {
+      "main": [[{ "node": "📊 Google Search Console — requêtes", "type": "main", "index": 0 }]]
+    },
+    "📊 Google Search Console — requêtes": {
+      "main": [[{ "node": "🎯 Analyser GSC + choisir mot-clé", "type": "main", "index": 0 }]]
+    },
+    "🎯 Analyser GSC + choisir mot-clé": {
+      "main": [[{ "node": "🧠 Construire prompt Claude", "type": "main", "index": 0 }]]
+    },
+    "🧠 Construire prompt Claude": {
+      "main": [[{ "node": "🤖 Claude — Génère l'article", "type": "main", "index": 0 }]]
+    },
+    "🤖 Claude — Génère l'article": {
+      "main": [[{ "node": "🔍 Parser réponse Claude", "type": "main", "index": 0 }]]
+    },
+    "🔍 Parser réponse Claude": {
+      "main": [[{ "node": "💾 Publier dans Supabase", "type": "main", "index": 0 }]]
+    },
+    "💾 Publier dans Supabase": {
+      "main": [[{ "node": "🔄 Revalidate cache Next.js", "type": "main", "index": 0 }]]
+    },
+    "🔄 Revalidate cache Next.js": {
+      "main": [[{ "node": "💌 Email de confirmation", "type": "main", "index": 0 }]]
+    },
+    "💌 Email de confirmation": {
+      "main": [[{ "node": "📧 Gmail — Confirmation", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

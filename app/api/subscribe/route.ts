@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     "subscription_data[metadata][etude]": body.etude ?? "",
 
     // Redirection
-    success_url: `${SITE_URL}/inscription?abonnement=ok`,
+    success_url: `${SITE_URL}/espace-notaire?bienvenue=1`,
     cancel_url: `${SITE_URL}/notaires#tarifs`,
 
     // Pré-remplir l'email si fourni

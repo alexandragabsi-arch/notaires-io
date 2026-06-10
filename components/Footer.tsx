@@ -42,9 +42,9 @@ export default function Footer() {
             },
           ].map((col) => (
             <div key={col.h}>
-              <h4 className="text-[var(--color-text-strong)] text-[13px] uppercase tracking-[1.5px] font-bold mb-4">
+              <h3 className="text-[var(--color-text-strong)] text-[13px] uppercase tracking-[1.5px] font-bold mb-4">
                 {col.h}
-              </h4>
+              </h3>
               <ul className="flex flex-col gap-2">
                 {col.links.map(([label, href]) => (
                   <li key={label}>

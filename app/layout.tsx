@@ -6,6 +6,7 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
+  preload: true,
 });
 
 const playfair = Playfair_Display({
@@ -13,6 +14,8 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   style: ["normal", "italic"],
   display: "swap",
+  preload: true,
+  weight: ["700", "800"], // Only load weights actually used (bold headings)
 });
 
 const BASE = "https://notaires.io";

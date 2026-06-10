@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Search, MapPin, ArrowRight } from "lucide-react";
+import { Search, MapPin, User } from "lucide-react";
 
 interface Suggestion {
   city: string;
@@ -12,16 +12,17 @@ interface Suggestion {
 
 export default function CitySearch() {
   const router = useRouter();
-  const [query, setQuery] = useState("");
+  const [cityQuery, setCityQuery] = useState("");
+  const [nameQuery, setNameQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [showSugg, setShowSugg] = useState(false);
   const [selectedCity, setSelectedCity] = useState("");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const skipNextFetch = useRef(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const cityRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const q = query.trim();
+    const q = cityQuery.trim();
     if (q.length < 2) { setSuggestions([]); setShowSugg(false); return; }
     if (skipNextFetch.current) { skipNextFetch.current = false; return; }
     if (timer.current) clearTimeout(timer.current);
@@ -48,11 +49,11 @@ export default function CitySearch() {
         setShowSugg(items.length > 0);
       } catch { /* silencieux */ }
     }, 180);
-  }, [query]);
+  }, [cityQuery]);
 
   function select(item: Suggestion) {
     skipNextFetch.current = true;
-    setQuery(item.label);
+    setCityQuery(item.label);
     setSelectedCity(item.city);
     setSuggestions([]);
     setShowSugg(false);
@@ -60,14 +61,18 @@ export default function CitySearch() {
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    const city = selectedCity || query.trim();
-    if (!city) { inputRef.current?.focus(); return; }
-    router.push(`/annuaire?ville=${encodeURIComponent(city)}`);
+    const city = selectedCity || cityQuery.trim();
+    const nom = nameQuery.trim();
+    if (!city && !nom) { cityRef.current?.focus(); return; }
+    const params = new URLSearchParams();
+    if (city) params.set("ville", city);
+    if (nom) params.set("nom", nom);
+    router.push(`/annuaire?${params.toString()}`);
   }
 
   return (
-    <section className="bg-[var(--color-tint-blue)] border-y border-[var(--color-border-soft)] py-10 sm:py-12">
-      <div className="max-w-[780px] mx-auto px-6">
+    <section className="bg-white py-10 sm:py-12">
+      <div className="max-w-[860px] mx-auto px-6">
         <div className="text-center mb-6">
           <p className="text-[12px] font-bold uppercase tracking-[1px] text-[var(--color-accent)] mb-1.5">
             Annuaire complet
@@ -76,16 +81,15 @@ export default function CitySearch() {
             Trouver un notaire par ville
           </h2>
         </div>
-
         <form onSubmit={submit} className="flex flex-col sm:flex-row gap-3">
           {/* Champ ville */}
           <div className="relative flex-1">
             <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-accent)] pointer-events-none" strokeWidth={2} />
             <input
-              ref={inputRef}
+              ref={cityRef}
               type="text"
-              value={query}
-              onChange={e => { setQuery(e.target.value); setSelectedCity(""); }}
+              value={cityQuery}
+              onChange={e => { setCityQuery(e.target.value); setSelectedCity(""); }}
               onFocus={() => suggestions.length > 0 && setShowSugg(true)}
               onBlur={() => setTimeout(() => setShowSugg(false), 150)}
               placeholder="Ville ou code postal…"
@@ -111,6 +115,19 @@ export default function CitySearch() {
             )}
           </div>
 
+          {/* Champ nom */}
+          <div className="relative flex-1">
+            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-accent)] pointer-events-none" strokeWidth={2} />
+            <input
+              type="text"
+              value={nameQuery}
+              onChange={e => setNameQuery(e.target.value)}
+              placeholder="Nom du notaire…"
+              autoComplete="off"
+              className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] bg-white transition shadow-sm"
+            />
+          </div>
+
           {/* Bouton */}
           <button
             type="submit"
@@ -118,10 +135,8 @@ export default function CitySearch() {
           >
             <Search className="w-4 h-4" strokeWidth={2.5} />
             Rechercher
-            <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
           </button>
         </form>
-
       </div>
     </section>
   );

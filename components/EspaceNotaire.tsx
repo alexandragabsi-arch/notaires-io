@@ -360,9 +360,10 @@ function EspaceNotaireInner() {
   }
 
   if (profile === null) {
-    // Pas de profil → page marketing
     if (typeof window !== "undefined") {
-      window.location.replace("/notaires");
+      // Connecté mais pas abonné → page marketing
+      // Non connecté → login
+      window.location.replace(authed ? "/notaires" : "/connexion");
     }
     return (
       <div className="min-h-[60vh] flex items-center justify-center">

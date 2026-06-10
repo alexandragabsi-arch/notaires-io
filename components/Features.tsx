@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Target, Clock, Banknote, ShieldCheck, ArrowRight } from "lucide-react";
+import { Target, Clock, Banknote, ShieldCheck } from "lucide-react";
 
 const features = [
   {
@@ -78,34 +78,6 @@ export default function Features() {
               </motion.div>
             );
           })}
-
-          {/* CTA full-width */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.4, delay: 0.28 }}
-            className="md:col-span-2 bg-gradient-to-br from-[var(--color-accent-soft)] to-[var(--color-tint-blue)] border border-[var(--color-border-soft)] rounded-2xl p-8 flex flex-col sm:flex-row sm:items-center gap-5 hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-card)] transition-all"
-          >
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-[var(--color-accent)] shrink-0">
-              <span className="text-white text-[20px]">🔑</span>
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-[18px] text-[var(--color-text-strong)] mb-1">
-                Vous êtes notaire ?
-              </h3>
-              <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">
-                Recevez des rendez-vous déjà préparés, depuis votre profil référencé. Agenda en ligne, visio, rappels automatiques.
-              </p>
-            </div>
-            <a
-              href="/notaires"
-              className="inline-flex items-center gap-2 bg-gradient-cta text-white px-5 py-3 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)] whitespace-nowrap shrink-0 hover:-translate-y-0.5 transition-transform"
-            >
-              Espace notaires
-              <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
-            </a>
-          </motion.div>
         </div>
       </div>
     </section>

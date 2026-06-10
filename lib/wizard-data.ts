@@ -145,6 +145,12 @@ export const Q2_TREE: Record<string, Q2Tree> = {
         label: "Je veux donner à un proche",
         desc: "Don d'argent, d'un bien immobilier ou de placements à un enfant ou conjoint",
       },
+      {
+        id: "testament",
+        icon: "📝",
+        label: "Je veux rédiger mon testament",
+        desc: "Organiser la transmission de mes biens après mon décès",
+      },
     ],
   },
   societe: {
@@ -191,6 +197,7 @@ export const SPECIALTY: Record<string, Record<string, string>> = {
     mariage: "Régimes matrimoniaux",
     separation: "Divorce & liquidation",
     donation: "Donations & libéralités",
+    testament: "Rédaction de testament",
   },
   societe: {
     creation: "Droit des sociétés — Création",
@@ -218,6 +225,7 @@ export const ESTIM: Record<string, Record<string, string>> = {
     mariage: "400 € — 600 €",
     separation: "1 200 € — 2 400 €",
     donation: "600 € — 1 200 €",
+    testament: "200 € — 500 €",
   },
   societe: {
     creation: "1 800 € — 2 400 €",
@@ -426,6 +434,28 @@ export const ENRICH: Record<string, EnrichQuestion[]> = {
       id: "type",
       label: "Qu'est-ce que vous voulez donner ?",
       options: ["De l'argent (virement ou espèces)", "Un bien immobilier", "Des placements ou actions", "Un peu des deux"],
+    },
+  ],
+  "famille:testament": [
+    {
+      id: "stat",
+      label: "Quelle est votre situation familiale ?",
+      options: ["Marié·e", "Pacsé·e", "Célibataire", "Veuf ou veuve"],
+    },
+    {
+      id: "enf",
+      label: "Avez-vous des enfants ?",
+      options: ["Oui, des enfants communs", "Oui, d'une relation précédente", "Non", "Je suis tuteur·trice d'un mineur"],
+    },
+    {
+      id: "biens",
+      label: "Que souhaitez-vous léguer en priorité ?",
+      options: ["Un bien immobilier", "Des liquidités ou placements", "Les deux", "Je ne sais pas encore"],
+    },
+    {
+      id: "exist",
+      label: "Avez-vous déjà rédigé un testament ?",
+      options: ["Non, c'est le premier", "Oui, je veux le modifier", "Oui, je veux le révoquer"],
     },
   ],
   "societe:creation": [

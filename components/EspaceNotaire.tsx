@@ -360,62 +360,14 @@ function EspaceNotaireInner() {
   }
 
   if (profile === null) {
-    // Non connecté ET pas de localStorage → invitation à se connecter
-    if (!authed) {
-      return (
-        <section className="py-20 px-6">
-          <div className="max-w-[480px] mx-auto text-center">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--color-tint-blue)] flex items-center justify-center text-[var(--color-accent)] mb-5">
-              <Lock className="w-8 h-8" strokeWidth={2} />
-            </div>
-            <h1 className="serif text-[26px] font-bold text-[var(--color-text-strong)] mb-3">
-              Connexion requise
-            </h1>
-            <p className="text-[var(--color-muted)] text-[15px] mb-6 leading-relaxed">
-              Votre espace notaire est sécurisé. Connectez-vous avec votre e-mail et mot de passe pour accéder à votre QR code et votre profil.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a
-                href="/connexion"
-                className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform"
-              >
-                Se connecter
-                <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
-              </a>
-              <a
-                href="/inscription"
-                className="text-[15px] text-[var(--color-accent)] font-semibold hover:underline"
-              >
-                Créer un compte →
-              </a>
-            </div>
-          </div>
-        </section>
-      );
+    // Pas de profil → page marketing
+    if (typeof window !== "undefined") {
+      window.location.replace("/notaires");
     }
-
-    // Connecté mais pas de profil → ils ont un compte sans avoir fini l'inscription
     return (
-      <section className="py-20 px-6">
-        <div className="max-w-[480px] mx-auto text-center">
-          <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--color-tint-blue)] flex items-center justify-center text-[var(--color-accent)] mb-5">
-            <User className="w-8 h-8" strokeWidth={2} />
-          </div>
-          <h1 className="serif text-[26px] font-bold text-[var(--color-text-strong)] mb-3">
-            Profil introuvable
-          </h1>
-          <p className="text-[var(--color-muted)] text-[15px] mb-6 leading-relaxed">
-            Votre compte existe mais aucun profil n&apos;y est encore associé. Finalisez votre inscription pour accéder à votre espace.
-          </p>
-          <a
-            href="/inscription"
-            className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform"
-          >
-            Finaliser mon inscription
-            <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
-          </a>
-        </div>
-      </section>
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin" />
+      </div>
     );
   }
 

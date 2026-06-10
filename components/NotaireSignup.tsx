@@ -931,7 +931,7 @@ export default function NotaireSignup() {
                   <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
                 </a>
                 <a
-                  href="/espace-notaire"
+                  href="/notaires"
                   className="inline-flex items-center gap-2 text-[var(--color-primary)] hover:text-[var(--color-accent)] px-4 py-3 rounded-[10px] text-[15px] font-semibold transition-colors"
                 >
                   Retour à l'espace notaires

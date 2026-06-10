@@ -75,49 +75,54 @@ function SlotCalendar({
   notaireId: string;
   notaireNom: string;
 }) {
-  const MAX_WEEKS = 13; // navigation jusqu'à 3 mois en avant
-  const [weekOffset, setWeekOffset] = useState(0); // 0 = semaine courante
-  const days = getNextWorkdays(7, weekOffset * 7);
+  const [isMobile, setIsMobile] = useState(false);
+  const [pageOffset, setPageOffset] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [bookingOpen, setBookingOpen] = useState(false);
 
-  function prevWeek() {
-    setWeekOffset(w => Math.max(0, w - 1));
-    setSelected(null);
-  }
-  function nextWeek() {
-    setWeekOffset(w => Math.min(MAX_WEEKS - 1, w + 1));
-    setSelected(null);
-  }
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
-  // Libellé de semaine affiché entre les boutons de navigation
-  const weekLabel =
-    weekOffset === 0
+  const daysPerPage = isMobile ? 4 : 7;
+  const MAX_PAGES = Math.ceil(91 / daysPerPage);
+  const days = getNextWorkdays(daysPerPage, pageOffset * daysPerPage);
+
+  function prevPage() { setPageOffset(p => Math.max(0, p - 1)); setSelected(null); }
+  function nextPage() { setPageOffset(p => Math.min(MAX_PAGES - 1, p + 1)); setSelected(null); }
+
+  const pageLabel =
+    pageOffset === 0
       ? "Cette semaine"
-      : weekOffset === 1
+      : !isMobile && pageOffset === 1
       ? "Semaine prochaine"
-      : `Dans ${weekOffset} semaines`;
+      : !isMobile
+      ? `Dans ${pageOffset} semaines`
+      : `Jours suivants`;
 
   return (
     <div>
-      {/* Navigation semaine */}
+      {/* Navigation */}
       <div className="flex items-center justify-between mb-4">
         <button
           type="button"
-          onClick={prevWeek}
-          disabled={weekOffset === 0}
+          onClick={prevPage}
+          disabled={pageOffset === 0}
           className="flex items-center gap-1 text-[13px] font-semibold text-[var(--color-accent)] disabled:opacity-30 disabled:cursor-not-allowed hover:underline transition-opacity"
         >
           <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
           Préc.
         </button>
         <span className="text-[12px] font-semibold text-[var(--color-muted)]">
-          {weekLabel}
+          {pageLabel}
         </span>
         <button
           type="button"
-          onClick={nextWeek}
-          disabled={weekOffset === MAX_WEEKS - 1}
+          onClick={nextPage}
+          disabled={pageOffset === MAX_PAGES - 1}
           className="flex items-center gap-1 text-[13px] font-semibold text-[var(--color-accent)] disabled:opacity-30 disabled:cursor-not-allowed hover:underline transition-opacity"
         >
           Suiv.
@@ -125,63 +130,58 @@ function SlotCalendar({
         </button>
       </div>
 
-      <div className="overflow-x-auto scrollbar-none pb-1">
-        <div
-          className="grid gap-2"
-          style={{
-            gridTemplateColumns: `repeat(${days.length}, minmax(72px, 1fr))`,
-            minWidth: `${days.length * 80}px`,
-          }}
-        >
-          {/* En-têtes jours */}
-          {days.map((d, i) => (
-            <div key={i} className="text-center">
-              <div className="text-[11px] font-bold text-[var(--color-muted)] uppercase tracking-[0.5px]">
-                {formatDayShort(d)}
-              </div>
-              <div className="text-[13px] font-bold text-[var(--color-text-strong)]">
-                {formatDayNum(d)}
-              </div>
-              <div className="text-[10px] text-[var(--color-muted)]">
-                {formatMonth(d)}
-              </div>
+      <div
+        className="grid gap-2"
+        style={{ gridTemplateColumns: `repeat(${days.length}, 1fr)` }}
+      >
+        {/* En-têtes jours */}
+        {days.map((d, i) => (
+          <div key={i} className="text-center">
+            <div className="text-[11px] font-bold text-[var(--color-muted)] uppercase tracking-[0.5px]">
+              {formatDayShort(d)}
             </div>
-          ))}
+            <div className="text-[13px] font-bold text-[var(--color-text-strong)]">
+              {formatDayNum(d)}
+            </div>
+            <div className="text-[10px] text-[var(--color-muted)]">
+              {formatMonth(d)}
+            </div>
+          </div>
+        ))}
 
-          {/* Créneaux — les semaines au-delà de slotMatrix affichent "—" */}
-          {days.map((_, i) => {
-            const matrixIdx = weekOffset * 7 + i;
-            const slots = slotMatrix?.[matrixIdx] ?? [];
-            return (
-              <div key={i} className="flex flex-col gap-1.5 mt-1">
-                {slots.length === 0 ? (
-                  <div className="h-8 flex items-center justify-center">
-                    <span className="text-[11px] text-[var(--color-muted)]">—</span>
-                  </div>
-                ) : (
-                  slots.map((slot) => {
-                    const key = `${matrixIdx}-${slot}`;
-                    const active = selected === key;
-                    return (
-                      <button
-                        key={slot}
-                        type="button"
-                        onClick={() => setSelected(active ? null : key)}
-                        className={`w-full py-1.5 rounded-[8px] text-[12px] font-semibold transition-all ${
-                          active
-                            ? "bg-[var(--color-primary)] text-white shadow-sm"
-                            : "bg-[var(--color-accent-soft)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
-                        }`}
-                      >
-                        {slot}
-                      </button>
-                    );
-                  })
-                )}
-              </div>
-            );
-          })}
-        </div>
+        {/* Créneaux */}
+        {days.map((_, i) => {
+          const matrixIdx = pageOffset * daysPerPage + i;
+          const slots = slotMatrix?.[matrixIdx] ?? [];
+          return (
+            <div key={i} className="flex flex-col gap-1.5 mt-1">
+              {slots.length === 0 ? (
+                <div className="h-8 flex items-center justify-center">
+                  <span className="text-[11px] text-[var(--color-muted)]">—</span>
+                </div>
+              ) : (
+                slots.map((slot) => {
+                  const key = `${matrixIdx}-${slot}`;
+                  const active = selected === key;
+                  return (
+                    <button
+                      key={slot}
+                      type="button"
+                      onClick={() => setSelected(active ? null : key)}
+                      className={`w-full py-1.5 rounded-[8px] text-[12px] font-semibold transition-all ${
+                        active
+                          ? "bg-[var(--color-primary)] text-white shadow-sm"
+                          : "bg-[var(--color-accent-soft)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
+                      }`}
+                    >
+                      {slot}
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* CTA si créneau sélectionné */}
@@ -210,7 +210,7 @@ function SlotCalendar({
         const parts = selected.split("-");
         const dayIdx = parseInt(parts[0]);
         const slotTime = parts.slice(1).join("-");
-        const localDayIdx = dayIdx - weekOffset * 7;
+        const localDayIdx = dayIdx - pageOffset * daysPerPage;
         const day = days[localDayIdx];
         const dayLabel = day
           ? `${formatDayShort(day)} ${formatDayNum(day)} ${formatMonth(day)} · ${slotTime}`

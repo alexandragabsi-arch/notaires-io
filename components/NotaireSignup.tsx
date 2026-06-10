@@ -207,9 +207,10 @@ export default function NotaireSignup() {
 
   /* ── Mode "Activer mon profil" (claim d'un profil listing existant) ────── */
   if (claimId) {
-    const displayName = claimedNotaire?.name ?? claimId;
     const claimSteps = ["Votre compte", "Paiement"];
     const claimStep = step === 0 ? 0 : 1; // step 0 = compte, tout autre = paiement
+    // claimedNotaire peut être null si l'ID n'est pas dans LISTING_NOTAIRES
+    const claimName = claimedNotaire?.name;
 
     return (
       <section className="py-12 sm:py-20 bg-white">
@@ -219,7 +220,7 @@ export default function NotaireSignup() {
               Activation du profil
             </div>
             <h1 className="serif text-[26px] sm:text-[34px] font-bold text-[var(--color-text-strong)] tracking-tight mb-2">
-              Bienvenue, {displayName.replace(/^Me\s+/, "Me ")}
+              {claimName ? `Bienvenue, ${claimName}` : "Bienvenue !"}
             </h1>
             <p className="text-[var(--color-muted)] text-[15px] max-w-[400px] mx-auto">
               Créez votre compte pour activer votre profil et recevoir vos rendez-vous en ligne.

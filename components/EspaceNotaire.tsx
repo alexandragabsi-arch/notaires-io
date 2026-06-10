@@ -298,24 +298,50 @@ function EspaceNotaireInner() {
   const [authed, setAuthed] = useState<boolean | null>(null); // null = en cours de vérif
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      const userId = data.user?.id ?? null;
-      setAuthed(!!userId);
+    let cancelled = false;
 
-      if (userId) {
-        // Notaire connecté → chercher son profil par user_id dans Supabase
-        getProfileByUserId(userId).then((p) => {
-          if (p) { setProfile(p); return; }
-          // Pas encore de profil lié → fallback localStorage (inscription en cours)
+    // Fallback si Supabase ne répond pas (réseau lent, redirect Stripe sur mobile)
+    const timeout = setTimeout(() => {
+      if (cancelled) return;
+      const local = getStoredProfiles();
+      setProfile(local.length > 0 ? local[0] : null);
+      setAuthed(false);
+    }, 8000);
+
+    supabase.auth.getUser()
+      .then(({ data }) => {
+        if (cancelled) return;
+        clearTimeout(timeout);
+        const userId = data.user?.id ?? null;
+        setAuthed(!!userId);
+
+        if (userId) {
+          getProfileByUserId(userId)
+            .then((p) => {
+              if (cancelled) return;
+              if (p) { setProfile(p); return; }
+              const local = getStoredProfiles();
+              setProfile(local.length > 0 ? local[0] : null);
+            })
+            .catch(() => {
+              if (cancelled) return;
+              const local = getStoredProfiles();
+              setProfile(local.length > 0 ? local[0] : null);
+            });
+        } else {
           const local = getStoredProfiles();
           setProfile(local.length > 0 ? local[0] : null);
-        });
-      } else {
-        // Non connecté → localStorage uniquement (compatible ancien comportement)
+        }
+      })
+      .catch(() => {
+        if (cancelled) return;
+        clearTimeout(timeout);
         const local = getStoredProfiles();
         setProfile(local.length > 0 ? local[0] : null);
-      }
-    });
+        setAuthed(false);
+      });
+
+    return () => { cancelled = true; clearTimeout(timeout); };
   }, []);
 
   // Auto-dismiss welcome banner après 6s

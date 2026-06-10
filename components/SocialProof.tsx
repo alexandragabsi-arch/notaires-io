@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ShieldCheck, Gavel, LockKeyhole, BadgeEuro } from "lucide-react";
+import { ShieldCheck, Gavel, LockKeyhole } from "lucide-react";
 
 const signals = [
   {
@@ -15,12 +15,6 @@ const signals = [
     label: "Tarifs réglementés par décret",
     color: "text-[var(--color-accent)]",
     bg: "bg-[var(--color-tint-blue)]",
-  },
-  {
-    icon: BadgeEuro,
-    label: "Premier RDV offert (30 min)",
-    color: "text-purple-600",
-    bg: "bg-[var(--color-tint-purple)]",
   },
   {
     icon: LockKeyhole,
@@ -39,7 +33,7 @@ export default function SocialProof() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
-          className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3"
+          className="flex flex-nowrap items-center justify-center gap-x-6"
         >
           {signals.map(({ icon: Icon, label, color, bg }, i) => (
             <motion.div

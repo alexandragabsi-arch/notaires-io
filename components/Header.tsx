@@ -88,9 +88,9 @@ export default function Header() {
         <div className="max-w-[1200px] mx-auto px-6 flex items-center justify-between py-4">
           <a
             href="/"
-            className="text-[19px] sm:text-[22px] font-extrabold tracking-tight text-[var(--color-primary)] shrink-0"
+            className="text-[19px] sm:text-[22px] font-extrabold tracking-tight text-[var(--color-text-strong)] shrink-0"
           >
-            Notaires<span className="text-[var(--color-accent)]">.io</span>
+            Notaires<span className="text-[var(--color-primary)]">.io</span>
           </a>
 
           <nav className="hidden md:flex gap-8 text-sm items-center">

@@ -122,7 +122,7 @@ export default function Page() {
         <section className="py-16 sm:py-20 bg-white">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="text-center mb-10">
-              <p className="text-[12px] font-bold uppercase tracking-[1px] text-[var(--color-accent)] mb-2">
+              <p className="text-[12px] font-bold uppercase tracking-[1px] text-[var(--color-accent)] mb-2 text-center">
                 Orientation personnalisée
               </p>
               <h2 className="serif text-[26px] sm:text-[32px] font-bold text-[var(--color-text-strong)] tracking-tight">

@@ -252,7 +252,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   const urlSpecialite = searchParams.get("specialite") ?? "";
 
   const [cityInput, setCityInput] = useState(urlVille);
-  const [city, setCity] = useState<string>(urlVille || ALL);
+  const [city, setCity] = useState<string>(extractBaseCity(urlVille) || ALL);
   const [suggestions, setSuggestions] = useState<CitySugg[]>([]);
   const [showSugg, setShowSugg] = useState(false);
   const suggTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

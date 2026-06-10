@@ -18,7 +18,7 @@ const steps = [
     tint: "bg-[var(--color-tint-green)]",
     iconColor: "text-[var(--color-success)]",
     title: "Comparez les notaires proches",
-    desc: "Avis, délais et estimation des honoraires, près de chez vous.",
+    desc: "Délais · près de chez vous",
   },
   {
     num: "3",

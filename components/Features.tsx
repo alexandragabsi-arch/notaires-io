@@ -64,15 +64,15 @@ export default function Features() {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4, delay: i * 0.06 }}
                 whileHover={{ y: -3 }}
-                className="bg-white border border-[var(--color-border-soft)] rounded-2xl p-8 hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-card)] transition-all"
+                className="bg-white border border-[var(--color-border-soft)] rounded-2xl p-8 hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-card)] transition-all flex flex-col h-full"
               >
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 ${f.tint}`}>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 shrink-0 ${f.tint}`}>
                   <Icon className={`w-6 h-6 ${f.iconColor}`} strokeWidth={1.75} />
                 </div>
                 <h3 className="font-bold text-[18px] text-[var(--color-text-strong)] mb-2">
                   {f.title}
                 </h3>
-                <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">
+                <p className="text-[var(--color-muted)] text-[15px] leading-relaxed flex-1">
                   {f.desc}
                 </p>
               </motion.div>

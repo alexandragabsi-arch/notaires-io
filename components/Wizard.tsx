@@ -50,6 +50,12 @@ export default function Wizard() {
   const suggestTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Autocomplete adresse complète pour les champs lieu_bien
+  const [addrSuggestions, setAddrSuggestions] = useState<string[]>([]);
+  const [showAddrSugg, setShowAddrSugg] = useState(false);
+  const [activeAddrId, setActiveAddrId] = useState<string | null>(null);
+  const addrTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
     const q = postal.trim();
     if (q.length < 2) { setCitySuggestions([]); setShowSuggestions(false); return; }
@@ -70,6 +76,21 @@ export default function Wizard() {
       } catch { /* silencieux */ }
     }, 200);
   }, [postal]);
+
+  function fetchAddrSuggestions(qId: string, val: string) {
+    setActiveAddrId(qId);
+    if (val.trim().length < 3) { setAddrSuggestions([]); setShowAddrSugg(false); return; }
+    if (addrTimer.current) clearTimeout(addrTimer.current);
+    addrTimer.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(val)}&limit=6&autocomplete=1`);
+        const json = await res.json();
+        const items = (json.features ?? []).map((f: { properties: { label: string } }) => f.properties.label);
+        setAddrSuggestions(items);
+        setShowAddrSugg(items.length > 0);
+      } catch { /* silencieux */ }
+    }, 180);
+  }
 
   function selectCity(item: { city: string; postcode: string }) {
     setPostal(item.postcode);
@@ -245,7 +266,7 @@ export default function Wizard() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 + i * 0.04 }}
                   whileHover={{ y: -1, borderColor: "var(--color-primary)" }}
-                  className="bg-white border-[1.5px] border-[var(--color-border)] rounded-xl p-3.5 cursor-pointer text-left flex items-center gap-3.5 transition-colors hover:bg-[var(--color-tint-blue)]"
+                  className="bg-white border-[1.5px] border-[var(--color-border)] rounded-xl p-3.5 cursor-pointer text-left flex items-start gap-3.5 transition-colors hover:bg-[var(--color-tint-blue)]"
                 >
                   <span
                     className={`text-lg leading-none shrink-0 w-[38px] h-[38px] rounded-[10px] flex items-center justify-center ${tintBg[o.tint]}`}
@@ -544,13 +565,38 @@ export default function Wizard() {
                       className="w-full px-3.5 py-2.5 rounded-[10px] border-[1.5px] border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition bg-white"
                     />
                   ) : q.type === "text" ? (
-                    <input
-                      type="text"
-                      placeholder={q.placeholder ?? ""}
-                      value={enrich[q.id] ?? ""}
-                      onChange={(e) => selectEnrich(q.id, e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-[10px] border-[1.5px] border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition bg-white"
-                    />
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder={q.placeholder ?? ""}
+                        value={enrich[q.id] ?? ""}
+                        onChange={(e) => {
+                          selectEnrich(q.id, e.target.value);
+                          if (q.id === "lieu_bien") fetchAddrSuggestions(q.id, e.target.value);
+                        }}
+                        onBlur={() => setTimeout(() => setShowAddrSugg(false), 150)}
+                        onFocus={() => q.id === "lieu_bien" && addrSuggestions.length > 0 && setShowAddrSugg(true)}
+                        autoComplete="off"
+                        className="w-full px-3.5 py-2.5 rounded-[10px] border-[1.5px] border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition bg-white"
+                      />
+                      {q.id === "lieu_bien" && showAddrSugg && activeAddrId === q.id && addrSuggestions.length > 0 && (
+                        <ul className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-[var(--color-border-soft)] rounded-xl shadow-lg overflow-hidden text-left">
+                          {addrSuggestions.map((label) => (
+                            <li
+                              key={label}
+                              onMouseDown={() => {
+                                selectEnrich(q.id, label);
+                                setShowAddrSugg(false);
+                              }}
+                              className="px-3.5 py-2 text-[13px] text-[var(--color-text-strong)] hover:bg-[var(--color-tint-blue)] cursor-pointer flex items-center gap-2"
+                            >
+                              <MapPin className="w-3 h-3 text-[var(--color-primary)] shrink-0" strokeWidth={2} />
+                              {label}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   ) : (
                     <div className="flex flex-wrap gap-1.5">
                       {q.options.map((o) => (

@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 const faqParticuliers = [
   {
     q: "Combien ça coûte ?",
-    a: "Le premier rendez-vous est offert, limité à 30 minutes. C'est suffisant pour poser vos questions, comprendre votre situation et décider de la suite. Si un acte notarié est nécessaire, vous réglez ensuite les honoraires directement au notaire — comme dans n'importe quelle étude, selon le tarif réglementé.",
+    a: "L'utilisation de Notaires.io est 100 % gratuite et sans engagement. Si un acte notarié est nécessaire, vous réglez ensuite les honoraires directement au notaire — comme dans n'importe quelle étude, selon le tarif réglementé.",
   },
   {
     q: "Comment ça marche concrètement ?",
@@ -100,7 +100,7 @@ const jsonLd = {
         "@type": "Offer",
         price: "0",
         priceCurrency: "EUR",
-        description: "Premier rendez-vous de 30 minutes offert",
+        description: "Service 100 % gratuit et sans engagement",
       },
     },
   ],
@@ -122,7 +122,7 @@ export default function Page() {
         <section className="py-16 sm:py-20 bg-white">
           <div className="max-w-[1200px] mx-auto px-6">
             <div className="text-center mb-10">
-              <p className="text-[12px] font-bold uppercase tracking-[1px] text-[var(--color-accent)] mb-2 text-center">
+              <p className="text-[12px] font-bold uppercase tracking-[1px] text-[var(--color-accent)] mb-2 !text-center">
                 Orientation personnalisée
               </p>
               <h2 className="serif text-[26px] sm:text-[32px] font-bold text-[var(--color-text-strong)] tracking-tight">

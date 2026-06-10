@@ -128,7 +128,7 @@ export default function Page() {
               <h2 className="serif text-[26px] sm:text-[32px] font-bold text-[var(--color-text-strong)] tracking-tight">
                 Quelle est votre situation ?
               </h2>
-              <p className="text-[16px] text-[var(--color-muted)] mt-3 max-w-[480px] mx-auto">
+              <p className="text-[16px] text-[var(--color-muted)] mt-3 max-w-[480px] mx-auto !text-center">
                 Répondez à 2–3 questions, on vous oriente vers le bon notaire et la bonne spécialité.
               </p>
             </div>

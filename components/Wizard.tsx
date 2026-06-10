@@ -219,7 +219,7 @@ export default function Wizard() {
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-[0_12px_40px_rgba(28,69,135,0.12)] border border-[var(--color-border-soft)] p-9 max-w-[480px] w-full relative">
+    <div className="bg-white rounded-3xl shadow-[0_12px_40px_rgba(28,69,135,0.12)] border border-[var(--color-border-soft)] p-9 max-w-[480px] w-full relative [&_p]:!text-left">
       <div className="flex gap-1.5 mb-6">
           {[1, 2, 3].map((i) => {
             const state = dotState(i);
@@ -317,7 +317,7 @@ export default function Wizard() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 + i * 0.04 }}
-                  className="bg-white border-[1.5px] border-[var(--color-border)] rounded-xl p-3.5 cursor-pointer text-left flex items-center gap-3.5 transition-all hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)] hover:-translate-y-px"
+                  className="bg-white border-[1.5px] border-[var(--color-border)] rounded-xl p-3.5 cursor-pointer text-left flex items-start gap-3.5 transition-all hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)] hover:-translate-y-px"
                 >
                   <span className="text-lg leading-none shrink-0 w-[38px] h-[38px] rounded-[10px] flex items-center justify-center bg-[var(--color-tint-blue)]">
                     {o.icon}

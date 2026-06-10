@@ -180,7 +180,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.3 }}
-          className="flex items-center justify-center gap-6 sm:gap-10 mt-8 flex-wrap"
+          className="flex items-center justify-center gap-6 sm:gap-10 mt-8 flex-wrap max-w-[680px] mx-auto"
         >
           {trust.map(([num, label]) => (
             <div key={label} className="text-center">

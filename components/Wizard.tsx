@@ -41,6 +41,7 @@ export default function Wizard() {
   const [q2, setQ2] = useState<string | null>(null);
   const [postal, setPostal] = useState("");
   const [cityLabel, setCityLabel] = useState(""); // nom affiché de la ville sélectionnée
+  const [cityBase, setCityBase] = useState("");   // nom de commune (sans arrondissement) pour le filtre
   const [enrich, setEnrich] = useState<Record<string, string>>({});
 
   // Autocomplete ville / CP
@@ -95,6 +96,7 @@ export default function Wizard() {
   function selectCity(item: { city: string; postcode: string }) {
     setPostal(item.postcode);
     setCityLabel(item.city);
+    setCityBase(item.city);
     setCitySuggestions([]);
     setShowSuggestions(false);
     inputRef.current?.blur();
@@ -111,7 +113,16 @@ export default function Wizard() {
       const props = geo.features?.[0]?.properties;
       if (props?.postcode) {
         setPostal(props.postcode);
-        setCityLabel(props.city ?? props.municipality ?? "");
+        const base = props.city ?? props.municipality ?? "";
+        setCityBase(base);
+        // Pour Paris : afficher l'arrondissement dans le label
+        const parisMatch = /^750(\d{2})$/.exec(props.postcode);
+        if (parisMatch) {
+          const arr = parseInt(parisMatch[1], 10);
+          setCityLabel(arr > 0 ? `Paris ${arr}e arrondissement` : base);
+        } else {
+          setCityLabel(base);
+        }
         setCitySuggestions([]);
         setShowSuggestions(false);
       }
@@ -183,7 +194,13 @@ export default function Wizard() {
   }
 
   function goToListing(city: string) {
-    window.open(`/annuaire?ville=${encodeURIComponent(city)}`, "_blank");
+    const specialty = q1 ? getSpecialty(q1, q2) : "";
+    const params = new URLSearchParams({ ville: cityBase || city });
+    if (specialty) params.set("specialite", specialty);
+    // Pour Paris : transmettre l'arrondissement si détecté par géoloc
+    const parisMatch = /^750(\d{2})$/.exec(postal);
+    if (parisMatch && !cityBase) params.set("arr", String(parseInt(parisMatch[1], 10)));
+    window.open(`/annuaire?${params.toString()}`, "_blank");
   }
 
   function submitPostal() {
@@ -206,6 +223,7 @@ export default function Wizard() {
     setQ2(null);
     setPostal("");
     setCityLabel("");
+    setCityBase("");
     setEnrich({});
     setDescribe("");
     setDetectResult(null);

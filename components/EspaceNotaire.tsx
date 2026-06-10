@@ -221,6 +221,12 @@ function ProfileSummary({ profile }: { profile: ListingNotaire }) {
                 {profile.officeName}
               </span>
             )}
+            {profile.email && (
+              <span className="flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
+                {profile.email}
+              </span>
+            )}
           </div>
           {profile.specialties.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-2">

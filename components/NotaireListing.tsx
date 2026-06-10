@@ -258,6 +258,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   const urlVille = searchParams.get("ville") ?? "";
   const urlNom = searchParams.get("nom") ?? "";
   const urlSpecialite = searchParams.get("specialite") ?? "";
+  const urlArr = searchParams.get("arr") ? parseInt(searchParams.get("arr")!, 10) : null;
 
   const [cityInput, setCityInput] = useState(urlVille);
   const [city, setCity] = useState<string>(extractBaseCity(urlVille) || ALL);
@@ -352,9 +353,11 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
       const matchName = !nq || n.name.toLowerCase().includes(nq);
       const matchLang = language === ALL || (n.languages ?? []).includes(language);
       const matchSpec = specialty === ALL || n.specialties.some(s => s.toLowerCase().includes(specialty.toLowerCase()));
-      return matchCity && matchName && matchLang && matchSpec;
+      // Filtre arrondissement : si le notaire a un arrondissement renseigné, vérifier la correspondance
+      const matchArr = !urlArr || !n.arrondissement || n.arrondissement === urlArr;
+      return matchCity && matchName && matchLang && matchSpec && matchArr;
     });
-  }, [all, city, nameQuery, language, specialty]);
+  }, [all, city, nameQuery, language, specialty, urlArr]);
 
   const displayed = useMemo(() => results.slice(0, displayLimit), [results, displayLimit]);
 
@@ -482,13 +485,21 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
 
         {/* ── Compteur ── */}
         {hasSearch && (
-          <div className="flex items-center justify-between mb-5 max-w-[860px] mx-auto">
-            <p className="text-[14px] text-[var(--color-muted)]">
-              <span className="font-bold text-[var(--color-text-strong)]">
-                {results.length.toLocaleString("fr-FR")}
-              </span>{" "}résultat{results.length > 1 ? "s" : ""}
-              {city !== ALL && <span className="font-semibold text-[var(--color-text-strong)]"> à {city}</span>}
-            </p>
+          <div className="flex items-center justify-between mb-5 max-w-[860px] mx-auto flex-wrap gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-[14px] text-[var(--color-muted)]">
+                <span className="font-bold text-[var(--color-text-strong)]">
+                  {results.length.toLocaleString("fr-FR")}
+                </span>{" "}résultat{results.length > 1 ? "s" : ""}
+                {city !== ALL && <span className="font-semibold text-[var(--color-text-strong)]"> à {city}</span>}
+              </p>
+              {urlArr && city.toLowerCase().includes("paris") && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--color-tint-blue)] text-[var(--color-accent)] text-[12px] font-semibold border border-[var(--color-border-soft)]">
+                  <MapPin className="w-3 h-3" strokeWidth={2.5} />
+                  Paris {urlArr}e arrondissement
+                </span>
+              )}
+            </div>
             {city !== ALL && (
               <button type="button" onClick={clearCity}
                 className="text-[13px] font-semibold text-[var(--color-accent)] hover:underline flex items-center gap-1">

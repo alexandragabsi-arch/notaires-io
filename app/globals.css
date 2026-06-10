@@ -1,42 +1,37 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* LegalCorners palette */
-  --color-primary: #1c4587;
-  --color-primary-hover: #163769;
-  --color-accent: #2d5dbf;
+  /* Palette LegalCorners */
+  --color-primary: #4980E6;
+  --color-primary-hover: #3a6fd4;
+  --color-accent: #4980E6;
   --color-accent-soft: #eef4ff;
-  --color-text-strong: #0f2a52;
+  --color-text-strong: #1C4587;
   --color-muted: #64748b;
   --color-border: #e5e7eb;
-  --color-border-soft: #eef2f7;
+  --color-border-soft: #e8edf5;
   --color-success: #10b981;
-  --color-tint-blue: #eef4ff;
-  --color-tint-purple: #fdf4ff;
+  --color-tint-blue: #f0f4ff;
+  --color-tint-purple: #eef2ff;
   --color-tint-green: #ecfdf5;
   --color-tint-warm: #fff7ed;
   --color-tint-rose: #fff1f2;
   --color-tint-mint: #f0fdfa;
 
-  /* Fonts */
-  --font-sans: var(--font-inter);
+  /* Fonts — DM Sans (LegalCorners) + Playfair pour les titres */
+  --font-sans: var(--font-dm-sans), var(--font-inter);
   --font-serif: var(--font-playfair);
 
   /* Shadows */
-  --shadow-card: 0 4px 24px rgba(28, 69, 135, 0.08);
-  --shadow-strong: 0 12px 40px rgba(28, 69, 135, 0.12);
-  --shadow-cta: 0 4px 14px rgba(45, 93, 191, 0.25);
-  --shadow-cta-hover: 0 6px 20px rgba(45, 93, 191, 0.35);
+  --shadow-card: 0 4px 24px rgba(73, 128, 230, 0.08);
+  --shadow-strong: 0 12px 40px rgba(73, 128, 230, 0.14);
+  --shadow-cta: 0 4px 14px rgba(73, 128, 230, 0.28);
+  --shadow-cta-hover: 0 6px 20px rgba(73, 128, 230, 0.38);
 }
 
 :root {
-  --gradient-cta: radial-gradient(
-    circle at 20% 35%,
-    #509bf8,
-    #447ce6,
-    #767af9
-  );
-  --gradient-banner: linear-gradient(135deg, #1c4587 0%, #2d5dbf 100%);
+  --gradient-cta: linear-gradient(135deg, #509BF8 0%, #4980E6 100%);
+  --gradient-banner: linear-gradient(135deg, #509BF8 0%, #4980E6 100%);
   --gradient-green: linear-gradient(135deg, #10b981, #059669);
 }
 
@@ -46,14 +41,6 @@ body {
   background: #ffffff;
 }
 
-/* Justification de tous les textes courants — dans @layer base
-   pour que les utilities Tailwind (text-center etc.) puissent l'écraser */
-@layer base {
-  p, li, td, th, blockquote, dd, dt, figcaption {
-    text-align: justify;
-    text-justify: inter-word;
-  }
-}
 
 html {
   scroll-behavior: smooth;

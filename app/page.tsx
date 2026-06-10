@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import SocialProof from "@/components/SocialProof";
-import CitySearch from "@/components/CitySearch";
+import Wizard from "@/components/Wizard";
 import Features from "@/components/Features";
 import HowItWorks from "@/components/HowItWorks";
 import FAQ from "@/components/FAQ";
@@ -117,7 +117,27 @@ export default function Page() {
       <main className="flex-1">
         <Hero />
         <SocialProof />
-        <CitySearch />
+
+        {/* Notre point fort : les questions qui orientent */}
+        <section className="py-16 sm:py-20 bg-white">
+          <div className="max-w-[1200px] mx-auto px-6">
+            <div className="text-center mb-10">
+              <p className="text-[12px] font-bold uppercase tracking-[1px] text-[var(--color-accent)] mb-2">
+                Orientation personnalisée
+              </p>
+              <h2 className="serif text-[26px] sm:text-[32px] font-bold text-[var(--color-text-strong)] tracking-tight">
+                Quelle est votre situation ?
+              </h2>
+              <p className="text-[16px] text-[var(--color-muted)] mt-3 max-w-[480px] mx-auto">
+                Répondez à 2–3 questions, on vous oriente vers le bon notaire et la bonne spécialité.
+              </p>
+            </div>
+            <div className="flex justify-center">
+              <Wizard />
+            </div>
+          </div>
+        </section>
+
         <Features />
         <HowItWorks />
         <FAQ

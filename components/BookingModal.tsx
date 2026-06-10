@@ -17,6 +17,7 @@ import {
   Upload,
   FolderOpen,
   Archive,
+  Loader2,
 } from "lucide-react";
 import JSZip from "jszip";
 
@@ -88,7 +89,7 @@ function defaultRoles(dossier: string): [string, string] {
   return [roles[0], roles[1] ?? roles[0]];
 }
 
-type Step = "dossier" | "participants" | "documents" | "confirm" | "success";
+type Step = "dossier" | "participants" | "documents" | "confirm" | "sending" | "success";
 
 /* ─── Documents requis par type de dossier ───────────────────────────────── */
 type DocType = { id: string; label: string; required: boolean; accept: string };
@@ -345,6 +346,28 @@ export default function BookingModal({
   }
 
   const mainOk = participants[0]?.prenom.trim() && participants[0]?.nom.trim();
+
+  async function confirmBooking() {
+    setStep("sending");
+    try {
+      await fetch("/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          notaireId,
+          notaireNom,
+          slotKey,
+          slotLabel,
+          dossier,
+          modalite,
+          participants,
+        }),
+      });
+    } catch {
+      // L'email est best-effort — on confirme quand même côté client
+    }
+    setStep("success");
+  }
 
   function exportAll() {
     const meta = { dossier, slot: slotLabel, notaire: notaireNom };
@@ -627,7 +650,7 @@ export default function BookingModal({
         {/* Footer actions */}
         {step !== "success" && (
           <div className="px-6 pb-6 pt-3 border-t border-[var(--color-border-soft)] shrink-0 flex gap-3">
-            {step !== "dossier" && (
+            {step !== "dossier" && step !== "sending" && (
               <button
                 type="button"
                 onClick={() => {
@@ -643,12 +666,12 @@ export default function BookingModal({
             )}
             <button
               type="button"
-              disabled={step === "participants" && !mainOk}
+              disabled={(step === "participants" && !mainOk) || step === "sending"}
               onClick={() => {
                 if (step === "dossier") setStep("participants");
                 else if (step === "participants") setStep("documents");
                 else if (step === "documents") setStep("confirm");
-                else if (step === "confirm") setStep("success");
+                else if (step === "confirm") confirmBooking();
               }}
               className="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)] disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:-translate-y-0.5"
             >
@@ -656,6 +679,7 @@ export default function BookingModal({
               {step === "participants" && <>Documents <ChevronRight className="w-4 h-4" strokeWidth={2.5} /></>}
               {step === "documents" && <>Récapitulatif <ChevronRight className="w-4 h-4" strokeWidth={2.5} /></>}
               {step === "confirm" && <>Confirmer le rendez-vous <Check className="w-4 h-4" strokeWidth={2.5} /></>}
+              {step === "sending" && <>Envoi en cours… <Loader2 className="w-4 h-4 animate-spin" strokeWidth={2.5} /></>}
             </button>
           </div>
         )}

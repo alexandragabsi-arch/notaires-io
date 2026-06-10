@@ -267,6 +267,7 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
 
   const [bio, setBio] = useState(notaire.bio ?? "");
   const [phone, setPhone] = useState(notaire.phone ?? "");
+  const [email, setEmail] = useState(notaire.email ?? "");
   const [address, setAddress] = useState(notaire.address ?? "");
   const [website, setWebsite] = useState(notaire.website ?? "");
   const [specs, setSpecs] = useState<string[]>(notaire.specialties ?? []);
@@ -322,6 +323,7 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
         photoFile: photoFile ?? undefined,
         bio: bio.trim() || undefined,
         phone: phone.trim() || undefined,
+        email: email.trim() || undefined,
         address: address.trim() || undefined,
         website: website.trim() || undefined,
         specialties: specs,
@@ -426,6 +428,20 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
               value={phone}
               onChange={e => setPhone(e.target.value)}
               placeholder="01 23 45 67 89"
+              className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] transition"
+            />
+          </div>
+
+          {/* Email de contact */}
+          <div>
+            <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-2">
+              Email de contact <span className="normal-case font-normal text-[11px] text-[var(--color-accent)]">(pour recevoir les notifications de RDV)</span>
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="contact@mon-etude.fr"
               className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] transition"
             />
           </div>

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabase";
 import {
   CalendarClock,
   Video,
@@ -26,44 +27,17 @@ interface Rdv {
   status: "Confirmé" | "En attente";
 }
 
-const RDVS: Rdv[] = [
-  {
-    id: "1",
-    client: "Famille Durand",
-    motif: "Succession",
-    day: "Demain",
-    time: "14h30",
-    mode: "visio",
-    status: "Confirmé",
-  },
-  {
-    id: "2",
-    client: "M. et Mme Lefèvre",
-    motif: "Acquisition immobilière",
-    day: "Demain",
-    time: "16h00",
-    mode: "cabinet",
-    status: "Confirmé",
-  },
-  {
-    id: "3",
-    client: "Sophie Bernard",
-    motif: "Donation",
-    day: "Vendredi",
-    time: "10h00",
-    mode: "visio",
-    status: "Confirmé",
-  },
-  {
-    id: "4",
-    client: "Entreprise Novalis",
-    motif: "Création de société",
-    day: "Lundi",
-    time: "11h00",
-    mode: "cabinet",
-    status: "En attente",
-  },
+const RDVS_MOCK: Rdv[] = [
+  { id: "1", client: "Famille Durand", motif: "Succession", day: "Demain", time: "14h30", mode: "visio", status: "Confirmé" },
+  { id: "2", client: "M. et Mme Lefèvre", motif: "Acquisition immobilière", day: "Demain", time: "16h00", mode: "cabinet", status: "Confirmé" },
+  { id: "3", client: "Sophie Bernard", motif: "Donation", day: "Vendredi", time: "10h00", mode: "visio", status: "Confirmé" },
+  { id: "4", client: "Entreprise Novalis", motif: "Création de société", day: "Lundi", time: "11h00", mode: "cabinet", status: "En attente" },
 ];
+
+function parseSlotLabel(slotLabel: string): { day: string; time: string } {
+  const parts = slotLabel.split("·").map((s) => s.trim());
+  return { day: parts[0] ?? slotLabel, time: parts[1] ?? "" };
+}
 
 function Switch({ on, onClick }: { on: boolean; onClick: () => void }) {
   return (
@@ -85,13 +59,48 @@ function Switch({ on, onClick }: { on: boolean; onClick: () => void }) {
   );
 }
 
-export default function NotaireDashboard() {
+export default function NotaireDashboard({ notaireId }: { notaireId?: string } = {}) {
   const [remindEve, setRemindEve] = useState(true);
   const [remind2h, setRemind2h] = useState(true);
+  const [rdvs, setRdvs] = useState<Rdv[]>(RDVS_MOCK);
+  const [loadingRdvs, setLoadingRdvs] = useState(false);
 
+  useEffect(() => {
+    if (!notaireId) return;
+    setLoadingRdvs(true);
+    supabase
+      .from("bookings")
+      .select("id, client_nom, dossier, slot_label, modalite, status")
+      .eq("notaire_id", notaireId)
+      .order("created_at", { ascending: false })
+      .limit(20)
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setRdvs(
+            data.map((row) => {
+              const { day, time } = parseSlotLabel(row.slot_label as string);
+              return {
+                id: row.id as string,
+                client: (row.client_nom as string) || "Client",
+                motif: row.dossier as string,
+                day,
+                time,
+                mode: (row.modalite as Mode) || "cabinet",
+                status: (row.status as "Confirmé" | "En attente") || "Confirmé",
+              };
+            })
+          );
+        } else if (data) {
+          setRdvs([]);
+        }
+        setLoadingRdvs(false);
+      });
+  }, [notaireId]);
+
+  const RDVS = rdvs;
   const aVenir = RDVS.length;
   const enVisio = RDVS.filter((r) => r.mode === "visio").length;
-  const demain = RDVS.filter((r) => r.day === "Demain").length;
+  const demain = RDVS.filter((r) => r.day.toLowerCase().includes("demain")).length;
 
   const stats = [
     { icon: CalendarDays, label: "RDV à venir", value: aVenir },
@@ -163,6 +172,17 @@ export default function NotaireDashboard() {
             <h3 className="font-bold text-[17px] text-[var(--color-text-strong)] mb-5">
               Rendez-vous à venir
             </h3>
+            {loadingRdvs && (
+              <div className="flex items-center justify-center py-8">
+                <div className="w-6 h-6 border-2 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin" />
+              </div>
+            )}
+            {!loadingRdvs && RDVS.length === 0 && notaireId && (
+              <div className="text-center py-10 text-[var(--color-muted)] text-[14px]">
+                <CalendarDays className="w-8 h-8 mx-auto mb-3 opacity-30" strokeWidth={1.5} />
+                Aucun rendez-vous pour l'instant.
+              </div>
+            )}
             <div className="flex flex-col gap-3">
               {RDVS.map((r) => {
                 const ModeIcon = r.mode === "visio" ? Video : Building2;

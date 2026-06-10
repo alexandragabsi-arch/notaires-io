@@ -27,6 +27,7 @@ import {
 import { getStoredProfiles, getProfileByUserId } from "@/lib/notaire-profiles";
 import { supabase } from "@/lib/supabase";
 import type { ListingNotaire } from "@/lib/notaires-listing";
+import NotaireDashboard from "@/components/NotaireDashboard";
 
 const SITE_URL =
   typeof window !== "undefined"
@@ -472,6 +473,10 @@ function EspaceNotaireInner() {
         </motion.div>
 
       </div>
+
+      {/* Agenda — rendez-vous réels depuis Supabase */}
+      <NotaireDashboard notaireId={profile.id} />
+
     </section>
   );
 }

@@ -212,103 +212,6 @@ export default function NotairePitch() {
       {/* Espace facturation : honoraires + factures Notaires.io */}
       <NotaireBilling />
 
-      {/* FAQ notaires */}
-      <FAQ
-        id="faq"
-        eyebrow="Questions des confrères"
-        title="Les questions qu'on nous pose le plus."
-        items={faqNotaires}
-      />
-
-      {/* Tarifs */}
-      <section id="tarifs" className="py-16 sm:py-20 lg:py-24 bg-white">
-        <div className="max-w-[920px] mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-10"
-          >
-            <div className="text-[var(--color-accent)] text-[13px] font-bold tracking-[1.5px] uppercase mb-3">
-              Tarifs
-            </div>
-            <h2 className="serif text-[28px] sm:text-[34px] lg:text-[40px] font-bold leading-[1.15] text-[var(--color-text-strong)] tracking-tight text-balance">
-              Un abonnement simple,<br />
-              <span className="serif-accent">sans surprise</span>.
-            </h2>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.45 }}
-            className="max-w-[560px] mx-auto bg-white border-2 border-[var(--color-accent)] rounded-3xl shadow-[var(--shadow-strong)] p-8 sm:p-10"
-          >
-            {/* Prix principal */}
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-1.5 bg-[var(--color-tint-green)] text-[var(--color-success)] text-[12px] font-bold px-3 py-1.5 rounded-full mb-3">
-                🎉 Offre de lancement
-              </div>
-              <div className="inline-flex items-baseline gap-1.5 mb-1">
-                <span className="serif text-[52px] font-bold text-[var(--color-primary)] leading-none">99</span>
-                <span className="text-[22px] font-bold text-[var(--color-primary)]">€</span>
-                <span className="text-[15px] text-[var(--color-muted)] ml-1">HT / mois</span>
-              </div>
-              <p className="text-[13px] text-[var(--color-muted)] mb-1">
-                pendant 3 mois · puis{" "}
-                <strong className="text-[var(--color-text-strong)]">119 € HT/mois</strong>
-              </p>
-              <p className="text-[13px] text-[var(--color-muted)]">par notaire · sans engagement</p>
-            </div>
-
-            {/* Inclus */}
-            <ul className="flex flex-col gap-3 mb-7">
-              {[
-                "Profil référencé dans l'annuaire",
-                "Prise de RDV en ligne (visio ou cabinet)",
-                "QR code personnalisé inclus",
-                "Tableau de bord des rendez-vous",
-                "Rappels e-mail automatiques clients",
-                "Proposition d'honoraires intégrée",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-[15px] text-[var(--color-text-strong)]">
-                  <span className="w-5 h-5 mt-[2px] rounded-full bg-[var(--color-success)] text-white inline-flex items-center justify-center shrink-0">
-                    <Check className="w-3 h-3" strokeWidth={3} />
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-
-            {/* Associé supplémentaire */}
-            <div className="bg-[var(--color-tint-blue)] rounded-2xl px-5 py-4 mb-7 flex items-start gap-3">
-              <span className="text-[20px] shrink-0">👥</span>
-              <div>
-                <div className="text-[14px] font-bold text-[var(--color-text-strong)] mb-0.5">
-                  Associé supplémentaire dans l'étude
-                </div>
-                <div className="text-[14px] text-[var(--color-muted)]">
-                  + <strong className="text-[var(--color-text-strong)]">99 € HT / mois</strong> par notaire associé
-                </div>
-              </div>
-            </div>
-
-            <a
-              href="/inscription"
-              className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
-            >
-              Référencer mon étude
-              <ArrowRight className="w-[17px] h-[17px]" strokeWidth={2.5} />
-            </a>
-            <p className="text-center text-[12px] text-[var(--color-muted)] mt-3">
-              Démo gratuite de 20 min · Aucun engagement · Résiliable à tout moment
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
       {/* Bientôt — l'application mobile */}
       <section className="py-16 sm:py-20 lg:py-28 overflow-hidden bg-white">
         <div className="max-w-[1200px] mx-auto px-6">
@@ -484,6 +387,103 @@ export default function NotairePitch() {
             </motion.div>
 
           </div>
+        </div>
+      </section>
+
+      {/* FAQ notaires */}
+      <FAQ
+        id="faq"
+        eyebrow="Questions des confrères"
+        title="Les questions qu'on nous pose le plus."
+        items={faqNotaires}
+      />
+
+      {/* Tarifs */}
+      <section id="tarifs" className="py-16 sm:py-20 lg:py-24 bg-white">
+        <div className="max-w-[920px] mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-10"
+          >
+            <div className="text-[var(--color-accent)] text-[13px] font-bold tracking-[1.5px] uppercase mb-3">
+              Tarifs
+            </div>
+            <h2 className="serif text-[28px] sm:text-[34px] lg:text-[40px] font-bold leading-[1.15] text-[var(--color-text-strong)] tracking-tight text-balance">
+              Un abonnement simple,<br />
+              <span className="serif-accent">sans surprise</span>.
+            </h2>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.45 }}
+            className="max-w-[560px] mx-auto bg-white border-2 border-[var(--color-accent)] rounded-3xl shadow-[var(--shadow-strong)] p-8 sm:p-10"
+          >
+            {/* Prix principal */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-1.5 bg-[var(--color-tint-green)] text-[var(--color-success)] text-[12px] font-bold px-3 py-1.5 rounded-full mb-3">
+                🎉 Offre de lancement
+              </div>
+              <div className="inline-flex items-baseline gap-1.5 mb-1">
+                <span className="serif text-[52px] font-bold text-[var(--color-primary)] leading-none">99</span>
+                <span className="text-[22px] font-bold text-[var(--color-primary)]">€</span>
+                <span className="text-[15px] text-[var(--color-muted)] ml-1">HT / mois</span>
+              </div>
+              <p className="text-[13px] text-[var(--color-muted)] mb-1">
+                pendant 3 mois · puis{" "}
+                <strong className="text-[var(--color-text-strong)]">119 € HT/mois</strong>
+              </p>
+              <p className="text-[13px] text-[var(--color-muted)]">par notaire · sans engagement</p>
+            </div>
+
+            {/* Inclus */}
+            <ul className="flex flex-col gap-3 mb-7">
+              {[
+                "Profil référencé dans l'annuaire",
+                "Prise de RDV en ligne (visio ou cabinet)",
+                "QR code personnalisé inclus",
+                "Tableau de bord des rendez-vous",
+                "Rappels e-mail automatiques clients",
+                "Proposition d'honoraires intégrée",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2.5 text-[15px] text-[var(--color-text-strong)]">
+                  <span className="w-5 h-5 mt-[2px] rounded-full bg-[var(--color-success)] text-white inline-flex items-center justify-center shrink-0">
+                    <Check className="w-3 h-3" strokeWidth={3} />
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            {/* Associé supplémentaire */}
+            <div className="bg-[var(--color-tint-blue)] rounded-2xl px-5 py-4 mb-7 flex items-start gap-3">
+              <span className="text-[20px] shrink-0">👥</span>
+              <div>
+                <div className="text-[14px] font-bold text-[var(--color-text-strong)] mb-0.5">
+                  Associé supplémentaire dans l'étude
+                </div>
+                <div className="text-[14px] text-[var(--color-muted)]">
+                  + <strong className="text-[var(--color-text-strong)]">99 € HT / mois</strong> par notaire associé
+                </div>
+              </div>
+            </div>
+
+            <a
+              href="/inscription"
+              className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+            >
+              Référencer mon étude
+              <ArrowRight className="w-[17px] h-[17px]" strokeWidth={2.5} />
+            </a>
+            <p className="text-center text-[12px] text-[var(--color-muted)] mt-3">
+              Démo gratuite de 20 min · Aucun engagement · Résiliable à tout moment
+            </p>
+          </motion.div>
         </div>
       </section>
 

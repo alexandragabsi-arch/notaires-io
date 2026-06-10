@@ -249,6 +249,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   const searchParams = useSearchParams();
   const urlVille = searchParams.get("ville") ?? "";
   const urlNom = searchParams.get("nom") ?? "";
+  const urlSpecialite = searchParams.get("specialite") ?? "";
 
   const [cityInput, setCityInput] = useState(urlVille);
   const [city, setCity] = useState<string>(urlVille || ALL);
@@ -260,7 +261,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
 
   const [nameQuery, setNameQuery] = useState(urlNom);
   const [language, setLanguage] = useState<string>(ALL);
-  const [specialty, setSpecialty] = useState<string>(ALL);
+  const [specialty, setSpecialty] = useState<string>(urlSpecialite || ALL);
   const [displayLimit, setDisplayLimit] = useState(60);
 
   const [stored, setStored] = useState<ListingNotaire[]>([]);
@@ -305,7 +306,8 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
 
   useEffect(() => {
     if (!urlVille) return;
-    skipNextFetch.current = true; // évite de relancer l'autocomplete depuis la sync URL
+    if (suggTimer.current) clearTimeout(suggTimer.current); // annule tout timer en cours
+    skipNextFetch.current = true;
     setCityInput(urlVille);
     setCity(urlVille);
   }, [urlVille]);
@@ -313,7 +315,8 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   useEffect(() => { setDisplayLimit(60); }, [city, nameQuery, specialty]);
 
   function selectSuggestion(item: CitySugg) {
-    skipNextFetch.current = true;   // empêche l'effet de relancer l'autocomplete
+    if (suggTimer.current) clearTimeout(suggTimer.current); // annule tout timer en cours
+    skipNextFetch.current = true;
     setCityInput(`${item.city} (${item.postcode})`);
     setCity(extractBaseCity(item.city));
     setSuggestions([]);

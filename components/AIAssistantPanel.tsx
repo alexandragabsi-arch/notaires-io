@@ -8,6 +8,18 @@ type Message =
   | { role: "user"; text: string }
   | { role: "assistant"; text: string; branchId?: string; q2?: string | null };
 
+function ctaUrl(branchId: string, q2?: string | null): string {
+  if (branchId === "immo") return "/annuaire?specialite=Droit+immobilier";
+  if (branchId === "famille") {
+    if (q2 === "deces") return "/annuaire?specialite=Successions";
+    if (q2 === "mariage") return "/annuaire?specialite=Mariage+%2F+PACS";
+    if (q2 === "donation") return "/annuaire?specialite=Donations";
+    return "/annuaire?specialite=Droit+de+la+famille";
+  }
+  if (branchId === "societe") return "/annuaire?specialite=Droit+des+soci%C3%A9t%C3%A9s";
+  return "/annuaire";
+}
+
 const SUGGESTIONS = [
   "Mon père vient de décéder, que dois-je faire ?",
   "Je veux acheter un appartement à Paris",
@@ -108,10 +120,10 @@ export default function AIAssistantPanel({ onClose }: { onClose: () => void }) {
             </div>
             {m.role === "assistant" && m.branchId && (
               <a
-                href="/#hero"
+                href={ctaUrl(m.branchId, m.q2)}
                 className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-accent)] hover:underline mt-0.5"
               >
-                Prendre RDV maintenant
+                Voir les notaires disponibles
                 <ArrowRight className="w-3 h-3" strokeWidth={2.5} />
               </a>
             )}

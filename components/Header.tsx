@@ -51,7 +51,6 @@ const SPECIALTIES = [
 const OTHER_LINKS: [string, string][] = [
   ["Comment ça marche", "/#how"],
   ["Blog", "/blog"],
-  ["Espace notaires", "/notaires"],
   ["FAQ", "/#faq"],
 ];
 
@@ -185,13 +184,20 @@ export default function Header() {
               </a>
             ))}
 
-            {hasProfile && (
+            {hasProfile ? (
               <a
                 href="/espace-notaire"
                 className="flex items-center gap-1.5 text-[var(--color-accent)] hover:text-[var(--color-primary)] transition-colors font-semibold"
               >
                 <LayoutDashboard className="w-3.5 h-3.5" strokeWidth={2.5} />
                 Mon espace
+              </a>
+            ) : (
+              <a
+                href="/connexion"
+                className="text-[12px] text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors border border-[var(--color-border)] rounded-full px-3 py-1"
+              >
+                Espace notaire
               </a>
             )}
           </nav>
@@ -316,10 +322,19 @@ export default function Header() {
                 <a
                   href="/connexion"
                   onClick={() => setOpen(false)}
-                  className="py-3 text-[15px] font-semibold text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors"
+                  className="py-3 text-[15px] font-semibold text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors border-b border-[var(--color-border-soft)]"
                 >
                   Connexion
                 </a>
+                {!hasProfile && (
+                  <a
+                    href="/connexion"
+                    onClick={() => setOpen(false)}
+                    className="py-3 text-[13px] text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors"
+                  >
+                    Espace notaire
+                  </a>
+                )}
               </div>
             </motion.nav>
           )}

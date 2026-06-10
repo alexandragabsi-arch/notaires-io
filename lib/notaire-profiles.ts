@@ -83,6 +83,7 @@ export async function getRemoteProfiles(): Promise<ListingNotaire[]> {
     website: row.website as string | undefined,
     address: row.address as string | undefined,
     phone: row.phone as string | undefined,
+    email: row.email as string | undefined,
     role: row.role as "associé" | "salarié" | undefined,
     specialties: (row.specialties as string[]) || [],
     languages: (row.languages as string[]) || undefined,
@@ -181,6 +182,7 @@ export interface ClaimData {
   phone?: string;
   address?: string;
   website?: string;
+  email?: string;            // email de contact du notaire (pour les notifications RDV)
   slotMatrix?: string[][];   // disponibilités sur 91 jours (13 semaines)
 }
 
@@ -217,6 +219,7 @@ export async function claimProfile(
     website: data.website?.trim() ?? null,
     address: data.address?.trim() ?? null,
     phone: data.phone?.trim() ?? null,
+    email: data.email?.trim() ?? null,
     role: null,
     specialties: data.specialties ?? [],
     languages: data.languages ?? [],
@@ -271,6 +274,7 @@ export async function getProfileByUserId(userId: string): Promise<ListingNotaire
     website: data.website as string | undefined,
     address: data.address as string | undefined,
     phone: data.phone as string | undefined,
+    email: data.email as string | undefined,
     role: data.role as "associé" | "salarié" | undefined,
     specialties: (data.specialties as string[]) || [],
     languages: (data.languages as string[]) || undefined,

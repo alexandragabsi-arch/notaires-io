@@ -167,9 +167,14 @@ export default function Wizard() {
   function confirmDetect() {
     if (!detectResult) return;
     setQ1(detectResult.branchId);
-    const q2val = detectResult.q2 ?? "_";
-    setQ2(q2val);
-    setStep("postal");
+    if (Q2_TREE[detectResult.branchId]) {
+      // Toujours passer par Q2 pour que l'utilisateur voit l'option pré-sélectionnée
+      if (detectResult.q2) setQ2(detectResult.q2);
+      setStep("q2");
+    } else {
+      setQ2(detectResult.q2 ?? "_");
+      setStep("postal");
+    }
   }
 
   function answerQ2(id: string) {
@@ -317,7 +322,7 @@ export default function Wizard() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.05 + i * 0.04 }}
-                  className="bg-white border-[1.5px] border-[var(--color-border)] rounded-xl p-3.5 cursor-pointer text-left flex items-start gap-3.5 transition-all hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)] hover:-translate-y-px"
+                  className={`rounded-xl p-3.5 cursor-pointer text-left flex items-start gap-3.5 transition-all hover:-translate-y-px border-[1.5px] ${q2 === o.id ? "border-[var(--color-primary)] bg-[var(--color-tint-blue)] shadow-[var(--shadow-card)]" : "bg-white border-[var(--color-border)] hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)]"}`}
                 >
                   <span className="text-lg leading-none shrink-0 w-[38px] h-[38px] rounded-[10px] flex items-center justify-center bg-[var(--color-tint-blue)]">
                     {o.icon}

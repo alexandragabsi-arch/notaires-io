@@ -97,6 +97,18 @@ export const Q2_TREE: Record<string, Q2Tree> = {
         label: "Un bien détenu à plusieurs",
         desc: "Bien partagé entre héritiers ou copropriétaires, désaccord à régler",
       },
+      {
+        id: "copro",
+        icon: "🏢",
+        label: "Copropriété",
+        desc: "Charges, règlement, syndic, travaux en immeuble — question ou litige",
+      },
+      {
+        id: "construction",
+        icon: "🏗️",
+        label: "Construction / VEFA",
+        desc: "Maison neuve, contrat de construction, achat sur plan (VEFA), permis",
+      },
     ],
   },
   offre: {
@@ -191,6 +203,8 @@ export const SPECIALTY: Record<string, Record<string, string>> = {
     achat: "Acquisition immobilière",
     transmission: "Transmission immobilière familiale",
     litige: "Droit immobilier & contentieux",
+    copro: "Droit de la copropriété",
+    construction: "Construction & VEFA",
   },
   famille: {
     deces: "Successions",
@@ -219,6 +233,8 @@ export const ESTIM: Record<string, Record<string, string>> = {
     achat: "2 100 € — 3 400 €",
     transmission: "1 400 € — 2 200 €",
     litige: "2 500 € — 4 800 €",
+    copro: "800 € — 2 000 €",
+    construction: "1 500 € — 3 000 €",
   },
   famille: {
     deces: "2 400 € — 3 200 €",
@@ -301,6 +317,42 @@ export const ENRICH: Record<string, EnrichQuestion[]> = {
       id: "credit",
       label: "Comment financez-vous cet achat ?",
       options: ["Avec un crédit bancaire", "Comptant (sans crédit)", "Crédit + apport personnel", "Pas encore décidé"],
+    },
+  ],
+  "immo:copro": [
+    {
+      id: "sujet",
+      label: "Quel est le sujet principal ?",
+      options: ["Charges impayées", "Travaux / vote en AG", "Règlement de copropriété", "Vente d'un lot", "Litige avec le syndic", "Autre"],
+    },
+    {
+      id: "role",
+      label: "Vous êtes…",
+      options: ["Copropriétaire occupant", "Copropriétaire bailleur", "Syndic / conseil syndical", "Acquéreur d'un lot"],
+    },
+    {
+      id: "urgence",
+      label: "Y a-t-il une échéance ou une urgence ?",
+      options: ["Oui, AG prévue bientôt", "Oui, procédure en cours", "Non, c'est préventif"],
+    },
+  ],
+  "immo:construction": [
+    {
+      id: "type",
+      label: "Quel type de projet ?",
+      options: ["Achat sur plan (VEFA)", "Contrat de construction de maison individuelle (CCMI)", "Maîtrise d'ouvrage libre", "Extension / surélévation"],
+    },
+    {
+      id: "stade",
+      label: "Où en êtes-vous ?",
+      options: ["Avant signature du contrat", "Contrat signé, travaux en cours", "Réception des travaux", "Litige constructeur / promoteur"],
+    },
+    {
+      id: "lieu_bien",
+      label: "Où se situe le projet ?",
+      type: "text",
+      placeholder: "Ex : Nantes, Bordeaux, Lyon…",
+      options: [],
     },
   ],
   "offre:achat": [

@@ -46,7 +46,7 @@ const faqParticuliers = [
   },
   {
     q: "Dois-je préparer des documents à l'avance ?",
-    a: "On vous indique en amont les informations utiles à votre dossier, pour que le rendez-vous soit efficace et que vous repartiez avec des réponses claires.",
+    a: "Oui, on vous indiquera dans votre espace les documents utiles à télécharger si vous souhaitez préparer votre dossier en amont du rendez-vous. Rien d'obligatoire — le notaire peut aussi vous guider lors du rendez-vous.",
   },
   {
     q: "Puis-je annuler ou reporter mon rendez-vous ?",

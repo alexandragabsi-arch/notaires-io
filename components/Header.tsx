@@ -185,7 +185,7 @@ export default function Header() {
             ))}
 
             <a
-              href={hasProfile ? "/espace-notaire" : "/connexion"}
+              href="/espace-notaire"
               className="flex items-center gap-1.5 text-[var(--color-accent)] hover:text-[var(--color-primary)] transition-colors font-semibold text-[13px]"
             >
               <LayoutDashboard className="w-3.5 h-3.5" strokeWidth={2.5} />
@@ -291,7 +291,7 @@ export default function Header() {
                 ))}
                 {/* Espace notaire dans le menu mobile */}
                 <a
-                  href={hasProfile ? "/espace-notaire" : "/connexion"}
+                  href="/espace-notaire"
                   onClick={() => setOpen(false)}
                   className="py-3 text-[15px] font-semibold text-[var(--color-accent)] flex items-center gap-2 hover:text-[var(--color-primary)] transition-colors border-b border-[var(--color-border-soft)]"
                 >

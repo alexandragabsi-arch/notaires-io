@@ -98,9 +98,18 @@ export default function Hero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="text-[16px] sm:text-[18px] text-[var(--color-muted)] mb-10 max-w-[560px] mx-auto"
+          className="text-[16px] sm:text-[18px] text-[var(--color-muted)] mb-3 max-w-[560px] mx-auto"
         >
           Immobilier, succession, famille, société — en visio ou au cabinet.
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.18 }}
+          className="text-[12px] text-[var(--color-muted)] italic mb-8 !text-center"
+        >
+          Créé par un notaire, au service des notaires.
         </motion.p>
 
         {/* Barre de recherche */}

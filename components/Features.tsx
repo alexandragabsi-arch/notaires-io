@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Target, Clock, Banknote, ShieldCheck } from "lucide-react";
+import { Target, CalendarCheck, Zap, ShieldCheck } from "lucide-react";
 
 const features = [
   {
@@ -12,18 +12,18 @@ const features = [
     desc: "Vous êtes orienté vers le notaire vraiment spécialisé dans votre situation — immobilier, succession, famille, société.",
   },
   {
-    icon: Clock,
+    icon: CalendarCheck,
     tint: "bg-[var(--color-tint-purple)]",
     iconColor: "text-purple-600",
-    title: "Un rendez-vous préparé",
-    desc: "Vous arrivez avec l'essentiel déjà transmis : moins d'attente, plus d'efficacité. Gagnez 30 minutes sur chaque RDV.",
+    title: "Tous vos rendez-vous au même endroit",
+    desc: "Passés, à venir, en visio ou au cabinet : votre espace réunit tout au même endroit, accessible 24/7. Plus jamais d'oubli grâce aux rappels automatiques.",
   },
   {
-    icon: Banknote,
+    icon: Zap,
     tint: "bg-[var(--color-tint-green)]",
     iconColor: "text-[var(--color-success)]",
-    title: "Premier RDV gratuit",
-    desc: "30 minutes pour poser vos questions et comprendre votre situation. Vous ne payez les honoraires du notaire que si vous passez à l'acte.",
+    title: "Réservez en temps réel",
+    desc: "Vous voyez les vraies disponibilités du notaire et réservez votre créneau en quelques secondes, sans appeler ni attendre.",
   },
   {
     icon: ShieldCheck,
@@ -49,7 +49,7 @@ export default function Features() {
             Pourquoi Notaires.io
           </div>
           <h2 className="serif text-[34px] lg:text-[44px] font-bold leading-[1.15] text-[var(--color-text-strong)] tracking-tight mb-3">
-            Ce que les autres <span className="serif-accent">n&apos;ont pas</span>.
+            Tout ce qui fait la <span className="serif-accent">différence</span>.
           </h2>
         </motion.div>
 

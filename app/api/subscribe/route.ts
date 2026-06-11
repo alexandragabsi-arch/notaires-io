@@ -41,6 +41,8 @@ export async function POST(req: NextRequest) {
     notaire?: string;
     etude?: string;
     email?: string;
+    notaireId?: string;
+    userId?: string;
   };
 
   // ── 1. Créer un coupon : -20 € pendant 3 mois (99€ → revient à 99€ sur 119€ base) ──
@@ -71,9 +73,13 @@ export async function POST(req: NextRequest) {
     // Coupon promo 3 mois appliqué
     "discounts[0][coupon]": couponId,
 
-    // Métadonnées
+    // Métadonnées (sur l'abonnement ET sur la session, pour le webhook)
     "subscription_data[metadata][notaire]": body.notaire ?? "",
     "subscription_data[metadata][etude]": body.etude ?? "",
+    "metadata[notaire]": body.notaire ?? "",
+    "metadata[etude]": body.etude ?? "",
+    "metadata[notaireId]": body.notaireId ?? "",
+    "metadata[userId]": body.userId ?? "",
 
     // Redirection
     success_url: `${SITE_URL}/espace-notaire?bienvenue=1`,

@@ -204,6 +204,8 @@ export default function NotaireSignup() {
           notaire: fullName,
           etude,
           email,
+          notaireId: profile.id,
+          userId,
         }),
       });
       const data = (await res.json()) as { url?: string; error?: string };

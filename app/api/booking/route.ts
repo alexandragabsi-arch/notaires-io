@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { sendEmail, SITE } from "@/lib/email";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 );
-
-const RESEND_API = "https://api.resend.com/emails";
-const FROM = "Notaires.io <contact@notaires.io>";
-const SITE = "https://notaires.io";
 
 interface Participant {
   civilite: string;
@@ -38,19 +35,6 @@ interface BookingPayload {
   participants: Participant[];
   documents?: StoredDocument[];
   userId?: string | null;
-}
-
-async function sendEmail(to: string, subject: string, html: string) {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) return; // pas encore configuré — on ne bloque pas la réservation
-  await fetch(RESEND_API, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${key}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ from: FROM, to, subject, html }),
-  });
 }
 
 export async function POST(req: NextRequest) {

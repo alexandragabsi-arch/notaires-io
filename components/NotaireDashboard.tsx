@@ -17,6 +17,8 @@ import {
   Download,
   Trash2,
   Loader2,
+  Receipt,
+  ExternalLink,
 } from "lucide-react";
 import { generateRoomId, internalVisioUrl, slotDayToDate } from "@/lib/visio";
 
@@ -42,6 +44,49 @@ interface Rdv {
   mode: Mode;
   status: "Confirmé" | "En attente";
 }
+
+// Facture Stripe (telle que renvoyée par /api/notaire/invoices).
+interface Invoice {
+  id: string;
+  number: string | null;
+  created: number;
+  amount: number;
+  currency: string;
+  status: string | null;
+  url: string | null;
+  pdf: string | null;
+}
+
+function fmtInvoiceDate(ms: number): string {
+  try {
+    return new Date(ms).toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  } catch {
+    return "";
+  }
+}
+
+function fmtAmount(cents: number, currency: string): string {
+  try {
+    return new Intl.NumberFormat("fr-FR", {
+      style: "currency",
+      currency: (currency || "eur").toUpperCase(),
+    }).format(cents / 100);
+  } catch {
+    return `${(cents / 100).toFixed(2)} €`;
+  }
+}
+
+const INVOICE_STATUS_FR: Record<string, string> = {
+  paid: "Payée",
+  open: "En attente",
+  draft: "Brouillon",
+  uncollectible: "Impayée",
+  void: "Annulée",
+};
 
 const RDVS_MOCK: Rdv[] = [
   { id: "1", client: "Famille Durand", motif: "Succession", day: "Demain", time: "14h30", mode: "visio", status: "Confirmé" },
@@ -83,9 +128,59 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
   // Pièces transmises au client, par RDV (source = bookings.notaire_documents).
   const [docsByRdv, setDocsByRdv] = useState<Record<string, SentDoc[]>>({});
   const [uploading, setUploading] = useState<Record<string, boolean>>({});
+  // Factures Stripe de l'abonnement (source = /api/notaire/invoices).
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [loadingInvoices, setLoadingInvoices] = useState(false);
 
   // Gestion documents possible uniquement sur les vrais RDV (notaire connecté).
   const canManageDocs = !!notaireId;
+
+  // Charge les préférences de rappel du notaire (interrupteurs persistés).
+  useEffect(() => {
+    if (!notaireId) return;
+    supabase
+      .from("notaire_profiles")
+      .select("remind_eve, remind_2h")
+      .eq("id", notaireId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!data) return;
+        if (typeof data.remind_eve === "boolean") setRemindEve(data.remind_eve);
+        if (typeof data.remind_2h === "boolean") setRemind2h(data.remind_2h);
+      });
+  }, [notaireId]);
+
+  // Enregistre une préférence de rappel (optimiste, réservé aux vrais comptes).
+  function persistRemind(field: "remind_eve" | "remind_2h", value: boolean) {
+    if (!notaireId) return;
+    supabase.from("notaire_profiles").update({ [field]: value }).eq("id", notaireId);
+  }
+
+  // Charge les factures Stripe du notaire (jeton Supabase → route sécurisée).
+  useEffect(() => {
+    if (!notaireId) return;
+    let active = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (!active) return;
+      const token = data.session?.access_token;
+      if (!token) return;
+      setLoadingInvoices(true);
+      fetch(`/api/notaire/invoices?notaireId=${encodeURIComponent(notaireId)}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((r) => r.json())
+        .then((d: { invoices?: Invoice[] }) => {
+          if (active && Array.isArray(d.invoices)) setInvoices(d.invoices);
+        })
+        .catch(() => {})
+        .finally(() => {
+          if (active) setLoadingInvoices(false);
+        });
+    });
+    return () => {
+      active = false;
+    };
+  }, [notaireId]);
 
   useEffect(() => {
     if (!notaireId) return;
@@ -460,7 +555,14 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
                   Envoyé à 18h00
                 </div>
               </div>
-              <Switch on={remindEve} onClick={() => setRemindEve((v) => !v)} />
+              <Switch
+                on={remindEve}
+                onClick={() => {
+                  const next = !remindEve;
+                  setRemindEve(next);
+                  persistRemind("remind_eve", next);
+                }}
+              />
             </div>
 
             <div className="flex items-center justify-between gap-3 py-3">
@@ -472,7 +574,14 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
                   Juste avant le rendez-vous
                 </div>
               </div>
-              <Switch on={remind2h} onClick={() => setRemind2h((v) => !v)} />
+              <Switch
+                on={remind2h}
+                onClick={() => {
+                  const next = !remind2h;
+                  setRemind2h(next);
+                  persistRemind("remind_2h", next);
+                }}
+              />
             </div>
 
             <div className="flex items-start gap-2 text-[13px] text-[var(--color-muted)] bg-[var(--color-tint-green)] rounded-[10px] px-3.5 py-3 mt-4">
@@ -487,6 +596,81 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
               </span>
             </div>
           </motion.div>
+
+          {/* Factures de l'abonnement */}
+          {canManageDocs && (
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.4, delay: 0.12 }}
+              className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6"
+            >
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-11 h-11 shrink-0 rounded-xl bg-[var(--color-tint-blue)] flex items-center justify-center text-[var(--color-accent)]">
+                  <Receipt className="w-[22px] h-[22px]" strokeWidth={2} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-[17px] text-[var(--color-text-strong)] leading-tight">
+                    Factures
+                  </h3>
+                  <p className="text-[13px] text-[var(--color-muted)]">
+                    Votre abonnement Notaires.io
+                  </p>
+                </div>
+              </div>
+
+              {loadingInvoices ? (
+                <div className="flex items-center gap-2 text-[13px] text-[var(--color-muted)] py-4">
+                  <Loader2 className="w-4 h-4 animate-spin" /> Chargement…
+                </div>
+              ) : invoices.length === 0 ? (
+                <p className="text-[13px] text-[var(--color-muted)] py-2">
+                  Aucune facture pour le moment. Elles apparaîtront ici après votre
+                  premier prélèvement.
+                </p>
+              ) : (
+                <ul className="flex flex-col divide-y divide-[var(--color-border-soft)]">
+                  {invoices.map((inv) => (
+                    <li key={inv.id} className="flex items-center gap-3 py-3">
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[14px] font-semibold text-[var(--color-text-strong)] truncate">
+                          {fmtAmount(inv.amount, inv.currency)}
+                          <span className="ml-2 text-[12px] font-normal text-[var(--color-muted)]">
+                            {inv.status ? INVOICE_STATUS_FR[inv.status] ?? inv.status : ""}
+                          </span>
+                        </div>
+                        <div className="text-[12px] text-[var(--color-muted)]">
+                          {fmtInvoiceDate(inv.created)}
+                          {inv.number ? ` · ${inv.number}` : ""}
+                        </div>
+                      </div>
+                      {inv.pdf && (
+                        <a
+                          href={inv.pdf}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="shrink-0 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--color-accent)] hover:underline"
+                        >
+                          <Download className="w-4 h-4" /> PDF
+                        </a>
+                      )}
+                      {!inv.pdf && inv.url && (
+                        <a
+                          href={inv.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="shrink-0 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--color-accent)] hover:underline"
+                        >
+                          <ExternalLink className="w-4 h-4" /> Voir
+                        </a>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </motion.div>
+          )}
         </div>
       </div>
     </section>

@@ -6,11 +6,13 @@ import { motion } from "framer-motion";
 import {
   Search, MapPin, X, Video, Phone,
   BadgeCheck, ArrowRight, Sparkles, ChevronLeft, ChevronRight,
-  Lock, Building2, Home, Users, Scale, Heart,
+  Lock, Building2, Home, Users, Scale, Heart, CalendarClock,
+  List, Map as MapIcon, ChevronDown, Check,
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { getStoredProfiles, getRemoteProfiles } from "@/lib/notaire-profiles";
+import NotaireMap from "@/components/NotaireMap";
 
 const ALL = "Toutes";
 
@@ -76,9 +78,11 @@ function extractArr(label: string): number | null {
 function getNextWorkdays(n: number): Date[] {
   const days: Date[] = [];
   const d = new Date();
+  // Inclut aujourd'hui s'il est ouvré (offset 0 = aujourd'hui), pour que
+  // l'agenda et le filtre « Aujourd'hui » aient des créneaux le jour même.
   while (days.length < n) {
-    d.setDate(d.getDate() + 1);
     if (d.getDay() !== 0 && d.getDay() !== 6) days.push(new Date(d));
+    d.setDate(d.getDate() + 1);
   }
   return days;
 }
@@ -88,6 +92,63 @@ function formatDayLabel(d: Date): { short: string; date: string } {
   const months = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
   return { short: shorts[d.getDay()], date: `${d.getDate()} ${months[d.getMonth()]}` };
 }
+
+const WEEKDAYS_FR = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+
+/** Date du Ne jour ouvré à partir d'aujourd'hui (offset 0 = aujourd'hui s'il est ouvré).
+ *  Cohérent avec getNextWorkdays : workdayDate(i) === getNextWorkdays(n)[i]. */
+function workdayDate(offset: number): Date {
+  const d = new Date();
+  let count = 0;
+  while (true) {
+    if (d.getDay() !== 0 && d.getDay() !== 6) {
+      if (count === offset) return d;
+      count++;
+    }
+    d.setDate(d.getDate() + 1);
+  }
+}
+
+/** Nombre de jours calendaires entre aujourd'hui et une date. */
+function calendarDaysFromToday(date: Date): number {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const d = new Date(date); d.setHours(0, 0, 0, 0);
+  return Math.round((d.getTime() - today.getTime()) / 86_400_000);
+}
+
+/** Nombre de jours avant le prochain RDV d'un notaire, ou null si inconnu.
+ *  Priorité au libellé `next` ("Aujourd'hui", "Demain", nom de jour) qui varie
+ *  par notaire ; fallback sur le premier créneau non vide de la slotMatrix. */
+function daysUntilNext(n: ListingNotaire): number | null {
+  const raw = (n.next ?? "").trim().toLowerCase();
+  if (raw && !raw.startsWith("sur demande")) {
+    if (raw.startsWith("aujourd")) return 0;
+    if (raw.startsWith("demain")) return 1;
+    const today = new Date().getDay();
+    for (let i = 0; i < 7; i++) {
+      if (raw.startsWith(WEEKDAYS_FR[i])) {
+        const diff = (i - today + 7) % 7;
+        return diff === 0 ? 7 : diff; // un nom de jour = prochaine occurrence future
+      }
+    }
+  }
+  const sm = n.slotMatrix;
+  if (sm && sm.length) {
+    for (let off = 0; off < sm.length; off++) {
+      if ((sm[off]?.length ?? 0) > 0) return calendarDaysFromToday(workdayDate(off));
+    }
+  }
+  return null;
+}
+
+/** Onglets du filtre de disponibilité. max = fenêtre en jours (null = tous). */
+const AVAIL_TABS: { label: string; max: number | null }[] = [
+  { label: "Tous", max: null },
+  { label: "Aujourd'hui", max: 0 },
+  { label: "Sous 3 jours", max: 3 },
+  { label: "Sous 7 jours", max: 7 },
+  { label: "Sous 14 jours", max: 14 },
+];
 
 /* ── Carte notaire ─────────────────────────────────────── */
 function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
@@ -185,10 +246,15 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
               </div>
             )}
 
-            {/* Domaines + langues */}
+            {/* Domaines + sous-spécialités + langues */}
             <div className="flex flex-wrap gap-1.5">
               {n.specialties.map((s) => (
                 <span key={s} className="text-[11px] px-2.5 py-1 rounded-full border border-[var(--color-border)] text-[var(--color-text-strong)]">
+                  {s}
+                </span>
+              ))}
+              {(n.subSpecialties ?? []).map((s) => (
+                <span key={s} className="text-[11px] px-2.5 py-1 rounded-full bg-[var(--color-tint-blue)] text-[var(--color-accent)] border border-[var(--color-border-soft)]">
                   {s}
                 </span>
               ))}
@@ -255,9 +321,12 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
               </button>
             </div>
 
-            <a href={`/notaires/${n.id}`}
-              className="self-center text-[12px] font-semibold text-[var(--color-accent)] hover:underline flex items-center gap-1 mt-1">
-              + Voir plus d&apos;horaires
+            <a
+              href={`/notaires/${n.id}#agenda`}
+              className="self-center text-[12px] font-semibold text-[var(--color-accent)] hover:underline flex items-center gap-1 mt-1"
+            >
+              + Voir tous les horaires
+              <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
             </a>
 
             {/* Badge réservation */}
@@ -293,6 +362,10 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   const [nameQuery, setNameQuery] = useState(urlNom);
   const [language, setLanguage] = useState<string>(ALL);
   const [specialty, setSpecialty] = useState<string>(urlSpecialite || ALL);
+  const [subSpec, setSubSpec] = useState<string>(ALL);
+  const [availMax, setAvailMax] = useState<number | null>(null); // null = "Tous"
+  const [availOpen, setAvailOpen] = useState(false); // menu disponibilité déplié
+  const [view, setView] = useState<"list" | "map">("list"); // liste (défaut) ou carte
   const [displayLimit, setDisplayLimit] = useState(60);
 
   const [stored, setStored] = useState<ListingNotaire[]>([]);
@@ -344,7 +417,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
     setCity(extractBaseCity(urlVille) || ALL);
   }, [urlVille]);
 
-  useEffect(() => { setDisplayLimit(60); }, [city, nameQuery, specialty]);
+  useEffect(() => { setDisplayLimit(60); }, [city, nameQuery, specialty, subSpec, language, availMax]);
 
   function selectSuggestion(item: CitySugg) {
     if (suggTimer.current) clearTimeout(suggTimer.current); // annule tout timer en cours
@@ -368,6 +441,24 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
     [all],
   );
 
+  // Sous-spécialités réellement présentes dans les données (remplies par les
+  // notaires à l'inscription). Vide tant qu'aucun notaire n'en a saisi.
+  const subSpecialties = useMemo(
+    () => Array.from(new Set(all.flatMap((n) => n.subSpecialties ?? []))).sort((a, b) => a.localeCompare(b, "fr")),
+    [all],
+  );
+
+  // Compteurs réels par ville (même logique de match que le filtre principal),
+  // pour ne plus afficher de chiffres codés en dur sur les villes populaires.
+  const cityCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const c of POPULAR_CITIES) {
+      const norm = c.name.toLowerCase();
+      counts[c.name] = all.filter((n) => n.city.toLowerCase().includes(norm)).length;
+    }
+    return counts;
+  }, [all]);
+
   // Arrondissement effectif : ?arr= dans l'URL, sinon déduit du libellé ville saisi.
   const arrFilter = useMemo(() => urlArr ?? extractArr(cityInput), [urlArr, cityInput]);
 
@@ -381,17 +472,30 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
       const specTargets = specialty === ALL ? [] : (SPECIALTY_MAP[specialty] ?? [specialty]);
       const matchSpec = specialty === ALL || n.specialties.some(s =>
         specTargets.some(t => s.toLowerCase().includes(t.toLowerCase())));
+      const matchSubSpec = subSpec === ALL || (n.subSpecialties ?? []).includes(subSpec);
+      // Filtre disponibilité : prochain RDV dans la fenêtre demandée.
+      let matchAvail = true;
+      if (availMax !== null) {
+        const d = daysUntilNext(n);
+        matchAvail = d !== null && (availMax === 0 ? d === 0 : d <= availMax);
+      }
       // Filtre arrondissement : si un arrondissement est demandé, ne garder que
       // les notaires de cet arrondissement (ceux sans arrondissement connu passent).
       const matchArr = !arrFilter || !n.arrondissement || n.arrondissement === arrFilter;
-      return matchCity && matchName && matchLang && matchSpec && matchArr;
+      return matchCity && matchName && matchLang && matchSpec && matchSubSpec && matchAvail && matchArr;
     });
-  }, [all, city, nameQuery, language, specialty, arrFilter]);
+  }, [all, city, nameQuery, language, specialty, subSpec, availMax, arrFilter]);
 
   const displayed = useMemo(() => results.slice(0, displayLimit), [results, displayLimit]);
 
-  /** Vrai dès qu'une ville, un nom ou une spécialité est saisi */
-  const hasSearch = city !== ALL || nameQuery.trim().length > 0 || specialty !== ALL;
+  /** Vrai dès qu'un critère de recherche/filtre est actif */
+  const hasSearch =
+    city !== ALL ||
+    nameQuery.trim().length > 0 ||
+    specialty !== ALL ||
+    subSpec !== ALL ||
+    language !== ALL ||
+    availMax !== null;
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
@@ -472,6 +576,61 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
           </div>
         </motion.div>
 
+        {/* Filtre disponibilité (repliable) */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.08 }}
+          className="mb-4 max-w-[860px] mx-auto"
+        >
+          <div className="relative inline-block">
+            <button
+              type="button"
+              onClick={() => setAvailOpen((o) => !o)}
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-[13px] font-semibold border transition-all ${
+                availMax !== null
+                  ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-sm"
+                  : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              }`}
+            >
+              <CalendarClock className="w-4 h-4" strokeWidth={2} />
+              {availMax === null
+                ? "Disponibilité"
+                : `Dispo : ${AVAIL_TABS.find((t) => t.max === availMax)?.label}`}
+              <ChevronDown
+                className={`w-3.5 h-3.5 transition-transform ${availOpen ? "rotate-180" : ""}`}
+                strokeWidth={2.5}
+              />
+            </button>
+
+            {availOpen && (
+              <>
+                {/* Clic à l'extérieur pour refermer */}
+                <div className="fixed inset-0 z-30" onClick={() => setAvailOpen(false)} />
+                <div className="absolute z-40 top-full left-0 mt-2 w-56 bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-lg overflow-hidden p-1">
+                  {AVAIL_TABS.map((tab) => {
+                    const on = availMax === tab.max;
+                    return (
+                      <button
+                        key={tab.label}
+                        type="button"
+                        onClick={() => { setAvailMax(tab.max); setAvailOpen(false); }}
+                        className={`w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl text-[13px] text-left transition-colors ${
+                          on
+                            ? "bg-[var(--color-tint-blue)] text-[var(--color-accent)] font-semibold"
+                            : "text-[var(--color-text-strong)] font-medium hover:bg-[var(--color-tint-blue)]"
+                        }`}
+                      >
+                        {tab.label}
+                        {on && <Check className="w-4 h-4 shrink-0" strokeWidth={2.5} />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+        </motion.div>
+
         {/* Filtres spécialité */}
         <motion.div
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
@@ -495,8 +654,24 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
           ))}
         </motion.div>
 
+        {/* Filtre sous-spécialités (apparaît dès qu'un notaire en a renseigné) */}
+        {subSpecialties.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4 max-w-[860px] mx-auto">
+            {subSpecialties.map((s) => (
+              <button key={s} type="button" onClick={() => setSubSpec(s === subSpec ? ALL : s)}
+                className={`px-3 py-1.5 rounded-full text-[12px] font-semibold border transition-colors ${
+                  subSpec === s
+                    ? "bg-[var(--color-primary)] text-white border-[var(--color-primary)]"
+                    : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]"
+                }`}>
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Filtre langues */}
-        {languages.length > 0 && city !== ALL && (
+        {languages.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4 max-w-[860px] mx-auto">
             {[ALL, ...languages].map((l) => (
               <button key={l} type="button" onClick={() => setLanguage(l === language ? ALL : l)}
@@ -529,12 +704,41 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
                 </span>
               )}
             </div>
-            {city !== ALL && (
-              <button type="button" onClick={clearCity}
-                className="text-[13px] font-semibold text-[var(--color-accent)] hover:underline flex items-center gap-1">
-                <X className="w-3.5 h-3.5" strokeWidth={2.5} /> Effacer
-              </button>
-            )}
+            <div className="flex items-center gap-3">
+              {/* Bascule Liste / Carte */}
+              <div className="inline-flex gap-1 p-1 rounded-xl bg-[var(--color-tint-blue)] border border-[var(--color-border-soft)]">
+                <button
+                  type="button"
+                  onClick={() => setView("list")}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
+                    view === "list"
+                      ? "bg-white text-[var(--color-accent)] shadow-sm"
+                      : "text-[var(--color-muted)] hover:text-[var(--color-text-strong)]"
+                  }`}
+                >
+                  <List className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  Liste
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setView("map")}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${
+                    view === "map"
+                      ? "bg-white text-[var(--color-accent)] shadow-sm"
+                      : "text-[var(--color-muted)] hover:text-[var(--color-text-strong)]"
+                  }`}
+                >
+                  <MapIcon className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  Carte
+                </button>
+              </div>
+              {city !== ALL && (
+                <button type="button" onClick={clearCity}
+                  className="text-[13px] font-semibold text-[var(--color-accent)] hover:underline flex items-center gap-1">
+                  <X className="w-3.5 h-3.5" strokeWidth={2.5} /> Effacer
+                </button>
+              )}
+            </div>
           </div>
         )}
 
@@ -560,22 +764,27 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
                 >
                   <MapPin className="w-5 h-5 text-[var(--color-accent)] group-hover:scale-110 transition-transform" strokeWidth={2} />
                   <span className="font-semibold text-[13px] text-[var(--color-text-strong)]">{c.name}</span>
-                  <span className="text-[11px] text-[var(--color-muted)]">{c.count} notaires</span>
+                  <span className="text-[11px] text-[var(--color-muted)]">{(cityCounts[c.name] ?? c.count).toLocaleString("fr-FR")} notaires</span>
                 </motion.button>
               ))}
             </div>
           </motion.div>
         )}
 
+        {/* ── Vue carte ── */}
+        {hasSearch && results.length > 0 && view === "map" && (
+          <NotaireMap notaires={results} />
+        )}
+
         {/* ── Liste résultats ── */}
-        {hasSearch && results.length > 0 && (
+        {hasSearch && results.length > 0 && view === "list" && (
           <div className="flex flex-col gap-4">
             {displayed.map((n, i) => <NotaireCard key={n.id} n={n} i={i} />)}
           </div>
         )}
 
         {/* Voir plus */}
-        {hasSearch && results.length > displayLimit && (
+        {hasSearch && view === "list" && results.length > displayLimit && (
           <div className="mt-8 text-center">
             <button onClick={() => setDisplayLimit((l) => l + 60)}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] font-semibold text-[var(--color-text-strong)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors">

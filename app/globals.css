@@ -41,7 +41,10 @@ body {
   background: #ffffff;
 }
 
-p, li {
+/* Justification réservée au contenu d'article (blog) — ne doit pas
+   écraser les alignements (text-center, etc.) du reste du site. */
+.prose-article p,
+.prose-article li {
   text-align: justify;
   text-justify: inter-word;
 }

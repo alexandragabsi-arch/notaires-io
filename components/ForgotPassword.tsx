@@ -63,7 +63,7 @@ export default function ForgotPassword() {
             >
               <label className="block">
                 <span className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-1.5 block">
-                  E-mail professionnel
+                  E-mail
                 </span>
                 <span className="relative flex items-center">
                   <Mail
@@ -74,7 +74,7 @@ export default function ForgotPassword() {
                     type="email"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    placeholder="maitre@etude.fr"
+                    placeholder="vous@email.fr"
                     autoComplete="email"
                     required
                     className="w-full pl-10 pr-3 py-2.5 rounded-[10px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"

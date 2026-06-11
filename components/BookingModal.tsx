@@ -521,8 +521,44 @@ export default function BookingModal({
 
   async function confirmBooking() {
     setStep("sending");
+
+    // Pièces : on uploade chaque fichier dans Supabase Storage (bucket privé),
+    // rattaché au compte → téléchargeable plus tard depuis l'espace client.
+    // Chemin : booking-documents/{userId}/{folderId}/{docId}-{nom}.
+    const folderId =
+      typeof crypto !== "undefined" && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+    const documents: {
+      id: string;
+      label: string;
+      fileName: string;
+      path?: string;
+    }[] = [];
+
+    for (const [id, file] of Object.entries(docs)) {
+      const label =
+        (DOCS_BY_DOSSIER[dossier] ?? DOCS_COMMUNS).find((d) => d.id === id)?.label ?? id;
+      let path: string | undefined;
+      // L'upload n'est possible que pour un compte connecté (RLS scoping userId).
+      if (userKey) {
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+        const candidate = `${userKey}/${folderId}/${id}-${safeName}`;
+        const { error: upErr } = await supabase.storage
+          .from("booking-documents")
+          .upload(candidate, file, {
+            upsert: true,
+            contentType: file.type || undefined,
+          });
+        if (!upErr) path = candidate;
+      }
+      documents.push({ id, label, fileName: file.name, path });
+    }
+
+    let bookingId = "";
     try {
-      await fetch("/api/booking", {
+      const res = await fetch("/api/booking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -533,17 +569,21 @@ export default function BookingModal({
           dossier,
           modalite,
           participants,
+          documents,
+          userId: userKey || null, // rattache le RDV au compte → espace cross-appareil
         }),
       });
+      const json = await res.json().catch(() => null);
+      if (json?.bookingId) bookingId = json.bookingId as string;
     } catch {
-      // L'email est best-effort — on confirme quand même côté client
+      // L'API est best-effort — on confirme quand même côté client
     }
 
-    // Enregistre le dossier dans l'espace personnel du particulier connecté.
+    // Cache local immédiat (la source de vérité reste Supabase via user_id).
     const storageKey = userKey || userEmail;
     if (storageKey) {
       const entry: ClientDossier = {
-        id: `dos-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        id: bookingId || `dos-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
         notaireId,
         notaireNom,
         slotKey,
@@ -558,11 +598,7 @@ export default function BookingModal({
           telephone: p.telephone,
           role: p.role,
         })),
-        documents: Object.entries(docs).map(([id, file]) => ({
-          id,
-          label: (DOCS_BY_DOSSIER[dossier] ?? DOCS_COMMUNS).find((d) => d.id === id)?.label ?? id,
-          fileName: file.name,
-        })),
+        documents,
         createdAt: Date.now(),
       };
       saveClientDossier(storageKey, entry);

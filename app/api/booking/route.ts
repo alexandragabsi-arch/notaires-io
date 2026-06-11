@@ -21,6 +21,13 @@ interface Participant {
   adresse?: string;
 }
 
+interface StoredDocument {
+  id: string;
+  label: string;
+  fileName: string;
+  path?: string;
+}
+
 interface BookingPayload {
   notaireId: string;
   notaireNom: string;
@@ -29,6 +36,8 @@ interface BookingPayload {
   dossier: string;
   modalite: "visio" | "cabinet";
   participants: Participant[];
+  documents?: StoredDocument[];
+  userId?: string | null;
 }
 
 async function sendEmail(to: string, subject: string, html: string) {
@@ -46,7 +55,7 @@ async function sendEmail(to: string, subject: string, html: string) {
 
 export async function POST(req: NextRequest) {
   const body = await req.json() as BookingPayload;
-  const { notaireId, notaireNom, slotKey, slotLabel, dossier, modalite, participants } = body;
+  const { notaireId, notaireNom, slotKey, slotLabel, dossier, modalite, participants, documents, userId } = body;
 
   if (!notaireId || !slotLabel || !participants?.length) {
     return NextResponse.json({ error: "Données manquantes" }, { status: 400 });
@@ -64,8 +73,10 @@ export async function POST(req: NextRequest) {
     dossier,
     modalite,
     participants,
+    documents: Array.isArray(documents) ? documents : [],
     client_nom: clientNom,
     client_email: client.email || null,
+    user_id: userId || null,
     status: "confirmé",
   }).select("id").single();
 

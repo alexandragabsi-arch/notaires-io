@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { addProfile, claimProfile } from "@/lib/notaire-profiles";
+import { sousSpecialitesPour } from "@/lib/sous-specialites";
 import { supabase } from "@/lib/supabase";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
@@ -29,6 +30,8 @@ import {
   CreditCard,
   Loader2,
   ShieldCheck,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 
 const SITE_URL =
@@ -71,6 +74,7 @@ export default function NotaireSignup() {
   const [ville, setVille] = useState("");
   const [website, setWebsite] = useState("");
   const [specs, setSpecs] = useState<string[]>([]);
+  const [subSpecs, setSubSpecs] = useState<string[]>([]);
   const [langs, setLangs] = useState<string[]>([]);
   const [role, setRole] = useState<"associé" | "salarié" | "">("");
 
@@ -89,7 +93,17 @@ export default function NotaireSignup() {
     (prenom.trim()[0] || "") + (nom.trim()[0] || "") || "N";
 
   function toggleSpec(s: string) {
-    setSpecs((prev) =>
+    setSpecs((prev) => {
+      const next = prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s];
+      // Purge les sous-spécialités qui ne sont plus rattachées à une spécialité cochée
+      const allowed = sousSpecialitesPour(next);
+      setSubSpecs((cur) => cur.filter((x) => allowed.includes(x)));
+      return next;
+    });
+  }
+
+  function toggleSubSpec(s: string) {
+    setSubSpecs((prev) =>
       prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s],
     );
   }
@@ -171,6 +185,7 @@ export default function NotaireSignup() {
           etude,
           website: website.trim() || undefined,
           specialties: specs,
+          subSpecialties: subSpecs,
           languages: langs,
           photo,
           photoFile: photoFile ?? undefined,
@@ -527,6 +542,34 @@ export default function NotaireSignup() {
                           })}
                         </div>
                       </div>
+
+                      {sousSpecialitesPour(specs).length > 0 && (
+                        <div>
+                          <span className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-2 block">
+                            Vos sous-spécialités
+                            <span className="text-[var(--color-muted)] font-normal"> (optionnel — affine votre profil dans l&apos;annuaire)</span>
+                          </span>
+                          <div className="flex flex-wrap gap-2">
+                            {sousSpecialitesPour(specs).map((s) => {
+                              const on = subSpecs.includes(s);
+                              return (
+                                <button
+                                  key={s}
+                                  type="button"
+                                  onClick={() => toggleSubSpec(s)}
+                                  className={`px-3 py-1.5 rounded-full text-[12px] font-semibold border transition-colors ${
+                                    on
+                                      ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)]"
+                                      : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                                  }`}
+                                >
+                                  {s}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
 
                       <div>
                         <span className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-2 block">
@@ -1065,6 +1108,9 @@ function IconInput({
   placeholder?: string;
   type?: string;
 }) {
+  const [show, setShow] = useState(false);
+  const isPassword = type === "password";
+  const inputType = isPassword && show ? "text" : type;
   return (
     <span className="relative flex items-center">
       <Icon
@@ -1072,12 +1118,26 @@ function IconInput({
         strokeWidth={2}
       />
       <input
-        type={type}
+        type={inputType}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-10 pr-3 py-2.5 rounded-[10px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
+        className={`w-full pl-10 ${isPassword ? "pr-10" : "pr-3"} py-2.5 rounded-[10px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition`}
       />
+      {isPassword && (
+        <button
+          type="button"
+          onClick={() => setShow((v) => !v)}
+          aria-label={show ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+          className="absolute right-3 text-[var(--color-muted)] hover:text-[var(--color-text-strong)] transition-colors"
+        >
+          {show ? (
+            <EyeOff className="w-[18px] h-[18px]" strokeWidth={2} />
+          ) : (
+            <Eye className="w-[18px] h-[18px]" strokeWidth={2} />
+          )}
+        </button>
+      )}
     </span>
   );
 }

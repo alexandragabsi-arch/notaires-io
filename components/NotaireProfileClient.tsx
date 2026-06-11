@@ -1003,10 +1003,11 @@ export default function NotaireProfileClient({
 
         {/* Colonne 2 : calendrier des créneaux */}
         <motion.div
+          id="agenda"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6"
+          className="scroll-mt-24 bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6"
         >
           <div className="flex items-center gap-2 mb-5">
             <CalendarDays className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />

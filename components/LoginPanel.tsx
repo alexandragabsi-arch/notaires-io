@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Mail, Lock, ArrowRight, Building2, User, ShieldCheck, Loader2 } from "lucide-react";
+import { Mail, Lock, ArrowRight, Building2, User, ShieldCheck, Loader2, Eye, EyeOff, Check } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 type Role = "particulier" | "notaire";
@@ -11,11 +11,35 @@ export default function LoginPanel() {
   const [role, setRole] = useState<Role>("particulier");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [notice, setNotice] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Réinitialisation de mot de passe (arrivée depuis le lien e-mail → /connexion?reset=1)
+  const [recoveryMode, setRecoveryMode] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [resetDone, setResetDone] = useState(false);
+
   const isNotaire = role === "notaire";
+
+  // Active le formulaire « nouveau mot de passe » quand l'utilisateur clique le lien reçu par e-mail.
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("reset") === "1" || window.location.hash.includes("type=recovery")) {
+        setRecoveryMode(true);
+      }
+    }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") setRecoveryMode(true);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,6 +61,40 @@ export default function LoginPanel() {
     window.location.href = isNotaire ? "/espace-notaire" : "/espace-client";
   }
 
+  // Validation + enregistrement du nouveau mot de passe via la session de récupération.
+  async function onResetSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+
+    if (newPassword.trim().length < 8) {
+      setError("Le mot de passe doit contenir au moins 8 caractères.");
+      return;
+    }
+    if (newPassword.trim() !== confirmPassword.trim()) {
+      setError("Les deux mots de passe ne correspondent pas.");
+      return;
+    }
+
+    setLoading(true);
+    const { error: updateError } = await supabase.auth.updateUser({
+      password: newPassword.trim(),
+    });
+    setLoading(false);
+
+    if (updateError) {
+      setError(
+        "Impossible de mettre à jour le mot de passe. Le lien a peut-être expiré — refaites une demande.",
+      );
+      return;
+    }
+
+    setResetDone(true);
+    // L'utilisateur est connecté via la session de récupération → on le redirige.
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 1800);
+  }
+
   return (
     <section className="py-16 sm:py-24 bg-white">
       <div className="max-w-[460px] mx-auto px-6 w-full">
@@ -47,15 +105,22 @@ export default function LoginPanel() {
         >
           <div className="text-center mb-8">
             <h1 className="serif text-[30px] sm:text-[36px] font-bold text-[var(--color-text-strong)] tracking-tight mb-2">
-              Connexion
+              {recoveryMode ? "Nouveau mot de passe" : "Connexion"}
             </h1>
             <p className="text-[var(--color-muted)] text-[15px]">
-              Accédez à votre espace{" "}
-              {isNotaire ? "notaire" : "personnel"}.
+              {recoveryMode ? (
+                "Choisissez un nouveau mot de passe pour votre compte."
+              ) : (
+                <>
+                  Accédez à votre espace{" "}
+                  {isNotaire ? "notaire" : "personnel"}.
+                </>
+              )}
             </p>
           </div>
 
-          {/* Sélecteur de profil */}
+          {/* Sélecteur de profil (masqué pendant la réinitialisation) */}
+          {!recoveryMode && (
           <div className="grid grid-cols-2 gap-1 p-1 bg-[var(--color-tint-blue)] rounded-[14px] mb-7">
             {([
               { id: "particulier" as Role, label: "Particulier", Icon: User },
@@ -79,8 +144,111 @@ export default function LoginPanel() {
               </button>
             ))}
           </div>
+          )}
 
-          {/* Formulaire */}
+          {/* Formulaire « nouveau mot de passe » (réinitialisation) */}
+          {recoveryMode && !resetDone && (
+            <form
+              onSubmit={onResetSubmit}
+              className="flex flex-col gap-4 bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-7"
+            >
+              <label className="block">
+                <span className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-1.5 block">
+                  Nouveau mot de passe
+                </span>
+                <span className="relative flex items-center">
+                  <Lock
+                    className="absolute left-3 w-[18px] h-[18px] text-[var(--color-muted)]"
+                    strokeWidth={2}
+                  />
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    required
+                    className="w-full pl-10 pr-10 py-2.5 rounded-[10px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword((v) => !v)}
+                    aria-label={showNewPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                    className="absolute right-3 text-[var(--color-muted)] hover:text-[var(--color-text-strong)] transition-colors"
+                  >
+                    {showNewPassword ? (
+                      <EyeOff className="w-[18px] h-[18px]" strokeWidth={2} />
+                    ) : (
+                      <Eye className="w-[18px] h-[18px]" strokeWidth={2} />
+                    )}
+                  </button>
+                </span>
+              </label>
+
+              <label className="block">
+                <span className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-1.5 block">
+                  Confirmer le mot de passe
+                </span>
+                <span className="relative flex items-center">
+                  <Lock
+                    className="absolute left-3 w-[18px] h-[18px] text-[var(--color-muted)]"
+                    strokeWidth={2}
+                  />
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="••••••••"
+                    autoComplete="new-password"
+                    required
+                    className="w-full pl-10 pr-3 py-2.5 rounded-[10px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
+                  />
+                </span>
+              </label>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="mt-1 w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-[18px] h-[18px] animate-spin" strokeWidth={2.5} />
+                    Mise à jour…
+                  </>
+                ) : (
+                  <>
+                    Définir le nouveau mot de passe
+                    <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
+                  </>
+                )}
+              </button>
+
+              {error && (
+                <div className="flex items-start gap-2 text-[13px] text-red-700 bg-red-50 rounded-[10px] px-3.5 py-3 border border-red-200">
+                  <span>{error}</span>
+                </div>
+              )}
+            </form>
+          )}
+
+          {/* Confirmation après réinitialisation réussie */}
+          {recoveryMode && resetDone && (
+            <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-8 text-center">
+              <div className="w-14 h-14 mx-auto rounded-2xl bg-[var(--color-tint-green)] flex items-center justify-center text-[var(--color-success)] mb-5">
+                <Check className="w-7 h-7" strokeWidth={2.5} />
+              </div>
+              <h2 className="serif text-[22px] font-bold text-[var(--color-text-strong)] mb-2">
+                Mot de passe mis à jour !
+              </h2>
+              <p className="text-[var(--color-muted)] text-[14px] leading-relaxed">
+                Vous êtes connecté. Redirection en cours…
+              </p>
+            </div>
+          )}
+
+          {/* Formulaire de connexion */}
+          {!recoveryMode && (
           <form
             onSubmit={onSubmit}
             className="flex flex-col gap-4 bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-7"
@@ -126,14 +294,26 @@ export default function LoginPanel() {
                   strokeWidth={2}
                 />
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   autoComplete="current-password"
                   required
-                  className="w-full pl-10 pr-3 py-2.5 rounded-[10px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-[10px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                  className="absolute right-3 text-[var(--color-muted)] hover:text-[var(--color-text-strong)] transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-[18px] h-[18px]" strokeWidth={2} />
+                  ) : (
+                    <Eye className="w-[18px] h-[18px]" strokeWidth={2} />
+                  )}
+                </button>
               </span>
             </label>
 
@@ -173,7 +353,9 @@ export default function LoginPanel() {
               </div>
             )}
           </form>
+          )}
 
+          {!recoveryMode && (
           <p className="text-center text-[14px] text-[var(--color-muted)] mt-6">
             {isNotaire
               ? "Votre étude n'est pas encore référencée ? "
@@ -185,6 +367,7 @@ export default function LoginPanel() {
               {isNotaire ? "Référencer mon étude" : "Prendre un premier RDV"}
             </a>
           </p>
+          )}
         </motion.div>
       </div>
     </section>

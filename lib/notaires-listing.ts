@@ -16,6 +16,7 @@ export interface ListingNotaire {
   arrondissement?: number;
   role?: "associé" | "salarié";
   specialties: string[];
+  subSpecialties?: string[];
   languages?: string[];
   next: string;
   slotMatrix?: string[][];

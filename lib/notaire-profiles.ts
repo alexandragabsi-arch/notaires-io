@@ -14,6 +14,7 @@ export interface SignupProfile {
   etude?: string;
   website?: string;          // URL du site de l'étude
   specialties: string[];
+  subSpecialties?: string[]; // sous-spécialités fines (cf. lib/sous-specialites.ts)
   languages?: string[];
   photo?: string | null;    // data URL (preview) ou URL publique Supabase Storage
   photoFile?: File;          // fichier brut → uploadé vers Supabase Storage
@@ -86,6 +87,7 @@ export async function getRemoteProfiles(): Promise<ListingNotaire[]> {
     email: row.email as string | undefined,
     role: row.role as "associé" | "salarié" | undefined,
     specialties: (row.specialties as string[]) || [],
+    subSpecialties: (row.sub_specialties as string[] | null) || undefined,
     languages: (row.languages as string[]) || undefined,
     bio: row.bio as string | undefined,
     photo: row.photo as string | undefined,
@@ -111,6 +113,7 @@ function toListing(p: SignupProfile): ListingNotaire {
     officeName: p.etude?.trim() || undefined,
     website: p.website?.trim() || undefined,
     specialties: p.specialties.length ? p.specialties : ["Notariat"],
+    subSpecialties: p.subSpecialties?.length ? p.subSpecialties : undefined,
     languages: p.languages?.length ? p.languages : undefined,
     next: "Sur demande",
     photo: p.photo || undefined,
@@ -163,6 +166,7 @@ export async function addProfile(p: SignupProfile): Promise<ListingNotaire> {
     phone: null,
     role: entry.role ?? null,
     specialties: entry.specialties,
+    sub_specialties: entry.subSpecialties ?? [],
     languages: entry.languages ?? [],
     bio: entry.bio ?? null,
     photo: entry.photo ?? null,
@@ -178,6 +182,7 @@ export interface ClaimData {
   photoFile?: File;          // fichier brut → upload Storage
   bio?: string;
   specialties?: string[];
+  subSpecialties?: string[];
   languages?: string[];
   phone?: string;
   address?: string;
@@ -222,6 +227,7 @@ export async function claimProfile(
     email: data.email?.trim() ?? null,
     role: null,
     specialties: data.specialties ?? [],
+    sub_specialties: data.subSpecialties ?? [],
     languages: data.languages ?? [],
     bio: data.bio ?? null,
     photo: photoUrl,
@@ -238,6 +244,7 @@ export async function claimProfile(
       initials,
       color: "default",
       specialties: data.specialties ?? [],
+      subSpecialties: data.subSpecialties,
       languages: data.languages,
       photo: photoUrl ?? undefined,
       bio: data.bio,
@@ -277,6 +284,7 @@ export async function getProfileByUserId(userId: string): Promise<ListingNotaire
     email: data.email as string | undefined,
     role: data.role as "associé" | "salarié" | undefined,
     specialties: (data.specialties as string[]) || [],
+    subSpecialties: (data.sub_specialties as string[] | null) || undefined,
     languages: (data.languages as string[]) || undefined,
     bio: data.bio as string | undefined,
     photo: data.photo as string | undefined,

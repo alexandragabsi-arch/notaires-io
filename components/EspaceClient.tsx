@@ -101,7 +101,7 @@ async function downloadDocument(path: string, fileName: string) {
   window.open(data.signedUrl, "_blank", "noopener,noreferrer");
 }
 
-type Tab = "upcoming" | "past" | "docs";
+type Tab = "upcoming" | "past" | "recus" | "docs";
 
 export default function EspaceClient() {
   const [loading, setLoading] = useState(true);
@@ -151,8 +151,8 @@ export default function EspaceClient() {
     };
   }, []);
 
-  // Répartition passé / futur + agrégat documents.
-  const { upcoming, past, docs } = useMemo(() => {
+  // Répartition passé / futur + agrégats documents (transmis / reçus).
+  const { upcoming, past, docs, recus } = useMemo(() => {
     const now = Date.now();
     const withDate = dossiers.map((d) => ({
       d,
@@ -167,7 +167,11 @@ export default function EspaceClient() {
     const docs = dossiers.flatMap((d) =>
       d.documents.map((doc) => ({ doc, dossier: d })),
     );
-    return { upcoming, past, docs };
+    // Pièces reçues du notaire, les plus récentes en premier.
+    const recus = dossiers
+      .flatMap((d) => d.notaireDocuments.map((doc) => ({ doc, dossier: d })))
+      .sort((a, b) => (b.doc.sentAt ?? 0) - (a.doc.sentAt ?? 0));
+    return { upcoming, past, docs, recus };
   }, [dossiers]);
 
   if (loading) {
@@ -183,7 +187,8 @@ export default function EspaceClient() {
   const TABS: { id: Tab; label: string; count: number; Icon: typeof CalendarClock }[] = [
     { id: "upcoming", label: "À venir", count: upcoming.length, Icon: CalendarClock },
     { id: "past", label: "Passés", count: past.length, Icon: Clock },
-    { id: "docs", label: "Documents", count: docs.length, Icon: FolderOpen },
+    { id: "recus", label: "Reçus", count: recus.length, Icon: Inbox },
+    { id: "docs", label: "Mes pièces", count: docs.length, Icon: FolderOpen },
   ];
 
   return (
@@ -215,7 +220,7 @@ export default function EspaceClient() {
         ) : (
           <>
             {/* Onglets */}
-            <div className="grid grid-cols-3 gap-1 p-1 bg-[var(--color-tint-blue)] rounded-[14px] mb-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 p-1 bg-[var(--color-tint-blue)] rounded-[14px] mb-6">
               {TABS.map(({ id, label, count, Icon }) => (
                 <button
                   key={id}
@@ -276,7 +281,53 @@ export default function EspaceClient() {
                 </div>
               ))}
 
-            {/* Onglet Documents */}
+            {/* Onglet Reçus (documents transmis par le notaire) */}
+            {tab === "recus" &&
+              (recus.length === 0 ? (
+                <TabEmpty
+                  icon={<Inbox className="w-7 h-7 text-[var(--color-accent)]" strokeWidth={2} />}
+                  title="Aucun document reçu"
+                  text="Les pièces que votre notaire vous transmet (actes, projets, justificatifs) apparaîtront ici."
+                />
+              ) : (
+                <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] overflow-hidden">
+                  {recus.map(({ doc, dossier }, i) => (
+                    <div
+                      key={`${dossier.id}-${doc.id}-${i}`}
+                      className="flex items-center gap-3 px-5 sm:px-6 py-4 border-b border-[var(--color-border-soft)] last:border-b-0"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-[var(--color-tint-green)] flex items-center justify-center shrink-0">
+                        <FileText className="w-5 h-5 text-[var(--color-success)]" strokeWidth={2} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[14px] font-semibold text-[var(--color-text-strong)] truncate">
+                          {doc.fileName}
+                        </div>
+                        <div className="text-[12px] text-[var(--color-muted)] truncate">
+                          Reçu de {dossier.notaireNom}
+                          {doc.sentAt ? ` · ${formatDate(doc.sentAt)}` : ""}
+                        </div>
+                      </div>
+                      {doc.path ? (
+                        <button
+                          type="button"
+                          onClick={() => downloadDocument(doc.path!, doc.fileName)}
+                          className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--color-accent)] border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-accent-soft)] px-3 py-2 rounded-[10px] transition-colors shrink-0"
+                        >
+                          <Download className="w-4 h-4" strokeWidth={2.5} />
+                          Télécharger
+                        </button>
+                      ) : (
+                        <span className="text-[12px] text-[var(--color-muted)] italic shrink-0">
+                          Non disponible
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+
+            {/* Onglet Mes pièces (documents transmis par le client) */}
             {tab === "docs" &&
               (docs.length === 0 ? (
                 <TabEmpty
@@ -446,6 +497,35 @@ function RdvCard({ d, index, past }: { d: ClientDossier; index: number; past: bo
             </div>
           )}
         </div>
+
+        {/* Pièces reçues du notaire */}
+        {d.notaireDocuments.length > 0 && (
+          <div className="mt-4 pt-4 border-t border-[var(--color-border-soft)]">
+            <div className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--color-muted)] uppercase tracking-wide mb-2">
+              <Inbox className="w-3.5 h-3.5" strokeWidth={2} />
+              Reçus du notaire ({d.notaireDocuments.length})
+            </div>
+            <div className="flex flex-col gap-1.5">
+              {d.notaireDocuments.map((doc) => (
+                <div key={doc.id} className="flex items-center gap-2 text-[13px] text-[var(--color-text-strong)]">
+                  <FileText className="w-4 h-4 text-[var(--color-success)] shrink-0" strokeWidth={2} />
+                  <span className="font-medium truncate">{doc.fileName}</span>
+                  {doc.path && (
+                    <button
+                      type="button"
+                      onClick={() => downloadDocument(doc.path!, doc.fileName)}
+                      aria-label={`Télécharger ${doc.fileName}`}
+                      className="ml-auto inline-flex items-center gap-1 text-[12px] font-semibold text-[var(--color-accent)] hover:underline shrink-0"
+                    >
+                      <Download className="w-3.5 h-3.5" strokeWidth={2.5} />
+                      Télécharger
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );

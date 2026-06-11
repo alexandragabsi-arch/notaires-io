@@ -12,10 +12,26 @@ import {
   Check,
   User,
   CalendarDays,
+  Paperclip,
+  FileText,
+  Download,
+  Trash2,
+  Loader2,
 } from "lucide-react";
 import { generateRoomId, internalVisioUrl, slotDayToDate } from "@/lib/visio";
 
+const DOCS_BUCKET = "booking-documents";
+
 type Mode = "visio" | "cabinet";
+
+// Pièce transmise par le notaire au client.
+interface SentDoc {
+  id: string;
+  label: string;
+  fileName: string;
+  path: string;
+  sentAt: number;
+}
 
 interface Rdv {
   id: string;
@@ -64,23 +80,34 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
   const [remind2h, setRemind2h] = useState(true);
   const [rdvs, setRdvs] = useState<Rdv[]>(RDVS_MOCK);
   const [loadingRdvs, setLoadingRdvs] = useState(false);
+  // Pièces transmises au client, par RDV (source = bookings.notaire_documents).
+  const [docsByRdv, setDocsByRdv] = useState<Record<string, SentDoc[]>>({});
+  const [uploading, setUploading] = useState<Record<string, boolean>>({});
+
+  // Gestion documents possible uniquement sur les vrais RDV (notaire connecté).
+  const canManageDocs = !!notaireId;
 
   useEffect(() => {
     if (!notaireId) return;
     setLoadingRdvs(true);
     supabase
       .from("bookings")
-      .select("id, client_nom, dossier, slot_label, modalite, status")
+      .select("id, client_nom, dossier, slot_label, modalite, status, notaire_documents")
       .eq("notaire_id", notaireId)
       .order("created_at", { ascending: false })
       .limit(20)
       .then(({ data }) => {
         if (data && data.length > 0) {
+          const docs: Record<string, SentDoc[]> = {};
           setRdvs(
             data.map((row) => {
               const { day, time } = parseSlotLabel(row.slot_label as string);
+              const id = row.id as string;
+              docs[id] = Array.isArray(row.notaire_documents)
+                ? (row.notaire_documents as SentDoc[])
+                : [];
               return {
-                id: row.id as string,
+                id,
                 client: (row.client_nom as string) || "Client",
                 motif: row.dossier as string,
                 day,
@@ -90,12 +117,77 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
               };
             })
           );
+          setDocsByRdv(docs);
         } else if (data) {
           setRdvs([]);
         }
         setLoadingRdvs(false);
       });
   }, [notaireId]);
+
+  // Envoi d'une pièce au client : upload Storage puis enregistrement métadonnées.
+  async function handleUpload(rdvId: string, file: File) {
+    setUploading((u) => ({ ...u, [rdvId]: true }));
+    try {
+      const docId =
+        typeof crypto !== "undefined" && crypto.randomUUID
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const path = `notaire/${rdvId}/${docId}-${safeName}`;
+      const { error: upErr } = await supabase.storage
+        .from(DOCS_BUCKET)
+        .upload(path, file, { upsert: true, contentType: file.type || undefined });
+      if (upErr) {
+        alert("Échec de l'envoi du document. Réessayez.");
+        return;
+      }
+      const newDoc: SentDoc = {
+        id: docId,
+        label: file.name,
+        fileName: file.name,
+        path,
+        sentAt: Date.now(),
+      };
+      const updated = [...(docsByRdv[rdvId] ?? []), newDoc];
+      const { error: updErr } = await supabase
+        .from("bookings")
+        .update({ notaire_documents: updated })
+        .eq("id", rdvId);
+      if (updErr) {
+        alert("Document envoyé mais non enregistré. Réessayez.");
+        return;
+      }
+      setDocsByRdv((d) => ({ ...d, [rdvId]: updated }));
+      // Notifie le client par e-mail (sans bloquer l'UI ni échouer l'envoi).
+      fetch("/api/booking-document", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ bookingId: rdvId, fileName: file.name }),
+      }).catch(() => {});
+    } finally {
+      setUploading((u) => ({ ...u, [rdvId]: false }));
+    }
+  }
+
+  async function handleDownload(doc: SentDoc) {
+    const { data, error } = await supabase.storage
+      .from(DOCS_BUCKET)
+      .createSignedUrl(doc.path, 60, { download: doc.fileName });
+    if (error || !data?.signedUrl) {
+      alert("Téléchargement indisponible.");
+      return;
+    }
+    window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+  }
+
+  async function handleDelete(rdvId: string, doc: SentDoc) {
+    if (!confirm(`Retirer « ${doc.label} » ? Le client n'y aura plus accès.`)) return;
+    await supabase.storage.from(DOCS_BUCKET).remove([doc.path]);
+    const updated = (docsByRdv[rdvId] ?? []).filter((x) => x.id !== doc.id);
+    await supabase.from("bookings").update({ notaire_documents: updated }).eq("id", rdvId);
+    setDocsByRdv((d) => ({ ...d, [rdvId]: updated }));
+  }
 
   const RDVS = rdvs;
   const aVenir = RDVS.length;
@@ -261,6 +353,76 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
                         </span>
                       )}
                     </div>
+
+                    {/* Documents transmis au client */}
+                    {canManageDocs && (
+                      <div className="mt-3 pt-3 border-t border-[var(--color-border-soft)]">
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <span className="text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)]">
+                            Documents pour le client
+                          </span>
+                          <label
+                            className={`inline-flex items-center gap-1.5 text-[12px] font-semibold px-2.5 py-1.5 rounded-[8px] cursor-pointer transition-colors ${
+                              uploading[r.id]
+                                ? "bg-[var(--color-tint-blue)] text-[var(--color-muted)] cursor-wait"
+                                : "bg-[var(--color-accent-soft)] text-[var(--color-accent)] hover:bg-[var(--color-tint-blue)]"
+                            }`}
+                          >
+                            {uploading[r.id] ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" strokeWidth={2.5} />
+                            ) : (
+                              <Paperclip className="w-3.5 h-3.5" strokeWidth={2.5} />
+                            )}
+                            {uploading[r.id] ? "Envoi…" : "Envoyer un document"}
+                            <input
+                              type="file"
+                              className="hidden"
+                              disabled={!!uploading[r.id]}
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) handleUpload(r.id, file);
+                                e.target.value = "";
+                              }}
+                            />
+                          </label>
+                        </div>
+                        {(docsByRdv[r.id]?.length ?? 0) === 0 ? (
+                          <p className="text-[12px] text-[var(--color-muted)] italic">
+                            Aucune pièce envoyée. Le client la verra dans son espace, onglet « Reçus ».
+                          </p>
+                        ) : (
+                          <div className="flex flex-col gap-1.5">
+                            {docsByRdv[r.id]!.map((doc) => (
+                              <div
+                                key={doc.id}
+                                className="flex items-center gap-2 text-[13px] text-[var(--color-text-strong)] bg-[var(--color-tint-blue)] rounded-[8px] px-3 py-2"
+                              >
+                                <FileText className="w-4 h-4 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
+                                <span className="font-medium truncate flex-1">{doc.fileName}</span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleDownload(doc)}
+                                  aria-label={`Télécharger ${doc.fileName}`}
+                                  className="shrink-0 text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors"
+                                  title="Télécharger"
+                                >
+                                  <Download className="w-4 h-4" strokeWidth={2.5} />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleDelete(r.id, doc)}
+                                  aria-label={`Retirer ${doc.fileName}`}
+                                  className="shrink-0 text-[var(--color-muted)] hover:text-red-600 transition-colors"
+                                  title="Retirer"
+                                >
+                                  <Trash2 className="w-4 h-4" strokeWidth={2} />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 );
               })}

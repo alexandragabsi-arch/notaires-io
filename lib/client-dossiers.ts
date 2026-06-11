@@ -15,6 +15,8 @@ export type StoredDocument = {
   // Chemin de l'objet dans le bucket Supabase Storage `booking-documents`
   // (présent uniquement si la pièce a été uploadée → téléchargeable).
   path?: string;
+  // Horodatage d'envoi (ms) — renseigné pour les pièces transmises par le notaire.
+  sentAt?: number;
 };
 
 export type ClientDossier = {
@@ -34,6 +36,8 @@ export type ClientDossier = {
     role: string;
   }[];
   documents: StoredDocument[];
+  // Pièces transmises par le notaire au client (onglet « Reçus »).
+  notaireDocuments: StoredDocument[];
   createdAt: number;
 };
 
@@ -93,6 +97,7 @@ type BookingRow = {
   modalite: string | null;
   participants: ClientDossier["participants"] | null;
   documents: StoredDocument[] | null;
+  notaire_documents: StoredDocument[] | null;
   created_at: string;
 };
 
@@ -107,6 +112,7 @@ function rowToDossier(row: BookingRow): ClientDossier {
     modalite: row.modalite === "visio" ? "visio" : "cabinet",
     participants: Array.isArray(row.participants) ? row.participants : [],
     documents: Array.isArray(row.documents) ? row.documents : [],
+    notaireDocuments: Array.isArray(row.notaire_documents) ? row.notaire_documents : [],
     createdAt: new Date(row.created_at).getTime(),
   };
 }
@@ -120,7 +126,7 @@ export async function fetchClientDossiers(userId: string): Promise<ClientDossier
     const { data, error } = await supabase
       .from("bookings")
       .select(
-        "id, notaire_id, notaire_nom, slot_key, slot_label, dossier, modalite, participants, documents, created_at",
+        "id, notaire_id, notaire_nom, slot_key, slot_label, dossier, modalite, participants, documents, notaire_documents, created_at",
       )
       .eq("user_id", userId)
       .order("created_at", { ascending: false });

@@ -599,6 +599,7 @@ export default function BookingModal({
           role: p.role,
         })),
         documents,
+        notaireDocuments: [],
         createdAt: Date.now(),
       };
       saveClientDossier(storageKey, entry);

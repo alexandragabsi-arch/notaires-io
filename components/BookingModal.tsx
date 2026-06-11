@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -18,8 +18,13 @@ import {
   FolderOpen,
   Archive,
   Loader2,
+  Mail,
+  Lock,
+  ShieldCheck,
 } from "lucide-react";
 import JSZip from "jszip";
+import { supabase } from "@/lib/supabase";
+import { saveClientDossier, type ClientDossier } from "@/lib/client-dossiers";
 
 /* ─── Types ──────────────────────────────────────────────────────────────── */
 export type Participant = {
@@ -89,7 +94,7 @@ function defaultRoles(dossier: string): [string, string] {
   return [roles[0], roles[1] ?? roles[0]];
 }
 
-type Step = "dossier" | "participants" | "documents" | "confirm" | "sending" | "success";
+type Step = "auth" | "dossier" | "participants" | "documents" | "confirm" | "sending" | "success";
 
 /* ─── Documents requis par type de dossier ───────────────────────────────── */
 type DocType = { id: string; label: string; required: boolean; accept: string };
@@ -300,6 +305,143 @@ async function downloadZip(
   URL.revokeObjectURL(url);
 }
 
+/* ─── Étape connexion / création de compte (particulier) ─────────────────── */
+function AuthGate({ onAuthed }: { onAuthed: (userKey: string, email: string) => void }) {
+  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setInfo("");
+    const mail = email.trim();
+    const pwd = password.trim();
+    if (!mail || pwd.length < 6) {
+      setError("Renseignez un e-mail valide et un mot de passe d'au moins 6 caractères.");
+      return;
+    }
+    setLoading(true);
+    try {
+      if (mode === "signup") {
+        const { data, error: err } = await supabase.auth.signUp({ email: mail, password: pwd });
+        if (err) {
+          setError("Impossible de créer le compte. Cet e-mail est peut-être déjà utilisé.");
+          return;
+        }
+        // Selon la config Supabase, une session peut être ouverte immédiatement.
+        if (data.session?.user) {
+          onAuthed(data.session.user.id, mail);
+          return;
+        }
+        setInfo("Compte créé. Connectez-vous pour confirmer votre rendez-vous.");
+        setMode("login");
+        return;
+      }
+      const { data, error: err } = await supabase.auth.signInWithPassword({ email: mail, password: pwd });
+      if (err || !data.user) {
+        setError("E-mail ou mot de passe incorrect.");
+        return;
+      }
+      onAuthed(data.user.id, mail);
+    } catch {
+      setError("Une erreur est survenue. Réessayez.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <motion.div key="auth" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+      <div className="flex items-start gap-2.5 bg-[var(--color-tint-blue)] rounded-xl px-4 py-3 mb-5">
+        <ShieldCheck className="w-4 h-4 text-[var(--color-accent)] shrink-0 mt-0.5" strokeWidth={2} />
+        <span className="text-[12px] text-[var(--color-muted)]">
+          Connectez-vous pour confirmer votre rendez-vous et retrouver votre dossier
+          (pièces, créneau, participants) dans votre espace personnel.
+        </span>
+      </div>
+
+      {/* Sélecteur compte existant / nouveau compte */}
+      <div className="grid grid-cols-2 gap-1 p-1 bg-[var(--color-tint-blue)] rounded-[12px] mb-5">
+        {([
+          { id: "login" as const, label: "J'ai déjà un compte" },
+          { id: "signup" as const, label: "Créer un compte" },
+        ]).map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => { setMode(id); setError(""); setInfo(""); }}
+            className={`py-2.5 rounded-[9px] text-[13px] font-semibold transition-all ${
+              mode === id
+                ? "bg-white text-[var(--color-primary)] shadow-[var(--shadow-card)]"
+                : "text-[var(--color-muted)] hover:text-[var(--color-primary)]"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <form onSubmit={submit} className="flex flex-col gap-3">
+        <label className="block">
+          <span className="text-[12px] font-semibold text-[var(--color-text-strong)] mb-1 block">E-mail</span>
+          <span className="relative flex items-center">
+            <Mail className="absolute left-3 w-[16px] h-[16px] text-[var(--color-muted)]" strokeWidth={2} />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="vous@email.fr"
+              autoComplete="email"
+              required
+              className="w-full pl-9 pr-3 py-2.5 rounded-[8px] border border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
+            />
+          </span>
+        </label>
+        <label className="block">
+          <span className="text-[12px] font-semibold text-[var(--color-text-strong)] mb-1 block">Mot de passe</span>
+          <span className="relative flex items-center">
+            <Lock className="absolute left-3 w-[16px] h-[16px] text-[var(--color-muted)]" strokeWidth={2} />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              autoComplete={mode === "signup" ? "new-password" : "current-password"}
+              required
+              className="w-full pl-9 pr-3 py-2.5 rounded-[8px] border border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
+            />
+          </span>
+        </label>
+
+        {error && (
+          <div className="text-[12px] text-red-700 bg-red-50 rounded-[8px] px-3 py-2.5 border border-red-200">{error}</div>
+        )}
+        {info && (
+          <div className="text-[12px] text-[var(--color-primary)] bg-[var(--color-tint-blue)] rounded-[8px] px-3 py-2.5">{info}</div>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-1 w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+        >
+          {loading ? (
+            <><Loader2 className="w-4 h-4 animate-spin" strokeWidth={2.5} />Veuillez patienter…</>
+          ) : mode === "signup" ? (
+            <>Créer mon compte <ChevronRight className="w-4 h-4" strokeWidth={2.5} /></>
+          ) : (
+            <>Se connecter <ChevronRight className="w-4 h-4" strokeWidth={2.5} /></>
+          )}
+        </button>
+      </form>
+    </motion.div>
+  );
+}
+
 /* ─── Composant principal ────────────────────────────────────────────────── */
 export default function BookingModal({
   notaireId,
@@ -314,7 +456,10 @@ export default function BookingModal({
   slotLabel: string;
   onClose: () => void;
 }) {
-  const [step, setStep] = useState<Step>("dossier");
+  const [step, setStep] = useState<Step>("auth");
+  const [authChecking, setAuthChecking] = useState(true);
+  const [userKey, setUserKey] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [dossier, setDossier] = useState(DOSSIERS[0]);
   const [modalite, setModalite] = useState<"visio" | "cabinet">("visio");
   const [participants, setParticipants] = useState<Participant[]>(() => {
@@ -323,6 +468,33 @@ export default function BookingModal({
   });
   const [docs, setDocs] = useState<Record<string, File>>({});
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+
+  // Vérifie la session à l'ouverture : si déjà connecté, on saute l'étape connexion.
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const { data } = await supabase.auth.getUser();
+        if (!active) return;
+        if (data.user) {
+          setUserKey(data.user.id);
+          setUserEmail(data.user.email ?? "");
+          setStep("dossier");
+        }
+      } catch {
+        /* non connecté → on reste sur l'étape "auth" */
+      } finally {
+        if (active) setAuthChecking(false);
+      }
+    })();
+    return () => { active = false; };
+  }, []);
+
+  function onAuthed(key: string, email: string) {
+    setUserKey(key);
+    setUserEmail(email);
+    setStep("dossier");
+  }
 
   function changeDossier(d: string) {
     setDossier(d);
@@ -366,6 +538,36 @@ export default function BookingModal({
     } catch {
       // L'email est best-effort — on confirme quand même côté client
     }
+
+    // Enregistre le dossier dans l'espace personnel du particulier connecté.
+    const storageKey = userKey || userEmail;
+    if (storageKey) {
+      const entry: ClientDossier = {
+        id: `dos-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        notaireId,
+        notaireNom,
+        slotKey,
+        slotLabel,
+        dossier,
+        modalite,
+        participants: participants.map((p) => ({
+          civilite: p.civilite,
+          prenom: p.prenom,
+          nom: p.nom,
+          email: p.email,
+          telephone: p.telephone,
+          role: p.role,
+        })),
+        documents: Object.entries(docs).map(([id, file]) => ({
+          id,
+          label: (DOCS_BY_DOSSIER[dossier] ?? DOCS_COMMUNS).find((d) => d.id === id)?.label ?? id,
+          fileName: file.name,
+        })),
+        createdAt: Date.now(),
+      };
+      saveClientDossier(storageKey, entry);
+    }
+
     setStep("success");
   }
 
@@ -397,9 +599,10 @@ export default function BookingModal({
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-[var(--color-border-soft)] shrink-0">
           <div>
             <div className="text-[11px] font-bold text-[var(--color-accent)] uppercase tracking-wide mb-0.5">
-              {step === "dossier" ? "Étape 1 / 4" : step === "participants" ? "Étape 2 / 4" : step === "documents" ? "Étape 3 / 4" : step === "confirm" ? "Étape 4 / 4" : "✓ Confirmé"}
+              {step === "auth" ? "Connexion" : step === "dossier" ? "Étape 1 / 4" : step === "participants" ? "Étape 2 / 4" : step === "documents" ? "Étape 3 / 4" : step === "confirm" ? "Étape 4 / 4" : "✓ Confirmé"}
             </div>
             <div className="text-[16px] font-bold text-[var(--color-text-strong)]">
+              {step === "auth" && "Connexion à votre espace"}
               {step === "dossier" && "Nature du dossier"}
               {step === "participants" && "Participants au rendez-vous"}
               {step === "documents" && "Documents à fournir"}
@@ -427,6 +630,17 @@ export default function BookingModal({
         {/* Corps scrollable */}
         <div className="flex-1 overflow-y-auto px-6 py-4">
           <AnimatePresence mode="wait">
+
+            {/* ── Étape 0 : Connexion / création de compte ── */}
+            {step === "auth" && (
+              authChecking ? (
+                <div key="auth-loading" className="flex items-center justify-center py-12">
+                  <Loader2 className="w-6 h-6 animate-spin text-[var(--color-accent)]" strokeWidth={2.5} />
+                </div>
+              ) : (
+                <AuthGate onAuthed={onAuthed} />
+              )
+            )}
 
             {/* ── Étape 1 : Dossier + modalité ── */}
             {step === "dossier" && (
@@ -641,6 +855,15 @@ export default function BookingModal({
                 <p className="text-[11px] text-[var(--color-muted)] mt-2">
                   Fiches CSV + {Object.keys(docs).length} document{Object.keys(docs).length > 1 ? "s" : ""} · nommés Genapi / Inot / Fichorga
                 </p>
+                <div className="mt-5 pt-5 border-t border-[var(--color-border-soft)]">
+                  <a
+                    href="/espace-client"
+                    className="inline-flex items-center gap-2 text-[13px] font-semibold text-[var(--color-accent)] hover:underline"
+                  >
+                    <FolderOpen className="w-4 h-4" strokeWidth={2.5} />
+                    Retrouver ce dossier dans mon espace
+                  </a>
+                </div>
               </motion.div>
             )}
 
@@ -648,7 +871,7 @@ export default function BookingModal({
         </div>
 
         {/* Footer actions */}
-        {step !== "success" && (
+        {step !== "success" && step !== "auth" && (
           <div className="px-6 pb-6 pt-3 border-t border-[var(--color-border-soft)] shrink-0 flex gap-3">
             {step !== "dossier" && step !== "sending" && (
               <button

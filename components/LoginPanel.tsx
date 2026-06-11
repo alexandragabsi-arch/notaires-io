@@ -21,12 +21,6 @@ export default function LoginPanel() {
     e.preventDefault();
     setError("");
 
-    if (!isNotaire) {
-      // Espace particulier : pas encore disponible
-      setNotice(true);
-      return;
-    }
-
     setLoading(true);
     const { error: authError } = await supabase.auth.signInWithPassword({
       email: email.trim(),
@@ -39,8 +33,8 @@ export default function LoginPanel() {
       return;
     }
 
-    // Connexion réussie → espace notaire
-    window.location.href = "/espace-notaire";
+    // Connexion réussie → espace correspondant au profil choisi
+    window.location.href = isNotaire ? "/espace-notaire" : "/espace-client";
   }
 
   return (

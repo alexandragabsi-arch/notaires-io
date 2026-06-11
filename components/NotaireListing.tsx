@@ -318,7 +318,8 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
     if (suggTimer.current) clearTimeout(suggTimer.current); // annule tout timer en cours
     skipNextFetch.current = true;
     setCityInput(urlVille);
-    setCity(urlVille);
+    // Réduit "Paris 13e Arrondissement" → "Paris" pour matcher la ville des notaires
+    setCity(extractBaseCity(urlVille) || ALL);
   }, [urlVille]);
 
   useEffect(() => { setDisplayLimit(60); }, [city, nameQuery, specialty]);

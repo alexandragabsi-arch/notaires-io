@@ -132,7 +132,7 @@ export default function Hero() {
               onBlur={() => setTimeout(() => setShowSugg(false), 150)}
               placeholder="Ville ou code postal…"
               autoComplete="off"
-              className="w-full pl-11 pr-4 py-4 rounded-2xl border border-white bg-white text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] shadow-sm transition"
+              className="w-full pl-12 pr-4 py-5 rounded-2xl border-[1.5px] border-[var(--color-border)] bg-white text-[16px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
             />
             {showSugg && suggestions.length > 0 && (
               <ul className="absolute z-50 top-full left-0 right-0 mt-1.5 bg-white border border-[var(--color-border-soft)] rounded-xl shadow-lg overflow-hidden text-left">
@@ -162,13 +162,13 @@ export default function Hero() {
               onChange={e => setNameQuery(e.target.value)}
               placeholder="Nom du notaire…"
               autoComplete="off"
-              className="w-full pl-11 pr-4 py-4 rounded-2xl border border-white bg-white text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] shadow-sm transition"
+              className="w-full pl-12 pr-4 py-5 rounded-2xl border-[1.5px] border-[var(--color-border)] bg-white text-[16px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
             />
           </div>
 
           <button
             type="submit"
-            className="inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-7 py-4 rounded-2xl text-[15px] font-bold shadow-[var(--shadow-cta)] hover:opacity-90 transition-opacity shrink-0"
+            className="inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-8 py-5 rounded-2xl text-[16px] font-bold shadow-[var(--shadow-cta)] hover:opacity-90 transition-opacity shrink-0"
           >
             <Search className="w-4 h-4" strokeWidth={2.5} />
             Rechercher

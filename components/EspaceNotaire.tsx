@@ -306,12 +306,12 @@ function EspaceNotaireInner() {
   useEffect(() => {
     let cancelled = false;
 
-    // Fallback si Supabase ne répond pas (réseau lent, redirect Stripe sur mobile)
+    // Fallback si Supabase ne répond pas : on ne peut pas confirmer la session
+    // → on considère non connecté et on redirige vers /connexion
     const timeout = setTimeout(() => {
       if (cancelled) return;
-      const local = getStoredProfiles();
-      setProfile(local.length > 0 ? local[0] : null);
       setAuthed(false);
+      setProfile(null);
     }, 8000);
 
     supabase.auth.getUser()
@@ -335,16 +335,16 @@ function EspaceNotaireInner() {
               setProfile(local.length > 0 ? local[0] : null);
             });
         } else {
-          const local = getStoredProfiles();
-          setProfile(local.length > 0 ? local[0] : null);
+          // Non connecté → redirection vers /connexion
+          setProfile(null);
         }
       })
       .catch(() => {
         if (cancelled) return;
         clearTimeout(timeout);
-        const local = getStoredProfiles();
-        setProfile(local.length > 0 ? local[0] : null);
+        // Erreur d'auth → on ne montre rien, redirection vers /connexion
         setAuthed(false);
+        setProfile(null);
       });
 
     return () => { cancelled = true; clearTimeout(timeout); };

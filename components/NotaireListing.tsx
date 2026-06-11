@@ -23,6 +23,20 @@ const SPECIALTIES = [
   { label: "Donations", icon: Users },
 ];
 
+/** Correspondance libellé de chip → valeurs réelles présentes dans les données.
+ *  Les données ne contiennent que : « Droit immobilier », « Successions »,
+ *  « Droit des sociétés », « Droit de la famille ». On rattache les chips qui
+ *  n'existent pas tels quels (Mariage/PACS, Donations) aux catégories réelles
+ *  les plus proches, sinon ils renvoyaient toujours 0 résultat. */
+const SPECIALTY_MAP: Record<string, string[]> = {
+  "Immobilier": ["Droit immobilier"],
+  "Successions": ["Successions"],
+  "Droit de la famille": ["Droit de la famille"],
+  "Mariage / PACS": ["Droit de la famille"],
+  "Droit des sociétés": ["Droit des sociétés"],
+  "Donations": ["Successions", "Droit de la famille"],
+};
+
 const POPULAR_CITIES = [
   { name: "Paris", count: 12 },
   { name: "Lyon", count: 8 },
@@ -49,6 +63,14 @@ const colorMap: Record<string, string> = {
 /** "Paris 18e Arrondissement" → "Paris" */
 function extractBaseCity(city: string): string {
   return city.replace(/\s+\d+e[r]?\s+arrondissement$/i, "").trim();
+}
+
+/** "Lyon 8e Arrondissement (69008)" → 8 · "Lyon" → null
+ *  On se base UNIQUEMENT sur le libellé « Ne Arrondissement » (fiable),
+ *  jamais sur le code postal d'une suggestion de ville (ambigu : Lyon → 69001). */
+function extractArr(label: string): number | null {
+  const m = label.match(/(\d+)\s*e[r]?\s+arrondissement/i);
+  return m ? parseInt(m[1], 10) : null;
 }
 
 function getNextWorkdays(n: number): Date[] {
@@ -346,6 +368,9 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
     [all],
   );
 
+  // Arrondissement effectif : ?arr= dans l'URL, sinon déduit du libellé ville saisi.
+  const arrFilter = useMemo(() => urlArr ?? extractArr(cityInput), [urlArr, cityInput]);
+
   const results = useMemo(() => {
     const norm = city === ALL ? "" : city.toLowerCase().trim();
     const nq = nameQuery.toLowerCase().trim();
@@ -353,12 +378,15 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
       const matchCity = !norm || n.city.toLowerCase().includes(norm);
       const matchName = !nq || n.name.toLowerCase().includes(nq);
       const matchLang = language === ALL || (n.languages ?? []).includes(language);
-      const matchSpec = specialty === ALL || n.specialties.some(s => s.toLowerCase().includes(specialty.toLowerCase()));
-      // Filtre arrondissement : si le notaire a un arrondissement renseigné, vérifier la correspondance
-      const matchArr = !urlArr || !n.arrondissement || n.arrondissement === urlArr;
+      const specTargets = specialty === ALL ? [] : (SPECIALTY_MAP[specialty] ?? [specialty]);
+      const matchSpec = specialty === ALL || n.specialties.some(s =>
+        specTargets.some(t => s.toLowerCase().includes(t.toLowerCase())));
+      // Filtre arrondissement : si un arrondissement est demandé, ne garder que
+      // les notaires de cet arrondissement (ceux sans arrondissement connu passent).
+      const matchArr = !arrFilter || !n.arrondissement || n.arrondissement === arrFilter;
       return matchCity && matchName && matchLang && matchSpec && matchArr;
     });
-  }, [all, city, nameQuery, language, specialty, urlArr]);
+  }, [all, city, nameQuery, language, specialty, arrFilter]);
 
   const displayed = useMemo(() => results.slice(0, displayLimit), [results, displayLimit]);
 
@@ -494,10 +522,10 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
                 </span>{" "}résultat{results.length > 1 ? "s" : ""}
                 {city !== ALL && <span className="font-semibold text-[var(--color-text-strong)]"> à {city}</span>}
               </p>
-              {urlArr && city.toLowerCase().includes("paris") && (
+              {arrFilter && city !== ALL && (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--color-tint-blue)] text-[var(--color-accent)] text-[12px] font-semibold border border-[var(--color-border-soft)]">
                   <MapPin className="w-3 h-3" strokeWidth={2.5} />
-                  Paris {urlArr}e arrondissement
+                  {city} {arrFilter}{arrFilter === 1 ? "er" : "e"} arrondissement
                 </span>
               )}
             </div>

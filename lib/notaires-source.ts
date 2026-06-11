@@ -44,6 +44,37 @@ interface RawOffice {
 let _cache: RawNotaire[] | null = null;
 let _officeCache: RawOffice[] | null = null;
 
+/**
+ * Déduit le numéro d'arrondissement à partir du code postal présent dans l'adresse.
+ * Les données scrapées n'ont pas de champ `arrondissement` : on l'extrait de l'adresse
+ * (ex. « 1 RUE MONTEBELLO 69003 LYON » → 3).
+ * Couvre Paris (75), Lyon (69) et Marseille (13). Retourne `undefined` sinon.
+ */
+function arrFromAddress(address?: string): number | undefined {
+  if (!address) return undefined;
+  const m = address.match(/\b(75|69|13)(\d{3})\b/);
+  if (!m) return undefined;
+  const dept = m[1];
+  const code = parseInt(m[1] + m[2], 10);
+  if (dept === "75") {
+    if (code === 75116) return 16; // Paris 16e (Auteuil)
+    const n = code - 75000;
+    return n >= 1 && n <= 20 ? n : undefined;
+  }
+  if (dept === "69") {
+    const n = code - 69000;
+    return n >= 1 && n <= 9 ? n : undefined;
+  }
+  // dept === "13"
+  const n = code - 13000;
+  return n >= 1 && n <= 16 ? n : undefined;
+}
+
+/** Arrondissement d'un notaire : champ explicite si présent, sinon déduit de l'adresse. */
+function notaireArr(n: RawNotaire): number | undefined {
+  return (n as RawNotaire & { arrondissement?: number }).arrondissement || arrFromAddress(n.address);
+}
+
 function loadAll(): RawNotaire[] {
   if (_cache) return _cache;
   try {
@@ -196,7 +227,7 @@ export function getNotairesByCity(city: string, limit = Infinity): ListingNotair
     address: n.address || undefined,
     phone: n.phone ? formatPhone(n.phone) : undefined,
     officeName: n.officeName || undefined,
-    arrondissement: (n as RawNotaire & { arrondissement?: number }).arrondissement || undefined,
+    arrondissement: notaireArr(n),
     role: n.role,
     specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
     next: "Disponible rapidement",
@@ -263,7 +294,7 @@ export function getNotairesBySpecialty(
     address: n.address || undefined,
     phone: n.phone ? formatPhone(n.phone) : undefined,
     officeName: n.officeName || undefined,
-    arrondissement: (n as RawNotaire & { arrondissement?: number }).arrondissement || undefined,
+    arrondissement: notaireArr(n),
     role: n.role,
     specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
     next: "Disponible rapidement",
@@ -298,7 +329,7 @@ export function getNotairesByArrondissement(city: string, arrNum: number): Listi
   const all = loadAll();
   const target = normalizeCity(city);
   return all
-    .filter(n => normalizeCity(n.city) === target && (n as RawNotaire & { arrondissement?: number }).arrondissement === arrNum)
+    .filter(n => normalizeCity(n.city) === target && notaireArr(n) === arrNum)
     .map(n => ({
       id: n.id,
       name: n.name,
@@ -308,7 +339,7 @@ export function getNotairesByArrondissement(city: string, arrNum: number): Listi
       address: n.address || undefined,
       phone: n.phone ? formatPhone(n.phone) : undefined,
       officeName: n.officeName || undefined,
-      arrondissement: (n as RawNotaire & { arrondissement?: number }).arrondissement || undefined,
+      arrondissement: notaireArr(n),
       specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
       next: "Disponible rapidement",
       slotMatrix: deterministicSlots(n.id),
@@ -322,10 +353,10 @@ export function getNotairesByArrondissement(city: string, arrNum: number): Listi
 export function getArrondissements(city: string): { num: number; label: string; slug: string; count: number }[] {
   const all = loadAll();
   const target = normalizeCity(city);
-  const filtered = all.filter(n => normalizeCity(n.city) === target && (n as RawNotaire & { arrondissement?: number }).arrondissement);
+  const filtered = all.filter(n => normalizeCity(n.city) === target && notaireArr(n));
   const map = new Map<number, number>();
   for (const n of filtered) {
-    const arr = (n as RawNotaire & { arrondissement?: number }).arrondissement!;
+    const arr = notaireArr(n)!;
     map.set(arr, (map.get(arr) ?? 0) + 1);
   }
   return [...map.entries()]
@@ -357,7 +388,7 @@ export function getAllNotaires(): ListingNotaire[] {
     address: n.address || undefined,
     phone: n.phone ? formatPhone(n.phone) : undefined,
     officeName: n.officeName || undefined,
-    arrondissement: (n as RawNotaire & { arrondissement?: number }).arrondissement || undefined,
+    arrondissement: notaireArr(n),
     role: n.role,
     specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
     next: "Disponible rapidement",

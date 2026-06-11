@@ -381,7 +381,11 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
               }`}
             >
               <MapPin className="w-3 h-3" />
-              {nearState === "done" ? nearLabel : "Position non trouvée"}
+              {nearState === "done"
+                ? nearLabel
+                : availableArr.length > 0
+                  ? "Localisation indispo — choisissez votre arrondissement"
+                  : "Localisation indisponible"}
               <X className="w-3 h-3 ml-0.5" />
             </button>
           )}

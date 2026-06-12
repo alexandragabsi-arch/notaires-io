@@ -188,7 +188,7 @@ export default function NotaireSignup() {
           claimId,
           claimedNotaire.name,
           claimedNotaire.city,
-          {},        // pas d'enrichissement ici — l'espace permettra de modifier plus tard
+          { crpcen },  // on persiste au moins le CRPCEN ; le reste sera modifiable dans l'espace
           userId,
         );
         profile = { ...claimedNotaire, claimed: true };
@@ -199,6 +199,7 @@ export default function NotaireSignup() {
           nom,
           ville,
           etude,
+          crpcen,
           website: website.trim() || undefined,
           specialties: specs,
           subSpecialties: subSpecs,

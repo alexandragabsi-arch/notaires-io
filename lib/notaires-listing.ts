@@ -13,6 +13,7 @@ export interface ListingNotaire {
   email?: string;          // email de contact pour les notifications RDV
   website?: string;        // URL du site de l'étude
   officeName?: string;
+  crpcen?: string;         // numéro CRPCEN de l'étude (4-6 chiffres)
   arrondissement?: number;
   role?: "associé" | "salarié";
   isOffice?: boolean; // true = fiche au niveau étude/office (pas un notaire individuel)

@@ -12,6 +12,7 @@ export interface SignupProfile {
   nom: string;
   ville: string;
   etude?: string;
+  crpcen?: string;           // numéro CRPCEN de l'étude (4-6 chiffres)
   website?: string;          // URL du site de l'étude
   specialties: string[];
   subSpecialties?: string[]; // sous-spécialités fines (cf. lib/sous-specialites.ts)
@@ -81,6 +82,7 @@ export async function getRemoteProfiles(): Promise<ListingNotaire[]> {
     color: (row.color as ListingNotaire["color"]) || "default",
     city: row.city as string,
     officeName: row.office_name as string | undefined,
+    crpcen: row.crpcen as string | undefined,
     website: row.website as string | undefined,
     address: row.address as string | undefined,
     phone: row.phone as string | undefined,
@@ -161,6 +163,7 @@ export async function addProfile(p: SignupProfile): Promise<ListingNotaire> {
     color: entry.color,
     city: entry.city,
     office_name: entry.officeName ?? null,
+    crpcen: p.crpcen?.trim() || null,
     website: entry.website ?? null,
     address: null,
     phone: null,
@@ -187,6 +190,7 @@ export interface ClaimData {
   phone?: string;
   address?: string;
   website?: string;
+  crpcen?: string;           // numéro CRPCEN de l'étude (4-6 chiffres)
   email?: string;            // email de contact du notaire (pour les notifications RDV)
   slotMatrix?: string[][];   // disponibilités sur 91 jours (13 semaines)
 }
@@ -221,6 +225,7 @@ export async function claimProfile(
     initials,
     color: "default",
     office_name: null,
+    crpcen: data.crpcen?.trim() || null,
     website: data.website?.trim() ?? null,
     address: data.address?.trim() ?? null,
     phone: data.phone?.trim() ?? null,
@@ -278,6 +283,7 @@ export async function getProfileByUserId(userId: string): Promise<ListingNotaire
     color: (data.color as ListingNotaire["color"]) || "default",
     city: data.city as string,
     officeName: data.office_name as string | undefined,
+    crpcen: data.crpcen as string | undefined,
     website: data.website as string | undefined,
     address: data.address as string | undefined,
     phone: data.phone as string | undefined,

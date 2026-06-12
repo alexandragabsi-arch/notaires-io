@@ -376,7 +376,7 @@ function EspaceNotaireInner() {
     if (typeof window !== "undefined") {
       // Connecté mais pas abonné → page marketing
       // Non connecté → login
-      window.location.replace(authed ? "/notaires" : "/connexion");
+      window.location.replace(authed ? "/notaires" : "/connexion?role=notaire");
     }
     return (
       <div className="min-h-[60vh] flex items-center justify-center">

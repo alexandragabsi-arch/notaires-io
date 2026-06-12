@@ -33,6 +33,10 @@ export default function LoginPanel() {
       if (params.get("reset") === "1" || window.location.hash.includes("type=recovery")) {
         setRecoveryMode(true);
       }
+      // Présélection de l'onglet via ?role=notaire (arrivée depuis l'e-mail /
+      // le lien « Espace notaire » / la redirection de /espace-notaire).
+      const r = params.get("role");
+      if (r === "notaire" || r === "particulier") setRole(r);
     }
     const {
       data: { subscription },

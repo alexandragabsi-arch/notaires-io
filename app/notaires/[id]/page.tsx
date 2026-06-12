@@ -35,7 +35,7 @@ export async function generateMetadata({
   const specs = n.specialties.join(", ");
 
   return {
-    title: `${n.name} — Notaire à ${location}`,
+    title: `${n.name} — ${n.isOffice ? "Étude notariale" : "Notaire"} à ${location}`,
     description: `Prenez rendez-vous avec ${n.name}, notaire à ${location}. Spécialités : ${specs}. 1er rendez-vous offert (30 min) en visio ou au cabinet. Tarifs réglementés.`,
     keywords: [
       `notaire ${n.city.toLowerCase()}`,

@@ -44891,43 +44891,199 @@
     "claimed": false
   },
   {
-    "id": "non-diffusible-non-diffusible-784307316",
-    "name": "Me [non-Diffusible] [non-Diffusible]",
-    "initials": "[[",
-    "color": "purple",
+    "id": "dumont-marc-784307316",
+    "name": "Me Marc Dumont",
+    "initials": "MD",
+    "color": "default",
     "city": "Paris",
     "citySlug": "paris",
     "officeName": "ALMA NOTAIRES",
-    "address": "[NON-DIFFUSIBLE]",
-    "phone": "",
-    "website": "",
+    "address": "21 AVENUE RAPP 75007 PARIS",
+    "phone": "+33140622525",
+    "website": "https://alma-notaires.fr",
     "specialties": [
       "Droit immobilier",
       "Successions"
     ],
     "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
       [],
       [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
       [],
-      [
-        "11:00"
-      ]
+      [],
+      [],
+      [],
+      []
     ],
     "role": "associé",
-    "source": "api-entreprises",
+    "source": "etude-site",
+    "claimed": false
+  },
+  {
+    "id": "busson-dominique-784307316",
+    "name": "Me Dominique Busson",
+    "initials": "DB",
+    "color": "green",
+    "city": "Paris",
+    "citySlug": "paris",
+    "officeName": "ALMA NOTAIRES",
+    "address": "21 AVENUE RAPP 75007 PARIS",
+    "phone": "+33140622525",
+    "website": "https://alma-notaires.fr",
+    "specialties": [
+      "Droit immobilier",
+      "Successions"
+    ],
+    "slotMatrix": [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    "role": "associé",
+    "source": "etude-site",
+    "claimed": false
+  },
+  {
+    "id": "renard-tanguy-784307316",
+    "name": "Me Tanguy Renard",
+    "initials": "TR",
+    "color": "purple",
+    "city": "Paris",
+    "citySlug": "paris",
+    "officeName": "ALMA NOTAIRES",
+    "address": "21 AVENUE RAPP 75007 PARIS",
+    "phone": "+33140622525",
+    "website": "https://alma-notaires.fr",
+    "specialties": [
+      "Droit immobilier",
+      "Successions"
+    ],
+    "slotMatrix": [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    "role": "associé",
+    "source": "etude-site",
+    "claimed": false
+  },
+  {
+    "id": "chaussade-amaury-784307316",
+    "name": "Me Amaury Chaussade",
+    "initials": "AC",
+    "color": "default",
+    "city": "Paris",
+    "citySlug": "paris",
+    "officeName": "ALMA NOTAIRES",
+    "address": "21 AVENUE RAPP 75007 PARIS",
+    "phone": "+33140622525",
+    "website": "https://alma-notaires.fr",
+    "specialties": [
+      "Droit immobilier",
+      "Successions"
+    ],
+    "slotMatrix": [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    "role": "associé",
+    "source": "etude-site",
+    "claimed": false
+  },
+  {
+    "id": "de-bouvet-pierre-antoine-784307316",
+    "name": "Me Pierre-Antoine de Bouvet",
+    "initials": "PB",
+    "color": "green",
+    "city": "Paris",
+    "citySlug": "paris",
+    "officeName": "ALMA NOTAIRES",
+    "address": "21 AVENUE RAPP 75007 PARIS",
+    "phone": "+33140622525",
+    "website": "https://alma-notaires.fr",
+    "specialties": [
+      "Droit immobilier",
+      "Successions"
+    ],
+    "slotMatrix": [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    "role": "associé",
+    "source": "etude-site",
+    "claimed": false
+  },
+  {
+    "id": "bourgninaud-quentin-784307316",
+    "name": "Me Quentin Bourgninaud",
+    "initials": "QB",
+    "color": "purple",
+    "city": "Paris",
+    "citySlug": "paris",
+    "officeName": "ALMA NOTAIRES",
+    "address": "21 AVENUE RAPP 75007 PARIS",
+    "phone": "+33140622525",
+    "website": "https://alma-notaires.fr",
+    "specialties": [
+      "Droit immobilier",
+      "Successions"
+    ],
+    "slotMatrix": [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    "role": "associé",
+    "source": "etude-site",
+    "claimed": false
+  },
+  {
+    "id": "josseaume-gelven-784307316",
+    "name": "Me Gelven Josseaume",
+    "initials": "GJ",
+    "color": "default",
+    "city": "Paris",
+    "citySlug": "paris",
+    "officeName": "ALMA NOTAIRES",
+    "address": "21 AVENUE RAPP 75007 PARIS",
+    "phone": "+33140622525",
+    "website": "https://alma-notaires.fr",
+    "specialties": [
+      "Droit immobilier",
+      "Successions"
+    ],
+    "slotMatrix": [
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+      []
+    ],
+    "role": "salarié",
+    "source": "etude-site",
     "claimed": false
   },
   {

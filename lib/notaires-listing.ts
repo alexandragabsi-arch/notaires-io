@@ -15,6 +15,7 @@ export interface ListingNotaire {
   officeName?: string;
   arrondissement?: number;
   role?: "associé" | "salarié";
+  isOffice?: boolean; // true = fiche au niveau étude/office (pas un notaire individuel)
   specialties: string[];
   subSpecialties?: string[];
   languages?: string[];

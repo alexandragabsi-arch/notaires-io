@@ -206,6 +206,109 @@ function deterministicSlots(id: string): string[][] {
 }
 
 /**
+ * Certaines fiches issues de l'API officielle ont opté pour la non-diffusion :
+ * le nom et l'adresse valent littéralement « [non-Diffusible] » / « [NON-DIFFUSIBLE] ».
+ * On les détecte pour les nettoyer à l'affichage.
+ */
+function isNonDiffusible(value?: string): boolean {
+  return /non[\s-]?diffusible/i.test(value ?? "");
+}
+
+/**
+ * Convertit une fiche brute en ListingNotaire, en nettoyant au passage les
+ * fiches « non diffusibles » : on affiche le nom de l'étude (qui, lui, est public
+ * et contient souvent le nom réel du notaire) à la place du « [non-Diffusible] ».
+ */
+function toListing(n: RawNotaire): ListingNotaire {
+  // Fiches « non diffusibles » : l'id correspond au SIREN de l'étude et la source
+  // n'expose pas de nom de personne. Ce sont donc des fiches au niveau ÉTUDE
+  // (et non un notaire individuel). On les affiche comme une étude notariale.
+  const nameMasked = isNonDiffusible(n.name);
+  const hasOffice = !!n.officeName && !isNonDiffusible(n.officeName);
+
+  const name = nameMasked
+    ? hasOffice
+      ? formatOfficeName(n.officeName).replace(/^Étude\s+/i, "")
+      : "Étude notariale"
+    : n.name;
+
+  const initials = nameMasked
+    ? hasOffice
+      ? officeInitials(n.officeName)
+      : "ET"
+    : n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map(p => p[0]).join("");
+
+  // Si on a promu l'étude en titre, on ne la répète pas sur sa propre ligne.
+  const officeName = nameMasked ? undefined : (n.officeName && !isNonDiffusible(n.officeName) ? n.officeName : undefined);
+  const address = n.address && !isNonDiffusible(n.address) ? n.address : undefined;
+
+  return {
+    id: n.id,
+    name,
+    initials,
+    color: n.color,
+    city: n.city,
+    address,
+    phone: n.phone ? formatPhone(n.phone) : undefined,
+    officeName,
+    arrondissement: notaireArr(n),
+    role: nameMasked ? undefined : n.role,
+    isOffice: nameMasked,
+    specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
+    next: "Disponible rapidement",
+    slotMatrix: deterministicSlots(n.id),
+    bio: undefined,
+  };
+}
+
+/** Met une ville en casse de titre pour l'affichage ("PARIS" → "Paris", "AIX-EN-PROVENCE" → "Aix-En-Provence"). */
+function titleCaseCity(city: string): string {
+  return city
+    .toLowerCase()
+    .replace(/(^|[\s\-’'])([a-zà-ÿ])/g, (_, sep, c) => sep + c.toUpperCase());
+}
+
+/** Clé de déduplication d'une étude : nom normalisé + ville normalisée. */
+function officeKey(name: string, city: string): string {
+  const n = (name ?? "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+  return `${n}|${normalizeCity(city)}`;
+}
+
+/**
+ * Convertit une étude (data/notaires-france.json) en ListingNotaire.
+ * Ces fiches sont au niveau ÉTUDE et n'ont ni adresse précise ni créneaux réels :
+ * on génère des créneaux indicatifs déterministes et on déduit le titre depuis le
+ * nom (individuel "NOM Prénom" → "Me Prénom Nom" ; raison sociale → "Étude …").
+ */
+function officeToListing(o: RawOffice): ListingNotaire {
+  const masked = isNonDiffusible(o.name);
+  const individual = !masked && isIndividual(o.name);
+  // L'adresse vaut souvent juste la ville (« PARIS ») : on ne l'affiche que si elle
+  // contient un numéro de voie (donc une vraie adresse postale).
+  const hasRealAddress = !!o.address && !isNonDiffusible(o.address) && /\d/.test(o.address);
+  return {
+    id: o.id,
+    name: masked ? "Étude notariale" : formatOfficeListing(o.name),
+    initials: masked ? "ET" : officeInitials(o.name),
+    color: "default",
+    city: titleCaseCity(o.city),
+    address: hasRealAddress ? o.address : undefined,
+    phone: o.phone ? formatPhone(o.phone) : undefined,
+    website: o.website || undefined,
+    arrondissement: arrFromAddress(o.address),
+    isOffice: masked ? true : !individual,
+    specialties: ["Droit immobilier", "Successions"],
+    next: "Disponible rapidement",
+    slotMatrix: deterministicSlots(o.id),
+  };
+}
+
+/**
  * Retourne les notaires d'une ville donnée en format ListingNotaire
  * @param city Nom de la ville (insensible à la casse et aux accents)
  * @param limit Nombre maximum de résultats (défaut : 20)
@@ -218,22 +321,7 @@ export function getNotairesByCity(city: string, limit = Infinity): ListingNotair
 
   // Prendre tous les notaires (ou jusqu'à `limit`)
   const slice = isFinite(limit) ? filtered.slice(0, limit) : filtered;
-  return slice.map((n, idx) => ({
-    id: n.id,
-    name: n.name,
-    initials: n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map(p => p[0]).join(""),
-    color: n.color,
-    city: n.city,
-    address: n.address || undefined,
-    phone: n.phone ? formatPhone(n.phone) : undefined,
-    officeName: n.officeName || undefined,
-    arrondissement: notaireArr(n),
-    role: n.role,
-    specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
-    next: "Disponible rapidement",
-    slotMatrix: deterministicSlots(n.id),
-    bio: undefined,
-  }));
+  return slice.map(toListing);
 }
 
 function formatPhone(phone: string): string {
@@ -285,22 +373,7 @@ export function getNotairesBySpecialty(
     i++;
   }
 
-  return picked.map(n => ({
-    id: n.id,
-    name: n.name,
-    initials: n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map(p => p[0]).join(""),
-    color: n.color,
-    city: n.city,
-    address: n.address || undefined,
-    phone: n.phone ? formatPhone(n.phone) : undefined,
-    officeName: n.officeName || undefined,
-    arrondissement: notaireArr(n),
-    role: n.role,
-    specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
-    next: "Disponible rapidement",
-    slotMatrix: deterministicSlots(n.id),
-    bio: undefined,
-  }));
+  return picked.map(toListing);
 }
 
 /**
@@ -330,21 +403,7 @@ export function getNotairesByArrondissement(city: string, arrNum: number): Listi
   const target = normalizeCity(city);
   return all
     .filter(n => normalizeCity(n.city) === target && notaireArr(n) === arrNum)
-    .map(n => ({
-      id: n.id,
-      name: n.name,
-      initials: n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map(p => p[0]).join(""),
-      color: n.color,
-      city: n.city,
-      address: n.address || undefined,
-      phone: n.phone ? formatPhone(n.phone) : undefined,
-      officeName: n.officeName || undefined,
-      arrondissement: notaireArr(n),
-      specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
-      next: "Disponible rapidement",
-      slotMatrix: deterministicSlots(n.id),
-      bio: undefined,
-    }));
+    .map(toListing);
 }
 
 /**
@@ -377,22 +436,28 @@ export function getArrondissements(city: string): { num: number; label: string; 
  */
 export function getAllNotaires(): ListingNotaire[] {
   const membres = loadAll();
+  const offices = loadOffices();
 
-  // Uniquement les notaires individuels (pas les études)
-  return membres.map((n) => ({
-    id: n.id,
-    name: n.name,
-    initials: n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map(p => p[0]).join(""),
-    color: n.color,
-    city: n.city,
-    address: n.address || undefined,
-    phone: n.phone ? formatPhone(n.phone) : undefined,
-    officeName: n.officeName || undefined,
-    arrondissement: notaireArr(n),
-    role: n.role,
-    specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
-    next: "Disponible rapidement",
-    slotMatrix: deterministicSlots(n.id),
-    bio: undefined,
-  }));
+  // Études déjà représentées par un notaire individuel (même raison sociale + ville) :
+  // on les exclut pour ne pas afficher deux fois la même structure.
+  const seen = new Set<string>();
+  for (const m of membres) {
+    if (m.officeName) seen.add(officeKey(m.officeName, m.city));
+  }
+
+  // L'annuaire ne liste que des notaires (personnes), jamais de fiche « Étude ».
+  // → on retire les fiches au niveau étude (non diffusibles) côté membres, et on ne
+  //   garde côté études France que celles dont le nom est un notaire individuel
+  //   (« SERRERO David » → « Me David Serrero »), pas les raisons sociales (SELARL…).
+  const membreListings = membres.map(toListing).filter((n) => !n.isOffice);
+  const officeListings = offices
+    .filter(
+      (o) =>
+        isIndividual(o.name) &&
+        !isNonDiffusible(o.name) &&
+        !seen.has(officeKey(o.name, o.city)),
+    )
+    .map(officeToListing);
+
+  return [...membreListings, ...officeListings];
 }

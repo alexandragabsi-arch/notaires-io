@@ -183,7 +183,7 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
               <div className="min-w-0">
                 <div className="font-bold text-[15px] text-[var(--color-text-strong)] leading-snug">{n.name}</div>
                 <div className="text-[12px] text-[var(--color-muted)] mt-0.5">
-                  {n.role === "salarié" ? "Notaire Salarié" : "Notaire Associé"}
+                  {n.isOffice ? "Étude notariale" : n.role === "salarié" ? "Notaire Salarié" : "Notaire Associé"}
                   {n.isNew && (
                     <span className="ml-1.5 inline-flex items-center gap-0.5 text-[10px] font-bold text-[var(--color-success)]">
                       <Sparkles className="w-2.5 h-2.5" strokeWidth={2.5} /> Nouveau
@@ -297,12 +297,21 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
                         </div>
                         {times.length === 0 ? (
                           <div className="text-[11px] text-[var(--color-muted)] text-center py-2 opacity-40">—</div>
-                        ) : (
+                        ) : n.claimed ? (
                           times.slice(0, 3).map((t) => (
                             <a key={t} href={`/notaires/${n.id}`}
                               className="block text-center text-[12px] font-bold text-white bg-[var(--color-primary)] hover:bg-[var(--color-accent)] rounded-lg py-2 transition-colors">
                               {t}
                             </a>
+                          ))
+                        ) : (
+                          // Profil non revendiqué : créneaux indicatifs, non réservables.
+                          times.slice(0, 3).map((t) => (
+                            <div key={t}
+                              title="Profil non revendiqué — créneaux indicatifs, non réservables"
+                              className="block text-center text-[12px] font-semibold text-[var(--color-muted)] bg-slate-50 border border-dashed border-[var(--color-border)] rounded-lg py-2 cursor-not-allowed select-none">
+                              {t}
+                            </div>
                           ))
                         )}
                       </div>
@@ -330,10 +339,17 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
             </a>
 
             {/* Badge réservation */}
-            <div className="mt-auto pt-3 border-t border-[var(--color-border-soft)] flex items-center gap-1.5 text-[11px] text-emerald-600 font-medium">
-              <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
-              Réservation en ligne · Confirmation immédiate · 30 min · visio ou cabinet
-            </div>
+            {n.claimed ? (
+              <div className="mt-auto pt-3 border-t border-[var(--color-border-soft)] flex items-center gap-1.5 text-[11px] text-emerald-600 font-medium">
+                <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
+                Réservation en ligne · Confirmation immédiate · 30 min · visio ou cabinet
+              </div>
+            ) : (
+              <div className="mt-auto pt-3 border-t border-[var(--color-border-soft)] flex items-center gap-1.5 text-[11px] text-[var(--color-muted)] font-medium">
+                <Lock className="w-3 h-3" strokeWidth={2.5} />
+                Profil non revendiqué · créneaux indicatifs, non réservables
+              </div>
+            )}
           </div>
 
         </div>
@@ -474,14 +490,19 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
         specTargets.some(t => s.toLowerCase().includes(t.toLowerCase())));
       const matchSubSpec = subSpec === ALL || (n.subSpecialties ?? []).includes(subSpec);
       // Filtre disponibilité : prochain RDV dans la fenêtre demandée.
+      // Les profils non revendiqués ont des créneaux indicatifs (non réservables).
+      // Tant qu'aucun notaire n'est abonné, ils doivent tous rester visibles quel
+      // que soit le filtre : on n'applique la fenêtre qu'aux profils revendiqués.
       let matchAvail = true;
-      if (availMax !== null) {
+      if (availMax !== null && n.claimed) {
         const d = daysUntilNext(n);
         matchAvail = d !== null && (availMax === 0 ? d === 0 : d <= availMax);
       }
-      // Filtre arrondissement : si un arrondissement est demandé, ne garder que
-      // les notaires de cet arrondissement (ceux sans arrondissement connu passent).
-      const matchArr = !arrFilter || !n.arrondissement || n.arrondissement === arrFilter;
+      // Filtre arrondissement (strict) : si un arrondissement est demandé, ne garder
+      // que les notaires réellement situés dans cet arrondissement. Les fiches sans
+      // arrondissement connu sont exclues — elles polluaient le résultat (ex. une
+      // fiche sans code postal apparaissait sous « Paris 18e »).
+      const matchArr = !arrFilter || n.arrondissement === arrFilter;
       return matchCity && matchName && matchLang && matchSpec && matchSubSpec && matchAvail && matchArr;
     });
   }, [all, city, nameQuery, language, specialty, subSpec, availMax, arrFilter]);

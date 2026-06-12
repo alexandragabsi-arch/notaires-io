@@ -709,7 +709,9 @@ export default function NotaireProfileClient({
       : "bg-gradient-cta";
 
   const roleLabel =
-    notaire.role === "associé"
+    notaire.isOffice
+      ? "Étude notariale"
+      : notaire.role === "associé"
       ? "Notaire associé"
       : notaire.role === "salarié"
       ? "Notaire salarié"

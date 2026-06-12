@@ -67,6 +67,13 @@ function extractBaseCity(city: string): string {
   return city.replace(/\s+\d+e[r]?\s+arrondissement$/i, "").trim();
 }
 
+/** Villes à arrondissements : la commune globale partage le code postal du 1er
+ *  (Lyon → 69001, Paris → 75001…), ce qui prête à confusion. On affiche alors
+ *  la ville sans code postal et on signale « Toute la ville ». */
+function isWholeMetropolis(city: string): boolean {
+  return /^(paris|lyon|marseille)$/i.test(city.trim());
+}
+
 /** "Lyon 8e Arrondissement (69008)" → 8 · "Lyon" → null
  *  On se base UNIQUEMENT sur le libellé « Ne Arrondissement » (fiable),
  *  jamais sur le code postal d'une suggestion de ville (ambigu : Lyon → 69001). */
@@ -438,7 +445,14 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   function selectSuggestion(item: CitySugg) {
     if (suggTimer.current) clearTimeout(suggTimer.current); // annule tout timer en cours
     skipNextFetch.current = true;
-    setCityInput(`${item.city} (${item.postcode})`);
+    // Le code postal collé au libellé est purement cosmétique (aucun filtre ne le
+    // lit) : pour une ville entière on ne l'affiche pas, sinon « Lyon (69001) »
+    // ressemble à tort au 1er arrondissement. On le garde pour les arrondissements
+    // (utile à extractArr) et pour les villes homonymes classiques.
+    const label = isWholeMetropolis(item.city)
+      ? item.city
+      : `${item.city} (${item.postcode})`;
+    setCityInput(label);
     setCity(extractBaseCity(item.city));
     setSuggestions([]);
     setShowSugg(false);
@@ -571,7 +585,9 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
                       <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
                       {item.city}
                     </span>
-                    <span className="text-[var(--color-muted)] text-[13px]">{item.postcode}</span>
+                    <span className="text-[var(--color-muted)] text-[13px]">
+                      {isWholeMetropolis(item.city) ? "Toute la ville" : item.postcode}
+                    </span>
                   </li>
                 ))}
               </ul>

@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Artefacts d'enrichissement annuaire (cache HTML notaires.fr)
+scripts/.enrich-cache/
+scripts/enrich-raw.json
+scripts/*.log

@@ -22,6 +22,7 @@ import {
   Settings,
   ShieldCheck,
   Receipt,
+  CreditCard,
 } from "lucide-react";
 import { getStoredProfiles, getProfileByUserId } from "@/lib/notaire-profiles";
 import { supabase } from "@/lib/supabase";
@@ -174,13 +175,10 @@ function QRBlock({ profile }: { profile: ListingNotaire }) {
 
 /* ── En-tête profil (photo en avant) ────────────────────────────────────────── */
 function ProfileHero({ profile }: { profile: ListingNotaire }) {
-  const avatarGradient =
-    profile.color === "green"
-      ? "bg-gradient-green"
-      : profile.color === "purple"
-      ? "bg-gradient-to-br from-purple-500 to-purple-700"
-      : "bg-gradient-cta";
-
+  // En mode démo, le profil fictif n'existe pas en base : les liens vers la
+  // fiche publique (#modifier inclus) mèneraient à « Profil introuvable ».
+  // On désactive donc ces boutons et on indique qu'ils sont actifs après inscription.
+  const isDemo = profile.id === "demo-notaire";
   return (
     <div className="relative overflow-hidden bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)]">
       {/* Bandeau dégradé sobre */}
@@ -204,28 +202,49 @@ function ProfileHero({ profile }: { profile: ListingNotaire }) {
               <img src={profile.photo} alt={profile.name} className="w-full h-full object-cover" />
             </div>
           ) : (
-            <div className={`w-28 h-28 sm:w-32 sm:h-32 rounded-3xl flex items-center justify-center text-white font-bold text-[40px] shrink-0 ring-4 ring-white shadow-[var(--shadow-card)] ${avatarGradient}`}>
-              {profile.initials}
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl flex items-center justify-center bg-white shrink-0 ring-4 ring-white shadow-[var(--shadow-strong)] border border-[var(--color-border-soft)] relative z-10">
+              <User className="w-14 h-14 text-[var(--color-muted)]" strokeWidth={1.25} />
             </div>
           )}
 
           <div className="flex flex-wrap justify-end gap-2 shrink-0">
-            <a
-              href={`/notaires/${profile.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 bg-[var(--color-accent-soft)] text-[var(--color-accent)] px-4 py-2 rounded-[10px] text-[13px] font-semibold hover:bg-[var(--color-tint-blue)] transition-colors"
-            >
-              <ExternalLink className="w-3.5 h-3.5" strokeWidth={2.5} />
-              Profil public
-            </a>
-            <a
-              href={`/notaires/${profile.id}#modifier`}
-              className="inline-flex items-center gap-1.5 border border-[var(--color-border-soft)] text-[var(--color-muted)] px-4 py-2 rounded-[10px] text-[13px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
-            >
-              <Settings className="w-3.5 h-3.5" strokeWidth={2.5} />
-              Modifier
-            </a>
+            {isDemo ? (
+              <>
+                <span
+                  className="inline-flex items-center gap-1.5 bg-[var(--color-accent-soft)] text-[var(--color-accent)] px-4 py-2 rounded-[10px] text-[13px] font-semibold opacity-60 cursor-not-allowed"
+                  title="Disponible une fois votre profil créé"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  Profil public
+                </span>
+                <span
+                  className="inline-flex items-center gap-1.5 border border-[var(--color-border-soft)] text-[var(--color-muted)] px-4 py-2 rounded-[10px] text-[13px] font-semibold opacity-60 cursor-not-allowed"
+                  title="Disponible une fois votre profil créé"
+                >
+                  <Settings className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  Modifier
+                </span>
+              </>
+            ) : (
+              <>
+                <a
+                  href={`/notaires/${profile.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 bg-[var(--color-accent-soft)] text-[var(--color-accent)] px-4 py-2 rounded-[10px] text-[13px] font-semibold hover:bg-[var(--color-tint-blue)] transition-colors"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  Profil public
+                </a>
+                <a
+                  href={`/notaires/${profile.id}#modifier`}
+                  className="inline-flex items-center gap-1.5 border border-[var(--color-border-soft)] text-[var(--color-muted)] px-4 py-2 rounded-[10px] text-[13px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+                >
+                  <Settings className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  Modifier
+                </a>
+              </>
+            )}
           </div>
         </div>
 
@@ -295,10 +314,12 @@ function QuickNav({ profileId }: { profileId: string }) {
     { icon: Receipt, label: "Mes factures", href: "#factures", color: "text-orange-500", bg: "bg-[var(--color-tint-warm)]" },
     { icon: User, label: "Mon profil public", href: `/notaires/${profileId}`, color: "text-purple-600", bg: "bg-[var(--color-tint-purple)]" },
     { icon: QrCode, label: "Mon QR code", href: "#qr", color: "text-[var(--color-accent)]", bg: "bg-[var(--color-tint-blue)]" },
+    { icon: CreditCard, label: "Cartes de visite", href: "/notaires/cartes", color: "text-pink-500", bg: "bg-[var(--color-tint-warm)]" },
+    { icon: Sparkles, label: "Les avantages Notaires.io", href: "/notaires", color: "text-[var(--color-accent)]", bg: "bg-[var(--color-accent-soft)]" },
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
       {links.map(({ icon: Icon, label, href, color, bg }) => {
         const external = href.startsWith("/");
         return (
@@ -493,9 +514,10 @@ function EspaceNotaireInner() {
 
       </div>
 
-      {/* Agenda — rendez-vous réels + factures depuis Supabase
-          (masqué en mode démo : pas de données réelles à charger) */}
-      {profile.id !== "demo-notaire" && <NotaireDashboard notaireId={profile.id} />}
+      {/* Agenda (rendez-vous) + factures depuis Supabase.
+          En mode démo, les sections s'affichent à vide (ancres #agenda / #factures
+          fonctionnelles) — pas de données réelles à charger. */}
+      <NotaireDashboard notaireId={profile.id} />
 
       {/* QR code — outil de partage, en complément */}
       <div className="max-w-[860px] mx-auto px-4 sm:px-6 pt-2">

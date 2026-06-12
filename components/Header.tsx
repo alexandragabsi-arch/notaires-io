@@ -192,6 +192,17 @@ export default function Header() {
               Espace notaire
             </a>
 
+            {/* Page de présentation — visible une fois le notaire connecté */}
+            {hasProfile && (
+              <a
+                href="/notaires"
+                className="flex items-center gap-1.5 text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors font-medium"
+              >
+                <Sparkles className="w-3.5 h-3.5" strokeWidth={2.5} />
+                Les avantages
+              </a>
+            )}
+
             {/* Accès démo aux espaces (aperçu sans connexion) */}
             <a
               href="/test"
@@ -307,6 +318,18 @@ export default function Header() {
                   <LayoutDashboard className="w-4 h-4" strokeWidth={2.5} />
                   Espace notaire
                 </a>
+
+                {/* Page de présentation — visible une fois le notaire connecté */}
+                {hasProfile && (
+                  <a
+                    href="/notaires"
+                    onClick={() => setOpen(false)}
+                    className="py-3 text-[15px] font-semibold text-[var(--color-muted)] flex items-center gap-2 hover:text-[var(--color-primary)] transition-colors border-b border-[var(--color-border-soft)]"
+                  >
+                    <Sparkles className="w-4 h-4" strokeWidth={2.5} />
+                    Les avantages
+                  </a>
+                )}
 
                 {/* Accès démo aux espaces dans le menu mobile */}
                 <a

@@ -73,40 +73,36 @@ export default async function BlogPage() {
 
         {/* Grid */}
         <section className="max-w-[1200px] mx-auto px-6 py-14">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7">
             {merged.map((post) => {
               const catColor = CATEGORY_COLORS[post.category] ?? "bg-gray-100 text-gray-600";
               return (
-                <article
+                <a
                   key={post.slug}
-                  className="bg-white border border-[var(--color-border)] rounded-2xl p-6 flex flex-col hover:shadow-[var(--shadow-strong)] transition-shadow duration-200"
+                  href={`/blog/${post.slug}`}
+                  className="group bg-white border border-[var(--color-border)] rounded-2xl p-5 sm:p-6 flex flex-col hover:shadow-[var(--shadow-strong)] hover:border-[var(--color-accent-soft)] transition-all duration-200"
                 >
-                  <span className={`inline-block self-start text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-4 ${catColor}`}>
+                  <span className={`inline-block self-start text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-3.5 ${catColor}`}>
                     {post.category}
                   </span>
 
-                  <h2 className="text-[17px] font-bold text-[var(--color-text-strong)] leading-snug mb-3 flex-1">
-                    <a href={`/blog/${post.slug}`} className="hover:text-[var(--color-accent)] transition-colors">
-                      {post.title}
-                    </a>
+                  <h2 className="text-[17px] font-bold text-[var(--color-text-strong)] leading-snug mb-2.5 group-hover:text-[var(--color-accent)] transition-colors">
+                    {post.title}
                   </h2>
 
-                  <p className="text-sm text-[var(--color-muted)] leading-relaxed mb-5 line-clamp-3">
+                  <p className="text-sm text-[var(--color-muted)] leading-relaxed mb-5 line-clamp-2">
                     {post.excerpt}
                   </p>
 
-                  <div className="flex items-center justify-between text-[12px] text-[var(--color-muted)] border-t border-[var(--color-border-soft)] pt-4">
+                  <div className="mt-auto flex items-center justify-between text-[12px] text-[var(--color-muted)] border-t border-[var(--color-border-soft)] pt-4">
                     <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
                     <span>{post.reading_time} min de lecture</span>
                   </div>
 
-                  <a
-                    href={`/blog/${post.slug}`}
-                    className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-accent)] hover:underline"
-                  >
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-accent)] group-hover:gap-2.5 transition-all">
                     Lire l&apos;article →
-                  </a>
-                </article>
+                  </span>
+                </a>
               );
             })}
           </div>

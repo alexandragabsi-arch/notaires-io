@@ -42,11 +42,16 @@ body {
 }
 
 /* Justification réservée au contenu d'article (blog) — ne doit pas
-   écraser les alignements (text-center, etc.) du reste du site. */
+   écraser les alignements (text-center, etc.) du reste du site.
+   Texte justifié PARTOUT (mobile inclus). Pour éviter les énormes
+   espaces entre mots ("rivières") sur les colonnes étroites du
+   téléphone, on active la césure automatique (nécessite lang="fr"). */
 .prose-article p,
 .prose-article li {
   text-align: justify;
   text-justify: inter-word;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 
 

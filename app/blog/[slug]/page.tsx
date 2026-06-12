@@ -7,6 +7,8 @@ import { getPostContent } from "@/lib/blog-content";
 import { getDynamicArticleBySlug, getDynamicArticleSlugs } from "@/lib/blog-supabase";
 
 const BASE = "https://notaires.io";
+// Image de partage social (OpenGraph / Twitter) par défaut pour les articles.
+const OG_IMAGE = { url: `${BASE}/og-image.png`, width: 1200, height: 630, alt: "Notaires.io" };
 
 // Allow slugs not in generateStaticParams (new articles from N8N agent)
 export const dynamicParams = true;
@@ -43,6 +45,13 @@ export async function generateMetadata({
         locale: "fr_FR",
         type: "article",
         publishedTime: dynamic.published_at,
+        images: [OG_IMAGE],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `${title} · Notaires.io`,
+        description: desc,
+        images: [OG_IMAGE.url],
       },
     };
   }
@@ -62,6 +71,13 @@ export async function generateMetadata({
       locale: "fr_FR",
       type: "article",
       publishedTime: post.date,
+      images: [OG_IMAGE],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${post.title} · Notaires.io`,
+      description: post.excerpt,
+      images: [OG_IMAGE.url],
     },
   };
 }
@@ -156,20 +172,19 @@ export default async function BlogPostPage({
               {dynamic.h1 ?? dynamic.title}
             </h1>
 
-            {dynamic.excerpt && (
-              <p className="text-lg text-[var(--color-muted)] leading-relaxed mb-4">
-                {dynamic.excerpt}
-              </p>
-            )}
-
-            <div className="flex items-center gap-4 text-[13px] text-[var(--color-muted)] border-y border-[var(--color-border-soft)] py-4 mb-10">
+            <div className="flex items-center gap-4 text-[13px] text-[var(--color-muted)] border-y border-[var(--color-border-soft)] py-4 mb-8">
               <span>Par <strong className="text-[var(--color-text-strong)]">Notaires.io</strong></span>
               <span>·</span>
               <time dateTime={dynamic.published_at}>{formatDate(dynamic.published_at)}</time>
             </div>
 
-            {dynamic.intro && (
-              <p className="text-[16px] leading-relaxed text-[var(--color-muted)] mb-8">{dynamic.intro}</p>
+            {/* Une seule introduction : on privilégie `intro` (le vrai chapô de
+               l'article) ; à défaut on retombe sur `excerpt`. L'excerpt reste
+               utilisé pour le SEO (meta description) et les cartes du blog. */}
+            {(dynamic.intro || dynamic.excerpt) && (
+              <p className="text-[17px] leading-relaxed text-[var(--color-muted)] mb-8 text-justify hyphens-auto">
+                {dynamic.intro || dynamic.excerpt}
+              </p>
             )}
 
             <div
@@ -286,7 +301,7 @@ export default async function BlogPostPage({
             {post.title}
           </h1>
 
-          <p className="text-lg text-[var(--color-muted)] leading-relaxed mb-4">
+          <p className="text-lg text-[var(--color-muted)] leading-relaxed mb-4 text-justify hyphens-auto">
             {post.excerpt}
           </p>
 

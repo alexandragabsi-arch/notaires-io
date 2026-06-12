@@ -23,6 +23,7 @@ import {
   LayoutDashboard,
   Settings,
   Lock,
+  ShieldCheck,
 } from "lucide-react";
 import { getStoredProfiles, getProfileByUserId } from "@/lib/notaire-profiles";
 import { supabase } from "@/lib/supabase";
@@ -225,6 +226,12 @@ function ProfileSummary({ profile }: { profile: ListingNotaire }) {
               <span className="flex items-center gap-1.5">
                 <Mail className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
                 {profile.email}
+              </span>
+            )}
+            {profile.crpcen && (
+              <span className="flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
+                CRPCEN {profile.crpcen}
               </span>
             )}
           </div>

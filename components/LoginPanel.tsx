@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, ArrowRight, Building2, User, ShieldCheck, Loader2, Eye, EyeOff, Check } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { isNotaireEmail } from "@/lib/notaire-email";
 
 type Role = "particulier" | "notaire";
 
@@ -44,6 +45,15 @@ export default function LoginPanel() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    // Côté notaire : seule une adresse officielle notaires.fr (directe ou
+    // sous-domaine de l'étude) est autorisée à se connecter.
+    if (isNotaire && !isNotaireEmail(email)) {
+      setError(
+        "Connexion notaire réservée aux adresses officielles @notaires.fr (ou un sous-domaine de votre étude, ex. @paris.notaires.fr).",
+      );
+      return;
+    }
 
     setLoading(true);
     const { error: authError } = await supabase.auth.signInWithPassword({

@@ -136,6 +136,7 @@ export async function POST(req: NextRequest) {
         <table style="width:100%;border-collapse:collapse;font-size:14px">
           <tr><td style="padding:6px 0;color:#5a6a8a;width:140px">Notaire</td><td style="font-weight:600">${meta.notaire || name || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">Étude</td><td>${meta.etude || "—"}</td></tr>
+          <tr><td style="padding:6px 0;color:#5a6a8a">CRPCEN</td><td>${meta.crpcen || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">Email</td><td>${email || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">Montant</td><td>${amount || "—"}</td></tr>
         </table>

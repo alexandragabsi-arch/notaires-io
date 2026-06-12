@@ -41,6 +41,7 @@ interface RawOffice {
   source: string;
 }
 
+// NB : cache mémoire process-level — réinitialisé à chaque recompilation du module.
 let _cache: RawNotaire[] | null = null;
 let _officeCache: RawOffice[] | null = null;
 

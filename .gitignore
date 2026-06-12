@@ -44,3 +44,5 @@ next-env.d.ts
 scripts/.enrich-cache/
 scripts/enrich-raw.json
 scripts/*.log
+# Export e-mails (données personnelles RGPD — ne pas versionner)
+scripts/notaires-emails.csv

@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json() as {
     notaire?: string;
     etude?: string;
+    crpcen?: string;
     email?: string;
     notaireId?: string;
     userId?: string;
@@ -76,8 +77,10 @@ export async function POST(req: NextRequest) {
     // Métadonnées (sur l'abonnement ET sur la session, pour le webhook)
     "subscription_data[metadata][notaire]": body.notaire ?? "",
     "subscription_data[metadata][etude]": body.etude ?? "",
+    "subscription_data[metadata][crpcen]": body.crpcen ?? "",
     "metadata[notaire]": body.notaire ?? "",
     "metadata[etude]": body.etude ?? "",
+    "metadata[crpcen]": body.crpcen ?? "",
     "metadata[notaireId]": body.notaireId ?? "",
     "metadata[userId]": body.userId ?? "",
 

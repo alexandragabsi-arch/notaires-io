@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { addProfile, claimProfile } from "@/lib/notaire-profiles";
+import { isNotaireEmail, cleanCrpcen, isValidCrpcen } from "@/lib/notaire-email";
 import { sousSpecialitesPour } from "@/lib/sous-specialites";
 import { supabase } from "@/lib/supabase";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
@@ -70,6 +71,7 @@ export default function NotaireSignup() {
 
   // Étude
   const [etude, setEtude] = useState("");
+  const [crpcen, setCrpcen] = useState("");
   const [adresse, setAdresse] = useState("");
   const [ville, setVille] = useState("");
   const [website, setWebsite] = useState("");
@@ -91,6 +93,20 @@ export default function NotaireSignup() {
   const displayName = fullName ? `Me ${fullName}` : "Me Votre Nom";
   const initials =
     (prenom.trim()[0] || "") + (nom.trim()[0] || "") || "N";
+
+  // Validation : seule une adresse officielle notaires.fr (directe ou
+  // sous-domaine) est acceptée — c'est la preuve d'un notaire en exercice.
+  const emailValid = isNotaireEmail(email);
+  const emailError = email.trim().length > 0 && !emailValid;
+  const crpcenValid = isValidCrpcen(crpcen);
+
+  // Conditions pour avancer dans le wizard (étapes Compte puis Étude).
+  const step0Valid =
+    prenom.trim() !== "" &&
+    nom.trim() !== "" &&
+    emailValid &&
+    password.trim().length >= 8;
+  const step1Valid = etude.trim() !== "" && crpcenValid;
 
   function toggleSpec(s: string) {
     setSpecs((prev) => {
@@ -203,6 +219,7 @@ export default function NotaireSignup() {
         body: JSON.stringify({
           notaire: fullName,
           etude,
+          crpcen,
           email,
           notaireId: profile.id,
           userId,
@@ -270,7 +287,16 @@ export default function NotaireSignup() {
                 {claimStep === 0 && (
                   <>
                     <Field label="E-mail professionnel">
-                      <IconInput icon={Mail} type="email" value={email} onChange={setEmail} placeholder="maitre@etude.fr" />
+                      <IconInput icon={Mail} type="email" value={email} onChange={setEmail} placeholder="prenom.nom@notaires.fr" />
+                      {emailError ? (
+                        <p className="text-[12px] text-red-600 mt-1.5 leading-snug">
+                          Adresse non valide. Utilisez votre e-mail officiel <strong>@notaires.fr</strong> (ou un sous-domaine de votre étude).
+                        </p>
+                      ) : (
+                        <p className="text-[12px] text-[var(--color-muted)] mt-1.5 leading-snug">
+                          Réservé aux notaires : adresse officielle <strong>@notaires.fr</strong> requise.
+                        </p>
+                      )}
                     </Field>
                     <Field label="Mot de passe">
                       <IconInput icon={Lock} type="password" value={password} onChange={setPassword} placeholder="••••••••" />
@@ -319,7 +345,7 @@ export default function NotaireSignup() {
 
             {claimStep === 0 && (
               <div className="mt-8 flex justify-end">
-                <button type="button" disabled={!email.trim() || !password.trim() || !accept} onClick={() => setStep(4)} className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0">
+                <button type="button" disabled={!emailValid || !password.trim() || !accept} onClick={() => setStep(4)} className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0">
                   Continuer vers le paiement
                   <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
                 </button>
@@ -460,8 +486,20 @@ export default function NotaireSignup() {
                           type="email"
                           value={email}
                           onChange={setEmail}
-                          placeholder="maitre@etude.fr"
+                          placeholder="prenom.nom@notaires.fr"
                         />
+                        {emailError ? (
+                          <p className="text-[12px] text-red-600 mt-1.5 leading-snug">
+                            Adresse non valide. Utilisez votre e-mail officiel{" "}
+                            <strong>@notaires.fr</strong> (ou un sous-domaine de
+                            votre étude, ex. <strong>@paris.notaires.fr</strong>).
+                          </p>
+                        ) : (
+                          <p className="text-[12px] text-[var(--color-muted)] mt-1.5 leading-snug">
+                            Réservé aux notaires : adresse officielle{" "}
+                            <strong>@notaires.fr</strong> requise.
+                          </p>
+                        )}
                       </Field>
                       <Field label="Téléphone">
                         <IconInput
@@ -494,6 +532,24 @@ export default function NotaireSignup() {
                           onChange={setEtude}
                           placeholder="Étude Martin & Associés"
                         />
+                      </Field>
+                      <Field label="Numéro CRPCEN de l'étude">
+                        <IconInput
+                          icon={ShieldCheck}
+                          value={crpcen}
+                          onChange={(v) => setCrpcen(cleanCrpcen(v))}
+                          placeholder="ex. 75123"
+                        />
+                        {crpcen.trim().length > 0 && !crpcenValid ? (
+                          <p className="text-[12px] text-red-600 mt-1.5 leading-snug">
+                            Le CRPCEN comporte 4 à 6 chiffres.
+                          </p>
+                        ) : (
+                          <p className="text-[12px] text-[var(--color-muted)] mt-1.5 leading-snug">
+                            Identifiant officiel de votre étude (figure sur vos
+                            actes). Sert à vérifier votre référencement.
+                          </p>
+                        )}
                       </Field>
                       <Field label="Adresse">
                         <IconInput
@@ -677,6 +733,7 @@ export default function NotaireSignup() {
                       <Recap label="E-mail" value={email || "—"} />
                       <Recap label="Téléphone" value={tel || "—"} />
                       <Recap label="Étude" value={etude || "—"} />
+                      <Recap label="CRPCEN" value={crpcen || "—"} />
                       <Recap
                         label="Adresse"
                         value={
@@ -837,7 +894,10 @@ export default function NotaireSignup() {
                     <button
                       type="button"
                       onClick={() => setStep((s) => s + 1)}
-                      className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
+                      disabled={
+                        (step === 0 && !step0Valid) || (step === 1 && !step1Valid)
+                      }
+                      className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                     >
                       Continuer
                       <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />

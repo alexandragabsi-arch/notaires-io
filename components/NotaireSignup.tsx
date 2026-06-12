@@ -100,13 +100,13 @@ export default function NotaireSignup() {
   const emailError = email.trim().length > 0 && !emailValid;
   const crpcenValid = isValidCrpcen(crpcen);
 
-  // Conditions pour avancer dans le wizard (étapes Compte puis Étude).
-  const step0Valid =
-    prenom.trim() !== "" &&
-    nom.trim() !== "" &&
-    emailValid &&
-    password.trim().length >= 8;
-  const step1Valid = etude.trim() !== "" && crpcenValid;
+  // Conditions pour avancer dans le wizard. On ne bloque que sur les règles
+  // métier explicites, avec un message visible pour chacune (jamais de blocage
+  // silencieux) : e-mail notarial valide + mot de passe (≥ 6) à l'étape Compte,
+  // numéro CRPCEN à l'étape Étude.
+  const passwordValid = password.trim().length >= 6;
+  const step0Valid = emailValid && passwordValid;
+  const step1Valid = crpcenValid;
 
   function toggleSpec(s: string) {
     setSpecs((prev) => {
@@ -518,7 +518,15 @@ export default function NotaireSignup() {
                           onChange={setPassword}
                           placeholder="••••••••"
                         />
+                        <p className={`text-[12px] mt-1.5 leading-snug ${password.length > 0 && !passwordValid ? "text-red-600" : "text-[var(--color-muted)]"}`}>
+                          Au moins 6 caractères.
+                        </p>
                       </Field>
+                      {!step0Valid && (
+                        <p className="text-[12px] text-[var(--color-muted)] -mt-1">
+                          Renseignez un e-mail <strong>@notaires.fr</strong> valide et un mot de passe pour continuer.
+                        </p>
+                      )}
                     </>
                   )}
 
@@ -533,7 +541,7 @@ export default function NotaireSignup() {
                           placeholder="Étude Martin & Associés"
                         />
                       </Field>
-                      <Field label="Numéro CRPCEN de l'étude">
+                      <Field label="Numéro CRPCEN de l'étude (obligatoire)">
                         <IconInput
                           icon={ShieldCheck}
                           value={crpcen}

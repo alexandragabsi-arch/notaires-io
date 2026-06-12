@@ -36,23 +36,33 @@ export async function sendEmail(
   }
 }
 
-// Gabarit commun : en-tête logo + contenu + pied de page.
-// `inner` est le HTML du corps (titres, blocs, boutons…).
+// Gabarit commun aux couleurs du site : fond bleu, bandeau dégradé + wordmark,
+// carte blanche pour le contenu, pied de page. `inner` = HTML du corps.
+// Couleurs : palette notaires.io (accent #4980E6, texte #1C4587, tint #f0f4ff).
 export function emailLayout(inner: string): string {
   return `
-    <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;padding:40px 24px;color:#1a1a2e">
-      <img src="${SITE}/logo-notaires-io.png" alt="Notaires.io" style="height:32px;margin-bottom:32px" />
-      ${inner}
-      <hr style="border:none;border-top:1px solid #e8edf5;margin:32px 0" />
-      <p style="font-size:12px;color:#8a9ab0;text-align:center">
-        <a href="${SITE}" style="color:#2d5dbf;text-decoration:none">Notaires.io</a> ·
-        Service gratuit d'orientation et de prise de rendez-vous notariale
-      </p>
+    <div style="background:#ffffff;margin:0;padding:32px 16px;font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Helvetica,Arial,sans-serif">
+      <div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:18px;overflow:hidden;border:1px solid #e3ebfb;box-shadow:0 10px 32px rgba(28,69,135,0.10)">
+        <!-- Bandeau d'en-tête bleu -->
+        <div style="background:linear-gradient(135deg,#509BF8 0%,#4980E6 100%);padding:30px 36px">
+          <a href="${SITE}" style="font-size:24px;font-weight:800;letter-spacing:-0.02em;text-decoration:none;color:#ffffff">Notaires<span style="color:#cfe0ff">.io</span></a>
+        </div>
+        <!-- Contenu (centré) -->
+        <div style="padding:38px 36px;color:#1C4587;text-align:center">
+          ${inner}
+        </div>
+        <!-- Pied de page -->
+        <div style="background:#ffffff;border-top:1px solid #e3ebfb;padding:22px 36px">
+          <p style="font-size:12px;color:#7588a8;text-align:center;margin:0;line-height:1.6">
+            <a href="${SITE}" style="color:#4980E6;text-decoration:none;font-weight:600">Notaires.io</a> · Plateforme de prise de rendez-vous notariale
+          </p>
+        </div>
+      </div>
     </div>
   `;
 }
 
-// Bouton d'action réutilisable (CTA bleu).
+// Bouton d'action réutilisable (CTA dégradé bleu, comme le site).
 export function emailButton(href: string, label: string): string {
-  return `<a href="${href}" style="display:inline-block;background:#2d5dbf;color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:12px 24px;border-radius:10px">${label}</a>`;
+  return `<a href="${href}" style="display:inline-block;background:linear-gradient(135deg,#509BF8 0%,#4980E6 100%);color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:13px 28px;border-radius:12px;box-shadow:0 4px 14px rgba(73,128,230,0.32)">${label}</a>`;
 }

@@ -133,7 +133,7 @@ export async function POST(req: NextRequest) {
       `[Notaires.io] Nouvel abonnement notaire${amount ? ` — ${amount}/mois` : ""}`,
       emailLayout(`
         <h2 style="font-size:18px;font-weight:700;margin-bottom:16px">Nouvel abonnement</h2>
-        <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <table style="width:100%;border-collapse:collapse;font-size:14px;text-align:left">
           <tr><td style="padding:6px 0;color:#5a6a8a;width:140px">Notaire</td><td style="font-weight:600">${meta.notaire || name || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">Étude</td><td>${meta.etude || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">CRPCEN</td><td>${meta.crpcen || "—"}</td></tr>
@@ -169,7 +169,7 @@ export async function POST(req: NextRequest) {
       `[Notaires.io] Commande de cartes à expédier${amount ? ` — ${amount}` : ""}`,
       emailLayout(`
         <h2 style="font-size:18px;font-weight:700;margin-bottom:16px">Commande de cartes</h2>
-        <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <table style="width:100%;border-collapse:collapse;font-size:14px;text-align:left">
           <tr><td style="padding:6px 0;color:#5a6a8a;width:140px">Notaire</td><td style="font-weight:600">${meta.notaire || name || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">Étude</td><td>${meta.etude || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">Modèle</td><td>${meta.cardType || "—"} × ${meta.quantity || "—"}</td></tr>

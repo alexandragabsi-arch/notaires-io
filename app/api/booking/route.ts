@@ -132,7 +132,7 @@ export async function POST(req: NextRequest) {
       <h2 style="font-size:18px;font-weight:700;margin-bottom:16px">
         Nouvelle réservation — ${slotLabel}
       </h2>
-      <table style="width:100%;border-collapse:collapse;font-size:14px">
+      <table style="width:100%;border-collapse:collapse;font-size:14px;text-align:left">
         <tr><td style="padding:6px 0;color:#5a6a8a;width:140px">Notaire</td><td style="font-weight:600">${notaireNom} (${notaireId})</td></tr>
         <tr><td style="padding:6px 0;color:#5a6a8a">Créneau</td><td>${slotLabel}</td></tr>
         <tr><td style="padding:6px 0;color:#5a6a8a">Modalité</td><td>${modalite}</td></tr>

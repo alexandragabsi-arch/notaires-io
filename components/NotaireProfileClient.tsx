@@ -11,7 +11,6 @@ import {
   ArrowLeft,
   Sparkles,
   Phone,
-  Mail,
   Building2,
   Video,
   PhoneCall,
@@ -259,6 +258,18 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
+
+  // Ouverture auto + scroll quand on arrive depuis l'espace notaire (#modifier)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (window.location.hash === "#modifier") {
+      setOpen(true);
+      // petit délai pour laisser le formulaire se monter avant le scroll
+      setTimeout(() => {
+        document.getElementById("modifier")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 120);
+    }
+  }, []);
 
   // Photo : fichier + aperçu
   const [photoPreview, setPhotoPreview] = useState<string>(notaire.photo ?? "");
@@ -894,12 +905,6 @@ export default function NotaireProfileClient({
                     </div>
                     <span className="text-[10px] text-[var(--color-muted)] font-semibold">Cabinet</span>
                   </div>
-                  <div className="flex flex-col items-center gap-1">
-                    <div className="w-9 h-9 rounded-xl bg-white border border-[var(--color-border-soft)] flex items-center justify-center text-[var(--color-success)]">
-                      <Mail className="w-5 h-5" strokeWidth={2} />
-                    </div>
-                    <span className="text-[10px] text-[var(--color-muted)] font-semibold">E-mail</span>
-                  </div>
                 </div>
                 <div className="mt-1 text-[11px] text-[var(--color-success)] font-semibold">
                   Rendez-vous confirmé
@@ -1189,8 +1194,8 @@ export default function NotaireProfileClient({
         </motion.div>
       </div>
 
-      {/* ── CTA notaire : revendiquer son profil ── */}
-      <div className="mt-10 max-w-[720px] mx-auto mb-4">
+      {/* ── CTA notaire : revendiquer / modifier son profil ── */}
+      <div id="modifier" className="mt-10 max-w-[720px] mx-auto mb-4 scroll-mt-24">
         {isClaimed ? (
           <ClaimSection notaire={notaire} />
         ) : (

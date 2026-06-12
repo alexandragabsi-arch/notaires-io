@@ -296,7 +296,7 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
   ];
 
   return (
-    <section id="agenda" className="py-16 sm:py-20 lg:py-24 bg-white">
+    <section id="agenda" className="py-16 sm:py-20 lg:py-24 bg-white scroll-mt-24">
       <div className="max-w-[1000px] mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -600,11 +600,12 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
           {/* Factures de l'abonnement */}
           {canManageDocs && (
             <motion.div
+              id="factures"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.4, delay: 0.12 }}
-              className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6"
+              className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6 scroll-mt-24"
             >
               <div className="flex items-center gap-3 mb-5">
                 <div className="w-11 h-11 shrink-0 rounded-xl bg-[var(--color-tint-blue)] flex items-center justify-center text-[var(--color-accent)]">

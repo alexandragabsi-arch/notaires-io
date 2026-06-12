@@ -11,7 +11,6 @@ import {
   Check,
   MessageCircle,
   Mail,
-  ArrowRight,
   ExternalLink,
   User,
   Building2,
@@ -20,10 +19,9 @@ import {
   BadgeCheck,
   Globe,
   CalendarDays,
-  LayoutDashboard,
   Settings,
-  Lock,
   ShieldCheck,
+  Receipt,
 } from "lucide-react";
 import { getStoredProfiles, getProfileByUserId } from "@/lib/notaire-profiles";
 import { supabase } from "@/lib/supabase";
@@ -174,8 +172,8 @@ function QRBlock({ profile }: { profile: ListingNotaire }) {
   );
 }
 
-/* ── Carte profil résumé ────────────────────────────────────────────────────── */
-function ProfileSummary({ profile }: { profile: ListingNotaire }) {
+/* ── En-tête profil (photo en avant) ────────────────────────────────────────── */
+function ProfileHero({ profile }: { profile: ListingNotaire }) {
   const avatarGradient =
     profile.color === "green"
       ? "bg-gradient-green"
@@ -184,86 +182,107 @@ function ProfileSummary({ profile }: { profile: ListingNotaire }) {
       : "bg-gradient-cta";
 
   return (
-    <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
-      <div className="flex items-start gap-4">
-        {profile.photo ? (
-          <div className="w-16 h-16 rounded-2xl overflow-hidden shrink-0">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={profile.photo} alt={profile.name} className="w-full h-full object-cover" />
-          </div>
-        ) : (
-          <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-white font-bold text-[20px] shrink-0 ${avatarGradient}`}>
-            {profile.initials}
-          </div>
-        )}
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-2 mb-1">
-            <h3 className="font-bold text-[17px] text-[var(--color-text-strong)]">{profile.name}</h3>
-            {profile.isNew ? (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-[var(--color-tint-green)] text-[var(--color-success)]">
-                <Sparkles className="w-3 h-3" strokeWidth={2.5} /> Nouveau
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-[var(--color-tint-green)] text-[var(--color-success)]">
-                <BadgeCheck className="w-3 h-3" strokeWidth={2} /> Vérifié
-              </span>
-            )}
-          </div>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-[var(--color-muted)]">
-            {profile.city && (
-              <span className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
-                {profile.city}
-              </span>
-            )}
-            {profile.officeName && (
-              <span className="flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
-                {profile.officeName}
-              </span>
-            )}
-            {profile.email && (
-              <span className="flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
-                {profile.email}
-              </span>
-            )}
-            {profile.crpcen && (
-              <span className="flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
-                CRPCEN {profile.crpcen}
-              </span>
-            )}
-          </div>
-          {profile.specialties.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mt-2">
-              {profile.specialties.slice(0, 4).map((s) => (
-                <span key={s} className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
-                  {s}
-                </span>
-              ))}
+    <div className="relative overflow-hidden bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)]">
+      {/* Bandeau dégradé sobre */}
+      <div className="h-28 sm:h-32 bg-gradient-cta relative">
+        <div
+          className="absolute inset-0 opacity-[0.18] pointer-events-none"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px)",
+            backgroundSize: "22px 22px",
+          }}
+        />
+      </div>
+
+      <div className="px-6 sm:px-8 pb-6">
+        {/* Ligne du bandeau : photo en chevauchement + actions */}
+        <div className="flex items-end justify-between gap-3 -mt-14 sm:-mt-16">
+          {profile.photo ? (
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl overflow-hidden shrink-0 ring-4 ring-white shadow-[var(--shadow-card)] bg-white">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={profile.photo} alt={profile.name} className="w-full h-full object-cover" />
+            </div>
+          ) : (
+            <div className={`w-28 h-28 sm:w-32 sm:h-32 rounded-3xl flex items-center justify-center text-white font-bold text-[40px] shrink-0 ring-4 ring-white shadow-[var(--shadow-card)] ${avatarGradient}`}>
+              {profile.initials}
             </div>
           )}
+
+          <div className="flex flex-wrap justify-end gap-2 shrink-0">
+            <a
+              href={`/notaires/${profile.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 bg-[var(--color-accent-soft)] text-[var(--color-accent)] px-4 py-2 rounded-[10px] text-[13px] font-semibold hover:bg-[var(--color-tint-blue)] transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" strokeWidth={2.5} />
+              Profil public
+            </a>
+            <a
+              href={`/notaires/${profile.id}#modifier`}
+              className="inline-flex items-center gap-1.5 border border-[var(--color-border-soft)] text-[var(--color-muted)] px-4 py-2 rounded-[10px] text-[13px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+            >
+              <Settings className="w-3.5 h-3.5" strokeWidth={2.5} />
+              Modifier
+            </a>
+          </div>
         </div>
-      </div>
-      <div className="mt-4 pt-4 border-t border-[var(--color-border-soft)] flex flex-wrap gap-2">
-        <a
-          href={`/notaires/${profile.id}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--color-accent)] hover:underline"
-        >
-          <ExternalLink className="w-3.5 h-3.5" strokeWidth={2} />
-          Voir mon profil public
-        </a>
-        <span className="text-[var(--color-border)]">·</span>
-        <a
-          href="/inscription"
-          className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors"
-        >
-          <Settings className="w-3.5 h-3.5" strokeWidth={2} />
-          Modifier mon profil
-        </a>
+
+        {/* Nom + badge */}
+        <div className="flex flex-wrap items-center gap-2 mt-4">
+          <h2 className="serif text-[24px] sm:text-[28px] font-bold text-[var(--color-text-strong)] tracking-tight leading-tight">
+            {profile.name}
+          </h2>
+          {profile.isNew ? (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-[var(--color-tint-green)] text-[var(--color-success)]">
+              <Sparkles className="w-3 h-3" strokeWidth={2.5} /> Nouveau
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-[var(--color-tint-green)] text-[var(--color-success)]">
+              <BadgeCheck className="w-3 h-3" strokeWidth={2} /> Vérifié
+            </span>
+          )}
+        </div>
+        {profile.officeName && (
+          <p className="text-[14px] text-[var(--color-muted)] flex items-center gap-1.5 mt-1.5">
+            <Building2 className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
+            {profile.officeName}
+          </p>
+        )}
+
+        {/* Méta : ville · email · CRPCEN */}
+        <div className="flex flex-wrap gap-x-5 gap-y-1.5 mt-4 text-[13px] text-[var(--color-muted)]">
+          {profile.city && (
+            <span className="flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
+              {profile.city}
+            </span>
+          )}
+          {profile.email && (
+            <span className="flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
+              {profile.email}
+            </span>
+          )}
+          {profile.crpcen && (
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-[var(--color-accent)]" strokeWidth={2} />
+              CRPCEN {profile.crpcen}
+            </span>
+          )}
+        </div>
+
+        {/* Spécialités */}
+        {profile.specialties.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            {profile.specialties.slice(0, 6).map((s) => (
+              <span key={s} className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                {s}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -272,31 +291,30 @@ function ProfileSummary({ profile }: { profile: ListingNotaire }) {
 /* ── Navigation rapide ──────────────────────────────────────────────────────── */
 function QuickNav({ profileId }: { profileId: string }) {
   const links = [
-    { icon: QrCode, label: "Mon QR code", href: "#qr", color: "text-[var(--color-accent)]", bg: "bg-[var(--color-tint-blue)]" },
-    { icon: CalendarDays, label: "Mes rendez-vous", href: `/notaires/${profileId}`, color: "text-[var(--color-success)]", bg: "bg-[var(--color-tint-green)]" },
+    { icon: CalendarDays, label: "Mes rendez-vous", href: "#agenda", color: "text-[var(--color-success)]", bg: "bg-[var(--color-tint-green)]" },
+    { icon: Receipt, label: "Mes factures", href: "#factures", color: "text-orange-500", bg: "bg-[var(--color-tint-warm)]" },
     { icon: User, label: "Mon profil public", href: `/notaires/${profileId}`, color: "text-purple-600", bg: "bg-[var(--color-tint-purple)]" },
-    { icon: LayoutDashboard, label: "Tableau de bord", href: "/espace-notaire", color: "text-orange-500", bg: "bg-[var(--color-tint-warm)]", soon: true },
+    { icon: QrCode, label: "Mon QR code", href: "#qr", color: "text-[var(--color-accent)]", bg: "bg-[var(--color-tint-blue)]" },
   ];
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-      {links.map(({ icon: Icon, label, href, color, bg, soon }) => (
-        <a
-          key={label}
-          href={href}
-          className="relative flex flex-col items-center gap-2 p-4 bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-[var(--shadow-card)] hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-strong)] transition-all text-center group"
-        >
-          {soon && (
-            <span className="absolute top-2 right-2 text-[9px] font-bold uppercase tracking-wide bg-orange-100 text-orange-600 px-1.5 py-0.5 rounded-full">
-              Bientôt
-            </span>
-          )}
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${bg} group-hover:scale-110 transition-transform`}>
-            <Icon className={`w-5 h-5 ${color}`} strokeWidth={2} />
-          </div>
-          <span className="text-[12px] font-semibold text-[var(--color-text-strong)] leading-tight">{label}</span>
-        </a>
-      ))}
+      {links.map(({ icon: Icon, label, href, color, bg }) => {
+        const external = href.startsWith("/");
+        return (
+          <a
+            key={label}
+            href={href}
+            {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            className="relative flex flex-col items-center gap-2 p-4 bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-[var(--shadow-card)] hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-strong)] transition-all text-center group"
+          >
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${bg} group-hover:scale-110 transition-transform`}>
+              <Icon className={`w-5 h-5 ${color}`} strokeWidth={2} />
+            </div>
+            <span className="text-[12px] font-semibold text-[var(--color-text-strong)] leading-tight">{label}</span>
+          </a>
+        );
+      })}
     </div>
   );
 }
@@ -312,6 +330,25 @@ function EspaceNotaireInner() {
 
   useEffect(() => {
     let cancelled = false;
+
+    // Mode démo (?demo=1) : aperçu de l'espace sans connexion, profil fictif.
+    if (searchParams.get("demo") === "1") {
+      setAuthed(true);
+      setProfile({
+        id: "demo-notaire",
+        name: "Me Démo Aperçu",
+        initials: "DA",
+        color: "default",
+        city: "Paris",
+        officeName: "Étude de démonstration",
+        email: "demo@notaires.io",
+        crpcen: "750123",
+        specialties: ["Immobilier", "Succession", "Famille", "Donation"],
+        next: "Sur demande",
+        isNew: false,
+      } as ListingNotaire);
+      return () => { cancelled = true; };
+    }
 
     // Fallback si Supabase ne répond pas : on ne peut pas confirmer la session
     // → on considère non connecté et on redirige vers /connexion
@@ -422,7 +459,7 @@ function EspaceNotaireInner() {
           )}
         </AnimatePresence>
 
-        {/* En-tête */}
+        {/* En-tête : salutation discrète */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -431,43 +468,48 @@ function EspaceNotaireInner() {
           <div className="text-[12px] font-bold uppercase tracking-[1px] text-[var(--color-accent)] mb-1">
             Mon espace
           </div>
-          <h1 className="serif text-[28px] sm:text-[34px] font-bold text-[var(--color-text-strong)] tracking-tight">
+          <h1 className="serif text-[26px] sm:text-[32px] font-bold text-[var(--color-text-strong)] tracking-tight">
             Bonjour, {profile.name.replace(/^Me\s+/, "Me ")} 👋
           </h1>
+        </motion.div>
+
+        {/* Carte profil — la photo en premier */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.05 }}
+        >
+          <ProfileHero profile={profile} />
         </motion.div>
 
         {/* Navigation rapide */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.05 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
         >
           <QuickNav profileId={profile.id} />
         </motion.div>
 
-        {/* QR code — section principale */}
+      </div>
+
+      {/* Agenda — rendez-vous réels + factures depuis Supabase
+          (masqué en mode démo : pas de données réelles à charger) */}
+      {profile.id !== "demo-notaire" && <NotaireDashboard notaireId={profile.id} />}
+
+      {/* QR code — outil de partage, en complément */}
+      <div className="max-w-[860px] mx-auto px-4 sm:px-6 pt-2">
         <motion.div
           id="qr"
           initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.4 }}
+          className="scroll-mt-24"
         >
           <QRBlock profile={profile} />
         </motion.div>
-
-        {/* Profil résumé */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.15 }}
-        >
-          <ProfileSummary profile={profile} />
-        </motion.div>
-
       </div>
-
-      {/* Agenda — rendez-vous réels depuis Supabase */}
-      <NotaireDashboard notaireId={profile.id} />
 
     </section>
   );

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sparkles, ChevronDown, MapPin, Scale, LayoutDashboard } from "lucide-react";
+import { Menu, X, Sparkles, ChevronDown, MapPin, Scale, LayoutDashboard, Eye } from "lucide-react";
 import { getStoredProfiles } from "@/lib/notaire-profiles";
 import { supabase } from "@/lib/supabase";
 import dynamic from "next/dynamic";
@@ -191,6 +191,15 @@ export default function Header() {
               <LayoutDashboard className="w-3.5 h-3.5" strokeWidth={2.5} />
               Espace notaire
             </a>
+
+            {/* Accès démo aux espaces (aperçu sans connexion) */}
+            <a
+              href="/test"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-dashed border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors font-semibold text-[12px]"
+            >
+              <Eye className="w-3.5 h-3.5" strokeWidth={2.5} />
+              Démo
+            </a>
           </nav>
 
           <div className="flex gap-3 items-center">
@@ -297,6 +306,16 @@ export default function Header() {
                 >
                   <LayoutDashboard className="w-4 h-4" strokeWidth={2.5} />
                   Espace notaire
+                </a>
+
+                {/* Accès démo aux espaces dans le menu mobile */}
+                <a
+                  href="/test"
+                  onClick={() => setOpen(false)}
+                  className="py-3 text-[15px] font-semibold text-[var(--color-muted)] flex items-center gap-2 hover:text-[var(--color-accent)] transition-colors border-b border-[var(--color-border-soft)]"
+                >
+                  <Eye className="w-4 h-4" strokeWidth={2.5} />
+                  Démo des espaces
                 </a>
 
                 {/* Assistant IA dans le menu mobile */}

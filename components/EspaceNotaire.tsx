@@ -175,10 +175,6 @@ function QRBlock({ profile }: { profile: ListingNotaire }) {
 
 /* ── En-tête profil (photo en avant) ────────────────────────────────────────── */
 function ProfileHero({ profile }: { profile: ListingNotaire }) {
-  // En mode démo, le profil fictif n'existe pas en base : les liens vers la
-  // fiche publique (#modifier inclus) mèneraient à « Profil introuvable ».
-  // On désactive donc ces boutons et on indique qu'ils sont actifs après inscription.
-  const isDemo = profile.id === "demo-notaire";
   return (
     <div className="relative overflow-hidden bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)]">
       {/* Bandeau dégradé sobre */}
@@ -208,43 +204,22 @@ function ProfileHero({ profile }: { profile: ListingNotaire }) {
           )}
 
           <div className="flex flex-wrap justify-end gap-2 shrink-0">
-            {isDemo ? (
-              <>
-                <span
-                  className="inline-flex items-center gap-1.5 bg-[var(--color-accent-soft)] text-[var(--color-accent)] px-4 py-2 rounded-[10px] text-[13px] font-semibold opacity-60 cursor-not-allowed"
-                  title="Disponible une fois votre profil créé"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" strokeWidth={2.5} />
-                  Profil public
-                </span>
-                <span
-                  className="inline-flex items-center gap-1.5 border border-[var(--color-border-soft)] text-[var(--color-muted)] px-4 py-2 rounded-[10px] text-[13px] font-semibold opacity-60 cursor-not-allowed"
-                  title="Disponible une fois votre profil créé"
-                >
-                  <Settings className="w-3.5 h-3.5" strokeWidth={2.5} />
-                  Modifier
-                </span>
-              </>
-            ) : (
-              <>
-                <a
-                  href={`/notaires/${profile.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 bg-[var(--color-accent-soft)] text-[var(--color-accent)] px-4 py-2 rounded-[10px] text-[13px] font-semibold hover:bg-[var(--color-tint-blue)] transition-colors"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" strokeWidth={2.5} />
-                  Profil public
-                </a>
-                <a
-                  href={`/notaires/${profile.id}#modifier`}
-                  className="inline-flex items-center gap-1.5 border border-[var(--color-border-soft)] text-[var(--color-muted)] px-4 py-2 rounded-[10px] text-[13px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
-                >
-                  <Settings className="w-3.5 h-3.5" strokeWidth={2.5} />
-                  Modifier
-                </a>
-              </>
-            )}
+            <a
+              href={`/notaires/${profile.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 bg-[var(--color-accent-soft)] text-[var(--color-accent)] px-4 py-2 rounded-[10px] text-[13px] font-semibold hover:bg-[var(--color-tint-blue)] transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" strokeWidth={2.5} />
+              Profil public
+            </a>
+            <a
+              href={`/notaires/${profile.id}#modifier`}
+              className="inline-flex items-center gap-1.5 border border-[var(--color-border-soft)] text-[var(--color-muted)] px-4 py-2 rounded-[10px] text-[13px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+            >
+              <Settings className="w-3.5 h-3.5" strokeWidth={2.5} />
+              Modifier
+            </a>
           </div>
         </div>
 
@@ -351,25 +326,6 @@ function EspaceNotaireInner() {
 
   useEffect(() => {
     let cancelled = false;
-
-    // Mode démo (?demo=1) : aperçu de l'espace sans connexion, profil fictif.
-    if (searchParams.get("demo") === "1") {
-      setAuthed(true);
-      setProfile({
-        id: "demo-notaire",
-        name: "Me Démo Aperçu",
-        initials: "DA",
-        color: "default",
-        city: "Paris",
-        officeName: "Étude de démonstration",
-        email: "demo@notaires.io",
-        crpcen: "750123",
-        specialties: ["Immobilier", "Succession", "Famille", "Donation"],
-        next: "Sur demande",
-        isNew: false,
-      } as ListingNotaire);
-      return () => { cancelled = true; };
-    }
 
     // Fallback si Supabase ne répond pas : on ne peut pas confirmer la session
     // → on considère non connecté et on redirige vers /connexion
@@ -514,9 +470,7 @@ function EspaceNotaireInner() {
 
       </div>
 
-      {/* Agenda (rendez-vous) + factures depuis Supabase.
-          En mode démo, les sections s'affichent à vide (ancres #agenda / #factures
-          fonctionnelles) — pas de données réelles à charger. */}
+      {/* Agenda (rendez-vous) + factures depuis Supabase. */}
       <NotaireDashboard notaireId={profile.id} />
 
       {/* QR code — outil de partage, en complément */}

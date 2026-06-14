@@ -112,30 +112,6 @@ export default function EspaceClient() {
   useEffect(() => {
     let active = true;
 
-    // Mode démo (?demo=1) : aperçu de l'espace sans connexion, données fictives.
-    if (typeof window !== "undefined" && window.location.search.includes("demo=1")) {
-      setEmail("demo@notaires.io (démo)");
-      setDossiers([
-        {
-          id: "demo-1",
-          notaireId: "demo-notaire",
-          notaireNom: "Me Démo",
-          slotKey: "demo",
-          slotLabel: "Lun. 16 juin · 10h00",
-          dossier: "Achat immobilier",
-          modalite: "visio",
-          participants: [
-            { civilite: "M.", prenom: "Jean", nom: "Démo", email: "jean@demo.fr", telephone: "06 00 00 00 00", role: "Acquéreur" },
-          ],
-          documents: [],
-          notaireDocuments: [],
-          createdAt: Date.now(),
-        },
-      ]);
-      setLoading(false);
-      return () => { active = false; };
-    }
-
     (async () => {
       try {
         const { data } = await supabase.auth.getUser();

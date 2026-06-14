@@ -164,7 +164,7 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
                       </div>
                       {times.length === 0 ? (
                         <div className="text-[11px] text-[var(--color-muted)] text-center py-2 opacity-40">—</div>
-                      ) : (
+                      ) : notaire.claimed ? (
                         times.slice(0, 3).map((t) => (
                           <a
                             key={t}
@@ -173,6 +173,17 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
                           >
                             {t}
                           </a>
+                        ))
+                      ) : (
+                        // Profil non revendiqué : créneaux indicatifs, non réservables.
+                        times.slice(0, 3).map((t) => (
+                          <div
+                            key={t}
+                            title="Profil non revendiqué — créneaux indicatifs, non réservables"
+                            className="block text-center text-[12px] font-semibold text-[var(--color-muted)] bg-slate-50 border border-dashed border-[var(--color-border)] rounded-lg py-2 cursor-not-allowed select-none"
+                          >
+                            {t}
+                          </div>
                         ))
                       )}
                     </div>

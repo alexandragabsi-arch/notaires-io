@@ -141,6 +141,7 @@ export default function NotairePitch() {
               {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
               <video
                 src={DEMO_VIDEO_SRC}
+                poster="/video-thumbnail.png"
                 className="absolute inset-0 w-full h-full"
                 controls
                 playsInline

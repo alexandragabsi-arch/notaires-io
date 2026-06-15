@@ -2,10 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail, SITE } from "@/lib/email";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-);
+// Client Supabase créé à la demande (pas au chargement du module) pour éviter
+// que le build n'échoue si une variable d'env manque au moment de la compilation.
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  );
+}
 
 interface Participant {
   civilite: string;
@@ -38,6 +42,7 @@ interface BookingPayload {
 }
 
 export async function POST(req: NextRequest) {
+  const supabase = getSupabase();
   const body = await req.json() as BookingPayload;
   const { notaireId, notaireNom, slotKey, slotLabel, dossier, modalite, participants, documents, userId } = body;
 

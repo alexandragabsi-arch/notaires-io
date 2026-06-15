@@ -10,10 +10,14 @@ export const runtime = "nodejs";
 
 const STRIPE_API = "https://api.stripe.com/v1";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-);
+// Client Supabase créé à la demande (pas au chargement du module) pour éviter
+// que le build n'échoue si une variable d'env manque au moment de la compilation.
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  );
+}
 
 interface StripeInvoice {
   id: string;
@@ -28,6 +32,7 @@ interface StripeInvoice {
 }
 
 export async function GET(req: NextRequest) {
+  const supabase = getSupabase();
   const notaireId = req.nextUrl.searchParams.get("notaireId");
   if (!notaireId) {
     return NextResponse.json({ error: "notaireId manquant" }, { status: 400 });

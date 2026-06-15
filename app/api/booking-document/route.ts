@@ -2,10 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail, SITE } from "@/lib/email";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-);
+// Client Supabase créé à la demande (pas au chargement du module) pour éviter
+// que le build n'échoue si une variable d'env manque au moment de la compilation.
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  );
+}
 
 interface Payload {
   bookingId: string;
@@ -16,6 +20,7 @@ interface Payload {
 // dans son espace. On ne joint pas le fichier : le client se connecte et le
 // télécharge via une URL signée (bucket privé).
 export async function POST(req: NextRequest) {
+  const supabase = getSupabase();
   const { bookingId, fileName } = (await req.json()) as Payload;
   if (!bookingId) {
     return NextResponse.json({ error: "Données manquantes" }, { status: 400 });

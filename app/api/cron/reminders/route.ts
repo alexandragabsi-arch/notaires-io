@@ -9,10 +9,14 @@ import { sendEmail, SITE } from "@/lib/email";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-);
+// Client Supabase créé à la demande (pas au chargement du module) pour éviter
+// que le build n'échoue si une variable d'env manque au moment de la compilation.
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  );
+}
 
 const TZ = "Europe/Paris";
 
@@ -124,6 +128,7 @@ function reminderHtml(kind: Kind, b: BookingRow): string {
 }
 
 export async function GET(req: NextRequest) {
+  const supabase = getSupabase();
   // Authentification du cron : Vercel envoie « Authorization: Bearer $CRON_SECRET ».
   const secret = process.env.CRON_SECRET;
   if (secret) {

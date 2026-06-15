@@ -11,6 +11,7 @@ import {
   FolderOpen,
   HandshakeIcon,
   X,
+  ChevronDown,
 } from "lucide-react";
 
 /* ─── Proposition d'honoraires ─────────────────────────────────────────────── */
@@ -97,6 +98,7 @@ function Stepper<T extends string>({
 
 /* ─── Composant principal ───────────────────────────────────────────────────── */
 export default function NotaireBilling() {
+  const [open, setOpen] = useState(false);
   const [pClient, setPClient] = useState("");
   const [pDossier, setPDossier] = useState(DOSSIERS[0]);
   const [pMontant, setPMontant] = useState("");
@@ -150,8 +152,12 @@ export default function NotaireBilling() {
             transition={{ duration: 0.4 }}
             className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-7"
           >
-            {/* En-tête */}
-            <div className="flex items-center gap-3">
+            {/* En-tête cliquable (dépliant) */}
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              className="w-full flex items-center gap-3 text-left group"
+            >
               <div className="w-11 h-11 shrink-0 rounded-xl bg-[var(--color-tint-green)] flex items-center justify-center text-[var(--color-success)]">
                 <HandshakeIcon className="w-[22px] h-[22px]" strokeWidth={2} />
               </div>
@@ -163,10 +169,22 @@ export default function NotaireBilling() {
                   Prise en charge du dossier suite au 1er rendez-vous
                 </p>
               </div>
-            </div>
+              <div className="flex items-center gap-1.5 shrink-0 text-[13px] font-semibold text-[var(--color-accent)] group-hover:text-[var(--color-primary)] transition-colors">
+                <span>{open ? "Réduire" : "Voir l'exemple"}</span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+                  strokeWidth={2.5}
+                />
+              </div>
+            </button>
 
-            {/* Contenu */}
-            <div>
+            {/* Contenu dépliable */}
+            <motion.div
+              initial={false}
+              animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
+              transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+              style={{ overflow: "hidden" }}
+            >
               <div className="pt-5">
                 <Stepper
                   steps={PROP_STEPS}
@@ -371,7 +389,7 @@ export default function NotaireBilling() {
               </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>

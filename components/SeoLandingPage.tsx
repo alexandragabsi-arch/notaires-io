@@ -463,7 +463,7 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
           <p className="text-[var(--color-muted)] mb-6 text-sm">
             {hasFilter
               ? <><strong className="text-[var(--color-text-strong)]">{filtered.length}</strong> notaire{filtered.length > 1 ? "s" : ""} trouvé{filtered.length > 1 ? "s" : ""}{selectedArr ? ` · ${arrLabel(selectedArr)}` : ""}{selectedSpecialty ? ` · ${selectedSpecialty}` : ""}</>
-              : <><strong className="text-[var(--color-text-strong)]">{notaires.length}</strong> notaire{notaires.length > 1 ? "s" : ""} partenaire{notaires.length > 1 ? "s" : ""} · 1er rendez-vous offert</>
+              : <><strong className="text-[var(--color-text-strong)]">{notaires.length}</strong> notaire{notaires.length > 1 ? "s" : ""} partenaire{notaires.length > 1 ? "s" : ""}</>
             }
           </p>
 

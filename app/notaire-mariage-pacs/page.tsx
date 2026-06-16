@@ -8,7 +8,7 @@ import { getNotairesBySpecialty, getNotairesMixed } from "@/lib/notaires-source"
 export const metadata: Metadata = {
   title: "Notaire mariage et PACS · Notaires.io",
   description:
-    "Trouvez un notaire pour votre contrat de mariage, votre PACS ou votre convention de PACS. Conseils sur le régime matrimonial, rédaction de l'acte, enregistrement. 1er rendez-vous offert.",
+    "Trouvez un notaire pour votre contrat de mariage, votre PACS ou votre convention de PACS. Conseils sur le régime matrimonial, rédaction de l'acte, enregistrement.",
   keywords: [
     "notaire mariage",
     "notaire PACS",
@@ -86,7 +86,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Notaire pour votre mariage ou PACS"
-          intro="Mariage ou PACS : une étape qui mérite une réflexion sérieuse sur votre avenir commun. Nos notaires spécialisés en droit de la famille vous conseillent sur le régime matrimonial ou la convention de PACS la plus adaptée à votre situation, et rédigent l'acte en toute sécurité. 1er rendez-vous offert."
+          intro="Mariage ou PACS : une étape qui mérite une réflexion sérieuse sur votre avenir commun. Nos notaires spécialisés en droit de la famille vous conseillent sur le régime matrimonial ou la convention de PACS la plus adaptée à votre situation, et rédigent l'acte en toute sécurité."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

@@ -8,7 +8,7 @@ import { getNotairesByCity } from "@/lib/notaires-source";
 export const metadata: Metadata = {
   title: "Notaire à Metz · Notaires.io",
   description:
-    "Trouvez un notaire à Metz disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
+    "Trouvez un notaire à Metz disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
     "notaire Metz",
     "notaire Metz immobilier",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Notaire à Metz · Notaires.io",
     description:
-      "Trouvez un notaire à Metz disponible rapidement. 1er rendez-vous offert, en visio ou au cabinet.",
+      "Trouvez un notaire à Metz disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-metz",
     type: "website",
   },
@@ -87,7 +87,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Metz"
-          intro="Vous cherchez un notaire à Metz pour votre mariage, votre PACS, un achat immobilier en Moselle ou la création de votre société ? Nos notaires partenaires messins maîtrisent le droit local et sont disponibles sous 48 h, en visio ou au cabinet. Le 1er rendez-vous est toujours offert."
+          intro="Vous cherchez un notaire à Metz pour votre mariage, votre PACS, un achat immobilier en Moselle ou la création de votre société ? Nos notaires partenaires messins maîtrisent le droit local et sont disponibles sous 48 h, en visio ou au cabinet."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

@@ -8,7 +8,7 @@ import { getNotairesByCity } from "@/lib/notaires-source";
 export const metadata: Metadata = {
   title: "Notaire à Strasbourg · Notaires.io",
   description:
-    "Trouvez un notaire à Strasbourg disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
+    "Trouvez un notaire à Strasbourg disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
     "notaire Strasbourg",
     "notaire Strasbourg immobilier",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Notaire à Strasbourg · Notaires.io",
     description:
-      "Trouvez un notaire à Strasbourg disponible rapidement. 1er rendez-vous offert, en visio ou au cabinet.",
+      "Trouvez un notaire à Strasbourg disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-strasbourg",
     type: "website",
   },
@@ -87,7 +87,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Strasbourg"
-          intro="Vous cherchez un notaire à Strasbourg pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Nos notaires partenaires strasbourgeois maîtrisent le droit local alsacien et sont disponibles sous 48 h, en visio ou au cabinet. Le 1er rendez-vous est toujours offert."
+          intro="Vous cherchez un notaire à Strasbourg pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Nos notaires partenaires strasbourgeois maîtrisent le droit local alsacien et sont disponibles sous 48 h, en visio ou au cabinet."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

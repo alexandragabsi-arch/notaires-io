@@ -14,7 +14,7 @@ const PARIS_ARRONDISSEMENTS = Array.from({ length: 20 }, (_, i) => ({
 export const metadata: Metadata = {
   title: "Notaire à Paris · Notaires.io",
   description:
-    "Trouvez un notaire à Paris disponible rapidement. Immobilier, succession, mariage, PACS, société — prise de rendez-vous en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
+    "Trouvez un notaire à Paris disponible rapidement. Immobilier, succession, mariage, PACS, société — prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
     "notaire Paris",
     "notaire Paris immobilier",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Notaire à Paris · Notaires.io",
     description:
-      "Trouvez un notaire à Paris disponible rapidement. 1er rendez-vous offert, en visio ou au cabinet.",
+      "Trouvez un notaire à Paris disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-paris",
     type: "website",
   },
@@ -72,7 +72,7 @@ const FAQ = [
   },
   {
     q: "Comment prendre rendez-vous avec un notaire à Paris via Notaires.io ?",
-    a: "C'est simple : choisissez votre notaire dans notre annuaire, sélectionnez un créneau disponible et confirmez votre rendez-vous en ligne. Le 1er rendez-vous est offert, en visio ou au cabinet selon votre préférence. Vous recevrez une confirmation par email et pourrez préparer votre dossier grâce à notre checklist personnalisée.",
+    a: "C'est simple : choisissez votre notaire dans notre annuaire, sélectionnez un créneau disponible et confirmez votre rendez-vous en ligne. En visio ou au cabinet selon votre préférence. Vous recevrez une confirmation par email et pourrez préparer votre dossier grâce à notre checklist personnalisée.",
   },
 ];
 
@@ -93,7 +93,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Paris"
-          intro="Besoin d'un notaire à Paris pour votre achat immobilier, votre succession ou votre mariage ? Nos notaires partenaires sont disponibles rapidement, en visio ou au cabinet. Le 1er rendez-vous est offert — comparez les profils et réservez en quelques clics."
+          intro="Besoin d'un notaire à Paris pour votre achat immobilier, votre succession ou votre mariage ? Nos notaires partenaires sont disponibles rapidement, en visio ou au cabinet. Comparez les profils et réservez en quelques clics."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

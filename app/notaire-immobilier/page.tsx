@@ -8,7 +8,7 @@ import { getNotairesBySpecialty } from "@/lib/notaires-source";
 export const metadata: Metadata = {
   title: "Notaire immobilier · Notaires.io",
   description:
-    "Trouvez un notaire spécialisé en immobilier pour votre achat, vente, investissement locatif ou SCI. Prise de rendez-vous en ligne, 1er rendez-vous offert. Tarifs réglementés, acte authentique garanti.",
+    "Trouvez un notaire spécialisé en immobilier pour votre achat, vente, investissement locatif ou SCI. Prise de rendez-vous en ligne. Tarifs réglementés, acte authentique garanti.",
   keywords: [
     "notaire immobilier",
     "notaire achat immobilier",
@@ -86,7 +86,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Notaire spécialisé en immobilier"
-          intro="Achat, vente, SCI, investissement locatif : nos notaires spécialisés en droit immobilier vous accompagnent à chaque étape de votre transaction. Ils vérifient, sécurisent et authentifient votre acte pour que vous puissiez signer en toute sérénité. 1er rendez-vous offert."
+          intro="Achat, vente, SCI, investissement locatif : nos notaires spécialisés en droit immobilier vous accompagnent à chaque étape de votre transaction. Ils vérifient, sécurisent et authentifient votre acte pour que vous puissiez signer en toute sérénité."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

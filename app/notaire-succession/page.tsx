@@ -8,7 +8,7 @@ import { getNotairesBySpecialty } from "@/lib/notaires-source";
 export const metadata: Metadata = {
   title: "Notaire succession · Notaires.io",
   description:
-    "Trouvez un notaire spécialisé en succession pour régler un héritage, organiser un partage ou rédiger un testament. Prise de rendez-vous en ligne, 1er rendez-vous offert. Accompagnement humain garanti.",
+    "Trouvez un notaire spécialisé en succession pour régler un héritage, organiser un partage ou rédiger un testament. Prise de rendez-vous en ligne. Accompagnement humain garanti.",
   keywords: [
     "notaire succession",
     "notaire héritage",
@@ -88,7 +88,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Notaire spécialisé en succession"
-          intro="Le règlement d'une succession est une étape douloureuse qui exige rigueur juridique et accompagnement humain. Nos notaires spécialisés prennent en charge l'intégralité du dossier — acte de notoriété, déclaration fiscale, partage — pour que vous puissiez traverser cette période sereinement. 1er rendez-vous offert."
+          intro="Le règlement d'une succession est une étape douloureuse qui exige rigueur juridique et accompagnement humain. Nos notaires spécialisés prennent en charge l'intégralité du dossier — acte de notoriété, déclaration fiscale, partage — pour que vous puissiez traverser cette période sereinement."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

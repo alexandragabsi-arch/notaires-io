@@ -14,7 +14,7 @@ const MARSEILLE_ARRONDISSEMENTS = Array.from({ length: 16 }, (_, i) => ({
 export const metadata: Metadata = {
   title: "Notaire à Marseille · Notaires.io",
   description:
-    "Trouvez un notaire à Marseille pour votre achat immobilier, donation ou succession. Prise de rendez-vous en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
+    "Trouvez un notaire à Marseille pour votre achat immobilier, donation ou succession. Prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
     "notaire Marseille",
     "notaire Marseille immobilier",
@@ -93,7 +93,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Marseille"
-          intro="Achat immobilier sur le littoral méditerranéen, donation à vos proches, succession : nos notaires partenaires à Marseille maîtrisent les spécificités juridiques de la région PACA. Disponibles rapidement, en visio ou au cabinet. 1er rendez-vous offert."
+          intro="Achat immobilier sur le littoral méditerranéen, donation à vos proches, succession : nos notaires partenaires à Marseille maîtrisent les spécificités juridiques de la région PACA. Disponibles rapidement, en visio ou au cabinet."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

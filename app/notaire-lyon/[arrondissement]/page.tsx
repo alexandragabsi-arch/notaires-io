@@ -38,11 +38,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const label = numToLabel(num);
   return {
     title: `Notaire Lyon ${label} arrondissement · Notaires.io`,
-    description: `Trouvez un notaire dans le ${label} arrondissement de Lyon. Immobilier, succession, mariage, PACS — prise de rendez-vous en ligne, 1er rendez-vous offert.`,
+    description: `Trouvez un notaire dans le ${label} arrondissement de Lyon. Immobilier, succession, mariage, PACS — prise de rendez-vous en ligne.`,
     alternates: { canonical: `https://notaires.io/notaire-lyon/${arrondissement}` },
     openGraph: {
       title: `Notaire Lyon ${label} · Notaires.io`,
-      description: `Notaires disponibles dans le ${label} arrondissement de Lyon. 1er rendez-vous offert.`,
+      description: `Notaires disponibles dans le ${label} arrondissement de Lyon.`,
       url: `https://notaires.io/notaire-lyon/${arrondissement}`,
       type: "website",
     },
@@ -73,7 +73,7 @@ export default async function Page({ params }: Props) {
   const faq = [
     {
       q: `Combien de notaires exercent dans le ${label} arrondissement de Lyon ?`,
-      a: `Il y a ${notaires.length > 0 ? notaires.length : "plusieurs"} notaires référencés dans le ${label} arrondissement de Lyon sur Notaires.io. Vous pouvez comparer leurs disponibilités et prendre rendez-vous directement en ligne, le 1er rendez-vous étant offert.`,
+      a: `Il y a ${notaires.length > 0 ? notaires.length : "plusieurs"} notaires référencés dans le ${label} arrondissement de Lyon sur Notaires.io. Vous pouvez comparer leurs disponibilités et prendre rendez-vous directement en ligne.`,
     },
     {
       q: `Puis-je consulter un notaire du ${label} arrondissement de Lyon en visio ?`,
@@ -105,7 +105,7 @@ export default async function Page({ params }: Props) {
       <main>
         <SeoLandingPage
           h1={`Notaire à Lyon — ${label} arrondissement`}
-          intro={`Vous recherchez un notaire dans le ${label} arrondissement de Lyon ? Consultez les profils disponibles, comparez les créneaux et prenez rendez-vous en ligne. Le 1er rendez-vous est offert — en visio ou au cabinet.`}
+          intro={`Vous recherchez un notaire dans le ${label} arrondissement de Lyon ? Consultez les profils disponibles, comparez les créneaux et prenez rendez-vous en ligne. En visio ou au cabinet.`}
           notaires={notaires}
           faq={faq}
           relatedLinks={relatedLinks}

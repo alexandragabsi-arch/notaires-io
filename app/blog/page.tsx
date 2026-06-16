@@ -115,7 +115,7 @@ export default async function BlogPage() {
               Une question pour un notaire ?
             </h2>
             <p className="text-[var(--color-muted)] mb-6">
-              Le premier rendez-vous est offert. En visio ou au cabinet, en moins de 48 h.
+              En visio ou au cabinet, en moins de 48 h.
             </p>
             <a
               href="/#hero"

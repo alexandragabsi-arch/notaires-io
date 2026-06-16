@@ -8,7 +8,7 @@ import { getNotairesByCity } from "@/lib/notaires-source";
 export const metadata: Metadata = {
   title: "Notaire à Nantes · Notaires.io",
   description:
-    "Trouvez un notaire à Nantes pour votre succession, donation ou mariage. Prise de rendez-vous en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
+    "Trouvez un notaire à Nantes pour votre succession, donation ou mariage. Prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
     "notaire Nantes",
     "notaire Nantes succession",
@@ -87,7 +87,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Nantes"
-          intro="Vous souhaitez organiser votre succession, faire une donation à vos enfants ou préparer votre mariage à Nantes ? Nos notaires partenaires en Loire-Atlantique vous accompagnent avec pédagogie à chaque étape. 1er rendez-vous offert, en visio ou au cabinet."
+          intro="Vous souhaitez organiser votre succession, faire une donation à vos enfants ou préparer votre mariage à Nantes ? Nos notaires partenaires en Loire-Atlantique vous accompagnent avec pédagogie à chaque étape, en visio ou au cabinet."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

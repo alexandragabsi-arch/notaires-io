@@ -8,7 +8,7 @@ import { getNotairesByCity } from "@/lib/notaires-source";
 export const metadata: Metadata = {
   title: "Notaire à Lille · Notaires.io",
   description:
-    "Trouvez un notaire à Lille pour votre achat immobilier, création de société ou succession. Prise de rendez-vous en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
+    "Trouvez un notaire à Lille pour votre achat immobilier, création de société ou succession. Prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
     "notaire Lille",
     "notaire Lille immobilier",
@@ -88,7 +88,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Lille"
-          intro="Achat immobilier dans la métropole lilloise, création de votre société dans les Hauts-de-France ou règlement d'une succession : nos notaires partenaires à Lille sont disponibles rapidement. 1er rendez-vous offert, en visio ou au cabinet. Certains reçoivent également en anglais."
+          intro="Achat immobilier dans la métropole lilloise, création de votre société dans les Hauts-de-France ou règlement d'une succession : nos notaires partenaires à Lille sont disponibles rapidement, en visio ou au cabinet. Certains reçoivent également en anglais."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

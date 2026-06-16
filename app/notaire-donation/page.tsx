@@ -8,7 +8,7 @@ import { getNotairesBySpecialty, getNotairesMixed } from "@/lib/notaires-source"
 export const metadata: Metadata = {
   title: "Notaire donation · Notaires.io",
   description:
-    "Trouvez un notaire spécialisé en donation pour transmettre votre patrimoine à vos enfants ou proches. Donation simple, donation-partage, usufruit, abattements fiscaux. 1er rendez-vous offert.",
+    "Trouvez un notaire spécialisé en donation pour transmettre votre patrimoine à vos enfants ou proches. Donation simple, donation-partage, usufruit, abattements fiscaux.",
   keywords: [
     "notaire donation",
     "donation enfants notaire",
@@ -87,7 +87,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Notaire spécialisé en donation"
-          intro="Transmettre votre patrimoine de votre vivant est l'un des actes les plus importants de votre vie. Nos notaires spécialisés vous accompagnent pour choisir la bonne stratégie — donation simple, donation-partage, usufruit — et optimiser la fiscalité dans le cadre légal. 1er rendez-vous offert."
+          intro="Transmettre votre patrimoine de votre vivant est l'un des actes les plus importants de votre vie. Nos notaires spécialisés vous accompagnent pour choisir la bonne stratégie — donation simple, donation-partage, usufruit — et optimiser la fiscalité dans le cadre légal."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

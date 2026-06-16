@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     template: "%s · Notaires.io",
   },
   description:
-    "Trouvez le notaire qu'il vous faut en 3 questions. Immobilier, succession, mariage, société — 1er rendez-vous offert, en visio ou au cabinet. Tarifs réglementés, service certifié.",
+    "Trouvez le notaire qu'il vous faut en 3 questions. Immobilier, succession, mariage, société, en visio ou au cabinet. Tarifs réglementés, service certifié.",
   keywords: [
     "notaire en ligne",
     "prendre rendez-vous notaire",

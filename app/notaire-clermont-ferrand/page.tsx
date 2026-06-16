@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Notaire à Clermont-Ferrand · Notaires.io",
     description:
-      "Trouvez un notaire à Clermont-Ferrand disponible rapidement. 1er rendez-vous offert, en visio ou au cabinet.",
+      "Trouvez un notaire à Clermont-Ferrand disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-clermont-ferrand",
     type: "website",
   },
@@ -87,7 +87,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Clermont-Ferrand"
-          intro="Vous cherchez un notaire à Clermont-Ferrand pour votre mariage, votre PACS, un achat immobilier en Auvergne ou la création de votre société ? Nos notaires partenaires clermontois sont disponibles sous 48 h, en visio ou au cabinet dans votre quartier. Le 1er rendez-vous est toujours offert."
+          intro="Vous cherchez un notaire à Clermont-Ferrand pour votre mariage, votre PACS, un achat immobilier en Auvergne ou la création de votre société ? Nos notaires partenaires clermontois sont disponibles sous 48 h, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

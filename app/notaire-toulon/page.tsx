@@ -8,7 +8,7 @@ import { getNotairesByCity } from "@/lib/notaires-source";
 export const metadata: Metadata = {
   title: "Notaire à Toulon · Notaires.io",
   description:
-    "Trouvez un notaire à Toulon disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
+    "Trouvez un notaire à Toulon disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
     "notaire Toulon",
     "notaire Toulon immobilier",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Notaire à Toulon · Notaires.io",
     description:
-      "Trouvez un notaire à Toulon disponible rapidement. 1er rendez-vous offert, en visio ou au cabinet.",
+      "Trouvez un notaire à Toulon disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-toulon",
     type: "website",
   },
@@ -87,7 +87,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Toulon"
-          intro="Vous cherchez un notaire à Toulon pour votre mariage, votre PACS, un achat immobilier dans le Var ou la création de votre société ? Nos notaires partenaires toulonnais sont disponibles sous 48 h, en visio ou au cabinet dans votre quartier. Le 1er rendez-vous est toujours offert."
+          intro="Vous cherchez un notaire à Toulon pour votre mariage, votre PACS, un achat immobilier dans le Var ou la création de votre société ? Nos notaires partenaires toulonnais sont disponibles sous 48 h, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

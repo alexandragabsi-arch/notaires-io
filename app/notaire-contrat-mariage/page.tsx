@@ -50,7 +50,7 @@ const jsonLd = {
         "@type": "Offer",
         price: "0",
         priceCurrency: "EUR",
-        description: "Premier rendez-vous de conseil offert — 30 minutes",
+        description: "Premier rendez-vous de conseil — 30 minutes",
       },
     },
     {
@@ -96,7 +96,7 @@ const FAQ = [
   },
   {
     q: "Faut-il se déplacer chez le notaire pour signer un contrat de mariage ?",
-    a: "La signature du contrat de mariage nécessite la présence physique des deux futurs époux chez le notaire, car il s'agit d'un acte authentique. Cependant, le premier rendez-vous de conseil — où vous discutez du régime le mieux adapté à votre situation — peut se tenir en visioconférence. Nos notaires partenaires proposent un premier rendez-vous offert en visio pour vous orienter avant la signature en cabinet.",
+    a: "La signature du contrat de mariage nécessite la présence physique des deux futurs époux chez le notaire, car il s'agit d'un acte authentique. Cependant, le premier rendez-vous de conseil — où vous discutez du régime le mieux adapté à votre situation — peut se tenir en visioconférence. Nos notaires partenaires proposent un premier rendez-vous en visio pour vous orienter avant la signature en cabinet.",
   },
 ];
 
@@ -118,7 +118,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Contrat de mariage — Conseil et rédaction par un notaire"
-          intro="Séparation de biens, communauté universelle ou régime de participation ? Choisir son régime matrimonial est une décision importante. Nos notaires partenaires vous accompagnent lors d'un 1er rendez-vous offert pour analyser votre situation et rédiger le contrat adapté — en visio ou au cabinet, avant votre mariage."
+          intro="Séparation de biens, communauté universelle ou régime de participation ? Choisir son régime matrimonial est une décision importante. Nos notaires partenaires vous accompagnent lors d'un 1er rendez-vous pour analyser votre situation et rédiger le contrat adapté — en visio ou au cabinet, avant votre mariage."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

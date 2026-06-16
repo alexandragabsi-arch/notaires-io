@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Notaire à Aix-en-Provence · Notaires.io",
     description:
-      "Trouvez un notaire à Aix-en-Provence disponible rapidement. 1er rendez-vous offert, en visio ou au cabinet.",
+      "Trouvez un notaire à Aix-en-Provence disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-aix-en-provence",
     type: "website",
   },
@@ -87,7 +87,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Aix-en-Provence"
-          intro="Vous cherchez un notaire à Aix-en-Provence pour votre mariage, votre PACS, un achat immobilier en Provence ou la création de votre société ? Nos notaires partenaires aixois sont disponibles sous 48 h, en visio ou au cabinet dans votre quartier. Le 1er rendez-vous est toujours offert."
+          intro="Vous cherchez un notaire à Aix-en-Provence pour votre mariage, votre PACS, un achat immobilier en Provence ou la création de votre société ? Nos notaires partenaires aixois sont disponibles sous 48 h, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

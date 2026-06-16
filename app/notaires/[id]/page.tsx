@@ -36,7 +36,7 @@ export async function generateMetadata({
 
   return {
     title: `${n.name} — ${n.isOffice ? "Étude notariale" : "Notaire"} à ${location}`,
-    description: `Prenez rendez-vous avec ${n.name}, notaire à ${location}. Spécialités : ${specs}. 1er rendez-vous offert (30 min) en visio ou au cabinet. Tarifs réglementés.`,
+    description: `Prenez rendez-vous avec ${n.name}, notaire à ${location}. Spécialités : ${specs}. Tarifs réglementés.`,
     keywords: [
       `notaire ${n.city.toLowerCase()}`,
       `${n.name.toLowerCase()}`,
@@ -82,7 +82,7 @@ function buildJsonLd(id: string) {
           "@type": "Offer",
           price: "0",
           priceCurrency: "EUR",
-          description: "Premier rendez-vous de 30 minutes offert",
+          description: "Premier rendez-vous de 30 minutes",
           availability: "https://schema.org/InStock",
         },
         isPartOf: { "@id": "https://notaires.io/#organization" },

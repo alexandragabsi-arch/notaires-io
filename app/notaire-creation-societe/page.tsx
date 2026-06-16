@@ -8,7 +8,7 @@ import { getNotairesBySpecialty } from "@/lib/notaires-source";
 export const metadata: Metadata = {
   title: "Notaire création de société · Notaires.io",
   description:
-    "Trouvez un notaire spécialisé en droit des sociétés pour créer votre SCI, SAS, SARL ou holding. Statuts sécurisés, apports immobiliers, pactes d'associés. 1er rendez-vous offert.",
+    "Trouvez un notaire spécialisé en droit des sociétés pour créer votre SCI, SAS, SARL ou holding. Statuts sécurisés, apports immobiliers, pactes d'associés.",
   keywords: [
     "notaire création société",
     "notaire SCI",
@@ -87,7 +87,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Notaire pour la création de votre société"
-          intro="SCI pour votre patrimoine immobilier, SAS pour votre start-up, holding pour votre groupe familial : nos notaires spécialisés en droit des sociétés rédigent vos statuts, sécurisent vos apports et anticipent les situations de blocage. 1er rendez-vous offert."
+          intro="SCI pour votre patrimoine immobilier, SAS pour votre start-up, holding pour votre groupe familial : nos notaires spécialisés en droit des sociétés rédigent vos statuts, sécurisent vos apports et anticipent les situations de blocage."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

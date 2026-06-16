@@ -8,7 +8,7 @@ import { getNotairesByCity } from "@/lib/notaires-source";
 export const metadata: Metadata = {
   title: "Notaire à Bordeaux · Notaires.io",
   description:
-    "Trouvez un notaire à Bordeaux pour votre succession, achat immobilier, mariage ou divorce. Prise de rendez-vous en ligne, 1er rendez-vous offert. Notaires certifiés, tarifs réglementés.",
+    "Trouvez un notaire à Bordeaux pour votre succession, achat immobilier, mariage ou divorce. Prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
     "notaire Bordeaux",
     "notaire Bordeaux succession",
@@ -87,7 +87,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Bordeaux"
-          intro="Succession, achat immobilier dans le bordelais, mariage ou divorce : nos notaires partenaires à Bordeaux vous accompagnent à chaque étape de votre vie. Disponibles rapidement, en visio ou au cabinet. Le 1er rendez-vous est offert — sans engagement."
+          intro="Succession, achat immobilier dans le bordelais, mariage ou divorce : nos notaires partenaires à Bordeaux vous accompagnent à chaque étape de votre vie. Disponibles rapidement, en visio ou au cabinet."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

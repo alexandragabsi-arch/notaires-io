@@ -8,7 +8,7 @@ import { getNotairesBySpecialty, getNotairesMixed } from "@/lib/notaires-source"
 export const metadata: Metadata = {
   title: "Notaire divorce · Notaires.io",
   description:
-    "Trouvez un notaire pour votre divorce par consentement mutuel, la liquidation de votre régime matrimonial ou la vente de votre bien commun. Accompagnement bienveillant, 1er rendez-vous offert.",
+    "Trouvez un notaire pour votre divorce par consentement mutuel, la liquidation de votre régime matrimonial ou la vente de votre bien commun. Accompagnement bienveillant.",
   keywords: [
     "notaire divorce",
     "divorce consentement mutuel notaire",
@@ -86,7 +86,7 @@ export default function Page() {
       <main>
         <SeoLandingPage
           h1="Notaire pour votre divorce"
-          intro="Divorce par consentement mutuel, liquidation de votre régime matrimonial, rachat de soulte ou vente du bien commun : nos notaires spécialisés en droit de la famille vous accompagnent avec bienveillance dans cette étape difficile. 1er rendez-vous offert, sans engagement."
+          intro="Divorce par consentement mutuel, liquidation de votre régime matrimonial, rachat de soulte ou vente du bien commun : nos notaires spécialisés en droit de la famille vous accompagnent avec bienveillance dans cette étape difficile, sans engagement."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

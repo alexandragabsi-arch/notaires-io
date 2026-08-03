@@ -36,6 +36,28 @@ const ALL_SPECIALTIES = [
 ];
 const ALL_LANGUAGES = ["Anglais", "Espagnol", "Arabe", "Portugais", "Italien", "Allemand", "Chinois", "Turc"];
 
+// Motifs de rendez-vous concrets, dérivés des domaines d'intervention du notaire.
+const MOTIFS_BY_SPECIALTY: Record<string, string[]> = {
+  "Droit immobilier": ["Compromis de vente", "Acte de vente", "Achat immobilier", "VEFA / neuf"],
+  "Successions": ["Ouverture de succession", "Déclaration de succession", "Partage successoral"],
+  "Droit de la famille": ["Contrat de mariage", "PACS", "Donation entre époux", "Divorce"],
+  "Mariage / PACS": ["Contrat de mariage", "PACS", "Changement de régime"],
+  "Donations": ["Donation", "Donation-partage"],
+  "Droit des sociétés": ["Création de société", "Cession de parts", "Modification de statuts"],
+  "Droit rural": ["Bail rural", "Vente de terres agricoles"],
+  "Droit commercial": ["Cession de fonds de commerce", "Bail commercial"],
+};
+
+function getMotifs(specialties: string[]): string[] {
+  const out: string[] = [];
+  for (const s of specialties) {
+    for (const m of MOTIFS_BY_SPECIALTY[s] ?? []) {
+      if (!out.includes(m)) out.push(m);
+    }
+  }
+  return out.slice(0, 10);
+}
+
 // Créneaux proposés dans l'éditeur de disponibilités
 const SLOT_PRESETS = ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"];
 
@@ -778,17 +800,28 @@ export default function NotaireProfileClient({
         className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6 sm:p-8 mb-6"
       >
         <div className="flex flex-col items-center text-center gap-6">
-          {/* Avatar */}
-          {notaire.photo ? (
-            <div className="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-[var(--color-tint-blue)]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={notaire.photo} alt={`Photo de ${notaire.name}`} loading="lazy" className="w-full h-full object-cover" />
-            </div>
-          ) : (
-            <div className={`w-24 h-24 rounded-2xl text-white flex items-center justify-center font-bold text-[28px] shrink-0 ${avatarGradient}`}>
-              {notaire.initials}
-            </div>
-          )}
+          {/* Avatar rond + badge de statut en incrustation */}
+          <div className="relative shrink-0">
+            {notaire.photo ? (
+              <div className="w-28 h-28 rounded-full overflow-hidden bg-[var(--color-tint-blue)] ring-4 ring-white shadow-[var(--shadow-card)]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={notaire.photo} alt={`Photo de ${notaire.name}`} loading="lazy" className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <div className={`w-28 h-28 rounded-full text-white flex items-center justify-center font-bold text-[30px] ring-4 ring-white shadow-[var(--shadow-card)] ${avatarGradient}`}>
+                {notaire.initials}
+              </div>
+            )}
+            {isClaimed ? (
+              <span className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[var(--color-accent)] border-[3px] border-white flex items-center justify-center text-white" title="Profil vérifié">
+                <BadgeCheck className="w-4 h-4" strokeWidth={2.5} />
+              </span>
+            ) : (
+              <span className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-slate-300 border-[3px] border-white flex items-center justify-center text-white" title="Profil non revendiqué">
+                <Lock className="w-3.5 h-3.5" strokeWidth={2.5} />
+              </span>
+            )}
+          </div>
 
           {/* Identité + coordonnées */}
           <div className="flex-1 min-w-0">
@@ -883,6 +916,27 @@ export default function NotaireProfileClient({
                 </div>
               </BlurredSection>
             )}
+
+            {/* CTA principal */}
+            <div className="mt-5">
+              {isClaimed ? (
+                <a
+                  href="#agenda"
+                  className="inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-8 py-3.5 rounded-full text-[15px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform"
+                >
+                  <CalendarDays className="w-4 h-4" strokeWidth={2.5} />
+                  Prendre rendez-vous
+                </a>
+              ) : (
+                <a
+                  href={`/annuaire?ville=${encodeURIComponent(notaire.city)}`}
+                  className="inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-7 py-3.5 rounded-full text-[15px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform"
+                >
+                  Voir les notaires disponibles à {notaire.city}
+                  <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
+                </a>
+              )}
+            </div>
           </div>
 
           {/* Accepte les RDV */}
@@ -957,6 +1011,28 @@ export default function NotaireProfileClient({
               ))}
             </div>
           </div>
+
+          {/* Motifs de rendez-vous */}
+          {getMotifs(notaire.specialties).length > 0 && (
+            <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <CalendarDays className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
+                <span className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
+                  Motifs de rendez-vous
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {getMotifs(notaire.specialties).map((m) => (
+                  <span
+                    key={m}
+                    className="inline-flex items-center px-3 py-1.5 rounded-full text-[12px] font-semibold bg-[var(--color-tint-blue)] text-[var(--color-primary)] border border-[var(--color-border-soft)]"
+                  >
+                    {m}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Langues */}
           {(notaire.languages ?? []).length > 0 && (

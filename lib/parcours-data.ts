@@ -19,12 +19,6 @@ export type ParcoursId =
 export interface ParcoursOption {
   value: string;
   label: string;
-  /** Réponse qui interrompt le parcours (ex. dossier déjà confié à un notaire). */
-  terminal?: boolean;
-  /** Message d'orientation affiché quand cette réponse est terminale
-   *  (sinon on retombe sur le message par défaut TERMINAL_NOTARY). */
-  terminalTitle?: string;
-  terminalBody?: string;
 }
 
 export interface ParcoursQuestion {
@@ -51,12 +45,6 @@ export interface ParcoursDef {
   estim: string;
   questions: ParcoursQuestion[];
 }
-
-/** Message affiché quand une réponse « terminale » interrompt le parcours. */
-export const TERMINAL_NOTARY = {
-  title: "Vous avez déjà un notaire sur ce dossier",
-  body: "Un notaire accompagne déjà votre dossier. Si vous souhaitez un second avis ou changer d'étude, vous pouvez consulter les notaires disponibles près de chez vous.",
-};
 
 /** Question ville / code postal ajoutée à la fin de chaque parcours : elle
  *  alimente le filtre `ville` de l'annuaire. Le notaire a une compétence

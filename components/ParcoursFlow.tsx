@@ -7,12 +7,11 @@ import { ArrowRight, ArrowLeft, Loader2, MapPin, Check } from "lucide-react";
 import {
   PARCOURS,
   getParcours,
-  TERMINAL_NOTARY,
   type ParcoursDef,
   type ParcoursQuestion,
 } from "@/lib/parcours-data";
 
-type View = "select" | "run" | "terminal";
+type View = "select" | "run";
 
 const tintBg: Record<string, string> = {
   blue: "bg-[var(--color-tint-blue)]",
@@ -39,7 +38,6 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [terminalMsg, setTerminalMsg] = useState<{ title: string; body: string }>(TERMINAL_NOTARY);
 
   // Ville / code postal (dernière question, alimente le filtre annuaire)
   const [postal, setPostal] = useState("");
@@ -177,29 +175,17 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
 
   function next() {
     if (!current || !canAdvance()) return;
-    // Réponse terminale (dossier déjà confié à un notaire) → écran d'orientation
-    if (current.type === "single") {
-      const opt = current.options?.find((o) => o.value === answers[current.id]);
-      if (opt?.terminal) {
-        setTerminalMsg({
-          title: opt.terminalTitle ?? TERMINAL_NOTARY.title,
-          body: opt.terminalBody ?? TERMINAL_NOTARY.body,
-        });
-        setView("terminal");
-        return;
-      }
-    }
     setQIndex((i) => i + 1);
   }
 
-  function goToAnnuaire(withVille: boolean) {
+  function goToAnnuaire() {
     if (!def) return;
     const params = new URLSearchParams();
-    const ville = withVille ? (cityBase || postal.trim()) : "";
+    const ville = cityBase || postal.trim();
     if (ville) params.set("ville", ville);
     params.set("specialite", def.specialite);
     const parisMatch = /^750(\d{2})$/.exec(postal.trim());
-    if (withVille && parisMatch && !cityBase) params.set("arr", String(parseInt(parisMatch[1], 10)));
+    if (parisMatch && !cityBase) params.set("arr", String(parseInt(parisMatch[1], 10)));
     router.push(`/annuaire?${params.toString()}`);
   }
 
@@ -223,7 +209,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
         }),
       }).catch(() => {});
     } finally {
-      goToAnnuaire(true);
+      goToAnnuaire();
     }
   }
 
@@ -519,41 +505,6 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
             )}
           </AnimatePresence>
         </div>
-      )}
-
-      {/* ═══════════════ Écran d'orientation (réponse terminale) ═══════════════ */}
-      {view === "terminal" && def && (
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-xl text-center py-10"
-        >
-          <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-6 ${tintBg[def.tint]}`}>
-            {def.icon}
-          </div>
-          <h2 className="serif text-[28px] sm:text-[34px] font-bold leading-[1.15] tracking-tight text-[var(--color-text-strong)] mb-3">
-            {terminalMsg.title}
-          </h2>
-          <p className="text-base text-[var(--color-muted)] mb-8 max-w-md mx-auto">
-            {terminalMsg.body}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <motion.button
-              onClick={() => goToAnnuaire(false)}
-              whileHover={{ y: -1, filter: "brightness(1.05)" }}
-              whileTap={{ scale: 0.98 }}
-              className="bg-gradient-cta text-white border-none px-8 py-4 rounded-2xl text-[16px] font-semibold shadow-[var(--shadow-cta)] inline-flex items-center justify-center gap-2"
-            >
-              Voir les notaires <ArrowRight className="w-4 h-4" />
-            </motion.button>
-            <button
-              onClick={resetToSelect}
-              className="bg-white text-[var(--color-primary)] border-[1.5px] border-[var(--color-border)] px-8 py-4 rounded-2xl text-[16px] font-semibold hover:bg-[var(--color-tint-blue)] hover:border-[var(--color-primary)] transition-colors"
-            >
-              Choisir un autre parcours
-            </button>
-          </div>
-        </motion.div>
       )}
     </div>
   );

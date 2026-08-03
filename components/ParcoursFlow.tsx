@@ -29,8 +29,9 @@ const slideVariants = {
   exit: { x: -32, opacity: 0 },
 };
 
-export default function ParcoursFlow() {
+export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 2 }) {
   const router = useRouter();
+  const Heading = headingLevel === 2 ? "h2" : "h1";
 
   const [view, setView] = useState<View>("select");
   const [pid, setPid] = useState<string | null>(null);
@@ -221,9 +222,9 @@ export default function ParcoursFlow() {
           className="w-full max-w-5xl"
         >
           <div className="text-center mb-10">
-            <h1 className="serif text-[34px] sm:text-[46px] font-bold leading-[1.1] tracking-tight text-[var(--color-text-strong)] mb-3">
+            <Heading className="serif text-[34px] sm:text-[46px] font-bold leading-[1.1] tracking-tight text-[var(--color-text-strong)] mb-3">
               De quoi avez-vous <span className="serif-accent">besoin</span> ?
-            </h1>
+            </Heading>
             <p className="text-base sm:text-lg text-[var(--color-muted)] max-w-2xl mx-auto">
               Répondez à quelques questions ciblées. On vous oriente ensuite vers les
               notaires compétents près de chez vous.

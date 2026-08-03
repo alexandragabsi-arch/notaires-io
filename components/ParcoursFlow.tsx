@@ -259,7 +259,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 + i * 0.05 }}
                 whileHover={{ y: -3 }}
-                className="group bg-white border-[1.5px] border-[var(--color-border-soft)] rounded-3xl p-6 text-left cursor-pointer transition-all hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)] shadow-[0_10px_30px_rgba(28,69,135,0.08)] hover:shadow-[0_16px_40px_rgba(28,69,135,0.14)] flex flex-col"
+                className="group bg-white border-[1.5px] border-[var(--color-border-soft)] rounded-3xl p-6 text-left cursor-pointer transition-all hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)] shadow-[0_2px_8px_rgba(28,69,135,0.05)] hover:shadow-[0_10px_26px_rgba(28,69,135,0.12)] flex flex-col"
               >
                 <span
                   className={`text-2xl w-14 h-14 rounded-2xl flex items-center justify-center mb-4 ${tintBg[p.tint]}`}

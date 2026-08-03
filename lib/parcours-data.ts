@@ -243,14 +243,7 @@ export const PARCOURS: ParcoursDef[] = [
         type: "single",
         options: [
           { value: "avenir", label: "Non, le mariage est à venir" },
-          {
-            value: "marie",
-            label: "Oui, nous sommes déjà mariés",
-            terminal: true,
-            terminalTitle: "Il s'agit d'un changement de régime matrimonial",
-            terminalBody:
-              "Le contrat de mariage se conclut avant le mariage. Comme vous êtes déjà mariés, votre demande relève d'un changement de régime matrimonial — une procédure spécifique qu'un notaire peut mener pour vous.",
-          },
+          { value: "marie", label: "Oui, nous sommes déjà mariés (changement de régime)" },
         ],
       },
       {
@@ -260,14 +253,7 @@ export const PARCOURS: ParcoursDef[] = [
         type: "single",
         options: [
           { value: "oui", label: "Oui, deux majeurs sans mesure de protection" },
-          {
-            value: "non",
-            label: "Non (minorité, tutelle ou curatelle)",
-            terminal: true,
-            terminalTitle: "Situation nécessitant un accompagnement particulier",
-            terminalBody:
-              "La minorité ou une mesure de protection (tutelle, curatelle) demande des autorisations spécifiques. Un notaire vous indiquera précisément la marche à suivre.",
-          },
+          { value: "non", label: "Non (minorité, tutelle ou curatelle)" },
         ],
       },
       {
@@ -310,14 +296,7 @@ export const PARCOURS: ParcoursDef[] = [
         type: "single",
         options: [
           { value: "oui", label: "Oui, nous sommes libres de nous pacser" },
-          {
-            value: "non",
-            label: "Non (déjà marié·e / pacsé·e, ou parenté proche)",
-            terminal: true,
-            terminalTitle: "Situation à examiner avec un notaire",
-            terminalBody:
-              "Un PACS suppose que chacun soit libre (ni marié, ni déjà pacsé) et sans lien de parenté proche. Un notaire fera le point avec vous sur votre situation.",
-          },
+          { value: "non", label: "Non (déjà marié·e / pacsé·e, ou parenté proche)" },
         ],
       },
       {
@@ -327,14 +306,7 @@ export const PARCOURS: ParcoursDef[] = [
         type: "single",
         options: [
           { value: "oui", label: "Oui, deux majeurs sans mesure de protection" },
-          {
-            value: "non",
-            label: "Non (minorité, tutelle ou curatelle)",
-            terminal: true,
-            terminalTitle: "Situation nécessitant un accompagnement particulier",
-            terminalBody:
-              "La minorité ou une mesure de protection (tutelle, curatelle) demande des autorisations spécifiques. Un notaire vous indiquera la marche à suivre.",
-          },
+          { value: "non", label: "Non (minorité, tutelle ou curatelle)" },
         ],
       },
       {

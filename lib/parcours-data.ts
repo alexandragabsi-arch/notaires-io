@@ -126,16 +126,15 @@ export const PARCOURS: ParcoursDef[] = [
     questions: [
       {
         id: "bien",
-        question: "Quel type de bien souhaitez-vous donner ?",
-        hint: "Plusieurs choix possibles. Une vue d'ensemble suffit.",
+        question: "Que souhaitez-vous transmettre ?",
+        hint: "Plusieurs choix possibles. Seules ces donations passent par un notaire.",
         type: "multi",
         options: [
-          { value: "immobilier", label: "Bien immobilier" },
-          { value: "epargne", label: "Comptes / épargne" },
-          { value: "assurance_vie", label: "Assurance-vie" },
-          { value: "entreprise", label: "Entreprise / parts" },
-          { value: "vehicules", label: "Véhicules" },
-          { value: "meubles", label: "Meubles / objets de valeur" },
+          { value: "immobilier", label: "Bien immobilier (maison, appartement, terrain)" },
+          { value: "argent", label: "Somme d'argent (donation familiale)" },
+          { value: "parts", label: "Parts de société / entreprise" },
+          { value: "epoux", label: "Donation entre époux (au dernier vivant)" },
+          { value: "partage", label: "Donation-partage entre héritiers" },
           { value: "idk", label: "Je ne sais pas encore" },
         ],
       },

@@ -777,7 +777,7 @@ export default function NotaireProfileClient({
         transition={{ duration: 0.4 }}
         className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6 sm:p-8 mb-6"
       >
-        <div className="flex flex-col sm:flex-row items-start gap-6">
+        <div className="flex flex-col items-center text-center sm:flex-row sm:items-start sm:text-left gap-6">
           {/* Avatar */}
           {notaire.photo ? (
             <div className="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-[var(--color-tint-blue)]">
@@ -792,7 +792,7 @@ export default function NotaireProfileClient({
 
           {/* Identité + coordonnées */}
           <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2 mb-1">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
               <h1 className="serif text-[28px] sm:text-[34px] font-bold text-[var(--color-text-strong)] leading-tight">
                 {notaire.name}
               </h1>
@@ -815,7 +815,7 @@ export default function NotaireProfileClient({
             </div>
 
             {/* Rôle + étude */}
-            <div className="flex flex-wrap items-center gap-3 mb-3">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mb-3">
               <span className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-[var(--color-accent)]">
                 <Award className="w-4 h-4" strokeWidth={2} />
                 {roleLabel}
@@ -830,7 +830,7 @@ export default function NotaireProfileClient({
 
             {/* Coordonnées en ligne */}
             {isClaimed ? (
-              <div className="flex flex-wrap gap-x-5 gap-y-1.5">
+              <div className="flex flex-wrap justify-center sm:justify-start gap-x-5 gap-y-1.5">
                 {notaire.address && (
                   <span className="inline-flex items-center gap-1.5 text-[13px] text-[var(--color-muted)]">
                     <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
@@ -867,7 +867,7 @@ export default function NotaireProfileClient({
               </div>
             ) : (
               <BlurredSection label="Voir les coordonnées" claimId={notaire.id}>
-                <div className="flex flex-wrap gap-x-5 gap-y-1.5">
+                <div className="flex flex-wrap justify-center sm:justify-start gap-x-5 gap-y-1.5">
                   <span className="inline-flex items-center gap-1.5 text-[13px] text-[var(--color-muted)]">
                     <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
                     {notaire.city}

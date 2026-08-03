@@ -339,7 +339,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
                 exit="exit"
                 transition={{ duration: 0.24 }}
               >
-                <h2 className="serif text-[30px] sm:text-[38px] font-bold leading-[1.15] tracking-tight text-[var(--color-text-strong)] mb-2.5">
+                <h2 className="serif text-[26px] sm:text-[32px] font-bold leading-[1.2] tracking-tight text-[var(--color-text-strong)] mb-2.5">
                   {current.question}
                 </h2>
                 {current.hint && (
@@ -482,7 +482,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
                 exit="exit"
                 transition={{ duration: 0.24 }}
               >
-                <h2 className="serif text-[30px] sm:text-[38px] font-bold leading-[1.15] tracking-tight text-[var(--color-text-strong)] mb-2.5">
+                <h2 className="serif text-[26px] sm:text-[32px] font-bold leading-[1.2] tracking-tight text-[var(--color-text-strong)] mb-2.5">
                   On vous met en relation avec{" "}
                   <span className="serif-accent">le bon notaire</span>
                 </h2>

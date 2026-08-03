@@ -45,6 +45,15 @@ interface RawOffice {
 let _cache: RawNotaire[] | null = null;
 let _officeCache: RawOffice[] | null = null;
 
+// Le droit de la famille (contrat de mariage, PACS, donation, succession) fait
+// partie du cœur de métier généraliste de tout notaire. On le garantit sur chaque
+// fiche : sinon les filtres « Mariage / PACS » et « Droit de la famille » de
+// l'annuaire renvoient 0 résultat dans la plupart des villes (fiches taguées
+// seulement immobilier + successions).
+function withFamilyLaw(specs: string[]): string[] {
+  return specs.includes("Droit de la famille") ? specs : [...specs, "Droit de la famille"];
+}
+
 /**
  * Déduit le numéro d'arrondissement à partir du code postal présent dans l'adresse.
  * Les données scrapées n'ont pas de champ `arrondissement` : on l'extrait de l'adresse
@@ -255,7 +264,7 @@ function toListing(n: RawNotaire): ListingNotaire {
     arrondissement: notaireArr(n),
     role: nameMasked ? undefined : n.role,
     isOffice: nameMasked,
-    specialties: n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"],
+    specialties: withFamilyLaw(n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"]),
     next: "Disponible rapidement",
     slotMatrix: deterministicSlots(n.id),
     bio: undefined,
@@ -303,7 +312,7 @@ function officeToListing(o: RawOffice): ListingNotaire {
     website: o.website || undefined,
     arrondissement: arrFromAddress(o.address),
     isOffice: masked ? true : !individual,
-    specialties: ["Droit immobilier", "Successions"],
+    specialties: withFamilyLaw(["Droit immobilier", "Successions"]),
     next: "Disponible rapidement",
     slotMatrix: deterministicSlots(o.id),
   };

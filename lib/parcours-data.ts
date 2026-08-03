@@ -177,7 +177,7 @@ export const PARCOURS: ParcoursDef[] = [
         question: "Avez-vous déjà confié le dossier à un notaire ?",
         type: "single",
         options: [
-          { value: "oui", label: "Oui", terminal: true },
+          { value: "oui", label: "Oui" },
           { value: "non", label: "Non" },
         ],
       },
@@ -211,7 +211,7 @@ export const PARCOURS: ParcoursDef[] = [
         question: "Avez-vous déjà confié le dossier à un notaire ?",
         type: "single",
         options: [
-          { value: "oui", label: "Oui", terminal: true },
+          { value: "oui", label: "Oui" },
           { value: "non", label: "Non" },
         ],
       },

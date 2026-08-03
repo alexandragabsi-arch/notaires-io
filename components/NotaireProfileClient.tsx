@@ -682,9 +682,11 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
 export default function NotaireProfileClient({
   id,
   initialNotaire,
+  colleagues = [],
 }: {
   id: string;
   initialNotaire?: ListingNotaire;
+  colleagues?: ListingNotaire[];
 }) {
   // Si le serveur a déjà trouvé le notaire, on l'utilise directement
   const [notaire, setNotaire] = useState<ListingNotaire | null | undefined>(
@@ -777,7 +779,7 @@ export default function NotaireProfileClient({
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-bold text-[14px] text-[var(--color-text-strong)]">Profil non revendiqué</p>
-            <p className="text-[13px] text-[var(--color-muted)] leading-snug">
+            <p className="text-[13px] text-[var(--color-muted)] leading-snug text-justify hyphens-auto">
               Ce profil existe dans notre annuaire mais n&apos;a pas encore été activé par son titulaire.
               Les coordonnées et l&apos;agenda restent masqués tant que le notaire n&apos;a pas souscrit.
             </p>
@@ -1305,6 +1307,37 @@ export default function NotaireProfileClient({
           </motion.a>
         )}
       </div>
+
+      {/* Autres notaires de l'étude */}
+      {colleagues.length > 0 && (
+        <div className="mt-8 bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
+          <div className="flex items-center gap-2 mb-5">
+            <Building2 className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
+            <span className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
+              Autres notaires de l&apos;étude
+            </span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {colleagues.map((c) => (
+              <a
+                key={c.id}
+                href={`/notaires/${c.id}`}
+                className="flex items-center gap-3 rounded-2xl border border-[var(--color-border-soft)] p-3 hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)] transition-colors"
+              >
+                <span className="w-11 h-11 rounded-full shrink-0 flex items-center justify-center text-white font-bold text-[15px] bg-gradient-cta">
+                  {c.initials}
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[14px] font-semibold text-[var(--color-text-strong)] truncate">
+                    {c.name}
+                  </span>
+                  <span className="block text-[12px] text-[var(--color-muted)] truncate">{c.city}</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
     </div>
   );

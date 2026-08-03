@@ -105,7 +105,24 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const notaire = findNotaire(id);  // lookup serveur (membres.json inclus)
+  const all = getAllNotaires();
+  const notaire =
+    LISTING_NOTAIRES.find((n) => n.id === id) ?? all.find((n) => n.id === id); // lookup serveur (membres.json inclus)
+
+  // Autres notaires de la même étude (même officeName + même ville), hors lui-même.
+  const officeKey = notaire?.officeName?.trim().toLowerCase();
+  const colleagues =
+    notaire && officeKey
+      ? all
+          .filter(
+            (n) =>
+              n.id !== notaire.id &&
+              n.officeName?.trim().toLowerCase() === officeKey &&
+              n.city === notaire.city,
+          )
+          .slice(0, 6)
+      : [];
+
   const jsonLd = buildJsonLd(id);
 
   return (
@@ -119,7 +136,7 @@ export default async function Page({
       <Header />
       <main className="min-h-screen bg-white">
         {/* On passe le notaire en prop pour éviter le lookup côté client (membres.json = server only) */}
-        <NotaireProfileClient id={id} initialNotaire={notaire} />
+        <NotaireProfileClient id={id} initialNotaire={notaire} colleagues={colleagues} />
       </main>
       <Footer />
     </>

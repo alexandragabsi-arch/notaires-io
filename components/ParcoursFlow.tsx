@@ -39,6 +39,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [terminalMsg, setTerminalMsg] = useState<{ title: string; body: string }>(TERMINAL_NOTARY);
 
   // Ville / code postal (dernière question, alimente le filtre annuaire)
   const [postal, setPostal] = useState("");
@@ -49,6 +50,11 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
   const [geoLoading, setGeoLoading] = useState(false);
   const suggestTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Ancre de haut de parcours : on y ramène la vue à chaque changement d'étape
+  // (utile surtout sur mobile, sinon la question apparaît au-dessus du scroll).
+  const topRef = useRef<HTMLDivElement>(null);
+  const firstMount = useRef(true);
 
   const def: ParcoursDef | undefined = getParcours(pid);
   const questions = def?.questions ?? [];
@@ -79,6 +85,12 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
     }, 200);
     return () => { if (suggestTimer.current) clearTimeout(suggestTimer.current); };
   }, [postal]);
+
+  // Ramène la vue en haut du parcours à chaque étape (pas au premier rendu).
+  useEffect(() => {
+    if (firstMount.current) { firstMount.current = false; return; }
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [view, qIndex]);
 
   function selectCity(item: { city: string; postcode: string }) {
     setPostal(item.postcode);
@@ -168,7 +180,14 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
     // Réponse terminale (dossier déjà confié à un notaire) → écran d'orientation
     if (current.type === "single") {
       const opt = current.options?.find((o) => o.value === answers[current.id]);
-      if (opt?.terminal) { setView("terminal"); return; }
+      if (opt?.terminal) {
+        setTerminalMsg({
+          title: opt.terminalTitle ?? TERMINAL_NOTARY.title,
+          body: opt.terminalBody ?? TERMINAL_NOTARY.body,
+        });
+        setView("terminal");
+        return;
+      }
     }
     setQIndex((i) => i + 1);
   }
@@ -212,7 +231,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
   const currentStep = isEmailStep ? questions.length : qIndex;
 
   return (
-    <div className="min-h-[70vh] w-full flex flex-col items-center px-5 py-10 sm:py-14">
+    <div ref={topRef} className="min-h-[70vh] w-full flex flex-col items-center px-5 py-10 sm:py-14 scroll-mt-24">
       {/* ═══════════════ Sélection du parcours ═══════════════ */}
       {view === "select" && (
         <motion.div
@@ -240,7 +259,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 + i * 0.05 }}
                 whileHover={{ y: -3 }}
-                className="group bg-white border-[1.5px] border-[var(--color-border)] rounded-3xl p-6 text-left cursor-pointer transition-colors hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)] shadow-[var(--shadow-card)] flex flex-col"
+                className="group bg-white border-[1.5px] border-[var(--color-border-soft)] rounded-3xl p-6 text-left cursor-pointer transition-all hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)] shadow-[0_10px_30px_rgba(28,69,135,0.08)] hover:shadow-[0_16px_40px_rgba(28,69,135,0.14)] flex flex-col"
               >
                 <span
                   className={`text-2xl w-14 h-14 rounded-2xl flex items-center justify-center mb-4 ${tintBg[p.tint]}`}
@@ -513,10 +532,10 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
             {def.icon}
           </div>
           <h2 className="serif text-[28px] sm:text-[34px] font-bold leading-[1.15] tracking-tight text-[var(--color-text-strong)] mb-3">
-            {TERMINAL_NOTARY.title}
+            {terminalMsg.title}
           </h2>
           <p className="text-base text-[var(--color-muted)] mb-8 max-w-md mx-auto">
-            {TERMINAL_NOTARY.body}
+            {terminalMsg.body}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <motion.button

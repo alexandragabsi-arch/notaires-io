@@ -21,6 +21,10 @@ export interface ParcoursOption {
   label: string;
   /** Réponse qui interrompt le parcours (ex. dossier déjà confié à un notaire). */
   terminal?: boolean;
+  /** Message d'orientation affiché quand cette réponse est terminale
+   *  (sinon on retombe sur le message par défaut TERMINAL_NOTARY). */
+  terminalTitle?: string;
+  terminalBody?: string;
 }
 
 export interface ParcoursQuestion {
@@ -55,13 +59,25 @@ export const TERMINAL_NOTARY = {
 };
 
 /** Question ville / code postal ajoutée à la fin de chaque parcours : elle
- *  alimente le filtre `ville` de l'annuaire. */
+ *  alimente le filtre `ville` de l'annuaire. Le notaire a une compétence
+ *  nationale : le client choisit librement la ville de son rendez-vous. */
 const POSTAL_QUESTION: ParcoursQuestion = {
   id: "ville",
-  question: "Dans quelle ville cherchez-vous votre notaire ?",
-  hint: "On vous présente ensuite les notaires les plus proches.",
+  question: "Dans quelle ville souhaitez-vous votre rendez-vous ?",
+  hint: "Vous êtes libre de choisir n'importe quel notaire en France.",
   type: "postal",
 };
+
+/** Variante de la question ville pour les parcours mariage / PACS : on précise
+ *  que le choix du notaire est libre et sans lien avec le lieu de célébration. */
+function postalRdvQuestion(hint: string): ParcoursQuestion {
+  return {
+    id: "ville",
+    question: "Dans quelle ville souhaitez-vous votre rendez-vous ?",
+    hint,
+    type: "postal",
+  };
+}
 
 const OUI_NON: ParcoursOption[] = [
   { value: "oui", label: "Oui" },
@@ -221,18 +237,61 @@ export const PARCOURS: ParcoursDef[] = [
     estim: "400 € — 600 € en moyenne",
     questions: [
       {
-        id: "nationalite",
-        question: "L'un des deux futurs époux est-il de nationalité française ?",
+        id: "deja_marie",
+        question: "Le mariage est-il déjà célébré ?",
+        hint: "Le contrat de mariage se signe avant la célébration.",
         type: "single",
-        options: OUI_NON,
+        options: [
+          { value: "avenir", label: "Non, le mariage est à venir" },
+          {
+            value: "marie",
+            label: "Oui, nous sommes déjà mariés",
+            terminal: true,
+            terminalTitle: "Il s'agit d'un changement de régime matrimonial",
+            terminalBody:
+              "Le contrat de mariage se conclut avant le mariage. Comme vous êtes déjà mariés, votre demande relève d'un changement de régime matrimonial — une procédure spécifique qu'un notaire peut mener pour vous.",
+          },
+        ],
       },
       {
-        id: "residence",
-        question: "L'un des deux futurs époux réside-t-il en France ?",
+        id: "capacite",
+        question: "Les deux futurs époux sont-ils majeurs et sans mesure de protection ?",
+        hint: "Minorité, tutelle ou curatelle nécessitent des autorisations spécifiques.",
+        type: "single",
+        options: [
+          { value: "oui", label: "Oui, deux majeurs sans mesure de protection" },
+          {
+            value: "non",
+            label: "Non (minorité, tutelle ou curatelle)",
+            terminal: true,
+            terminalTitle: "Situation nécessitant un accompagnement particulier",
+            terminalBody:
+              "La minorité ou une mesure de protection (tutelle, curatelle) demande des autorisations spécifiques. Un notaire vous indiquera précisément la marche à suivre.",
+          },
+        ],
+      },
+      {
+        id: "regime",
+        question: "Quel régime matrimonial envisagez-vous ?",
+        hint: "Le notaire vous conseillera selon votre situation ; ce choix pourra être affiné.",
+        type: "single",
+        options: [
+          { value: "separation", label: "Séparation de biens" },
+          { value: "communaute", label: "Communauté (mise en commun des biens)" },
+          { value: "participation", label: "Participation aux acquêts" },
+          { value: "idk", label: "Je ne sais pas encore" },
+        ],
+      },
+      {
+        id: "international",
+        question: "Y a-t-il un élément international ?",
+        hint: "L'un de vous est de nationalité étrangère, ou réside / résidera à l'étranger.",
         type: "single",
         options: OUI_NON,
       },
-      POSTAL_QUESTION,
+      postalRdvQuestion(
+        "Le notaire peut être dans la ville de votre choix — ce n'est pas lié au lieu de célébration de votre mariage.",
+      ),
     ],
   },
   {
@@ -245,18 +304,60 @@ export const PARCOURS: ParcoursDef[] = [
     estim: "300 € — 500 € en moyenne",
     questions: [
       {
-        id: "nationalite",
-        question: "L'un des deux partenaires est-il de nationalité française ?",
+        id: "liberte",
+        question: "Êtes-vous tous les deux libres de vous pacser ?",
+        hint: "Ni marié·e, ni déjà pacsé·e, et sans lien de parenté proche.",
         type: "single",
-        options: OUI_NON,
+        options: [
+          { value: "oui", label: "Oui, nous sommes libres de nous pacser" },
+          {
+            value: "non",
+            label: "Non (déjà marié·e / pacsé·e, ou parenté proche)",
+            terminal: true,
+            terminalTitle: "Situation à examiner avec un notaire",
+            terminalBody:
+              "Un PACS suppose que chacun soit libre (ni marié, ni déjà pacsé) et sans lien de parenté proche. Un notaire fera le point avec vous sur votre situation.",
+          },
+        ],
       },
       {
-        id: "residence",
-        question: "L'un des deux partenaires réside-t-il en France ?",
+        id: "capacite",
+        question: "Êtes-vous tous les deux majeurs et sans mesure de protection ?",
+        hint: "Minorité, tutelle ou curatelle nécessitent des autorisations spécifiques.",
+        type: "single",
+        options: [
+          { value: "oui", label: "Oui, deux majeurs sans mesure de protection" },
+          {
+            value: "non",
+            label: "Non (minorité, tutelle ou curatelle)",
+            terminal: true,
+            terminalTitle: "Situation nécessitant un accompagnement particulier",
+            terminalBody:
+              "La minorité ou une mesure de protection (tutelle, curatelle) demande des autorisations spécifiques. Un notaire vous indiquera la marche à suivre.",
+          },
+        ],
+      },
+      {
+        id: "biens",
+        question: "Comment souhaitez-vous gérer vos biens ?",
+        hint: "C'est le régime de votre convention de PACS.",
+        type: "single",
+        options: [
+          { value: "separation", label: "Séparation de biens (régime par défaut)" },
+          { value: "indivision", label: "Indivision (biens achetés ensemble partagés)" },
+          { value: "idk", label: "Je ne sais pas encore" },
+        ],
+      },
+      {
+        id: "international",
+        question: "Y a-t-il un élément international ?",
+        hint: "L'un de vous est de nationalité étrangère, ou réside / résidera à l'étranger.",
         type: "single",
         options: OUI_NON,
       },
-      POSTAL_QUESTION,
+      postalRdvQuestion(
+        "Le notaire peut être dans la ville de votre choix — ce n'est pas lié au lieu d'enregistrement de votre PACS.",
+      ),
     ],
   },
 ];

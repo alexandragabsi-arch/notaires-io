@@ -20,7 +20,6 @@ import {
   ImagePlus,
   Trash2,
   Lock,
-  Zap,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -1164,41 +1163,12 @@ export default function NotaireProfileClient({
         </motion.div>
       </div>
 
-      {/* ── CTA notaire : revendiquer / modifier son profil ── */}
-      <div id="modifier" className="mt-10 max-w-[720px] mx-auto mb-4 scroll-mt-24">
-        {isClaimed ? (
+      {/* ── Espace propriétaire : modifier son profil (uniquement si revendiqué) ── */}
+      {isClaimed && (
+        <div id="modifier" className="mt-10 max-w-[720px] mx-auto mb-4 scroll-mt-24">
           <ClaimSection notaire={notaire} />
-        ) : (
-          <motion.a
-            href={`/inscription?claim=${notaire.id}`}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-            className="w-full flex items-center justify-between gap-4 py-6 px-6 rounded-2xl border-2 border-[var(--color-accent)] bg-[var(--color-tint-blue)] hover:bg-[#e8eef9] hover:shadow-lg transition-all group"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-[var(--color-accent)] flex items-center justify-center shrink-0">
-                <Zap className="w-6 h-6 text-white" strokeWidth={2} />
-              </div>
-              <div>
-                <p className="font-bold text-[16px] text-[var(--color-text-strong)]">
-                  Vous êtes {notaire.name} ?
-                </p>
-                <p className="text-[13px] text-[var(--color-muted)]">
-                  Activez votre profil · Recevez des RDV en ligne · Agenda + visio inclus
-                </p>
-              </div>
-            </div>
-            <div className="shrink-0 flex flex-col items-end gap-1">
-              <span className="inline-flex items-center gap-1 bg-[var(--color-accent)] text-white px-3 py-1.5 rounded-[8px] text-[13px] font-bold group-hover:bg-[#1e4aa8] transition-colors">
-                Activer mon profil
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.5} />
-              </span>
-              <span className="text-[11px] text-[var(--color-accent)] font-medium">À partir de 99€ HT/mois</span>
-            </div>
-          </motion.a>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Autres notaires de l'étude */}
       {colleagues.length > 0 && (

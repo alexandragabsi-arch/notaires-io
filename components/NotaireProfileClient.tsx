@@ -753,55 +753,29 @@ export default function NotaireProfileClient({
       : "Notaire";
 
   return (
-    <div className="max-w-[1140px] mx-auto px-4 sm:px-6 py-10 sm:py-14">
+    <div className="max-w-[1140px] mx-auto px-4 sm:px-6 py-5 sm:py-8">
       {/* ── Retour ── */}
       <motion.a
         href="/annuaire"
         initial={{ opacity: 0, x: -8 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3 }}
-        className="inline-flex items-center gap-2 text-[14px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-[14px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] mb-4 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" strokeWidth={2.5} />
         Annuaire
       </motion.a>
-
-      {/* ── Bannière profil non revendiqué ── */}
-      {!isClaimed && (
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35 }}
-          className="mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 rounded-2xl px-5 py-4"
-        >
-          <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
-            <Lock className="w-5 h-5 text-slate-400" strokeWidth={2} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-bold text-[14px] text-[var(--color-text-strong)]">Profil non revendiqué</p>
-            <p className="text-[13px] text-[var(--color-muted)] leading-snug text-justify hyphens-auto">
-              Ce profil existe dans notre annuaire mais n&apos;a pas encore été activé par son titulaire.
-              Les coordonnées et l&apos;agenda restent masqués tant que le notaire n&apos;a pas souscrit.
-            </p>
-          </div>
-          <a
-            href={`/inscription?claim=${notaire.id}`}
-            className="shrink-0 inline-flex items-center gap-1.5 bg-[var(--color-accent)] hover:bg-[#1e4aa8] text-white px-4 py-2.5 rounded-[10px] text-[13px] font-bold transition-colors"
-          >
-            C&apos;est vous ?
-            <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
-          </a>
-        </motion.div>
-      )}
 
       {/* ── Bannière identité (pleine largeur) ── */}
       <motion.div
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6 sm:p-8 mb-6"
+        className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] overflow-hidden mb-6"
       >
-        <div className="flex flex-col items-center text-center gap-6">
+        {/* Bandeau coloré : la photo du notaire ressort dessus (mobile + desktop) */}
+        <div className="h-24 sm:h-28 bg-gradient-banner" />
+        <div className="flex flex-col items-center text-center gap-4 px-6 sm:px-8 pb-6 sm:pb-8 -mt-14 sm:-mt-16">
           {/* Avatar rond + badge de statut en incrustation */}
           <div className="relative shrink-0">
             {notaire.photo ? (
@@ -982,6 +956,29 @@ export default function NotaireProfileClient({
           </div>
         </div>
       </motion.div>
+
+      {/* ── Bannière profil non revendiqué (sous le hero) ── */}
+      {!isClaimed && (
+        <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-tint-blue)] px-5 py-4">
+          <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shrink-0">
+            <Lock className="w-5 h-5 text-slate-400" strokeWidth={2} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-[14px] text-[var(--color-text-strong)]">Profil non revendiqué</p>
+            <p className="text-[13px] text-[var(--color-muted)] leading-snug text-justify hyphens-auto">
+              Ce profil existe dans notre annuaire mais n&apos;a pas encore été activé par son titulaire.
+              Les coordonnées et l&apos;agenda restent masqués tant que le notaire n&apos;a pas souscrit.
+            </p>
+          </div>
+          <a
+            href={`/inscription?claim=${notaire.id}`}
+            className="shrink-0 inline-flex items-center gap-1.5 bg-[var(--color-accent)] hover:bg-[#1e4aa8] text-white px-4 py-2.5 rounded-[10px] text-[13px] font-bold transition-colors"
+          >
+            C&apos;est vous ?
+            <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
+          </a>
+        </div>
+      )}
 
       {/* ── Corps principal : 3 colonnes sur large ── */}
       <div className="grid lg:grid-cols-[1fr_1fr_320px] gap-6 items-start">

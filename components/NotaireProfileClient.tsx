@@ -805,12 +805,7 @@ export default function NotaireProfileClient({
               <h1 className="serif text-[28px] sm:text-[34px] font-bold text-[var(--color-text-strong)] leading-tight">
                 {notaire.name}
               </h1>
-              {!isClaimed ? (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[12px] font-semibold bg-slate-100 text-slate-500 border border-slate-200">
-                  <Lock className="w-3 h-3" strokeWidth={2.5} />
-                  Non revendiqué
-                </span>
-              ) : notaire.isNew ? (
+              {isClaimed && (notaire.isNew ? (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[12px] font-bold bg-[var(--color-tint-green)] text-[var(--color-success)]">
                   <Sparkles className="w-3.5 h-3.5" strokeWidth={2.5} />
                   Nouveau
@@ -820,7 +815,7 @@ export default function NotaireProfileClient({
                   <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} />
                   Vérifié
                 </span>
-              )}
+              ))}
             </div>
 
             {/* Rôle + étude */}

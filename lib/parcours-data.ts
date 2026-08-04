@@ -217,6 +217,7 @@ export const PARCOURS: ParcoursDef[] = [
         options: [
           { value: "seul", label: "Seul propriétaire" },
           { value: "indivision", label: "En indivision" },
+          { value: "autre", label: "Autre situation (SCI, usufruit…)" },
         ],
       },
       POSTAL_QUESTION,

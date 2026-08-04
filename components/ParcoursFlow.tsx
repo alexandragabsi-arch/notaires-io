@@ -329,13 +329,13 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
                   {current.question}
                 </h2>
                 {current.hint && (
-                  <p className="text-base text-[var(--color-muted)] mb-8">{current.hint}</p>
+                  <p className="text-[15px] sm:text-base text-[var(--color-muted)] mb-5 sm:mb-8">{current.hint}</p>
                 )}
-                {!current.hint && <div className="mb-8" />}
+                {!current.hint && <div className="mb-5 sm:mb-8" />}
 
                 {/* Choix unique */}
                 {current.type === "single" && (
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-2 sm:gap-3">
                     {current.options?.map((o, i) => {
                       const selected = answers[current.id] === o.value;
                       return (
@@ -345,7 +345,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.04 + i * 0.04 }}
-                          className={`w-full rounded-2xl px-6 py-5 text-left flex items-center justify-between gap-4 border-[1.5px] transition-all text-[17px] font-semibold ${
+                          className={`w-full rounded-xl sm:rounded-2xl px-4 py-3 sm:px-6 sm:py-4 text-left flex items-center justify-between gap-3 border-[1.5px] transition-all text-[15px] sm:text-[17px] font-semibold ${
                             selected
                               ? "border-[var(--color-primary)] bg-[var(--color-tint-blue)] shadow-[var(--shadow-card)] text-[var(--color-primary)]"
                               : "border-[var(--color-border)] bg-white text-[var(--color-text-strong)] hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)]"
@@ -353,7 +353,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
                         >
                           {o.label}
                           <span
-                            className={`w-6 h-6 rounded-full border-[1.5px] flex items-center justify-center shrink-0 transition-colors ${
+                            className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-[1.5px] flex items-center justify-center shrink-0 transition-colors ${
                               selected ? "border-[var(--color-primary)] bg-[var(--color-primary)]" : "border-[var(--color-border)]"
                             }`}
                           >
@@ -367,7 +367,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
 
                 {/* Choix multiple */}
                 {current.type === "multi" && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                     {current.options?.map((o, i) => {
                       const arr = (answers[current.id] as string[]) ?? [];
                       const selected = arr.includes(o.value);
@@ -378,7 +378,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.04 + i * 0.03 }}
-                          className={`rounded-2xl px-5 py-4 text-left flex items-center justify-between gap-3 border-[1.5px] transition-all text-[16px] font-semibold ${
+                          className={`rounded-xl sm:rounded-2xl px-4 py-3 sm:py-3.5 text-left flex items-center justify-between gap-2.5 border-[1.5px] transition-all text-[14px] sm:text-[16px] font-semibold ${
                             selected
                               ? "border-[var(--color-primary)] bg-[var(--color-tint-blue)] shadow-[var(--shadow-card)] text-[var(--color-primary)]"
                               : "border-[var(--color-border)] bg-white text-[var(--color-text-strong)] hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)]"
@@ -386,7 +386,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
                         >
                           {o.label}
                           <span
-                            className={`w-6 h-6 rounded-md border-[1.5px] flex items-center justify-center shrink-0 transition-colors ${
+                            className={`w-5 h-5 sm:w-6 sm:h-6 rounded-md border-[1.5px] flex items-center justify-center shrink-0 transition-colors ${
                               selected ? "border-[var(--color-primary)] bg-[var(--color-primary)]" : "border-[var(--color-border)]"
                             }`}
                           >
@@ -443,7 +443,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
                 )}
 
                 {/* CTA Suivant */}
-                <div className="mt-10">
+                <div className="mt-6 sm:mt-10">
                   <motion.button
                     onClick={next}
                     disabled={!canAdvance()}

@@ -625406,5 +625406,68 @@
   "role": "associé",
   "source": "notaires.fr",
   "claimed": false
+ },
+ {
+  "id": "le-goff-omarjee-mamoudzou-976",
+  "name": "Le Goff & Omarjee",
+  "initials": "LO",
+  "color": "default",
+  "city": "Mamoudzou",
+  "citySlug": "mamoudzou",
+  "officeName": "Office Notarial Le Goff, Omarjee et Associés",
+  "address": "Immeuble Coralium n°5, Kawéni, 97600 Mamoudzou",
+  "phone": "0269642910",
+  "website": "https://legoff-omarjee-associes.notaires.fr",
+  "specialties": [
+   "Droit immobilier",
+   "Successions",
+   "Droit de la famille"
+  ],
+  "slotMatrix": [],
+  "role": "associé",
+  "source": "annuaire-web",
+  "claimed": false
+ },
+ {
+  "id": "pons-thazard-thazard-lauret-mamoudzou-976",
+  "name": "Pons, Thazard & Thazard-Lauret",
+  "initials": "PT",
+  "color": "green",
+  "city": "Mamoudzou",
+  "citySlug": "mamoudzou",
+  "officeName": "SCP Pons-Thazard-Thazard-Lauret",
+  "address": "41 place Mariage, 97600 Mamoudzou",
+  "phone": "",
+  "website": "",
+  "specialties": [
+   "Droit immobilier",
+   "Successions",
+   "Droit de la famille"
+  ],
+  "slotMatrix": [],
+  "role": "associé",
+  "source": "annuaire-web",
+  "claimed": false
+ },
+ {
+  "id": "groupe-monassier-ocean-indien-mamoudzou-976",
+  "name": "Groupe Monassier Océan Indien",
+  "initials": "GM",
+  "color": "purple",
+  "city": "Mamoudzou",
+  "citySlug": "mamoudzou",
+  "officeName": "Groupe Monassier Océan Indien",
+  "address": "Place du Marché, 97600 Mamoudzou",
+  "phone": "",
+  "website": "",
+  "specialties": [
+   "Droit immobilier",
+   "Successions",
+   "Droit de la famille"
+  ],
+  "slotMatrix": [],
+  "role": "associé",
+  "source": "annuaire-web",
+  "claimed": false
  }
 ]

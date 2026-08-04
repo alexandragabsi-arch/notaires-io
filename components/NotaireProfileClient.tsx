@@ -832,62 +832,6 @@ export default function NotaireProfileClient({
               )}
             </div>
 
-            {/* Coordonnées en ligne */}
-            {isClaimed ? (
-              <div className="flex flex-wrap justify-center gap-x-5 gap-y-1.5">
-                {notaire.address && (
-                  <span className="inline-flex items-center gap-1.5 text-[13px] text-[var(--color-muted)]">
-                    <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
-                    {notaire.address}
-                  </span>
-                )}
-                {notaire.phone && (
-                  <a
-                    href={`tel:${notaire.phone.replace(/\s/g, "")}`}
-                    className="inline-flex items-center gap-1.5 text-[13px] text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors"
-                  >
-                    <Phone className="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
-                    {notaire.phone}
-                  </a>
-                )}
-                {notaire.website && (
-                  <a
-                    href={notaire.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[13px] text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors"
-                  >
-                    <Globe className="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
-                    {notaire.website.replace(/^https?:\/\/(www\.)?/, "")}
-                    <ExternalLink className="w-2.5 h-2.5 opacity-50" strokeWidth={2} />
-                  </a>
-                )}
-                {!notaire.address && !notaire.phone && !notaire.website && (
-                  <span className="inline-flex items-center gap-1.5 text-[13px] text-[var(--color-muted)]">
-                    <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
-                    {notaire.city}{notaire.area ? ` · ${notaire.area}` : ""}
-                  </span>
-                )}
-              </div>
-            ) : (
-              <BlurredSection label="Voir les coordonnées" claimId={notaire.id}>
-                <div className="flex flex-wrap justify-center gap-x-5 gap-y-1.5">
-                  <span className="inline-flex items-center gap-1.5 text-[13px] text-[var(--color-muted)]">
-                    <MapPin className="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
-                    {notaire.city}
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 text-[13px] text-[var(--color-muted)]">
-                    <Phone className="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
-                    +33 · · · · · · · · ·
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 text-[13px] text-[var(--color-muted)]">
-                    <Globe className="w-3.5 h-3.5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
-                    www.etude-notariale.fr
-                  </span>
-                </div>
-              </BlurredSection>
-            )}
-
             {/* CTA principal */}
             <div className="mt-5">
               {isClaimed ? (
@@ -910,45 +854,31 @@ export default function NotaireProfileClient({
             </div>
           </div>
 
-          {/* Accepte les RDV */}
-          <div className={`shrink-0 flex flex-col items-center gap-2 rounded-2xl px-5 py-4 ${isClaimed ? "bg-[var(--color-tint-blue)]" : "bg-green-50 border border-green-100"}`}>
-            {isClaimed ? (
-              <>
-                <div className="text-[11px] font-bold uppercase tracking-[0.8px] text-[var(--color-muted)] mb-1">
-                  Accepte les RDVs
-                </div>
-                <div className="flex gap-3">
-                  <div className="flex flex-col items-center gap-1">
-                    <div className="w-9 h-9 rounded-xl bg-white border border-[var(--color-border-soft)] flex items-center justify-center text-[var(--color-accent)]">
-                      <Video className="w-5 h-5" strokeWidth={2} />
-                    </div>
-                    <span className="text-[10px] text-[var(--color-muted)] font-semibold">Visio</span>
+          {/* Accepte les RDV (uniquement si profil activé) */}
+          {isClaimed && (
+            <div className="shrink-0 flex flex-col items-center gap-2 rounded-2xl px-5 py-4 bg-[var(--color-tint-blue)]">
+              <div className="text-[11px] font-bold uppercase tracking-[0.8px] text-[var(--color-muted)] mb-1">
+                Accepte les RDVs
+              </div>
+              <div className="flex gap-3">
+                <div className="flex flex-col items-center gap-1">
+                  <div className="w-9 h-9 rounded-xl bg-white border border-[var(--color-border-soft)] flex items-center justify-center text-[var(--color-accent)]">
+                    <Video className="w-5 h-5" strokeWidth={2} />
                   </div>
-                  <div className="flex flex-col items-center gap-1">
-                    <div className="w-9 h-9 rounded-xl bg-white border border-[var(--color-border-soft)] flex items-center justify-center text-[var(--color-accent)]">
-                      <PhoneCall className="w-5 h-5" strokeWidth={2} />
-                    </div>
-                    <span className="text-[10px] text-[var(--color-muted)] font-semibold">Cabinet</span>
+                  <span className="text-[10px] text-[var(--color-muted)] font-semibold">Visio</span>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="w-9 h-9 rounded-xl bg-white border border-[var(--color-border-soft)] flex items-center justify-center text-[var(--color-accent)]">
+                    <PhoneCall className="w-5 h-5" strokeWidth={2} />
                   </div>
+                  <span className="text-[10px] text-[var(--color-muted)] font-semibold">Cabinet</span>
                 </div>
-                <div className="mt-1 text-[11px] text-[var(--color-success)] font-semibold">
-                  Rendez-vous confirmé
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="text-[11px] font-bold uppercase tracking-[0.8px] text-slate-400 mb-1">
-                  Profil non activé
-                </div>
-                <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
-                  <Lock className="w-5 h-5 text-slate-400" strokeWidth={2} />
-                </div>
-                <div className="mt-1 text-[11px] text-slate-400 font-semibold text-center leading-tight">
-                  RDV en ligne non disponibles
-                </div>
-              </>
-            )}
-          </div>
+              </div>
+              <div className="mt-1 text-[11px] text-[var(--color-success)] font-semibold">
+                Rendez-vous confirmé
+              </div>
+            </div>
+          )}
         </div>
       </motion.div>
 
@@ -1109,13 +1039,6 @@ export default function NotaireProfileClient({
                   Ce notaire n&apos;a pas encore activé son profil Notaires.io.
                 </p>
               </div>
-              <a
-                href={`/inscription?claim=${notaire.id}`}
-                className="inline-flex items-center gap-2 bg-[var(--color-accent)] hover:bg-[#1e4aa8] text-white px-5 py-2.5 rounded-[10px] text-[13px] font-bold transition-colors"
-              >
-                C&apos;est vous ? Activer mon profil
-                <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
-              </a>
             </div>
           ) : notaire.slotMatrix ? (
             <SlotCalendar
@@ -1146,50 +1069,27 @@ export default function NotaireProfileClient({
           transition={{ duration: 0.4, delay: 0.15 }}
           className="lg:sticky lg:top-8 flex flex-col gap-4"
         >
-          {/* CTA principal */}
-          <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
-            {isClaimed ? (
-              <>
-                <div className="text-center mb-5">
-                  <div className="text-[13px] text-[var(--color-muted)] mb-1">Prochain créneau</div>
-                  <div className="text-[20px] font-bold text-[var(--color-success)]">{notaire.next}</div>
-                </div>
-                <a
-                  href="/#hero"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 mb-3"
-                >
-                  Prendre rendez-vous
-                  <ArrowRight className="w-[17px] h-[17px]" strokeWidth={2.5} />
-                </a>
-                <p className="text-[12px] text-[var(--color-muted)] text-center leading-relaxed">
-                  Réservation en ligne · Confirmation immédiate
-                  <br />
-                  visio ou cabinet
-                </p>
-              </>
-            ) : (
-              <>
-                <div className="flex flex-col items-center gap-3 text-center">
-                  <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center">
-                    <Lock className="w-6 h-6 text-slate-400" strokeWidth={2} />
-                  </div>
-                  <p className="font-bold text-[14px] text-[var(--color-text-strong)]">
-                    Prise de RDV verrouillée
-                  </p>
-                  <p className="text-[12px] text-[var(--color-muted)] leading-snug">
-                    Ce notaire doit activer son profil pour recevoir des rendez-vous en ligne.
-                  </p>
-                </div>
-                <a
-                  href={`/inscription?claim=${notaire.id}`}
-                  className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-[var(--color-accent)] hover:bg-[#1e4aa8] text-white px-6 py-3.5 rounded-[10px] text-[14px] font-bold transition-colors"
-                >
-                  C&apos;est vous ? Activer mon profil
-                  <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
-                </a>
-              </>
-            )}
-          </div>
+          {/* CTA principal (uniquement si profil activé) */}
+          {isClaimed && (
+            <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
+              <div className="text-center mb-5">
+                <div className="text-[13px] text-[var(--color-muted)] mb-1">Prochain créneau</div>
+                <div className="text-[20px] font-bold text-[var(--color-success)]">{notaire.next}</div>
+              </div>
+              <a
+                href="/#hero"
+                className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 mb-3"
+              >
+                Prendre rendez-vous
+                <ArrowRight className="w-[17px] h-[17px]" strokeWidth={2.5} />
+              </a>
+              <p className="text-[12px] text-[var(--color-muted)] text-center leading-relaxed">
+                Réservation en ligne · Confirmation immédiate
+                <br />
+                visio ou cabinet
+              </p>
+            </div>
+          )}
 
           {/* Badge notaire officiel */}
           <div className="bg-[var(--color-tint-blue)] border border-[var(--color-border-soft)] rounded-2xl p-5 text-[13px] text-[var(--color-muted)] flex flex-col gap-2">

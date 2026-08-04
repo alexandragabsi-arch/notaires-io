@@ -36,12 +36,9 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
   const [pid, setPid] = useState<string | null>(null);
   const [qIndex, setQIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
-  const [email, setEmail] = useState("");
-  const [submitting, setSubmitting] = useState(false);
 
   // Ville / code postal (dernière question, alimente le filtre annuaire)
   const [postal, setPostal] = useState("");
-  const [cityLabel, setCityLabel] = useState("");
   const [cityBase, setCityBase] = useState("");
   const [citySuggestions, setCitySuggestions] = useState<{ city: string; postcode: string }[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -56,9 +53,8 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
 
   const def: ParcoursDef | undefined = getParcours(pid);
   const questions = def?.questions ?? [];
-  const isEmailStep = def ? qIndex >= questions.length : false;
   const current: ParcoursQuestion | undefined = questions[qIndex];
-  const totalSteps = questions.length + 1; // + étape email
+  const totalSteps = questions.length;
 
   // ── Autocomplete ville / CP (api-adresse.data.gouv.fr) ──────────────────────
   useEffect(() => {
@@ -92,7 +88,6 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
 
   function selectCity(item: { city: string; postcode: string }) {
     setPostal(item.postcode);
-    setCityLabel(item.city);
     setCityBase(item.city);
     setCitySuggestions([]);
     setShowSuggestions(false);
@@ -112,13 +107,6 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
         setPostal(props.postcode);
         const base = props.city ?? props.municipality ?? "";
         setCityBase(base);
-        const parisMatch = /^750(\d{2})$/.exec(props.postcode);
-        if (parisMatch) {
-          const arr = parseInt(parisMatch[1], 10);
-          setCityLabel(arr > 0 ? `Paris ${arr}e arrondissement` : base);
-        } else {
-          setCityLabel(base);
-        }
         setCitySuggestions([]);
         setShowSuggestions(false);
       }
@@ -131,9 +119,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
     setPid(id);
     setQIndex(0);
     setAnswers({});
-    setEmail("");
     setPostal("");
-    setCityLabel("");
     setCityBase("");
     setView("run");
   }
@@ -146,7 +132,6 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
   }
 
   function back() {
-    if (isEmailStep) { setQIndex(questions.length - 1); return; }
     if (qIndex === 0) { resetToSelect(); return; }
     setQIndex((i) => i - 1);
   }
@@ -175,6 +160,8 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
 
   function next() {
     if (!current || !canAdvance()) return;
+    // Dernière question (ville) → redirection directe vers l'annuaire filtré.
+    if (qIndex >= questions.length - 1) { goToAnnuaire(); return; }
     setQIndex((i) => i + 1);
   }
 
@@ -189,32 +176,8 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
     router.push(`/annuaire?${params.toString()}`);
   }
 
-  async function submitEmail(e: React.FormEvent) {
-    e.preventDefault();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return;
-    setSubmitting(true);
-    try {
-      // Enregistrement best-effort du lead (email + réponses). N'empêche jamais
-      // la redirection même si l'API échoue.
-      await fetch("/api/parcours", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          parcours: def?.id,
-          parcoursLabel: def?.label,
-          email: email.trim(),
-          ville: cityLabel || cityBase || postal.trim(),
-          specialite: def?.specialite,
-          answers,
-        }),
-      }).catch(() => {});
-    } finally {
-      goToAnnuaire();
-    }
-  }
-
   // ── Progress bar ────────────────────────────────────────────────────────────
-  const currentStep = isEmailStep ? questions.length : qIndex;
+  const currentStep = qIndex;
 
   return (
     <div ref={topRef} className="min-h-[70vh] w-full flex flex-col items-center px-5 py-10 sm:py-14 scroll-mt-24">
@@ -316,7 +279,7 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
 
           <AnimatePresence mode="wait">
             {/* ─── Question ─── */}
-            {!isEmailStep && current && (
+            {current && (
               <motion.div
                 key={`q-${qIndex}`}
                 variants={slideVariants}
@@ -451,56 +414,10 @@ export default function ParcoursFlow({ headingLevel = 1 }: { headingLevel?: 1 | 
                     whileTap={canAdvance() ? { scale: 0.98 } : {}}
                     className="bg-gradient-cta text-white border-none px-8 py-4 rounded-2xl text-[16px] font-semibold cursor-pointer shadow-[var(--shadow-cta)] inline-flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
-                    Suivant
+                    {qIndex >= questions.length - 1 ? "Voir les notaires disponibles" : "Suivant"}
                     <ArrowRight className="w-4 h-4" />
                   </motion.button>
                 </div>
-              </motion.div>
-            )}
-
-            {/* ─── Étape email ─── */}
-            {isEmailStep && (
-              <motion.div
-                key="email"
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.24 }}
-              >
-                <h2 className="serif text-[26px] sm:text-[32px] font-bold leading-[1.2] tracking-tight text-[var(--color-text-strong)] mb-2.5">
-                  On vous met en relation avec{" "}
-                  <span className="serif-accent">le bon notaire</span>
-                </h2>
-                <p className="text-base text-[var(--color-muted)] mb-8">
-                  Indiquez votre email pour recevoir votre orientation et découvrir les
-                  notaires disponibles{cityLabel ? ` à ${cityLabel}` : ""}.
-                </p>
-                <form onSubmit={submitEmail} className="flex flex-col gap-3 max-w-md">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="votre@email.fr"
-                    required
-                    className="w-full px-6 py-4 text-lg border-[1.5px] border-[var(--color-border)] rounded-2xl outline-none focus:border-[var(--color-primary)] font-medium text-[var(--color-text-strong)] transition-colors"
-                  />
-                  <motion.button
-                    type="submit"
-                    disabled={submitting}
-                    whileHover={{ y: -1, filter: "brightness(1.05)" }}
-                    whileTap={{ scale: 0.98 }}
-                    className="bg-gradient-cta text-white border-none px-8 py-4 rounded-2xl text-[16px] font-semibold cursor-pointer shadow-[var(--shadow-cta)] inline-flex items-center justify-center gap-2 disabled:opacity-60"
-                  >
-                    {submitting
-                      ? <><Loader2 className="w-4 h-4 animate-spin" /> Un instant…</>
-                      : <>Voir les notaires disponibles <ArrowRight className="w-4 h-4" /></>}
-                  </motion.button>
-                  <p className="text-[12px] text-[var(--color-muted)] leading-relaxed">
-                    En validant, vous acceptez d&apos;être recontacté par Notaires.io au sujet de
-                    votre demande. Gratuit et sans engagement.
-                  </p>
-                </form>
               </motion.div>
             )}
           </AnimatePresence>

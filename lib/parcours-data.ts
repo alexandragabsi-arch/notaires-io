@@ -112,7 +112,14 @@ export const PARCOURS: ParcoursDef[] = [
       {
         id: "residence_france",
         question: "La résidence principale du défunt était-elle en France ?",
-        hint: "C'est elle qui détermine le notaire compétent.",
+        hint: "C'est l'un des critères qui déterminent le notaire compétent.",
+        type: "single",
+        options: OUI_NON,
+      },
+      {
+        id: "biens_france",
+        question: "Y a-t-il des biens situés en France ?",
+        hint: "Un notaire français reste compétent dès qu'il existe des biens en France (notamment immobiliers), même si le défunt résidait à l'étranger.",
         type: "single",
         options: OUI_NON,
       },

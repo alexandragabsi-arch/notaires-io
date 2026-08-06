@@ -6,19 +6,31 @@ import { X, Sparkles, Send, Loader2, ArrowRight } from "lucide-react";
 
 type Message =
   | { role: "user"; text: string }
-  | { role: "assistant"; text: string; branchId?: string; q2?: string | null };
+  | { role: "assistant"; text: string; branchId?: string; q2?: string | null; ville?: string };
 
-function ctaUrl(branchId: string, q2?: string | null): string {
-  if (branchId === "immo") return "/annuaire?specialite=Droit+immobilier";
+function specialiteFor(branchId: string, q2?: string | null): string | null {
+  if (branchId === "immo") return "Droit immobilier";
   if (branchId === "famille") {
-    if (q2 === "deces") return "/annuaire?specialite=Successions";
-    if (q2 === "mariage") return "/annuaire?specialite=Mariage+%2F+PACS";
-    if (q2 === "donation") return "/annuaire?specialite=Donations";
-    return "/annuaire?specialite=Droit+de+la+famille";
+    if (q2 === "deces") return "Successions";
+    if (q2 === "mariage") return "Mariage / PACS";
+    if (q2 === "donation") return "Donations";
+    return "Droit de la famille";
   }
-  if (branchId === "societe") return "/annuaire?specialite=Droit+des+soci%C3%A9t%C3%A9s";
-  return "/annuaire";
+  if (branchId === "societe") return "Droit des sociétés";
+  return null;
 }
+
+function ctaUrl(branchId: string, q2?: string | null, ville?: string): string {
+  const params = new URLSearchParams();
+  const specialite = specialiteFor(branchId, q2);
+  if (specialite) params.set("specialite", specialite);
+  if (ville?.trim()) params.set("ville", ville.trim());
+  const qs = params.toString();
+  return qs ? `/annuaire?${qs}` : "/annuaire";
+}
+
+// Villes proposées en réponse rapide quand l'assistant demande la localisation
+const VILLES_RAPIDES = ["Paris", "Lyon", "Marseille", "Bordeaux", "Toute la France"];
 
 const SUGGESTIONS = [
   "Mon père vient de décéder, que dois-je faire ?",
@@ -36,14 +48,47 @@ export default function AIAssistantPanel({ onClose }: { onClose: () => void }) {
     },
   ]);
   const [loading, setLoading] = useState(false);
+  // Spécialité détectée en attente de la ville de l'utilisateur
+  const [pendingBranch, setPendingBranch] = useState<{ branchId: string; q2?: string | null } | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
+  // Étape 2 : l'utilisateur indique la ville → on affiche le lien filtré ville + spécialité
+  function provideVille(rawVille: string) {
+    if (!pendingBranch) return;
+    const label = rawVille.trim();
+    const isAll = /^toute la france$/i.test(label) || !label;
+    const ville = isAll ? "" : label;
+    const { branchId, q2 } = pendingBranch;
+    setMessages((m) => [
+      ...m,
+      { role: "user", text: label || "Toute la France" },
+      {
+        role: "assistant",
+        text: ville
+          ? `Voici les notaires disponibles à ${ville}.`
+          : "Voici les notaires disponibles dans toute la France.",
+        branchId,
+        q2,
+        ville,
+      },
+    ]);
+    setPendingBranch(null);
+    setInput("");
+  }
+
   async function send(text: string) {
     if (!text.trim() || loading) return;
+
+    // Si on attend la ville, ce message EST la ville (pas une nouvelle situation)
+    if (pendingBranch) {
+      provideVille(text);
+      return;
+    }
+
     const userMsg: Message = { role: "user", text: text.trim() };
     setMessages((m) => [...m, userMsg]);
     setInput("");
@@ -62,10 +107,13 @@ export default function AIAssistantPanel({ onClose }: { onClose: () => void }) {
           { role: "assistant", text: "Pouvez-vous préciser votre situation ? Par exemple : \"Mon père est décédé\", \"Je veux acheter un appartement\", \"Je me marie bientôt\"…" },
         ]);
       } else {
+        // Étape 1 : on a la spécialité, on demande la ville avant d'orienter
         setMessages((m) => [
           ...m,
-          { role: "assistant", text: data.message ?? "Voici ce que je vous recommande.", branchId: data.branchId, q2: data.q2 },
+          { role: "assistant", text: data.message ?? "Voici ce que je vous recommande." },
+          { role: "assistant", text: "Dans quelle ville cherchez-vous un notaire ?" },
         ]);
+        setPendingBranch({ branchId: data.branchId, q2: data.q2 });
       }
     } catch {
       setMessages((m) => [
@@ -120,7 +168,7 @@ export default function AIAssistantPanel({ onClose }: { onClose: () => void }) {
             </div>
             {m.role === "assistant" && m.branchId && (
               <a
-                href={ctaUrl(m.branchId, m.q2)}
+                href={ctaUrl(m.branchId, m.q2, m.ville)}
                 className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-accent)] hover:underline mt-0.5"
               >
                 Voir les notaires disponibles
@@ -136,6 +184,22 @@ export default function AIAssistantPanel({ onClose }: { onClose: () => void }) {
               <Loader2 className="w-3.5 h-3.5 text-[var(--color-accent)] animate-spin" strokeWidth={2.5} />
               <span className="text-[12px] text-[var(--color-muted)]">Analyse en cours…</span>
             </div>
+          </div>
+        )}
+
+        {/* Réponses rapides ville (après détection de la spécialité) */}
+        {pendingBranch && !loading && (
+          <div className="flex flex-wrap gap-1.5 mt-1">
+            {VILLES_RAPIDES.map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => provideVille(v)}
+                className="text-[12px] px-3 py-1.5 rounded-full border border-[var(--color-border)] text-[var(--color-text-strong)] hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)] transition-colors"
+              >
+                {v}
+              </button>
+            ))}
           </div>
         )}
 
@@ -168,7 +232,7 @@ export default function AIAssistantPanel({ onClose }: { onClose: () => void }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); } }}
-            placeholder="Décrivez votre situation…"
+            placeholder={pendingBranch ? "Votre ville (ex. Paris, Lyon…)" : "Décrivez votre situation…"}
             rows={2}
             className="flex-1 resize-none px-3.5 py-2.5 rounded-xl border border-[var(--color-border)] text-[13px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition"
           />

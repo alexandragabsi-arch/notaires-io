@@ -117,6 +117,12 @@ function workdayDate(offset: number): Date {
 }
 
 /** Nombre de jours calendaires entre aujourd'hui et une date. */
+/** Minuscules + suppression des accents, pour que « leon » trouve « Léon »
+ *  et « nimes » trouve « Nîmes ». */
+function deburr(s: string): string {
+  return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+}
+
 function calendarDaysFromToday(date: Date): number {
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const d = new Date(date); d.setHours(0, 0, 0, 0);
@@ -483,8 +489,8 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   const cityCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const c of POPULAR_CITIES) {
-      const norm = c.name.toLowerCase();
-      counts[c.name] = all.filter((n) => n.city.toLowerCase().includes(norm)).length;
+      const norm = deburr(c.name);
+      counts[c.name] = all.filter((n) => deburr(n.city).includes(norm)).length;
     }
     return counts;
   }, [all]);
@@ -493,11 +499,11 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   const arrFilter = useMemo(() => urlArr ?? extractArr(cityInput), [urlArr, cityInput]);
 
   const results = useMemo(() => {
-    const norm = city === ALL ? "" : city.toLowerCase().trim();
-    const nq = nameQuery.toLowerCase().trim();
+    const norm = city === ALL ? "" : deburr(city).trim();
+    const nq = deburr(nameQuery).trim();
     return all.filter((n) => {
-      const matchCity = !norm || n.city.toLowerCase().includes(norm);
-      const matchName = !nq || n.name.toLowerCase().includes(nq);
+      const matchCity = !norm || deburr(n.city).includes(norm);
+      const matchName = !nq || deburr(n.name).includes(nq);
       const matchLang = language === ALL || (n.languages ?? []).includes(language);
       const specTargets = specialty === ALL ? [] : (SPECIALTY_MAP[specialty] ?? [specialty]);
       const matchSpec = specialty === ALL || n.specialties.some(s =>

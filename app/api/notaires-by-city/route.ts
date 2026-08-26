@@ -48,6 +48,23 @@ function normCity(city: string): string {
   return city.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 }
 
+/**
+ * Rapproche la ville d'une fiche de la ville demandée.
+ * On tolère seulement le préfixe suivi d'un séparateur, pour garder
+ * « Paris » ↔ « Paris 8e ». Un `includes` libre était trop permissif :
+ * une fiche sans ville matchait TOUTES les villes (`"x".includes("")`),
+ * « Eu » matchait « B-eu-vais » et « Albi » matchait « B-albi-gny ».
+ */
+function cityMatches(rawCity: string, norm: string): boolean {
+  const c = normCity(rawCity ?? "");
+  if (!c || !norm) return false;
+  if (c === norm) return true;
+  const isSep = (ch: string | undefined) => !!ch && /[\s-]/.test(ch);
+  if (c.startsWith(norm) && isSep(c[norm.length])) return true;
+  if (norm.startsWith(c) && isSep(norm[c.length])) return true;
+  return false;
+}
+
 const SLOTS = [
   "Demain 09h30", "Demain 10h00", "Demain 14h30", "Demain 16h00",
   "Vendredi 09h00", "Vendredi 11h00", "Lundi 09h30", "Lundi 11h00",
@@ -80,9 +97,13 @@ export async function GET(req: NextRequest) {
   if (!norm) return NextResponse.json([]);
 
   // 1. Cherche dans membres (notaires individuels)
+  // On écarte les fiches au niveau étude (id `etude-…` issu de l'API entreprises,
+  // ou raison sociale du type « Étude … ») : l'annuaire ne liste que des personnes,
+  // exactement comme le site (cf. lib/notaires-source.ts).
   const membres = loadMembres();
   const fromMembres = membres
-    .filter(n => normCity(n.city) === norm || normCity(n.city).includes(norm) || norm.includes(normCity(n.city)))
+    .filter(n => !String(n.id).startsWith("etude-") && !OFFICE_PREFIXES.test(n.name.replace(/^Me\s+/, "")))
+    .filter(n => cityMatches(n.city, norm))
     .slice(0, limit);
 
   if (fromMembres.length >= limit) {
@@ -95,10 +116,14 @@ export async function GET(req: NextRequest) {
     })));
   }
 
-  // 2. Complète avec les études de notaires-france.json
+  // 2. Complète avec les études dont la raison sociale EST un notaire
+  //    (« SERRERO David » → « Me David Serrero »). Les vraies raisons sociales
+  //    (SCP, SELARL, Chambre des notaires…) sont exclues : on ne veut que des
+  //    personnes, jamais une fiche étude déguisée en notaire.
   const offices = loadOffices();
   const fromOffices = offices
-    .filter(o => normCity(o.city) === norm || normCity(o.city).includes(norm) || norm.includes(normCity(o.city)))
+    .filter(o => isIndividual(o.name))
+    .filter(o => cityMatches(o.city, norm))
     .slice(0, limit - fromMembres.length);
 
   const all = [

@@ -61974,79 +61974,6 @@
     "claimed": false
   },
   {
-    "id": "etude-780506820",
-    "name": "Étude Chambre des notaires",
-    "initials": "CD",
-    "color": "purple",
-    "city": "Beauvais",
-    "citySlug": "beauvais",
-    "officeName": "CHAMBRE DES NOTAIRES",
-    "address": "10 RUE SAINT-LOUIS 60000 BEAUVAIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-781170386",
-    "name": "Étude Chambre des notaires",
-    "initials": "CD",
-    "color": "default",
-    "city": "Angouleme",
-    "citySlug": "angouleme",
-    "officeName": "CHAMBRE DES NOTAIRES",
-    "address": "16 RUE PRUDENT 16000 ANGOULEME",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "avousten-emmanuelle-christine-782612287",
     "name": "Me Emmanuelle Christine Avousten",
     "initials": "EA",
@@ -62667,42 +62594,6 @@
       [],
       [
         "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "non-diffusible-non-diffusible-901251181",
-    "name": "Me [non-Diffusible] [non-Diffusible]",
-    "initials": "[[",
-    "color": "purple",
-    "city": "Viry",
-    "citySlug": "viry",
-    "officeName": "LES NOTAIRES D'ECOVELA",
-    "address": "[NON-DIFFUSIBLE]",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
       ]
     ],
     "role": "associé",
@@ -73033,45 +72924,6 @@
     "claimed": false
   },
   {
-    "id": "etude-477807887",
-    "name": "Étude Cham interdep notaires cour appel",
-    "initials": "CI",
-    "color": "green",
-    "city": "Reims",
-    "citySlug": "reims",
-    "officeName": "CHAM INTERDEP NOTAIRES COUR APPEL",
-    "address": "44 CRS J B LANGLET 51100 REIMS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "auge-laurence-883158040",
     "name": "Me Laurence Auge",
     "initials": "LA",
@@ -77674,42 +77526,6 @@
     "claimed": false
   },
   {
-    "id": "boizard-jerome-pierre-marie-rene-786453779",
-    "name": "Me Jerome Pierre Marie Rene Boizard",
-    "initials": "JB",
-    "color": "default",
-    "city": "Les sables d'olonne",
-    "citySlug": "les-sables-d-olonne",
-    "officeName": "CBMK NOTAIRES ASSOCIES",
-    "address": "2-4 2 AV GEORGES POMPIDOU 85100 LES SABLES D'OLONNE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "charrier-muriel-jeannette-andree-786453779",
     "name": "Me Muriel Jeannette Andrée Charrier",
     "initials": "MC",
@@ -77944,46 +77760,6 @@
       ]
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-781117320",
-    "name": "Étude Chambre dep des notaires s m",
-    "initials": "CD",
-    "color": "green",
-    "city": "Rouen",
-    "citySlug": "rouen",
-    "officeName": "CHAMBRE DEP DES NOTAIRES S M",
-    "address": "39 RUE DU CHAMP DES OISEAUX 76000 ROUEN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -80341,46 +80117,6 @@
       ]
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-778648071",
-    "name": "Étude Chambre des notaires de yonne",
-    "initials": "CD",
-    "color": "purple",
-    "city": "Auxerre",
-    "citySlug": "auxerre",
-    "officeName": "CHAMBRE DES NOTAIRES DE YONNE",
-    "address": "61 AVENUE DES CLAIRIONS 89000 AUXERRE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -93554,43 +93290,6 @@
     "claimed": false
   },
   {
-    "id": "etude-777185992",
-    "name": "Étude Chambre des notaires du tarn",
-    "initials": "CD",
-    "color": "purple",
-    "city": "Albi",
-    "citySlug": "albi",
-    "officeName": "CHAMBRE DES NOTAIRES DU TARN",
-    "address": "30 PLACE HENRI DE GORSSE 81000 ALBI",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "emonnet-geoffroy-777655812",
     "name": "Me Geoffroy Emonnet",
     "initials": "GE",
@@ -94544,45 +94243,6 @@
       [],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "valard-olivier-849694831",
-    "name": "Me Olivier Valard",
-    "initials": "OV",
-    "color": "purple",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "MIMOSAS SPFPL DE NOTAIRES",
-    "address": "33 AVENUE DU GENERAL SARRAIL 75016 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -95556,45 +95216,6 @@
       ]
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-780608832",
-    "name": "Étude Caisse garantie des notaires",
-    "initials": "CG",
-    "color": "green",
-    "city": "Amiens",
-    "citySlug": "amiens",
-    "officeName": "CAISSE GARANTIE DES NOTAIRES",
-    "address": "7 PLACE D'AGUESSEAU 80000 AMIENS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -97621,45 +97242,6 @@
     "citySlug": "toulouse",
     "officeName": "SELARL DUGA NOTAIRES",
     "address": "3 RUE BOULBONNE 31000 TOULOUSE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "helou-roula-907995294",
-    "name": "Me Roula Helou",
-    "initials": "RH",
-    "color": "green",
-    "city": "La turbie",
-    "citySlug": "la-turbie",
-    "officeName": "ROULA HELOU NOTAIRE",
-    "address": "VILLA AUGUSTA - BATIMENT E 2 ROUTE DE NICE 06320 LA TURBIE",
     "phone": "",
     "website": "",
     "specialties": [
@@ -101368,44 +100950,6 @@
       ]
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-924600273",
-    "name": "Étude Mediation notaires 77",
-    "initials": "MN",
-    "color": "default",
-    "city": "Melun",
-    "citySlug": "melun",
-    "officeName": "MEDIATION NOTAIRES 77",
-    "address": "24 BOULEVARD CHAMBLAIN 77000 MELUN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -113966,41 +113510,6 @@
     "claimed": false
   },
   {
-    "id": "pavlidis-konstantina-852951540",
-    "name": "Me Konstantina Pavlidis",
-    "initials": "KP",
-    "color": "purple",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "PAVLIDIS PIGAUX PRUNIER NOTAIRES",
-    "address": "2 RUE TURGOT 75009 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "pigaux-frederic-852951540",
     "name": "Me Frederic Pigaux",
     "initials": "FP",
@@ -115453,45 +114962,6 @@
       ]
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-923153589",
-    "name": "Étude Centre de mediation des notaires de corse",
-    "initials": "CD",
-    "color": "purple",
-    "city": "Bastia",
-    "citySlug": "bastia",
-    "officeName": "CENTRE DE MEDIATION DES NOTAIRES DE CORSE",
-    "address": "BAT A IMMEUBLE LE 108 CAPANELLE 8 RUE DU CHANOINE COLOMBANI 20200 BASTIA",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -122092,44 +121562,6 @@
       ]
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-839370624",
-    "name": "Étude Chambre interdepartementale des notaires d auvergne",
-    "initials": "CI",
-    "color": "green",
-    "city": "Clermont-ferrand",
-    "citySlug": "clermont-ferrand",
-    "officeName": "CHAMBRE INTERDEPARTEMENTALE DES NOTAIRES D AUVERGNE",
-    "address": "10 RUE MARECHAL FOCH 63000 CLERMONT-FERRAND",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -139371,45 +138803,6 @@
     "claimed": false
   },
   {
-    "id": "etude-934283839",
-    "name": "Étude Chambre interdepartementale des notaires berry nivernais",
-    "initials": "CI",
-    "color": "green",
-    "city": "Bourges",
-    "citySlug": "bourges",
-    "officeName": "CHAMBRE INTERDEPARTEMENTALE DES NOTAIRES BERRY NIVERNAIS",
-    "address": "16 RUE JEAN BAFFIER 18000 BOURGES",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "clave-maylis-helene-929446813",
     "name": "Me Maylis Hélène Clavé",
     "initials": "MC",
@@ -141022,44 +140415,6 @@
       []
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-412924078",
-    "name": "Étude Groupement immobilier notaires grand paris (gin gp)",
-    "initials": "GI",
-    "color": "purple",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "GROUPEMENT IMMOBILIER NOTAIRES GRAND PARIS (GIN GP)",
-    "address": "65 RUE DE TURBIGO 75003 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -146105,86 +145460,6 @@
     "citySlug": "herbignac",
     "officeName": "SELARL GUIHARD DICECCA NOTAIRES ASSOCIES",
     "address": "41 RUE DE VERDUN 44410 HERBIGNAC",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "brison-valentine-942474503",
-    "name": "Me Valentine Brison",
-    "initials": "VB",
-    "color": "default",
-    "city": "",
-    "citySlug": "",
-    "officeName": "COTE BECHARD GAGNON NOTAIRES INC",
-    "address": "QUEBEC 783 BD DES BOIS-FRANCS SUD G6P 5W3  VICTORIAVILLE CANADA",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "cote-marie-claude-942474503",
-    "name": "Me Marie-Claude Côté",
-    "initials": "MC",
-    "color": "green",
-    "city": "",
-    "citySlug": "",
-    "officeName": "COTE BECHARD GAGNON NOTAIRES INC",
-    "address": "QUEBEC 783 BD DES BOIS-FRANCS SUD G6P 5W3  VICTORIAVILLE CANADA",
     "phone": "",
     "website": "",
     "specialties": [
@@ -164142,44 +163417,6 @@
     "claimed": false
   },
   {
-    "id": "cabanes-philippe-775982168",
-    "name": "Me Philippe Cabanes",
-    "initials": "PC",
-    "color": "green",
-    "city": "Beziers",
-    "citySlug": "beziers",
-    "officeName": "FREDERIC VIDAL ET JENNIFER GAZQUEZ NOTAIRES ASSOCIES",
-    "address": "LE FORUM BAT B 1ER ETAGE 1 16 AVENUE DE LA VOIE DOMITIENNE 34500 BEZIERS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "gasquez-jennifer-elodie-775982168",
     "name": "Me Jennifer Elodie Gasquez",
     "initials": "JG",
@@ -164213,46 +163450,6 @@
       ],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "vidal-frederic-775982168",
-    "name": "Me Frederic Vidal",
-    "initials": "FV",
-    "color": "default",
-    "city": "Beziers",
-    "citySlug": "beziers",
-    "officeName": "FREDERIC VIDAL ET JENNIFER GAZQUEZ NOTAIRES ASSOCIES",
-    "address": "LE FORUM BAT B 1ER ETAGE 1 16 AVENUE DE LA VOIE DOMITIENNE 34500 BEZIERS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -179641,40 +178838,6 @@
     "claimed": false
   },
   {
-    "id": "etude-334203064",
-    "name": "Étude Armelle duval-ormezzano et vincent richaud, notaires associes",
-    "initials": "AD",
-    "color": "green",
-    "city": "Vienne",
-    "citySlug": "vienne",
-    "officeName": "ARMELLE DUVAL-ORMEZZANO ET VINCENT RICHAUD, NOTAIRES ASSOCIES",
-    "address": "2 AVENUE BEAUSEJOUR 38200 VIENNE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "court-payen-arnaud-337622724",
     "name": "Me Arnaud Court-Payen",
     "initials": "AC",
@@ -186439,46 +185602,6 @@
       [],
       [
         "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "schwartz-carly-viviane-322204306",
-    "name": "Me Carly Viviane Schwartz",
-    "initials": "CS",
-    "color": "purple",
-    "city": "Fontainebleau",
-    "citySlug": "fontainebleau",
-    "officeName": "SCP LUDOVIC BONELLE ET CARLY SCHWARTZ, NOTAIRES ASSOCIES",
-    "address": "4 PLACE D'ARMES 77300 FONTAINEBLEAU",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
       ]
     ],
     "role": "associé",
@@ -199525,41 +198648,6 @@
       ]
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-831219084",
-    "name": "Étude Centre de mediation du conseil regional des notaires de la cour d'appel de rouen",
-    "initials": "CD",
-    "color": "default",
-    "city": "Rouen",
-    "citySlug": "rouen",
-    "officeName": "CENTRE DE MEDIATION DU CONSEIL REGIONAL DES NOTAIRES DE LA COUR D'APPEL DE ROUEN",
-    "address": "39 RUE DU CHAMP DES OISEAUX 76000 ROUEN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -212955,42 +212043,6 @@
       ],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "leroy-alexandre-399914647",
-    "name": "Me Alexandre Leroy",
-    "initials": "AL",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "CELINE BIGUEUR-PICARD, ALEXANDRE LEROY ET MARIE MOGUILEWSKY, NOTAIRES ASSOCIES (BPLM)",
-    "address": "25 RUE GUILLAUME TELL 75017 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -238528,42 +237580,6 @@
     "claimed": false
   },
   {
-    "id": "debrus-henri-jules-jacques-402566376",
-    "name": "Me Henri Jules Jacques Debrus",
-    "initials": "HD",
-    "color": "default",
-    "city": "Montpellier",
-    "citySlug": "montpellier",
-    "officeName": "JACQUES DEBRUS ET HENRI DEBRUS NOTAIRES ASSOCIES D'UNE STE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE",
-    "address": "2 EME ETAGE 11 GR JEAN MOULIN 34000 MONTPELLIER",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "debrus-jacques-402566376",
     "name": "Me Jacques Debrus",
     "initials": "JD",
@@ -253905,41 +252921,6 @@
     "claimed": false
   },
   {
-    "id": "duparc-olivier-313270381",
-    "name": "Me Olivier Duparc",
-    "initials": "OD",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "FABRICE LUZU, JULIEN TROKINER, SEBASTIEN WOLF, VIRGINIE JACQUET ET OLIVIER DUPARC, NOTAIRES ASSOCIES",
-    "address": "29 RUE DE LA BIENFAISANCE 75008 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "jacquet-virginie-313270381",
     "name": "Me Virginie Jacquet",
     "initials": "VJ",
@@ -254787,41 +253768,6 @@
       [],
       [
         "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "boyreau-florence-341052827",
-    "name": "Me Florence Boyreau",
-    "initials": "FB",
-    "color": "default",
-    "city": "Auterive",
-    "citySlug": "auterive",
-    "officeName": "FLORENCE BOYREAU ET JULIEN BENAC NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELELL TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "16 RUE EMILE ZOLA 31190 AUTERIVE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
       ]
     ],
     "role": "associé",
@@ -260265,46 +259211,6 @@
       ],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "topin-laurent-jean-gaston-844254920",
-    "name": "Me Laurent Jean Gaston Topin",
-    "initials": "LT",
-    "color": "green",
-    "city": "Maligny",
-    "citySlug": "maligny",
-    "officeName": "LAURENT TOPIN ET EMILIE BERARDO NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "96 GR GRAND RUE 89800 MALIGNY",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -268773,45 +267679,6 @@
     "claimed": false
   },
   {
-    "id": "braud-frederic-francois-claude-314247057",
-    "name": "Me Frederic Francois Claude Braud",
-    "initials": "FB",
-    "color": "default",
-    "city": "Grenoble",
-    "citySlug": "grenoble",
-    "officeName": "XAVIER ROCHE, PHILIPPE CASTETS, FREDERIC BRAUD ET ALEXIS BENHAMOU, NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELL",
-    "address": "1 RUE PHILIS DE LA CHARCE 38000 GRENOBLE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "castets-philippe-andre-vincent-314247057",
     "name": "Me Philippe Andre Vincent Castets",
     "initials": "PC",
@@ -270071,41 +268938,6 @@
     "claimed": false
   },
   {
-    "id": "paulissen-roy-virginie-404377483",
-    "name": "Me Virginie Paulissen",
-    "initials": "VP",
-    "color": "purple",
-    "city": "Phalempin",
-    "citySlug": "phalempin",
-    "officeName": "BERTRAND LANDAS  LUDOVIC FOURNET ET VIRGINIE PAULISSEN-ROY  NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITUL",
-    "address": "9 LE NOUVEAU 9 LE NOUVEAU VILLAGE 59133 PHALEMPIN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "bayle-bouquie-nathalie-andree-383797750",
     "name": "Me Nathalie Andree Bayle",
     "initials": "NB",
@@ -270319,44 +269151,6 @@
         "10:00"
       ],
       [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "colas-rodolphe-332417252",
-    "name": "Me Rodolphe Colas",
-    "initials": "RC",
-    "color": "default",
-    "city": "Blere",
-    "citySlug": "blere",
-    "officeName": "NICOLE NURET-DESCLE ET RODOLPHE COLAS, NOTAIRES ASSOCIES, SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "12 RUE SAINT-JULIEN 37150 BLERE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
       [],
       []
     ],
@@ -273851,46 +272645,6 @@
       ]
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-778598896",
-    "name": "Étude Chambre des notaires",
-    "initials": "CD",
-    "color": "green",
-    "city": "Macon",
-    "citySlug": "macon",
-    "officeName": "CHAMBRE DES NOTAIRES",
-    "address": "69 PLACE SAINT VINCENT 71000 MACON",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -280638,81 +279392,6 @@
     "claimed": false
   },
   {
-    "id": "tandonnet-louis-philippe-marie-edouard-hubert-patrick-351133764",
-    "name": "Me Louis-Philippe Marie Edouard Hubert Patrick Tandonnet",
-    "initials": "LT",
-    "color": "purple",
-    "city": "Bourg-en-bresse",
-    "citySlug": "bourg-en-bresse",
-    "officeName": "PAUL GAUD, PATRICK NAZARETH , STEPHANE VIEILLE ET LOUIS PHILIPPE TANDONNET LUC SAINT-PAUL NOTAIRES ASSOCIES",
-    "address": "1 RUE DU VINGT-TROISIEME R I 01000 BOURG-EN-BRESSE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "vieille-stephane-robert-nicolas-351133764",
-    "name": "Me Stephane Robert Nicolas Vieille",
-    "initials": "SV",
-    "color": "default",
-    "city": "Bourg-en-bresse",
-    "citySlug": "bourg-en-bresse",
-    "officeName": "PAUL GAUD, PATRICK NAZARETH , STEPHANE VIEILLE ET LOUIS PHILIPPE TANDONNET LUC SAINT-PAUL NOTAIRES ASSOCIES",
-    "address": "1 RUE DU VINGT-TROISIEME R I 01000 BOURG-EN-BRESSE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "ginglinger-poyard-ginglinger-caroline-301168183",
     "name": "Me Caroline Ginglinger-Poyard",
     "initials": "CG",
@@ -283947,45 +282626,6 @@
     "claimed": false
   },
   {
-    "id": "jacqueson-lorthiois-florence-claudine-hermance-829351329",
-    "name": "Me Florence Claudine Hermance Jacqueson",
-    "initials": "FJ",
-    "color": "purple",
-    "city": "Chalon-sur-saone",
-    "citySlug": "chalon-sur-saone",
-    "officeName": "FLORENCE LORTHIOIS NOTAIRE",
-    "address": "16 BD DE LA REPUBLIQUE 71100 CHALON-SUR-SAONE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "etude-913743787",
     "name": "Étude Sas notaire 15",
     "initials": "SN",
@@ -284507,42 +283147,6 @@
       ],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "goblet-bouvier-caroline-841313711",
-    "name": "Me Caroline Goblet",
-    "initials": "CG",
-    "color": "purple",
-    "city": "Tours",
-    "citySlug": "tours",
-    "officeName": "CAROLINE GOBLET NOTAIRE",
-    "address": "11 RUE CHARLES PEGUY 37000 TOURS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -286987,81 +285591,6 @@
     "claimed": false
   },
   {
-    "id": "etude-780713087",
-    "name": "Étude Conseil region notaires cour",
-    "initials": "CR",
-    "color": "default",
-    "city": "Caen",
-    "citySlug": "caen",
-    "officeName": "CONSEIL REGION NOTAIRES COUR",
-    "address": "6 PL LOUIS GUILLOUARD 14000 CAEN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-780936498",
-    "name": "Étude Chambre depart notaires l orne",
-    "initials": "CD",
-    "color": "green",
-    "city": "Alencon",
-    "citySlug": "alencon",
-    "officeName": "CHAMBRE DEPART NOTAIRES L ORNE",
-    "address": "45 CRS CLEMENCEAU 61000 ALENCON",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "foullon-lucie-829538917",
     "name": "Me Lucie Foullon",
     "initials": "LF",
@@ -287291,45 +285820,6 @@
     "claimed": false
   },
   {
-    "id": "truffet-eric-pierre-daniel-853645331",
-    "name": "Me Eric Pierre Daniel Truffet",
-    "initials": "ET",
-    "color": "purple",
-    "city": "Melun",
-    "citySlug": "melun",
-    "officeName": "LOUIS, LAROCHE & ASSOCIES, NOTAIRES",
-    "address": "3 BD GAMBETTA 77000 MELUN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "romme-fabrice-841239833",
     "name": "Me Fabrice Romme",
     "initials": "FR",
@@ -287367,41 +285857,6 @@
       ]
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-823454996",
-    "name": "Étude Amaury ploteau, notaire associe",
-    "initials": "AP",
-    "color": "green",
-    "city": "Montaigu-vendee",
-    "citySlug": "montaigu-vendee",
-    "officeName": "AMAURY PLOTEAU, NOTAIRE ASSOCIE",
-    "address": "34 LA PERROCHERE 85600 MONTAIGU-VENDEE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -288467,47 +286922,6 @@
     "claimed": false
   },
   {
-    "id": "calvet-charles-833463946",
-    "name": "Me Charles Calvet",
-    "initials": "CC",
-    "color": "green",
-    "city": "Valreas",
-    "citySlug": "valreas",
-    "officeName": "SELARL CHARLES CALVET, NOTAIRE",
-    "address": "46 CRS JEAN JAURES 84600 VALREAS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "antoine-barre-sophie-833483803",
     "name": "Me Sophie Antoine",
     "initials": "SA",
@@ -288894,47 +287308,6 @@
     "claimed": false
   },
   {
-    "id": "legrand-yonnel-315668483",
-    "name": "Me Yonnel Legrand",
-    "initials": "YL",
-    "color": "default",
-    "city": "Jard-sur-mer",
-    "citySlug": "jard-sur-mer",
-    "officeName": "SCP Y LEGRAND B BARATHON NOTAIRES",
-    "address": "3 PL DE LA LIBERTE 85520 JARD-SUR-MER",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "dambrine-georges-300900396",
     "name": "Me Georges Dambrine",
     "initials": "GD",
@@ -289071,47 +287444,6 @@
         "11:00",
         "14:00",
         "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "melon-nicolas-342871282",
-    "name": "Me Nicolas Melon",
-    "initials": "NM",
-    "color": "purple",
-    "city": "Angers",
-    "citySlug": "angers",
-    "officeName": "PHILIPPE TOCQUEVILLE ET NICOLAS MELON NOTAIRES",
-    "address": "9 RUE DES ARENES 49000 ANGERS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
       ]
     ],
     "role": "associé",
@@ -290274,42 +288606,6 @@
     "claimed": false
   },
   {
-    "id": "nogues-benoit-antoine-henri-431303833",
-    "name": "Me Benoit Antoine Henri Nogues",
-    "initials": "BN",
-    "color": "green",
-    "city": "Angouleme",
-    "citySlug": "angouleme",
-    "officeName": "L. METAIS B. NOGUES SCP DE NOTAIRES",
-    "address": "6 PL HENRI DUNANT 16000 ANGOULEME",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "galandon-jean-pierre-334983111",
     "name": "Me Jean Pierre Galandon",
     "initials": "JG",
@@ -290410,45 +288706,6 @@
         "14:00",
         "15:30"
       ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "barre-stephane-jacques-311771067",
-    "name": "Me Stephane Jacques Barre",
-    "initials": "SB",
-    "color": "purple",
-    "city": "Le puy-en-velay",
-    "citySlug": "le-puy-en-velay",
-    "officeName": "SCP REGIS VEY NOTAIRE ASSOCIE",
-    "address": "2 B RUE DU FAUBOURG SAINT JEAN 43000 LE PUY-EN-VELAY",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -290564,81 +288821,6 @@
         "11:00",
         "14:00"
       ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "didier-pierre-marcel-410693436",
-    "name": "Me Pierre Marcel Didier",
-    "initials": "PD",
-    "color": "default",
-    "city": "Aubenas",
-    "citySlug": "aubenas",
-    "officeName": "PIERRE DIDIER ET HUBERT MOLLE NOTAIRES",
-    "address": "12 AV DE LA LIBERTE 07200 AUBENAS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "molle-hubert-etienne-marie-410693436",
-    "name": "Me Hubert Etienne Marie Molle",
-    "initials": "HM",
-    "color": "green",
-    "city": "Aubenas",
-    "citySlug": "aubenas",
-    "officeName": "PIERRE DIDIER ET HUBERT MOLLE NOTAIRES",
-    "address": "12 AV DE LA LIBERTE 07200 AUBENAS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -290912,84 +289094,6 @@
         "14:00",
         "15:30"
       ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "gousseau-damien-didier-980946487",
-    "name": "Me Damien Didier Gousseau",
-    "initials": "DG",
-    "color": "green",
-    "city": "Conflans-sainte-honorine",
-    "citySlug": "conflans-sainte-honorine",
-    "officeName": "DAMIEN GOUSSEAU ET CHARLENE DHIF, NOTAIRES",
-    "address": "5 PL DE LA LIBERTE 78700 CONFLANS-SAINTE-HONORINE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "dhif-legros-charlene-claudia-claude-980946487",
-    "name": "Me Charlene Claudia Claude Dhif",
-    "initials": "CD",
-    "color": "purple",
-    "city": "Conflans-sainte-honorine",
-    "citySlug": "conflans-sainte-honorine",
-    "officeName": "DAMIEN GOUSSEAU ET CHARLENE DHIF, NOTAIRES",
-    "address": "5 PL DE LA LIBERTE 78700 CONFLANS-SAINTE-HONORINE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -291965,81 +290069,6 @@
     "claimed": false
   },
   {
-    "id": "ernaelsteen-franck-bernard-ghislain-922671201",
-    "name": "Me Franck Bernard Ghislain Ernaelsteen",
-    "initials": "FE",
-    "color": "green",
-    "city": "Montmedy",
-    "citySlug": "montmedy",
-    "officeName": "FRANCK ERNAELSTEEN ET AUDE HERBINET, NOTAIRES ASSOCIES (SCP)",
-    "address": "7 PL EUGENE TRONVILLE 55600 MONTMEDY",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "herbinet-aude-922671201",
-    "name": "Me Aude Herbinet",
-    "initials": "AH",
-    "color": "purple",
-    "city": "Montmedy",
-    "citySlug": "montmedy",
-    "officeName": "FRANCK ERNAELSTEEN ET AUDE HERBINET, NOTAIRES ASSOCIES (SCP)",
-    "address": "7 PL EUGENE TRONVILLE 55600 MONTMEDY",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "compagnon-bruno-310580600",
     "name": "Me Bruno Compagnon",
     "initials": "BC",
@@ -292225,42 +290254,6 @@
       [],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "pelletier-philippe-pierre-louis-803703206",
-    "name": "Me Philippe Pierre Louis Pelletier",
-    "initials": "PP",
-    "color": "purple",
-    "city": "Marcilly-les-buxy",
-    "citySlug": "marcilly-les-buxy",
-    "officeName": "PHILIPPE PELLETIER ET JULIE YOT NOTAIRES ASSOCIES",
-    "address": "1738 ROUTE DU MARTRAT 71390 MARCILLY-LES-BUXY",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -292920,44 +290913,6 @@
     "claimed": false
   },
   {
-    "id": "malaval-stephanie-383341724",
-    "name": "Me Stephanie Malaval",
-    "initials": "SM",
-    "color": "purple",
-    "city": "Boulogne-billancourt",
-    "citySlug": "boulogne-billancourt",
-    "officeName": "STEPHANIE MALAVAL ET ANNE DE VILMORIN, NOTAIRES ASSOCIES",
-    "address": "31 AV ANDRE MORIZET 92100 BOULOGNE-BILLANCOURT",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "l-eveque-de-vilmorin-recoules-arche-anne-383341724",
     "name": "Me Anne L'eveque de vilmorin",
     "initials": "AV",
@@ -293266,42 +291221,6 @@
     "claimed": false
   },
   {
-    "id": "massonnet-nathalie-pascale-paule-marie-381168806",
-    "name": "Me Nathalie Pascale Paule Marie Massonnet",
-    "initials": "NM",
-    "color": "green",
-    "city": "Le neubourg",
-    "citySlug": "le-neubourg",
-    "officeName": "CATHERINE BERTHEMET ET NATHALIE MASSONNET, NOTAIRES ASSOCIES",
-    "address": "25 PL DU CHATEAU 27110 LE NEUBOURG",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "boitelle-antoine-387852668",
     "name": "Me Antoine Boitelle",
     "initials": "AB",
@@ -293499,46 +291418,6 @@
     "claimed": false
   },
   {
-    "id": "gillot-cossard-helene-781061825",
-    "name": "Me Helene Gillot",
-    "initials": "HG",
-    "color": "purple",
-    "city": "Le havre",
-    "citySlug": "le-havre",
-    "officeName": "FRANCOIS GILLOT ET HELENE GILLOT-COSSARD NOTAIRES",
-    "address": "109 BD DE STRASBOURG 76600 LE HAVRE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "gillot-francois-adrien-gerard-781061825",
     "name": "Me Francois Adrien Gerard Gillot",
     "initials": "FG",
@@ -293651,44 +291530,6 @@
       ]
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-948011416",
-    "name": "Étude Alexandre billy et sebastien durand notaires associes (alexandre billy et sebastien durand, notaires associes)",
-    "initials": "AB",
-    "color": "default",
-    "city": "Banyuls-sur-mer",
-    "citySlug": "banyuls-sur-mer",
-    "officeName": "ALEXANDRE BILLY ET SEBASTIEN DURAND NOTAIRES ASSOCIES (ALEXANDRE BILLY ET SEBASTIEN DURAND, NOTAIRES ASSOCIES)",
-    "address": "66650 BANYULS SUR MER 56 AV GENERAL DE GAULLE 66650 BANYULS-SUR-MER",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -294726,77 +292567,6 @@
       ],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "meyer-jean-michel-andre-gaston-490159373",
-    "name": "Me Jean-Michel Andre Gaston Meyer",
-    "initials": "JM",
-    "color": "purple",
-    "city": "Rochefort-du-gard",
-    "citySlug": "rochefort-du-gard",
-    "officeName": "JEAN MICHEL MEYER ET PASCALE SAILLARD NOTAIRES ASSOCIES",
-    "address": "3 AV FREDERIC MISTRAL 30650 ROCHEFORT-DU-GARD",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "caradec-vasseur-caradec-emmanuelle-791701865",
-    "name": "Me Emmanuelle Caradec-Vasseur",
-    "initials": "EC",
-    "color": "default",
-    "city": "Plouescat",
-    "citySlug": "plouescat",
-    "officeName": "EMMANUELLE CARADEC-VASSEUR, NOTAIRE TITULAIRE D'UN OFFICINE NOTARIAL",
-    "address": "BOULEVARD DE L’EUROPE 29430 PLOUESCAT",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -297735,46 +295505,6 @@
     "claimed": false
   },
   {
-    "id": "berlioz-ricetti-pierre-francois-alexandre-483323267",
-    "name": "Me Pierre Francois Alexandre Berlioz-Ricetti",
-    "initials": "PB",
-    "color": "purple",
-    "city": "Peyrins",
-    "citySlug": "peyrins",
-    "officeName": "PIERRE BERLIOZ-RICETTI - CECILE RISSOAN HELINE, NOTAIRES ASSOCIES",
-    "address": "IMMEUBLE LE CALIGNON 26380 PEYRINS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "rissoan-heline-rissoan-cecile-laure-483323267",
     "name": "Me Cecile Laure Rissoan héline",
     "initials": "CH",
@@ -298611,44 +296341,6 @@
     "claimed": false
   },
   {
-    "id": "feynie-marco-788243780",
-    "name": "Me Marco Feynie",
-    "initials": "MF",
-    "color": "default",
-    "city": "Toulouse",
-    "citySlug": "toulouse",
-    "officeName": "FBM NOTAIRES, SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "2 AV JEAN RIEUX 31000 TOULOUSE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "molinie-axel-788243780",
     "name": "Me Axel Molinie",
     "initials": "AM",
@@ -299103,225 +296795,6 @@
     "claimed": false
   },
   {
-    "id": "augu-damien-marie-francois-dominique-328400031",
-    "name": "Me Damien Marie Francois Dominique Augu",
-    "initials": "DA",
-    "color": "purple",
-    "city": "Vannes",
-    "citySlug": "vannes",
-    "officeName": "MARTINE BOURLES, DAMIEN AUGU, SABINE VASSE, NOTAIRES ASSOCIES",
-    "address": "1 PL NAZARETH 56000 VANNES",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "bertounesque-stephanie-celine-328400031",
-    "name": "Me Stephanie Celine Bertounesque",
-    "initials": "SB",
-    "color": "default",
-    "city": "Vannes",
-    "citySlug": "vannes",
-    "officeName": "MARTINE BOURLES, DAMIEN AUGU, SABINE VASSE, NOTAIRES ASSOCIES",
-    "address": "1 PL NAZARETH 56000 VANNES",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "bourles-martine-marie-annick-andree-328400031",
-    "name": "Me Martine Marie Annick Andree Bourles",
-    "initials": "MB",
-    "color": "green",
-    "city": "Vannes",
-    "citySlug": "vannes",
-    "officeName": "MARTINE BOURLES, DAMIEN AUGU, SABINE VASSE, NOTAIRES ASSOCIES",
-    "address": "1 PL NAZARETH 56000 VANNES",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "chauchat-rozier-guillaume-jean-marie-328400031",
-    "name": "Me Guillaume Jean Marie Chauchat-Rozier",
-    "initials": "GC",
-    "color": "purple",
-    "city": "Vannes",
-    "citySlug": "vannes",
-    "officeName": "MARTINE BOURLES, DAMIEN AUGU, SABINE VASSE, NOTAIRES ASSOCIES",
-    "address": "1 PL NAZARETH 56000 VANNES",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "potocki-sarah-marie-henriette-328400031",
-    "name": "Me Sarah Marie Henriette Potocki",
-    "initials": "SP",
-    "color": "default",
-    "city": "Vannes",
-    "citySlug": "vannes",
-    "officeName": "MARTINE BOURLES, DAMIEN AUGU, SABINE VASSE, NOTAIRES ASSOCIES",
-    "address": "1 PL NAZARETH 56000 VANNES",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "vasse-wendling-sabine-eliane-bernadette-328400031",
-    "name": "Me Sabine Eliane Bernadette Vasse",
-    "initials": "SV",
-    "color": "green",
-    "city": "Vannes",
-    "citySlug": "vannes",
-    "officeName": "MARTINE BOURLES, DAMIEN AUGU, SABINE VASSE, NOTAIRES ASSOCIES",
-    "address": "1 PL NAZARETH 56000 VANNES",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "lonchampt-alexande-311642102",
     "name": "Me Alexande Lonchampt",
     "initials": "AL",
@@ -299394,87 +296867,6 @@
       [],
       [
         "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "labarthe-piol-jean-marie-311821474",
-    "name": "Me Jean-Marie Labarthe-Piol",
-    "initials": "JL",
-    "color": "default",
-    "city": "Chartres",
-    "citySlug": "chartres",
-    "officeName": "FRANCOIS LATOURNERIE ET JEAN-MARIE LABARTHE-PIOL, NOTAIRES ASSOCIES.",
-    "address": "15 RUE DES GRENETS 28000 CHARTRES",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "latournerie-francois-311821474",
-    "name": "Me Francois Latournerie",
-    "initials": "FL",
-    "color": "green",
-    "city": "Chartres",
-    "citySlug": "chartres",
-    "officeName": "FRANCOIS LATOURNERIE ET JEAN-MARIE LABARTHE-PIOL, NOTAIRES ASSOCIES.",
-    "address": "15 RUE DES GRENETS 28000 CHARTRES",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
       ]
     ],
     "role": "associé",
@@ -299599,45 +296991,6 @@
     "claimed": false
   },
   {
-    "id": "landreau-remy-joseph-henri-313577835",
-    "name": "Me Remy Joseph Henri Landreau",
-    "initials": "RL",
-    "color": "purple",
-    "city": "Saint-priest",
-    "citySlug": "saint-priest",
-    "officeName": "FRANCOIS BARTHELET SANDRA TAMBORINI ET REMY LANDREAU NOTAIRES ASSOCIES",
-    "address": "12 BD FRANCOIS REYMOND 69800 SAINT-PRIEST",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "tamborini-sandra-emilienne-313577835",
     "name": "Me Sandra Emilienne Tamborini",
     "initials": "ST",
@@ -299749,41 +297102,6 @@
     "claimed": false
   },
   {
-    "id": "falch-felix-323960187",
-    "name": "Me Felix Falch",
-    "initials": "FF",
-    "color": "default",
-    "city": "Figeac",
-    "citySlug": "figeac",
-    "officeName": "COLETTE LAVAYSSIERE - FELIX FALCH - SOPHIE CHASSANG NOTAIRES ASSOCIES",
-    "address": "6 AV MARECHAL JOFFRE 46100 FIGEAC",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "moncouet-lavayssiere-colette-marie-323960187",
     "name": "Me Colette Marie Moncouet",
     "initials": "CM",
@@ -299815,45 +297133,6 @@
       []
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-753227222",
-    "name": "Étude Daniele bingler, notaire, associe d'une scp titulaire d'un office notarial",
-    "initials": "DB",
-    "color": "purple",
-    "city": "Munster",
-    "citySlug": "munster",
-    "officeName": "DANIELE BINGLER, NOTAIRE, ASSOCIE D'UNE SCP TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "21 RUE DE LA REPUBLIQUE 68140 MUNSTER",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -300267,44 +297546,6 @@
     "claimed": false
   },
   {
-    "id": "bruneau-nicolas-bernard-marcel-338774573",
-    "name": "Me Nicolas Bernard Marcel Bruneau",
-    "initials": "NB",
-    "color": "green",
-    "city": "Bar-sur-seine",
-    "citySlug": "bar-sur-seine",
-    "officeName": "BERNARD DE LA HAMAYDE JEAN-BAPTISTE DELAVIGNE ET NICOLAS BRUNEAU NOTAIRES ASSO",
-    "address": "BAR SUR SEINE 9 FG DE BOURGOGNE 10110 BAR-SUR-SEINE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "de-la-hamayde-bernard-338774573",
     "name": "Me Bernard De la hamayde",
     "initials": "BH",
@@ -300338,44 +297579,6 @@
         "11:00",
         "14:00",
         "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "delavigne-jean-baptiste-christophe-frederic-338774573",
-    "name": "Me Jean-Baptiste Christophe Frederic Delavigne",
-    "initials": "JD",
-    "color": "default",
-    "city": "Bar-sur-seine",
-    "citySlug": "bar-sur-seine",
-    "officeName": "BERNARD DE LA HAMAYDE JEAN-BAPTISTE DELAVIGNE ET NICOLAS BRUNEAU NOTAIRES ASSO",
-    "address": "BAR SUR SEINE 9 FG DE BOURGOGNE 10110 BAR-SUR-SEINE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
       ]
     ],
     "role": "associé",
@@ -300947,40 +298150,6 @@
     "claimed": false
   },
   {
-    "id": "etude-445374200",
-    "name": "Étude Christophe laine, notaire associe d'une societe civile professionnelle titulaire d'un office notarial",
-    "initials": "CL",
-    "color": "green",
-    "city": "Le mele-sur-sarthe",
-    "citySlug": "le-mele-sur-sarthe",
-    "officeName": "CHRISTOPHE LAINE, NOTAIRE ASSOCIE D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "90 GRANDE RUE 61170 LE MELE-SUR-SARTHE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "genin-robert-jean-marcel-393166277",
     "name": "Me Robert Jean Marcel Genin",
     "initials": "RG",
@@ -301050,44 +298219,6 @@
       [
         "11:00"
       ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "riou-laurent-pierre-320422595",
-    "name": "Me Laurent Pierre Riou",
-    "initials": "LR",
-    "color": "purple",
-    "city": "Landerneau",
-    "citySlug": "landerneau",
-    "officeName": "MES JACQUES KERBAUL, LAURENT RIOU, NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN",
-    "address": "30 BD DE LA GARE 29800 LANDERNEAU",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -301200,44 +298331,6 @@
       [],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "saccoccio-philippe-301076782",
-    "name": "Me Philippe Saccoccio",
-    "initials": "PS",
-    "color": "default",
-    "city": "Manosque",
-    "citySlug": "manosque",
-    "officeName": "PHILIPPE SACCOCCIO, SOPHIE CASANOVA-TIRAND, VINCENT BONDIL,JEAN-YVES MAZAN, NOTAIRES",
-    "address": "29 AV JEAN GIONO 04100 MANOSQUE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -301710,45 +298803,6 @@
         "11:00",
         "14:00",
         "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "renoult-vincent-raymond-780608824",
-    "name": "Me Vincent Raymond Renoult",
-    "initials": "VR",
-    "color": "green",
-    "city": "Amiens",
-    "citySlug": "amiens",
-    "officeName": "SOPHIE BOURLON ET VINCENT RENOULT, NOTAIRES ASSOCIES (SOCIETE TITULAIRE D'UN OFFICE NOTARIAL)",
-    "address": "18 PL PARMENTIER 80000 AMIENS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
       ]
     ],
     "role": "associé",
@@ -303015,44 +300069,6 @@
     "claimed": false
   },
   {
-    "id": "leguil-laurence-503880684",
-    "name": "Me Laurence Leguil",
-    "initials": "LL",
-    "color": "default",
-    "city": "Parce-sur-sarthe",
-    "citySlug": "parce-sur-sarthe",
-    "officeName": "JACQUES SERREAU ET LAURENCE LEGUIL NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN",
-    "address": "2 RUE DE LA LIBERATION 72300 PARCE-SUR-SARTHE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "serreau-jacques-503880684",
     "name": "Me Jacques Serreau",
     "initials": "JS",
@@ -304109,40 +301125,6 @@
     "claimed": false
   },
   {
-    "id": "pichon-jean-cyrille-795209246",
-    "name": "Me Jean-Cyrille Pichon",
-    "initials": "JP",
-    "color": "purple",
-    "city": "Andrezieux-boutheon",
-    "citySlug": "andrezieux-boutheon",
-    "officeName": "JEAN-CYRILLE PICHON ET LAETITIA RICHARD-PICHON NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE",
-    "address": "15 PL DU FOREZ 42160 ANDREZIEUX-BOUTHEON",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "pichon-richard-laetitia-charlotte-mauricia-795209246",
     "name": "Me Laetitia Charlotte Mauricia Pichon",
     "initials": "LP",
@@ -304519,41 +301501,6 @@
     "claimed": false
   },
   {
-    "id": "martine-hubert-olivier-andre-gaston-490582756",
-    "name": "Me Hubert Olivier Andre Gaston Martine",
-    "initials": "HM",
-    "color": "green",
-    "city": "Ardres",
-    "citySlug": "ardres",
-    "officeName": "MARIE-JOELLE PATEY-BERTIN ET HUBERT MARTINE NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE",
-    "address": "72 BD CONSTANTIN SENLECQ 62610 ARDRES",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "rietsch-jean-philippe-stephane-michel-493562367",
     "name": "Me Jean-Philippe Stephane Michel Rietsch",
     "initials": "JR",
@@ -304694,82 +301641,6 @@
         "09:00",
         "10:30",
         "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "sechet-beguier-elisabeth-marthe-jacqueline-marie-334174521",
-    "name": "Me Elisabeth Marthe Jacqueline Marie Sechet",
-    "initials": "ES",
-    "color": "default",
-    "city": "Carnac",
-    "citySlug": "carnac",
-    "officeName": "SEVERINE CAILLOCE ET ELISABETH SECHET, NOTAIRES, ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE",
-    "address": "4 AV DU ROHIC 56340 CARNAC",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "cailloce-guyomard-severine-334174521",
-    "name": "Me Severine Cailloce",
-    "initials": "SC",
-    "color": "green",
-    "city": "Carnac",
-    "citySlug": "carnac",
-    "officeName": "SEVERINE CAILLOCE ET ELISABETH SECHET, NOTAIRES, ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE",
-    "address": "4 AV DU ROHIC 56340 CARNAC",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
       ],
       [],
       [
@@ -305276,87 +302147,6 @@
     "claimed": false
   },
   {
-    "id": "carre-nicolas-323347179",
-    "name": "Me Nicolas Carre",
-    "initials": "NC",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "SCP NICOLAS CARRE, MARTIN DESROUSSEAUX, MELANIE DUBOIS ET THIBAUT SERVENT, NOTAIRES ASSOCIES",
-    "address": "76 RUE NATIONALE 59000 LILLE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "desrousseaux-martin-323347179",
-    "name": "Me Martin Desrousseaux",
-    "initials": "MD",
-    "color": "green",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "SCP NICOLAS CARRE, MARTIN DESROUSSEAUX, MELANIE DUBOIS ET THIBAUT SERVENT, NOTAIRES ASSOCIES",
-    "address": "76 RUE NATIONALE 59000 LILLE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "quecq-d-henripret-dubois-melanie-323347179",
     "name": "Me Melanie Quecq d'henripret",
     "initials": "MD",
@@ -305386,46 +302176,6 @@
       [],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "servent-thibaut-323347179",
-    "name": "Me Thibaut Servent",
-    "initials": "TS",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "SCP NICOLAS CARRE, MARTIN DESROUSSEAUX, MELANIE DUBOIS ET THIBAUT SERVENT, NOTAIRES ASSOCIES",
-    "address": "76 RUE NATIONALE 59000 LILLE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -306232,41 +302982,6 @@
       [],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "leprince-veron-leprince-helene-786312207",
-    "name": "Me Helene Leprince-Veron",
-    "initials": "HL",
-    "color": "default",
-    "city": "Loue",
-    "citySlug": "loue",
-    "officeName": "SOCIETE CIVILE PROFESSIONNELLE DENOMMEE HELENE LEPRINCE-VERON NOTAIRE TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "12 RUE DU CHATEAU 72540 LOUE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -307542,46 +304257,6 @@
     "claimed": false
   },
   {
-    "id": "decaux-florian-helen-bertrand-444473078",
-    "name": "Me Florian Helen Bertrand Decaux",
-    "initials": "FD",
-    "color": "purple",
-    "city": "Saint-cere",
-    "citySlug": "saint-cere",
-    "officeName": "SCP FLORIAN ET CLAIRE DECAUX, NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "AVENUE GASTON MONNERVILLE 46400 SAINT-CERE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "decaux-decup-claire-aude-helene-444473078",
     "name": "Me Claire Aude Hélène Decaux",
     "initials": "CD",
@@ -307610,45 +304285,6 @@
         "11:00",
         "14:00",
         "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "berregard-damien-michael-492899851",
-    "name": "Me Damien Michael Berregard",
-    "initials": "DB",
-    "color": "green",
-    "city": "Perros-guirec",
-    "citySlug": "perros-guirec",
-    "officeName": "CHRISTOPHE LEVARDET DAMIEN BERREGARD NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTAR",
-    "address": "19 RUE DES SEPT ILES 22700 PERROS-GUIREC",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
       ]
     ],
     "role": "associé",
@@ -307695,80 +304331,6 @@
     "claimed": false
   },
   {
-    "id": "peltier-francois-albert-joseph-342996576",
-    "name": "Me Francois Albert Joseph Peltier",
-    "initials": "FP",
-    "color": "default",
-    "city": "Caen",
-    "citySlug": "caen",
-    "officeName": "JOSE ANTOINE PELTIER ET FRANCOIS PELTIER, NOTAIRES, ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE, TITULAIRE D'UN OFFICE",
-    "address": "80 BD DUNOIS 14000 CAEN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "peltier-jose-antoine-bruno-342996576",
-    "name": "Me Jose Antoine Bruno Peltier",
-    "initials": "JP",
-    "color": "green",
-    "city": "Caen",
-    "citySlug": "caen",
-    "officeName": "JOSE ANTOINE PELTIER ET FRANCOIS PELTIER, NOTAIRES, ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE, TITULAIRE D'UN OFFICE",
-    "address": "80 BD DUNOIS 14000 CAEN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "colombel-robert-michel-392131744",
     "name": "Me Robert Michel Colombel",
     "initials": "RC",
@@ -307808,83 +304370,10 @@
     "claimed": false
   },
   {
-    "id": "bidal-sandrine-348321837",
-    "name": "Me Sandrine Bidal",
-    "initials": "SB",
-    "color": "green",
-    "city": "Eybens",
-    "citySlug": "eybens",
-    "officeName": "MYRTILLE REBERT, REMI PORCELLA, ET SANDRINE BIDAL, NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN (UFORETS)",
-    "address": "9 PL DE GEVE 38320 EYBENS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "rebert-palain-myrtille-348321837",
     "name": "Me Myrtille Rebert",
     "initials": "MR",
     "color": "purple",
-    "city": "Eybens",
-    "citySlug": "eybens",
-    "officeName": "MYRTILLE REBERT, REMI PORCELLA, ET SANDRINE BIDAL, NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN (UFORETS)",
-    "address": "9 PL DE GEVE 38320 EYBENS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "porcella-remi-charles-348321837",
-    "name": "Me Remi Charles Porcella",
-    "initials": "RP",
-    "color": "default",
     "city": "Eybens",
     "citySlug": "eybens",
     "officeName": "MYRTILLE REBERT, REMI PORCELLA, ET SANDRINE BIDAL, NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN (UFORETS)",
@@ -308137,40 +304626,6 @@
       [
         "11:00"
       ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "beaulande-cedric-alain-329221782",
-    "name": "Me Cedric Alain Beaulande",
-    "initials": "CB",
-    "color": "default",
-    "city": "Muzillac",
-    "citySlug": "muzillac",
-    "officeName": "HUBERT COLLAS DE CHATELPERRON, CEDRIC BEAULANDE, ET STEPHANIE LE ROUX NOTAIRES, ASSOCIES D'UNE SOCIETE CIVIILE PROFESSI",
-    "address": "9 RUE GAL DE GAULLE 56190 MUZILLAC",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -308632,41 +305087,6 @@
     "claimed": false
   },
   {
-    "id": "glock-stephane-398262048",
-    "name": "Me Stephane Glock",
-    "initials": "SG",
-    "color": "default",
-    "city": "La wantzenau",
-    "citySlug": "la-wantzenau",
-    "officeName": "CHRISTIAN GRIENEISEN, EDMOND GRESSER ET STEPHANE GLOCK NOTAIRES ASSOCIES DE LA SCP TITULAIRE DE L'OFFICE NOTARIAL DE LA",
-    "address": "9 RUE DE LA GARE 67610 LA WANTZENAU",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "gresser-edmond-398262048",
     "name": "Me Edmond Gresser",
     "initials": "EG",
@@ -308813,45 +305233,6 @@
       ],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "le-gohic-romuald-jean-mickael-438653396",
-    "name": "Me Romuald Jean Mickael Le gohic",
-    "initials": "RG",
-    "color": "purple",
-    "city": "Carhaix-plouguer",
-    "citySlug": "carhaix-plouguer",
-    "officeName": "CATHERINE MARTIN-RAFFRAY, ROMUALD LE GOHIC, NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE",
-    "address": "13 AV VICTOR HUGO 29270 CARHAIX-PLOUGUER",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -309145,45 +305526,6 @@
     "claimed": false
   },
   {
-    "id": "huleux-francis-andre-gaston-797677762",
-    "name": "Me Francis Andre Gaston Huleux",
-    "initials": "FH",
-    "color": "purple",
-    "city": "Montgeron",
-    "citySlug": "montgeron",
-    "officeName": "XAVIER NYS ET FRANCIS HULEUX, NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "180 AV DE LA REPUBLIQUE 91230 MONTGERON",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "nys-xavier-claude-797677762",
     "name": "Me Xavier Claude Nys",
     "initials": "XN",
@@ -309286,41 +305628,6 @@
       [
         "11:00",
         "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "philippon-alexandra-renee-830591707",
-    "name": "Me Alexandra Renée Philippon",
-    "initials": "AP",
-    "color": "default",
-    "city": "Montlucon",
-    "citySlug": "montlucon",
-    "officeName": "HUBERT LEPEE ET ALEXANDRA PHILIPPON NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTARIA",
-    "address": "98 BOULEVARD DE COURTAIS 03100 MONTLUCON",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
       ]
     ],
     "role": "associé",
@@ -309469,40 +305776,6 @@
         "14:00",
         "15:30"
       ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "vaudier-chalencon-caroline-beatrice-532651643",
-    "name": "Me Caroline Beatrice Vaudier",
-    "initials": "CV",
-    "color": "purple",
-    "city": "Saint-haon-le-chatel",
-    "citySlug": "saint-haon-le-chatel",
-    "officeName": "WILFRID MERLE ET CAROLINE VAUDIER, NOTAIRES, ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTARIA",
-    "address": "HOTEL JEHAN PELLETIER 42370 SAINT-HAON-LE-CHATEL",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -309897,45 +306170,6 @@
     "claimed": false
   },
   {
-    "id": "crossoir-emmanuelle-777663683",
-    "name": "Me Emmanuelle Crossoir",
-    "initials": "EC",
-    "color": "green",
-    "city": "La chapelle-des-fougeretz",
-    "citySlug": "la-chapelle-des-fougeretz",
-    "officeName": "GWENAELLE KOMAROFF-BOULCH ET EMMANUELLE CROSSOIR, NOTAIRES ASSOCIES D'UNE SCP TITULAIRE D'UN OFFICE NOTARIAL, SOCIETE EN (SCP)",
-    "address": "LD LA BROSSE 35520 LA CHAPELLE-DES-FOUGERETZ",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "etude-330762592",
     "name": "Étude Christian fleche et denis bauchant notaires associes d'une societe civile professionnelle titulaire d'un office notarial",
     "initials": "CF",
@@ -310121,46 +306355,6 @@
       [],
       [
         "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "thuault-lebosse-thuault-noemie-801530007",
-    "name": "Me Noemie Thuault-Lebosse",
-    "initials": "NT",
-    "color": "purple",
-    "city": "Gorron",
-    "citySlug": "gorron",
-    "officeName": "SCP BOUTAIN THUAULT LEBOSSE NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "2 GRANDE RUE 53120 GORRON",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
       ]
     ],
     "role": "associé",
@@ -310468,80 +306662,6 @@
     "claimed": false
   },
   {
-    "id": "bosquet-nicolas-olivier-xavier-491205977",
-    "name": "Me Nicolas Olivier Xavier Bosquet",
-    "initials": "NB",
-    "color": "purple",
-    "city": "Binic-etables-sur-mer",
-    "citySlug": "binic-etables-sur-mer",
-    "officeName": "STEPHANE FRETIGNE ET NICOLAS BOSQUET NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTA",
-    "address": "4 RUE DE L'EUROPE 22520 BINIC-ETABLES-SUR-MER",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "fretigne-stephane-marceau-491205977",
-    "name": "Me Stephane Marceau Fretigne",
-    "initials": "SF",
-    "color": "default",
-    "city": "Binic-etables-sur-mer",
-    "citySlug": "binic-etables-sur-mer",
-    "officeName": "STEPHANE FRETIGNE ET NICOLAS BOSQUET NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTA",
-    "address": "4 RUE DE L'EUROPE 22520 BINIC-ETABLES-SUR-MER",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "coudert-claude-524604972",
     "name": "Me Claude Coudert",
     "initials": "CC",
@@ -310763,87 +306883,6 @@
       [],
       [
         "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "dutour-nicolas-392447454",
-    "name": "Me Nicolas Dutour",
-    "initials": "ND",
-    "color": "purple",
-    "city": "Pont-du-chateau",
-    "citySlug": "pont-du-chateau",
-    "officeName": "NICOLAS DUTOUR XAVIER ROUX ET BENOIT JALENQUES NOTAIRES ASSOCIES D'UNE SCP TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "1 PL DE LA REPUBLIQUE 63430 PONT-DU-CHATEAU",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "jalenques-benoit-392447454",
-    "name": "Me Benoit Jalenques",
-    "initials": "BJ",
-    "color": "default",
-    "city": "Pont-du-chateau",
-    "citySlug": "pont-du-chateau",
-    "officeName": "NICOLAS DUTOUR XAVIER ROUX ET BENOIT JALENQUES NOTAIRES ASSOCIES D'UNE SCP TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "1 PL DE LA REPUBLIQUE 63430 PONT-DU-CHATEAU",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
       ]
     ],
     "role": "associé",
@@ -311232,83 +307271,10 @@
     "claimed": false
   },
   {
-    "id": "dahan-franck-305392672",
-    "name": "Me Franck Dahan",
-    "initials": "FD",
-    "color": "default",
-    "city": "Bondy",
-    "citySlug": "bondy",
-    "officeName": "ARNAUD TRUBERT CECILE MARGUIN ET FRANCK DAHAN NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLETITULAIRE D'UN OFFIC",
-    "address": "114 AV CARNOT 93140 BONDY",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "marguin-cecile-marguerite-suzanne-305392672",
     "name": "Me Cecile Marguerite Suzanne Marguin",
     "initials": "CM",
     "color": "green",
-    "city": "Bondy",
-    "citySlug": "bondy",
-    "officeName": "ARNAUD TRUBERT CECILE MARGUIN ET FRANCK DAHAN NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLETITULAIRE D'UN OFFIC",
-    "address": "114 AV CARNOT 93140 BONDY",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "trubert-arnaud-305392672",
-    "name": "Me Arnaud Trubert",
-    "initials": "AT",
-    "color": "purple",
     "city": "Bondy",
     "citySlug": "bondy",
     "officeName": "ARNAUD TRUBERT CECILE MARGUIN ET FRANCK DAHAN NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLETITULAIRE D'UN OFFIC",
@@ -312028,112 +307994,6 @@
     "claimed": false
   },
   {
-    "id": "leleu-ludovic-jack-robert-384552162",
-    "name": "Me Ludovic Jack Robert Leleu",
-    "initials": "LL",
-    "color": "purple",
-    "city": "Falaise",
-    "citySlug": "falaise",
-    "officeName": "LUDOVIC LELEU, THIBAULT ENGELHARD ET BENJAMIN SOUBISE NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE",
-    "address": "2 AV DE LA CROSSE 14700 FALAISE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "soubise-benjamin-384552162",
-    "name": "Me Benjamin Soubise",
-    "initials": "BS",
-    "color": "default",
-    "city": "Falaise",
-    "citySlug": "falaise",
-    "officeName": "LUDOVIC LELEU, THIBAULT ENGELHARD ET BENJAMIN SOUBISE NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE",
-    "address": "2 AV DE LA CROSSE 14700 FALAISE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "brisse-laurent-marcel-francois-385401989",
-    "name": "Me Laurent Marcel Francois Brisse",
-    "initials": "LB",
-    "color": "green",
-    "city": "Saint-maur-des-fosses",
-    "citySlug": "saint-maur-des-fosses",
-    "officeName": "CHARLES FLOBERT ET LAURENT BRISSE NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTARIAL",
-    "address": "5 AV GAMBETTA 94100 SAINT-MAUR-DES-FOSSES",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "flobert-charles-385401989",
     "name": "Me Charles Flobert",
     "initials": "CF",
@@ -312200,43 +308060,6 @@
       [],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "pied-guillaume-333148583",
-    "name": "Me Guillaume Pied",
-    "initials": "GP",
-    "color": "green",
-    "city": "Retiers",
-    "citySlug": "retiers",
-    "officeName": "MICHEL LE POUPON ET GUILLAUME PIED NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTARIA",
-    "address": "25 RUE DU MARECHAL FOCH 35240 RETIERS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -312738,43 +308561,6 @@
     "claimed": false
   },
   {
-    "id": "legoff-normand-line-marie-paule-colette-808052138",
-    "name": "Me Line Marie-Paule Colette Legoff",
-    "initials": "LL",
-    "color": "purple",
-    "city": "La roche-bernard",
-    "citySlug": "la-roche-bernard",
-    "officeName": "MARC PHILIPPE ET LINE LEGOFF NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TUTULAIRE D'UN OFFICE NOTARIAL",
-    "address": "56-58 56 RUE DE NANTES 56130 LA ROCHE-BERNARD",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "philippe-marc-jean-808052138",
     "name": "Me Marc Jean Philippe",
     "initials": "MP",
@@ -313199,47 +308985,6 @@
     "name": "Me Pierre Sauret",
     "initials": "PS",
     "color": "purple",
-    "city": "Clermont-ferrand",
-    "citySlug": "clermont-ferrand",
-    "officeName": "GIE SERVICES-NOT DROIT DES AFFAIRES",
-    "address": "66 BOULEVARD MAURICE POURCHON 63100 CLERMONT-FERRAND",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "vorilhon-aude-344087093",
-    "name": "Me Aude Vorilhon",
-    "initials": "AV",
-    "color": "default",
     "city": "Clermont-ferrand",
     "citySlug": "clermont-ferrand",
     "officeName": "GIE SERVICES-NOT DROIT DES AFFAIRES",
@@ -313759,44 +309504,6 @@
       [
         "11:00"
       ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "assez-laurent-337802904",
-    "name": "Me Laurent Assez",
-    "initials": "LA",
-    "color": "default",
-    "city": "Vaugneray",
-    "citySlug": "vaugneray",
-    "officeName": "DENIS SIBILLE, EMMANUELLE SPENNATO, LAURENT ASSEZ ET MATHIEU GUDYKA, NOTAIRES ASSOCIES, D'UNE SOCIETE CIVILE PROFESSIONN",
-    "address": "PAE MAISON BLANCHE 2 CHEMIN DES VIGNES 69670 VAUGNERAY",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -315625,44 +311332,6 @@
     "claimed": false
   },
   {
-    "id": "chapron-chapron-jacquette-audrey-498409655",
-    "name": "Me Audrey Chapron",
-    "initials": "AC",
-    "color": "purple",
-    "city": "Pierrefonds",
-    "citySlug": "pierrefonds",
-    "officeName": "JEAN-MICHEL CAUSSE ET AUDREY CHAPRON-JACQUETTE NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSIONNELLE TITULAIRE D'UN O",
-    "address": "4 RUE LOUIS D'ORLEANS 60350 PIERREFONDS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "faure-francoise-531451862",
     "name": "Me Francoise Faure",
     "initials": "FF",
@@ -316383,45 +312052,6 @@
     "claimed": false
   },
   {
-    "id": "roth-clement-andre-319032306",
-    "name": "Me Clement Andre Roth",
-    "initials": "CR",
-    "color": "green",
-    "city": "Sainte-genevieve-des-bois",
-    "citySlug": "sainte-genevieve-des-bois",
-    "officeName": "ARMAND ROTH, CLEMENT ROTH ET VALERIE REBOUL NOTAIRES ASSOCIES (SOCIETE PROFESSIONNELLE TITULAIRE D'UN OFFICE NOTARIAL)",
-    "address": "41 AV GEORGES PITARD 91700 SAINTE-GENEVIEVE-DES-BOIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "riffaud-cecile-delphine-352628697",
     "name": "Me Cecile Delphine Riffaud",
     "initials": "CR",
@@ -316647,42 +312277,6 @@
     "claimed": false
   },
   {
-    "id": "benoist-jean-philippe-gerard-384597993",
-    "name": "Me Jean-Philippe Gerard Benoist",
-    "initials": "JB",
-    "color": "green",
-    "city": "Saint-just-saint-rambert",
-    "citySlug": "saint-just-saint-rambert",
-    "officeName": "PHILIPPE DA SILVA, JEAN-PHILIPPE BENOIST ET DOMINIQUE MAUBERT-DELAMORINIERE NOTAIRES ASSOCIES  TITULAIRES D'UN OFFICE N",
-    "address": "1 PL DE LA REPUBLIQUE 42170 SAINT-JUST-SAINT-RAMBERT",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "da-silva-philippe-384597993",
     "name": "Me Philippe Da silva",
     "initials": "PS",
@@ -316712,46 +312306,6 @@
       [],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "maubert-delamoriniere-dominique-daniel-384597993",
-    "name": "Me Dominique Daniel Maubert-Delamoriniere",
-    "initials": "DM",
-    "color": "default",
-    "city": "Saint-just-saint-rambert",
-    "citySlug": "saint-just-saint-rambert",
-    "officeName": "PHILIPPE DA SILVA, JEAN-PHILIPPE BENOIST ET DOMINIQUE MAUBERT-DELAMORINIERE NOTAIRES ASSOCIES  TITULAIRES D'UN OFFICE N",
-    "address": "1 PL DE LA REPUBLIQUE 42170 SAINT-JUST-SAINT-RAMBERT",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -317237,46 +312791,6 @@
       [],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "daoulas-lanig-781340732",
-    "name": "Me Lanig Daoulas",
-    "initials": "LD",
-    "color": "default",
-    "city": "La rochelle",
-    "citySlug": "la-rochelle",
-    "officeName": "LANIG DAOULAS, DELPHINE LEBOSSE, EDITH GIRARDEAU ET BENJAMIN CHAVIGNIER, NOTAIRES ASSOCIES D'UNE SOCIETE CIVILE PROFESSI",
-    "address": "133 BD ANDRE SAUTEL 17000 LA ROCHELLE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -319327,84 +314841,6 @@
     "claimed": false
   },
   {
-    "id": "le-xuan-vinh-nicolas-thuyet-robert-834011579",
-    "name": "Me Vinh Nicolas Thuyet Robert Le xuan",
-    "initials": "VX",
-    "color": "green",
-    "city": "Arras",
-    "citySlug": "arras",
-    "officeName": "SELARL THIBAUT BRASME ET VINH LE XUAN, NOTAIRES ASSOCIES, TITULAIRE D'UN OFFICE NOTARIAL A ARRAS, 21 RUE DE JUSTICE",
-    "address": "21 RUE DE JUSTICE 62000 ARRAS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "beaudoin-camille-883634438",
-    "name": "Me Camille Beaudoin",
-    "initials": "CB",
-    "color": "purple",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "OFFICE NOTARIAL RUE DES FILLES DU CALVAIRE",
-    "address": "14 RUE DES FILLES DU CALVAIRE 75003 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [],
-      [],
-      [
-        "10:00",
-        "14:00"
-      ],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "clermont-olivier-883634438",
     "name": "Me Olivier Clermont",
     "initials": "OC",
@@ -319487,46 +314923,6 @@
     "claimed": false
   },
   {
-    "id": "guez-julien-883634438",
-    "name": "Me Julien Guez",
-    "initials": "JG",
-    "color": "purple",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "OFFICE NOTARIAL RUE DES FILLES DU CALVAIRE",
-    "address": "14 RUE DES FILLES DU CALVAIRE 75003 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "etude-780608568",
     "name": "Étude Scp pierre-antoine daillez, sophie bourlon, benoit waymel, franck massy, vincent renoult et julien flament notaires asso",
     "initials": "SP",
@@ -319587,87 +314983,6 @@
       [],
       [],
       [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "bouvet-xavier-pierre-andre-779691088",
-    "name": "Me Xavier Pierre Andre Bouvet",
-    "initials": "XB",
-    "color": "purple",
-    "city": "Ecully",
-    "citySlug": "ecully",
-    "officeName": "JEAN-CLAUDE RAVIER, NICOLAS DUC-DODON, OLIVIER BARLET, XAVIER BOUVET, CEDRIC CHEVALEYRE ET AURELIEN RENET NOTAIRES ASSOC",
-    "address": "4 ALL DES TULLISTES 69130 ECULLY",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "chevaleyre-cedric-779691088",
-    "name": "Me Cedric Chevaleyre",
-    "initials": "CC",
-    "color": "default",
-    "city": "Ecully",
-    "citySlug": "ecully",
-    "officeName": "JEAN-CLAUDE RAVIER, NICOLAS DUC-DODON, OLIVIER BARLET, XAVIER BOUVET, CEDRIC CHEVALEYRE ET AURELIEN RENET NOTAIRES ASSOC",
-    "address": "4 ALL DES TULLISTES 69130 ECULLY",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
       [
         "09:00"
       ],
@@ -319752,46 +315067,6 @@
       [],
       [
         "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "renet-aurelien-mathieu-jerome-779691088",
-    "name": "Me Aurelien Mathieu Jerome Renet",
-    "initials": "AR",
-    "color": "default",
-    "city": "Ecully",
-    "citySlug": "ecully",
-    "officeName": "JEAN-CLAUDE RAVIER, NICOLAS DUC-DODON, OLIVIER BARLET, XAVIER BOUVET, CEDRIC CHEVALEYRE ET AURELIEN RENET NOTAIRES ASSOC",
-    "address": "4 ALL DES TULLISTES 69130 ECULLY",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
       ]
     ],
     "role": "associé",
@@ -320026,41 +315301,6 @@
     "claimed": false
   },
   {
-    "id": "vrain-ampoulier-isabelle-christine-840693428",
-    "name": "Me Isabelle Christine Vrain",
-    "initials": "IV",
-    "color": "green",
-    "city": "Les sables d'olonne",
-    "citySlug": "les-sables-d-olonne",
-    "officeName": "SELAS VRAIN",
-    "address": "CENTRE D'AFFAIRES LE PINAY IMP DE LA GABARE 85100 LES SABLES D'OLONNE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "viger-isabeau-michelle-veronique-400489324",
     "name": "Me Isabeau Michelle Véronique Viger",
     "initials": "IV",
@@ -320164,41 +315404,6 @@
       [
         "11:00"
       ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "faverie-romain-pierre-camille-839352556",
-    "name": "Me Romain Pierre Camille Faverie",
-    "initials": "RF",
-    "color": "purple",
-    "city": "Bayeux",
-    "citySlug": "bayeux",
-    "officeName": "BLF",
-    "address": "8 RUE TARDIF 14400 BAYEUX",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -322204,44 +317409,6 @@
     "claimed": false
   },
   {
-    "id": "hoareau-olivier-790867402",
-    "name": "Me Olivier Hoareau",
-    "initials": "OH",
-    "color": "purple",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "OLIVIER HOAREAU",
-    "address": "SCP ROZES FABRE ET ASSOCIE NOTAIRES 9 RUE DE VILLERSEXEL 75007 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "carre-aude-829283548",
     "name": "Me Aude Carre",
     "initials": "AC",
@@ -323458,40 +318625,6 @@
     "claimed": false
   },
   {
-    "id": "etude-490519022",
-    "name": "Étude Pour la promotion du notariat en bourbonnais (apnb)",
-    "initials": "PL",
-    "color": "purple",
-    "city": "Moulins",
-    "citySlug": "moulins",
-    "officeName": "POUR LA PROMOTION DU NOTARIAT EN BOURBONNAIS (APNB)",
-    "address": "CHAMBRE DES NOTAIRES DE L ALLIER 19 RUE DIDEROT 03000 MOULINS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "forestier-pierre-edouard-bernard-marcel-879359834",
     "name": "Me Pierre Edouard Bernard Marcel Forestier",
     "initials": "PF",
@@ -323762,47 +318895,6 @@
       ],
       [],
       []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "wolf-sebastien-438705295",
-    "name": "Me Sebastien Wolf",
-    "initials": "SW",
-    "color": "purple",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "SEBASTIEN WOLF",
-    "address": "DIX SEPT68 NOTAIRES 29 RUE DE LA BIENFAISANCE 75008 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -324429,42 +319521,6 @@
     "claimed": false
   },
   {
-    "id": "lagier-brice-753880798",
-    "name": "Me Brice Lagier",
-    "initials": "BL",
-    "color": "default",
-    "city": "Nerac",
-    "citySlug": "nerac",
-    "officeName": "BRICE LAGIER",
-    "address": "SCP LANTA BLAJAN NOTAIRES ASSOCIES RUE DU CHATEAU 47600 NERAC",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "foucault-bourdarios-virginie-caroline-539962035",
     "name": "Me Virginie Caroline Foucault",
     "initials": "VF",
@@ -324996,42 +320052,6 @@
       [
         "11:00",
         "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "gombeaud-guillaume-913674537",
-    "name": "Me Guillaume Gombeaud",
-    "initials": "GG",
-    "color": "green",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "GUILLAUME GOMBEAUD",
-    "address": "SELAS CARRE NOTAIRES 34 B RUE DE L'UNIVERSITE 75007 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
       ]
     ],
     "role": "associé",
@@ -326422,46 +321442,6 @@
     "claimed": false
   },
   {
-    "id": "dinca-andreea-498741651",
-    "name": "Me Andreea Dinca",
-    "initials": "AD",
-    "color": "green",
-    "city": "Ecouen",
-    "citySlug": "ecouen",
-    "officeName": "ANDREEA DINCA",
-    "address": "SELARL ANDREEA DINCA  NOTAIRE 55 RUE PAUL LORILLON 95440 ECOUEN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "lecuyer-stanislas-ernest-jean-regis-800899247",
     "name": "Me Stanislas Ernest Jean Regis Lecuyer",
     "initials": "SL",
@@ -326766,45 +321746,6 @@
       ]
     ],
     "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "etude-918323700",
-    "name": "Étude Centre notarial de mediation de franche-comte (cnmfc)",
-    "initials": "CN",
-    "color": "default",
-    "city": "Besancon",
-    "citySlug": "besancon",
-    "officeName": "CENTRE NOTARIAL DE MEDIATION DE FRANCHE-COMTE (CNMFC)",
-    "address": "CHAMBRE DES NOTAIRES DE FRANCHE-COM 22 A RUE DE TREY 25000 BESANCON",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
     "source": "api-entreprises",
     "claimed": false
   },
@@ -327270,46 +322211,6 @@
     "claimed": false
   },
   {
-    "id": "hugonenc-nathalie-418680849",
-    "name": "Me Nathalie Hugonenc",
-    "initials": "NH",
-    "color": "default",
-    "city": "Portet-sur-garonne",
-    "citySlug": "portet-sur-garonne",
-    "officeName": "NATHALIE HUGONENC",
-    "address": "SELARL N. HUGONENC NOTAIRE II 1117 ANCIENNE ROUTE IMPERIALE 31120 PORTET-SUR-GARONNE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "martin-elodie-marie-839808375",
     "name": "Me Elodie Marie Martin",
     "initials": "EM",
@@ -327430,164 +322331,6 @@
     "claimed": false
   },
   {
-    "id": "dartois-florian-899964472",
-    "name": "Me Florian Dartois",
-    "initials": "FD",
-    "color": "green",
-    "city": "Livry-gargan",
-    "citySlug": "livry-gargan",
-    "officeName": "FLORIAN DARTOIS",
-    "address": "SAS 125 BRIAND NOTAIRES 125 AVENUE ARISTIDE BRIAND 93190 LIVRY-GARGAN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "wach-olivier-philippe-938758554",
-    "name": "Me Olivier Philippe Wach",
-    "initials": "OW",
-    "color": "purple",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "OLIVIER WACH",
-    "address": "CHEZ SAS JOUFFROY NOTAIRES PARIS 95 RUE JOUFFROY D'ABBANS 75017 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "sordet-ribeiro-margot-499409860",
-    "name": "Me Margot Sordet",
-    "initials": "MS",
-    "color": "default",
-    "city": "Crespieres",
-    "citySlug": "crespieres",
-    "officeName": "MARGOT SORDET (RIBEIRO)",
-    "address": "SCP JEAN DAMBRE THIERRY DAMBRE NOTAIRE 13 RUE DE MONCEL 78121 CRESPIERES",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [
-        "09:00",
-        "10:30"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "cherrier-philippe-paul-411849391",
-    "name": "Me Philippe Paul Cherrier",
-    "initials": "PC",
-    "color": "default",
-    "city": "Rosheim",
-    "citySlug": "rosheim",
-    "officeName": "PHILIPPE CHERRIER",
-    "address": "SCP CHERRIER ET KUHN MAGRET NOTAIRES 10 A AVENUE DE LA GARE 67560 ROSHEIM",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "abric-benoit-841137359",
     "name": "Me Benoit Abric",
     "initials": "BA",
@@ -327666,118 +322409,6 @@
     "claimed": false
   },
   {
-    "id": "magnin-elodie-lucienne-jacqueline-julienne-899581805",
-    "name": "Me Elodie Lucienne Jacqueline Julienne Magnin",
-    "initials": "EM",
-    "color": "green",
-    "city": "Livry-gargan",
-    "citySlug": "livry-gargan",
-    "officeName": "ELODIE MAGNIN",
-    "address": "SAS 125 BRIAND NOTAIRES 125 AVENUE ARISTIDE BRIAND 93190 LIVRY-GARGAN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00",
-        "14:30"
-      ],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [],
-      [],
-      [
-        "11:00",
-        "14:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "duval-marielle-isabelle-493022453",
-    "name": "Me Marielle Isabelle Duval",
-    "initials": "MD",
-    "color": "purple",
-    "city": "Saint-cyr-sur-morin",
-    "citySlug": "saint-cyr-sur-morin",
-    "officeName": "MARIELLE DUVAL",
-    "address": "SAS NOTAIRE DE LA VALLEE DE LA MARNE 33 AVENUE DANIEL SIMON 77750 SAINT-CYR-SUR-MORIN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [],
-      [],
-      [],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "fauzan-becker-marie-christine-elisabeth-807401302",
-    "name": "Me Marie-Christine Elisabeth Fauzan",
-    "initials": "MF",
-    "color": "default",
-    "city": "Neuilly-sur-seine",
-    "citySlug": "neuilly-sur-seine",
-    "officeName": "MARIE-CHRISTINE FAUZAN (BECKER)",
-    "address": "SELARL FAUZAN COHEN NOTAIRES NEUILLY 90 AVENUE CHARLES DE GAULLE 92200 NEUILLY-SUR-SEINE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "carreia-ballan-correia-leslie-anne-suzy-838213692",
     "name": "Me Leslie Anne Suzy Carreia ballan",
     "initials": "LB",
@@ -327812,41 +322443,6 @@
         "14:00",
         "15:30"
       ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "bellili-malika-838214161",
-    "name": "Me Malika Bellili",
-    "initials": "MB",
-    "color": "purple",
-    "city": "Gif-sur-yvette",
-    "citySlug": "gif-sur-yvette",
-    "officeName": "MALIKA BELLILI",
-    "address": "SCP BELLILI ET CORREIA BALLAN NOTAIRES 43 AVENUE DU GENERAL LECLERC 91190 GIF-SUR-YVETTE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -327921,40 +322517,6 @@
         "14:00",
         "15:30"
       ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "plocque-julien-303410518",
-    "name": "Me Julien Plocque",
-    "initials": "JP",
-    "color": "green",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "PLOCQUE-KATZNER SAS",
-    "address": "11 RUE DE BEAUJOLAIS 75001 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit des sociétés"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -329290,41 +323852,6 @@
       [
         "11:00"
       ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "allez-antoine-519721336",
-    "name": "Me Antoine Allez",
-    "initials": "AA",
-    "color": "green",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "ANTOINE ALLEZ",
-    "address": "15 AVENUE VICTOR HUGO 75016 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -335551,46 +330078,6 @@
     "claimed": false
   },
   {
-    "id": "helou-roula-534260658",
-    "name": "Me Roula Helou",
-    "initials": "RH",
-    "color": "green",
-    "city": "La turbie",
-    "citySlug": "la-turbie",
-    "officeName": "ROULA HELOU",
-    "address": "3 AVENUE DE LA VICTOIRE 06320 LA TURBIE",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00",
-        "10:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [],
-      [
-        "09:00",
-        "10:30",
-        "15:00"
-      ],
-      [],
-      [
-        "11:00"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "martin-frederic-marie-393170121",
     "name": "Me Frederic Marie Martin",
     "initials": "FM",
@@ -335699,41 +330186,6 @@
       [
         "11:00"
       ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
-    "id": "bourgois-francois-pierre-834373268",
-    "name": "Me Francois Pierre Bourgois",
-    "initials": "FB",
-    "color": "purple",
-    "city": "Anzin-saint-aubin",
-    "citySlug": "anzin-saint-aubin",
-    "officeName": "FRANCOIS BOURGOIS",
-    "address": "NOTAIRE 10 B RUE HENRI CADOT 62223 ANZIN-SAINT-AUBIN",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [
-        "09:00"
-      ],
-      [
-        "09:30",
-        "11:00"
-      ],
-      [],
-      [
-        "10:00"
-      ],
-      [],
-      [],
-      []
     ],
     "role": "associé",
     "source": "api-entreprises",
@@ -339078,26 +333530,6 @@
     "address": "17 rue d' Austerlitz 69004 LYON",
     "phone": "0481650298",
     "website": "https://www.notaires.fr/fr/office/gho-lorena",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "berengere-bois-samier-69005-p90tcn",
-    "name": "Me Bérengère Bois-Samier",
-    "initials": "BB",
-    "color": "default",
-    "city": "Lyon",
-    "citySlug": "lyon",
-    "officeName": "Bbs Notaires, SELAS",
-    "address": "40-41 quai Fulchiron 69005 LYON",
-    "phone": "04.28.38.41.42",
-    "website": "https://www.notaires.fr/fr/office/bbs-notaires-selas",
     "specialties": [
       "Droit immobilier",
       "Successions"
@@ -342888,26 +337320,6 @@
     "claimed": false
   },
   {
-    "id": "henri-lenouvel-13006-kqruqx",
-    "name": "Me Henri Lenouvel",
-    "initials": "HL",
-    "color": "default",
-    "city": "Marseille",
-    "citySlug": "marseille",
-    "officeName": "Lenouvel, Du Crest Berengier, Lenouvel, Berengier Et Berengier, Notaires, Associés, SCP",
-    "address": "17 COURS PIERRE PUGET 13006 MARSEILLE",
-    "phone": "0491530030",
-    "website": "https://www.notaires.fr/fr/office/lenouvel-du-crest-berengier-lenouvel-berengier-et-berengier-notaires-associes-scp",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "romain-berengier-13006-w6t5kq",
     "name": "Me Romain Berengier",
     "initials": "RB",
@@ -345468,26 +339880,6 @@
     "claimed": false
   },
   {
-    "id": "laurent-poli-13011-qacsih",
-    "name": "Me Laurent Poli",
-    "initials": "LP",
-    "color": "default",
-    "city": "Marseille",
-    "citySlug": "marseille",
-    "officeName": "SELARL Laurent Poli, Romain Elbaum, Notaires Associés",
-    "address": "67 montée de Saint Menet 13011 MARSEILLE",
-    "phone": "0481132125",
-    "website": "https://www.notaires.fr/fr/office/selarl-laurent-poli-romain-elbaum-notaires-associes-0",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "jean-charles-royol-13012-lv1rgn",
     "name": "Me Jean-Charles Royol",
     "initials": "JR",
@@ -345988,26 +340380,6 @@
     "claimed": false
   },
   {
-    "id": "arthur-cazalet-75116-eh7dry",
-    "name": "Me Arthur Cazalet",
-    "initials": "AC",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "Sas Screeb Notaires",
-    "address": "64 AVENUE KLEBER 75116 PARIS",
-    "phone": "0153922727",
-    "website": "https://www.notaires.fr/fr/office/sas-screeb-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "typhanie-lescastreyres-75116-chha1p",
     "name": "Me Typhanie Lescastreyres",
     "initials": "TL",
@@ -346091,26 +340463,6 @@
     "id": "lucia-lacroix-75116-awdy66",
     "name": "Me Lucia Lacroix",
     "initials": "LL",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "Sas Screeb Notaires",
-    "address": "64 AVENUE KLEBER 75116 PARIS",
-    "phone": "0153922727",
-    "website": "https://www.notaires.fr/fr/office/sas-screeb-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "damien-mancel-75116-v1b4e4",
-    "name": "Me Damien Mancel",
-    "initials": "DM",
     "color": "default",
     "city": "Paris",
     "citySlug": "paris",
@@ -346238,26 +340590,6 @@
     "address": "64 AVENUE KLEBER 75116 PARIS",
     "phone": "0153922727",
     "website": "https://www.notaires.fr/fr/office/sas-screeb-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "hanna-cohen-75116-cvvko",
-    "name": "Me Hanna Cohen",
-    "initials": "HC",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "Chn Notaires, SELARL À Associé Unique",
-    "address": "140 avenue Victor Hugo 75116 PARIS",
-    "phone": "0140740055",
-    "website": "https://www.notaires.fr/fr/office/chn-notaires-selarl-associe-unique",
     "specialties": [
       "Droit immobilier",
       "Successions"
@@ -346838,46 +341170,6 @@
     "address": "55, avenue Kleber 75116 PARIS",
     "phone": "0184824343",
     "website": "https://www.notaires.fr/fr/office/selafa-acte-2",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "brice-bories-75116-ljzq3g",
-    "name": "Me Brice Bories",
-    "initials": "BB",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "Sas Bories & Bories Notaires",
-    "address": "138 avenue Victor Hugo 75116 PARIS",
-    "phone": "0145387293",
-    "website": "https://www.notaires.fr/fr/office/sas-bories-bories-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "bastien-bories-75116-wwckvn",
-    "name": "Me Bastien Bories",
-    "initials": "BB",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "Sas Bories & Bories Notaires",
-    "address": "138 avenue Victor Hugo 75116 PARIS",
-    "phone": "0145387293",
-    "website": "https://www.notaires.fr/fr/office/sas-bories-bories-notaires",
     "specialties": [
       "Droit immobilier",
       "Successions"
@@ -347548,89 +341840,9 @@
     "claimed": false
   },
   {
-    "id": "anne-muzard-75116-ifw0mh",
-    "name": "Me Anne Muzard",
-    "initials": "AM",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "SELAS Lbmb Notaires",
-    "address": "25 AVENUE MARCEAU 75116 PARIS",
-    "phone": "0147660266",
-    "website": "https://www.notaires.fr/fr/office/selas-lbmb-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "florence-gemignani-75116-sbjsgb",
-    "name": "Me Florence Gemignani",
-    "initials": "FG",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "SELAS Lbmb Notaires",
-    "address": "25 AVENUE MARCEAU 75116 PARIS",
-    "phone": "0147660266",
-    "website": "https://www.notaires.fr/fr/office/selas-lbmb-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "pierre-olivier-jeanjean-75116-fxiqdu",
-    "name": "Me Pierre-Olivier Jeanjean",
-    "initials": "PJ",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "SELAS Lbmb Notaires",
-    "address": "25 AVENUE MARCEAU 75116 PARIS",
-    "phone": "0147660266",
-    "website": "https://www.notaires.fr/fr/office/selas-lbmb-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "stanislas-royer-75116-8yx3w7",
     "name": "Me Stanislas Royer",
     "initials": "SR",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "SELAS Lbmb Notaires",
-    "address": "25 AVENUE MARCEAU 75116 PARIS",
-    "phone": "0147660266",
-    "website": "https://www.notaires.fr/fr/office/selas-lbmb-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "charles-edouard-peschard-75116-1jvryp",
-    "name": "Me Charles-Edouard Peschard",
-    "initials": "CP",
     "color": "default",
     "city": "Paris",
     "citySlug": "paris",
@@ -347831,26 +342043,6 @@
     "id": "quentin-masse-75116-kmumzp",
     "name": "Me Quentin Masse",
     "initials": "QM",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "SELAS La Plume Notaires",
-    "address": "147 Avenue de Malakoff 75116 PARIS",
-    "phone": "0159034800",
-    "website": "https://www.notaires.fr/fr/office/selas-la-plume-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "olivier-valard-75116-zf5psu",
-    "name": "Me Olivier Valard",
-    "initials": "OV",
     "color": "default",
     "city": "Paris",
     "citySlug": "paris",
@@ -349531,26 +343723,6 @@
     "id": "camille-guillaume-75002-g7gtg4",
     "name": "Me Camille Guillaume",
     "initials": "CG",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "Lecuyer Et Associés, Sas",
-    "address": "4 RUE DE LA PAIX 75002 PARIS",
-    "phone": "0142615094",
-    "website": "https://www.notaires.fr/fr/office/lecuyer-et-associes-sas",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "charles-antoine-boulay-75002-3i5u3x",
-    "name": "Me Charles-Antoine Boulay",
-    "initials": "CB",
     "color": "default",
     "city": "Paris",
     "citySlug": "paris",
@@ -354028,26 +348200,6 @@
     "claimed": false
   },
   {
-    "id": "jean-marie-guibert-75007-tjbj4d",
-    "name": "Me Jean-Marie Guibert",
-    "initials": "JG",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "SELAS 137 Notaires",
-    "address": "137 rue de l’Université 75007 PARIS",
-    "phone": "0188400400",
-    "website": "https://www.notaires.fr/fr/office/selas-137-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "laetitia-boulle-75007-b67r0k",
     "name": "Me Laetitia Boullé",
     "initials": "LB",
@@ -355578,26 +349730,6 @@
     "address": "16 cours Albert 1er 75008 PARIS",
     "phone": "0183756206",
     "website": "https://www.notaires.fr/fr/office/sas-8eme-acte",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "nicolas-parc-75008-p2361d",
-    "name": "Me Nicolas Parc",
-    "initials": "NP",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "SELARL Parc Notaires",
-    "address": "170 bis Boulevard Haussman 75008 PARIS",
-    "phone": "0186901132",
-    "website": "https://www.notaires.fr/fr/office/selarl-parc-notaires",
     "specialties": [
       "Droit immobilier",
       "Successions"
@@ -363218,26 +357350,6 @@
     "address": "41 avenue de Friedland 75008 PARIS",
     "phone": "0176215820",
     "website": "https://www.notaires.fr/fr/office/selas-bc-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "ludovic-giraud-75008-kwv4gx",
-    "name": "Me Ludovic Giraud",
-    "initials": "LG",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "Sas Efficience Paris",
-    "address": "33 rue Marbeuf 75008 PARIS",
-    "phone": "0144538000",
-    "website": "https://www.notaires.fr/fr/office/sas-efficience-paris",
     "specialties": [
       "Droit immobilier",
       "Successions"
@@ -483428,46 +477540,6 @@
     "claimed": false
   },
   {
-    "id": "daniel-scheid-67000-4kd99r",
-    "name": "Me Daniel Scheid",
-    "initials": "DS",
-    "color": "default",
-    "city": "Strasbourg",
-    "citySlug": "strasbourg",
-    "officeName": "Lorch-Kalck Et Associés",
-    "address": "16 RUE DE RATHSAMHAUSEN 67000 STRASBOURG",
-    "phone": "0388349999",
-    "website": "https://www.notaires.fr/fr/office/lorch-kalck-et-associes",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "dominique-lorch-kalck-67000-79x2i4",
-    "name": "Me Dominique Lorch-Kalck",
-    "initials": "DL",
-    "color": "default",
-    "city": "Strasbourg",
-    "citySlug": "strasbourg",
-    "officeName": "Lorch-Kalck Et Associés",
-    "address": "16 RUE DE RATHSAMHAUSEN 67000 STRASBOURG",
-    "phone": "0388349999",
-    "website": "https://www.notaires.fr/fr/office/lorch-kalck-et-associes",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "joel-dolle-67000-p3hycc",
     "name": "Me Joël Dollé",
     "initials": "JD",
@@ -494948,26 +489020,6 @@
     "claimed": false
   },
   {
-    "id": "thibaut-duriez-59000-yktwfd",
-    "name": "Me Thibaut Duriez",
-    "initials": "TD",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "SELARL Notaires Lille Royale",
-    "address": "74 rue Royale 59000 LILLE",
-    "phone": "0320552641",
-    "website": "https://www.notaires.fr/fr/office/selarl-notaires-lille-royale",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "florence-graux-59000-g535bg",
     "name": "Me Florence Graux",
     "initials": "FG",
@@ -495268,26 +489320,6 @@
     "claimed": false
   },
   {
-    "id": "guillaume-bricard-59000-wkw3r7",
-    "name": "Me Guillaume Bricard",
-    "initials": "GB",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "Emaille Bricard Notaires, SELARL",
-    "address": "224 rue Pierre Legrand 59000 LILLE",
-    "phone": "0320041028",
-    "website": "https://www.notaires.fr/fr/office/emaille-bricard-notaires-selarl",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "anne-sophie-markiewicz-59000-h0bgva",
     "name": "Me Anne-Sophie Markiewicz",
     "initials": "AM",
@@ -495298,46 +489330,6 @@
     "address": "224 rue Pierre Legrand 59000 LILLE",
     "phone": "0320041028",
     "website": "https://www.notaires.fr/fr/office/emaille-bricard-notaires-selarl",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "jean-louis-barrois-59000-kl00ab",
-    "name": "Me Jean-Louis Barrois",
-    "initials": "JB",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "Arsenal Notaires",
-    "address": "93 RUE DE L HOPITAL MILITAIRE 59000 LILLE",
-    "phone": "0320308090",
-    "website": "https://www.notaires.fr/fr/office/arsenal-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "nathalie-loock-59000-jikyyq",
-    "name": "Me Nathalie Loock",
-    "initials": "NL",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "Arsenal Notaires",
-    "address": "93 RUE DE L HOPITAL MILITAIRE 59000 LILLE",
-    "phone": "0320308090",
-    "website": "https://www.notaires.fr/fr/office/arsenal-notaires",
     "specialties": [
       "Droit immobilier",
       "Successions"
@@ -495608,129 +489600,9 @@
     "claimed": false
   },
   {
-    "id": "delphine-delaroiere-59000-16rv70",
-    "name": "Me Delphine Delaroiere",
-    "initials": "DD",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "SELARL Tsd Notaires",
-    "address": "14 RUE DU VIEUX FAUBOURG 59000 LILLE",
-    "phone": "0320135353",
-    "website": "https://www.notaires.fr/fr/office/selarl-tsd-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "judith-barbry-59000-5t0lh5",
-    "name": "Me Judith Barbry",
-    "initials": "JB",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "SELARL Tsd Notaires",
-    "address": "14 RUE DU VIEUX FAUBOURG 59000 LILLE",
-    "phone": "0320135353",
-    "website": "https://www.notaires.fr/fr/office/selarl-tsd-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "capucine-valckenaere-59000-swsnzy",
     "name": "Me Capucine Valckenaere",
     "initials": "CV",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "SELARL Tsd Notaires",
-    "address": "14 RUE DU VIEUX FAUBOURG 59000 LILLE",
-    "phone": "0320135353",
-    "website": "https://www.notaires.fr/fr/office/selarl-tsd-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "anthony-scrive-59000-8ildhm",
-    "name": "Me Anthony Scrive",
-    "initials": "AS",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "SELARL Tsd Notaires",
-    "address": "14 RUE DU VIEUX FAUBOURG 59000 LILLE",
-    "phone": "0320135353",
-    "website": "https://www.notaires.fr/fr/office/selarl-tsd-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "franck-beauvalot-59000-1xumh",
-    "name": "Me Franck Beauvalot",
-    "initials": "FB",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "SELARL Tsd Notaires",
-    "address": "14 RUE DU VIEUX FAUBOURG 59000 LILLE",
-    "phone": "0320135353",
-    "website": "https://www.notaires.fr/fr/office/selarl-tsd-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "yves-laurent-chatiliez-59000-10l8xf",
-    "name": "Me Yves-Laurent Chatiliez",
-    "initials": "YC",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "SELARL Tsd Notaires",
-    "address": "14 RUE DU VIEUX FAUBOURG 59000 LILLE",
-    "phone": "0320135353",
-    "website": "https://www.notaires.fr/fr/office/selarl-tsd-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "alexandrine-hamm-59000-kk7gk5",
-    "name": "Me Alexandrine Hamm",
-    "initials": "AH",
     "color": "default",
     "city": "Lille",
     "citySlug": "lille",
@@ -496008,26 +489880,6 @@
     "claimed": false
   },
   {
-    "id": "vincent-roche-59000-tjti3z",
-    "name": "Me Vincent Roche",
-    "initials": "VR",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "Notaires Du Nouveau Siecle, SELARL",
-    "address": "85-87 Rue de l'Hôpital Militaire 59000 LILLE",
-    "phone": "0320145464",
-    "website": "https://www.notaires.fr/fr/office/notaires-du-nouveau-siecle-selarl",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "pauline-bourguignon-59000-81dftk",
     "name": "Me Pauline Bourguignon",
     "initials": "PB",
@@ -496038,26 +489890,6 @@
     "address": "85-87 Rue de l'Hôpital Militaire 59000 LILLE",
     "phone": "0320145464",
     "website": "https://www.notaires.fr/fr/office/notaires-du-nouveau-siecle-selarl",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "patrick-vacossin-59000-4e5v55",
-    "name": "Me Patrick Vacossin",
-    "initials": "PV",
-    "color": "default",
-    "city": "Lille",
-    "citySlug": "lille",
-    "officeName": "Vacossin Et Associés",
-    "address": "11 RUE JACQUEMARS GIELEE 59000 LILLE",
-    "phone": "0320579344",
-    "website": "https://www.notaires.fr/fr/office/vacossin-et-associes",
     "specialties": [
       "Droit immobilier",
       "Successions"
@@ -510078,46 +503910,6 @@
     "address": "18 Place Parmentier 80000 AMIENS",
     "phone": "0322715200",
     "website": "https://www.notaires.fr/fr/office/office-18-notaires-associes-sas",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "romane-daniele-80000-n8ofd1",
-    "name": "Me Romane Daniele",
-    "initials": "RD",
-    "color": "default",
-    "city": "Amiens",
-    "citySlug": "amiens",
-    "officeName": "Notaires D&s, SELARL",
-    "address": "75-77 rue Saint Fuscien 80000 AMIENS",
-    "phone": "0376240025",
-    "website": "https://www.notaires.fr/fr/office/notaires-ds-selarl",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "floriane-stuck-80000-3xk0ff",
-    "name": "Me Floriane Stuck",
-    "initials": "FS",
-    "color": "default",
-    "city": "Amiens",
-    "citySlug": "amiens",
-    "officeName": "Notaires D&s, SELARL",
-    "address": "75-77 rue Saint Fuscien 80000 AMIENS",
-    "phone": "0376240025",
-    "website": "https://www.notaires.fr/fr/office/notaires-ds-selarl",
     "specialties": [
       "Droit immobilier",
       "Successions"
@@ -534728,46 +528520,6 @@
     "claimed": false
   },
   {
-    "id": "aurelien-touton-33000-ex6uh1",
-    "name": "Me Aurélien Touton",
-    "initials": "AT",
-    "color": "default",
-    "city": "Bordeaux",
-    "citySlug": "bordeaux",
-    "officeName": "SCP Dambier Et Associés",
-    "address": "23 Avenue du Jeu de Paume 33000 BORDEAUX",
-    "phone": "",
-    "website": "https://www.notaires.fr/fr/office/scp-dambier-et-associes-0",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "antoine-magendie-33000-3hx2wp",
-    "name": "Me Antoine Magendie",
-    "initials": "AM",
-    "color": "default",
-    "city": "Bordeaux",
-    "citySlug": "bordeaux",
-    "officeName": "SCP Dambier Et Associés",
-    "address": "23 Avenue du Jeu de Paume 33000 BORDEAUX",
-    "phone": "",
-    "website": "https://www.notaires.fr/fr/office/scp-dambier-et-associes-0",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "sebastien-cetre-33000-wpd438",
     "name": "Me Sébastien Cetre",
     "initials": "SC",
@@ -534788,49 +528540,9 @@
     "claimed": false
   },
   {
-    "id": "fabrice-gauthier-33000-4ychmc",
-    "name": "Me Fabrice Gauthier",
-    "initials": "FG",
-    "color": "default",
-    "city": "Bordeaux",
-    "citySlug": "bordeaux",
-    "officeName": "SCP Dambier Et Associés",
-    "address": "23 Avenue du Jeu de Paume 33000 BORDEAUX",
-    "phone": "",
-    "website": "https://www.notaires.fr/fr/office/scp-dambier-et-associes-0",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "agathe-coquema-33000-i9aa4",
     "name": "Me Agathe Coquema",
     "initials": "AC",
-    "color": "default",
-    "city": "Bordeaux",
-    "citySlug": "bordeaux",
-    "officeName": "SCP Dambier Et Associés",
-    "address": "23 Avenue du Jeu de Paume 33000 BORDEAUX",
-    "phone": "",
-    "website": "https://www.notaires.fr/fr/office/scp-dambier-et-associes-0",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "pierre-houzelot-33000-evy8ge",
-    "name": "Me Pierre Houzelot",
-    "initials": "PH",
     "color": "default",
     "city": "Bordeaux",
     "citySlug": "bordeaux",
@@ -534948,26 +528660,6 @@
     "claimed": false
   },
   {
-    "id": "audrey-dambier-33000-dg5m7t",
-    "name": "Me Audrey Dambier",
-    "initials": "AD",
-    "color": "default",
-    "city": "Bordeaux",
-    "citySlug": "bordeaux",
-    "officeName": "SCP Dambier Et Associés",
-    "address": "23 Avenue du Jeu de Paume 33000 BORDEAUX",
-    "phone": "",
-    "website": "https://www.notaires.fr/fr/office/scp-dambier-et-associes-0",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "clementine-dreano-33000-rfp30",
     "name": "Me Clémentine Dreano",
     "initials": "CD",
@@ -535068,26 +528760,6 @@
     "claimed": false
   },
   {
-    "id": "olivier-lasserre-33000-oomz2u",
-    "name": "Me Olivier Lasserre",
-    "initials": "OL",
-    "color": "default",
-    "city": "Bordeaux",
-    "citySlug": "bordeaux",
-    "officeName": "SCP Dambier Et Associés",
-    "address": "23 Avenue du Jeu de Paume 33000 BORDEAUX",
-    "phone": "",
-    "website": "https://www.notaires.fr/fr/office/scp-dambier-et-associes-0",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "stephanie-pantin-33000-ul5k8w",
     "name": "Me Stéphanie Pantin",
     "initials": "SP",
@@ -535171,26 +528843,6 @@
     "id": "sandrine-castel-33000-nakzix",
     "name": "Me Sandrine Castel",
     "initials": "SC",
-    "color": "default",
-    "city": "Bordeaux",
-    "citySlug": "bordeaux",
-    "officeName": "SCP Dambier Et Associés",
-    "address": "23 Avenue du Jeu de Paume 33000 BORDEAUX",
-    "phone": "",
-    "website": "https://www.notaires.fr/fr/office/scp-dambier-et-associes-0",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "alison-dambier-33000-nd73b9",
-    "name": "Me Alison Dambier",
-    "initials": "AD",
     "color": "default",
     "city": "Bordeaux",
     "citySlug": "bordeaux",
@@ -535371,26 +529023,6 @@
     "id": "julie-gondellon-33000-ftxhxy",
     "name": "Me Julie Gondellon",
     "initials": "JG",
-    "color": "default",
-    "city": "Bordeaux",
-    "citySlug": "bordeaux",
-    "officeName": "SCP Dambier Et Associés",
-    "address": "23 Avenue du Jeu de Paume 33000 BORDEAUX",
-    "phone": "",
-    "website": "https://www.notaires.fr/fr/office/scp-dambier-et-associes-0",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "julien-desqueyroux-33000-k0fvaw",
-    "name": "Me Julien Desqueyroux",
-    "initials": "JD",
     "color": "default",
     "city": "Bordeaux",
     "citySlug": "bordeaux",
@@ -536018,26 +529650,6 @@
     "address": "11 allée Serr 33100 BORDEAUX",
     "phone": "0556678104",
     "website": "https://www.notaires.fr/fr/office/selarl-notaserr",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "romain-leplus-33200-psmab1",
-    "name": "Me Romain Leplus",
-    "initials": "RL",
-    "color": "default",
-    "city": "Bordeaux",
-    "citySlug": "bordeaux",
-    "officeName": "Barea Sanchez Et Associé, SELARL",
-    "address": "124 avenue du Général Leclerc 33200 BORDEAUX",
-    "phone": "0557311534",
-    "website": "https://www.notaires.fr/fr/office/barea-sanchez-et-associe-selarl",
     "specialties": [
       "Droit immobilier",
       "Successions"
@@ -562618,46 +556230,6 @@
     "address": "50 ALLEE JEAN JAURES 31000 TOULOUSE",
     "phone": "0562736820",
     "website": "https://www.notaires.fr/fr/office/chwartz-et-associes-selarl",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "charles-brenac-31500-8ufxnr",
-    "name": "Me Charles Brenac",
-    "initials": "CB",
-    "color": "default",
-    "city": "Toulouse",
-    "citySlug": "toulouse",
-    "officeName": "SELAS Fbm Notaires",
-    "address": "2 AVENUE JEAN RIEUX 31500 TOULOUSE",
-    "phone": "0534455840",
-    "website": "https://www.notaires.fr/fr/office/selas-fbm-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "axel-molinie-31500-xkoylx",
-    "name": "Me Axel Molinie",
-    "initials": "AM",
-    "color": "default",
-    "city": "Toulouse",
-    "citySlug": "toulouse",
-    "officeName": "SELAS Fbm Notaires",
-    "address": "2 AVENUE JEAN RIEUX 31500 TOULOUSE",
-    "phone": "0534455840",
-    "website": "https://www.notaires.fr/fr/office/selas-fbm-notaires",
     "specialties": [
       "Droit immobilier",
       "Successions"
@@ -590188,26 +583760,6 @@
     "claimed": false
   },
   {
-    "id": "denis-pithon-49000-6dxunx",
-    "name": "Me Denis Pithon",
-    "initials": "DP",
-    "color": "default",
-    "city": "Angers",
-    "citySlug": "angers",
-    "officeName": "Not'1pact, SELARL",
-    "address": "1 rue de Buffon 49000 ANGERS",
-    "phone": "0241883232",
-    "website": "https://www.notaires.fr/fr/office/not1pact-selarl",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "sophie-guinet-49000-k6cmo8",
     "name": "Me Sophie Guinet",
     "initials": "SG",
@@ -590448,49 +584000,9 @@
     "claimed": false
   },
   {
-    "id": "emilie-jouet-49000-8zh3uv",
-    "name": "Me Emilie Jouet",
-    "initials": "EJ",
-    "color": "default",
-    "city": "Angers",
-    "citySlug": "angers",
-    "officeName": "Njl Notaires Associes, SELARL",
-    "address": "11 boulevard du Roi René 49000 ANGERS",
-    "phone": "0241253388",
-    "website": "https://www.notaires.fr/fr/office/njl-notaires-associes-selarl",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "isabelle-souef-marchal-49000-7ki8an",
     "name": "Me Isabelle Souëf-Marchal",
     "initials": "IS",
-    "color": "default",
-    "city": "Angers",
-    "citySlug": "angers",
-    "officeName": "Njl Notaires Associes, SELARL",
-    "address": "11 boulevard du Roi René 49000 ANGERS",
-    "phone": "0241253388",
-    "website": "https://www.notaires.fr/fr/office/njl-notaires-associes-selarl",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "nicolas-nomblot-49000-sysv69",
-    "name": "Me Nicolas Nomblot",
-    "initials": "NN",
     "color": "default",
     "city": "Angers",
     "citySlug": "angers",
@@ -590638,46 +584150,6 @@
     "address": "2 rue de l'Aiguillerie 49100 ANGERS",
     "phone": "0241058714",
     "website": "https://www.notaires.fr/fr/office/selas-groupe-anjou-loire-notaires-0",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "antoine-desvaux-49100-9mdnti",
-    "name": "Me Antoine Desvaux",
-    "initials": "AD",
-    "color": "default",
-    "city": "Angers",
-    "citySlug": "angers",
-    "officeName": "Dcb Notaires Associes, SELARL",
-    "address": "21 PLACE LA FAYETTE 49100 ANGERS",
-    "phone": "0241886517",
-    "website": "https://www.notaires.fr/fr/office/dcb-notaires-associes-selarl",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "laurence-chauveau-49100-k2qgb3",
-    "name": "Me Laurence Chauveau",
-    "initials": "LC",
-    "color": "default",
-    "city": "Angers",
-    "citySlug": "angers",
-    "officeName": "Dcb Notaires Associes, SELARL",
-    "address": "21 PLACE LA FAYETTE 49100 ANGERS",
-    "phone": "0241886517",
-    "website": "https://www.notaires.fr/fr/office/dcb-notaires-associes-selarl",
     "specialties": [
       "Droit immobilier",
       "Successions"
@@ -601028,26 +594500,6 @@
     "claimed": false
   },
   {
-    "id": "linda-tan-06000-6mifqm",
-    "name": "Me Linda Tan",
-    "initials": "LT",
-    "color": "default",
-    "city": "Nice",
-    "citySlug": "nice",
-    "officeName": "SELAS Philia Notaires",
-    "address": "3 rue Cassini 06000 NICE",
-    "phone": "0422700127",
-    "website": "https://www.notaires.fr/fr/office/selas-philia-notaires-0",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
     "id": "nathalie-le-cherif-el-ouazzani-06000-i89tbi",
     "name": "Me Nathalie Le Cherif El-Ouazzani",
     "initials": "NE",
@@ -601231,26 +594683,6 @@
     "id": "audrey-pages-06200-d39w6t",
     "name": "Me Audrey Pagès",
     "initials": "AP",
-    "color": "default",
-    "city": "Nice",
-    "citySlug": "nice",
-    "officeName": "Perrin Et Associées",
-    "address": "117 Promenade des Anglais 06200 NICE",
-    "phone": "0492155220",
-    "website": "https://www.notaires.fr/fr/office/perrin-et-associees",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "elodie-perrin-06200-16qmoi",
-    "name": "Me Elodie Perrin",
-    "initials": "EP",
     "color": "default",
     "city": "Nice",
     "citySlug": "nice",

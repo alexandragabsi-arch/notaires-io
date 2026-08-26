@@ -20,7 +20,7 @@ import {
   Receipt,
   ExternalLink,
 } from "lucide-react";
-import { generateRoomId, internalVisioUrl, slotDayToDate } from "@/lib/visio";
+import { generateRoomId, internalVisioUrl, slotDayToDate, isRdvOpen } from "@/lib/visio";
 
 const DOCS_BUCKET = "booking-documents";
 
@@ -43,6 +43,10 @@ interface Rdv {
   time: string;
   mode: Mode;
   status: "Confirmé" | "En attente";
+  /** Libellé brut du créneau + date de réservation : nécessaires pour dater
+   *  le RDV avec certitude (l'année se déduit de la date de création). */
+  slotLabel: string;
+  createdAt: number;
 }
 
 // Facture Stripe (telle que renvoyée par /api/notaire/invoices).
@@ -89,10 +93,10 @@ const INVOICE_STATUS_FR: Record<string, string> = {
 };
 
 const RDVS_MOCK: Rdv[] = [
-  { id: "1", client: "Famille Durand", motif: "Succession", day: "Demain", time: "14h30", mode: "visio", status: "Confirmé" },
-  { id: "2", client: "M. et Mme Lefèvre", motif: "Acquisition immobilière", day: "Demain", time: "16h00", mode: "cabinet", status: "Confirmé" },
-  { id: "3", client: "Sophie Bernard", motif: "Donation", day: "Vendredi", time: "10h00", mode: "visio", status: "Confirmé" },
-  { id: "4", client: "Entreprise Novalis", motif: "Création de société", day: "Lundi", time: "11h00", mode: "cabinet", status: "En attente" },
+  { id: "1", client: "Famille Durand", motif: "Succession", day: "Demain", time: "14h30", mode: "visio", status: "Confirmé", slotLabel: "Demain · 14h30", createdAt: Date.now() },
+  { id: "2", client: "M. et Mme Lefèvre", motif: "Acquisition immobilière", day: "Demain", time: "16h00", mode: "cabinet", status: "Confirmé", slotLabel: "Demain · 16h00", createdAt: Date.now() },
+  { id: "3", client: "Sophie Bernard", motif: "Donation", day: "Vendredi", time: "10h00", mode: "visio", status: "Confirmé", slotLabel: "Vendredi · 10h00", createdAt: Date.now() },
+  { id: "4", client: "Entreprise Novalis", motif: "Création de société", day: "Lundi", time: "11h00", mode: "cabinet", status: "En attente", slotLabel: "Lundi · 11h00", createdAt: Date.now() },
 ];
 
 function parseSlotLabel(slotLabel: string): { day: string; time: string } {
@@ -187,7 +191,7 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
     setLoadingRdvs(true);
     supabase
       .from("bookings")
-      .select("id, client_nom, dossier, slot_label, modalite, status, notaire_documents")
+      .select("id, client_nom, dossier, slot_label, modalite, status, notaire_documents, created_at")
       .eq("notaire_id", notaireId)
       .order("created_at", { ascending: false })
       .limit(20)
@@ -209,6 +213,8 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
                 time,
                 mode: (row.modalite as Mode) || "cabinet",
                 status: (row.status as "Confirmé" | "En attente") || "Confirmé",
+                slotLabel: (row.slot_label as string) || "",
+                createdAt: row.created_at ? new Date(row.created_at as string).getTime() : Date.now(),
               };
             })
           );
@@ -414,10 +420,13 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
                         {r.mode === "visio" ? "Visio" : "Au cabinet"}
                       </span>
                       {r.mode === "visio" && (() => {
-                          const rdvDate = slotDayToDate(r.day);
-                          const roomId = generateRoomId(r.id, r.time, rdvDate);
-                          const isToday = rdvDate === new Date().toISOString().slice(0, 10);
-                          return isToday ? (
+                          // Salle dérivée du seul id de réservation → identique
+                          // à celle du client. Le bouton n'apparaît que le jour
+                          // du RDV, à partir de 30 min avant l'heure prévue.
+                          const rdvDate = slotDayToDate(r.slotLabel, r.createdAt);
+                          const roomId = generateRoomId(r.id);
+                          const ouverte = isRdvOpen(r.slotLabel, r.createdAt);
+                          return ouverte ? (
                             <a
                               key="join"
                               href={internalVisioUrl(roomId, rdvDate)}

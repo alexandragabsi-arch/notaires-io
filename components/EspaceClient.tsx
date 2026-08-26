@@ -24,6 +24,7 @@ import {
   type ClientDossier,
 } from "@/lib/client-dossiers";
 import { generateRoomId, internalVisioUrl, slotDayToDate } from "@/lib/visio";
+import AccountSettings from "@/components/AccountSettings";
 
 const DOCS_BUCKET = "booking-documents";
 
@@ -82,12 +83,10 @@ function parseRdvDate(slotLabel: string, createdAt: number): Date | null {
 
 // Même logique que le dashboard notaire → garantit la MÊME salle Jitsi.
 function visioLinkFor(d: ClientDossier): string {
-  const parts = d.slotLabel.split("·").map((s) => s.trim());
-  const day = parts[0] ?? d.slotLabel;
-  const time = parts[1] ?? "";
-  const rdvDate = slotDayToDate(day);
-  const roomId = generateRoomId(d.id, time, rdvDate);
-  return internalVisioUrl(roomId, rdvDate);
+  // La salle dérive du seul identifiant de réservation → strictement la même
+  // que celle calculée côté notaire. La date ne sert qu'à l'ouverture.
+  const rdvDate = slotDayToDate(d.slotLabel, d.createdAt);
+  return internalVisioUrl(generateRoomId(d.id), rdvDate);
 }
 
 async function downloadDocument(path: string, fileName: string) {
@@ -374,6 +373,9 @@ export default function EspaceClient() {
               ))}
           </>
         )}
+
+        {/* Réglages du compte : déconnexion + suppression (App Store 5.1.1 v) */}
+        <AccountSettings email={email} role="client" />
       </div>
     </section>
   );

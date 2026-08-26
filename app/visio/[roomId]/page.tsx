@@ -56,7 +56,10 @@ function VisioContent() {
             startWithAudioMuted: false,
             startWithVideoMuted: false,
             disableDeepLinking: true,
+            // `prejoinPageEnabled` est l'ancienne clé, ignorée par meet.jit.si
+            // aujourd'hui ; on garde les deux pour couvrir les deux versions.
             prejoinPageEnabled: false,
+            prejoinConfig: { enabled: false },
           },
           interfaceConfigOverwrite: {
             SHOW_JITSI_WATERMARK: false,
@@ -67,6 +70,10 @@ function VisioContent() {
             ],
           },
         });
+        // On retire le voile dès que l'iframe est en place : Jitsi peut afficher
+        // son propre écran d'accueil avant l'entrée en réunion, et le loader
+        // resterait sinon posé par-dessus.
+        setStatus("ready");
         api.addEventListener("videoConferenceJoined", () => setStatus("ready"));
         api.addEventListener("readyToClose", () => window.close());
       } catch {
@@ -163,7 +170,10 @@ function VisioContent() {
 
         {/* ── Container Jitsi ── */}
         {status !== "locked" && (
-          <div ref={containerRef} className="w-full h-full" style={{ minHeight: "calc(100vh - 64px)" }} />
+          // `height` explicite, et pas seulement `min-height` : Jitsi crée son
+          // iframe en `height:100%`, or un pourcentage ne se résout jamais
+          // contre un min-height — l'iframe retombait à 150 px.
+          <div ref={containerRef} className="w-full" style={{ height: "calc(100vh - 64px)" }} />
         )}
       </div>
     </div>

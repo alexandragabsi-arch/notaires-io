@@ -1,0 +1,19 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["58UX97NV94.app.rork.47b0gicl1iadpu92q67gl"],
+        "components": [
+          {
+            "/": "/reinitialiser-mot-de-passe",
+            "comment": "Lien de reinitialisation du mot de passe recu par e-mail"
+          },
+          {
+            "/": "/reinitialiser-mot-de-passe/*",
+            "comment": "Variantes avec segment supplementaire"
+          }
+        ]
+      }
+    ]
+  }
+}

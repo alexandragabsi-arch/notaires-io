@@ -171,11 +171,33 @@ async function processOffice(office, all, seen) {
 async function main() {
   console.log("👤  Récupération des notaires associés par étude\n");
 
-  const offices = JSON.parse(readFileSync("data/notaires-france.json", "utf-8"));
-  console.log(`Total études : ${offices.length} — concurrence : ${CONCURRENCY}\n`);
+  let offices = JSON.parse(readFileSync("data/notaires-france.json", "utf-8"));
 
-  const all = [];
-  const seen = new Set();
+  // Reprise de l'existant : le fichier contient aussi des fiches d'autres
+  // sources (SIRENE via fetch-from-sirene.mjs). Repartir d'un tableau vide
+  // les effacerait — on fusionne au lieu d'écraser.
+  let all = [];
+  try {
+    all = JSON.parse(readFileSync("data/notaires-membres.json", "utf-8"));
+    console.log(`Fichier existant : ${all.length} fiches conservées`);
+  } catch {
+    console.log("Aucun fichier existant, on repart de zéro");
+  }
+  const seen = new Set(all.map((n) => n.id));
+
+  // `--manquantes` : ne visite que les études sans aucun notaire rattaché.
+  // Évite de refaire 7 200 requêtes quand il n'en manque qu'une poignée.
+  if (process.argv.includes("--manquantes")) {
+    const norm = (s) => (s ?? "").toLowerCase().normalize("NFD")
+      .replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+    const couverts = new Set(all.filter((n) => n.officeName).map((n) => norm(n.officeName)));
+    const avant = offices.length;
+    offices = offices.filter((o) => !couverts.has(norm(o.name)));
+    console.log(`Mode --manquantes : ${offices.length} études sans notaire (sur ${avant})`);
+  }
+
+  console.log(`Études à visiter : ${offices.length} — concurrence : ${CONCURRENCY}\n`);
+
   let done = 0;
 
   // Traitement par batches de CONCURRENCY

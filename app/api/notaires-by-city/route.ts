@@ -101,8 +101,10 @@ export async function GET(req: NextRequest) {
   // ou raison sociale du type « Étude … ») : l'annuaire ne liste que des personnes,
   // exactement comme le site (cf. lib/notaires-source.ts).
   const membres = loadMembres();
-  const fromMembres = membres
-    .filter(n => !String(n.id).startsWith("etude-") && !OFFICE_PREFIXES.test(n.name.replace(/^Me\s+/, "")))
+  const personnes = membres.filter(
+    n => !String(n.id).startsWith("etude-") && !OFFICE_PREFIXES.test(n.name.replace(/^Me\s+/, "")),
+  );
+  const fromMembres = personnes
     .filter(n => cityMatches(n.city, norm))
     .slice(0, limit);
 
@@ -126,6 +128,16 @@ export async function GET(req: NextRequest) {
     .filter(o => cityMatches(o.city, norm))
     .slice(0, limit - fromMembres.length);
 
+  // 3. Repli par NOM. L'app envoie la saisie de l'utilisateur dans `city` sans
+  //    distinguer ville et patronyme : taper « léon » ne renvoyait que les
+  //    2 notaires de la commune de Léon, jamais les 72 qui s'appellent Léon.
+  //    Insensible aux accents, comme la recherche du site.
+  const dejaPris = new Set([...fromMembres, ...fromOffices].map(x => x.name));
+  const restant = limit - fromMembres.length - fromOffices.length;
+  const fromNames = restant <= 0 ? [] : personnes
+    .filter(n => !dejaPris.has(n.name) && normCity(n.name).includes(norm))
+    .slice(0, restant);
+
   const all = [
     ...fromMembres.map((n, i) => ({
       name: n.name,
@@ -146,6 +158,13 @@ export async function GET(req: NextRequest) {
         next: SLOTS[(fromMembres.length + i) % SLOTS.length],
       };
     }),
+    ...fromNames.map((n, i) => ({
+      name: n.name,
+      initials: n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).map((p: string) => p[0]).slice(0, 2).join(""),
+      color: n.color,
+      city: n.city,
+      next: SLOTS[(fromMembres.length + fromOffices.length + i) % SLOTS.length],
+    })),
   ];
 
   return NextResponse.json(all.slice(0, limit));

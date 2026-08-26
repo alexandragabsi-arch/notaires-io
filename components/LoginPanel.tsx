@@ -17,7 +17,8 @@ export default function LoginPanel() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Réinitialisation de mot de passe (arrivée depuis le lien e-mail → /connexion?reset=1)
+  // Réinitialisation de mot de passe (arrivée depuis le lien e-mail →
+  // /connexion?reset=1 côté web, /reinitialiser-mot-de-passe depuis l'app iOS)
   const [recoveryMode, setRecoveryMode] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -30,7 +31,12 @@ export default function LoginPanel() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      if (params.get("reset") === "1" || window.location.hash.includes("type=recovery")) {
+      if (
+        params.get("reset") === "1" ||
+        window.location.hash.includes("type=recovery") ||
+        // L'app iOS native redirige vers cette page dédiée, sans paramètre.
+        window.location.pathname === "/reinitialiser-mot-de-passe"
+      ) {
         setRecoveryMode(true);
       }
       // Présélection de l'onglet via ?role=notaire (arrivée depuis l'e-mail /

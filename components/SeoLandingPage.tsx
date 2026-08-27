@@ -305,14 +305,29 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
       const postcode: string = props?.postcode ?? "";
       const city: string = props?.city ?? "";
       const num = postalToArrNum(postcode);
-      if (num && availableArr.includes(num)) {
-        /* Arrondissement détecté ET des notaires y figurent */
+      /* Ville détectée, rapprochée de celles réellement présentes dans la liste. */
+      const villeDetectee = availableCities.find((c) => {
+        const a = c.toLowerCase().trim();
+        const b = city.toLowerCase().trim();
+        return a === b || a.includes(b) || b.includes(a);
+      }) ?? null;
+
+      if (num && availableArr.includes(num) && villeDetectee) {
+        /* Arrondissement détecté ET des notaires y figurent.
+           On fixe AUSSI la ville : un numéro d'arrondissement seul ne distingue
+           pas Paris 8e (75008) de Marseille 8e (13008) ni de Lyon 8e (69008),
+           et le filtre remontait des notaires d'une autre ville que celle
+           affichée dans le libellé.
+           Sans ville identifiée, on n'applique pas le filtre arrondissement :
+           il serait aveugle à la ville et donnerait des résultats faux. */
         setSelectedArr(num);
+        setSelectedCity(villeDetectee);
         setNearLabel(`${city} ${arrLabel(num)}`);
         setNearState("done");
       } else if (num) {
         /* Arrondissement détecté mais aucun notaire → fallback ville entière */
         setSelectedArr(null);
+        setSelectedCity(villeDetectee);
         setNearLabel(city);
         setNearState("done");
       } else {

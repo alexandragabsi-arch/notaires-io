@@ -8,9 +8,9 @@ import {
   ScrollText,
   ArrowRight,
   Smartphone,
-  Bell,
+  Mail,
   CalendarCheck,
-  MessageSquare,
+  FolderLock,
   Download,
   Check,
 } from "lucide-react";
@@ -27,7 +27,7 @@ const faqNotaires = [
   },
   {
     q: "Est-ce conforme à la déontologie notariale ?",
-    a: "Oui. Notaires.io est conçu par un notaire en exercice, dans le respect des règles de la profession. Rien n'est fait qui puisse vous mettre en difficulté vis-à-vis de votre déontologie.",
+    a: "Oui. Notaires.io est conçu par une diplômée notaire, dans le respect des règles de la profession. Rien n'est fait qui puisse vous mettre en difficulté vis-à-vis de votre déontologie.",
   },
   {
     q: "Comment mes clients prennent-ils rendez-vous ?",
@@ -112,7 +112,7 @@ export default function NotairePitch() {
                 dossier.
               </p>
               <p className="serif text-[18px] sm:text-[20px] italic text-[var(--color-primary)] text-center">
-                Créé par un notaire, au service des notaires.
+                Créé par une diplômée notaire, au service des notaires.
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-3">
@@ -284,7 +284,7 @@ export default function NotairePitch() {
                     <div className="mx-3 mt-3 bg-white rounded-2xl p-3 shadow-sm border border-blue-100 shrink-0">
                       <div className="flex items-center gap-2 mb-1.5">
                         <div className="w-5 h-5 rounded-md bg-[#3b5fd9] flex items-center justify-center shrink-0">
-                          <Bell className="w-2.5 h-2.5 text-white" strokeWidth={2.5}/>
+                          <Mail className="w-2.5 h-2.5 text-white" strokeWidth={2.5}/>
                         </div>
                         <span className="text-[9px] font-bold text-[#3b5fd9] uppercase tracking-wide">Nouveau RDV</span>
                         <span className="text-[8px] text-gray-400 ml-auto">maintenant</span>
@@ -324,8 +324,8 @@ export default function NotairePitch() {
                     <div className="mt-auto bg-white border-t border-gray-100 flex justify-around py-2 shrink-0">
                       {[
                         { icon: CalendarCheck, label: "Agenda", active: true },
-                        { icon: MessageSquare, label: "Messages", active: false },
-                        { icon: Bell, label: "Notifs", active: false },
+                        { icon: FolderLock, label: "Dossiers", active: false },
+                        { icon: ScrollText, label: "Factures", active: false },
                         { icon: Smartphone, label: "Profil", active: false },
                       ].map(({ icon: Icon, label, active }) => (
                         <div key={label} className="flex flex-col items-center gap-0.5">
@@ -353,9 +353,9 @@ export default function NotairePitch() {
             >
               <div className="flex flex-col gap-5 mb-10">
                 {[
-                  { icon: Bell, title: "Notifications push instantanées", desc: "Nouveau RDV, message client ou rappel — tout en temps réel.", tint: "bg-[var(--color-tint-blue)] text-[var(--color-accent)]" },
+                  { icon: Mail, title: "Alerte e-mail à chaque réservation", desc: "Nouveau rendez-vous, rappel la veille puis deux heures avant — envoyés automatiquement.", tint: "bg-[var(--color-tint-blue)] text-[var(--color-accent)]" },
                   { icon: CalendarCheck, title: "Agenda synchronisé", desc: "Votre planning complet sur mobile, toujours à jour.", tint: "bg-[var(--color-tint-green)] text-[var(--color-success)]" },
-                  { icon: MessageSquare, title: "Messagerie sécurisée", desc: "Échangez avec vos clients dans un espace confidentiel.", tint: "bg-[var(--color-tint-purple)] text-purple-600" },
+                  { icon: FolderLock, title: "Échange de pièces sécurisé", desc: "Vos clients déposent leurs documents, vous leur répondez — stockage privé, liens à durée limitée.", tint: "bg-[var(--color-tint-purple)] text-purple-600" },
                   { icon: Download, title: "Export Genapi / Inot / Fichorga", desc: "Téléchargez les fiches clients en un clic — format CSV prêt à importer dans votre logiciel notarial.", tint: "bg-[var(--color-tint-warm)] text-orange-600" },
                 ].map(({ icon: Icon, title, desc, tint }) => (
                   <div key={title} className="flex items-start gap-4">
@@ -481,6 +481,28 @@ export default function NotairePitch() {
               Référencer mon étude
               <ArrowRight className="w-[17px] h-[17px]" strokeWidth={2.5} />
             </a>
+            {/* Conditions d'abonnement — exigées par la guideline App Store 3.1.2 :
+                durée, prix, reconduction, et liens CGU + confidentialité au
+                niveau de l'offre. */}
+            <div className="mt-5 pt-4 border-t border-[var(--color-border-soft)] text-[12px] text-[var(--color-muted)] leading-relaxed">
+              <p className="mb-1">
+                <strong className="text-[var(--color-text-strong)]">Abonnement mensuel</strong> —
+                99 € HT/mois les 3 premiers mois, puis 119 € HT/mois, par notaire.
+                Reconduction automatique chaque mois, résiliable à tout moment
+                depuis votre espace notaire ; la résiliation prend effet à la fin
+                de la période en cours.
+              </p>
+              <p>
+                <a href="/cgu" className="text-[var(--color-accent)] hover:underline font-semibold">
+                  Conditions générales
+                </a>
+                {" · "}
+                <a href="/confidentialite" className="text-[var(--color-accent)] hover:underline font-semibold">
+                  Politique de confidentialité
+                </a>
+              </p>
+            </div>
+
             <p className="text-center text-[12px] text-[var(--color-muted)] mt-3">
               Démo gratuite de 20 min · Aucun engagement · Résiliable à tout moment
             </p>

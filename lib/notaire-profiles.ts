@@ -66,6 +66,14 @@ export function getStoredProfiles(): ListingNotaire[] {
   return safeParse(window.localStorage.getItem(STORAGE_KEY));
 }
 
+// Purge le profil mémorisé localement (déconnexion, suppression de compte).
+export function clearStoredProfiles(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(STORAGE_KEY);
+  } catch { /* mode privé / quota */ }
+}
+
 // Lit les profils depuis Supabase (visible par tous les visiteurs).
 export async function getRemoteProfiles(): Promise<ListingNotaire[]> {
   const { data, error } = await supabase

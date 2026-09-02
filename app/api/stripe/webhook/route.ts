@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail, emailLayout, emailButton, SITE, ADMIN_EMAIL } from "@/lib/email";
+import { traiterCommandeCartes } from "@/lib/carte-commande";
 
 // Client Supabase créé à la demande (pas au chargement du module) pour éviter
 // que le build n'échoue si une variable d'env manque au moment de la compilation.
@@ -28,6 +29,7 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 interface StripeSession {
+  id?: string;
   mode?: string;
   customer?: string | null;
   customer_email?: string | null;
@@ -102,6 +104,11 @@ export async function POST(req: NextRequest) {
   const name = s.customer_details?.name || "";
   const meta = s.metadata ?? {};
   const amount = formatAmount(s.amount_total, s.currency);
+  // Adresse de livraison recomposée pour les e-mails (les métadonnées sont
+  // désormais éclatées en champs séparés, exigés par l'imprimeur).
+  const livraisonLisible = [meta.livDestinataire, meta.livRue, `${meta.livCodePostal ?? ""} ${meta.livVille ?? ""}`.trim()]
+    .filter(Boolean)
+    .join(", ") || meta.livraison || "";
 
   if (s.mode === "subscription") {
     // ── Abonnement notaire ──────────────────────────────────────────────────
@@ -152,6 +159,14 @@ export async function POST(req: NextRequest) {
 
   if (s.mode === "payment") {
     // ── Commande de cartes physiques ────────────────────────────────────────
+    // Le paiement est confirmé : on fabrique le PDF et on passe commande chez
+    // l'imprimeur. C'est le seul déclencheur possible — rien ne part sans
+    // paiement encaissé.
+    const commande =
+      meta.type === "cartes"
+        ? await traiterCommandeCartes(s.id ?? "", meta, s.amount_total ?? 0)
+        : { ok: false as const, error: "Commande sans métadonnées de cartes" };
+
     if (email) {
       await sendEmail(
         email,
@@ -165,7 +180,7 @@ export async function POST(req: NextRequest) {
             ${amount ? `(${amount})` : ""}. Vos cartes seront imprimées et expédiées
             à l'adresse indiquée.
           </p>
-          ${meta.livraison ? `<div style="background:#f8f9fa;border-radius:12px;padding:20px;margin-bottom:24px"><div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Livraison</div><div style="font-size:14px;color:#5a6a8a">${meta.livraison}</div></div>` : ""}
+          ${livraisonLisible ? `<div style="background:#f8f9fa;border-radius:12px;padding:20px;margin-bottom:24px"><div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:4px">Livraison</div><div style="font-size:14px;color:#5a6a8a">${livraisonLisible}</div></div>` : ""}
         `),
       );
     }
@@ -180,11 +195,20 @@ export async function POST(req: NextRequest) {
           <tr><td style="padding:6px 0;color:#5a6a8a">Modèle</td><td>${meta.cardType || "—"} × ${meta.quantity || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">Montant</td><td>${amount || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">Email</td><td>${email || "—"}</td></tr>
-          <tr><td style="padding:6px 0;color:#5a6a8a">Livraison</td><td>${meta.livraison || "—"}</td></tr>
+          <tr><td style="padding:6px 0;color:#5a6a8a">Livraison</td><td>${livraisonLisible || "—"}</td></tr>
+          <tr><td style="padding:6px 0;color:#5a6a8a">Imprimeur</td><td>${
+            commande.ok
+              ? `commande ${commande.gelatoOrderId} (${commande.orderType === "order" ? "en production" : "BROUILLON — rien n'est imprimé"})`
+              : `<span style="color:#dc2626;font-weight:600">échec — ${commande.error}</span>`
+          }</td></tr>
         </table>
       `),
     );
-    return NextResponse.json({ received: true, handled: "payment" });
+    return NextResponse.json({
+      received: true,
+      handled: "payment",
+      printer: commande.ok ? commande.gelatoOrderId : commande.error,
+    });
   }
 
   return NextResponse.json({ received: true, handled: "none" });

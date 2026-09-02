@@ -76,7 +76,7 @@ export default function CardDesigner() {
     nom: "", etude: "", rue: "", codePostal: "", ville: "", tel: "", email: "",
   });
   const [cardType, setCardType] = useState<CardType>("standard");
-  const [qty, setQty] = useState<Qty>(250);
+  const [qty, setQty] = useState<Qty>(200);
   const [autreLivraison, setAutreLivraison] = useState(false);
   const [livraison, setLivraison] = useState<Record<LivraisonKey, string>>({
     destinataire: "", rue: "", codePostal: "", ville: "",

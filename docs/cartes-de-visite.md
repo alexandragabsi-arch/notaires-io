@@ -27,8 +27,8 @@ page de rendez-vous.
 | `STRIPE_SECRET_KEY` | Encaissement. Compte **LegalCorners**. |
 | `STRIPE_WEBHOOK_SECRET` | Signature du webhook Stripe — doit venir du **même** compte que la clé ci-dessus. |
 | `GELATO_API_KEY` | Clé imprimeur. Serveur uniquement, **jamais** préfixée `NEXT_PUBLIC_`. |
-| `GELATO_PRODUCT_UID_STANDARD` | Référence catalogue du modèle 350 g. |
-| `GELATO_PRODUCT_UID_PREMIUM` | Référence catalogue du modèle 600 g. |
+| `GELATO_PRODUCT_UID_STANDARD` | Facultatif — surcharge la référence par défaut. |
+| `GELATO_PRODUCT_UID_PREMIUM` | Facultatif — surcharge la référence par défaut. |
 | `GELATO_ORDER_TYPE` | `draft` (défaut) ou `order`. Voir ci-dessous. |
 | `GELATO_WEBHOOK_SECRET` | Jeton attendu dans l'URL du webhook imprimeur. |
 | `SUPABASE_SERVICE_ROLE_KEY` | Écriture serveur dans `card_orders` et le bucket. |
@@ -41,20 +41,35 @@ peut y vérifier l'aperçu du fichier, mais rien n'est imprimé ni facturé.
 
 Ne passer à `order` qu'après avoir vérifié un brouillon de bout en bout.
 
+## Catalogue et coûts, relevés le 2 septembre 2026
+
+Format retenu : **`bd` = 85 × 55 mm**, le standard européen, celui du PDF
+généré. Les autres formats du catalogue (`bb` 90×50, `bc` 90×55, `bx` 88,9×50,8)
+ne correspondent pas.
+
+**Le catalogue Gelato ne propose pas de 600 g soft-touch** : 350 g est
+l'épaisseur maximale. Les deux modèles ont donc été redéfinis sur ce qui existe
+réellement.
+
+Coûts imprimeur en France, hors port (**5,78 €**, DPD, 2 jours) :
+
+| Modèle | Référence | 100 | 200 | 500 |
+|---|---|---|---|---|
+| Standard — pelliculage mat | `cards_pf_bd_pt_350-gsm-coated-silk_cl_4-4_ct_matt-protection_hor` | 18,10 € | 24,75 € | 43,05 € |
+| Premium — papier naturel | `cards_pf_bd_pt_350-gsm-uncoated_cl_4-4_hor` | 34,34 € | 54,59 € | 109,26 € |
+
+Le palier **250 n'existe pas** pour le pelliculé : les quantités sont 100 / 200 / 500.
+
 ## À faire avant la première commande réelle
 
-1. **Relever les `productUid`** dans le catalogue Gelato (format, papier,
-   recto/verso, orientation) et les mettre en variables d'environnement.
-2. **Relever les prix Gelato** par palier :
-   `curl -s "https://product.gelatoapis.com/v3/products/UID/prices" -H "X-API-KEY: $GELATO_API_KEY"`
-   puis ajuster la grille de vente dans `lib/cartes.ts` — les montants actuels
-   sont des valeurs de départ, pas des prix calibrés sur un coût réel.
-3. **Jouer la migration** `supabase/migrations/20260902_card_orders.sql`
-   (table `card_orders`, RLS, bucket `cartes`).
+1. ~~Relever les `productUid`~~ — fait, valeurs par défaut dans `lib/cartes.ts`.
+2. ~~Relever les prix et calibrer la grille~~ — fait.
+3. ~~Jouer la migration~~ — appliquée en production le 2 septembre 2026.
 4. **Déclarer le webhook imprimeur** dans Gelato :
    `https://notaires.io/api/gelato/webhook?token=<GELATO_WEBHOOK_SECRET>`
 5. **Commander un brouillon**, vérifier l'aperçu du PDF dans le tableau de bord,
-   puis basculer `GELATO_ORDER_TYPE=order`.
+   puis basculer `GELATO_ORDER_TYPE=order` — c'est cette variable, et elle seule,
+   qui ouvre la commande au public.
 
 ## Reste à construire
 

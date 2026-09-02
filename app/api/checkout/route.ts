@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prixCents, getCardType, formatPrix, productUid } from "@/lib/cartes";
+import { gelatoOrderType } from "@/lib/gelato";
 
 // Crée la session de paiement pour une commande de cartes de visite.
 // Appel direct à l'API Stripe REST — pas de SDK nécessaire.
@@ -56,10 +57,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Modèle ou quantité invalide" }, { status: 400 });
   }
 
-  // Garde-fou : sans référence produit chez l'imprimeur, la commande échouerait
-  // APRÈS encaissement. On refuse avant d'ouvrir le paiement plutôt que de
-  // débiter quelqu'un pour des cartes qui ne partiraient jamais.
-  if (!productUid(type.id)) {
+  // Garde-fou : tant que l'intégration imprimeur n'est pas passée en production
+  // (GELATO_ORDER_TYPE=order), une commande payée partirait en brouillon et ne
+  // serait jamais imprimée. On refuse avant d'encaisser. Idem si la référence
+  // produit venait à manquer.
+  if (gelatoOrderType() !== "order" || !productUid(type.id)) {
     return NextResponse.json(
       { error: "La commande de cartes est momentanément indisponible. Réessayez plus tard." },
       { status: 503 },

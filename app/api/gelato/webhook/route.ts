@@ -86,16 +86,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  const premierSuivi = Boolean(suivi) && !avant?.tracking_url;
-  if (premierSuivi && avant) {
-    await previenirExpedition(avant, suivi!);
+  // Un e-mail ne part que si la commande existe ET qu'elle n'avait pas encore
+  // de suivi : Gelato peut rejouer le même événement.
+  const previenir = Boolean(suivi) && Boolean(avant) && !avant?.tracking_url;
+  if (previenir) {
+    await previenirExpedition(avant!, suivi!);
   }
 
   return NextResponse.json({
     received: true,
     reference,
+    known: Boolean(avant),
     status: maj.status ?? null,
-    notified: premierSuivi,
+    notified: previenir,
   });
 }
 

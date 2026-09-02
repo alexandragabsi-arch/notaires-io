@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { limiter, ipDe } from "@/lib/rate-limit";
 
 type Detected = { branchId: string; q2: string | null; message: string };
 
@@ -32,6 +33,16 @@ function detectFromKeywords(text: string): Detected | null {
 }
 
 export async function POST(req: NextRequest) {
+  // Cette route appelle l'API Anthropic, facturée à l'usage : sans limite,
+  // une boucle d'appels se traduit directement en facture.
+  const limite = limiter(`detect:${ipDe(req)}`, 10, 60000);
+  if (!limite.autorise) {
+    return NextResponse.json(
+      { error: "Trop de demandes. Réessayez dans un instant." },
+      { status: 429, headers: { "Retry-After": String(limite.attendreSec) } },
+    );
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   const { description } = (await req.json()) as { description: string };
   if (!description?.trim()) {

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { limiter, ipDe } from "@/lib/rate-limit";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail, emailLayout, emailButton, ADMIN_EMAIL, SITE } from "@/lib/email";
 
@@ -20,6 +21,16 @@ interface ParcoursLead {
 }
 
 export async function POST(req: NextRequest) {
+  // Chaque appel écrit en base et envoie trois e-mails : c'est la route la
+  // plus facile à détourner pour saturer le quota d'envoi.
+  const limite = limiter(`parcours:${ipDe(req)}`, 3, 60000);
+  if (!limite.autorise) {
+    return NextResponse.json(
+      { error: "Trop de demandes. Réessayez dans un instant." },
+      { status: 429, headers: { "Retry-After": String(limite.attendreSec) } },
+    );
+  }
+
   const body = (await req.json()) as ParcoursLead;
   const { parcours, parcoursLabel, email, ville, specialite, answers } = body;
 

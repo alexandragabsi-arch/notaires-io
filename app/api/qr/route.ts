@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
+import { limiter, ipDe } from "@/lib/rate-limit";
 
 // Génère un QR code PNG en proxy-ant api.qrserver.com (pas de librairie npm).
 // Usage : GET /api/qr?data=https://notaires.io/notaires/am&size=400
 export async function GET(req: NextRequest) {
+  // Proxy vers un service tiers : on ne veut pas servir de relais gratuit.
+  const limite = limiter(`qr:${ipDe(req)}`, 30, 60000);
+  if (!limite.autorise) {
+    return NextResponse.json(
+      { error: "Trop de demandes. Réessayez dans un instant." },
+      { status: 429, headers: { "Retry-After": String(limite.attendreSec) } },
+    );
+  }
+
   const { searchParams } = req.nextUrl;
   const data = searchParams.get("data") ?? "";
   const size = Math.min(Number(searchParams.get("size") ?? 400), 1000);

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { limiter, ipDe } from "@/lib/rate-limit";
 import { readFileSync } from "fs";
 import { join } from "path";
 
@@ -90,6 +91,16 @@ function loadOffices(): RawOffice[] {
 }
 
 export async function GET(req: NextRequest) {
+  // L'annuaire est l'actif du site : on le sert normalement, mais on ne le
+  // laisse pas aspirer fiche par fiche à pleine vitesse.
+  const limite = limiter(`annuaire:${ipDe(req)}`, 60, 60000);
+  if (!limite.autorise) {
+    return NextResponse.json(
+      { error: "Trop de demandes. Réessayez dans un instant." },
+      { status: 429, headers: { "Retry-After": String(limite.attendreSec) } },
+    );
+  }
+
   const city = req.nextUrl.searchParams.get("city") ?? "";
   const norm = normCity(city);
   const limit = 4;

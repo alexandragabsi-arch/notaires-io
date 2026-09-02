@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
   };
 
   // Champ piège : voir /api/booking. Réponse volontairement anodine.
-  if (piegeDeclenche(body)) return reponsePiege();
+  if (piegeDeclenche(body)) return reponsePiege("subscribe");
 
   // ── 1. Créer un coupon : -20 € pendant 3 mois (99€ → revient à 99€ sur 119€ base) ──
   // On utilise un coupon idempotent (même id = pas de doublon dans Stripe)

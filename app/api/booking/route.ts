@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
   // Champ piège : rempli, la requête vient d'un robot de formulaire. On répond
   // comme si tout allait bien pour ne pas lui signaler qu'il est repéré.
-  if (piegeDeclenche(body)) return reponsePiege();
+  if (piegeDeclenche(body)) return reponsePiege("booking");
   const { notaireId, notaireNom, slotKey, slotLabel, dossier, modalite, participants, documents, userId } = body;
 
   if (!notaireId || !slotLabel || !participants?.length) {

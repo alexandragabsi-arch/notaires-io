@@ -53,7 +53,12 @@ export function piegeDeclenche(body: unknown): boolean {
 }
 
 /** Réponse volontairement identique à un succès : un robot ne doit pas
- *  apprendre qu'il a été repéré, sinon il adapte sa charge. */
-export function reponsePiege() {
+ *  apprendre qu'il a été repéré, sinon il adapte sa charge.
+ *
+ *  Le déclenchement est journalisé : si un humain se faisait piéger par un
+ *  autofill, la ligne apparaîtrait dans les logs Vercel — sans elle, le
+ *  faux positif serait indétectable puisque la réponse imite un succès. */
+export function reponsePiege(contexte = "") {
+  console.warn(`[anti-robot] champ piège déclenché${contexte ? ` — ${contexte}` : ""}`);
   return Response.json({ ok: true });
 }

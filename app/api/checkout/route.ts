@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prixCents, getCardType, formatPrix } from "@/lib/cartes";
+import { prixCents, getCardType, formatPrix, productUid } from "@/lib/cartes";
 
 // Crée la session de paiement pour une commande de cartes de visite.
 // Appel direct à l'API Stripe REST — pas de SDK nécessaire.
@@ -54,6 +54,16 @@ export async function POST(req: NextRequest) {
   const total = prixCents(body.cardType, body.quantity);
   if (!type || total === null) {
     return NextResponse.json({ error: "Modèle ou quantité invalide" }, { status: 400 });
+  }
+
+  // Garde-fou : sans référence produit chez l'imprimeur, la commande échouerait
+  // APRÈS encaissement. On refuse avant d'ouvrir le paiement plutôt que de
+  // débiter quelqu'un pour des cartes qui ne partiraient jamais.
+  if (!productUid(type.id)) {
+    return NextResponse.json(
+      { error: "La commande de cartes est momentanément indisponible. Réessayez plus tard." },
+      { status: 503 },
+    );
   }
 
   if (!body.notaireId) {

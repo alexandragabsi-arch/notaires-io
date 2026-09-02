@@ -10,6 +10,10 @@ import { CHAMP_PIEGE } from "@/lib/rate-limit";
  * `aria-hidden` et `tabIndex={-1}` le rendent invisible aux lecteurs d'écran
  * et à la navigation au clavier — un humain ne peut donc pas le remplir par
  * accident, un robot qui remplit tout le formulaire s'y jette.
+ *
+ * Les attributs `data-*` écartent les gestionnaires de mots de passe et
+ * l'autofill du navigateur, qui remplissent volontiers un champ texte au nom
+ * crédible même masqué : ici un faux positif coûterait une inscription.
  */
 export default function ChampPiege({
   value,
@@ -27,6 +31,10 @@ export default function ChampPiege({
         type="text"
         tabIndex={-1}
         autoComplete="off"
+        data-1p-ignore="true"
+        data-lpignore="true"
+        data-bwignore="true"
+        data-form-type="other"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />

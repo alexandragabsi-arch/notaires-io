@@ -23,11 +23,14 @@ import {
   ShieldCheck,
   Receipt,
   CreditCard,
+  Store,
 } from "lucide-react";
 import { getStoredProfiles, getProfileByUserId } from "@/lib/notaire-profiles";
 import { supabase } from "@/lib/supabase";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import NotaireDashboard from "@/components/NotaireDashboard";
+import AccountSettings from "@/components/AccountSettings";
+import GoogleVisibilite from "@/components/GoogleVisibilite";
 
 const SITE_URL =
   typeof window !== "undefined"
@@ -288,21 +291,29 @@ function QuickNav({ profileId }: { profileId: string }) {
     { icon: CalendarDays, label: "Mes rendez-vous", href: "#agenda", color: "text-[var(--color-success)]", bg: "bg-[var(--color-tint-green)]" },
     { icon: Receipt, label: "Mes factures", href: "#factures", color: "text-orange-500", bg: "bg-[var(--color-tint-warm)]" },
     { icon: User, label: "Mon profil public", href: `/notaires/${profileId}`, color: "text-purple-600", bg: "bg-[var(--color-tint-purple)]" },
+    { icon: Store, label: "Ma visibilité Google", href: "#google", color: "text-[var(--color-accent)]", bg: "bg-[var(--color-tint-blue)]" },
     { icon: QrCode, label: "Mon QR code", href: "#qr", color: "text-[var(--color-accent)]", bg: "bg-[var(--color-tint-blue)]" },
     { icon: CreditCard, label: "Cartes de visite", href: "/notaires/cartes", color: "text-pink-500", bg: "bg-[var(--color-tint-warm)]" },
     { icon: Sparkles, label: "Les avantages Notaires.io", href: "/notaires", color: "text-[var(--color-accent)]", bg: "bg-[var(--color-accent-soft)]" },
   ];
 
+  // Si la dernière ligne de la grille est incomplète, la dernière tuile s'étire
+  // pour éviter une tuile orpheline en fin de grille.
+  const lastSpan = [
+    links.length % 2 === 1 ? "col-span-2" : "",
+    links.length % 3 === 1 ? "sm:col-span-3" : links.length % 3 === 2 ? "sm:col-span-2" : "",
+  ].filter(Boolean).join(" ");
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-      {links.map(({ icon: Icon, label, href, color, bg }) => {
+      {links.map(({ icon: Icon, label, href, color, bg }, i) => {
         const external = href.startsWith("/");
         return (
           <a
             key={label}
             href={href}
             {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            className="relative flex flex-col items-center gap-2 p-4 bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-[var(--shadow-card)] hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-strong)] transition-all text-center group"
+            className={`relative flex flex-col items-center gap-2 p-4 bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-[var(--shadow-card)] hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-strong)] transition-all text-center group ${i === links.length - 1 ? lastSpan : ""}`}
           >
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${bg} group-hover:scale-110 transition-transform`}>
               <Icon className={`w-5 h-5 ${color}`} strokeWidth={2} />
@@ -473,8 +484,20 @@ function EspaceNotaireInner() {
       {/* Agenda (rendez-vous) + factures depuis Supabase. */}
       <NotaireDashboard notaireId={profile.id} />
 
-      {/* QR code — outil de partage, en complément */}
-      <div className="max-w-[860px] mx-auto px-4 sm:px-6 pt-2">
+      {/* Visibilité Google + QR code — les outils d'acquisition */}
+      <div className="max-w-[860px] mx-auto px-4 sm:px-6 pt-2 flex flex-col gap-6">
+        {/* Bouton « Prendre rendez-vous » sur la fiche d'établissement Google */}
+        <motion.div
+          id="google"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.4 }}
+          className="scroll-mt-24"
+        >
+          <GoogleVisibilite profile={profile} />
+        </motion.div>
+
         <motion.div
           id="qr"
           initial={{ opacity: 0, y: 16 }}
@@ -485,6 +508,9 @@ function EspaceNotaireInner() {
         >
           <QRBlock profile={profile} />
         </motion.div>
+
+        {/* Réglages du compte : déconnexion + suppression (App Store 5.1.1 v) */}
+        <AccountSettings email={profile.email ?? ""} role="notaire" />
       </div>
 
     </section>

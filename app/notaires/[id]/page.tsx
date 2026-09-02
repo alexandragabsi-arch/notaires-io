@@ -78,12 +78,26 @@ function buildJsonLd(id: string) {
         openingHours: "Mo-Fr 09:00-18:00",
         knowsAbout: n.specialties,
         availableLanguage: n.languages ?? ["Français"],
-        makesOffer: {
-          "@type": "Offer",
-          price: "0",
-          priceCurrency: "EUR",
-          description: "Premier rendez-vous de 30 minutes",
-          availability: "https://schema.org/InStock",
+        // Bouton « Réserver » façon Doctolib : Google lit cette action pour proposer
+        // la prise de RDV directement depuis les résultats de recherche.
+        potentialAction: {
+          "@type": "ReserveAction",
+          name: "Prendre rendez-vous",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `https://notaires.io/notaires/${n.id}#agenda`,
+            inLanguage: "fr-FR",
+            actionPlatform: [
+              "https://schema.org/DesktopWebPlatform",
+              "https://schema.org/MobileWebPlatform",
+              "https://schema.org/AndroidPlatform",
+              "https://schema.org/IOSPlatform",
+            ],
+          },
+          result: {
+            "@type": "Reservation",
+            name: `Rendez-vous avec ${n.name}`,
+          },
         },
         isPartOf: { "@id": "https://notaires.io/#organization" },
       },

@@ -8,6 +8,7 @@ const dmSans = DM_Sans({
   weight: ["400", "500", "600", "700"],
 });
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -91,7 +92,7 @@ const jsonLd = {
       url: BASE,
       logo: { "@type": "ImageObject", url: `${BASE}/og-image.png` },
       description:
-        "Plateforme de prise de rendez-vous notariale intelligente pour particuliers et notaires. Créée par un notaire en exercice.",
+        "Plateforme de prise de rendez-vous notariale intelligente pour particuliers et notaires. Créée par une diplômée notaire.",
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer support",
@@ -133,6 +134,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-white text-[#1C4587]">
         {children}
+        <Analytics />
       </body>
     </html>
   );

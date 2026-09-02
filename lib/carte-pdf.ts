@@ -117,30 +117,25 @@ export async function genererCartePdf(data: CarteData): Promise<Uint8Array> {
     color: GRIS,
   });
 
-  // ── Verso : le QR en grand, c'est lui qu'on scanne ────────────────────
+  // ── Verso : fond blanc, le QR en grand ────────────────────────────────
+  // Blanc plutôt qu'un aplat de couleur : un QR sombre sur blanc est le cas
+  // le plus favorable pour les lecteurs de téléphone, et le blanc est le fond
+  // de l'identité Notaires.io, le bleu n'y étant qu'un accent.
   const verso = pdf.addPage([L, H]);
-  verso.drawRectangle({ x: 0, y: 0, width: L, height: H, color: BLEU });
+  verso.drawRectangle({ x: 0, y: 0, width: L, height: H, color: rgb(1, 1, 1) });
 
-  // Cartouche blanc derrière le QR : un QR sur fond bleu ne se scanne pas.
   const qrVersoTaille = 26 * MM;
-  const cartouche = qrVersoTaille + 6 * MM;
-  const cx = (L - cartouche) / 2;
-  const cy = H - MARGE - cartouche + 2 * MM;
-  verso.drawRectangle({ x: cx, y: cy, width: cartouche, height: cartouche, color: rgb(1, 1, 1) });
-  verso.drawImage(qrImage, {
-    x: cx + 3 * MM,
-    y: cy + 3 * MM,
-    width: qrVersoTaille,
-    height: qrVersoTaille,
-  });
+  const qrX = (L - qrVersoTaille) / 2;
+  const qrY = H - MARGE - qrVersoTaille + 1 * MM;
+  verso.drawImage(qrImage, { x: qrX, y: qrY, width: qrVersoTaille, height: qrVersoTaille });
 
-  const centrer = (texte: string, police: typeof sans, taille: number, y: number, couleur = rgb(1, 1, 1)) => {
+  const centrer = (texte: string, police: typeof sans, taille: number, y: number, couleur = GRIS) => {
     const largeur = police.widthOfTextAtSize(texte, taille);
     verso.drawText(texte, { x: (L - largeur) / 2, y, size: taille, font: police, color: couleur });
   };
 
-  centrer("Prenez rendez-vous en ligne", sansBold, 8.5, cy - 7 * MM);
-  centrer("notaires.io", serifBold, 11, cy - 12 * MM, rgb(0.85, 0.90, 1));
+  centrer("Prenez rendez-vous en ligne", sansBold, 8.5, qrY - 6 * MM, ACCENT);
+  centrer("notaires.io", serifBold, 11, qrY - 11.5 * MM, BLEU);
 
   return pdf.save();
 }

@@ -20,7 +20,13 @@ export async function sendEmail(
   html: string,
 ): Promise<boolean> {
   const key = process.env.RESEND_API_KEY;
-  if (!key) return false; // pas encore configuré — on ne bloque jamais l'appelant
+  // On ne bloque jamais l'appelant, mais on laisse une trace : sans ce log,
+  // une clé absente ou refusée se traduit par des e-mails qui ne partent
+  // jamais, sans la moindre erreur visible dans les logs Vercel.
+  if (!key) {
+    console.warn(`[email] RESEND_API_KEY absente — e-mail « ${subject} » non envoyé`);
+    return false;
+  }
   try {
     const res = await fetch(RESEND_API, {
       method: "POST",
@@ -30,8 +36,13 @@ export async function sendEmail(
       },
       body: JSON.stringify({ from: FROM, to, subject, html }),
     });
+    if (!res.ok) {
+      const detail = await res.text().catch(() => "");
+      console.error(`[email] Resend a refusé « ${subject} » (${res.status}) ${detail.slice(0, 300)}`);
+    }
     return res.ok;
-  } catch {
+  } catch (e) {
+    console.error(`[email] Envoi impossible « ${subject} » : ${(e as Error).message}`);
     return false;
   }
 }

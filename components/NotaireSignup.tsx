@@ -9,6 +9,8 @@ import { sousSpecialitesPour } from "@/lib/sous-specialites";
 import { supabase } from "@/lib/supabase";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
+import ChampPiege from "@/components/ChampPiege";
+import { CHAMP_PIEGE } from "@/lib/rate-limit";
 import {
   User,
   Mail,
@@ -61,6 +63,8 @@ export default function NotaireSignup() {
   const [savedProfile, setSavedProfile] = useState<ListingNotaire | null>(null);
   const [paying, setPaying] = useState(false);
   const [payError, setPayError] = useState("");
+  // Champ piège anti-robot : toujours vide chez un humain.
+  const [piege, setPiege] = useState("");
 
   // Compte
   const [prenom, setPrenom] = useState("");
@@ -218,6 +222,7 @@ export default function NotaireSignup() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          [CHAMP_PIEGE]: piege,
           notaire: fullName,
           etude,
           crpcen,
@@ -368,6 +373,8 @@ export default function NotaireSignup() {
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-white">
       <div className="max-w-[1100px] mx-auto px-6">
+        <ChampPiege value={piege} onChange={setPiege} />
+
         {/* En-tête */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}

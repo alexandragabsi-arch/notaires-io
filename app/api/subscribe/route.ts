@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { limiter, ipDe, piegeDeclenche, reponsePiege } from "@/lib/rate-limit";
 
 /**
  * POST /api/subscribe
@@ -32,6 +33,14 @@ async function stripePost(path: string, params: Record<string, string>, secret: 
 }
 
 export async function POST(req: NextRequest) {
+  const limite = limiter(`subscribe:${ipDe(req)}`, 5, 60_000);
+  if (!limite.autorise) {
+    return NextResponse.json(
+      { error: "Trop de demandes. Réessayez dans un instant." },
+      { status: 429, headers: { "Retry-After": String(limite.attendreSec) } },
+    );
+  }
+
   const secret = process.env.STRIPE_SECRET_KEY;
   if (!secret) {
     return NextResponse.json({ error: "Stripe non configuré" }, { status: 500 });
@@ -45,6 +54,9 @@ export async function POST(req: NextRequest) {
     notaireId?: string;
     userId?: string;
   };
+
+  // Champ piège : voir /api/booking. Réponse volontairement anodine.
+  if (piegeDeclenche(body)) return reponsePiege();
 
   // ── 1. Créer un coupon : -20 € pendant 3 mois (99€ → revient à 99€ sur 119€ base) ──
   // On utilise un coupon idempotent (même id = pas de doublon dans Stripe)

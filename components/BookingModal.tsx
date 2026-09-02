@@ -24,6 +24,8 @@ import {
 } from "lucide-react";
 import JSZip from "jszip";
 import { supabase } from "@/lib/supabase";
+import ChampPiege from "@/components/ChampPiege";
+import { CHAMP_PIEGE } from "@/lib/rate-limit";
 import { saveClientDossier, type ClientDossier } from "@/lib/client-dossiers";
 
 /* ─── Types ──────────────────────────────────────────────────────────────── */
@@ -467,6 +469,8 @@ export default function BookingModal({
     return [newParticipant(r1), newParticipant(r2)];
   });
   const [docs, setDocs] = useState<Record<string, File>>({});
+  // Champ piège anti-robot : toujours vide chez un humain.
+  const [piege, setPiege] = useState("");
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   // Vérifie la session à l'ouverture : si déjà connecté, on saute l'étape connexion.
@@ -562,6 +566,7 @@ export default function BookingModal({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          [CHAMP_PIEGE]: piege,
           notaireId,
           notaireNom,
           slotKey,
@@ -682,6 +687,8 @@ export default function BookingModal({
             {/* ── Étape 1 : Dossier + modalité ── */}
             {step === "dossier" && (
               <motion.div key="dossier" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                <ChampPiege value={piege} onChange={setPiege} />
+
                 <div className="mb-5">
                   <label className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-2 block">
                     Nature du dossier *

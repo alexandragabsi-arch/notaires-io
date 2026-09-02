@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail, SITE } from "@/lib/email";
+import { limiter, ipDe, piegeDeclenche, reponsePiege } from "@/lib/rate-limit";
 
 // Client Supabase créé à la demande (pas au chargement du module) pour éviter
 // que le build n'échoue si une variable d'env manque au moment de la compilation.
@@ -42,8 +43,22 @@ interface BookingPayload {
 }
 
 export async function POST(req: NextRequest) {
+  // Une réservation écrit en base et déclenche des e-mails : c'est la route la
+  // plus coûteuse à laisser ouverte. 5 tentatives par minute et par adresse.
+  const limite = limiter(`booking:${ipDe(req)}`, 5, 60_000);
+  if (!limite.autorise) {
+    return NextResponse.json(
+      { error: "Trop de demandes. Réessayez dans un instant." },
+      { status: 429, headers: { "Retry-After": String(limite.attendreSec) } },
+    );
+  }
+
   const supabase = getSupabase();
   const body = await req.json() as BookingPayload;
+
+  // Champ piège : rempli, la requête vient d'un robot de formulaire. On répond
+  // comme si tout allait bien pour ne pas lui signaler qu'il est repéré.
+  if (piegeDeclenche(body)) return reponsePiege();
   const { notaireId, notaireNom, slotKey, slotLabel, dossier, modalite, participants, documents, userId } = body;
 
   if (!notaireId || !slotLabel || !participants?.length) {

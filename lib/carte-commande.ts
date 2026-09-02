@@ -79,6 +79,7 @@ export async function traiterCommandeCartes(
         amount_cents: amountCents,
         nom: meta.nom,
         etude: meta.etude,
+        email: meta.email,
         livraison,
         status: "paid",
       })

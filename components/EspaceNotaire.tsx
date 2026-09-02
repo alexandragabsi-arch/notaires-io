@@ -31,6 +31,7 @@ import type { ListingNotaire } from "@/lib/notaires-listing";
 import NotaireDashboard from "@/components/NotaireDashboard";
 import AccountSettings from "@/components/AccountSettings";
 import GoogleVisibilite from "@/components/GoogleVisibilite";
+import CommandesCartes from "@/components/CommandesCartes";
 
 const SITE_URL =
   typeof window !== "undefined"
@@ -497,6 +498,8 @@ function EspaceNotaireInner() {
         >
           <GoogleVisibilite profile={profile} />
         </motion.div>
+
+        <CommandesCartes notaireId={profile.id} />
 
         <motion.div
           id="qr"

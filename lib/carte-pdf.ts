@@ -6,6 +6,10 @@ import QRCode from "qrcode";
 // Format carte de visite européen : 85 × 55 mm, plus 3 mm de fond perdu sur
 // chaque bord (le massicot coupe dans cette marge). Tout élément vital doit
 // rester à au moins 3 mm du trait de coupe.
+//
+// Le fichier fait DEUX pages : toutes les cartes du catalogue de l'imprimeur
+// sont en 4-4, c'est-à-dire imprimées recto ET verso. Un PDF d'une seule page
+// serait refusé, ou produirait un verso non maîtrisé.
 
 const MM = 2.834645669; // 1 mm en points PostScript (72 dpi)
 const LARGEUR_MM = 85;
@@ -33,7 +37,7 @@ export type CarteData = {
 };
 
 /**
- * Rend le recto de la carte. Retourne un PDF à une page, prêt pour l'impression.
+ * Rend la carte : page 1 le recto, page 2 le verso. Prêt pour l'impression.
  * Le QR est généré localement : aucun service tiers dans la chaîne d'impression,
  * un rendu qui change ou un service indisponible produirait 500 cartes inutilisables.
  */
@@ -112,6 +116,31 @@ export async function genererCartePdf(data: CarteData): Promise<Uint8Array> {
     font: sans,
     color: GRIS,
   });
+
+  // ── Verso : le QR en grand, c'est lui qu'on scanne ────────────────────
+  const verso = pdf.addPage([L, H]);
+  verso.drawRectangle({ x: 0, y: 0, width: L, height: H, color: BLEU });
+
+  // Cartouche blanc derrière le QR : un QR sur fond bleu ne se scanne pas.
+  const qrVersoTaille = 26 * MM;
+  const cartouche = qrVersoTaille + 6 * MM;
+  const cx = (L - cartouche) / 2;
+  const cy = H - MARGE - cartouche + 2 * MM;
+  verso.drawRectangle({ x: cx, y: cy, width: cartouche, height: cartouche, color: rgb(1, 1, 1) });
+  verso.drawImage(qrImage, {
+    x: cx + 3 * MM,
+    y: cy + 3 * MM,
+    width: qrVersoTaille,
+    height: qrVersoTaille,
+  });
+
+  const centrer = (texte: string, police: typeof sans, taille: number, y: number, couleur = rgb(1, 1, 1)) => {
+    const largeur = police.widthOfTextAtSize(texte, taille);
+    verso.drawText(texte, { x: (L - largeur) / 2, y, size: taille, font: police, color: couleur });
+  };
+
+  centrer("Prenez rendez-vous en ligne", sansBold, 8.5, cy - 7 * MM);
+  centrer("notaires.io", serifBold, 11, cy - 12 * MM, rgb(0.85, 0.90, 1));
 
   return pdf.save();
 }

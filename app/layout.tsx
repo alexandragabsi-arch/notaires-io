@@ -98,7 +98,10 @@ const jsonLd = {
         contactType: "customer support",
         availableLanguage: ["French"],
       },
-      sameAs: [],
+      sameAs: [
+        "https://www.linkedin.com/company/notaires-io/",
+        "https://www.instagram.com/notaires.io/",
+      ],
     },
     {
       "@type": "WebSite",

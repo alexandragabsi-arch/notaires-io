@@ -45,12 +45,16 @@ export default function CguPage() {
 
       <h2>4. Accès et tarification</h2>
       <p>
-        Le premier rendez-vous via Notaires.io est <strong>offert et limité à
-        30 minutes</strong>. Il permet au particulier de poser ses questions,
-        de comprendre sa situation et de décider de la suite avec le notaire.
-        Si un acte notarié est nécessaire, les honoraires sont dus directement
-        au notaire, selon la tarification réglementée applicable à la
-        prestation. La création d'un profil notaire est réservée aux
+        <strong>L&apos;utilisation de Notaires.io est gratuite pour les
+        particuliers</strong>&nbsp;: la recherche d&apos;un notaire, la prise de
+        rendez-vous et l&apos;espace client ne donnent lieu à aucun frais ni à
+        aucun abonnement. Le premier rendez-vous est prévu pour une durée
+        d&apos;environ 30 minutes ; il permet au particulier de poser ses
+        questions, de comprendre sa situation et de décider de la suite avec le
+        notaire. Les conditions financières de ce rendez-vous et des prestations
+        ultérieures relèvent du notaire : les honoraires et émoluments lui sont
+        dus directement, selon la tarification réglementée applicable. La
+        création d&apos;un profil notaire est réservée aux
         professionnels habilités. Vous vous engagez à fournir des informations
         exactes et à jour, et à préserver la confidentialité de vos
         identifiants.

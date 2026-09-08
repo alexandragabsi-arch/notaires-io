@@ -88,12 +88,13 @@ export default function Footer() {
               ],
             },
             {
-              h: "Légal",
+              h: "Aide & légal",
               links: [
+                ["Aide & support", "/support"],
                 ["Mentions légales", "/mentions-legales"],
                 ["CGU", "/cgu"],
+                ["CGV", "/cgv"],
                 ["Confidentialité", "/confidentialite"],
-                ["RGPD", "/confidentialite"],
               ],
             },
           ].map((col) => (

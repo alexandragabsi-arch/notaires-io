@@ -49,3 +49,9 @@ scripts/notaires-emails.csv
 
 # Sauvegardes locales des scripts de nettoyage
 *.bak
+
+# Fichiers de prospection : adresses e-mail nominatives, jamais versionnées
+scripts/enriched*.csv
+scripts/envois-prospection.csv
+scripts/desabonnements.txt
+scripts/generic_batch*.json

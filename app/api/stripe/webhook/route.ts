@@ -176,7 +176,7 @@ export async function POST(req: NextRequest) {
           <tr><td style="padding:6px 0;color:#5a6a8a">Étude</td><td>${meta.etude || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">CRPCEN</td><td>${meta.crpcen || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">Email</td><td>${email || "—"}</td></tr>
-          <tr><td style="padding:6px 0;color:#5a6a8a">Offre</td><td>2 mois offerts, puis 119 € HT/mois</td></tr>
+          <tr><td style="padding:6px 0;color:#5a6a8a">Offre</td><td>2 mois offerts, puis ${meta.formule === "jeune-pro" ? "99 € HT/mois (jeune notaire — <strong>justificatif à demander</strong>)" : "119 € HT/mois"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">1er prélèvement</td><td>${finEssai || "—"}</td></tr>
         </table>
       `),

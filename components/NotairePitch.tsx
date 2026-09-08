@@ -461,6 +461,20 @@ export default function NotairePitch() {
               ))}
             </ul>
 
+            {/* Tarif jeune notaire */}
+            <div className="bg-[var(--color-tint-green)] rounded-2xl px-5 py-4 mb-4 flex items-start gap-3">
+              <span className="text-[20px] shrink-0">🌱</span>
+              <div>
+                <div className="text-[14px] font-bold text-[var(--color-text-strong)] mb-0.5">
+                  Vous êtes notaire depuis moins de 3 ans
+                </div>
+                <div className="text-[14px] text-[var(--color-muted)]">
+                  <strong className="text-[var(--color-text-strong)]">99 € HT / mois</strong> au lieu de 119 €,
+                  à cocher à l&apos;inscription
+                </div>
+              </div>
+            </div>
+
             {/* Associé supplémentaire */}
             <div className="bg-[var(--color-tint-blue)] rounded-2xl px-5 py-4 mb-7 flex items-start gap-3">
               <span className="text-[20px] shrink-0">👥</span>
@@ -487,7 +501,8 @@ export default function NotairePitch() {
             <div className="mt-5 pt-4 border-t border-[var(--color-border-soft)] text-[12px] text-[var(--color-muted)] leading-relaxed">
               <p className="mb-1">
                 <strong className="text-[var(--color-text-strong)]">Abonnement mensuel</strong> —
-                2 mois offerts, puis 119 € HT/mois par notaire. La carte est
+                2 mois offerts, puis 119 € HT/mois par notaire — 99 € HT/mois
+                pour les notaires installés depuis moins de trois ans. La carte est
                 enregistrée à l&apos;inscription mais n&apos;est débitée qu&apos;à l&apos;issue des
                 2 mois. Reconduction automatique chaque mois, résiliable à tout
                 moment depuis votre espace notaire ; la résiliation prend effet à

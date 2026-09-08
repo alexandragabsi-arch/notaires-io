@@ -63,6 +63,8 @@ export default function NotaireSignup() {
   const [savedProfile, setSavedProfile] = useState<ListingNotaire | null>(null);
   const [paying, setPaying] = useState(false);
   const [payError, setPayError] = useState("");
+  // Formule « jeune notaire » : déclarative, moins de trois ans d'exercice.
+  const [jeunePro, setJeunePro] = useState(false);
   // Champ piège anti-robot : toujours vide chez un humain.
   const [piege, setPiege] = useState("");
 
@@ -229,6 +231,7 @@ export default function NotaireSignup() {
           email,
           notaireId: profile.id,
           userId,
+          formule: jeunePro ? "jeune-pro" : "standard",
         }),
       });
       const data = (await res.json()) as { url?: string; error?: string };
@@ -327,9 +330,22 @@ export default function NotaireSignup() {
                         <span className="text-[18px] font-bold text-[var(--color-primary)]">mois</span>
                         <span className="text-[13px] text-[var(--color-muted)] ml-1">offerts</span>
                       </div>
-                      <p className="text-[13px] text-[var(--color-muted)]">puis <strong className="text-[var(--color-text-strong)]">119 € HT/mois</strong> · résiliable à tout moment</p>
+                      <p className="text-[13px] text-[var(--color-muted)]">puis <strong className="text-[var(--color-text-strong)]">{jeunePro ? "99" : "119"} € HT/mois</strong> · résiliable à tout moment</p>
                       <p className="text-[12px] text-[var(--color-muted)] mt-1.5">Carte enregistrée maintenant, aucun débit avant 2 mois.</p>
                     </div>
+                    <label className="flex items-start gap-2.5 cursor-pointer bg-white border border-[var(--color-border-soft)] rounded-xl px-4 py-3">
+                      <input
+                        type="checkbox"
+                        checked={jeunePro}
+                        onChange={e => setJeunePro(e.target.checked)}
+                        className="mt-0.5 w-4 h-4 shrink-0 accent-[var(--color-accent)] cursor-pointer"
+                      />
+                      <span className="text-[13px] text-[var(--color-muted)] leading-relaxed">
+                        <strong className="text-[var(--color-text-strong)]">Je suis notaire depuis moins de 3 ans</strong>
+                        {" — "}tarif jeune notaire à 99 € HT/mois. Un justificatif de nomination pourra vous être demandé.
+                      </span>
+                    </label>
+
                     <ul className="flex flex-col gap-2.5">
                       {["QR code personnalisé + lien de prise de RDV", "Profil activé dans l'annuaire", "Agenda en ligne (visio ou cabinet)", "Rappels e-mail automatiques clients"].map(item => (
                         <li key={item} className="flex items-center gap-2.5 text-[14px] text-[var(--color-text-strong)]">
@@ -824,12 +840,25 @@ export default function NotaireSignup() {
                           </div>
                         </div>
                         <p className="text-[13px] text-[var(--color-muted)]">
-                          puis <strong className="text-[var(--color-text-strong)]">119 € HT/mois</strong> · résiliable à tout moment
+                          puis <strong className="text-[var(--color-text-strong)]">{jeunePro ? "99" : "119"} € HT/mois</strong> · résiliable à tout moment
                         </p>
                         <p className="text-[12px] text-[var(--color-muted)] mt-1.5">
                           Carte enregistrée maintenant, aucun débit avant 2 mois.
                         </p>
                       </div>
+
+                      <label className="flex items-start gap-2.5 cursor-pointer bg-white border border-[var(--color-border-soft)] rounded-xl px-4 py-3">
+                        <input
+                          type="checkbox"
+                          checked={jeunePro}
+                          onChange={e => setJeunePro(e.target.checked)}
+                          className="mt-0.5 w-4 h-4 shrink-0 accent-[var(--color-accent)] cursor-pointer"
+                        />
+                        <span className="text-[13px] text-[var(--color-muted)] leading-relaxed">
+                          <strong className="text-[var(--color-text-strong)]">Je suis notaire depuis moins de 3 ans</strong>
+                          {" — "}tarif jeune notaire à 99 € HT/mois. Un justificatif de nomination pourra vous être demandé.
+                        </span>
+                      </label>
 
                       {/* Ce qui est inclus */}
                       <ul className="flex flex-col gap-2.5">

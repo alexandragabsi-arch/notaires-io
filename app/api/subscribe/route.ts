@@ -5,13 +5,14 @@ import { limiter, ipDe, piegeDeclenche, reponsePiege } from "@/lib/rate-limit";
  * POST /api/subscribe
  * Crée une session Stripe Checkout en mode "subscription" avec :
  *   - Période d'essai : 2 mois offerts (aucun débit)
- *   - Puis 119 € HT/mois, prélevé automatiquement
+ *   - Puis 119 € HT/mois (99 € pour la formule « jeune notaire »),
+ *     prélevé automatiquement
  *
  * La carte est demandée dès l'inscription (payment_method_collection: always) :
  * Stripe gère seul le rappel avant le premier débit et la bascule en payant.
  *
  * Body JSON attendu :
- *   { notaire: string, etude: string, email: string }
+ *   { notaire: string, etude: string, email: string, formule?: "standard" | "jeune-pro" }
  */
 
 const STRIPE_API = "https://api.stripe.com/v1";
@@ -22,6 +23,27 @@ function toForm(obj: Record<string, string>): string {
     .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join("&");
 }
+
+/**
+ * Formules d'abonnement. Le client n'envoie qu'un identifiant : le montant est
+ * choisi ici. Accepter un prix transmis par le navigateur reviendrait à laisser
+ * n'importe qui s'abonner à 1 €.
+ *
+ * « jeune-pro » est déclaratif — installé depuis moins de trois ans — et tracé
+ * dans les métadonnées Stripe pour contrôle a posteriori.
+ */
+const FORMULES = {
+  standard: {
+    montant: 11900,
+    nom: "Notaires.io — Abonnement mensuel HT",
+  },
+  "jeune-pro": {
+    montant: 9900,
+    nom: "Notaires.io — Abonnement jeune notaire HT",
+  },
+} as const;
+
+type Formule = keyof typeof FORMULES;
 
 /**
  * Fin de la période d'essai : 2 mois calendaires à compter d'aujourd'hui.
@@ -71,21 +93,27 @@ export async function POST(req: NextRequest) {
     email?: string;
     notaireId?: string;
     userId?: string;
+    formule?: string;
   };
 
   // Champ piège : voir /api/booking. Réponse volontairement anodine.
   if (piegeDeclenche(body)) return reponsePiege("subscribe");
 
-  // ── Créer la session Checkout : 2 mois offerts, puis 119 € HT/mois ─────────
+  // ── Créer la session Checkout : 2 mois offerts, puis le tarif de la formule ─
   const trialEnd = finEssaiUnix();
+  const formule: Formule = body.formule === "jeune-pro" ? "jeune-pro" : "standard";
+  const { montant, nom } = FORMULES[formule];
   const params: Record<string, string> = {
     mode: "subscription",
 
     // Prix de base : 119 € HT/mois (inline, pas besoin de Price pré-créé)
     "line_items[0][price_data][currency]": "eur",
-    "line_items[0][price_data][unit_amount]": "11900",  // 119 € en centimes
+    "line_items[0][price_data][unit_amount]": String(montant),
     "line_items[0][price_data][recurring][interval]": "month",
-    "line_items[0][price_data][product_data][name]": "Notaires.io — Abonnement mensuel HT",
+    "line_items[0][price_data][product_data][name]": nom,
+    // Sans tax_behavior, Stripe traite le montant comme TTC et extrait la TVA
+    // au lieu de l'ajouter : le prix annoncé HT devenait le total payé.
+    "line_items[0][price_data][tax_behavior]": "exclusive",
     "line_items[0][price_data][product_data][description]":
       "Prix HT · TVA 20% en sus · Plateforme de prise de RDV notariale · Profil, agenda en ligne, visio, rappels automatiques",
     "line_items[0][quantity]": "1",
@@ -105,6 +133,8 @@ export async function POST(req: NextRequest) {
     "metadata[notaire]": body.notaire ?? "",
     "metadata[etude]": body.etude ?? "",
     "metadata[crpcen]": body.crpcen ?? "",
+    "subscription_data[metadata][formule]": formule,
+    "metadata[formule]": formule,
     "subscription_data[metadata][finEssai]": String(trialEnd),
     "metadata[finEssai]": String(trialEnd),
     "metadata[notaireId]": body.notaireId ?? "",
@@ -124,7 +154,7 @@ export async function POST(req: NextRequest) {
     "consent_collection[payment_method_reuse_agreement][position]": "auto",
     "consent_collection[terms_of_service]": "required",
     "custom_text[terms_of_service_acceptance][message]":
-      "Les 2 premiers mois sont offerts : aucun débit aujourd'hui. J'accepte le prélèvement mensuel automatique de 119 € HT sur cette carte à l'issue de cette période, conformément aux [CGV](https://notaires.io/cgv).",
+      `Les 2 premiers mois sont offerts : aucun débit aujourd'hui. J'accepte le prélèvement mensuel automatique de ${montant / 100} € HT (TVA en sus) sur cette carte à l'issue de cette période, conformément aux [CGV](https://notaires.io/cgv).`,
 
     // Afficher le récap prix
     "payment_method_types[0]": "card",

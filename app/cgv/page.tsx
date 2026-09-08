@@ -78,6 +78,13 @@ export default function CgvPage() {
           Tarif de l’abonnement : <strong>119 € HT par mois</strong> et par étude.
         </li>
         <li>
+          Tarif jeune notaire : <strong>99 € HT par mois</strong>, réservé aux
+          notaires installés depuis <strong>moins de trois ans</strong>. Cette
+          qualité est déclarée par l’abonné lors de la souscription ; un
+          justificatif de nomination peut être demandé, et le tarif standard
+          s’applique à défaut.
+        </li>
+        <li>
           Offre de lancement : <strong>les deux premiers mois d’abonnement sont
           offerts</strong>. Aucune somme n’est prélevée pendant cette période ;
           le tarif de 119 € HT par mois s’applique ensuite.

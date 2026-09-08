@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail, SITE } from "@/lib/email";
 
@@ -127,15 +128,31 @@ function reminderHtml(kind: Kind, b: BookingRow): string {
   `;
 }
 
+// Comparaison à temps constant, comme pour la signature du webhook Stripe :
+// une comparaison naïve laisse fuir la longueur du préfixe correct.
+function bearerValide(header: string | null, secret: string): boolean {
+  if (!header) return false;
+  const attendu = Buffer.from(`Bearer ${secret}`);
+  const recu = Buffer.from(header);
+  if (attendu.length !== recu.length) return false;
+  return crypto.timingSafeEqual(attendu, recu);
+}
+
 export async function GET(req: NextRequest) {
   const supabase = getSupabase();
   // Authentification du cron : Vercel envoie « Authorization: Bearer $CRON_SECRET ».
+  //
+  // Le contrôle n'est plus conditionné à l'existence du secret. Tant qu'il
+  // l'était, une variable d'environnement absente désactivait silencieusement
+  // la protection : la route répondait 200 à n'importe qui, lisait la table
+  // bookings et envoyait les rappels aux clients. Sans secret configuré, on
+  // refuse désormais de servir.
   const secret = process.env.CRON_SECRET;
-  if (secret) {
-    const auth = req.headers.get("authorization");
-    if (auth !== `Bearer ${secret}`) {
-      return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
-    }
+  if (!secret) {
+    return NextResponse.json({ error: "Cron non configuré" }, { status: 503 });
+  }
+  if (!bearerValide(req.headers.get("authorization"), secret)) {
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const { data, error } = await supabase

@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 export const metadata: Metadata = {
   title: "Référencer mon étude notariale — Espace notaires",
   description:
-    "Rejoignez Notaires.io : recevez des rendez-vous déjà préparés sur la bonne spécialité, gérez vos créneaux en visio ou au cabinet, envoyez vos propositions d'honoraires en ligne. Plateforme créée par un notaire en exercice. Offre lancement : 99 € HT/mois les 3 premiers mois, puis 119 € HT/mois.",
+    "Rejoignez Notaires.io : recevez des rendez-vous déjà préparés sur la bonne spécialité, gérez vos créneaux en visio ou au cabinet, envoyez vos propositions d'honoraires en ligne. Plateforme créée par une diplômée notaire. Offre lancement : 2 mois offerts, puis 119 € HT/mois.",
   keywords: [
     "logiciel notaire",
     "gestion rendez-vous notaire",
@@ -51,16 +51,16 @@ const jsonLd = {
       operatingSystem: "Web",
       offers: {
         "@type": "Offer",
-        price: "99",
+        price: "119",
         priceCurrency: "EUR",
         priceSpecification: {
           "@type": "UnitPriceSpecification",
-          price: "99",
+          price: "119",
           priceCurrency: "EUR",
           billingDuration: "P1M",
           unitText: "mois",
         },
-        description: "Offre lancement : 99 € HT/mois les 3 premiers mois, puis 119 € HT/mois — accès à la plateforme de prise de RDV notariale",
+        description: "Offre lancement : 2 mois offerts, puis 119 € HT/mois — accès à la plateforme de prise de RDV notariale",
       },
       provider: { "@id": "https://notaires.io/#organization" },
     },

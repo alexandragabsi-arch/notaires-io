@@ -428,15 +428,15 @@ export default function NotairePitch() {
             {/* Prix principal */}
             <div className="text-center mb-8">
               <div className="inline-flex items-center gap-1.5 bg-[var(--color-tint-green)] text-[var(--color-success)] text-[12px] font-bold px-3 py-1.5 rounded-full mb-3">
-                🎉 Offre de lancement
+                🎁 Offre de lancement
               </div>
               <div className="inline-flex items-baseline gap-1.5 mb-1">
-                <span className="serif text-[52px] font-bold text-[var(--color-primary)] leading-none">99</span>
-                <span className="text-[22px] font-bold text-[var(--color-primary)]">€</span>
-                <span className="text-[15px] text-[var(--color-muted)] ml-1">HT / mois</span>
+                <span className="serif text-[52px] font-bold text-[var(--color-primary)] leading-none">2</span>
+                <span className="text-[22px] font-bold text-[var(--color-primary)]">mois</span>
+                <span className="text-[15px] text-[var(--color-muted)] ml-1">offerts</span>
               </div>
               <p className="text-[13px] text-[var(--color-muted)] mb-1">
-                pendant 3 mois · puis{" "}
+                puis{" "}
                 <strong className="text-[var(--color-text-strong)]">119 € HT/mois</strong>
               </p>
               <p className="text-[13px] text-[var(--color-muted)]">par notaire · sans engagement</p>
@@ -487,10 +487,11 @@ export default function NotairePitch() {
             <div className="mt-5 pt-4 border-t border-[var(--color-border-soft)] text-[12px] text-[var(--color-muted)] leading-relaxed">
               <p className="mb-1">
                 <strong className="text-[var(--color-text-strong)]">Abonnement mensuel</strong> —
-                99 € HT/mois les 3 premiers mois, puis 119 € HT/mois, par notaire.
-                Reconduction automatique chaque mois, résiliable à tout moment
-                depuis votre espace notaire ; la résiliation prend effet à la fin
-                de la période en cours.
+                2 mois offerts, puis 119 € HT/mois par notaire. La carte est
+                enregistrée à l&apos;inscription mais n&apos;est débitée qu&apos;à l&apos;issue des
+                2 mois. Reconduction automatique chaque mois, résiliable à tout
+                moment depuis votre espace notaire ; la résiliation prend effet à
+                la fin de la période en cours.
               </p>
               <p>
                 <a href="/cgu" className="text-[var(--color-accent)] hover:underline font-semibold">
@@ -504,7 +505,7 @@ export default function NotairePitch() {
             </div>
 
             <p className="text-center text-[12px] text-[var(--color-muted)] mt-3">
-              Démo gratuite de 20 min · Aucun engagement · Résiliable à tout moment
+              Aucun débit pendant 2 mois · Aucun engagement · Résiliable à tout moment
             </p>
           </motion.div>
         </div>

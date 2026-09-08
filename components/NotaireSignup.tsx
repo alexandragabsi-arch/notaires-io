@@ -319,16 +319,16 @@ export default function NotaireSignup() {
                 {claimStep === 1 && (
                   <div className="flex flex-col gap-5">
                     <div className="bg-[var(--color-tint-green)] rounded-xl px-4 py-3 text-center">
-                      <span className="text-[13px] font-bold text-[var(--color-success)]">🎉 Offre de lancement</span>
+                      <span className="text-[13px] font-bold text-[var(--color-success)]">🎁 Offre de lancement</span>
                     </div>
                     <div className="bg-[var(--color-tint-blue)] rounded-2xl p-5 border border-[var(--color-border-soft)]">
                       <div className="flex items-baseline gap-1 mb-1">
-                        <span className="serif text-[36px] font-bold text-[var(--color-primary)] leading-none">99</span>
-                        <span className="text-[18px] font-bold text-[var(--color-primary)]">€</span>
-                        <span className="text-[13px] text-[var(--color-muted)] ml-1">HT/mois</span>
-                        <span className="text-[13px] text-[var(--color-muted)] ml-2">pendant 3 mois</span>
+                        <span className="serif text-[36px] font-bold text-[var(--color-primary)] leading-none">2</span>
+                        <span className="text-[18px] font-bold text-[var(--color-primary)]">mois</span>
+                        <span className="text-[13px] text-[var(--color-muted)] ml-1">offerts</span>
                       </div>
                       <p className="text-[13px] text-[var(--color-muted)]">puis <strong className="text-[var(--color-text-strong)]">119 € HT/mois</strong> · résiliable à tout moment</p>
+                      <p className="text-[12px] text-[var(--color-muted)] mt-1.5">Carte enregistrée maintenant, aucun débit avant 2 mois.</p>
                     </div>
                     <ul className="flex flex-col gap-2.5">
                       {["QR code personnalisé + lien de prise de RDV", "Profil activé dans l'annuaire", "Agenda en ligne (visio ou cabinet)", "Rappels e-mail automatiques clients"].map(item => (
@@ -339,10 +339,10 @@ export default function NotaireSignup() {
                     </ul>
                     {payError && <p className="text-[13px] text-red-600 bg-red-50 rounded-xl px-4 py-3 border border-red-200">{payError}</p>}
                     <button type="button" onClick={goToPayment} disabled={paying} className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-4 rounded-[12px] text-[16px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed">
-                      {paying ? <><Loader2 className="w-5 h-5 animate-spin" strokeWidth={2.5} />Redirection…</> : <><CreditCard className="w-5 h-5" strokeWidth={2.5} />Payer et activer mon profil</>}
+                      {paying ? <><Loader2 className="w-5 h-5 animate-spin" strokeWidth={2.5} />Redirection…</> : <><CreditCard className="w-5 h-5" strokeWidth={2.5} />Activer mes 2 mois offerts</>}
                     </button>
                     <div className="flex items-center justify-center gap-2 text-[12px] text-[var(--color-muted)]">
-                      <ShieldCheck className="w-4 h-4 shrink-0" strokeWidth={2} />Paiement 100 % sécurisé par Stripe · Aucun engagement
+                      <ShieldCheck className="w-4 h-4 shrink-0" strokeWidth={2} />Carte sécurisée par Stripe · Aucun débit aujourd&apos;hui
                     </div>
                   </div>
                 )}
@@ -352,7 +352,7 @@ export default function NotaireSignup() {
             {claimStep === 0 && (
               <div className="mt-8 flex justify-end">
                 <button type="button" disabled={!emailValid || !password.trim() || !accept} onClick={() => setStep(4)} className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0">
-                  Continuer vers le paiement
+                  Continuer vers l&apos;activation
                   <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
                 </button>
               </div>
@@ -810,7 +810,7 @@ export default function NotaireSignup() {
                       {/* Badge offre */}
                       <div className="text-center">
                         <span className="inline-flex items-center gap-1.5 bg-[var(--color-tint-green)] text-[var(--color-success)] text-[12px] font-bold px-3 py-1.5 rounded-full">
-                          🎉 Offre de lancement
+                          🎁 Offre de lancement
                         </span>
                       </div>
 
@@ -818,14 +818,16 @@ export default function NotaireSignup() {
                       <div className="bg-[var(--color-tint-blue)] rounded-2xl p-5 border border-[var(--color-border-soft)]">
                         <div className="flex items-baseline justify-between mb-1">
                           <div className="flex items-baseline gap-1">
-                            <span className="serif text-[36px] font-bold text-[var(--color-primary)] leading-none">99</span>
-                            <span className="text-[18px] font-bold text-[var(--color-primary)]">€</span>
-                            <span className="text-[13px] text-[var(--color-muted)] ml-1">HT/mois</span>
+                            <span className="serif text-[36px] font-bold text-[var(--color-primary)] leading-none">2</span>
+                            <span className="text-[18px] font-bold text-[var(--color-primary)]">mois</span>
+                            <span className="text-[13px] text-[var(--color-muted)] ml-1">offerts</span>
                           </div>
-                          <span className="text-[13px] text-[var(--color-muted)] font-semibold">pendant 3 mois</span>
                         </div>
                         <p className="text-[13px] text-[var(--color-muted)]">
                           puis <strong className="text-[var(--color-text-strong)]">119 € HT/mois</strong> · résiliable à tout moment
+                        </p>
+                        <p className="text-[12px] text-[var(--color-muted)] mt-1.5">
+                          Carte enregistrée maintenant, aucun débit avant 2 mois.
                         </p>
                       </div>
 
@@ -868,7 +870,7 @@ export default function NotaireSignup() {
                         ) : (
                           <>
                             <CreditCard className="w-5 h-5" strokeWidth={2.5} />
-                            Payer et activer mon profil
+                            Activer mes 2 mois offerts
                           </>
                         )}
                       </button>
@@ -876,7 +878,7 @@ export default function NotaireSignup() {
                       {/* Sécurité */}
                       <div className="flex items-center justify-center gap-2 text-[12px] text-[var(--color-muted)]">
                         <ShieldCheck className="w-4 h-4 shrink-0" strokeWidth={2} />
-                        Paiement 100 % sécurisé par Stripe · Aucun engagement
+                        Carte sécurisée par Stripe · Aucun débit aujourd&apos;hui
                       </div>
                     </div>
                   )}
@@ -903,7 +905,7 @@ export default function NotaireSignup() {
                       disabled={!accept}
                       className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
                     >
-                      Continuer vers le paiement
+                      Continuer vers l&apos;activation
                       <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
                     </button>
                   ) : (

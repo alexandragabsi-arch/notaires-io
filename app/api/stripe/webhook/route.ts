@@ -74,6 +74,18 @@ function formatAmount(cents?: number | null, currency?: string | null): string {
   }
 }
 
+// Date de fin d'essai transmise par /api/subscribe dans les métadonnées
+// (timestamp Unix en secondes), formatée pour l'e-mail de bienvenue.
+function formatDateFr(unix?: string): string {
+  const t = Number(unix);
+  if (!Number.isFinite(t) || t <= 0) return "";
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(t * 1000));
+}
+
 export async function POST(req: NextRequest) {
   const supabase = getSupabase();
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -120,19 +132,33 @@ export async function POST(req: NextRequest) {
         .update({ stripe_customer_id: customerId })
         .eq("id", meta.notaireId);
     }
+    const finEssai = formatDateFr(meta.finEssai);
     if (email) {
       await sendEmail(
         email,
-        "Bienvenue sur Notaires.io — votre abonnement est actif ✓",
+        "Bienvenue sur Notaires.io — vos 2 mois offerts commencent ✓",
         emailLayout(`
           <h1 style="font-size:22px;font-weight:700;margin-bottom:8px;color:#1a1a2e">
             Bienvenue sur Notaires.io 🎉
           </h1>
           <p style="color:#5a6a8a;margin-bottom:24px">
-            ${name ? `Bonjour ${name},` : "Bonjour,"} votre abonnement est confirmé.
+            ${name ? `Bonjour ${name},` : "Bonjour,"} votre compte est activé.
             Votre profil, votre agenda en ligne, la visio et les rappels automatiques
             sont désormais actifs.
           </p>
+          <div style="background:#f8f9fa;border-radius:12px;padding:20px;margin-bottom:24px">
+            <div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:4px">
+              Vos 2 premiers mois sont offerts
+            </div>
+            <div style="font-size:14px;color:#5a6a8a">
+              Aucun prélèvement n'a été effectué.${
+                finEssai
+                  ? ` Le premier prélèvement de 119 € HT/mois interviendra le <strong style="color:#1a1a2e">${finEssai}</strong>.`
+                  : " Le premier prélèvement de 119 € HT/mois interviendra à l'issue de cette période."
+              }
+              Vous pouvez résilier d'ici là sans rien payer, depuis votre espace notaire.
+            </div>
+          </div>
           <div style="margin-bottom:24px">${emailButton(`${SITE}/espace-notaire`, "Accéder à mon tableau de bord")}</div>
           <p style="font-size:13px;color:#5a6a8a">
             Une question ? Répondez simplement à cet e-mail.
@@ -142,7 +168,7 @@ export async function POST(req: NextRequest) {
     }
     await sendEmail(
       ADMIN_EMAIL,
-      `[Notaires.io] Nouvel abonnement notaire${amount ? ` — ${amount}/mois` : ""}`,
+      `[Notaires.io] Nouvel abonnement notaire — 2 mois offerts`,
       emailLayout(`
         <h2 style="font-size:18px;font-weight:700;margin-bottom:16px">Nouvel abonnement</h2>
         <table style="width:100%;border-collapse:collapse;font-size:14px;text-align:left">
@@ -150,7 +176,8 @@ export async function POST(req: NextRequest) {
           <tr><td style="padding:6px 0;color:#5a6a8a">Étude</td><td>${meta.etude || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">CRPCEN</td><td>${meta.crpcen || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">Email</td><td>${email || "—"}</td></tr>
-          <tr><td style="padding:6px 0;color:#5a6a8a">Montant</td><td>${amount || "—"}</td></tr>
+          <tr><td style="padding:6px 0;color:#5a6a8a">Offre</td><td>2 mois offerts, puis 119 € HT/mois</td></tr>
+          <tr><td style="padding:6px 0;color:#5a6a8a">1er prélèvement</td><td>${finEssai || "—"}</td></tr>
         </table>
       `),
     );

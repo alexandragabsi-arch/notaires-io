@@ -4,8 +4,11 @@ import { limiter, ipDe, piegeDeclenche, reponsePiege } from "@/lib/rate-limit";
 /**
  * POST /api/subscribe
  * Crée une session Stripe Checkout en mode "subscription" avec :
- *   - Phase promo : 99 € HT/mois pendant 3 mois
- *   - Phase standard : 119 € HT/mois ensuite (via coupon -20 € × 3 mois)
+ *   - Période d'essai : 2 mois offerts (aucun débit)
+ *   - Puis 119 € HT/mois, prélevé automatiquement
+ *
+ * La carte est demandée dès l'inscription (payment_method_collection: always) :
+ * Stripe gère seul le rappel avant le premier débit et la bascule en payant.
  *
  * Body JSON attendu :
  *   { notaire: string, etude: string, email: string }
@@ -18,6 +21,21 @@ function toForm(obj: Record<string, string>): string {
   return Object.entries(obj)
     .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
     .join("&");
+}
+
+/**
+ * Fin de la période d'essai : 2 mois calendaires à compter d'aujourd'hui.
+ * On n'utilise pas trial_period_days (60 jours ne font pas 2 mois selon les
+ * mois traversés) — un notaire inscrit le 15 mars est débité le 15 mai.
+ */
+function finEssaiUnix(): number {
+  const d = new Date();
+  const jour = d.getDate();
+  d.setMonth(d.getMonth() + 2);
+  // Débordement (31 décembre + 2 mois → 3 mars) : on recale sur le dernier
+  // jour du mois visé.
+  if (d.getDate() !== jour) d.setDate(0);
+  return Math.floor(d.getTime() / 1000);
 }
 
 async function stripePost(path: string, params: Record<string, string>, secret: string) {
@@ -58,19 +76,8 @@ export async function POST(req: NextRequest) {
   // Champ piège : voir /api/booking. Réponse volontairement anodine.
   if (piegeDeclenche(body)) return reponsePiege("subscribe");
 
-  // ── 1. Créer un coupon : -20 € pendant 3 mois (99€ → revient à 99€ sur 119€ base) ──
-  // On utilise un coupon idempotent (même id = pas de doublon dans Stripe)
-  const couponId = "promo-3mois-99ht";
-  await stripePost("/coupons", {
-    id: couponId,
-    amount_off: "2000",        // 20 € en centimes
-    currency: "eur",
-    duration: "repeating",
-    duration_in_months: "3",
-    name: "Offre lancement 3 mois à 99€ HT",
-  }, secret).catch(() => null); // Ignore si le coupon existe déjà
-
-  // ── 2. Créer la session Checkout abonnement à 119 € HT/mois ─────────────────
+  // ── Créer la session Checkout : 2 mois offerts, puis 119 € HT/mois ─────────
+  const trialEnd = finEssaiUnix();
   const params: Record<string, string> = {
     mode: "subscription",
 
@@ -83,8 +90,13 @@ export async function POST(req: NextRequest) {
       "Prix HT · TVA 20% en sus · Plateforme de prise de RDV notariale · Profil, agenda en ligne, visio, rappels automatiques",
     "line_items[0][quantity]": "1",
 
-    // Coupon promo 3 mois appliqué
-    "discounts[0][coupon]": couponId,
+    // 2 mois offerts : rien n'est débité avant cette date.
+    "subscription_data[trial_end]": String(trialEnd),
+    // Sans moyen de paiement valide à la fin de l'essai, l'abonnement s'annule
+    // (filet de sécurité : la carte est de toute façon collectée ci-dessous).
+    "subscription_data[trial_settings][end_behavior][missing_payment_method]": "cancel",
+    // Carte demandée dès l'inscription, malgré un montant dû de 0 €.
+    payment_method_collection: "always",
 
     // Métadonnées (sur l'abonnement ET sur la session, pour le webhook)
     "subscription_data[metadata][notaire]": body.notaire ?? "",
@@ -93,6 +105,8 @@ export async function POST(req: NextRequest) {
     "metadata[notaire]": body.notaire ?? "",
     "metadata[etude]": body.etude ?? "",
     "metadata[crpcen]": body.crpcen ?? "",
+    "subscription_data[metadata][finEssai]": String(trialEnd),
+    "metadata[finEssai]": String(trialEnd),
     "metadata[notaireId]": body.notaireId ?? "",
     "metadata[userId]": body.userId ?? "",
 
@@ -110,7 +124,7 @@ export async function POST(req: NextRequest) {
     "consent_collection[payment_method_reuse_agreement][position]": "auto",
     "consent_collection[terms_of_service]": "required",
     "custom_text[terms_of_service_acceptance][message]":
-      "J'accepte le prélèvement mensuel automatique sur cette carte conformément aux [CGV](https://notaires.io/cgv).",
+      "Les 2 premiers mois sont offerts : aucun débit aujourd'hui. J'accepte le prélèvement mensuel automatique de 119 € HT sur cette carte à l'issue de cette période, conformément aux [CGV](https://notaires.io/cgv).",
 
     // Afficher le récap prix
     "payment_method_types[0]": "card",

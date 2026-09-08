@@ -341,8 +341,8 @@ export default function NotaireSignup() {
                         className="mt-0.5 w-4 h-4 shrink-0 accent-[var(--color-accent)] cursor-pointer"
                       />
                       <span className="text-[13px] text-[var(--color-muted)] leading-relaxed">
-                        <strong className="text-[var(--color-text-strong)]">Je suis notaire depuis moins de 3 ans</strong>
-                        {" — "}tarif jeune notaire à 99 € HT/mois. Un justificatif de nomination pourra vous être demandé.
+                        <strong className="text-[var(--color-text-strong)]">J&apos;atteste sur l&apos;honneur être notaire en exercice depuis moins de 3 ans</strong>
+                        {" — "}tarif jeune notaire à 99 € HT/mois au lieu de 119 €. Un justificatif de nomination pourra vous être demandé.
                       </span>
                     </label>
 
@@ -855,8 +855,8 @@ export default function NotaireSignup() {
                           className="mt-0.5 w-4 h-4 shrink-0 accent-[var(--color-accent)] cursor-pointer"
                         />
                         <span className="text-[13px] text-[var(--color-muted)] leading-relaxed">
-                          <strong className="text-[var(--color-text-strong)]">Je suis notaire depuis moins de 3 ans</strong>
-                          {" — "}tarif jeune notaire à 99 € HT/mois. Un justificatif de nomination pourra vous être demandé.
+                          <strong className="text-[var(--color-text-strong)]">J&apos;atteste sur l&apos;honneur être notaire en exercice depuis moins de 3 ans</strong>
+                          {" — "}tarif jeune notaire à 99 € HT/mois au lieu de 119 €. Un justificatif de nomination pourra vous être demandé.
                         </span>
                       </label>
 

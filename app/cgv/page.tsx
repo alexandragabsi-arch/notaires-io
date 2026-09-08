@@ -80,9 +80,10 @@ export default function CgvPage() {
         <li>
           Tarif jeune notaire : <strong>99 € HT par mois</strong>, réservé aux
           notaires installés depuis <strong>moins de trois ans</strong>. Cette
-          qualité est déclarée par l’abonné lors de la souscription ; un
-          justificatif de nomination peut être demandé, et le tarif standard
-          s’applique à défaut.
+          qualité fait l’objet d’une <strong>attestation sur l’honneur</strong>
+          lors de la souscription ; un justificatif de nomination peut être
+          demandé à tout moment, et le tarif standard s’applique à défaut, sans
+          préjudice de la régularisation des mois déjà facturés.
         </li>
         <li>
           Offre de lancement : <strong>les deux premiers mois d’abonnement sont

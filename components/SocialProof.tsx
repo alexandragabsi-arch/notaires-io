@@ -6,8 +6,11 @@ import { ShieldCheck, Gavel, LockKeyhole } from "lucide-react";
 const signals = [
   {
     icon: ShieldCheck,
-    label: "Notaires officiels CSN",
-    mobileLabel: "Notaires CSN",
+    // Éviter « CSN » seul : accolé à un bouclier, cela laisse entendre un
+    // agrément du Conseil supérieur du notariat que la plateforme n’a pas.
+    // Ce qui est vrai et vérifiable : les fiches viennent de l’annuaire officiel.
+    label: "Notaires de l’annuaire officiel",
+    mobileLabel: "Annuaire officiel",
     color: "text-[var(--color-success)]",
     bg: "bg-[var(--color-tint-green)]",
   },
@@ -20,8 +23,11 @@ const signals = [
   },
   {
     icon: LockKeyhole,
-    label: "RGPD · Hébergé en France",
-    mobileLabel: "RGPD · France",
+    // « Hébergé en France » était faux : les mentions légales déclarent
+    // Vercel Inc. (Californie). L’absence de traceur, elle, est vérifiable —
+    // aucun analytics ni pixel dans le code.
+    label: "RGPD · Aucun traceur publicitaire",
+    mobileLabel: "RGPD · Sans traceur",
     color: "text-orange-500",
     bg: "bg-[var(--color-tint-warm)]",
   },

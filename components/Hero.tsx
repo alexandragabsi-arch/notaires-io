@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Search, MapPin, User } from "lucide-react";
+import { Search, MapPin, User, Loader2 } from "lucide-react";
 
 interface Suggestion {
   city: string;
@@ -109,7 +109,7 @@ export default function Hero() {
           transition={{ duration: 0.4, delay: 0.18 }}
           className="text-[12px] text-[var(--color-muted)] italic font-semibold mb-8 !text-center"
         >
-          Créé par un Notaire, au service des Notaires.
+          Créé par une diplômée notaire, au service des notaires.
         </motion.p>
 
         {/* Barre de recherche */}

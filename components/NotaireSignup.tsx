@@ -398,15 +398,25 @@ export default function NotaireSignup() {
           transition={{ duration: 0.45 }}
           className="text-center mb-10"
         >
-          <div className="inline-flex items-center gap-2 bg-[var(--color-accent-soft)] text-[var(--color-accent)] px-4 py-2 rounded-full text-[13px] font-semibold mb-4">
-            Référencer mon étude
+          {/* L'offre était annoncée dans les e-mails et sur la page tarifs, puis
+              disparaissait ici : le visiteur arrivait sur un formulaire en cinq
+              étapes dont la dernière s'appelle « Paiement », sans plus aucune
+              trace de la gratuité qui l'avait fait cliquer. Elle est désormais
+              la première chose qu'il lit. */}
+          <div className="inline-flex items-center gap-2 bg-[var(--color-tint-green)] text-[var(--color-success)] px-4 py-2 rounded-full text-[13px] font-bold mb-4">
+            🎁 2 mois offerts — aucun débit aujourd&apos;hui
           </div>
           <h1 className="serif text-[28px] sm:text-[36px] lg:text-[42px] font-bold text-[var(--color-text-strong)] tracking-tight mb-2">
             Créez votre profil notaire
           </h1>
-          <p className="text-[var(--color-muted)] text-[15px] sm:text-[16px] max-w-[520px] mx-auto">
+          <p className="text-[var(--color-muted)] text-[15px] sm:text-[16px] max-w-[560px] mx-auto mb-3">
             Quelques minutes suffisent. Vous pouvez tout compléter maintenant —
             ou ajouter votre photo plus tard.
+          </p>
+          <p className="text-[14px] text-[var(--color-text-strong)] max-w-[560px] mx-auto">
+            Vos deux premiers mois sont offerts, puis 119 € HT/mois sans engagement.
+            La carte est enregistrée à la dernière étape mais n&apos;est débitée
+            qu&apos;à l&apos;issue des deux mois — vous pouvez arrêter avant, sans rien payer.
           </p>
         </motion.div>
 

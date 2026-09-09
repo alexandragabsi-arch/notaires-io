@@ -77,7 +77,10 @@ export const metadata: Metadata = {
   },
   alternates: { canonical: BASE },
   verification: {
-    // google: "VOTRE_CODE_GOOGLE_SEARCH_CONSOLE", // à renseigner après vérification GSC
+    // Preuve de propriété pour la Search Console : Next.js en fait une balise
+    // <meta name="google-site-verification"> dans le <head> de chaque page.
+    // Ce code est public par nature, il n'ouvre aucun accès par lui-même.
+    google: "_hWwL3rdM5cf-CdH-mzSSgDKgGCYJT2wfMSzxlsrn5I",
   },
 };
 

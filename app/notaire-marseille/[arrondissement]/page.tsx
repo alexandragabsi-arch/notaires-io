@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import { pageGeoLd } from "@/lib/seo-jsonld";
+import { CONTENUS } from "@/lib/arrondissements-contenu";
 import { getNotairesByArrondissement, getArrondissements } from "@/lib/notaires-source";
 
 interface Props {
@@ -36,9 +38,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const num = slugToNum(arrondissement);
   if (!num) return {};
   const label = numToLabel(num);
+  const contenu = CONTENUS["Marseille"][num];
   return {
     title: `Notaire Marseille ${label} arrondissement · Notaires.io`,
-    description: `Trouvez un notaire dans le ${label} arrondissement de Marseille. Immobilier, succession, mariage, PACS — prise de rendez-vous en ligne.`,
+    description: contenu
+      ? `Notaires dans le ${label} arrondissement de Marseille — ${contenu.quartiers.slice(0, 3).join(", ")}. Immobilier, succession, famille, société : prise de rendez-vous en ligne.`
+      : `Trouvez un notaire dans le ${label} arrondissement de Marseille. Immobilier, succession, mariage, PACS — prise de rendez-vous en ligne.`,
     alternates: { canonical: `https://notaires.io/notaire-marseille/${arrondissement}` },
     openGraph: {
       title: `Notaire Marseille ${label} · Notaires.io`,
@@ -56,6 +61,9 @@ export default async function Page({ params }: Props) {
 
   const label = numToLabel(num);
   const notaires = getNotairesByArrondissement("Marseille", num);
+  // Texte propre à l'arrondissement : sans lui, les pages ne se distinguaient
+  // que par un numéro et se concurrençaient entre elles.
+  const contenu = CONTENUS["Marseille"][num];
 
   // Liens vers les autres arrondissements
   const allArr = getArrondissements("Marseille");
@@ -71,6 +79,7 @@ export default async function Page({ params }: Props) {
   ];
 
   const faq = [
+    ...(contenu ? [contenu.question] : []),
     {
       q: `Combien de notaires exercent dans le ${label} arrondissement de Marseille ?`,
       a: `Il y a ${notaires.length > 0 ? notaires.length : "plusieurs"} notaires référencés dans le ${label} arrondissement de Marseille sur Notaires.io. Vous pouvez comparer leurs disponibilités et prendre rendez-vous directement en ligne.`,
@@ -90,22 +99,27 @@ export default async function Page({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-              { "@type": "ListItem", position: 2, name: "Notaire à Marseille", item: "https://notaires.io/notaire-marseille" },
-              { "@type": "ListItem", position: 3, name: `Marseille ${label}`, item: `https://notaires.io/notaire-marseille/${arrondissement}` },
-            ],
-          }),
+          __html: JSON.stringify(
+            pageGeoLd({
+              etapes: [
+                { nom: "Accueil", url: "https://notaires.io" },
+                { nom: "Notaire à Marseille", url: "https://notaires.io/notaire-marseille" },
+                { nom: `Marseille ${label}`, url: `https://notaires.io/notaire-marseille/${arrondissement}` },
+              ],
+              faq,
+              notaires,
+              ville: "Marseille",
+            }),
+          ),
         }}
       />
       <Header />
       <main>
         <SeoLandingPage
           h1={`Notaire à Marseille — ${label} arrondissement`}
-          intro={`Vous recherchez un notaire dans le ${label} arrondissement de Marseille ? Consultez les profils disponibles, comparez les créneaux et prenez rendez-vous en ligne. En visio ou au cabinet.`}
+          intro={contenu
+            ? `${contenu.profil} Quartiers couverts : ${contenu.quartiers.join(", ")}. Comparez les profils, les créneaux et prenez rendez-vous en ligne, en visio ou au cabinet.`
+            : `Vous recherchez un notaire dans le ${label} arrondissement de Marseille ? Consultez les profils disponibles, comparez les créneaux et prenez rendez-vous en ligne.`}
           notaires={notaires}
           faq={faq}
           relatedLinks={relatedLinks}

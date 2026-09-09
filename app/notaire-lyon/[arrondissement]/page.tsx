@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import { pageGeoLd } from "@/lib/seo-jsonld";
+import { CONTENUS } from "@/lib/arrondissements-contenu";
 import { getNotairesByArrondissement, getArrondissements } from "@/lib/notaires-source";
 
 interface Props {
@@ -36,9 +38,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const num = slugToNum(arrondissement);
   if (!num) return {};
   const label = numToLabel(num);
+  const contenu = CONTENUS["Lyon"][num];
   return {
     title: `Notaire Lyon ${label} arrondissement · Notaires.io`,
-    description: `Trouvez un notaire dans le ${label} arrondissement de Lyon. Immobilier, succession, mariage, PACS — prise de rendez-vous en ligne.`,
+    description: contenu
+      ? `Notaires dans le ${label} arrondissement de Lyon — ${contenu.quartiers.slice(0, 3).join(", ")}. Immobilier, succession, famille, société : prise de rendez-vous en ligne.`
+      : `Trouvez un notaire dans le ${label} arrondissement de Lyon. Immobilier, succession, mariage, PACS — prise de rendez-vous en ligne.`,
     alternates: { canonical: `https://notaires.io/notaire-lyon/${arrondissement}` },
     openGraph: {
       title: `Notaire Lyon ${label} · Notaires.io`,
@@ -56,6 +61,9 @@ export default async function Page({ params }: Props) {
 
   const label = numToLabel(num);
   const notaires = getNotairesByArrondissement("Lyon", num);
+  // Texte propre à l'arrondissement : sans lui, les pages ne se distinguaient
+  // que par un numéro et se concurrençaient entre elles.
+  const contenu = CONTENUS["Lyon"][num];
 
   // Liens vers les autres arrondissements
   const allArr = getArrondissements("Lyon");
@@ -71,6 +79,7 @@ export default async function Page({ params }: Props) {
   ];
 
   const faq = [
+    ...(contenu ? [contenu.question] : []),
     {
       q: `Combien de notaires exercent dans le ${label} arrondissement de Lyon ?`,
       a: `Il y a ${notaires.length > 0 ? notaires.length : "plusieurs"} notaires référencés dans le ${label} arrondissement de Lyon sur Notaires.io. Vous pouvez comparer leurs disponibilités et prendre rendez-vous directement en ligne.`,
@@ -90,22 +99,27 @@ export default async function Page({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-              { "@type": "ListItem", position: 2, name: "Notaire à Lyon", item: "https://notaires.io/notaire-lyon" },
-              { "@type": "ListItem", position: 3, name: `Lyon ${label}`, item: `https://notaires.io/notaire-lyon/${arrondissement}` },
-            ],
-          }),
+          __html: JSON.stringify(
+            pageGeoLd({
+              etapes: [
+                { nom: "Accueil", url: "https://notaires.io" },
+                { nom: "Notaire à Lyon", url: "https://notaires.io/notaire-lyon" },
+                { nom: `Lyon ${label}`, url: `https://notaires.io/notaire-lyon/${arrondissement}` },
+              ],
+              faq,
+              notaires,
+              ville: "Lyon",
+            }),
+          ),
         }}
       />
       <Header />
       <main>
         <SeoLandingPage
           h1={`Notaire à Lyon — ${label} arrondissement`}
-          intro={`Vous recherchez un notaire dans le ${label} arrondissement de Lyon ? Consultez les profils disponibles, comparez les créneaux et prenez rendez-vous en ligne. En visio ou au cabinet.`}
+          intro={contenu
+            ? `${contenu.profil} Quartiers couverts : ${contenu.quartiers.join(", ")}. Comparez les profils, les créneaux et prenez rendez-vous en ligne, en visio ou au cabinet.`
+            : `Vous recherchez un notaire dans le ${label} arrondissement de Lyon ? Consultez les profils disponibles, comparez les créneaux et prenez rendez-vous en ligne.`}
           notaires={notaires}
           faq={faq}
           relatedLinks={relatedLinks}

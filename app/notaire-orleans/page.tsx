@@ -71,7 +71,14 @@ export default function Page() {
     : LISTING_NOTAIRES.filter((n) => n.city === "Orléans");
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          ...jsonLd,
+          "@graph": [
+            ...jsonLd["@graph"],
+            // Questions/réponses éligibles aux résultats enrichis.
+            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+          ],
+        }) }} />
       <Header />
       <main>
         <SeoLandingPage

@@ -87,7 +87,14 @@ export default function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          ...jsonLd,
+          "@graph": [
+            ...jsonLd["@graph"],
+            // Questions/réponses éligibles aux résultats enrichis.
+            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+          ],
+        }) }}
       />
       <Header />
       <main>

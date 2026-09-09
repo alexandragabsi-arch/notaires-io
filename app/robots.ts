@@ -9,20 +9,32 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/", "/connexion", "/espace-notaire", "/espace-client"],
       },
       {
-        // Aspirateurs de contenu pour l'entraînement de modèles. Ils ne
-        // rapportent aucune visite : ils prennent l'annuaire et n'envoient
-        // personne. Les moteurs de recherche, eux, restent les bienvenus.
+        // Robots des moteurs de réponse (ChatGPT, Perplexity, Claude, Google AI).
+        // Ils étaient bloqués parce qu'ils prennent le contenu sans envoyer de
+        // visite. Mais un particulier qui demande « un notaire dans le 8ème »
+        // à un assistant obtient une réponse citant des sources : rester bloqué,
+        // c'est être absent de ce canal. On les autorise donc sur les pages
+        // publiques — l'annuaire, les fiches et les articles — tout en gardant
+        // les espaces privés fermés.
         userAgent: [
-          "CCBot",
-          "GPTBot",
-          "ClaudeBot",
-          "anthropic-ai",
+          "OAI-SearchBot",
+          "ChatGPT-User",
           "PerplexityBot",
-          "Bytespider",
-          "Amazonbot",
+          "Perplexity-User",
+          "ClaudeBot",
+          "Claude-User",
+          "anthropic-ai",
           "Applebot-Extended",
-          "meta-externalagent",
+          "Google-Extended",
         ],
+        allow: "/",
+        disallow: ["/api/", "/connexion", "/espace-notaire", "/espace-client"],
+      },
+      {
+        // En revanche, les aspirateurs qui servent uniquement à constituer des
+        // corpus d'entraînement, sans jamais citer la source ni renvoyer de
+        // visiteur, restent exclus.
+        userAgent: ["CCBot", "Bytespider", "Amazonbot", "meta-externalagent"],
         disallow: "/",
       },
     ],

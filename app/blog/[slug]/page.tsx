@@ -98,6 +98,20 @@ function formatDate(dateStr: string): string {
   return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 }
 
+/* Villes mises en avant au bas de chaque article : ce sont celles qui
+   concentrent le plus de notaires référencés. */
+const VILLES_BLOG: [string, string][] = [
+  ["Paris", "/notaire-paris"],
+  ["Lyon", "/notaire-lyon"],
+  ["Marseille", "/notaire-marseille"],
+  ["Toulouse", "/notaire-toulouse"],
+  ["Bordeaux", "/notaire-bordeaux"],
+  ["Nice", "/notaire-nice"],
+  ["Nantes", "/notaire-nantes"],
+  ["Lille", "/notaire-lille"],
+  ["Toutes les villes", "/annuaire"],
+];
+
 export default async function BlogPostPage({
   params,
 }: {
@@ -334,6 +348,29 @@ export default async function BlogPostPage({
                     </a>
                   );
                 })}
+            </div>
+
+            {/* Trouver un notaire — maillage vers les pages géographiques.
+                Les 91 articles et les 500 pages de ville s'ignoraient : un
+                lecteur venu d'une recherche informationnelle n'avait aucun
+                chemin vers la prise de rendez-vous, et les pages de ville ne
+                recevaient aucune autorité des articles qui, eux, rapportent
+                déjà des impressions. */}
+            <div className="mt-10 pt-8 border-t border-[var(--color-border-soft)]">
+              <h2 className="text-base font-bold text-[var(--color-text-strong)] uppercase tracking-widest mb-4 text-sm">
+                Trouver un notaire près de chez vous
+              </h2>
+              <div className="flex flex-wrap gap-2.5">
+                {VILLES_BLOG.map(([label, href]) => (
+                  <a
+                    key={href}
+                    href={href}
+                    className="text-sm font-semibold text-[var(--color-primary)] bg-white border border-[var(--color-border-soft)] px-4 py-2 rounded-full hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+                  >
+                    {label}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </section>

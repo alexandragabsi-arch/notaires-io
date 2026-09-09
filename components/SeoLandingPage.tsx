@@ -14,6 +14,20 @@ interface Props {
 
 const DAYS_VISIBLE = 5;
 
+/* ── Guides à mettre en avant sur toutes les pages géographiques ──
+   Ces articles répondent aux requêtes qui rapportent le plus d'impressions au
+   site — « acte de vente notarié », « compromis de vente notaire », « délai
+   signature notaire » — sans obtenir un seul clic, faute d'être assez bien
+   classés. Les 500 pages géographiques et les 91 articles s'ignoraient : les
+   relier fait circuler l'autorité entre les deux, dans les deux sens. */
+const GUIDES: { href: string; label: string }[] = [
+  { href: "/blog/compromis-acte-de-vente-difference", label: "Compromis et acte de vente : les différences" },
+  { href: "/blog/delai-signature-acte-notarie", label: "Délai de signature d'un acte notarié" },
+  { href: "/blog/delai-succession-notaire", label: "Combien de temps pour régler une succession" },
+  { href: "/blog/frais-de-notaire-achat-immobilier", label: "Frais de notaire dans un achat" },
+  { href: "/blog/prendre-rdv-notaire-en-ligne", label: "Prendre rendez-vous chez le notaire en ligne" },
+];
+
 /* ── Spécialités disponibles (ordre d'affichage) ── */
 const SPECIALTY_PILLS = [
   { key: "Droit immobilier", label: "Immobilier" },
@@ -522,6 +536,26 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
           </div>
         </section>
       )}
+
+      {/* Guides — maillage vers les articles */}
+      <section className="py-10 px-6 bg-[var(--color-tint-blue)] border-t border-[var(--color-border-soft)]">
+        <div className="max-w-[1200px] mx-auto">
+          <h2 className="text-base font-bold text-[var(--color-text-strong)] uppercase tracking-widest mb-5 text-sm">
+            À lire avant votre rendez-vous
+          </h2>
+          <div className="flex flex-wrap gap-3">
+            {GUIDES.map((g) => (
+              <a
+                key={g.href}
+                href={g.href}
+                className="text-sm font-semibold text-[var(--color-primary)] bg-white border border-[var(--color-border-soft)] px-4 py-2 rounded-full hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+              >
+                {g.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Related links */}
       {relatedLinks.length > 0 && (

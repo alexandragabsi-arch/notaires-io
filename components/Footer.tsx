@@ -25,6 +25,50 @@ const SOCIALS = [
   },
 ];
 
+/* Villes couvertes par une page dédiée. Présentes dans le pied de page de
+   chaque page du site, elles reçoivent ainsi un lien de tout le site. */
+const VILLES: [string, string][] = [
+  ["Paris", "/notaire-paris"],
+  ["Lyon", "/notaire-lyon"],
+  ["Marseille", "/notaire-marseille"],
+  ["Toulouse", "/notaire-toulouse"],
+  ["Nice", "/notaire-nice"],
+  ["Nantes", "/notaire-nantes"],
+  ["Montpellier", "/notaire-montpellier"],
+  ["Strasbourg", "/notaire-strasbourg"],
+  ["Bordeaux", "/notaire-bordeaux"],
+  ["Lille", "/notaire-lille"],
+  ["Rennes", "/notaire-rennes"],
+  ["Reims", "/notaire-reims"],
+  ["Toulon", "/notaire-toulon"],
+  ["Saint-Étienne", "/notaire-saint-etienne"],
+  ["Le Havre", "/notaire-le-havre"],
+  ["Grenoble", "/notaire-grenoble"],
+  ["Dijon", "/notaire-dijon"],
+  ["Angers", "/notaire-angers"],
+  ["Nancy", "/notaire-nancy"],
+  ["Metz", "/notaire-metz"],
+  ["Clermont-Ferrand", "/notaire-clermont-ferrand"],
+  ["Aix-en-Provence", "/notaire-aix-en-provence"],
+  ["Brest", "/notaire-brest"],
+  ["Rouen", "/notaire-rouen"],
+  ["Orléans", "/notaire-orleans"],
+  ["Perpignan", "/notaire-perpignan"],
+  ["Par département", "/notaire-departement"],
+];
+
+/* Pages thématiques : elles répondent aux requêtes qui rapportent déjà le plus
+   d'impressions (acte de vente, compromis, succession…). */
+const SPECIALITES: [string, string][] = [
+  ["Notaire immobilier", "/notaire-immobilier"],
+  ["Succession", "/notaire-succession"],
+  ["Donation", "/notaire-donation"],
+  ["Divorce", "/notaire-divorce"],
+  ["Mariage et PACS", "/notaire-mariage-pacs"],
+  ["Contrat de mariage", "/notaire-contrat-mariage"],
+  ["Création de société", "/notaire-creation-societe"],
+];
+
 export default function Footer() {
   return (
     <footer className="bg-white text-[var(--color-muted)] border-t border-[var(--color-border-soft)] pt-14 pb-8 mt-auto">
@@ -117,6 +161,42 @@ export default function Footer() {
             </div>
           ))}
         </div>
+        {/* Maillage géographique.
+            Les 34 pages de ville et les 45 pages d'arrondissement n'étaient
+            liées depuis aucune page du site : découvertes par le sitemap mais
+            jugées sans importance, elles restaient « détectée, actuellement non
+            indexée » dans la Search Console. Un lien présent sur toutes les
+            pages leur donne le poids qui leur manquait. */}
+        <div className="border-t border-[var(--color-border-soft)] pt-6 pb-6">
+          <h3 className="text-[var(--color-text-strong)] text-[13px] uppercase tracking-[1.5px] font-bold mb-4">
+            Trouver un notaire près de chez vous
+          </h3>
+          <ul className="flex flex-wrap gap-x-4 gap-y-2">
+            {VILLES.map(([label, href]) => (
+              <li key={href}>
+                <a
+                  href={href}
+                  className="text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors text-[13px]"
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <ul className="flex flex-wrap gap-x-4 gap-y-2 mt-3">
+            {SPECIALITES.map(([label, href]) => (
+              <li key={href}>
+                <a
+                  href={href}
+                  className="text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors text-[13px]"
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <div className="border-t border-[var(--color-border-soft)] pt-6 flex flex-wrap justify-between gap-3 text-[13px]">
           <div>© 2026 Notaires.io · Une marque du groupe LegalCorners</div>
         </div>

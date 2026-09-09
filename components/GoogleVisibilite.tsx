@@ -55,6 +55,21 @@ export default function GoogleVisibilite({ profile }: { profile: ListingNotaire 
   const urlRef = useRef<HTMLSpanElement>(null);
   // Ancre #agenda : le visiteur venu de Google atterrit directement sur le calendrier.
   const profileUrl = `${SITE_URL}/notaires/${profile.id}#agenda`;
+  // Bouton « Prendre rendez-vous » à coller sur le site de l'étude. Un lien
+  // depuis un domaine en .notaires.fr pèse lourd pour le référencement de la
+  // fiche : c'est le levier le plus accessible face aux plateformes installées.
+  const codeSite = `<a href="${profileUrl}" style="display:inline-block;background:#2d5dbf;color:#fff;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:8px;font-family:sans-serif">Prendre rendez-vous en ligne</a>`;
+  const [copieSite, setCopieSite] = useState<"idle" | "ok" | "fail">("idle");
+
+  async function copierCodeSite() {
+    try {
+      await navigator.clipboard.writeText(codeSite);
+      setCopieSite("ok");
+      setTimeout(() => setCopieSite("idle"), 2000);
+    } catch {
+      setCopieSite("fail");
+    }
+  }
 
   // Recherche Google pré-remplie pour vérifier que la fiche existe déjà
   const checkQuery = [profile.name, profile.officeName, profile.city]
@@ -149,6 +164,42 @@ export default function GoogleVisibilite({ profile }: { profile: ListingNotaire 
             faites <strong className="text-[var(--color-text-strong)]">⌘/Ctrl + C</strong>.
           </p>
         )}
+      </div>
+
+      {/* Bouton pour le site de l'étude */}
+      <div className="mb-6">
+        <p className="text-[12px] font-bold uppercase tracking-[0.8px] text-[var(--color-muted)] mb-2">
+          Le bouton à ajouter sur le site de votre étude
+        </p>
+        <div className="bg-[var(--color-tint-green)] rounded-xl px-4 py-4">
+          <p className="text-[13px] text-[var(--color-text-strong)] mb-3 leading-relaxed">
+            Collez ce code sur le site de votre étude : vos visiteurs réservent
+            en un clic, et le lien renforce la visibilité de votre fiche dans
+            les moteurs de recherche.
+          </p>
+          <div className="bg-white border border-[var(--color-border-soft)] rounded-lg px-3 py-2 mb-3">
+            <code className="text-[11px] text-[var(--color-muted)] break-all select-all block">
+              {codeSite}
+            </code>
+          </div>
+          <button
+            type="button"
+            onClick={copierCodeSite}
+            className="inline-flex items-center gap-1.5 bg-white border border-[var(--color-border)] text-[var(--color-text-strong)] px-3 py-1.5 rounded-[8px] text-[12px] font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+          >
+            {copieSite === "ok"
+              ? <Check className="w-3.5 h-3.5 text-[var(--color-success)]" strokeWidth={2.5} />
+              : <Copy className="w-3.5 h-3.5" strokeWidth={2.5} />
+            }
+            {copieSite === "ok" ? "Copié !" : "Copier le code"}
+          </button>
+          {copieSite === "fail" && (
+            <p className="text-[12px] text-[var(--color-muted)] mt-2">
+              Votre navigateur bloque la copie — sélectionnez le code ci-dessus
+              et faites <strong className="text-[var(--color-text-strong)]">⌘/Ctrl + C</strong>.
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Tutoriel en 4 étapes */}

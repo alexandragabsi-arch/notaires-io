@@ -160,6 +160,25 @@ export async function POST(req: NextRequest) {
             </div>
           </div>
           <div style="margin-bottom:24px">${emailButton(`${SITE}/espace-notaire`, "Accéder à mon tableau de bord")}</div>
+          ${
+            // Un lien depuis le site de l'étude — souvent un domaine en
+            // .notaires.fr — pèse lourd dans le référencement de la fiche.
+            // C'est le moment de le demander : le notaire vient de s'inscrire.
+            meta.notaireId
+              ? `<div style="background:#f8f9fa;border-radius:12px;padding:20px;margin-bottom:24px">
+                   <div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:6px">
+                     Un geste utile : ajoutez votre lien sur le site de votre étude
+                   </div>
+                   <div style="font-size:14px;color:#5a6a8a;line-height:1.6">
+                     Votre page est ici : <a href="${SITE}/notaires/${meta.notaireId}" style="color:#4980E6;font-weight:600">${SITE.replace("https://", "")}/notaires/${meta.notaireId}</a><br>
+                     Un bouton « Prendre rendez-vous » sur le site de votre étude permet à vos
+                     visiteurs de réserver en un clic, et améliore la visibilité de votre fiche
+                     dans les moteurs de recherche. Le code à copier vous attend dans votre espace,
+                     section « Ma visibilité Google ».
+                   </div>
+                 </div>`
+              : ""
+          }
           <p style="font-size:13px;color:#5a6a8a">
             Une question ? Répondez simplement à cet e-mail.
           </p>

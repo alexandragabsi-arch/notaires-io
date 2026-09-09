@@ -29,11 +29,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!v) return {};
   const specs = v.specialites.slice(0, 3).join(", ").toLowerCase();
   return {
-    title: `Notaire à ${v.nom} — ${v.nombre} notaires · Notaires.io`,
-    description: `${v.nombre} notaires référencés à ${v.nom}${specs ? ` : ${specs}` : ""}. Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`,
+    title: `Notaire à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""} — ${v.nombre} notaires · Notaires.io`,
+    description: `${v.nombre} notaires référencés à ${v.nom}${v.codePostal ? ` ${v.codePostal}` : ""}${specs ? ` : ${specs}` : ""}. Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`,
     alternates: { canonical: `https://notaires.io/notaire-ville/${v.slug}` },
     openGraph: {
-      title: `Notaire à ${v.nom} · Notaires.io`,
+      title: `Notaire à ${v.nom}${v.codePostal ? ` ${v.codePostal}` : ""} · Notaires.io`,
       description: `${v.nombre} notaires référencés à ${v.nom}. Prise de rendez-vous en ligne.`,
       url: `https://notaires.io/notaire-ville/${v.slug}`,
       type: "website",
@@ -61,6 +61,12 @@ export default async function Page({ params }: Props) {
     : "";
 
   const faq = [
+    ...(v.codePostal
+      ? [{
+          q: `Quels notaires exercent dans le ${v.codePostal} ?`,
+          a: `Le code postal ${v.codePostal} correspond à ${v.nom}, où ${v.nombre} notaires sont référencés sur Notaires.io. Vous pouvez consulter leurs spécialités et réserver un créneau en ligne.`,
+        }]
+      : []),
     {
       q: `Combien de notaires exercent à ${v.nom} ?`,
       a: `${v.nombre} notaires sont référencés à ${v.nom} sur Notaires.io. Vous pouvez comparer leurs spécialités et leurs disponibilités, puis réserver directement en ligne.`,
@@ -103,8 +109,8 @@ export default async function Page({ params }: Props) {
       <Header />
       <main>
         <SeoLandingPage
-          h1={`Trouver un notaire à ${v.nom}`}
-          intro={`${v.nombre} notaires sont référencés à ${v.nom}${specs ? `, principalement en ${specs}` : ""}. Comparez les profils et les créneaux disponibles, puis prenez rendez-vous en ligne — en visioconférence ou au cabinet.`}
+          h1={`Trouver un notaire à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""}`}
+          intro={`${v.nombre} notaires sont référencés à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""}${specs ? `, principalement en ${specs}` : ""}. Comparez les profils et les créneaux disponibles, puis prenez rendez-vous en ligne — en visioconférence ou au cabinet.`}
           notaires={notaires}
           faq={faq}
           relatedLinks={[

@@ -37,6 +37,13 @@ export interface VilleCouverte {
   nombre: number;
   /** Spécialités les plus représentées localement, pour différencier les pages. */
   specialites: string[];
+  /**
+   * Code postal principal, déduit des adresses des études.
+   * « notaire 74000 » est une recherche courante, et le code postal est le
+   * signal qui rattache sans ambiguïté une page à un territoire — les
+   * plateformes concurrentes le placent d'ailleurs dans leurs URL.
+   */
+  codePostal?: string;
 }
 
 let cache: VilleCouverte[] | null = null;
@@ -44,7 +51,7 @@ let cache: VilleCouverte[] | null = null;
 export function getVillesCouvertes(): VilleCouverte[] {
   if (cache) return cache;
 
-  const parVille = new Map<string, { nom: string; specs: Map<string, number> }>();
+  const parVille = new Map<string, { nom: string; specs: Map<string, number>; cps: Map<string, number> }>();
   for (const n of getAllNotaires()) {
     const nom = (n.city || "").trim();
     if (!nom) continue;
@@ -52,9 +59,12 @@ export function getVillesCouvertes(): VilleCouverte[] {
     if (!slug || VILLES_STATIQUES.has(slug)) continue;
     let entree = parVille.get(slug);
     if (!entree) {
-      entree = { nom, specs: new Map() };
+      entree = { nom, specs: new Map(), cps: new Map() };
       parVille.set(slug, entree);
     }
+    // Une commune peut avoir plusieurs codes postaux : on retient le plus fréquent.
+    const cp = (n.address || "").match(/\b(\d{5})\b/)?.[1];
+    if (cp) entree.cps.set(cp, (entree.cps.get(cp) ?? 0) + 1);
     for (const s of n.specialties || []) {
       entree.specs.set(s, (entree.specs.get(s) ?? 0) + 1);
     }
@@ -62,14 +72,15 @@ export function getVillesCouvertes(): VilleCouverte[] {
   }
 
   cache = [...parVille.entries()]
-    .map(([slug, { nom, specs }]) => {
+    .map(([slug, { nom, specs, cps }]) => {
       const total = specs.get("__total") ?? 0;
       const specialites = [...specs.entries()]
         .filter(([k]) => k !== "__total")
         .sort((a, b) => b[1] - a[1])
         .slice(0, 4)
         .map(([k]) => k);
-      return { nom, slug, nombre: total, specialites };
+      const codePostal = [...cps.entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
+      return { nom, slug, nombre: total, specialites, codePostal };
     })
     .filter((v) => v.nombre >= SEUIL_VILLE)
     .sort((a, b) => b.nombre - a.nombre);

@@ -39,6 +39,7 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: "https://notaires.io/sitemap.xml",
+    // /llms.txt décrit le service aux moteurs de réponse (voir app/llms.txt).
     host: "https://notaires.io",
   };
 }

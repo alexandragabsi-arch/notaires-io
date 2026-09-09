@@ -99,8 +99,35 @@ const jsonLd = {
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer support",
+        email: "contact@notaires.io",
+        telephone: "+33756833361",
         availableLanguage: ["French"],
+        areaServed: "FR",
       },
+      // Identité de l'éditeur : un assistant qui cite une source vérifie qui
+      // se trouve derrière. Ces éléments sont publics et opposables.
+      parentOrganization: {
+        "@type": "Organization",
+        name: "LegalCorners",
+        legalName: "LEGALCORNERS",
+        vatID: "FR66988485405",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "78 avenue des Champs-Élysées",
+          postalCode: "75008",
+          addressLocality: "Paris",
+          addressCountry: "FR",
+        },
+      },
+      areaServed: { "@type": "Country", name: "France" },
+      knowsAbout: [
+        "Prise de rendez-vous notariale",
+        "Droit immobilier",
+        "Successions",
+        "Droit de la famille",
+        "Donations",
+        "Droit des sociétés",
+      ],
       sameAs: [
         "https://www.linkedin.com/company/notaires-io/",
         "https://www.instagram.com/notaires.io/",

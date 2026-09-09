@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { DEPARTEMENTS } from "@/lib/departements-data";
+import { getVillesCouvertes } from "@/lib/villes-data";
 import { getDynamicArticles } from "@/lib/blog-supabase";
 
 const BASE = "https://notaires.io";
@@ -144,5 +145,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.75,
     }));
 
-  return [...staticPages, ...notairePages, ...seoLandingPages, ...blogPages, ...dynamicBlogPages, ...departementPages];
+  // Pages de ville générées depuis les données : elles n'existent que si la
+  // commune compte assez de notaires pour que la page ait du contenu.
+  const villePages: MetadataRoute.Sitemap = getVillesCouvertes().map((v) => ({
+    url: `${BASE}/notaire-ville/${v.slug}`,
+    lastModified: NOW,
+    changeFrequency: "weekly" as const,
+    // Les villes les mieux pourvues passent devant : c'est là que la demande est.
+    priority: v.nombre >= 50 ? 0.8 : v.nombre >= 20 ? 0.75 : 0.7,
+  }));
+
+  return [...staticPages, ...notairePages, ...seoLandingPages, ...blogPages, ...dynamicBlogPages, ...departementPages, ...villePages];
 }

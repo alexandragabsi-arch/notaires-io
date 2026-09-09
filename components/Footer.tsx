@@ -55,6 +55,7 @@ const VILLES: [string, string][] = [
   ["Orléans", "/notaire-orleans"],
   ["Perpignan", "/notaire-perpignan"],
   ["Par département", "/notaire-departement"],
+  ["Annuaire complet", "/annuaire"],
 ];
 
 /* Pages thématiques : elles répondent aux requêtes qui rapportent déjà le plus

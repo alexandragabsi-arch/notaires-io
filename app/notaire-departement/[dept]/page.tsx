@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
 import { getDepartementBySlug, getAllDepartementSlugs } from "@/lib/departements-data";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
+import { getDonneesDepartement } from "@/lib/departements-villes";
 
 interface Props {
   params: Promise<{ dept: string }>;
@@ -106,7 +107,19 @@ export default async function Page({ params }: Props) {
     ],
   };
 
+  // Chiffres et communes du département : sans eux, les 95 pages ne se
+  // distinguaient que par un nom, ce qu'un moteur traite comme du doublon.
+  const donnees = getDonneesDepartement(dep.code);
+  const villes = donnees?.villes ?? [];
+  const specs = (donnees?.specialites ?? []).join(", ").toLowerCase();
+
   const faq = [
+    ...(donnees
+      ? [{
+          q: `Combien de notaires exercent dans le ${dep.name} ?`,
+          a: `${donnees.notaires} notaires sont référencés dans le ${dep.name} (${dep.code}) sur Notaires.io${villes.length ? `, répartis notamment entre ${villes.slice(0, 5).map(v => v.nom).join(", ")}` : ""}.${specs ? ` Les domaines les plus représentés y sont ${specs}.` : ""}`,
+        }]
+      : []),
     {
       q: `Combien coûte un notaire dans le ${dep.name} ?`,
       a: `Les honoraires des notaires dans le ${dep.name} sont fixés par décret et identiques sur tout le territoire français. Pour un achat immobilier, comptez 7 à 8 % du prix du bien (logement ancien) ou 2 à 3 % (neuf). Pour une succession, les émoluments dépendent de l'actif net transmis.`,
@@ -126,6 +139,9 @@ export default async function Page({ params }: Props) {
   ];
 
   const relatedLinks = [
+    // Les communes du département d'abord : c'est le maillage qui manquait,
+    // et le chemin que suit réellement un visiteur.
+    ...villes.map((v) => ({ href: v.href, label: `Notaire à ${v.nom}` })),
     { href: "/notaire-immobilier",    label: "Notaire immobilier" },
     { href: "/notaire-succession",    label: "Notaire succession" },
     { href: "/notaire-mariage-pacs",  label: "Notaire mariage / PACS" },
@@ -147,7 +163,9 @@ export default async function Page({ params }: Props) {
       <main>
         <SeoLandingPage
           h1={`Trouver un notaire dans le ${dep.name} (${dep.code})`}
-          intro={`Vous recherchez un notaire dans le département du ${dep.name} ? Notaires.io met en relation avec des notaires certifiés à ${dep.chefLieu} et dans tout le ${dep.name}. Immobilier, succession, mariage, PACS, donation — prise de rendez-vous en ligne, en visio ou au cabinet.`}
+          intro={donnees
+            ? `${donnees.notaires} notaires sont référencés dans le ${dep.name} (${dep.code})${villes.length ? `, à ${dep.chefLieu} et dans ${villes.length > 1 ? `${villes.length - 1} autres communes` : "les communes environnantes"}` : ""}.${specs ? ` Les domaines les plus représentés y sont ${specs}.` : ""} Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`
+            : `Vous recherchez un notaire dans le département du ${dep.name} ? Notaires.io met en relation avec des notaires à ${dep.chefLieu} et dans tout le ${dep.name}. Immobilier, succession, mariage, PACS, donation — prise de rendez-vous en ligne, en visio ou au cabinet.`}
           notaires={notaires}
           faq={faq}
           relatedLinks={relatedLinks}

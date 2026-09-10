@@ -10,10 +10,15 @@
 const CLE = "b36c029fbecfe439b305e7b1a6dc7aab";
 const HOTE = "notaires.io";
 
-const reponse = await fetch(`https://${HOTE}/sitemap.xml`, {
-  headers: { "User-Agent": "notaires-io-indexnow/1.0" },
-});
-const xml = await reponse.text();
+// Le sitemap est lu dans le build local plutôt qu'en ligne : la protection
+// anti-robot de l'hébergeur intercepte les requêtes automatisées vers le site,
+// et un sitemap vide ferait soumettre zéro URL sans que rien ne le signale.
+import { readFile } from "node:fs/promises";
+
+const xml = await readFile(
+  new URL("../.next/server/app/sitemap.xml.body", import.meta.url),
+  "utf-8",
+);
 const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 
 const limite = Number(process.argv[2]) || urls.length;

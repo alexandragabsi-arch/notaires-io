@@ -55,6 +55,11 @@ les 20 arrondissements de Paris, les 9 de Lyon, les 16 de Marseille, et
 
 Villes les mieux pourvues : ${principales}.
 
+## Version détaillée
+
+Réponses de référence, liste des guides et des villes couvertes :
+https://notaires.io/llms-full.txt
+
 ## Où trouver quoi
 
 - Annuaire complet : https://notaires.io/annuaire

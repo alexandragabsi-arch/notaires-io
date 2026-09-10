@@ -28,10 +28,20 @@ export function breadcrumbLd(etapes: FilAriane[]) {
   };
 }
 
-/** Questions/réponses de la page, éligibles aux résultats enrichis. */
+/**
+ * Questions/réponses de la page, éligibles aux résultats enrichis.
+ *
+ * `speakable` désigne les passages qu'un assistant peut lire à voix haute ou
+ * reprendre dans une réponse. C'est le format que les moteurs de réponse
+ * privilégient : une question, une réponse courte, une source identifiée.
+ */
 export function faqLd(faq: { q: string; a: string }[]) {
   return {
     "@type": "FAQPage",
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", "[data-speakable]"],
+    },
     mainEntity: faq.map((f) => ({
       "@type": "Question",
       name: f.q,
@@ -48,6 +58,7 @@ export function faqLd(faq: { q: string; a: string }[]) {
 export function notairesLd(notaires: ListingNotaire[], ville: string) {
   return {
     "@type": "ItemList",
+    name: `Notaires à ${ville}`,
     numberOfItems: notaires.length,
     itemListElement: notaires.slice(0, 25).map((n, i) => ({
       "@type": "ListItem",

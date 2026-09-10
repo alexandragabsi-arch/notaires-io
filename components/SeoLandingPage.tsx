@@ -378,7 +378,7 @@ export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks 
           <h1 className="font-extrabold text-3xl sm:text-4xl md:text-5xl leading-tight mb-5 font-[var(--font-playfair)] text-[var(--color-text-strong)]">
             {h1}
           </h1>
-          <p className="text-[var(--color-muted)] text-lg leading-relaxed mb-8 max-w-[640px] mx-auto">
+          <p className="text-[var(--color-muted)] text-lg leading-relaxed mb-8 max-w-[640px] mx-auto" data-speakable>
             {intro}
           </p>
           <a

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { limiter, ipDe } from "@/lib/rate-limit";
+import { sendEmail, emailLayout, emailButton, ADMIN_EMAIL, SITE } from "@/lib/email";
 
 // Consomme un code d'invitation et ouvre l'accès offert, sans Stripe ni carte.
 //
@@ -73,13 +74,15 @@ export async function POST(req: NextRequest) {
 
   const mois = data[0].mois_offerts ?? 3;
 
-  const { error: majErreur } = await supabase
+  const { data: profil, error: majErreur } = await supabase
     .from("notaire_profiles")
     .update({
       subscription_status: "offert",
       subscription_renewal_at: finAccesIso(mois),
     })
-    .eq("id", body.notaireId);
+    .eq("id", body.notaireId)
+    .select("name, city, email")
+    .maybeSingle();
 
   if (majErreur) {
     // Le code est consommé mais l'accès n'est pas ouvert : à traiter à la main,
@@ -90,6 +93,33 @@ export async function POST(req: NextRequest) {
       { status: 500 },
     );
   }
+
+  // Alerte à l'administratrice. Un code d'invitation n'est pas une inscription
+  // ordinaire : c'est un testeur ou un confrère qu'on a sollicité, et le savoir
+  // le jour même permet de le rappeler tant que l'essai est frais.
+  // `await` sans bloquer la réponse en cas d'échec : sendEmail ne lève jamais.
+  const fin = new Date(finAccesIso(mois)).toLocaleDateString("fr-FR", {
+    day: "numeric", month: "long", year: "numeric",
+  });
+  await sendEmail(
+    ADMIN_EMAIL,
+    `🎟️ Code ${code} utilisé — ${profil?.name ?? "un notaire"} vient de s'inscrire`,
+    emailLayout(`
+      <h1 style="margin:0 0 6px;font-size:22px;color:#1c4587">Votre invitation a été utilisée</h1>
+      <p style="margin:0 0 18px;color:#54617a;font-size:15px;line-height:1.6">
+        <strong style="color:#1a2233">${profil?.name ?? "—"}</strong>${profil?.city ? ` · ${profil.city}` : ""}
+        vient de créer son compte avec le code <code>${code}</code>.
+      </p>
+      <p style="margin:0 0 18px;color:#54617a;font-size:15px;line-height:1.6">
+        Accès offert <strong>${mois} mois</strong>, jusqu'au <strong>${fin}</strong>.
+        Aucune carte n'a été demandée, aucun prélèvement n'aura lieu.
+      </p>
+      <p style="margin:0 0 22px;color:#54617a;font-size:15px;line-height:1.6">
+        C'est le bon moment pour lui proposer les trente minutes de retour d'expérience.
+      </p>
+      ${emailButton(`${SITE}/espace-notaire`, "Voir dans l'espace notaire")}
+    `),
+  );
 
   return NextResponse.json({ ok: true, moisOfferts: mois, finAcces: finAccesIso(mois) });
 }

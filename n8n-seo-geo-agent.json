@@ -1,5 +1,5 @@
 {
-  "name": "🔍 SEO Agent Notaires.io — Quotidien",
+  "name": "🔍 SEO + GEO Agent Notaires.io — Quotidien",
   "nodes": [
     {
       "parameters": {
@@ -44,7 +44,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// === ANALYSE GSC + SÉLECTION DU MOT-CLÉ ===\n\n// Handle GSC error gracefully — fallback to keyword list if auth fails\nconst gscData = $input.item.json?.error ? { rows: [] } : ($input.item.json || { rows: [] });\nconst today = new Date();\nconst startOfYear = new Date(today.getFullYear(), 0, 1);\nconst dayOfYear = Math.floor((today - startOfYear) / 86400000);\nconst hourOfDay = today.getHours();\nconst rotationIndex = (dayOfYear * 24 + hourOfDay);\n\n// Liste de secours si GSC a peu de données\nconst fallbackKeywords = [\n  {\n    \"keyword\": \"notaire succession\",\n    \"intention\": \"tout savoir sur le rôle du notaire dans une succession\",\n    \"category\": \"Succession\"\n  },\n  {\n    \"keyword\": \"frais de notaire succession\",\n    \"intention\": \"coût d'une succession chez le notaire\",\n    \"category\": \"Succession\"\n  },\n  {\n    \"keyword\": \"délai règlement succession notaire\",\n    \"intention\": \"combien de temps dure une succession\",\n    \"category\": \"Succession\"\n  },\n  {\n    \"keyword\": \"héritage sans testament notaire\",\n    \"intention\": \"que se passe-t-il sans testament\",\n    \"category\": \"Succession\"\n  },\n  {\n    \"keyword\": \"déclaration de succession notaire\",\n    \"intention\": \"comment faire sa déclaration de succession\",\n    \"category\": \"Succession\"\n  },\n  {\n    \"keyword\": \"frais de notaire vente immobilière\",\n    \"intention\": \"calculer les frais de notaire pour une vente\",\n    \"category\": \"Immobilier\"\n  },\n  {\n    \"keyword\": \"frais de notaire achat maison\",\n    \"intention\": \"frais de notaire pour acheter une maison\",\n    \"category\": \"Immobilier\"\n  },\n  {\n    \"keyword\": \"acte de vente notaire immobilier\",\n    \"intention\": \"signature acte définitif chez le notaire\",\n    \"category\": \"Immobilier\"\n  },\n  {\n    \"keyword\": \"compromis de vente notaire\",\n    \"intention\": \"signer un compromis chez le notaire\",\n    \"category\": \"Immobilier\"\n  },\n  {\n    \"keyword\": \"frais notaire maison ancienne\",\n    \"intention\": \"frais de notaire dans l'ancien\",\n    \"category\": \"Immobilier\"\n  },\n  {\n    \"keyword\": \"contrat de mariage notaire\",\n    \"intention\": \"choisir son contrat de mariage\",\n    \"category\": \"Mariage\"\n  },\n  {\n    \"keyword\": \"notaire PACS mariage différence\",\n    \"intention\": \"PACS ou mariage chez le notaire\",\n    \"category\": \"Mariage\"\n  },\n  {\n    \"keyword\": \"régime matrimonial notaire\",\n    \"intention\": \"choisir son régime matrimonial\",\n    \"category\": \"Mariage\"\n  },\n  {\n    \"keyword\": \"donation enfants notaire\",\n    \"intention\": \"faire une donation à ses enfants de son vivant\",\n    \"category\": \"Donation\"\n  },\n  {\n    \"keyword\": \"donation entre époux notaire\",\n    \"intention\": \"protéger son conjoint par une donation\",\n    \"category\": \"Donation\"\n  },\n  {\n    \"keyword\": \"rdv notaire rapide\",\n    \"intention\": \"prendre un rendez-vous notaire rapidement en ligne\",\n    \"category\": \"Guide\"\n  },\n  {\n    \"keyword\": \"prendre rendez-vous notaire en ligne\",\n    \"intention\": \"réserver un créneau chez un notaire depuis internet\",\n    \"category\": \"Guide\"\n  },\n  {\n    \"keyword\": \"notaire disponible rapidement\",\n    \"intention\": \"trouver un notaire disponible sous 48h\",\n    \"category\": \"Guide\"\n  },\n  {\n    \"keyword\": \"notaire en ligne rendez-vous visio\",\n    \"intention\": \"consulter un notaire en vidéo depuis chez soi\",\n    \"category\": \"Guide\"\n  },\n  {\n    \"keyword\": \"premier rendez-vous notaire gratuit\",\n    \"intention\": \"le 1er RDV notaire est-il payant\",\n    \"category\": \"FAQ\"\n  },\n  {\n    \"keyword\": \"notaire SCI familiale création\",\n    \"intention\": \"créer une SCI chez le notaire\",\n    \"category\": \"Immobilier\"\n  },\n  {\n    \"keyword\": \"testament notaire coût\",\n    \"intention\": \"combien coûte un testament chez un notaire\",\n    \"category\": \"FAQ\"\n  },\n  {\n    \"keyword\": \"notaire divorce consentement mutuel\",\n    \"intention\": \"procédure divorce par acte notarié\",\n    \"category\": \"Guide\"\n  }\n];\n\nconst rows = gscData.rows || [];\nlet selectedKeyword = null;\nlet gscContext = '';\nlet source = 'fallback';\n\nif (rows.length >= 3) {\n  const opportunities = rows\n    .filter(r => r.position >= 4 && r.position <= 30 && r.impressions >= 2)\n    .sort((a, b) => {\n      const scoreA = a.impressions * (31 - a.position);\n      const scoreB = b.impressions * (31 - b.position);\n      return scoreB - scoreA;\n    });\n\n  if (opportunities.length > 0) {\n    const best = opportunities[rotationIndex % opportunities.length];\n    selectedKeyword = {\n      keyword: best.keys[0],\n      intention: `améliorer le ranking sur \"${best.keys[0]}\"`,\n      category: 'FAQ',\n      gsc_position: Math.round(best.position * 10) / 10,\n      gsc_impressions: best.impressions,\n      gsc_clicks: best.clicks,\n      gsc_ctr: Math.round(best.ctr * 1000) / 10,\n    };\n    source = 'gsc';\n    gscContext = `\\n\\nDonnées GSC réelles :\\n- Position actuelle : ${selectedKeyword.gsc_position} → objectif top 3\\n- Impressions / 7j : ${selectedKeyword.gsc_impressions}\\n- Clics : ${selectedKeyword.gsc_clicks} · CTR : ${selectedKeyword.gsc_ctr}%`;\n  }\n}\n\nif (!selectedKeyword) {\n  const fb = fallbackKeywords[rotationIndex % fallbackKeywords.length];\n  selectedKeyword = { ...fb, gsc_position: null, gsc_impressions: 0, gsc_clicks: 0, gsc_ctr: 0 };\n}\n\nreturn [{ json: { ...selectedKeyword, gscContext, source, date: today.toISOString().split('T')[0], dayOfYear } }];"
+        "jsCode": "// Croise les requêtes Google Search Console avec les 39 articles publiés,\n// et désigne LA page à renforcer aujourd'hui.\n//\n// Changement de doctrine : on n'écrit plus d'article neuf. 337 articles\n// publiés n'ont ramené que 23 visiteurs par mois — le volume n'était pas le\n// problème, il l'a créé. Une page déjà en position 5-20 a des impressions :\n// il lui manque quelques places, pas un cousin de plus.\n\nconst gsc = $('📊 Google Search Console — requêtes').first().json.rows || [];\nconst articles = $input.all().map((i) => i.json).flat();\n\nconst mots = (s) =>\n  new Set(\n    (s || '')\n      .toLowerCase()\n      .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')\n      .split(/[^a-z0-9]+/)\n      .filter((m) => m.length > 3)   // « des », « les », « chez » n'apprennent rien\n  );\n\n// Position 5 à 20 : au-delà, il faudrait tout refaire ; en deçà, le gain est mince.\nconst candidats = gsc\n  .filter((r) => r.position >= 5 && r.position <= 20 && r.impressions >= 3)\n  .map((r) => {\n    const req = r.keys[0];\n    const mr = mots(req);\n\n    // On rattache la requête à l'article existant qui la couvre le mieux,\n    // par recouvrement de vocabulaire. Pas de correspondance exacte possible :\n    // une requête Google ne ressemble jamais tout à fait à un mot-clé cible.\n    let meilleur = null, meilleurScore = 0;\n    for (const a of articles) {\n      const ma = mots(`${a.keyword} ${a.title}`);\n      let commun = 0;\n      for (const m of mr) if (ma.has(m)) commun++;\n      const score = commun / Math.max(mr.size, 1);\n      if (score > meilleurScore) { meilleurScore = score; meilleur = a; }\n    }\n\n    return {\n      requete: req, position: r.position, impressions: r.impressions,\n      clics: r.clicks, article: meilleur, affinite: meilleurScore,\n      // Beaucoup d'impressions + position basse dans la fenêtre = marge maximale.\n      score: r.impressions * (21 - r.position) * meilleurScore,\n    };\n  })\n  // En dessous de la moitié des mots en commun, le rattachement est douteux :\n  // mieux vaut ne rien faire que renforcer la mauvaise page.\n  .filter((c) => c.article && c.affinite >= 0.5)\n  .sort((a, b) => b.score - a.score);\n\nif (!candidats.length) {\n  return [{ json: { action: 'rien', raison: 'aucune requête en position 5-20 rattachable à un article' } }];\n}\n\nconst c = candidats[0];\nreturn [{\n  json: {\n    action: 'ameliorer',\n    requete: c.requete,\n    position: Math.round(c.position * 10) / 10,\n    impressions: c.impressions,\n    clics: c.clics,\n    slug: c.article.slug,\n    titre_actuel: c.article.title,\n    contenu_actuel: c.article.content_html || '',\n    // Les autres requêtes rattachées à la même page : autant de questions\n    // auxquelles l'article devra répondre explicitement.\n    requetes_liees: candidats\n      .filter((x) => x.article.slug === c.article.slug && x.requete !== c.requete)\n      .slice(0, 8).map((x) => x.requete),\n  },\n}];\n"
       },
       "id": "n3",
       "name": "🎯 Analyser GSC + choisir mot-clé",
@@ -57,7 +57,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const kw = $input.item.json;\n\nconst gscLine = kw.source === 'gsc'\n  ? `\\n\\n📊 DONNÉES GOOGLE SEARCH CONSOLE :\\n- Position actuelle : ${kw.gsc_position} → objectif top 3\\n- Impressions (7j) : ${kw.gsc_impressions} · Clics : ${kw.gsc_clicks} · CTR : ${kw.gsc_ctr}%\\nCe mot-clé est en striking distance.`\n  : '';\n\nconst prompt = `Tu es un expert SEO spécialisé en droit notarial français, rédacteur senior pour Notaires.io.\\n\\nNotaires.io est une plateforme digitale qui permet aux particuliers de trouver le bon notaire en 3 questions et prendre rendez-vous en visio ou au cabinet. 1er RDV offert. 17 000+ notaires référencés.${gscLine}\\n\\nGénère un article SEO complet en français ciblant :\\n- Mot-clé principal : ${kw.keyword}\\n- Intention de recherche : ${kw.intention}\\n- Catégorie : ${kw.category}\\n\\nRéponds UNIQUEMENT avec un objet JSON valide (sans markdown ni texte autour) :\\n{\\n  \"meta_title\": \"titre <title>, 55-60 car, mot-clé en début\",\\n  \"meta_description\": \"meta desc 140-155 car avec CTA\",\\n  \"h1\": \"titre H1 engageant\",\\n  \"slug\": \"slug-url-kebab-sans-accents\",\\n  \"excerpt\": \"résumé 120-150 mots, mot-clé dans les 50 premiers mots\",\\n  \"intro\": \"intro 80-100 mots\",\\n  \"content_html\": \"article HTML complet avec h2, h3, p, ul/li, strong — 1300 à 1700 mots\",\\n  \"faq\": [{ \"q\": \"question naturelle\", \"r\": \"réponse 60-80 mots\" }],\\n  \"category\": \"Succession|Immobilier|Mariage|Famille|Donation|Guide|FAQ|Local\",\\n  \"reading_time\": 6\\n}\\n\\nRègles : 4-6 sections H2, 3-5 questions FAQ, ton expert accessible, mentionner Notaires.io naturellement.`;\n\nconst body = JSON.stringify({\n  model: 'claude-sonnet-4-6',\n  max_tokens: 4096,\n  messages: [{ role: 'user', content: prompt }]\n});\n\nreturn [{ json: { body, keyword: kw } }];"
+        "jsCode": "// Construit la requête Claude en mode « améliorer ».\n// L'article existe déjà : on le renforce sur les requêtes que Google montre\n// comme réellement tapées, en gardant son slug — l'upsert le mettra à jour.\n\nconst c = $input.first().json;\nif (c.action !== 'ameliorer') return [];\n\nconst prompt = `Tu es un expert SEO spécialisé en droit notarial français, rédacteur senior pour Notaires.io.\n\nNotaires.io est une plateforme de prise de rendez-vous en ligne pour les études notariales, créée par une diplômée notaire. Les particuliers prennent rendez-vous en visio ou au cabinet, sur les disponibilités réelles de l'étude. Plus de 23 000 notaires référencés.\n\nMISSION : améliorer un article EXISTANT, pas en écrire un nouveau.\n\nArticle actuel : \"${c.titre_actuel}\"\nIl se positionne en ${c.position}ᵉ position sur « ${c.requete} », avec ${c.impressions} impressions et ${c.clics} clic(s) sur 30 jours.\nIl est vu, mais pas cliqué, ou pas assez haut placé.\n\nAutres requêtes qui mènent à cette page et auxquelles il doit répondre explicitement :\n${(c.requetes_liees || []).map((r) => `- ${r}`).join('\\n') || '- (aucune autre)'}\n\nCONTENU ACTUEL :\n${(c.contenu_actuel || '').slice(0, 12000)}\n\nCONSIGNES :\n- Reprends et enrichis ce contenu ; ne repars pas de zéro, ne perds rien de juste.\n- Traite explicitement chaque requête listée, avec le vocabulaire employé par l'internaute.\n- Ajoute ce qui manque : chiffres, délais, barèmes, cas particuliers, étapes concrètes.\n- Nous sommes en 2026 : aucune référence à 2024 ou 2025 ne doit subsister.\n- Les tarifs des actes sont fixés par décret. Notaires.io ne délivre aucun conseil juridique et n'est pas un office notarial.\n- N'annonce jamais de \"1er rendez-vous offert\" : cette accroche n'est pas la nôtre.\n- 1 800 à 2 500 mots, plus dense que l'original.\n\nRéponds UNIQUEMENT avec un objet JSON valide (sans markdown ni texte autour) :\n{\n  \"meta_title\": \"titre <title>, 55-60 caractères, mot-clé en début\",\n  \"meta_description\": \"meta description 140-155 caractères avec appel à l'action\",\n  \"h1\": \"titre H1 engageant\",\n  \"excerpt\": \"résumé 120-150 mots, mot-clé dans les 50 premiers\",\n  \"intro\": \"introduction 80-100 mots\",\n  \"content_html\": \"article HTML complet : h2, h3, p, ul/li, strong\",\n  \"faq\": [{ \"q\": \"question telle qu'elle est tapée\", \"r\": \"réponse 60-80 mots\" }],\n  \"category\": \"Succession|Immobilier|Mariage|Famille|Donation|Guide|FAQ|Local\",\n  \"reading_time\": 9\n}\n\n5 à 7 sections H2, 5 à 8 questions de FAQ reprenant les requêtes ci-dessus.`;\n\nreturn [{\n  json: {\n    // Opus 5 : même prix d'entrée que Sonnet 4.6, nettement meilleur en rédaction.\n    // 16 000 tokens de sortie : 4 096 tronquait les articles en plein milieu.\n    body: JSON.stringify({\n      model: 'claude-opus-5',\n      max_tokens: 16000,\n      messages: [{ role: 'user', content: prompt }],\n    }),\n    slug: c.slug,          // on garde le slug : c'est ce qui fait l'UPDATE\n    cible: c,\n  },\n}];\n"
       },
       "id": "n4",
       "name": "🧠 Construire prompt Claude",
@@ -110,7 +110,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const response = $input.item.json;\nconst kw = $('🧠 Construire prompt Claude').item.json.keyword;\n\nlet rawText;\ntry {\n  rawText = response.content[0].text;\n} catch(e) {\n  throw new Error('Réponse Claude illisible: ' + JSON.stringify(response).substring(0, 200));\n}\n\nlet art;\ntry {\n  const cleaned = rawText.replace(/^```json\\s*/i, '').replace(/\\s*```$/i, '').trim();\n  art = JSON.parse(cleaned);\n} catch(e) {\n  throw new Error('JSON invalide: ' + rawText.substring(0, 400));\n}\n\nconst slug = (art.slug || '')\n  .toLowerCase()\n  .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')\n  .replace(/[^a-z0-9-]/g, '-')\n  .replace(/-+/g, '-')\n  .replace(/^-|-$/g, '');\nconst now = new Date();\nconst dateSuffix = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + '-' + String(now.getHours()).padStart(2,'0') + 'h';\nconst uniqueSlug = slug; // horodatage retire : il creait un doublon par execution\n\nconst article = {\n  slug: uniqueSlug || slug,\n  title: art.h1 || art.meta_title || kw.keyword,\n  meta_title: art.meta_title || null,\n  meta_description: art.meta_description || null,\n  excerpt: art.excerpt || null,\n  h1: art.h1 || null,\n  intro: art.intro || null,\n  content_html: art.content_html || '',\n  faq_json: art.faq || null,\n  category: art.category || kw.category || 'Guide',\n  keyword: kw.keyword,\n  keyword_type: kw.source || 'fallback',\n  reading_time: art.reading_time || 6,\n  published: true,\n};\n\nreturn [{ json: { article, keyword: kw } }];"
+        "jsCode": "// Parse la réponse de Claude et réutilise le slug de l'article existant.\n// C'est ce slug, inchangé, qui fait que l'upsert Supabase MET À JOUR la page\n// au lieu d'en créer une nouvelle. Ne jamais y ajouter d'horodatage : c'est\n// exactement ce qui avait produit 337 articles pour 39 sujets.\n\nconst response = $input.item.json;\nconst amont = $('🧠 Construire prompt Claude').item.json;\n\nlet rawText;\ntry {\n  rawText = response.content[0].text;\n} catch (e) {\n  throw new Error('Réponse Claude illisible: ' + JSON.stringify(response).substring(0, 200));\n}\n\nlet art;\ntry {\n  art = JSON.parse(rawText.replace(/^```json\\s*/i, '').replace(/\\s*```$/i, '').trim());\n} catch (e) {\n  throw new Error('JSON invalide dans réponse Claude: ' + rawText.substring(0, 400));\n}\n\nconst article = {\n  slug: amont.slug,                       // ← slug conservé, donc UPDATE\n  title: art.h1 || art.meta_title || amont.cible.titre_actuel,\n  meta_title: art.meta_title || null,\n  meta_description: art.meta_description || null,\n  excerpt: art.excerpt || null,\n  h1: art.h1 || null,\n  intro: art.intro || null,\n  content_html: art.content_html || '',\n  faq_json: art.faq || null,\n  category: art.category || 'Guide',\n  keyword: amont.cible.requete,\n  keyword_type: 'gsc-amelioration',\n  reading_time: art.reading_time || 9,\n  published: true,\n};\n\nreturn [{ json: { article, cible: amont.cible } }];\n"
       },
       "id": "n6",
       "name": "🔍 Parser réponse Claude",
@@ -228,6 +228,67 @@
           "name": "Resend SMTP LegalCorners"
         }
       }
+    },
+    {
+      "id": "n20",
+      "name": "📖 Lire les articles publiés",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        432,
+        464
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "=https://stgbcjvklljoqlpzoagu.supabase.co/rest/v1/blog_articles?published=eq.true&select=slug,title,keyword,content_html",
+        "sendHeaders": true,
+        "specifyHeaders": "keypair",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0Z2JjanZrbGxqb3FscHpvYWd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDU3NDg5MSwiZXhwIjoyMDk2MTUwODkxfQ.Fo4WnNX41TrAIJUS7X8uSNcywkgkAQRt6vvx_UItUC0"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0Z2JjanZrbGxqb3FscHpvYWd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDU3NDg5MSwiZXhwIjoyMDk2MTUwODkxfQ.Fo4WnNX41TrAIJUS7X8uSNcywkgkAQRt6vvx_UItUC0"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "n21",
+      "name": "📡 IndexNow — signaler la mise à jour",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1888,
+        304
+      ],
+      "parameters": {
+        "jsCode": "// Volet GEO : signaler la page mise à jour à IndexNow.\n//\n// Bing prend les URL en quelques minutes là où Google met des semaines — et\n// ChatGPT s'appuie sur l'index de Bing pour ses recherches web. C'est le\n// canal où notaires.io peut devancer des concurrents mieux installés sur\n// Google : les moteurs de réponse citent qui répond clairement, pas qui a\n// le plus d'ancienneté.\nconst slug = $('🔍 Parser réponse Claude').first().json.article.slug;\nreturn [{\n  json: {\n    host: 'notaires.io',\n    key: \"b36c029fbecfe439b305e7b1a6dc7aab\",\n    keyLocation: \"https://notaires.io/b36c029fbecfe439b305e7b1a6dc7aab.txt\",\n    urlList: [`https://notaires.io/blog/${slug}`],\n  },\n}];\n"
+      }
+    },
+    {
+      "id": "n22",
+      "name": "📡 IndexNow — envoi",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2096,
+        304
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.indexnow.org/indexnow",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify($json) }}",
+        "options": {}
+      }
     }
   ],
   "pinData": {},
@@ -247,14 +308,7 @@
       "main": [
         [
           {
-            "node": "🎯 Analyser GSC + choisir mot-clé",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "🎯 Analyser GSC + choisir mot-clé",
+            "node": "📖 Lire les articles publiés",
             "type": "main",
             "index": 0
           }
@@ -320,7 +374,7 @@
       "main": [
         [
           {
-            "node": "💌 Email de confirmation",
+            "node": "📡 IndexNow — signaler la mise à jour",
             "type": "main",
             "index": 0
           }
@@ -332,6 +386,39 @@
         [
           {
             "node": "📧 Email — Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📖 Lire les articles publiés": {
+      "main": [
+        [
+          {
+            "node": "🎯 Analyser GSC + choisir mot-clé",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📡 IndexNow — signaler la mise à jour": {
+      "main": [
+        [
+          {
+            "node": "📡 IndexNow — envoi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "📡 IndexNow — envoi": {
+      "main": [
+        [
+          {
+            "node": "💌 Email de confirmation",
             "type": "main",
             "index": 0
           }

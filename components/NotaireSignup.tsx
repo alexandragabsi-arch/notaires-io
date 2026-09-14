@@ -65,6 +65,9 @@ export default function NotaireSignup() {
   const [payError, setPayError] = useState("");
   // Formule « jeune notaire » : déclarative, moins de trois ans d'exercice.
   const [jeunePro, setJeunePro] = useState(false);
+  // Code d'invitation : ouvre un accès offert sans carte ni abonnement Stripe.
+  // Réservé aux testeurs et confrères invités — un code ne sert qu'une fois.
+  const [codeInvit, setCodeInvit] = useState("");
   // Champ piège anti-robot : toujours vide chez un humain.
   const [piege, setPiege] = useState("");
 
@@ -219,7 +222,33 @@ export default function NotaireSignup() {
       }
       setSavedProfile(profile);
 
-      // 2. Crée la session Stripe Checkout
+      // 2a. Code d'invitation : on ouvre l'accès offert et on s'arrête là.
+      //     Ni Stripe, ni carte, ni prélèvement possible — c'est tout l'intérêt
+      //     pour un testeur, qui n'aurait sinon aucune raison de confier sa CB.
+      if (codeInvit.trim()) {
+        const res = await fetch("/api/invitation", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code: codeInvit.trim(),
+            notaireId: profile.id,
+            userId,
+          }),
+        });
+        const data = (await res.json()) as { ok?: boolean; error?: string };
+
+        if (data.ok) {
+          window.location.href = "/espace-notaire?bienvenue=1";
+        } else {
+          // Le profil est déjà créé : on laisse l'utilisateur corriger son code
+          // ou repartir sur le paiement, sans lui refaire tout le tunnel.
+          setPayError(data.error ?? "Ce code n'a pas pu être validé.");
+          setPaying(false);
+        }
+        return;
+      }
+
+      // 2b. Crée la session Stripe Checkout
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -869,6 +898,28 @@ export default function NotaireSignup() {
                           {" — "}tarif jeune notaire à 99 € HT/mois au lieu de 119 €. Un justificatif de nomination pourra vous être demandé.
                         </span>
                       </label>
+
+                      {/* Code d'invitation — discret : c'est l'exception, pas la règle.
+                          Le mettre en avant inviterait chacun à en chercher un. */}
+                      <details className="bg-white border border-[var(--color-border-soft)] rounded-xl px-4 py-3">
+                        <summary className="text-[13px] font-semibold text-[var(--color-muted)] cursor-pointer select-none">
+                          J&apos;ai un code d&apos;invitation
+                        </summary>
+                        <input
+                          type="text"
+                          value={codeInvit}
+                          onChange={(e) => setCodeInvit(e.target.value.toUpperCase())}
+                          placeholder="Votre code"
+                          autoComplete="off"
+                          spellCheck={false}
+                          className="mt-3 w-full border border-[var(--color-border-soft)] rounded-lg px-3 py-2.5 text-[14px] font-mono tracking-wider uppercase focus:outline-none focus:border-[var(--color-accent)]"
+                        />
+                        {codeInvit.trim() && (
+                          <p className="mt-2 text-[12px] text-[var(--color-success)] font-semibold">
+                            Aucune carte bancaire ne vous sera demandée.
+                          </p>
+                        )}
+                      </details>
 
                       {/* Ce qui est inclus */}
                       <ul className="flex flex-col gap-2.5">

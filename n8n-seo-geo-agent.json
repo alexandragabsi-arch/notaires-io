@@ -312,6 +312,13 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "📖 Lire les articles publiés",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },

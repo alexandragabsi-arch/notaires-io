@@ -130,11 +130,11 @@
           "parameters": [
             {
               "name": "apikey",
-              "value": "=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0Z2JjanZrbGxqb3FscHpvYWd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDU3NDg5MSwiZXhwIjoyMDk2MTUwODkxfQ.Fo4WnNX41TrAIJUS7X8uSNcywkgkAQRt6vvx_UItUC0"
+              "value": "=__CLE_SUPABASE_RETIREE_VOIR_README__"
             },
             {
               "name": "Authorization",
-              "value": "=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN0Z2JjanZrbGxqb3FscHpvYWd1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDU3NDg5MSwiZXhwIjoyMDk2MTUwODkxfQ.Fo4WnNX41TrAIJUS7X8uSNcywkgkAQRt6vvx_UItUC0"
+              "value": "=Bearer __CLE_SUPABASE_RETIREE_VOIR_README__"
             },
             {
               "name": "Content-Type",

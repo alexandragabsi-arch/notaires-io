@@ -15,6 +15,20 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // Consolidation du blog (14/09/2026). L'agent SEO ajoutait un horodatage
+      // au slug à chaque exécution : le même mot-clé produisait une page neuve
+      // au lieu de mettre à jour l'existante — 337 articles pour 39 sujets,
+      // jusqu'à 17 versions de « PACS ou mariage ». Google, face à 17 pages qui
+      // se cannibalisent, n'en classait aucune.
+      //
+      // Les 39 versions retenues portent désormais une URL sans date. Cette
+      // règle unique renvoie les 337 anciennes URL vers elles, en 308, pour ne
+      // perdre ni les visiteurs ni le peu d'autorité déjà acquise.
+      {
+        source: "/blog/:sujet([a-z0-9-]+)-:date(\\d{4}-\\d{2}-\\d{2}-\\d{2}h)",
+        destination: "/blog/:sujet",
+        permanent: true,
+      },
       // « réinitialiser » est l'orthographe naturelle en français : sans ces
       // redirections, un utilisateur qui saisit l'accent tombe sur un 404.
       {

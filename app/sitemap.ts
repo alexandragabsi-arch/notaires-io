@@ -3,6 +3,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { DEPARTEMENTS } from "@/lib/departements-data";
 import { getVillesCouvertes } from "@/lib/villes-data";
 import { getDynamicArticles } from "@/lib/blog-supabase";
+import { BLOG_POSTS } from "@/lib/blog-posts";
 
 const BASE = "https://notaires.io";
 
@@ -89,37 +90,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/notaire-contrat-mariage`, lastModified: NOW, changeFrequency: "weekly", priority: 0.9 },
   ];
 
+  // Les 91 articles du dépôt étaient recopiés à la main ici : 60 d'entre eux
+  // n'y figuraient pas, et restaient donc introuvables pour Google autrement
+  // que par les liens internes. La liste est désormais dérivée de la source.
+  //
+  // `lastModified` porte la vraie date de publication, pas l'heure du build :
+  // un lastmod qui change à chaque déploiement finit par être ignoré.
   const blogPages: MetadataRoute.Sitemap = [
-    { url: `${BASE}/blog`,                                                                      lastModified: NOW, changeFrequency: "weekly",  priority: 0.8 },
-    { url: `${BASE}/blog/contrat-de-mariage-separation-de-biens-ou-communaute`,                 lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/frais-de-notaire-achat-immobilier`,                                    lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/delai-succession-notaire`,                                             lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/pacs-ou-mariage-difference-notaire`,                                   lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/premier-rendez-vous-notaire-gratuit`,                                  lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/donation-enfants-avant-deces`,                                         lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/testament-olographe-notarie`,                                          lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/assurance-vie-succession-notaire`,                                     lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/heritiers-reservataires-quotite`,                                      lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/declaration-succession-delais`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/succession-sans-testament`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/desheriter-enfant-possible`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/droits-succession-calcul`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/acte-notoriete-succession`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/partage-succession-indivision`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/renoncer-succession-notaire`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/succession-concubin-non-marie`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/optimisation-fiscale-succession`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/rapport-donation-succession`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/legs-testament-notaire`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/succession-internationale`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/compromis-acte-de-vente-difference`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/plus-value-immobiliere-exoneration`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/viager-notaire-guide`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/sci-familiale-creation-notaire`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/achat-immobilier-indivision`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/servitude-passage-notaire`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/promesse-vente-unilaterale`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/blog/frais-notaire-neuf-vefa`, lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
+    { url: `${BASE}/blog`, lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
+    ...BLOG_POSTS.map((post) => ({
+      url: `${BASE}/blog/${post.slug}`,
+      lastModified: new Date(post.date),
+      changeFrequency: "monthly" as const,
+      priority: 0.75,
+    })),
   ];
 
   // 95 pages départements

@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { BLOG_POSTS } from "@/lib/blog-posts";
 import { getDynamicArticles } from "@/lib/blog-supabase";
+import { SLUGS_RETIRES } from "@/lib/fusions-blog";
 
 // Revalidate every 5 minutes so new N8N articles appear quickly
 export const revalidate = 300;
@@ -47,7 +48,12 @@ export default async function BlogPage() {
   const merged = [
     ...dynamic,
     ...staticPosts.filter((p) => !dynamicSlugs.has(p.slug)),
-  ].sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime());
+  ]
+    // Les pages fusionnées redirigent : les lister enverrait le lecteur — et
+    // le robot — sur une 308, et entretiendrait la cannibalisation corrigée
+    // le 15/09. Voir lib/fusions-blog.ts.
+    .filter((p) => !SLUGS_RETIRES.has(p.slug))
+    .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime());
 
   return (
     <>

@@ -55,3 +55,5 @@ scripts/enriched*.csv
 scripts/envois-prospection.csv
 scripts/desabonnements.txt
 scripts/generic_batch*.json
+scripts/appels-paris.csv
+scripts/appels-mobiles-idf.csv

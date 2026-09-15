@@ -280,9 +280,41 @@ def envoyer(cle, dest, nom):
         raise RuntimeError(f"{e.code} {e.read().decode()[:200]}") from None
 
 
+# ----------------------------------------------------------------------------
+# ⛔ CAMPAGNE SUSPENDUE — 15/09/2026
+#
+# notaires.io est inscrit sur la Spamhaus DBL (code 127.0.1.2, « domaine de
+# spam »), sous-domaines compris. Vérifiable à tout moment :
+#
+#     dig +short A notaires.io.dbl.spamhaus.org
+#     (vide = retiré ; 127.0.1.x = toujours listé)
+#
+# La cause est l'envoi à un fichier d'adresses collectées sans consentement :
+# 29 messages en 90 secondes le 08/09 vers @notaires.fr, depuis un domaine né
+# treize jours plus tôt. Tant que le domaine est listé, chaque envoi aggrave le
+# dossier et Spamhaus refuse le retrait — et le malus ne frappe pas que la
+# prospection : il touche AUSSI les confirmations de rendez-vous et les factures,
+# puisque la DBL est consultée sur les liens contenus dans les messages.
+#
+# Ce garde-fou saute quand, et seulement quand, les trois conditions sont
+# réunies : le domaine est retiré de la DBL, les destinataires ont donné leur
+# accord, et la cadence reste basse. Le retirer sans cela relisterait le domaine
+# en quelques jours.
+CAMPAGNE_SUSPENDUE = True
+
+
 def main():
     n = int(sys.argv[1])
     go = "--go" in sys.argv
+    if go and CAMPAGNE_SUSPENDUE:
+        sys.exit(
+            "ARRÊT : campagne suspendue — notaires.io est sur la Spamhaus DBL.\n"
+            "Vérifier : dig +short A notaires.io.dbl.spamhaus.org\n"
+            "Une réponse vide signifie que le domaine est retiré ; passer alors\n"
+            "CAMPAGNE_SUSPENDUE à False, et n'écrire qu'à des personnes\n"
+            "qui ont donné leur accord.\n"
+            "(La simulation sans --go reste possible.)"
+        )
     # --relance : réécrit aussi aux adresses déjà contactées lors d'une campagne
     # précédente. Les désabonnés restent exclus en toutes circonstances.
     relance = "--relance" in sys.argv

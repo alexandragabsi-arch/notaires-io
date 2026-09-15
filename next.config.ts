@@ -15,6 +15,86 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // Consolidation par SUJET (15/09/2026). La passe de la veille avait
+      // dédoublonné les URL, pas les thèmes : six sujets restaient couverts par
+      // 21 pages — « notaire succession » à lui seul en avait six. Elles se
+      // cannibalisaient entre elles, et l'agent SEO tournait en rond dessus.
+      // Une seule page par sujet désormais, les autres renvoyées ici.
+      {
+        source: "/blog/contrat-de-mariage-notaire-choisir-regime-matrimonial",
+        destination: "/blog/contrat-de-mariage-notaire",
+        permanent: true,
+      },
+      {
+        source: "/blog/contrat-de-mariage-notaire-quel-regime-choisir",
+        destination: "/blog/contrat-de-mariage-notaire",
+        permanent: true,
+      },
+      {
+        source: "/blog/contrat-mariage-notaire-choisir-regime-matrimonial",
+        destination: "/blog/contrat-de-mariage-notaire",
+        permanent: true,
+      },
+      {
+        source: "/blog/donation-enfants-notaire-guide-complet",
+        destination: "/blog/donation-enfants-notaire",
+        permanent: true,
+      },
+      {
+        source: "/blog/notaire-succession-role-delais-couts",
+        destination: "/blog/notaire-succession",
+        permanent: true,
+      },
+      {
+        source: "/blog/notaire-succession-role-demarches-couts",
+        destination: "/blog/notaire-succession",
+        permanent: true,
+      },
+      {
+        source: "/blog/notaire-succession-role-demarches-honoraires",
+        destination: "/blog/notaire-succession",
+        permanent: true,
+      },
+      {
+        source: "/blog/notaire-succession-role-etapes-couts",
+        destination: "/blog/notaire-succession",
+        permanent: true,
+      },
+      {
+        source: "/blog/notaire-succession-role-etapes-frais",
+        destination: "/blog/notaire-succession",
+        permanent: true,
+      },
+      {
+        source: "/blog/rdv-notaire-rapide-prendre-rendez-vous-en-ligne",
+        destination: "/blog/rdv-notaire-rapide",
+        permanent: true,
+      },
+      {
+        source: "/blog/rdv-notaire-rapide-rendez-vous-en-ligne",
+        destination: "/blog/rdv-notaire-rapide",
+        permanent: true,
+      },
+      {
+        source: "/blog/regime-matrimonial-notaire-choisir",
+        destination: "/blog/regime-matrimonial-notaire",
+        permanent: true,
+      },
+      {
+        source: "/blog/regime-matrimonial-notaire-choisir-contrat-mariage",
+        destination: "/blog/regime-matrimonial-notaire",
+        permanent: true,
+      },
+      {
+        source: "/blog/regime-matrimonial-notaire-comment-choisir",
+        destination: "/blog/regime-matrimonial-notaire",
+        permanent: true,
+      },
+      {
+        source: "/blog/testament-notaire-cout-tarifs",
+        destination: "/blog/testament-notaire-cout",
+        permanent: true,
+      },
       // Consolidation du blog (14/09/2026). L'agent SEO ajoutait un horodatage
       // au slug à chaque exécution : le même mot-clé produisait une page neuve
       // au lieu de mettre à jour l'existante — 337 articles pour 39 sujets,

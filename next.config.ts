@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      {
+        source: "/blog/prendre-rendez-vous-notaire-en-ligne",
+        destination: "/blog/rdv-notaire-rapide",
+        permanent: true,
+      },
       // Consolidation par SUJET (15/09/2026). La passe de la veille avait
       // dédoublonné les URL, pas les thèmes : six sujets restaient couverts par
       // 21 pages — « notaire succession » à lui seul en avait six. Elles se

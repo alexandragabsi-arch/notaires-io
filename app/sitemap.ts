@@ -4,6 +4,7 @@ import { DEPARTEMENTS } from "@/lib/departements-data";
 import { getVillesCouvertes } from "@/lib/villes-data";
 import { getDynamicArticles } from "@/lib/blog-supabase";
 import { BLOG_POSTS } from "@/lib/blog-posts";
+import { SLUGS_RETIRES } from "@/lib/fusions-blog";
 
 const BASE = "https://notaires.io";
 
@@ -98,7 +99,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // un lastmod qui change à chaque déploiement finit par être ignoré.
   const blogPages: MetadataRoute.Sitemap = [
     { url: `${BASE}/blog`, lastModified: NOW, changeFrequency: "weekly", priority: 0.8 },
-    ...BLOG_POSTS.map((post) => ({
+    // Les pages fusionnées redirigent : les déclarer reviendrait à envoyer
+    // Google vers des 308 et à entretenir la cannibalisation qu'on vient de
+    // corriger.
+    ...BLOG_POSTS.filter((post) => !SLUGS_RETIRES.has(post.slug)).map((post) => ({
       url: `${BASE}/blog/${post.slug}`,
       lastModified: new Date(post.date),
       changeFrequency: "monthly" as const,
@@ -122,6 +126,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticBlogSlugs = new Set(blogPages.map((p) => p.url));
   const dynamicBlogPages: MetadataRoute.Sitemap = dynamicArticles
     .filter((a) => !staticBlogSlugs.has(`${BASE}/blog/${a.slug}`))
+    .filter((a) => !SLUGS_RETIRES.has(a.slug))
     .map((a) => ({
       url: `${BASE}/blog/${a.slug}`,
       lastModified: new Date(a.published_at),

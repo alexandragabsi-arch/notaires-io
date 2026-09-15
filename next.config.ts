@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { FUSIONS_BLOG } from "./lib/fusions-blog";
 
 const nextConfig: NextConfig = {
   async headers() {
@@ -15,6 +16,15 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // Fusion par INTENTION (15/09/2026). La consolidation précédente avait
+      // réglé les doublons de sujet ; restaient neuf pages qui visaient toutes
+      // « rdv notaire », la requête la plus stratégique du site. Voir
+      // lib/fusions-blog.ts pour le détail et la page conservée à chaque fois.
+      ...Object.entries(FUSIONS_BLOG).map(([ancien, nouveau]) => ({
+        source: `/blog/${ancien}`,
+        destination: `/blog/${nouveau}`,
+        permanent: true,
+      })),
       {
         source: "/blog/prendre-rendez-vous-notaire-en-ligne",
         destination: "/blog/rdv-notaire-rapide",

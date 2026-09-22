@@ -4809,13 +4809,13 @@ function Article83() {
 function Article84() {
   return (
     <>
-<p className="lead">Combien coûte une consultation chez le notaire en 2026 ? Tout dépend de ce que vous demandez : un renseignement rapide, un conseil lié à un acte ou une vraie consultation sans acte à la clé. Ce guide distingue les trois et donne les fourchettes pratiquées.</p>
+<p className="lead">Faut-il payer pour poser une question à un notaire ? Dans la grande majorité des cas, non. Un renseignement est gratuit, le conseil lié à un acte est compris dans le prix de l'acte, et la prise de rendez-vous sur notaires.io ne vous coûte rien.</p>
 
 {/* Réponse directe, placée sous la question exacte que posent les internautes :
     c'est le passage que les moteurs reprennent tel quel dans leurs réponses. */}
 <h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Quel est le prix pour un renseignement chez un notaire ?</h2>
 <div className="bg-[var(--color-tint-blue)] border-l-4 border-[var(--color-accent)] rounded-xl p-5 mb-8">
-<p className="text-[var(--color-text-strong)] leading-relaxed">Un <strong>simple renseignement chez un notaire est en général gratuit</strong> : une question courte, par téléphone ou lors d'un premier échange, n'est pas facturée. Une <strong>consultation approfondie qui ne débouche pas sur un acte est payante</strong> : ses honoraires sont libres, fixés par écrit avec le notaire, le plus souvent entre <strong>80 et 400 € HT</strong>.</p>
+<p className="text-[var(--color-text-strong)] leading-relaxed">Un <strong>renseignement chez un notaire est gratuit</strong> : une question simple, par téléphone ou lors d'un premier échange, n'est pas facturée. Le conseil qui prépare un acte est compris dans le prix de cet acte. Seule une consultation approfondie sans acte peut être payante, à un prix que le notaire doit vous annoncer avant.</p>
 </div>
 
 <h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Gratuit ou payant : les trois cas</h2>
@@ -4830,41 +4830,40 @@ function Article84() {
 </thead>
 <tbody className="text-[var(--color-muted)]">
 <tr>
-<td className="border-b border-[var(--color-border-soft)] py-2 pr-4"><strong className="text-[var(--color-text-strong)]">Renseignement rapide</strong></td>
-<td className="border-b border-[var(--color-border-soft)] py-2 pr-4">0 € en général</td>
-<td className="border-b border-[var(--color-border-soft)] py-2">Question générale, orientation, premier contact : les études ne le facturent pas en pratique.</td>
+<td className="border-b border-[var(--color-border-soft)] py-2 pr-4"><strong className="text-[var(--color-text-strong)]">Renseignement</strong></td>
+<td className="border-b border-[var(--color-border-soft)] py-2 pr-4">Gratuit</td>
+<td className="border-b border-[var(--color-border-soft)] py-2">Question générale, orientation, premier contact : le notaire ne le facture pas.</td>
 </tr>
 <tr>
 <td className="border-b border-[var(--color-border-soft)] py-2 pr-4"><strong className="text-[var(--color-text-strong)]">Conseil lié à un acte</strong></td>
-<td className="border-b border-[var(--color-border-soft)] py-2 pr-4">Inclus dans l'acte</td>
-<td className="border-b border-[var(--color-border-soft)] py-2">Pour un acte au tarif réglementé (vente, donation, contrat de mariage…), le conseil est compris dans les <a href="/blog/emoluments-notaire-calcul-tarifs-reglementes" className="text-[var(--color-accent)] underline">émoluments</a>.</td>
+<td className="border-b border-[var(--color-border-soft)] py-2 pr-4">Compris dans l'acte</td>
+<td className="border-b border-[var(--color-border-soft)] py-2">Pour un acte au tarif réglementé (vente, donation, contrat de mariage…), le conseil est inclus dans les <a href="/blog/emoluments-notaire-calcul-tarifs-reglementes" className="text-[var(--color-accent)] underline">émoluments</a> : il ne s'ajoute pas.</td>
 </tr>
 <tr>
-<td className="py-2 pr-4"><strong className="text-[var(--color-text-strong)]">Consultation sans acte</strong></td>
-<td className="py-2 pr-4">80 à 400 € HT</td>
-<td className="py-2">Prestation hors tarif : honoraires libres, convenus avec vous par écrit (article L444-1 du Code de commerce), TVA de 20 % en sus.</td>
+<td className="py-2 pr-4"><strong className="text-[var(--color-text-strong)]">Consultation approfondie sans acte</strong></td>
+<td className="py-2 pr-4">Annoncé à l'avance</td>
+<td className="py-2">Prestation hors tarif réglementé : le notaire en fixe le prix librement et doit vous l'indiquer avant de commencer.</td>
 </tr>
 </tbody>
 </table>
 </div>
 
 <KeyPoints points={[
-  "Un renseignement rapide n'est en général pas facturé.",
-  "Pour les actes tarifés, le conseil est inclus dans les émoluments de l'acte.",
-  "Une consultation sans acte coûte le plus souvent 80 à 400 € HT, selon sa durée et sa complexité.",
-  "Des consultations gratuites existent auprès des chambres des notaires, des Points-justice et des maisons de justice et du droit."
+  "Un renseignement chez le notaire est gratuit.",
+  "Pour les actes tarifés, le conseil est compris dans les émoluments de l'acte.",
+  "Une consultation approfondie sans acte peut être payante : le prix vous est annoncé avant.",
+  "Sur notaires.io, la prise de rendez-vous est gratuite."
 ]} />
 
-<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Les tarifs selon le type de consultation</h2>
-<p className="text-[var(--color-muted)] mb-4 leading-relaxed">Les montants ci-dessous sont des ordres de grandeur constatés : chaque étude fixe librement ses honoraires hors tarif, et doit vous les annoncer avant de commencer.</p>
-<p className="text-[var(--color-muted)] mb-4 leading-relaxed"><strong className="text-[var(--color-text-strong)]">Consultation juridique simple (30 min) :</strong> 80 à 150 € HT. Pour une question précise (validité d'un contrat, droits d'un héritier, interprétation d'un texte). Ce type de consultation est souvent offert si l'étude espère décrocher un dossier.</p>
-<p className="text-[var(--color-muted)] mb-4 leading-relaxed"><strong className="text-[var(--color-text-strong)]">Bilan patrimonial (1 à 2 heures) :</strong> 200 à 600 € HT. Analyse complète de votre situation (patrimoine, régime matrimonial, fiscalité, objectifs de transmission). Les études spécialisées en gestion de patrimoine peuvent facturer davantage.</p>
-<p className="text-[var(--color-muted)] mb-4 leading-relaxed"><strong className="text-[var(--color-text-strong)]">Consultation successorale :</strong> souvent incluse dans les émoluments de règlement de succession si vous mandatez le notaire pour la gestion de la succession. Pour une consultation pure sans mandat de succession, comptez 150 à 300 € HT.</p>
-<p className="text-[var(--color-muted)] mb-6 leading-relaxed"><strong className="text-[var(--color-text-strong)]">Conseil en droit des affaires :</strong> 200 à 500 € HT l'heure pour les opérations complexes (transmission d'entreprise, pacte Dutreil, restructuration sociétaire). Ces honoraires sont comparables à ceux des avocats d'affaires.</p>
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Prendre rendez-vous sans frais</h2>
+<p className="text-[var(--color-muted)] mb-4 leading-relaxed">Sur notaires.io, <strong className="text-[var(--color-text-strong)]">réserver un rendez-vous avec un notaire est gratuit</strong> : vous choisissez l'étude et le créneau, en visio ou au cabinet, sans frais de réservation. Si votre projet aboutit à un acte, le conseil reçu lors de ce rendez-vous est compris dans le prix de l'acte.</p>
+<p className="text-[var(--color-muted)] mb-6 leading-relaxed">Pour en savoir plus sur ce premier échange, lisez <a href="/blog/premier-rendez-vous-notaire-gratuit" className="text-[var(--color-accent)] underline">le premier rendez-vous chez le notaire est-il gratuit ?</a>. Pour le coût des actes eux-mêmes, voyez <a href="/blog/tarifs-honoraires-notaire" className="text-[var(--color-accent)] underline">tarifs et honoraires du notaire</a>.</p>
 
-<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Comment optimiser le coût de votre consultation</h2>
-<p className="text-[var(--color-muted)] mb-4 leading-relaxed">Préparez une liste de questions précises — évitez les questions vagues du type "qu'est-ce que je dois faire ?". Plus votre situation est documentée et vos questions ciblées, moins de temps (et donc d'honoraires) seront nécessaires.</p>
-<p className="text-[var(--color-muted)] leading-relaxed">Pour les personnes souhaitant une consultation gratuite, les <strong className="text-[var(--color-text-strong)]">maisons de justice et du droit</strong>, les <strong className="text-[var(--color-text-strong)]">Points-justice</strong> (anciens points d'accès au droit), les <strong className="text-[var(--color-text-strong)]">chambres départementales des notaires</strong> et certaines <strong className="text-[var(--color-text-strong)]">mairies</strong> proposent des permanences notariales gratuites. Pour savoir ce qu'il en est d'un premier rendez-vous en étude, voyez aussi <a href="/blog/premier-rendez-vous-notaire-gratuit" className="text-[var(--color-accent)] underline">le premier rendez-vous chez le notaire est-il gratuit ?</a> et <a href="/blog/tarifs-honoraires-notaire" className="text-[var(--color-accent)] underline">tarifs et honoraires du notaire</a>. Ces consultations sont limitées à des questions générales — pour un projet précis nécessitant un acte, l'étude notariale reste incontournable.</p>
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Les consultations gratuites hors étude</h2>
+<p className="text-[var(--color-muted)] mb-4 leading-relaxed">Les <strong className="text-[var(--color-text-strong)]">chambres départementales des notaires</strong>, les <strong className="text-[var(--color-text-strong)]">Points-justice</strong> (anciens points d'accès au droit) et les <strong className="text-[var(--color-text-strong)]">maisons de justice et du droit</strong> organisent des permanences notariales gratuites. Elles répondent aux questions générales ; un projet précis se traite ensuite avec un notaire.</p>
+
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Bien préparer votre rendez-vous</h2>
+<p className="text-[var(--color-muted)] leading-relaxed">Préparez une liste de questions précises et les documents utiles (titre de propriété, livret de famille, contrat de mariage…). Plus votre situation est claire, plus le notaire peut vous répondre dès le premier échange.</p>
 
 <InternalCTA />
     </>

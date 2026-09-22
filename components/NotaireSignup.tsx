@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { addProfile, claimProfile } from "@/lib/notaire-profiles";
+import { addProfile, claimProfile, erreurPhoto, PHOTO_TYPES } from "@/lib/notaire-profiles";
 import { isNotaireEmail, cleanCrpcen, isValidCrpcen } from "@/lib/notaire-email";
 import { sousSpecialitesPour } from "@/lib/sous-specialites";
 import { supabase } from "@/lib/supabase";
@@ -92,6 +92,7 @@ export default function NotaireSignup() {
   // Profil public
   const [photo, setPhoto] = useState<string | null>(null);    // data URL pour l'aperçu
   const [photoFile, setPhotoFile] = useState<File | null>(null); // fichier brut pour upload Storage
+  const [photoError, setPhotoError] = useState("");
   const [bio, setBio] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -144,6 +145,10 @@ export default function NotaireSignup() {
   function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    // Mêmes règles que le bucket Storage : JPG/PNG/WebP, 5 Mo max.
+    const erreur = erreurPhoto(file);
+    setPhotoError(erreur);
+    if (erreur) { e.target.value = ""; return; }
     setPhotoFile(file);  // garde le fichier brut pour l'upload Supabase Storage
     const reader = new FileReader();
     reader.onload = () => setPhoto(reader.result as string);  // aperçu local immédiat
@@ -162,7 +167,17 @@ export default function NotaireSignup() {
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email: email.trim(),
           password: password.trim(),
+          // Lien de confirmation → page de connexion notaire avec message de succès.
+          options: { emailRedirectTo: `${window.location.origin}/connexion?role=notaire&confirme=1` },
         });
+
+        // Confirmation d'e-mail active : un e-mail déjà inscrit ne renvoie pas
+        // d'erreur mais un utilisateur sans identité (anti-énumération Supabase).
+        if (!signUpError && signUpData.user && signUpData.user.identities?.length === 0) {
+          setPayError("Un compte existe déjà avec cet e-mail. Connectez-vous via la page Connexion.");
+          setPaying(false);
+          return;
+        }
 
         if (signUpError) {
           // Email déjà enregistré → essayer de se connecter avec le même mot de passe
@@ -271,8 +286,9 @@ export default function NotaireSignup() {
         setPayError(data.error ?? "Erreur lors de la création du paiement. Veuillez réessayer.");
         setPaying(false);
       }
-    } catch {
-      setPayError("Une erreur réseau est survenue. Veuillez réessayer.");
+    } catch (err) {
+      // Les erreurs d'enregistrement de fiche portent un message explicite.
+      setPayError(err instanceof Error && err.message ? err.message : "Une erreur réseau est survenue. Veuillez réessayer.");
       setPaying(false);
     }
   }
@@ -779,10 +795,13 @@ export default function NotaireSignup() {
                           <input
                             ref={fileRef}
                             type="file"
-                            accept="image/*"
+                            accept={PHOTO_TYPES.join(",")}
                             onChange={onPhoto}
                             className="hidden"
                           />
+                          {photoError && (
+                            <p className="mt-2 text-[13px] text-[var(--color-danger)]">{photoError}</p>
+                          )}
                         </div>
                       </div>
                       <Field label="Présentation (visible par vos clients)">

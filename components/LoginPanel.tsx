@@ -16,6 +16,11 @@ export default function LoginPanel() {
   const [notice, setNotice] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  // Compte créé mais e-mail pas encore confirmé → on propose de renvoyer le lien.
+  const [nonConfirme, setNonConfirme] = useState(false);
+  const [renvoi, setRenvoi] = useState<"" | "envoi" | "ok">("");
+  const [confirme, setConfirme] = useState(false);
+  const [attente, setAttente] = useState(false);
 
   // Réinitialisation de mot de passe (arrivée depuis le lien e-mail →
   // /connexion?reset=1 côté web, /reinitialiser-mot-de-passe depuis l'app iOS)
@@ -39,6 +44,12 @@ export default function LoginPanel() {
       ) {
         setRecoveryMode(true);
       }
+      // Retour depuis le lien de confirmation d'inscription.
+      if (params.get("confirme") === "1" || window.location.hash.includes("type=signup")) {
+        setConfirme(true);
+      }
+      // Arrivée juste après l'inscription, avant confirmation de l'e-mail.
+      if (params.get("attente") === "1") setAttente(true);
       // Présélection de l'onglet via ?role=notaire (arrivée depuis l'e-mail /
       // le lien « Espace notaire » / la redirection de /espace-notaire).
       const r = params.get("role");
@@ -55,6 +66,8 @@ export default function LoginPanel() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    setNonConfirme(false);
+    setRenvoi("");
 
     // Côté notaire : seule une adresse officielle notaires.fr (directe ou
     // sous-domaine de l'étude) est autorisée à se connecter.
@@ -73,12 +86,35 @@ export default function LoginPanel() {
     setLoading(false);
 
     if (authError) {
+      if (authError.code === "email_not_confirmed") {
+        setNonConfirme(true);
+        setError(
+          "Votre adresse e-mail n'est pas encore confirmée. Cliquez sur le lien reçu par e-mail (pensez aux indésirables).",
+        );
+        return;
+      }
       setError("E-mail ou mot de passe incorrect. Vérifiez vos identifiants.");
       return;
     }
 
     // Connexion réussie → espace correspondant au profil choisi
     window.location.href = isNotaire ? "/espace-notaire" : "/espace-client";
+  }
+
+  // Renvoie l'e-mail de confirmation d'inscription.
+  async function renvoyerConfirmation() {
+    setRenvoi("envoi");
+    const { error: resendError } = await supabase.auth.resend({
+      type: "signup",
+      email: email.trim(),
+      options: { emailRedirectTo: `${window.location.origin}/connexion?role=notaire&confirme=1` },
+    });
+    if (resendError) {
+      setRenvoi("");
+      setError("Impossible de renvoyer l'e-mail pour le moment. Réessayez dans une minute.");
+      return;
+    }
+    setRenvoi("ok");
   }
 
   // Validation + enregistrement du nouveau mot de passe via la session de récupération.
@@ -355,10 +391,38 @@ export default function LoginPanel() {
               )}
             </button>
 
+            {attente && !confirme && !error && (
+              <div className="text-[13px] text-[var(--color-text-strong)] bg-[var(--color-accent-soft)] rounded-[10px] px-3.5 py-3">
+                Inscription enregistrée. Dernière étape : cliquez sur le lien de confirmation
+                envoyé à votre adresse @notaires.fr (pensez aux indésirables), puis connectez-vous.
+              </div>
+            )}
+
+            {confirme && !error && (
+              <div className="text-[13px] text-[var(--color-text-strong)] bg-[var(--color-accent-soft)] rounded-[10px] px-3.5 py-3">
+                Adresse e-mail confirmée. Connectez-vous pour accéder à votre espace.
+              </div>
+            )}
+
             {error && (
               <div className="flex items-start gap-2 text-[13px] text-red-700 bg-red-50 rounded-[10px] px-3.5 py-3 border border-red-200">
                 <span>{error}</span>
               </div>
+            )}
+
+            {nonConfirme && (
+              <button
+                type="button"
+                onClick={renvoyerConfirmation}
+                disabled={renvoi !== ""}
+                className="text-[13px] font-medium text-[var(--color-accent)] hover:underline disabled:opacity-60 disabled:no-underline"
+              >
+                {renvoi === "ok"
+                  ? "E-mail de confirmation renvoyé ✓"
+                  : renvoi === "envoi"
+                    ? "Envoi…"
+                    : "Renvoyer l'e-mail de confirmation"}
+              </button>
             )}
 
             {notice && (

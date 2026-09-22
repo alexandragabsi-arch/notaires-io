@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { limiter, ipDe } from "@/lib/rate-limit";
 import { sendEmail, emailLayout, emailButton, ADMIN_EMAIL, SITE } from "@/lib/email";
+import { compteEstNotaire, MESSAGE_EMAIL_NON_NOTAIRE } from "@/lib/notaire-email-serveur";
 
 // Consomme un code d'invitation et ouvre l'accès offert, sans Stripe ni carte.
 //
@@ -43,7 +44,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Requête incomplète." }, { status: 400 });
   }
 
+  // Vérifié AVANT de consommer le code : un compte hors notaires.fr ne doit
+  // pas pouvoir brûler une invitation.
+  if (!(await compteEstNotaire(body.userId))) {
+    return NextResponse.json({ error: MESSAGE_EMAIL_NON_NOTAIRE }, { status: 403 });
+  }
+
   const supabase = getSupabase();
+
+  // La fiche doit appartenir à ce compte (rattachement fait par
+  // /api/profil-notaire) : sinon on offrirait l'accès à la fiche d'un autre.
+  const { data: fiche } = await supabase
+    .from("notaire_profiles")
+    .select("user_id")
+    .eq("id", body.notaireId)
+    .maybeSingle();
+  if (!fiche || fiche.user_id !== body.userId) {
+    return NextResponse.json({ error: "Fiche introuvable pour ce compte." }, { status: 403 });
+  }
 
   // Consommation atomique : la condition `utilise_par is null` fait partie de
   // l'UPDATE lui-même. Deux soumissions simultanées du même code ne peuvent

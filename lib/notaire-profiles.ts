@@ -3,6 +3,9 @@
 
 import type { ListingNotaire } from "./notaires-listing";
 import { supabase } from "./supabase";
+import { erreurPhoto } from "./photo-regles";
+
+export { erreurPhoto, PHOTO_TYPES } from "./photo-regles";
 
 const STORAGE_KEY = "notaires-io:profils";
 
@@ -27,22 +30,44 @@ export interface SignupProfile {
 }
 
 /**
- * Upload une photo vers le bucket Supabase Storage "notaire-photos".
- * Retourne l'URL publique si succès, null sinon (le bucket n'existe pas encore, etc.).
- *
- * ⚠️  Créer le bucket manuellement dans Supabase Dashboard :
- *     Storage → New bucket → "notaire-photos" → ✅ Public bucket
+ * Upload une photo vers le bucket Supabase Storage "notaire-photos"
+ * (cf. migration 20260922_notaire_photos_bucket.sql).
+ * Chemin : <auth.uid()>/<id>.<ext> — la policy RLS n'autorise l'écriture que
+ * dans le dossier de l'utilisateur connecté.
+ * Retourne l'URL publique si succès, null sinon.
  */
-async function uploadPhoto(id: string, file: File): Promise<string | null> {
+async function uploadPhoto(id: string, file: File, userId?: string): Promise<string | null> {
   try {
-    const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
-    const path = `${id}.${ext}`;
+    if (erreurPhoto(file)) return null;
+    const { data: session } = await supabase.auth.getUser();
+    const uid = session.user?.id;
+
+    // Pas de session : cas normal juste après l'inscription, tant que l'e-mail
+    // n'est pas confirmé. L'upload passe alors par le serveur, qui revérifie
+    // que le compte est bien un notaire.
+    if (!uid) {
+      if (!userId) return null;
+      const form = new FormData();
+      form.append("photo", file);
+      form.append("notaireId", id);
+      form.append("userId", userId);
+      const res = await fetch("/api/photo-notaire", { method: "POST", body: form });
+      const json = (await res.json().catch(() => ({}))) as { url?: string };
+      return json.url ?? null;
+    }
+
+    const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
+    const path = `${uid}/${id}.${ext}`;
     const { error } = await supabase.storage
       .from("notaire-photos")
       .upload(path, file, { upsert: true, contentType: file.type });
-    if (error) return null;
+    if (error) {
+      console.error("[photo] upload échoué :", error.message);
+      return null;
+    }
     const { data } = supabase.storage.from("notaire-photos").getPublicUrl(path);
-    return data.publicUrl ?? null;
+    // Cache-buster : l'URL reste identique quand le notaire change de photo.
+    return data.publicUrl ? `${data.publicUrl}?v=${Date.now()}` : null;
   } catch {
     return null;
   }
@@ -101,6 +126,7 @@ export async function getRemoteProfiles(): Promise<ListingNotaire[]> {
     languages: (row.languages as string[]) || undefined,
     bio: row.bio as string | undefined,
     photo: row.photo as string | undefined,
+    slotMatrix: (row.slot_matrix as string[][] | null) || undefined,
     next: "Sur demande",
     isNew: false,
   }));
@@ -133,15 +159,33 @@ function toListing(p: SignupProfile): ListingNotaire {
   };
 }
 
+// Écrit la fiche via /api/profil-notaire (la table n'est plus modifiable
+// directement avec la clé publique). Lève une erreur au message affichable.
+async function enregistrerFiche(ligne: Record<string, unknown>, userId?: string): Promise<void> {
+  const { data } = await supabase.auth.getSession();
+  const jeton = data.session?.access_token;
+  const res = await fetch("/api/profil-notaire", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(jeton ? { Authorization: `Bearer ${jeton}` } : {}),
+    },
+    body: JSON.stringify({ ...ligne, userId }),
+  });
+  const json = (await res.json().catch(() => ({}))) as { error?: string };
+  if (!res.ok) throw new Error(json.error ?? "L'enregistrement de la fiche a échoué. Réessayez.");
+}
+
 // Enregistre un nouveau profil : localStorage (instantané) + Supabase (persistant).
 export async function addProfile(p: SignupProfile): Promise<ListingNotaire> {
   const entry = toListing(p);
 
   // Upload photo vers Supabase Storage si un fichier est fourni
   if (p.photoFile) {
-    const url = await uploadPhoto(entry.id, p.photoFile);
-    if (url) entry.photo = url; // remplace le base64 par l'URL publique
-    // sinon entry.photo reste le data URL base64 (fallback)
+    const url = await uploadPhoto(entry.id, p.photoFile, p.userId);
+    // Échec : pas de base64 de plusieurs Mo dans une table publique — le
+    // notaire pourra ajouter sa photo depuis son espace.
+    entry.photo = url ?? undefined;
   }
 
   // 1. localStorage pour affichage immédiat
@@ -163,8 +207,8 @@ export async function addProfile(p: SignupProfile): Promise<ListingNotaire> {
     }
   }
 
-  // 2. Supabase pour persistance multi-utilisateurs
-  await supabase.from("notaire_profiles").upsert({
+  // 2. Supabase (via le serveur) pour persistance multi-utilisateurs
+  await enregistrerFiche({
     id: entry.id,
     name: entry.name,
     initials: entry.initials,
@@ -173,16 +217,13 @@ export async function addProfile(p: SignupProfile): Promise<ListingNotaire> {
     office_name: entry.officeName ?? null,
     crpcen: p.crpcen?.trim() || null,
     website: entry.website ?? null,
-    address: null,
-    phone: null,
     role: entry.role ?? null,
     specialties: entry.specialties,
     sub_specialties: entry.subSpecialties ?? [],
     languages: entry.languages ?? [],
     bio: entry.bio ?? null,
     photo: entry.photo ?? null,
-    user_id: p.userId ?? null,
-  });
+  }, p.userId);
 
   return entry;
 }
@@ -220,33 +261,31 @@ export async function claimProfile(
 
   // Upload photo si un fichier est fourni
   if (data.photoFile) {
-    const url = await uploadPhoto(id, data.photoFile);
+    const url = await uploadPhoto(id, data.photoFile, userId);
     if (url) photoUrl = url;
   }
 
   const initials = name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map((w: string) => w[0]).join("").toUpperCase() || "N";
 
-  await supabase.from("notaire_profiles").upsert({
+  // Seuls les champs renseignés sont envoyés : une modification partielle
+  // n'efface pas le reste de la fiche (le serveur ignore les « undefined »).
+  await enregistrerFiche({
     id,
     name,
     city,
     initials,
-    color: "default",
-    office_name: null,
-    crpcen: data.crpcen?.trim() || null,
-    website: data.website?.trim() ?? null,
-    address: data.address?.trim() ?? null,
-    phone: data.phone?.trim() ?? null,
-    email: data.email?.trim() ?? null,
-    role: null,
-    specialties: data.specialties ?? [],
-    sub_specialties: data.subSpecialties ?? [],
-    languages: data.languages ?? [],
-    bio: data.bio ?? null,
+    crpcen: data.crpcen,
+    website: data.website,
+    address: data.address,
+    phone: data.phone,
+    email: data.email,
+    specialties: data.specialties,
+    sub_specialties: data.subSpecialties,
+    languages: data.languages,
+    bio: data.bio,
     photo: photoUrl,
-    slot_matrix: data.slotMatrix ?? null,
-    user_id: userId ?? null,
-  });
+    slot_matrix: data.slotMatrix,
+  }, userId);
 
   // Sauvegarde localStorage → accès immédiat à /espace-notaire après paiement
   if (userId && typeof window !== "undefined") {
@@ -302,6 +341,7 @@ export async function getProfileByUserId(userId: string): Promise<ListingNotaire
     languages: (data.languages as string[]) || undefined,
     bio: data.bio as string | undefined,
     photo: data.photo as string | undefined,
+    slotMatrix: (data.slot_matrix as string[][] | null) || undefined,
     next: "Sur demande",
     isNew: false,
     claimed: true,

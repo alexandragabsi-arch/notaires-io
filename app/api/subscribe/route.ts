@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { limiter, ipDe, piegeDeclenche, reponsePiege } from "@/lib/rate-limit";
+import { compteEstNotaire, MESSAGE_EMAIL_NON_NOTAIRE } from "@/lib/notaire-email-serveur";
 
 /**
  * POST /api/subscribe
@@ -98,6 +99,11 @@ export async function POST(req: NextRequest) {
 
   // Champ piège : voir /api/booking. Réponse volontairement anodine.
   if (piegeDeclenche(body)) return reponsePiege("subscribe");
+
+  // Domaine notarial revérifié côté serveur sur l'e-mail réel du compte.
+  if (!(await compteEstNotaire(body.userId))) {
+    return NextResponse.json({ error: MESSAGE_EMAIL_NON_NOTAIRE }, { status: 403 });
+  }
 
   // ── Créer la session Checkout : 2 mois offerts, puis le tarif de la formule ─
   const trialEnd = finEssaiUnix();

@@ -279,6 +279,7 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   // Ouverture auto + scroll quand on arrive depuis l'espace notaire (#modifier)
   useEffect(() => {
@@ -349,6 +350,7 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
+    setSaveError("");
     try {
       const data: ClaimData = {
         photo: photoPreview || null,
@@ -364,6 +366,9 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
       };
       await claimProfile(notaire.id, notaire.name, notaire.city, data);
       setDone(true);
+    } catch (err) {
+      // Refus serveur : pas connecté, fiche d'un autre compte, etc.
+      setSaveError(err instanceof Error ? err.message : "L'enregistrement a échoué. Réessayez.");
     } finally {
       setSaving(false);
     }
@@ -657,6 +662,10 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
               Cliquez sur un créneau pour l'activer ou le désactiver.
             </p>
           </div>
+
+          {saveError && (
+            <p className="text-[13px] text-[var(--color-danger)]">{saveError}</p>
+          )}
 
           {/* Submit */}
           <button

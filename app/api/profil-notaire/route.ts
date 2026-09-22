@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { limiter, ipDe } from "@/lib/rate-limit";
 import { identifierNotaire, supabaseAdmin } from "@/lib/notaire-email-serveur";
+import { BIO_MAX } from "@/lib/photo-regles";
 
 // Création, revendication et modification d'une fiche notaire.
 //
@@ -127,7 +128,7 @@ export async function POST(req: NextRequest) {
     specialties: liste(body.specialties, 30),
     sub_specialties: liste(body.sub_specialties, 60),
     languages: liste(body.languages, 20),
-    bio: texte(body.bio, 3000),
+    bio: texte(body.bio, BIO_MAX),
     photo: photo(body.photo),
     slot_matrix: creneaux(body.slot_matrix),
   };

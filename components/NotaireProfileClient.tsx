@@ -24,7 +24,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
-import { getStoredProfiles, getRemoteProfiles, claimProfile, type ClaimData } from "@/lib/notaire-profiles";
+import { getStoredProfiles, getRemoteProfiles, claimProfile, BIO_MAX, type ClaimData } from "@/lib/notaire-profiles";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import BookingModal from "@/components/BookingModal";
 
@@ -518,12 +518,12 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
             </label>
             <textarea
               value={bio}
-              onChange={e => setBio(e.target.value.slice(0, 500))}
+              onChange={e => setBio(e.target.value.slice(0, BIO_MAX))}
               rows={4}
               placeholder="Notaire à … depuis …, je vous accompagne dans vos projets immobiliers, familiaux et patrimoniaux…"
               className="w-full px-4 py-3 rounded-xl border-2 border-[var(--color-border)] text-[14px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] transition resize-none"
             />
-            <p className="text-[11px] text-[var(--color-muted)] text-right mt-1">{bio.length}/500</p>
+            <p className="text-[11px] text-[var(--color-muted)] text-right mt-1">{bio.length}/{BIO_MAX}</p>
           </div>
 
           {/* Spécialités */}

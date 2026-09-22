@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { addProfile, claimProfile, erreurPhoto, PHOTO_TYPES } from "@/lib/notaire-profiles";
+import { addProfile, claimProfile, erreurPhoto, PHOTO_TYPES, BIO_MAX } from "@/lib/notaire-profiles";
 import { isNotaireEmail, cleanCrpcen, isValidCrpcen } from "@/lib/notaire-email";
 import { sousSpecialitesPour } from "@/lib/sous-specialites";
 import { supabase } from "@/lib/supabase";
@@ -225,6 +225,7 @@ export default function NotaireSignup() {
           etude,
           crpcen,
           website: website.trim() || undefined,
+          address: adresse.trim() || undefined,
           specialties: specs,
           subSpecialties: subSpecs,
           languages: langs,
@@ -804,14 +805,16 @@ export default function NotaireSignup() {
                           )}
                         </div>
                       </div>
-                      <Field label="Présentation (visible par vos clients)">
+                      <Field label="Présentation (visible par vos clients, 500 caractères max)">
                         <textarea
                           value={bio}
-                          onChange={(e) => setBio(e.target.value)}
+                          onChange={(e) => setBio(e.target.value.slice(0, BIO_MAX))}
+                          maxLength={BIO_MAX}
                           rows={4}
                           placeholder="Notaire à Paris depuis 12 ans, j'accompagne particuliers et entreprises sur l'immobilier et la transmission…"
                           className="w-full px-3.5 py-2.5 rounded-[10px] border border-[var(--color-border)] text-[15px] text-[var(--color-text-strong)] placeholder:text-[var(--color-muted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-soft)] transition resize-none"
                         />
+                        <p className="text-[11px] text-[var(--color-muted)] text-right mt-1">{bio.length}/{BIO_MAX}</p>
                       </Field>
                     </>
                   )}

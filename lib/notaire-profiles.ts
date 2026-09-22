@@ -5,7 +5,7 @@ import type { ListingNotaire } from "./notaires-listing";
 import { supabase } from "./supabase";
 import { erreurPhoto } from "./photo-regles";
 
-export { erreurPhoto, PHOTO_TYPES } from "./photo-regles";
+export { erreurPhoto, PHOTO_TYPES, BIO_MAX } from "./photo-regles";
 
 const STORAGE_KEY = "notaires-io:profils";
 
@@ -17,6 +17,7 @@ export interface SignupProfile {
   etude?: string;
   crpcen?: string;           // numéro CRPCEN de l'étude (4-6 chiffres)
   website?: string;          // URL du site de l'étude
+  address?: string;          // adresse de l'étude
   specialties: string[];
   subSpecialties?: string[]; // sous-spécialités fines (cf. lib/sous-specialites.ts)
   languages?: string[];
@@ -217,6 +218,7 @@ export async function addProfile(p: SignupProfile): Promise<ListingNotaire> {
     office_name: entry.officeName ?? null,
     crpcen: p.crpcen?.trim() || null,
     website: entry.website ?? null,
+    address: p.address?.trim() || null,
     role: entry.role ?? null,
     specialties: entry.specialties,
     sub_specialties: entry.subSpecialties ?? [],

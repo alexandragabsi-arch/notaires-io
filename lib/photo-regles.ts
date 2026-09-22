@@ -7,3 +7,7 @@ export function erreurPhoto(file: File): string {
   if (file.size > PHOTO_MAX_OCTETS) return "Photo trop lourde : 5 Mo maximum.";
   return "";
 }
+
+// Longueur max de la présentation (≈ 80 mots), identique partout et revérifiée
+// côté serveur.
+export const BIO_MAX = 500;

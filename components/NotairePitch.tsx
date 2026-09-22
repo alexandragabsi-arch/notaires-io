@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import LienInscription, { BandeauOffre } from "@/components/LienInscription";
 import {
   Video,
   QrCode,
@@ -98,6 +99,7 @@ export default function NotairePitch() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
+            <BandeauOffre />
             <div className="inline-flex items-center gap-2 bg-[var(--color-accent-soft)] text-[var(--color-accent)] px-4 py-2 rounded-full text-[13px] font-semibold mb-6">
               Espace notaires
             </div>
@@ -116,13 +118,12 @@ export default function NotairePitch() {
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-3">
-              <a
-                href="/inscription"
+              <LienInscription
                 className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
               >
                 Référencer mon étude
                 <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
-              </a>
+              </LienInscription>
             </div>
           </motion.div>
         </div>
@@ -488,13 +489,12 @@ export default function NotairePitch() {
               </div>
             </div>
 
-            <a
-              href="/inscription"
+            <LienInscription
               className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
             >
               Référencer mon étude
               <ArrowRight className="w-[17px] h-[17px]" strokeWidth={2.5} />
-            </a>
+            </LienInscription>
             {/* Conditions d'abonnement — exigées par la guideline App Store 3.1.2 :
                 durée, prix, reconduction, et liens CGU + confidentialité au
                 niveau de l'offre. */}
@@ -543,13 +543,12 @@ export default function NotairePitch() {
               Référencez votre étude ou réservez une démo en visio. On vous montre
               tout en 20 minutes.
             </p>
-            <a
-              href="/inscription"
+            <LienInscription
               className="inline-flex items-center gap-2 bg-gradient-cta text-white px-7 py-3.5 rounded-[10px] text-[16px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5"
             >
               Référencer mon étude
               <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
-            </a>
+            </LienInscription>
           </motion.div>
         </div>
       </section>

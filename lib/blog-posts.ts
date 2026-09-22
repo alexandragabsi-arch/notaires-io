@@ -3,6 +3,8 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   date: string; // "YYYY-MM-DD"
+  // Date de dernière révision réelle du contenu, si l'article a été retravaillé.
+  updated?: string; // "YYYY-MM-DD"
   readingTime: number; // minutes
   category: string;
   keywords: string[];
@@ -1214,15 +1216,19 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "consultation-notaire-prix",
-    title: "Consultation notaire : quel est le prix en 2025 ?",
-    excerpt: "Consultation juridique, bilan patrimonial, conseil en succession : combien coûte une heure chez le notaire ? Tarifs, pratiques et comment optimiser votre budget.",
+    title: "Consultation notaire : quel prix en 2026 ? Renseignement gratuit ou payant",
+    excerpt: "Un simple renseignement chez le notaire est en général gratuit. Une consultation approfondie sans acte est payante : honoraires libres, convenus par écrit. Fourchettes de prix 2026 et consultations gratuites.",
     date: "2025-12-28",
+    updated: "2026-09-22",
     readingTime: 6,
     category: "Guide",
-    keywords: ["consultation notaire prix", "tarif consultation notaire", "combien coûte notaire consultation", "honoraires consultation notaire 2025"],
+    keywords: ["consultation notaire prix", "prix renseignement notaire", "renseignement notaire gratuit", "tarif consultation notaire", "honoraires consultation notaire 2026"],
     canonicalUrl: "https://notaires.io/blog/consultation-notaire-prix",
     faqs: [
-      { question: "Quel est le tarif moyen d'une consultation d'une heure chez un notaire ?", answer: "Entre 150 et 400 € selon la région et la spécialité. En Île-de-France, comptez plutôt 200 à 350 € HT pour une heure de consultation patrimoniale ou successorale." },
+      { question: "Quel est le prix pour un renseignement chez un notaire ?", answer: "Un simple renseignement chez un notaire est en général gratuit : une question courte, par téléphone ou lors d'un premier échange, n'est pas facturée. Une consultation approfondie qui ne débouche pas sur un acte est payante : ses honoraires sont libres, fixés par écrit avec le notaire, souvent entre 80 et 400 € HT." },
+      { question: "Le notaire peut-il facturer un conseil donné pour préparer un acte ?", answer: "Non, pas en plus. Pour un acte au tarif réglementé (vente, donation, contrat de mariage…), le conseil qui le prépare est compris dans les émoluments de l'acte. Seules les prestations hors tarif, comme une consultation sans acte, donnent lieu à des honoraires." },
+      { question: "Où obtenir une consultation notariale gratuite ?", answer: "Auprès des permanences organisées par les chambres départementales des notaires, dans les Points-justice et les maisons de justice et du droit. Ces consultations répondent aux questions générales ; un dossier précis se traite ensuite en étude." },
+      { question: "Quel est le tarif moyen d'une consultation d'une heure chez un notaire ?", answer: "Entre 150 et 400 € HT selon la région et la spécialité, TVA de 20 % en sus. En Île-de-France, comptez plutôt 200 à 350 € HT pour une heure de consultation patrimoniale ou successorale." },
       { question: "La consultation notariale est-elle déductible des impôts ?", answer: "Non, les honoraires de consultation notariale ne sont pas déductibles pour les particuliers. En revanche, ils peuvent l'être pour les professionnels si la consultation concerne leur activité." }
     ]
   },

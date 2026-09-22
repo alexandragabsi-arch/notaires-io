@@ -1126,9 +1126,6 @@ function Article11() {
 
   <p>Consulter un notaire en amont permet d'identifier la stratégie la plus adaptée à votre situation familiale et patrimoniale, tout en optimisant la fiscalité pour vos héritiers.</p>
 
-  <h2>Questions fréquentes</h2>
-  <p>Vous trouverez ci-dessous les réponses aux questions les plus courantes sur les successions sans testament. Pour une analyse personnalisée, un échange avec un notaire reste indispensable.</p>
-
   <InternalCTA />
 </>
     </>
@@ -4812,16 +4809,54 @@ function Article83() {
 function Article84() {
   return (
     <>
-<p className="lead">Combien coûte une consultation chez le notaire en 2025 ? La réponse varie selon le type de consultation, la région et la complexité de votre situation. Ce guide vous donne les tarifs pratiqués et vous aide à estimer le budget d'un rendez-vous notarial.</p>
+<p className="lead">Combien coûte une consultation chez le notaire en 2026 ? Tout dépend de ce que vous demandez : un renseignement rapide, un conseil lié à un acte ou une vraie consultation sans acte à la clé. Ce guide distingue les trois et donne les fourchettes pratiquées.</p>
+
+{/* Réponse directe, placée sous la question exacte que posent les internautes :
+    c'est le passage que les moteurs reprennent tel quel dans leurs réponses. */}
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Quel est le prix pour un renseignement chez un notaire ?</h2>
+<div className="bg-[var(--color-tint-blue)] border-l-4 border-[var(--color-accent)] rounded-xl p-5 mb-8">
+<p className="text-[var(--color-text-strong)] leading-relaxed">Un <strong>simple renseignement chez un notaire est en général gratuit</strong> : une question courte, par téléphone ou lors d'un premier échange, n'est pas facturée. Une <strong>consultation approfondie qui ne débouche pas sur un acte est payante</strong> : ses honoraires sont libres, fixés par écrit avec le notaire, le plus souvent entre <strong>80 et 400 € HT</strong>.</p>
+</div>
+
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Gratuit ou payant : les trois cas</h2>
+<div className="overflow-x-auto mb-6">
+<table className="w-full text-sm border-collapse">
+<thead>
+<tr className="text-left text-[var(--color-text-strong)]">
+<th className="border-b border-[var(--color-border-soft)] py-2 pr-4">Situation</th>
+<th className="border-b border-[var(--color-border-soft)] py-2 pr-4">Prix</th>
+<th className="border-b border-[var(--color-border-soft)] py-2">Pourquoi</th>
+</tr>
+</thead>
+<tbody className="text-[var(--color-muted)]">
+<tr>
+<td className="border-b border-[var(--color-border-soft)] py-2 pr-4"><strong className="text-[var(--color-text-strong)]">Renseignement rapide</strong></td>
+<td className="border-b border-[var(--color-border-soft)] py-2 pr-4">0 € en général</td>
+<td className="border-b border-[var(--color-border-soft)] py-2">Question générale, orientation, premier contact : les études ne le facturent pas en pratique.</td>
+</tr>
+<tr>
+<td className="border-b border-[var(--color-border-soft)] py-2 pr-4"><strong className="text-[var(--color-text-strong)]">Conseil lié à un acte</strong></td>
+<td className="border-b border-[var(--color-border-soft)] py-2 pr-4">Inclus dans l'acte</td>
+<td className="border-b border-[var(--color-border-soft)] py-2">Pour un acte au tarif réglementé (vente, donation, contrat de mariage…), le conseil est compris dans les <a href="/blog/emoluments-notaire-calcul-tarifs-reglementes" className="text-[var(--color-accent)] underline">émoluments</a>.</td>
+</tr>
+<tr>
+<td className="py-2 pr-4"><strong className="text-[var(--color-text-strong)]">Consultation sans acte</strong></td>
+<td className="py-2 pr-4">80 à 400 € HT</td>
+<td className="py-2">Prestation hors tarif : honoraires libres, convenus avec vous par écrit (article L444-1 du Code de commerce), TVA de 20 % en sus.</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 <KeyPoints points={[
-  "Les honoraires libres pour une consultation varient de 150 à 400 € l'heure.",
+  "Un renseignement rapide n'est en général pas facturé.",
   "Pour les actes tarifés, le conseil est inclus dans les émoluments de l'acte.",
-  "La première consultation est souvent gratuite si elle mène à un acte notarié.",
-  "Des consultations gratuites existent en maisons de justice et maisons des notaires."
+  "Une consultation sans acte coûte le plus souvent 80 à 400 € HT, selon sa durée et sa complexité.",
+  "Des consultations gratuites existent auprès des chambres des notaires, des Points-justice et des maisons de justice et du droit."
 ]} />
 
 <h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Les tarifs selon le type de consultation</h2>
+<p className="text-[var(--color-muted)] mb-4 leading-relaxed">Les montants ci-dessous sont des ordres de grandeur constatés : chaque étude fixe librement ses honoraires hors tarif, et doit vous les annoncer avant de commencer.</p>
 <p className="text-[var(--color-muted)] mb-4 leading-relaxed"><strong className="text-[var(--color-text-strong)]">Consultation juridique simple (30 min) :</strong> 80 à 150 € HT. Pour une question précise (validité d'un contrat, droits d'un héritier, interprétation d'un texte). Ce type de consultation est souvent offert si l'étude espère décrocher un dossier.</p>
 <p className="text-[var(--color-muted)] mb-4 leading-relaxed"><strong className="text-[var(--color-text-strong)]">Bilan patrimonial (1 à 2 heures) :</strong> 200 à 600 € HT. Analyse complète de votre situation (patrimoine, régime matrimonial, fiscalité, objectifs de transmission). Les études spécialisées en gestion de patrimoine peuvent facturer davantage.</p>
 <p className="text-[var(--color-muted)] mb-4 leading-relaxed"><strong className="text-[var(--color-text-strong)]">Consultation successorale :</strong> souvent incluse dans les émoluments de règlement de succession si vous mandatez le notaire pour la gestion de la succession. Pour une consultation pure sans mandat de succession, comptez 150 à 300 € HT.</p>
@@ -4829,7 +4864,7 @@ function Article84() {
 
 <h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Comment optimiser le coût de votre consultation</h2>
 <p className="text-[var(--color-muted)] mb-4 leading-relaxed">Préparez une liste de questions précises — évitez les questions vagues du type "qu'est-ce que je dois faire ?". Plus votre situation est documentée et vos questions ciblées, moins de temps (et donc d'honoraires) seront nécessaires.</p>
-<p className="text-[var(--color-muted)] leading-relaxed">Pour les personnes souhaitant une consultation gratuite, les <strong className="text-[var(--color-text-strong)]">maisons de justice et du droit</strong>, les <strong className="text-[var(--color-text-strong)]">points d'accès au droit</strong> et certaines <strong className="text-[var(--color-text-strong)]">mairies</strong> proposent des permanences notariales gratuites. Ces consultations sont limitées à des questions générales — pour un projet précis nécessitant un acte, l'étude notariale reste incontournable.</p>
+<p className="text-[var(--color-muted)] leading-relaxed">Pour les personnes souhaitant une consultation gratuite, les <strong className="text-[var(--color-text-strong)]">maisons de justice et du droit</strong>, les <strong className="text-[var(--color-text-strong)]">Points-justice</strong> (anciens points d'accès au droit), les <strong className="text-[var(--color-text-strong)]">chambres départementales des notaires</strong> et certaines <strong className="text-[var(--color-text-strong)]">mairies</strong> proposent des permanences notariales gratuites. Pour savoir ce qu'il en est d'un premier rendez-vous en étude, voyez aussi <a href="/blog/premier-rendez-vous-notaire-gratuit" className="text-[var(--color-accent)] underline">le premier rendez-vous chez le notaire est-il gratuit ?</a> et <a href="/blog/tarifs-honoraires-notaire" className="text-[var(--color-accent)] underline">tarifs et honoraires du notaire</a>. Ces consultations sont limitées à des questions générales — pour un projet précis nécessitant un acte, l'étude notariale reste incontournable.</p>
 
 <InternalCTA />
     </>

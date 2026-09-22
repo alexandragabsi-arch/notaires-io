@@ -259,7 +259,7 @@ export default async function BlogPostPage({
     description: post.excerpt,
     url: post.canonicalUrl,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.updated ?? post.date,
     author: { "@type": "Organization", name: "Notaires.io", url: BASE },
     publisher: {
       "@type": "Organization",
@@ -323,11 +323,35 @@ export default async function BlogPostPage({
             <span>Par <strong className="text-[var(--color-text-strong)]">Notaires.io</strong></span>
             <span>·</span>
             <time dateTime={post.date}>{formatDate(post.date)}</time>
+            {post.updated && (
+              <>
+                <span>·</span>
+                <span>
+                  Mis à jour le <time dateTime={post.updated}>{formatDate(post.updated)}</time>
+                </span>
+              </>
+            )}
           </div>
 
           <div className="prose-article">
             {content}
           </div>
+
+          {/* Le balisage FAQPage n'est admis par Google que si les questions
+              figurent aussi, en clair, sur la page. */}
+          {post.faqs && post.faqs.length > 0 && (
+            <div className="mt-12 border-t border-[var(--color-border-soft)] pt-10">
+              <h2 className="text-xl font-bold text-[var(--color-primary)] mb-6">Questions fréquentes</h2>
+              <div className="flex flex-col gap-4">
+                {post.faqs.map((f, i) => (
+                  <div key={i} className="bg-[var(--color-tint-blue)] rounded-xl p-5">
+                    <h3 className="font-semibold text-[var(--color-text-strong)] mb-2">{f.question}</h3>
+                    <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">{f.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </article>
 
         <section className="bg-[var(--color-tint-blue)] border-t border-[var(--color-border-soft)] py-12 px-6">

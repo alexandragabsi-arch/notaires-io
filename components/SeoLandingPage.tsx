@@ -3,6 +3,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { ChevronLeft, ChevronRight, MapPin, Phone, Navigation, Loader2, X } from "lucide-react";
 import type { ListingNotaire } from "@/lib/notaires-listing";
+import { useFichesCompletees } from "@/lib/fiches-completees";
 
 interface Props {
   h1: string;
@@ -267,7 +268,10 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
   );
 }
 
-export default function SeoLandingPage({ h1, intro, notaires, faq, relatedLinks }: Props) {
+export default function SeoLandingPage({ h1, intro, notaires: notairesAnnuaire, faq, relatedLinks }: Props) {
+  // Fiches complétées par les notaires (photo, présentation…) et nouvelles
+  // inscriptions de la ville, fusionnées à la liste de l'annuaire.
+  const notaires = useFichesCompletees(notairesAnnuaire);
   const workdays = useMemo(() => getNextWorkdays(7), []);
 
   /* ── Filtres ── */

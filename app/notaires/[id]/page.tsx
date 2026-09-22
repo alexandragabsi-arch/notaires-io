@@ -3,7 +3,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import NotaireProfileClient from "@/components/NotaireProfileClient";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
-import { getAllNotaires } from "@/lib/notaires-source";
+import { getAllNotaires, redirectionFiche } from "@/lib/notaires-source";
+import { permanentRedirect } from "next/navigation";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { createClient } from "@supabase/supabase-js";
 
@@ -178,6 +179,11 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  // Doublon fusionné (même notaire, autre source) : redirection 301 vers la
+  // fiche conservée, pour ne pas perdre l'URL déjà indexée.
+  const cible = redirectionFiche(id);
+  if (cible) permanentRedirect(`/notaires/${cible}`);
+
   const all = getAllNotaires();
   const base =
     LISTING_NOTAIRES.find((n) => n.id === id) ?? all.find((n) => n.id === id); // lookup serveur (membres.json inclus)

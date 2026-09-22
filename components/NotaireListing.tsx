@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
-import { getStoredProfiles, getRemoteProfiles } from "@/lib/notaire-profiles";
+import { useFichesCompletees } from "@/lib/fiches-completees";
 import NotaireMap from "@/components/NotaireMap";
 
 const ALL = "Toutes";
@@ -397,31 +397,10 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   const [view, setView] = useState<"list" | "map">("list"); // liste (défaut) ou carte
   const [displayLimit, setDisplayLimit] = useState(60);
 
-  const [stored, setStored] = useState<ListingNotaire[]>([]);
-  useEffect(() => {
-    setStored(getStoredProfiles());
-    getRemoteProfiles().then((remote) => {
-      const localIds = new Set(getStoredProfiles().map((n) => n.id));
-      setStored((prev) => [...prev, ...remote.filter((n) => !localIds.has(n.id))]);
-    });
-  }, []);
-
   const base = baseListings ?? LISTING_NOTAIRES;
-  // Une fiche complétée par son notaire remplace sa version d'annuaire (même
-  // id) au lieu de s'afficher en double ; les champs vides ne masquent rien.
-  const all = useMemo(() => {
-    const parId = new Map(stored.map((n) => [n.id, n]));
-    const fusion = base.map((b) => {
-      const r = parId.get(b.id);
-      if (!r) return b;
-      parId.delete(b.id);
-      const renseignes = Object.entries(r).filter(
-        ([, v]) => v !== undefined && v !== null && !(Array.isArray(v) && v.length === 0),
-      );
-      return { ...b, ...Object.fromEntries(renseignes) } as ListingNotaire;
-    });
-    return [...parId.values(), ...fusion];
-  }, [stored, base]);
+  // Fiches complétées par les notaires : remplacent leur version d'annuaire
+  // (même id, sans doublon) ; les fiches créées à l'inscription s'ajoutent.
+  const all = useFichesCompletees(base, false);
 
   // Autocomplete ville/CP
   useEffect(() => {

@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { limiter, ipDe } from "@/lib/rate-limit";
 import { identifierNotaire, supabaseAdmin } from "@/lib/notaire-email-serveur";
 import { BIO_MAX } from "@/lib/photo-regles";
+import { normaliserSpecialites } from "@/lib/specialites";
 import { sendEmail, emailLayout, emailButton, ADMIN_EMAIL, SITE } from "@/lib/email";
 
 // Création, revendication et modification d'une fiche notaire.
@@ -141,7 +142,10 @@ export async function POST(req: NextRequest) {
     phone: texte(body.phone, 30),
     email: texte(body.email, 160),
     role,
-    specialties: liste(body.specialties, 30),
+    specialties: (() => {
+      const l = liste(body.specialties, 30);
+      return l ? normaliserSpecialites(l) : undefined;
+    })(),
     sub_specialties: liste(body.sub_specialties, 60),
     languages: liste(body.languages, 20),
     bio: texte(body.bio, BIO_MAX),

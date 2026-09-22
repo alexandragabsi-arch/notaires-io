@@ -85,12 +85,77 @@ function notaireArr(n: RawNotaire): number | undefined {
   return (n as RawNotaire & { arrondissement?: number }).arrondissement || arrFromAddress(n.address);
 }
 
+// ── Doublons entre sources ──────────────────────────────────────────────────
+// Un même notaire figure souvent deux fois : via notaires.fr (nom d'usage,
+// téléphone, site, adresse exacte) et via l'API Entreprises (nom d'état civil
+// complet, sans téléphone ni site) — « Me Thibault Argueil » et
+// « Me Thibault Jean Argueil », même étude. On garde la fiche notaires.fr ;
+// l'ancienne URL de l'autre redirige vers elle (voir redirectionFiche).
+let _alias: Map<string, string> | null = null;
+
+const FORMES_SOCIALES = new Set([
+  "selarl", "selas", "selasu", "selafa", "scp", "sas", "sarl", "snc", "eurl", "office", "notarial",
+  "notariale", "etude", "societe", "de", "des", "du", "la", "le", "les", "et", "notaires", "notaire",
+  "associes", "associe",
+]);
+
+function sansAccents(s: string): string {
+  return (s ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+function motsNom(s: string): Set<string> {
+  return new Set(sansAccents(s).split(" ").filter((m) => m.length > 1 && m !== "me"));
+}
+function motsEtude(s: string): Set<string> {
+  return new Set(sansAccents(s).split(" ").filter((m) => m.length > 1 && !FORMES_SOCIALES.has(m)));
+}
+function codePostal(s: string): string {
+  return (s ?? "").match(/\b\d{5}\b/)?.[0] ?? "";
+}
+
+// Même personne : même ville, tous les mots du nom le plus court présents dans
+// l'autre (au moins prénom + nom), et même étude ou même code postal.
+function memeNotaire(a: RawNotaire, b: RawNotaire): boolean {
+  const na = motsNom(a.name), nb = motsNom(b.name);
+  const [court, long] = na.size <= nb.size ? [na, nb] : [nb, na];
+  if (court.size < 2 || ![...court].every((m) => long.has(m))) return false;
+  const ea = motsEtude(a.officeName), eb = motsEtude(b.officeName);
+  const memeEtude = ea.size > 0 && eb.size > 0 && [...ea].some((m) => eb.has(m));
+  const memeCp = codePostal(a.address) !== "" && codePostal(a.address) === codePostal(b.address);
+  return memeEtude || memeCp;
+}
+
+function dedoublonner(tous: RawNotaire[]): { garde: RawNotaire[]; alias: Map<string, string> } {
+  const refParVille = new Map<string, RawNotaire[]>();
+  for (const n of tous) {
+    if (n.source === "api-entreprises") continue;
+    const k = sansAccents(n.city);
+    const l = refParVille.get(k);
+    if (l) l.push(n);
+    else refParVille.set(k, [n]);
+  }
+  const alias = new Map<string, string>();
+  for (const n of tous) {
+    if (n.source !== "api-entreprises") continue;
+    const cible = refParVille.get(sansAccents(n.city))?.find((r) => memeNotaire(n, r));
+    if (cible) alias.set(n.id, cible.id);
+  }
+  return { garde: tous.filter((n) => !alias.has(n.id)), alias };
+}
+
+/** Fiche fusionnée avec une autre : id de la fiche conservée (sinon undefined). */
+export function redirectionFiche(id: string): string | undefined {
+  loadAll();
+  return _alias?.get(id);
+}
+
 function loadAll(): RawNotaire[] {
   if (_cache) return _cache;
   try {
     const filePath = join(process.cwd(), "data", "notaires-membres.json");
     const raw = readFileSync(filePath, "utf-8");
-    _cache = JSON.parse(raw) as RawNotaire[];
+    const { garde, alias } = dedoublonner(JSON.parse(raw) as RawNotaire[]);
+    _cache = garde;
+    _alias = alias;
     return _cache;
   } catch {
     return [];

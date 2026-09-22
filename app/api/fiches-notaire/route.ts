@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
     .from("notaire_profiles")
     .select("id")
     .in("id", trouvees.map((n) => n.id))
-    .not("user_id", "is", null);
+    .eq("verifie", true); // une revendication non confirmée ne bloque pas la fiche
   const prises = new Set((data ?? []).map((r) => r.id as string));
 
   const fiches: FicheTrouvee[] = trouvees.map((n) => ({

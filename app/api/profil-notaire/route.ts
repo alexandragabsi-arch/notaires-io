@@ -83,17 +83,31 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Fiche visée : libre ou déjà à ce compte.
+  // Fiche visée : libre, déjà à ce compte, ou revendiquée par un compte qui
+  // n'a jamais confirmé son e-mail (reprise possible, sinon n'importe qui
+  // pourrait bloquer la fiche d'un confrère avec son adresse).
   const { data: existante } = await db
     .from("notaire_profiles")
-    .select("id, user_id")
+    .select("id, user_id, verifie")
     .eq("id", id)
     .maybeSingle();
+  let reprise = false;
   if (existante?.user_id && existante.user_id !== user.id) {
-    return NextResponse.json(
-      { error: "Cette fiche est déjà rattachée à un autre compte. Écrivez-nous à contact@notaires.io." },
-      { status: 403 },
-    );
+    let libre = false;
+    if (!existante.verifie) {
+      const { data: ancien } = await db.auth.admin.getUserById(existante.user_id);
+      const ancienCree = ancien.user ? Date.parse(ancien.user.created_at) : 0;
+      // Reprise par un compte confirmé, ou après l'expiration de la fenêtre
+      // d'inscription (2 h) de la revendication précédente.
+      libre = !!user.email_confirmed_at || Date.now() - ancienCree > 2 * 60 * 60 * 1000;
+    }
+    if (!libre) {
+      return NextResponse.json(
+        { error: "Cette fiche est déjà rattachée à un autre compte. Écrivez-nous à contact@notaires.io." },
+        { status: 403 },
+      );
+    }
+    reprise = true;
   }
 
   // Un compte = une fiche.
@@ -134,7 +148,10 @@ export async function POST(req: NextRequest) {
     photo: photo(body.photo),
     slot_matrix: creneaux(body.slot_matrix),
   };
-  const ligne: Record<string, unknown> = { id, user_id: user.id };
+  // En cas de reprise, rien de ce qu'avait saisi le compte précédent ne subsiste.
+  const ligne: Record<string, unknown> = reprise
+    ? { id, user_id: user.id, phone: null, address: null, website: null, email: null, bio: null, photo: null, slot_matrix: null, subscription_status: null, subscription_renewal_at: null, offre: null }
+    : { id, user_id: user.id };
   for (const [k, v] of Object.entries(champs)) if (v !== undefined) ligne[k] = v;
 
   if (!existante && (!ligne.name || !ligne.city)) {

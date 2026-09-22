@@ -22,7 +22,8 @@ export const revalidate = 300;
 /**
  * Version complétée par le notaire (table notaire_profiles, même id que la
  * fiche de l'annuaire) : photo, présentation, site, agenda… Elle prend le pas
- * sur les données importées. Seules les fiches rattachées à un compte comptent.
+ * sur les données importées. Seules les fiches rattachées à un compte, et dont
+ * l'abonnement ou la période offerte n'a pas expiré, comptent.
  */
 async function ficheCompletee(id: string): Promise<Partial<ListingNotaire> | null> {
   const { data } = await createClient(
@@ -30,11 +31,26 @@ async function ficheCompletee(id: string): Promise<Partial<ListingNotaire> | nul
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   )
     .from("notaire_profiles")
-    .select("name, city, initials, office_name, address, phone, website, role, specialties, sub_specialties, languages, bio, photo, slot_matrix, user_id")
+    .select("name, city, initials, office_name, address, phone, website, role, specialties, sub_specialties, languages, bio, photo, slot_matrix, user_id, subscription_status")
     .eq("id", id)
-    .not("user_id", "is", null)
+    .eq("verifie", true) // compte à l'e-mail confirmé uniquement
     .maybeSingle();
+  // Période offerte terminée sans carte (ou abonnement résilié) : on revient à
+  // la fiche d'annuaire de base. Les données restent en base pour la réactivation.
   if (!data) return null;
+  if (data.subscription_status === "expire") {
+    // Version de base : identité et adresse seulement (fiche créée à
+    // l'inscription, absente de l'annuaire importé, sinon introuvable).
+    const base: Partial<ListingNotaire> = {
+      name: data.name ?? undefined,
+      city: data.city ?? undefined,
+      initials: data.initials ?? undefined,
+      officeName: data.office_name ?? undefined,
+      address: data.address ?? undefined,
+      claimed: false,
+    };
+    return Object.fromEntries(Object.entries(base).filter(([, v]) => v !== undefined)) as Partial<ListingNotaire>;
+  }
 
   const champs: Partial<ListingNotaire> = {
     name: data.name ?? undefined,

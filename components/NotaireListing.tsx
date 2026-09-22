@@ -407,7 +407,21 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   }, []);
 
   const base = baseListings ?? LISTING_NOTAIRES;
-  const all = useMemo(() => [...stored, ...base], [stored, base]);
+  // Une fiche complétée par son notaire remplace sa version d'annuaire (même
+  // id) au lieu de s'afficher en double ; les champs vides ne masquent rien.
+  const all = useMemo(() => {
+    const parId = new Map(stored.map((n) => [n.id, n]));
+    const fusion = base.map((b) => {
+      const r = parId.get(b.id);
+      if (!r) return b;
+      parId.delete(b.id);
+      const renseignes = Object.entries(r).filter(
+        ([, v]) => v !== undefined && v !== null && !(Array.isArray(v) && v.length === 0),
+      );
+      return { ...b, ...Object.fromEntries(renseignes) } as ListingNotaire;
+    });
+    return [...parId.values(), ...fusion];
+  }, [stored, base]);
 
   // Autocomplete ville/CP
   useEffect(() => {

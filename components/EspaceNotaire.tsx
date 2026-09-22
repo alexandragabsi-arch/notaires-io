@@ -32,6 +32,7 @@ import NotaireDashboard from "@/components/NotaireDashboard";
 import AccountSettings from "@/components/AccountSettings";
 import GoogleVisibilite from "@/components/GoogleVisibilite";
 import CommandesCartes from "@/components/CommandesCartes";
+import BandeauAbonnement from "@/components/BandeauAbonnement";
 
 const SITE_URL =
   typeof window !== "undefined"
@@ -331,6 +332,7 @@ function QuickNav({ profileId }: { profileId: string }) {
 function EspaceNotaireInner() {
   const searchParams = useSearchParams();
   const isWelcome = searchParams.get("bienvenue") === "1";
+  const retourCarte = searchParams.get("carte") === "ok";
 
   const [profile, setProfile] = useState<ListingNotaire | null | undefined>(undefined);
   const [showWelcome, setShowWelcome] = useState(isWelcome);
@@ -419,6 +421,9 @@ function EspaceNotaireInner() {
     <section className="py-10 sm:py-14 px-4 sm:px-6">
       <div className="max-w-[860px] mx-auto flex flex-col gap-6">
 
+        {/* État de l'abonnement : essai sans carte, expiré, carte ajoutée */}
+        <BandeauAbonnement notaireId={profile.id} retourCarte={retourCarte} />
+
         {/* Bannière bienvenue */}
         <AnimatePresence>
           {showWelcome && (
@@ -434,7 +439,7 @@ function EspaceNotaireInner() {
               </div>
               <div className="flex-1">
                 <p className="font-bold text-[15px] text-[var(--color-success)]">
-                  Paiement confirmé — bienvenue sur Notaires.io !
+                  Bienvenue sur Notaires.io !
                 </p>
                 <p className="text-[13px] text-[var(--color-muted)]">
                   Votre profil est actif. Voici votre QR code personnalisé, prêt à partager.

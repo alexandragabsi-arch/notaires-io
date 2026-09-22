@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { addProfile, claimProfile, erreurPhoto, PHOTO_TYPES, BIO_MAX } from "@/lib/notaire-profiles";
 import { isNotaireEmail, cleanCrpcen, isValidCrpcen } from "@/lib/notaire-email";
+import { OFFRES, offreConnue, offreValide, dateFr } from "@/lib/offres";
 import { sousSpecialitesPour } from "@/lib/sous-specialites";
 import { supabase } from "@/lib/supabase";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
@@ -32,6 +33,7 @@ import {
   Copy,
   QrCode,
   CreditCard,
+  Gift,
   Loader2,
   ShieldCheck,
   Eye,
@@ -57,6 +59,12 @@ const SPECIALTIES = [
 export default function NotaireSignup() {
   const searchParams = useSearchParams();
   const claimId = searchParams.get("claim");
+  // Offre « essai sans carte » via un lien (/inscription?offre=linkedin).
+  // Expirée → on le dit, et l'inscription repasse sur l'essai avec carte.
+  const offreParam = searchParams.get("offre");
+  const offre = offreValide(offreParam);
+  const offreExpiree = !!offreConnue(offreParam) && !offre;
+  const offreFin = offreConnue(offreParam) ? dateFr(OFFRES[offreConnue(offreParam)!].finValidite) : "";
   // Fiche visée par le lien « Activer mon profil ». Les 35 fiches vedettes sont
   // connues côté navigateur ; les ~23 000 autres sont chargées depuis le serveur.
   const [claimedNotaire, setClaimedNotaire] = useState<FicheTrouvee | null>(() => {
@@ -147,9 +155,9 @@ export default function NotaireSignup() {
 
   // Conditions pour avancer dans le wizard. On ne bloque que sur les règles
   // métier explicites, avec un message visible pour chacune (jamais de blocage
-  // silencieux) : e-mail notarial valide + mot de passe (≥ 6) à l'étape Compte,
+  // silencieux) : e-mail notarial valide + mot de passe (≥ 8) à l'étape Compte,
   // numéro CRPCEN à l'étape Étude.
-  const passwordValid = password.trim().length >= 6;
+  const passwordValid = password.trim().length >= 8;
   const step0Valid = emailValid && passwordValid;
   const step1Valid = crpcenValid;
 
@@ -301,7 +309,26 @@ export default function NotaireSignup() {
       }
       setSavedProfile(profile);
 
-      // 2a. Code d'invitation : on ouvre l'accès offert et on s'arrête là.
+      // 2a. Offre sans carte (lien LinkedIn…) : ni Stripe ni carte.
+      if (offre) {
+        const { data: sess } = await supabase.auth.getSession();
+        const jeton = sess.session?.access_token;
+        const res = await fetch("/api/offre", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...(jeton ? { Authorization: `Bearer ${jeton}` } : {}) },
+          body: JSON.stringify({ offre, notaireId: profile.id, userId }),
+        });
+        const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+        if (data.ok) {
+          window.location.href = "/espace-notaire?bienvenue=1";
+        } else {
+          setPayError(data.error ?? "L'offre n'a pas pu être activée. Réessayez.");
+          setPaying(false);
+        }
+        return;
+      }
+
+      // 2b. Code d'invitation : on ouvre l'accès offert et on s'arrête là.
       //     Ni Stripe, ni carte, ni prélèvement possible — c'est tout l'intérêt
       //     pour un testeur, qui n'aurait sinon aucune raison de confier sa CB.
       if (codeInvit.trim()) {
@@ -327,7 +354,7 @@ export default function NotaireSignup() {
         return;
       }
 
-      // 2b. Crée la session Stripe Checkout
+      // 2c. Crée la session Stripe Checkout
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -418,6 +445,7 @@ export default function NotaireSignup() {
                     </Field>
                     <Field label="Mot de passe">
                       <IconInput icon={Lock} type="password" value={password} onChange={setPassword} placeholder="••••••••" />
+                      <p className="text-[12px] text-[var(--color-muted)] mt-1.5">Au moins 8 caractères.</p>
                     </Field>
                     <label className="flex items-start gap-2.5 mt-1 cursor-pointer">
                       <input type="checkbox" checked={accept} onChange={e => setAccept(e.target.checked)} className="mt-0.5 w-4 h-4 shrink-0 accent-[var(--color-accent)] cursor-pointer" />
@@ -440,7 +468,7 @@ export default function NotaireSignup() {
                         <span className="text-[13px] text-[var(--color-muted)] ml-1">offerts</span>
                       </div>
                       <p className="text-[13px] text-[var(--color-muted)]">puis <strong className="text-[var(--color-text-strong)]">{jeunePro ? "99" : "119"} € HT/mois</strong> · résiliable à tout moment</p>
-                      <p className="text-[12px] text-[var(--color-muted)] mt-1.5">Carte enregistrée maintenant, aucun débit avant 2 mois.</p>
+                      <p className="text-[12px] text-[var(--color-muted)] mt-1.5">{offre ? "Aucune carte demandée. Rappel par e-mail 7 jours avant la fin." : "Carte enregistrée maintenant, aucun débit avant 2 mois."}</p>
                     </div>
                     <label className="flex items-start gap-2.5 cursor-pointer bg-white border border-[var(--color-border-soft)] rounded-xl px-4 py-3">
                       <input
@@ -464,10 +492,10 @@ export default function NotaireSignup() {
                     </ul>
                     {payError && <p className="text-[13px] text-red-600 bg-red-50 rounded-xl px-4 py-3 border border-red-200">{payError}</p>}
                     <button type="button" onClick={goToPayment} disabled={paying} className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-4 rounded-[12px] text-[16px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed">
-                      {paying ? <><Loader2 className="w-5 h-5 animate-spin" strokeWidth={2.5} />Redirection…</> : <><CreditCard className="w-5 h-5" strokeWidth={2.5} />Activer mes 2 mois offerts</>}
+                      {paying ? <><Loader2 className="w-5 h-5 animate-spin" strokeWidth={2.5} />Redirection…</> : <>{offre ? <Gift className="w-5 h-5" strokeWidth={2.5} /> : <CreditCard className="w-5 h-5" strokeWidth={2.5} />}{offre ? "Activer mes 2 mois offerts — sans carte" : "Activer mes 2 mois offerts"}</>}
                     </button>
                     <div className="flex items-center justify-center gap-2 text-[12px] text-[var(--color-muted)]">
-                      <ShieldCheck className="w-4 h-4 shrink-0" strokeWidth={2} />Carte sécurisée par Stripe · Aucun débit aujourd&apos;hui
+                      <ShieldCheck className="w-4 h-4 shrink-0" strokeWidth={2} />{offre ? "Aucune carte bancaire demandée" : <>Carte sécurisée par Stripe · Aucun débit aujourd&apos;hui</>}
                     </div>
                   </div>
                 )}
@@ -476,7 +504,7 @@ export default function NotaireSignup() {
 
             {claimStep === 0 && (
               <div className="mt-8 flex justify-end">
-                <button type="button" disabled={!emailValid || !password.trim() || !accept} onClick={() => setStep(4)} className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0">
+                <button type="button" disabled={!emailValid || !passwordValid || !accept} onClick={() => setStep(4)} className="inline-flex items-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0">
                   Continuer vers l&apos;activation
                   <ArrowRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
                 </button>
@@ -513,7 +541,9 @@ export default function NotaireSignup() {
               trace de la gratuité qui l'avait fait cliquer. Elle est désormais
               la première chose qu'il lit. */}
           <div className="inline-flex items-center gap-2 bg-[var(--color-tint-green)] text-[var(--color-success)] px-4 py-2 rounded-full text-[13px] font-bold mb-4">
-            🎁 2 mois offerts — aucun débit aujourd&apos;hui
+            {offre
+              ? <>🎁 {OFFRES[offre].libelle} — 2 mois offerts, sans carte bancaire</>
+              : <>🎁 2 mois offerts — aucun débit aujourd&apos;hui</>}
           </div>
           <h1 className="serif text-[28px] sm:text-[36px] lg:text-[42px] font-bold text-[var(--color-text-strong)] tracking-tight mb-2">
             Créez votre profil notaire
@@ -522,11 +552,25 @@ export default function NotaireSignup() {
             Quelques minutes suffisent. Vous pouvez tout compléter maintenant —
             ou ajouter votre photo plus tard.
           </p>
-          <p className="text-[14px] text-[var(--color-text-strong)] max-w-[560px] mx-auto">
-            Vos deux premiers mois sont offerts, puis 119 € HT/mois sans engagement.
-            La carte est enregistrée à la dernière étape mais n&apos;est débitée
-            qu&apos;à l&apos;issue des deux mois — vous pouvez arrêter avant, sans rien payer.
-          </p>
+          {offre ? (
+            <p className="text-[14px] text-[var(--color-text-strong)] max-w-[560px] mx-auto">
+              Aucune carte demandée. À la fin des deux mois, vous choisissez : ajouter
+              votre carte pour continuer (119 € HT/mois, sans engagement), ou arrêter —
+              votre fiche reste alors dans l&apos;annuaire.
+            </p>
+          ) : (
+            <p className="text-[14px] text-[var(--color-text-strong)] max-w-[560px] mx-auto">
+              Vos deux premiers mois sont offerts, puis 119 € HT/mois sans engagement.
+              La carte est enregistrée à la dernière étape mais n&apos;est débitée
+              qu&apos;à l&apos;issue des deux mois — vous pouvez arrêter avant, sans rien payer.
+            </p>
+          )}
+          {offreExpiree && (
+            <p className="text-[13px] text-[var(--color-muted)] max-w-[560px] mx-auto mt-3 bg-[var(--color-accent-soft)] rounded-xl px-4 py-2.5">
+              L&apos;offre sans carte a pris fin le {offreFin}. Vous bénéficiez tout de même
+              de 2 mois offerts, sans aucun débit avant leur terme.
+            </p>
+          )}
         </motion.div>
 
         {!done ? (
@@ -662,7 +706,7 @@ export default function NotaireSignup() {
                           placeholder="••••••••"
                         />
                         <p className={`text-[12px] mt-1.5 leading-snug ${password.length > 0 && !passwordValid ? "text-red-600" : "text-[var(--color-muted)]"}`}>
-                          Au moins 6 caractères.
+                          Au moins 8 caractères.
                         </p>
                       </Field>
                       {!step0Valid && (
@@ -1018,10 +1062,13 @@ export default function NotaireSignup() {
                           puis <strong className="text-[var(--color-text-strong)]">{jeunePro ? "99" : "119"} € HT/mois</strong> · résiliable à tout moment
                         </p>
                         <p className="text-[12px] text-[var(--color-muted)] mt-1.5">
-                          Carte enregistrée maintenant, aucun débit avant 2 mois.
+                          {offre
+                            ? "Aucune carte demandée. Rappel par e-mail 7 jours avant la fin."
+                            : "Carte enregistrée maintenant, aucun débit avant 2 mois."}
                         </p>
                       </div>
 
+                      {!offre && (<>
                       <label className="flex items-start gap-2.5 cursor-pointer bg-white border border-[var(--color-border-soft)] rounded-xl px-4 py-3">
                         <input
                           type="checkbox"
@@ -1056,6 +1103,7 @@ export default function NotaireSignup() {
                           </p>
                         )}
                       </details>
+                      </>)}
 
                       {/* Ce qui est inclus */}
                       <ul className="flex flex-col gap-2.5">
@@ -1091,12 +1139,12 @@ export default function NotaireSignup() {
                         {paying ? (
                           <>
                             <Loader2 className="w-5 h-5 animate-spin" strokeWidth={2.5} />
-                            Redirection vers le paiement…
+                            {offre ? "Activation…" : "Redirection vers le paiement…"}
                           </>
                         ) : (
                           <>
-                            <CreditCard className="w-5 h-5" strokeWidth={2.5} />
-                            Activer mes 2 mois offerts
+                            {offre ? <Gift className="w-5 h-5" strokeWidth={2.5} /> : <CreditCard className="w-5 h-5" strokeWidth={2.5} />}
+                            {offre ? "Activer mes 2 mois offerts — sans carte" : "Activer mes 2 mois offerts"}
                           </>
                         )}
                       </button>
@@ -1104,7 +1152,7 @@ export default function NotaireSignup() {
                       {/* Sécurité */}
                       <div className="flex items-center justify-center gap-2 text-[12px] text-[var(--color-muted)]">
                         <ShieldCheck className="w-4 h-4 shrink-0" strokeWidth={2} />
-                        Carte sécurisée par Stripe · Aucun débit aujourd&apos;hui
+                        {offre ? "Aucune carte bancaire demandée" : <>Carte sécurisée par Stripe · Aucun débit aujourd&apos;hui</>}
                       </div>
                     </div>
                   )}

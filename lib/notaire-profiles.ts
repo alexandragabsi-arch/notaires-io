@@ -100,11 +100,16 @@ export function clearStoredProfiles(): void {
   } catch { /* mode privé / quota */ }
 }
 
-// Lit les profils depuis Supabase (visible par tous les visiteurs).
+// Lit les fiches complétées par les notaires eux-mêmes (rattachées à un
+// compte, période offerte ou abonnement non expiré). Les ~23 000 fiches
+// importées n'y figurent pas : l'annuaire les lit déjà côté serveur, et les
+// charger ici téléchargeait la table entière à chaque visite.
 export async function getRemoteProfiles(): Promise<ListingNotaire[]> {
   const { data, error } = await supabase
     .from("notaire_profiles")
     .select("*")
+    .eq("verifie", true) // compte rattaché à l'e-mail confirmé
+    .or("subscription_status.is.null,subscription_status.neq.expire")
     .order("created_at", { ascending: false });
 
   if (error || !data) return [];

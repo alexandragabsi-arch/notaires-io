@@ -76,6 +76,11 @@ function formatAmount(cents?: number | null, currency?: string | null): string {
 
 // Date de fin d'essai transmise par /api/subscribe dans les métadonnées
 // (timestamp Unix en secondes), formatée pour l'e-mail de bienvenue.
+// Données issues de la fiche (saisies par le notaire) insérées dans un e-mail HTML.
+function echapper(v: string): string {
+  return v.replace(/[<>&"]/g, (c) => `&#${c.charCodeAt(0)};`);
+}
+
 function formatDateFr(unix?: string): string {
   const t = Number(unix);
   if (!Number.isFinite(t) || t <= 0) return "";
@@ -106,6 +111,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Payload illisible" }, { status: 400 });
   }
 
+  // Abonnement Stripe résilié (ou annulé faute de carte en fin d'essai) :
+  // la fiche redevient une fiche d'annuaire de base.
+  if (event.type === "customer.subscription.deleted") {
+    const sub = (event.data?.object ?? {}) as { customer?: string | null; metadata?: Record<string, string> | null };
+    const notaireId = sub.metadata?.notaireId;
+    const requete = supabase.from("notaire_profiles").update({ subscription_status: "expire" });
+    if (notaireId) await requete.eq("id", notaireId);
+    else if (sub.customer) await requete.eq("stripe_customer_id", sub.customer);
+    return NextResponse.json({ received: true, handled: "subscription.deleted" });
+  }
+
   if (event.type !== "checkout.session.completed") {
     // On accuse réception des autres événements sans rien faire.
     return NextResponse.json({ received: true, ignored: event.type });
@@ -126,11 +142,39 @@ export async function POST(req: NextRequest) {
     // ── Abonnement notaire ──────────────────────────────────────────────────
     // Lie le compte notaire au client Stripe → factures visibles dans l'espace.
     const customerId = typeof s.customer === "string" ? s.customer : null;
-    if (customerId && meta.notaireId) {
+    // Carte enregistrée → abonnement actif (fin de l'essai sans carte, le cas échéant).
+    if (meta.notaireId) {
       await supabase
         .from("notaire_profiles")
-        .update({ stripe_customer_id: customerId })
+        .update({ ...(customerId ? { stripe_customer_id: customerId } : {}), subscription_status: "actif" })
         .eq("id", meta.notaireId);
+    }
+
+    // Carte ajoutée depuis l'espace (après un essai sans carte) : simple
+    // confirmation, pas le message de bienvenue de l'inscription.
+    if (meta.ajoutCarte === "1") {
+      const debut = formatDateFr(meta.finEssai);
+      if (email) {
+        await sendEmail(
+          email,
+          "Carte enregistrée — votre abonnement Notaires.io continue ✓",
+          emailLayout(`
+            <h1 style="font-size:22px;font-weight:700;margin-bottom:8px;color:#1a1a2e">Merci, c'est enregistré</h1>
+            <p style="color:#5a6a8a;margin-bottom:24px">
+              ${name ? `Bonjour ${name},` : "Bonjour,"} votre carte est enregistrée : votre fiche, votre agenda
+              et vos rappels continuent sans interruption.
+              ${debut ? `Le premier prélèvement de ${meta.formule === "jeune-pro" ? "99" : "119"} € HT interviendra le <strong style="color:#1a1a2e">${debut}</strong>, à la fin de votre période offerte.` : ""}
+            </p>
+            <div style="margin-bottom:24px">${emailButton(`${SITE}/espace-notaire`, "Accéder à mon espace")}</div>
+          `),
+        );
+      }
+      await sendEmail(
+        ADMIN_EMAIL,
+        `[Notaires.io] 💳 Carte ajoutée après essai — ${meta.notaire || name || "notaire"}`,
+        emailLayout(`<p style="font-size:14px">${echapper(meta.notaire || name || "—")} (${echapper(email || "—")}) a ajouté sa carte. 1er prélèvement : ${debut || "immédiat"}.</p>`),
+      );
+      return NextResponse.json({ received: true, handled: "subscription.ajoutCarte" });
     }
     const finEssai = formatDateFr(meta.finEssai);
     if (email) {

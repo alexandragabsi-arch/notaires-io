@@ -459,7 +459,7 @@ export default function NotaireSignup() {
                 {claimStep === 1 && (
                   <div className="flex flex-col gap-5">
                     <div className="bg-[var(--color-tint-green)] rounded-xl px-4 py-3 text-center">
-                      <span className="text-[13px] font-bold text-[var(--color-success)]">🎁 Offre de lancement</span>
+                      <span className="text-[13px] font-bold text-[var(--color-success)]">🎁 {offre ? OFFRES[offre].libelle : "Offre de lancement"}</span>
                     </div>
                     <div className="bg-[var(--color-tint-blue)] rounded-2xl p-5 border border-[var(--color-border-soft)]">
                       <div className="flex items-baseline gap-1 mb-1">
@@ -1005,8 +1005,9 @@ export default function NotaireSignup() {
                         value={photo ? "Ajoutée" : "À ajouter plus tard"}
                       />
                       <p className="text-[13px] text-[var(--color-muted)] leading-relaxed mt-2 text-justify hyphens-auto">
-                        Vérifiez vos informations puis passez au paiement.
-                        Votre profil sera activé dès la confirmation de votre abonnement.
+                        {offre
+                          ? "Vérifiez vos informations puis activez votre offre. Votre fiche sera publiée dès que vous aurez confirmé votre adresse e-mail."
+                          : "Vérifiez vos informations puis passez au paiement. Votre profil sera activé dès la confirmation de votre abonnement."}
                       </p>
                       <label className="flex items-start gap-2.5 mt-2 cursor-pointer">
                         <input
@@ -1045,7 +1046,7 @@ export default function NotaireSignup() {
                       {/* Badge offre */}
                       <div className="text-center">
                         <span className="inline-flex items-center gap-1.5 bg-[var(--color-tint-green)] text-[var(--color-success)] text-[12px] font-bold px-3 py-1.5 rounded-full">
-                          🎁 Offre de lancement
+                          🎁 {offre ? OFFRES[offre].libelle : "Offre de lancement"}
                         </span>
                       </div>
 

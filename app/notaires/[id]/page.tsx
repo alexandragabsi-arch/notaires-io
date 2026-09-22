@@ -5,6 +5,7 @@ import NotaireProfileClient from "@/components/NotaireProfileClient";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getAllNotaires } from "@/lib/notaires-source";
 import type { ListingNotaire } from "@/lib/notaires-listing";
+import { createClient } from "@supabase/supabase-js";
 
 // Génère statiquement les 35 notaires vedettes ; les autres sont SSR à la demande
 export async function generateStaticParams() {
@@ -13,6 +14,48 @@ export async function generateStaticParams() {
 
 // Permet les pages dynamiques pour les 9 000+ membres non pré-générés
 export const dynamicParams = true;
+
+// Une fiche complétée par son notaire doit apparaître sans attendre un
+// redéploiement (voir aussi revalidatePath dans /api/profil-notaire).
+export const revalidate = 300;
+
+/**
+ * Version complétée par le notaire (table notaire_profiles, même id que la
+ * fiche de l'annuaire) : photo, présentation, site, agenda… Elle prend le pas
+ * sur les données importées. Seules les fiches rattachées à un compte comptent.
+ */
+async function ficheCompletee(id: string): Promise<Partial<ListingNotaire> | null> {
+  const { data } = await createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  )
+    .from("notaire_profiles")
+    .select("name, city, initials, office_name, address, phone, website, role, specialties, sub_specialties, languages, bio, photo, slot_matrix, user_id")
+    .eq("id", id)
+    .not("user_id", "is", null)
+    .maybeSingle();
+  if (!data) return null;
+
+  const champs: Partial<ListingNotaire> = {
+    name: data.name ?? undefined,
+    city: data.city ?? undefined,
+    initials: data.initials ?? undefined,
+    officeName: data.office_name ?? undefined,
+    address: data.address ?? undefined,
+    phone: data.phone ?? undefined,
+    website: data.website ?? undefined,
+    role: data.role ?? undefined,
+    specialties: Array.isArray(data.specialties) && data.specialties.length ? data.specialties : undefined,
+    subSpecialties: data.sub_specialties?.length ? data.sub_specialties : undefined,
+    languages: Array.isArray(data.languages) && data.languages.length ? data.languages : undefined,
+    bio: data.bio ?? undefined,
+    photo: data.photo ?? undefined,
+    slotMatrix: Array.isArray(data.slot_matrix) ? data.slot_matrix : undefined,
+    claimed: true,
+  };
+  // On ne garde que les champs renseignés : un champ vide ne masque pas l'annuaire.
+  return Object.fromEntries(Object.entries(champs).filter(([, v]) => v !== undefined)) as Partial<ListingNotaire>;
+}
 
 /** Cherche un notaire dans LISTING_NOTAIRES puis dans getAllNotaires() */
 function findNotaire(id: string): ListingNotaire | undefined {
@@ -120,8 +163,17 @@ export default async function Page({
 }) {
   const { id } = await params;
   const all = getAllNotaires();
-  const notaire =
+  const base =
     LISTING_NOTAIRES.find((n) => n.id === id) ?? all.find((n) => n.id === id); // lookup serveur (membres.json inclus)
+  const completee = await ficheCompletee(id);
+  // Fiche de l'annuaire enrichie, ou fiche créée à l'inscription (absente de l'annuaire).
+  const notaire: ListingNotaire | undefined = completee
+    ? ({
+        ...(base ?? { id, initials: "N", color: "default", next: "Sur demande", specialties: [] }),
+        ...completee,
+        id,
+      } as ListingNotaire)
+    : base;
 
   // Autres notaires de la même étude (même officeName + même ville), hors lui-même.
   const officeKey = notaire?.officeName?.trim().toLowerCase();

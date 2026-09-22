@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { addProfile, claimProfile, erreurPhoto, PHOTO_TYPES, BIO_MAX } from "@/lib/notaire-profiles";
@@ -9,6 +9,7 @@ import { sousSpecialitesPour } from "@/lib/sous-specialites";
 import { supabase } from "@/lib/supabase";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
+import type { FicheTrouvee } from "@/lib/fiches-recherche";
 import ChampPiege from "@/components/ChampPiege";
 import { CHAMP_PIEGE } from "@/lib/rate-limit";
 import {
@@ -56,7 +57,19 @@ const SPECIALTIES = [
 export default function NotaireSignup() {
   const searchParams = useSearchParams();
   const claimId = searchParams.get("claim");
-  const claimedNotaire = claimId ? (LISTING_NOTAIRES.find(n => n.id === claimId) ?? null) : null;
+  // Fiche visée par le lien « Activer mon profil ». Les 35 fiches vedettes sont
+  // connues côté navigateur ; les ~23 000 autres sont chargées depuis le serveur.
+  const [claimedNotaire, setClaimedNotaire] = useState<FicheTrouvee | null>(() => {
+    const n = claimId ? LISTING_NOTAIRES.find((x) => x.id === claimId) : undefined;
+    return n ? { id: n.id, name: n.name, city: n.city, officeName: n.officeName, address: n.address, claimed: false } : null;
+  });
+  useEffect(() => {
+    if (!claimId) return;
+    fetch(`/api/fiches-notaire?id=${encodeURIComponent(claimId)}`)
+      .then((r) => r.json())
+      .then((d: { fiches?: FicheTrouvee[] }) => { if (d.fiches?.[0]) setClaimedNotaire(d.fiches[0]); })
+      .catch(() => {});
+  }, [claimId]);
 
   const [step, setStep] = useState(0);
   const [done, setDone] = useState(false);
@@ -89,6 +102,10 @@ export default function NotaireSignup() {
   const [langs, setLangs] = useState<string[]>([]);
   const [role, setRole] = useState<"associé" | "salarié" | "">("");
 
+  // Fiche existante de l'annuaire proposée pendant l'inscription (anti-doublon).
+  const [fichesProposees, setFichesProposees] = useState<FicheTrouvee[]>([]);
+  const [ficheChoisie, setFicheChoisie] = useState<FicheTrouvee | null>(null);
+
   // Profil public
   const [photo, setPhoto] = useState<string | null>(null);    // data URL pour l'aperçu
   const [photoFile, setPhotoFile] = useState<File | null>(null); // fichier brut pour upload Storage
@@ -109,6 +126,24 @@ export default function NotaireSignup() {
   const emailValid = isNotaireEmail(email);
   const emailError = email.trim().length > 0 && !emailValid;
   const crpcenValid = isValidCrpcen(crpcen);
+
+  // Recherche de la fiche existante dès que nom + ville sont saisis (après une
+  // courte pause de frappe). Pas en mode « Activer mon profil » : la fiche est connue.
+  useEffect(() => {
+    if (claimId) return;
+    const t = setTimeout(() => {
+      if (nom.trim().length < 2 || ville.trim().length < 2) {
+        setFichesProposees([]);
+        return;
+      }
+      const q = new URLSearchParams({ prenom, nom, ville });
+      fetch(`/api/fiches-notaire?${q}`)
+        .then((r) => r.json())
+        .then((d: { fiches?: FicheTrouvee[] }) => setFichesProposees(d.fiches ?? []))
+        .catch(() => setFichesProposees([]));
+    }, 500);
+    return () => clearTimeout(t);
+  }, [prenom, nom, ville, claimId]);
 
   // Conditions pour avancer dans le wizard. On ne bloque que sur les règles
   // métier explicites, avec un message visible pour chacune (jamais de blocage
@@ -206,16 +241,44 @@ export default function NotaireSignup() {
       // 1. Enregistre / revendique le profil dans Supabase
       let profile: ListingNotaire;
 
-      if (claimId && claimedNotaire) {
-        // Mode claim : lie l'auth à l'ID de listing existant
+      // Fiche existante : lien « Activer mon profil » ou fiche reconnue à l'inscription.
+      const cible = claimId ? claimedNotaire : ficheChoisie;
+      if (cible) {
+        // La fiche garde son nom et sa ville officiels ; on n'envoie que ce qui a
+        // été saisi (un champ vide n'efface pas l'existant).
+        const saisi = (v: string) => v.trim() || undefined;
         await claimProfile(
-          claimId,
-          claimedNotaire.name,
-          claimedNotaire.city,
-          { crpcen },  // on persiste au moins le CRPCEN ; le reste sera modifiable dans l'espace
+          cible.id,
+          cible.name,
+          cible.city,
+          claimId
+            ? { crpcen }
+            : {
+                crpcen: saisi(crpcen),
+                website: saisi(website),
+                address: saisi(adresse),
+                bio: saisi(bio),
+                specialties: specs.length ? specs : undefined,
+                subSpecialties: subSpecs.length ? subSpecs : undefined,
+                languages: langs.length ? langs : undefined,
+                photoFile: photoFile ?? undefined,
+              },
           userId,
         );
-        profile = { ...claimedNotaire, claimed: true };
+        profile = {
+          id: cible.id,
+          name: cible.name,
+          city: cible.city,
+          officeName: cible.officeName,
+          address: saisi(adresse) ?? cible.address,
+          initials: cible.name.replace(/^Me\s+/, "").split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase() || "N",
+          color: "default",
+          specialties: specs,
+          next: "Sur demande",
+          photo: photo ?? undefined,
+          bio: saisi(bio),
+          claimed: true,
+        };
       } else {
         // Mode inscription standard
         profile = await addProfile({
@@ -655,6 +718,57 @@ export default function NotaireSignup() {
                           placeholder="Paris 8ème"
                         />
                       </Field>
+                      {/* Fiche existante reconnue : on complète au lieu de dupliquer */}
+                      {ficheChoisie ? (
+                        <div className="rounded-[12px] border border-[var(--color-success)] bg-[var(--color-tint-green)] px-4 py-3.5 text-[13px] leading-snug">
+                          <p className="font-semibold text-[var(--color-text-strong)]">
+                            ✓ Votre fiche : {ficheChoisie.name}
+                            {ficheChoisie.officeName ? ` · ${ficheChoisie.officeName}` : ""} ({ficheChoisie.city})
+                          </p>
+                          <p className="text-[var(--color-muted)] mt-1">
+                            Votre inscription complétera cette fiche, déjà visible dans l&apos;annuaire — pas de doublon.
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => setFicheChoisie(null)}
+                            className="mt-2 text-[12px] font-semibold text-[var(--color-accent)] hover:underline"
+                          >
+                            Ce n&apos;est pas moi
+                          </button>
+                        </div>
+                      ) : fichesProposees.length > 0 && (
+                        <div className="rounded-[12px] border border-[var(--color-border)] bg-[var(--color-accent-soft)] px-4 py-3.5">
+                          <p className="text-[13px] font-semibold text-[var(--color-text-strong)] mb-2.5">
+                            Vous êtes déjà dans l&apos;annuaire ? Sélectionnez votre fiche :
+                          </p>
+                          <div className="flex flex-col gap-2">
+                            {fichesProposees.map((f) => (
+                              <div key={f.id} className="flex items-center justify-between gap-3 bg-white rounded-[10px] border border-[var(--color-border)] px-3 py-2.5">
+                                <div className="min-w-0 text-[13px] leading-snug">
+                                  <p className="font-semibold text-[var(--color-text-strong)] truncate">{f.name}</p>
+                                  <p className="text-[var(--color-muted)] truncate">
+                                    {[f.officeName, f.address || f.city].filter(Boolean).join(" · ")}
+                                  </p>
+                                </div>
+                                {f.claimed ? (
+                                  <span className="shrink-0 text-[12px] text-[var(--color-muted)]">Déjà activée</span>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() => setFicheChoisie(f)}
+                                    className="shrink-0 px-3 py-1.5 rounded-[8px] text-[12px] font-semibold bg-[var(--color-accent)] text-white hover:opacity-90"
+                                  >
+                                    C&apos;est moi
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                          <p className="text-[12px] text-[var(--color-muted)] mt-2.5">
+                            Fiche déjà activée par erreur ou absente ? Continuez : une nouvelle fiche sera créée. Besoin d&apos;aide : contact@notaires.io
+                          </p>
+                        </div>
+                      )}
                       <Field label="Site web de l'étude (facultatif)">
                         <IconInput
                           icon={Globe}

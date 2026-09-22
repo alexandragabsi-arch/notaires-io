@@ -259,7 +259,8 @@ export async function claimProfile(
   data: ClaimData,
   userId?: string,
 ): Promise<void> {
-  let photoUrl: string | null = data.photo ?? null;
+  // undefined = on ne touche pas à la photo existante
+  let photoUrl: string | null | undefined = data.photo;
 
   // Upload photo si un fichier est fourni
   if (data.photoFile) {

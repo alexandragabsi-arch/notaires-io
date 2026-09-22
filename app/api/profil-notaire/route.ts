@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { limiter, ipDe } from "@/lib/rate-limit";
 import { identifierNotaire, supabaseAdmin } from "@/lib/notaire-email-serveur";
 import { BIO_MAX } from "@/lib/photo-regles";
+import { sendEmail, emailLayout, emailButton, ADMIN_EMAIL, SITE } from "@/lib/email";
 
 // Création, revendication et modification d'une fiche notaire.
 //
@@ -145,5 +147,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "L'enregistrement de la fiche a échoué. Réessayez." }, { status: 500 });
   }
 
+  // Première prise de possession d'une fiche : alerte à l'administratrice, qui
+  // peut vérifier que c'est bien le bon notaire (sendEmail ne lève jamais).
+  if (!existante?.user_id) {
+    const echap = (v: unknown) => String(v ?? "").replace(/[<>&"]/g, (c) => `&#${c.charCodeAt(0)};`);
+    await sendEmail(
+      ADMIN_EMAIL,
+      `📋 Fiche ${existante ? "revendiquée" : "créée"} — ${echap(ligne.name ?? id)}`,
+      emailLayout(`
+        <h1 style="margin:0 0 6px;font-size:22px;color:#1c4587">Fiche ${existante ? "revendiquée" : "créée"}</h1>
+        <p style="margin:0 0 18px;color:#54617a;font-size:15px;line-height:1.6">
+          Compte <strong>${echap(user.email)}</strong> → fiche <code>${echap(id)}</code>
+          ${ligne.name ? ` (${echap(ligne.name)}${ligne.city ? `, ${echap(ligne.city)}` : ""})` : ""}.
+        </p>
+        ${emailButton(`${SITE}/notaires/${encodeURIComponent(id)}`, "Voir la fiche")}
+      `),
+    );
+  }
+
+  // La page publique de la fiche reflète tout de suite la mise à jour.
+  revalidatePath(`/notaires/${id}`);
   return NextResponse.json({ ok: true, id });
 }

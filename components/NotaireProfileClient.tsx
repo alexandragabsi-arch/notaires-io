@@ -24,7 +24,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
-import { getStoredProfiles, getRemoteProfiles, claimProfile, BIO_MAX, type ClaimData } from "@/lib/notaire-profiles";
+import { getStoredProfiles, getRemoteProfiles, claimProfile, getProfileByUserId, erreurPhoto, PHOTO_TYPES, BIO_MAX, type ClaimData } from "@/lib/notaire-profiles";
+import { supabase } from "@/lib/supabase";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import BookingModal from "@/components/BookingModal";
 
@@ -280,6 +281,20 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
   const [saveError, setSaveError] = useState("");
+  const [photoError, setPhotoError] = useState("");
+
+  // Seul le notaire connecté à qui appartient la fiche voit le formulaire
+  // (le serveur refuse de toute façon les autres).
+  const [proprietaire, setProprietaire] = useState(false);
+  useEffect(() => {
+    let actif = true;
+    supabase.auth.getUser().then(async ({ data }) => {
+      if (!data.user) return;
+      const fiche = await getProfileByUserId(data.user.id);
+      if (actif && fiche?.id === notaire.id) setProprietaire(true);
+    });
+    return () => { actif = false; };
+  }, [notaire.id]);
 
   // Ouverture auto + scroll quand on arrive depuis l'espace notaire (#modifier)
   useEffect(() => {
@@ -317,6 +332,10 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
   function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    // Mêmes règles que le bucket : JPG/PNG/WebP, 5 Mo max.
+    const erreur = erreurPhoto(file);
+    setPhotoError(erreur);
+    if (erreur) { e.target.value = ""; return; }
     setPhotoFile(file);
     const reader = new FileReader();
     reader.onload = () => setPhotoPreview(reader.result as string);
@@ -374,6 +393,8 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
     }
   }
 
+  if (!proprietaire) return null;
+
   if (done) {
     return (
       <motion.div
@@ -397,7 +418,7 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
           className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl border-2 border-dashed border-[var(--color-border)] text-[14px] font-semibold text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
         >
           <Award className="w-4 h-4" strokeWidth={2} />
-          Vous êtes {notaire.name.replace(/^Me\s+/, "Me ")} ? Complétez votre profil
+          Modifier ma fiche (photo, présentation, site, disponibilités)
         </button>
       ) : (
         <motion.form
@@ -451,7 +472,10 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
                   </button>
                 )}
               </div>
-              <input ref={fileRef} type="file" accept="image/*" onChange={onPhoto} className="hidden" />
+              <input ref={fileRef} type="file" accept={PHOTO_TYPES.join(",")} onChange={onPhoto} className="hidden" />
+              {photoError && (
+                <p className="mt-2 text-[13px] text-[var(--color-danger)]">{photoError}</p>
+              )}
             </div>
           </div>
 

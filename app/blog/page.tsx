@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { BLOG_POSTS } from "@/lib/blog-posts";
 import { getDynamicArticles } from "@/lib/blog-supabase";
 import { SLUGS_RETIRES } from "@/lib/fusions-blog";
+import { texteBrut } from "@/lib/texte-brut";
 
 // Revalidate every 5 minutes so new N8N articles appear quickly
 export const revalidate = 300;
@@ -97,7 +98,7 @@ export default async function BlogPage() {
                   </h2>
 
                   <p className="text-sm text-[var(--color-muted)] leading-relaxed mb-5 line-clamp-2">
-                    {post.excerpt}
+                    {texteBrut(post.excerpt)}
                   </p>
 
                   <div className="mt-auto flex items-center justify-between text-[12px] text-[var(--color-muted)] border-t border-[var(--color-border-soft)] pt-4">

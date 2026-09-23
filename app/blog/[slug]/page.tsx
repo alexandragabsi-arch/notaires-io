@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { texteBrut } from "@/lib/texte-brut";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -31,7 +32,7 @@ export async function generateMetadata({
   const dynamic = await getDynamicArticleBySlug(slug);
   if (dynamic) {
     const title = dynamic.meta_title ?? dynamic.title;
-    const desc = dynamic.meta_description ?? dynamic.excerpt ?? "";
+    const desc = texteBrut(dynamic.meta_description ?? dynamic.excerpt ?? "");
     return {
       title,
       description: desc,
@@ -129,7 +130,7 @@ export default async function BlogPostPage({
       "@context": "https://schema.org",
       "@type": "Article",
       headline: dynamic.h1 ?? dynamic.title,
-      description: dynamic.excerpt ?? "",
+      description: texteBrut(dynamic.excerpt),
       url: `${BASE}/blog/${slug}`,
       datePublished: dynamic.published_at,
       dateModified: dynamic.published_at,
@@ -150,8 +151,8 @@ export default async function BlogPostPage({
           "@type": "FAQPage",
           mainEntity: faq.map((f) => ({
             "@type": "Question",
-            name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.r },
+            name: texteBrut(f.q),
+            acceptedAnswer: { "@type": "Answer", text: texteBrut(f.r) },
           })),
         }
       : null;
@@ -197,7 +198,7 @@ export default async function BlogPostPage({
                utilisé pour le SEO (meta description) et les cartes du blog. */}
             {(dynamic.intro || dynamic.excerpt) && (
               <p className="text-[17px] leading-relaxed text-[var(--color-muted)] mb-8 text-justify hyphens-auto">
-                {dynamic.intro || dynamic.excerpt}
+                {texteBrut(dynamic.intro || dynamic.excerpt)}
               </p>
             )}
 
@@ -212,8 +213,8 @@ export default async function BlogPostPage({
                 <div className="flex flex-col gap-4">
                   {faq.map((f, i) => (
                     <div key={i} className="bg-[var(--color-tint-blue)] rounded-xl p-5">
-                      <p className="font-semibold text-[var(--color-text-strong)] mb-2">{f.q}</p>
-                      <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">{f.r}</p>
+                      <p className="font-semibold text-[var(--color-text-strong)] mb-2">{texteBrut(f.q)}</p>
+                      <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">{texteBrut(f.r)}</p>
                     </div>
                   ))}
                 </div>

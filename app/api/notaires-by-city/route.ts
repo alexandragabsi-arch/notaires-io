@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { limiter, ipDe } from "@/lib/rate-limit";
 import { readFileSync } from "fs";
+import { supabaseAdmin } from "@/lib/notaire-email-serveur";
 import { join } from "path";
 
 interface RawNotaire {
@@ -90,6 +91,37 @@ function loadOffices(): RawOffice[] {
   } catch { return []; }
 }
 
+/** Notaires inscrits sur la plateforme, dans la ville demandée.
+ *  L'app lisait uniquement les fichiers importés : un notaire abonné y
+ *  apparaissait sans sa photo, sans son agenda, et jamais en tête. */
+async function inscritsDeLaVille(norm: string) {
+  try {
+    const { data } = await supabaseAdmin()
+      .from("notaire_profiles")
+      .select("id, name, initials, color, city, photo, specialties, slot_matrix, subscription_status")
+      .eq("verifie", true);
+    return (data ?? [])
+      .filter((n) => n.subscription_status !== "expire" && cityMatches(String(n.city ?? ""), norm))
+      .map((n) => {
+        const prochain = (n.slot_matrix as string[][] | null)?.findIndex((j) => j?.length > 0) ?? -1;
+        const heure = prochain >= 0 ? (n.slot_matrix as string[][])[prochain][0] : null;
+        return {
+          id: n.id as string,
+          name: n.name as string,
+          initials: (n.initials as string) || "NT",
+          color: (n.color as "default" | "green" | "purple") || "default",
+          city: n.city as string,
+          photo: (n.photo as string | null) ?? undefined,
+          specialties: (n.specialties as string[] | null) ?? undefined,
+          claimed: true,
+          next: heure ? (prochain === 0 ? `Demain ${heure}` : `Dans ${prochain + 1} jours ${heure}`) : "Sur demande",
+        };
+      });
+  } catch {
+    return [];  // l'annuaire importé reste servi si la base ne répond pas
+  }
+}
+
 export async function GET(req: NextRequest) {
   // L'annuaire est l'actif du site : on le sert normalement, mais on ne le
   // laisse pas aspirer fiche par fiche à pleine vitesse.
@@ -107,6 +139,11 @@ export async function GET(req: NextRequest) {
 
   if (!norm) return NextResponse.json([]);
 
+  // 0. Notaires inscrits : toujours en tête, avec leurs vraies données.
+  const inscrits = await inscritsDeLaVille(norm);
+  const placesRestantes = Math.max(0, limit - inscrits.length);
+  if (placesRestantes === 0) return NextResponse.json(inscrits.slice(0, limit));
+
   // 1. Cherche dans membres (notaires individuels)
   // On écarte les fiches au niveau étude (id `etude-…` issu de l'API entreprises,
   // ou raison sociale du type « Étude … ») : l'annuaire ne liste que des personnes,
@@ -115,18 +152,19 @@ export async function GET(req: NextRequest) {
   const personnes = membres.filter(
     n => !String(n.id).startsWith("etude-") && !OFFICE_PREFIXES.test(n.name.replace(/^Me\s+/, "")),
   );
+  const dejaInscrits = new Set(inscrits.map((n) => n.name));
   const fromMembres = personnes
-    .filter(n => cityMatches(n.city, norm))
-    .slice(0, limit);
+    .filter(n => cityMatches(n.city, norm) && !dejaInscrits.has(n.name))
+    .slice(0, placesRestantes);
 
-  if (fromMembres.length >= limit) {
-    return NextResponse.json(fromMembres.slice(0, limit).map((n, i) => ({
+  if (fromMembres.length >= placesRestantes) {
+    return NextResponse.json([...inscrits, ...fromMembres.map((n, i) => ({
       name: n.name,
       initials: n.initials || n.name.replace(/^Me\s+/, "").split(/\s+/).map((p: string) => p[0]).slice(0, 2).join(""),
       color: n.color,
       city: n.city,
       next: SLOTS[i % SLOTS.length],
-    })));
+    }))].slice(0, limit));
   }
 
   // 2. Complète avec les études dont la raison sociale EST un notaire
@@ -137,19 +175,20 @@ export async function GET(req: NextRequest) {
   const fromOffices = offices
     .filter(o => isIndividual(o.name))
     .filter(o => cityMatches(o.city, norm))
-    .slice(0, limit - fromMembres.length);
+    .slice(0, placesRestantes - fromMembres.length);
 
   // 3. Repli par NOM. L'app envoie la saisie de l'utilisateur dans `city` sans
   //    distinguer ville et patronyme : taper « léon » ne renvoyait que les
   //    2 notaires de la commune de Léon, jamais les 72 qui s'appellent Léon.
   //    Insensible aux accents, comme la recherche du site.
-  const dejaPris = new Set([...fromMembres, ...fromOffices].map(x => x.name));
-  const restant = limit - fromMembres.length - fromOffices.length;
+  const dejaPris = new Set([...inscrits, ...fromMembres, ...fromOffices].map(x => x.name));
+  const restant = placesRestantes - fromMembres.length - fromOffices.length;
   const fromNames = restant <= 0 ? [] : personnes
     .filter(n => !dejaPris.has(n.name) && normCity(n.name).includes(norm))
     .slice(0, restant);
 
   const all = [
+    ...inscrits,
     ...fromMembres.map((n, i) => ({
       name: n.name,
       initials: n.initials || "NT",

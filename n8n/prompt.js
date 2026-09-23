@@ -35,15 +35,20 @@ Réponds UNIQUEMENT avec un objet JSON valide (sans markdown ni texte autour) :
   "meta_title": "titre <title>, 55-60 caractères, mot-clé en début",
   "meta_description": "meta description 140-155 caractères avec appel à l'action",
   "h1": "titre H1 engageant",
-  "excerpt": "résumé 120-150 mots, mot-clé dans les 50 premiers",
-  "intro": "introduction 80-100 mots",
+  "excerpt": "résumé 120-150 mots, mot-clé dans les 50 premiers, TEXTE BRUT sans balise HTML",
+  "intro": "introduction 80-100 mots, TEXTE BRUT sans balise HTML",
   "content_html": "article HTML complet : h2, h3, p, ul/li, strong",
-  "faq": [{ "q": "question telle qu'elle est tapée", "r": "réponse 60-80 mots" }],
+  "faq": [{ "q": "question telle qu'elle est tapée, TEXTE BRUT", "r": "réponse 60-80 mots, TEXTE BRUT sans balise HTML" }],
   "category": "Succession|Immobilier|Mariage|Famille|Donation|Guide|FAQ|Local",
   "reading_time": 9
 }
 
-5 à 7 sections H2, 5 à 8 questions de FAQ reprenant les requêtes ci-dessus.`;
+5 à 7 sections H2, 5 à 8 questions de FAQ reprenant les requêtes ci-dessus.
+
+Le HTML n'est autorisé QUE dans content_html. meta_title, meta_description,
+h1, excerpt, intro et les q/r de la FAQ sont du texte brut : aucune balise
+(<strong>, <p>, <br>…), aucune entité (&nbsp;, &amp;). Ces champs sont affichés
+tels quels sur le site et dans les résultats Google, où une balise se voit.`;
 
 return [{
   json: {

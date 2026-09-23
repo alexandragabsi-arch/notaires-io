@@ -17,7 +17,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/annuaire`,              lastModified: NOW, changeFrequency: "daily",   priority: 0.95 },
     { url: `${BASE}/notaires`,             lastModified: NOW, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/inscription`,          lastModified: NOW, changeFrequency: "monthly", priority: 0.75 },
-    { url: `${BASE}/connexion`,            lastModified: NOW, changeFrequency: "monthly", priority: 0.3 },
     { url: `${BASE}/support`,              lastModified: NOW, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE}/mentions-legales`,     lastModified: NOW, changeFrequency: "yearly",  priority: 0.2 },
     { url: `${BASE}/cgu`,                  lastModified: NOW, changeFrequency: "yearly",  priority: 0.2 },

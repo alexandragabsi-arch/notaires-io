@@ -166,6 +166,7 @@ const AVAIL_TABS: { label: string; max: number | null }[] = [
 /* ── Carte notaire ─────────────────────────────────────── */
 function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
   const [offset, setOffset] = useState(0);
+  const [competencesOuvertes, setCompetencesOuvertes] = useState(false);
   const workdays = useMemo(() => getNextWorkdays(30), []);
   const maxOffset = Math.max(0, workdays.length - DAYS_VISIBLE);
   const visibleDays = workdays.slice(offset, offset + DAYS_VISIBLE);
@@ -259,24 +260,37 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
               </div>
             )}
 
-            {/* Domaines + sous-spécialités + langues */}
-            <div className="flex flex-wrap gap-1.5">
-              {n.specialties.map((s) => (
-                <span key={s} className="text-[11px] px-2.5 py-1 rounded-full border border-[var(--color-border)] text-[var(--color-text-strong)]">
-                  {s}
-                </span>
-              ))}
-              {(n.subSpecialties ?? []).map((s) => (
-                <span key={s} className="text-[11px] px-2.5 py-1 rounded-full bg-[var(--color-tint-blue)] text-[var(--color-accent)] border border-[var(--color-border-soft)]">
-                  {s}
-                </span>
-              ))}
-              {(n.languages ?? []).map((l) => (
-                <span key={l} className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">
-                  🌐 {l}
-                </span>
-              ))}
-            </div>
+            {/* Domaines + sous-spécialités + langues.
+                Un notaire complet peut cocher 30 compétences : affichées toutes,
+                elles poussaient l'agenda hors de l'écran. On en montre six, le
+                reste se déplie à la demande. */}
+            {(() => {
+              const domaines = n.specialties.map((s) => ({ cle: `d-${s}`, texte: s, style: "border border-[var(--color-border)] text-[var(--color-text-strong)]" }));
+              const sous = (n.subSpecialties ?? []).map((s) => ({ cle: `s-${s}`, texte: s, style: "bg-[var(--color-tint-blue)] text-[var(--color-accent)] border border-[var(--color-border-soft)]" }));
+              const langues = (n.languages ?? []).map((l) => ({ cle: `l-${l}`, texte: `🌐 ${l}`, style: "bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium" }));
+              const toutes = [...domaines, ...sous, ...langues];
+              const visibles = competencesOuvertes ? toutes : toutes.slice(0, 6);
+              const restantes = toutes.length - visibles.length;
+              return (
+                <div className="flex flex-wrap gap-1.5">
+                  {visibles.map((c) => (
+                    <span key={c.cle} className={`text-[11px] px-2.5 py-1 rounded-full ${c.style}`}>
+                      {c.texte}
+                    </span>
+                  ))}
+                  {(restantes > 0 || competencesOuvertes) && (
+                    <button
+                      type="button"
+                      onClick={() => setCompetencesOuvertes((v) => !v)}
+                      aria-expanded={competencesOuvertes}
+                      className="text-[11px] px-2.5 py-1 rounded-full border border-dashed border-[var(--color-accent)] text-[var(--color-accent)] font-semibold hover:bg-[var(--color-accent-soft)] transition-colors"
+                    >
+                      {competencesOuvertes ? "Voir moins" : `+ ${restantes} compétence${restantes > 1 ? "s" : ""}`}
+                    </button>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* CTA */}
             <a href={`/notaires/${n.id}`}
@@ -527,9 +541,13 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   // Ordre : l'arrondissement demandé d'abord, puis les notaires inscrits des
   // arrondissements voisins, puis le reste.
   const classes = useMemo(() => {
-    const tries = abonnesEnTete(results);
-    if (!arrFilter) return tries;
-    return [...tries].sort((a, b) => Number(b.arrondissement === arrFilter) - Number(a.arrondissement === arrFilter));
+    if (!arrFilter) return abonnesEnTete(results);
+    // Inscrits d'abord — y compris hors de l'arrondissement demandé, sinon ils
+    // finissaient au-delà de la 600e place, donc invisibles — puis les notaires
+    // de l'arrondissement, puis le reste.
+    return [...results].sort((a, b) =>
+      Number(!!b.claimed) - Number(!!a.claimed) ||
+      Number(b.arrondissement === arrFilter) - Number(a.arrondissement === arrFilter));
   }, [results, arrFilter]);
   const displayed = useMemo(() => classes.slice(0, displayLimit), [classes, displayLimit]);
 

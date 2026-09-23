@@ -304,7 +304,9 @@ export default function SeoLandingPage({ h1, intro, notaires: notairesAnnuaire, 
       return true;
     })),
     [notaires, selectedSpecialty, selectedArr, selectedCity]
-  ).sort((a, b) => (selectedArr ? Number(b.arrondissement === selectedArr) - Number(a.arrondissement === selectedArr) : 0));
+  ).sort((a, b) =>
+    Number(!!b.claimed) - Number(!!a.claimed) ||
+    (selectedArr ? Number(b.arrondissement === selectedArr) - Number(a.arrondissement === selectedArr) : 0));
 
   /* Géolocalisation → arrondissement */
   const detectNearMe = useCallback(async () => {

@@ -515,13 +515,22 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
       // que les notaires réellement situés dans cet arrondissement. Les fiches sans
       // arrondissement connu sont exclues — elles polluaient le résultat (ex. une
       // fiche sans code postal apparaissait sous « Paris 18e »).
-      const matchArr = !arrFilter || n.arrondissement === arrFilter;
+      // Un notaire inscrit de la même ville reste proposé même hors de
+      // l'arrondissement demandé : il est le seul à proposer un vrai agenda,
+      // et quelques rues d'écart ne justifient pas de le cacher. Il apparaît
+      // après ceux de l'arrondissement (cf. tri plus bas).
+      const matchArr = !arrFilter || n.arrondissement === arrFilter || (!!n.claimed && matchCity);
       return matchCity && matchName && matchLang && matchSpec && matchSubSpec && matchAvail && matchArr;
     });
   }, [all, city, nameQuery, language, specialty, subSpec, availMax, arrFilter]);
 
-  // Les notaires inscrits passent devant : eux seuls ont un agenda réservable.
-  const classes = useMemo(() => abonnesEnTete(results), [results]);
+  // Ordre : l'arrondissement demandé d'abord, puis les notaires inscrits des
+  // arrondissements voisins, puis le reste.
+  const classes = useMemo(() => {
+    const tries = abonnesEnTete(results);
+    if (!arrFilter) return tries;
+    return [...tries].sort((a, b) => Number(b.arrondissement === arrFilter) - Number(a.arrondissement === arrFilter));
+  }, [results, arrFilter]);
   const displayed = useMemo(() => classes.slice(0, displayLimit), [classes, displayLimit]);
 
   /** Vrai dès qu'un critère de recherche/filtre est actif */

@@ -41,3 +41,17 @@ export function arrDepuisAdresse(adresse: string | null | undefined): Arrondisse
   const m = (adresse ?? "").match(/\b\d{5}\b/);
   return m ? arrDepuisCodePostal(m[0]) : null;
 }
+
+// Code commune des trois villes à arrondissements. L'API Adresse renvoie pour
+// « Paris » la commune entière (75056) avec le code postal 75001 : le prendre
+// pour un arrondissement enfermait le visiteur dans le 1er.
+const COMMUNES_A_ARRONDISSEMENTS = new Set(["75056", "69123", "13055"]);
+
+export function estVilleEntiere(citycode: string | null | undefined): boolean {
+  return !!citycode && COMMUNES_A_ARRONDISSEMENTS.has(citycode);
+}
+
+/** Arrondissement d'une suggestion de ville : aucun si c'est la ville entière. */
+export function arrDeSuggestion(s: { postcode?: string | null; citycode?: string | null }): Arrondissement | null {
+  return estVilleEntiere(s.citycode) ? null : arrDepuisCodePostal(s.postcode);
+}

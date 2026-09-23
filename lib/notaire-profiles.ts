@@ -135,6 +135,10 @@ export async function getRemoteProfiles(): Promise<ListingNotaire[]> {
     slotMatrix: (row.slot_matrix as string[][] | null) || undefined,
     next: "Sur demande",
     isNew: false,
+    // Fiche rattachée à un compte confirmé : notaire inscrit sur la plateforme.
+    // Sans ce marquage, l'annuaire le traitait comme une fiche importée — pas
+    // de badge, et il ne remontait pas en tête des résultats.
+    claimed: true,
   }));
 }
 

@@ -297,12 +297,14 @@ export default function SeoLandingPage({ h1, intro, notaires: notairesAnnuaire, 
   const filtered = useMemo(() =>
     abonnesEnTete(notaires.filter(n => {
       if (selectedSpecialty && !n.specialties.includes(selectedSpecialty)) return false;
-      if (selectedArr && n.arrondissement !== selectedArr) return false;
+      // Les notaires inscrits de la ville restent proposés hors arrondissement
+      // (voir l'annuaire) : ils passent en fin de liste, pas à la trappe.
+      if (selectedArr && n.arrondissement !== selectedArr && !n.claimed) return false;
       if (selectedCity && n.city?.toLowerCase() !== selectedCity.toLowerCase()) return false;
       return true;
     })),
     [notaires, selectedSpecialty, selectedArr, selectedCity]
-  );
+  ).sort((a, b) => (selectedArr ? Number(b.arrondissement === selectedArr) - Number(a.arrondissement === selectedArr) : 0));
 
   /* Géolocalisation → arrondissement */
   const detectNearMe = useCallback(async () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { arrDepuisCodePostal } from "@/lib/arrondissements";
+import { arrDepuisCodePostal, arrDeSuggestion, estVilleEntiere } from "@/lib/arrondissements";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Loader2, Sparkles, MapPin } from "lucide-react";
@@ -46,7 +46,9 @@ export default function Wizard() {
   const [enrich, setEnrich] = useState<Record<string, string>>({});
 
   // Autocomplete ville / CP
-  const [citySuggestions, setCitySuggestions] = useState<{ city: string; postcode: string }[]>([]);
+  const [citySuggestions, setCitySuggestions] = useState<{ city: string; postcode: string; citycode: string }[]>([]);
+  // Arrondissement retenu (géoloc ou suggestion) ; null = ville entière.
+  const [arrChoisi, setArrChoisi] = useState<number | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [geoLoading, setGeoLoading] = useState(false);
   const suggestTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -68,10 +70,13 @@ export default function Wizard() {
         const res = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(q)}&type=municipality&limit=7&autocomplete=1`);
         const json = await res.json();
         const seen = new Set<string>();
-        const items: { city: string; postcode: string }[] = [];
+        const items: { city: string; postcode: string; citycode: string }[] = [];
         for (const f of json.features ?? []) {
           const key = f.properties.city + f.properties.postcode;
-          if (!seen.has(key)) { seen.add(key); items.push({ city: f.properties.city, postcode: f.properties.postcode }); }
+          if (!seen.has(key)) {
+            seen.add(key);
+            items.push({ city: f.properties.city, postcode: f.properties.postcode, citycode: f.properties.citycode ?? "" });
+          }
         }
         setCitySuggestions(items);
         setShowSuggestions(items.length > 0);
@@ -94,8 +99,9 @@ export default function Wizard() {
     }, 180);
   }
 
-  function selectCity(item: { city: string; postcode: string }) {
+  function selectCity(item: { city: string; postcode: string; citycode: string }) {
     setPostal(item.postcode);
+    setArrChoisi(arrDeSuggestion(item)?.num ?? null);
     setCityLabel(item.city);
     setCityBase(item.city);
     setCitySuggestions([]);
@@ -118,6 +124,7 @@ export default function Wizard() {
         setCityBase(base);
         // Arrondissement (Paris, Lyon, Marseille) affiché dans le libellé.
         const arr = arrDepuisCodePostal(props.postcode);
+        setArrChoisi(arr?.num ?? null);
         setCityLabel(arr && base ? `${base} ${arr.label}` : base);
         setCitySuggestions([]);
         setShowSuggestions(false);
@@ -195,8 +202,7 @@ export default function Wizard() {
     if (specialty) params.set("specialite", specialty);
     // Arrondissement transmis dès qu'il est connu : sans lui, l'annuaire
     // affichait toute la ville (un habitant du 16e voyait des notaires du 8e).
-    const arr = arrDepuisCodePostal(postal);
-    if (arr) params.set("arr", String(arr.num));
+    if (arrChoisi) params.set("arr", String(arrChoisi));
     window.open(`/annuaire?${params.toString()}`, "_blank");
   }
 
@@ -510,7 +516,9 @@ export default function Wizard() {
                         className="px-4 py-3 text-[14px] text-[var(--color-text-strong)] hover:bg-[var(--color-tint-blue)] cursor-pointer flex justify-between items-center"
                       >
                         <span className="font-semibold">{item.city}</span>
-                        <span className="text-[var(--color-muted)] text-[13px]">{item.postcode}</span>
+                        <span className="text-[var(--color-muted)] text-[13px]">
+                          {estVilleEntiere(item.citycode) ? "Toute la ville" : item.postcode}
+                        </span>
                       </li>
                     ))}
                   </ul>

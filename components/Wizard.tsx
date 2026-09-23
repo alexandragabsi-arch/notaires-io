@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { arrDepuisCodePostal } from "@/lib/arrondissements";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Loader2, Sparkles, MapPin } from "lucide-react";
@@ -115,14 +116,9 @@ export default function Wizard() {
         setPostal(props.postcode);
         const base = props.city ?? props.municipality ?? "";
         setCityBase(base);
-        // Pour Paris : afficher l'arrondissement dans le label
-        const parisMatch = /^750(\d{2})$/.exec(props.postcode);
-        if (parisMatch) {
-          const arr = parseInt(parisMatch[1], 10);
-          setCityLabel(arr > 0 ? `Paris ${arr}e arrondissement` : base);
-        } else {
-          setCityLabel(base);
-        }
+        // Arrondissement (Paris, Lyon, Marseille) affiché dans le libellé.
+        const arr = arrDepuisCodePostal(props.postcode);
+        setCityLabel(arr && base ? `${base} ${arr.label}` : base);
         setCitySuggestions([]);
         setShowSuggestions(false);
       }
@@ -197,9 +193,10 @@ export default function Wizard() {
     const specialty = q1 ? getSpecialty(q1, q2) : "";
     const params = new URLSearchParams({ ville: cityBase || city });
     if (specialty) params.set("specialite", specialty);
-    // Pour Paris : transmettre l'arrondissement si détecté par géoloc
-    const parisMatch = /^750(\d{2})$/.exec(postal);
-    if (parisMatch && !cityBase) params.set("arr", String(parseInt(parisMatch[1], 10)));
+    // Arrondissement transmis dès qu'il est connu : sans lui, l'annuaire
+    // affichait toute la ville (un habitant du 16e voyait des notaires du 8e).
+    const arr = arrDepuisCodePostal(postal);
+    if (arr) params.set("arr", String(arr.num));
     window.open(`/annuaire?${params.toString()}`, "_blank");
   }
 

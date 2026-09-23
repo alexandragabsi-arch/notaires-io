@@ -9,6 +9,7 @@
 import { readFileSync } from "fs";
 import { join } from "path";
 import type { ListingNotaire } from "./notaires-listing";
+import { arrDepuisAdresse } from "./arrondissements";
 
 interface RawNotaire {
   id: string;
@@ -61,23 +62,7 @@ function withFamilyLaw(specs: string[]): string[] {
  * Couvre Paris (75), Lyon (69) et Marseille (13). Retourne `undefined` sinon.
  */
 function arrFromAddress(address?: string): number | undefined {
-  if (!address) return undefined;
-  const m = address.match(/\b(75|69|13)(\d{3})\b/);
-  if (!m) return undefined;
-  const dept = m[1];
-  const code = parseInt(m[1] + m[2], 10);
-  if (dept === "75") {
-    if (code === 75116) return 16; // Paris 16e (Auteuil)
-    const n = code - 75000;
-    return n >= 1 && n <= 20 ? n : undefined;
-  }
-  if (dept === "69") {
-    const n = code - 69000;
-    return n >= 1 && n <= 9 ? n : undefined;
-  }
-  // dept === "13"
-  const n = code - 13000;
-  return n >= 1 && n <= 16 ? n : undefined;
+  return arrDepuisAdresse(address)?.num;
 }
 
 /** Arrondissement d'un notaire : champ explicite si présent, sinon déduit de l'adresse. */

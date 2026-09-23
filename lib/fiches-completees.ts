@@ -9,6 +9,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ListingNotaire } from "./notaires-listing";
 import { getRemoteProfiles } from "./notaire-profiles";
+import { arrDepuisAdresse } from "./arrondissements";
 
 // Une seule requête par visite, partagée par tous les composants de la page.
 let _promesse: Promise<ListingNotaire[]> | null = null;
@@ -21,16 +22,10 @@ function sansAccents(s: string): string {
   return (s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 }
 
-// « Paris 8ème » / « 75008 » → 8 (Paris, Lyon, Marseille), comme l'annuaire.
+// « Paris 8ème » / adresse « … 75008 … » → 8 (Paris, Lyon, Marseille).
 function arrondissement(n: ListingNotaire): number | undefined {
-  const m = (n.address ?? "").match(/\b(75|69|13)(\d{3})\b/);
-  if (m) {
-    const code = parseInt(m[1] + m[2], 10);
-    if (code === 75116) return 16;
-    const num = code - parseInt(m[1] + "000", 10);
-    const max = m[1] === "75" ? 20 : m[1] === "69" ? 9 : 16;
-    if (num >= 1 && num <= max) return num;
-  }
+  const parAdresse = arrDepuisAdresse(n.address);
+  if (parAdresse) return parAdresse.num;
   const v = sansAccents(n.city).match(/^(paris|lyon|marseille)\s+(\d{1,2})/);
   return v ? parseInt(v[2], 10) : undefined;
 }
@@ -66,6 +61,12 @@ export function fusionnerFiches(
 
   // Fiches actives en tête : ce sont elles qui prennent des rendez-vous.
   return [...nouvelles, ...fusion];
+}
+
+/** Notaires inscrits sur la plateforme en tête, le reste dans l'ordre d'origine.
+ *  Ce sont les seuls qui prennent réellement des rendez-vous en ligne. */
+export function abonnesEnTete(liste: ListingNotaire[]): ListingNotaire[] {
+  return [...liste].sort((a, b) => Number(!!b.claimed) - Number(!!a.claimed));
 }
 
 /** Liste de l'annuaire enrichie des fiches complétées (chargées après le rendu). */

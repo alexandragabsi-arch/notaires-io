@@ -3,7 +3,8 @@
 import { useState, useMemo, useCallback } from "react";
 import { ChevronLeft, ChevronRight, MapPin, Phone, Navigation, Loader2, X } from "lucide-react";
 import type { ListingNotaire } from "@/lib/notaires-listing";
-import { useFichesCompletees } from "@/lib/fiches-completees";
+import { useFichesCompletees, abonnesEnTete } from "@/lib/fiches-completees";
+import { arrDepuisCodePostal, libelleArr } from "@/lib/arrondissements";
 
 interface Props {
   h1: string;
@@ -40,15 +41,8 @@ const SPECIALTY_PILLS = [
 ];
 
 /* ── Géolocalisation → numéro d'arrondissement ── */
-function postalToArrNum(code: string): number | null {
-  if (/^750\d\d$/.test(code)) { const n = parseInt(code.slice(3), 10); return n >= 1 && n <= 20 ? n : null; }
-  if (code === "75116") return 16;
-  if (/^690\d\d$/.test(code)) { const n = parseInt(code.slice(3), 10); return n >= 1 && n <= 9 ? n : null; }
-  if (/^130\d\d$/.test(code)) { const n = parseInt(code.slice(3), 10); return n >= 1 && n <= 16 ? n : null; }
-  return null;
-}
-
-function arrLabel(n: number): string { return n === 1 ? "1er" : `${n}ème`; }
+const postalToArrNum = (code: string): number | null => arrDepuisCodePostal(code)?.num ?? null;
+const arrLabel = libelleArr;
 
 function getNextWorkdays(n: number): Date[] {
   const days: Date[] = [];
@@ -299,14 +293,14 @@ export default function SeoLandingPage({ h1, intro, notaires: notairesAnnuaire, 
     return SPECIALTY_PILLS.filter(p => set.has(p.key));
   }, [notaires]);
 
-  /* Notaires filtrés */
+  /* Notaires filtrés, inscrits en tête (seuls à proposer un vrai agenda) */
   const filtered = useMemo(() =>
-    notaires.filter(n => {
+    abonnesEnTete(notaires.filter(n => {
       if (selectedSpecialty && !n.specialties.includes(selectedSpecialty)) return false;
       if (selectedArr && n.arrondissement !== selectedArr) return false;
       if (selectedCity && n.city?.toLowerCase() !== selectedCity.toLowerCase()) return false;
       return true;
-    }),
+    })),
     [notaires, selectedSpecialty, selectedArr, selectedCity]
   );
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { arrDepuisCodePostal } from "@/lib/arrondissements";
 import { MapPin, Loader2, ChevronRight, Navigation, Search } from "lucide-react";
 
 type Status = "idle" | "loading" | "found" | "error";
@@ -63,22 +64,7 @@ function slugify(str: string): string {
     .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
-function postalToArrondissement(code: string): { num: number; label: string; slug: string } | null {
-  if (/^750\d\d$/.test(code)) {
-    const n = parseInt(code.slice(3), 10);
-    if (n >= 1 && n <= 20) return { num: n, label: n === 1 ? "1er" : `${n}ème`, slug: n === 1 ? "1er" : `${n}eme` };
-  }
-  if (code === "75116") return { num: 16, label: "16ème", slug: "16eme" };
-  if (/^690\d\d$/.test(code)) {
-    const n = parseInt(code.slice(3), 10);
-    if (n >= 1 && n <= 9) return { num: n, label: n === 1 ? "1er" : `${n}ème`, slug: n === 1 ? "1er" : `${n}eme` };
-  }
-  if (/^130\d\d$/.test(code)) {
-    const n = parseInt(code.slice(3), 10);
-    if (n >= 1 && n <= 16) return { num: n, label: n === 1 ? "1er" : `${n}ème`, slug: n === 1 ? "1er" : `${n}eme` };
-  }
-  return null;
-}
+const postalToArrondissement = arrDepuisCodePostal;
 
 function buildHref(citySlug: string, postcode: string): string | null {
   const pageSlug = CITY_MAP[citySlug];

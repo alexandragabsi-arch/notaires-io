@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
-import { useFichesCompletees } from "@/lib/fiches-completees";
+import { useFichesCompletees, abonnesEnTete } from "@/lib/fiches-completees";
 import NotaireMap from "@/components/NotaireMap";
 
 const ALL = "Toutes";
@@ -520,7 +520,9 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
     });
   }, [all, city, nameQuery, language, specialty, subSpec, availMax, arrFilter]);
 
-  const displayed = useMemo(() => results.slice(0, displayLimit), [results, displayLimit]);
+  // Les notaires inscrits passent devant : eux seuls ont un agenda réservable.
+  const classes = useMemo(() => abonnesEnTete(results), [results]);
+  const displayed = useMemo(() => classes.slice(0, displayLimit), [classes, displayLimit]);
 
   /** Vrai dès qu'un critère de recherche/filtre est actif */
   const hasSearch =

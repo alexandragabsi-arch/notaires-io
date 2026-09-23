@@ -43,7 +43,7 @@ export default function BandeauAbonnement({ notaireId, retourCarte }: { notaireI
     });
     const json = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
     if (json.url) {
-      window.location.href = json.url;
+      window.location.assign(json.url);
       return;
     }
     setErreur(json.error ?? "Impossible d'ouvrir le paiement. Réessayez.");

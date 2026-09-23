@@ -1,7 +1,15 @@
-// Offres « essai sans carte » accessibles par un lien : /inscription?offre=<code>.
-// Partagé navigateur / serveur ; le serveur revérifie toujours la validité.
+// Offres « essai sans carte ». L'offre de lancement s'applique à toute
+// inscription ; un lien /inscription?offre=<code> permet d'en nommer une autre
+// (campagne identifiée, suivi séparé). Partagé navigateur / serveur ; le
+// serveur revérifie toujours la validité.
 
 export const OFFRES = {
+  // Offre par défaut : 2 mois offerts sans carte pour tout notaire qui s'inscrit.
+  lancement: {
+    mois: 2,
+    finValidite: "2026-12-31T23:59:59+01:00",
+    libelle: "Offre de lancement",
+  },
   // Campagne abonnés de la page LinkedIn (septembre 2026).
   linkedin: {
     mois: 2,
@@ -9,6 +17,9 @@ export const OFFRES = {
     libelle: "Offre abonnés LinkedIn",
   },
 } as const;
+
+/** Offre appliquée quand le lien n'en précise aucune. */
+export const OFFRE_PAR_DEFAUT: CodeOffre = "lancement";
 
 export type CodeOffre = keyof typeof OFFRES;
 
@@ -20,6 +31,12 @@ export function offreConnue(code: string | null | undefined): CodeOffre | null {
 export function offreValide(code: string | null | undefined, maintenant = new Date()): CodeOffre | null {
   const c = offreConnue(code);
   return c && maintenant.getTime() <= new Date(OFFRES[c].finValidite).getTime() ? c : null;
+}
+
+/** Offre à appliquer à une inscription : celle du lien si elle est encore
+ *  ouverte, sinon l'offre de lancement. Null si plus aucune n'est ouverte. */
+export function offreApplicable(code: string | null | undefined, maintenant = new Date()): CodeOffre | null {
+  return offreValide(code, maintenant) ?? offreValide(OFFRE_PAR_DEFAUT, maintenant);
 }
 
 /** Fin de l'accès offert : N mois calendaires (le 15 mars → le 15 mai).

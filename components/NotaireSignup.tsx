@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { addProfile, claimProfile, erreurPhoto, PHOTO_TYPES, BIO_MAX } from "@/lib/notaire-profiles";
 import { isNotaireEmail, cleanCrpcen, isValidCrpcen } from "@/lib/notaire-email";
-import { OFFRES, offreConnue, offreValide, dateFr } from "@/lib/offres";
+import { OFFRES, offreConnue, offreValide, offreApplicable, dateFr } from "@/lib/offres";
 import { sousSpecialitesPour } from "@/lib/sous-specialites";
 import { supabase } from "@/lib/supabase";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
@@ -62,8 +62,10 @@ export default function NotaireSignup() {
   // Offre « essai sans carte » via un lien (/inscription?offre=linkedin).
   // Expirée → on le dit, et l'inscription repasse sur l'essai avec carte.
   const offreParam = searchParams.get("offre");
-  const offre = offreValide(offreParam);
-  const offreExpiree = !!offreConnue(offreParam) && !offre;
+  // Toute inscription se fait sans carte (offre de lancement) ; un lien de
+  // campagne nomme simplement l'offre affichée.
+  const offre = offreApplicable(offreParam);
+  const offreExpiree = !!offreConnue(offreParam) && !offreValide(offreParam);
   const offreFin = offreConnue(offreParam) ? dateFr(OFFRES[offreConnue(offreParam)!].finValidite) : "";
   // Fiche visée par le lien « Activer mon profil ». Les 35 fiches vedettes sont
   // connues côté navigateur ; les ~23 000 autres sont chargées depuis le serveur.
@@ -320,7 +322,7 @@ export default function NotaireSignup() {
         });
         const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
         if (data.ok) {
-          window.location.href = "/espace-notaire?bienvenue=1";
+          window.location.assign("/espace-notaire?bienvenue=1");
         } else {
           setPayError(data.error ?? "L'offre n'a pas pu être activée. Réessayez.");
           setPaying(false);
@@ -344,7 +346,7 @@ export default function NotaireSignup() {
         const data = (await res.json()) as { ok?: boolean; error?: string };
 
         if (data.ok) {
-          window.location.href = "/espace-notaire?bienvenue=1";
+          window.location.assign("/espace-notaire?bienvenue=1");
         } else {
           // Le profil est déjà créé : on laisse l'utilisateur corriger son code
           // ou repartir sur le paiement, sans lui refaire tout le tunnel.
@@ -372,7 +374,7 @@ export default function NotaireSignup() {
       const data = (await res.json()) as { url?: string; error?: string };
 
       if (data.url) {
-        window.location.href = data.url;
+        window.location.assign(data.url);
       } else {
         setPayError(data.error ?? "Erreur lors de la création du paiement. Veuillez réessayer.");
         setPaying(false);
@@ -567,8 +569,8 @@ export default function NotaireSignup() {
           )}
           {offreExpiree && (
             <p className="text-[13px] text-[var(--color-muted)] max-w-[560px] mx-auto mt-3 bg-[var(--color-accent-soft)] rounded-xl px-4 py-2.5">
-              L&apos;offre sans carte a pris fin le {offreFin}. Vous bénéficiez tout de même
-              de 2 mois offerts, sans aucun débit avant leur terme.
+              {OFFRES[offreConnue(offreParam)!].libelle} a pris fin le {offreFin}.
+              Vous bénéficiez de l&apos;offre de lancement : 2 mois offerts, sans carte.
             </p>
           )}
         </motion.div>

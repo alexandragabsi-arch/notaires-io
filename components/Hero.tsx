@@ -90,7 +90,7 @@ export default function Hero() {
           transition={{ duration: 0.4 }}
           className="serif text-[32px] sm:text-[44px] lg:text-[54px] font-bold leading-[1.15] tracking-tight text-[var(--color-text-strong)] mb-4"
         >
-          Trouvez le bon notaire<br className="hidden sm:block" />{" "}
+          Prenez RDV avec le bon notaire<br className="hidden sm:block" />{" "}
           <span className="text-[var(--color-primary)]">pour votre situation</span>
         </motion.h1>
 

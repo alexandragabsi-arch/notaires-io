@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import {
   Search, MapPin, X, Video, Phone,
   BadgeCheck, ArrowRight, Sparkles, ChevronLeft, ChevronRight,
-  Lock, Building2, Home, Users, Scale, Heart, CalendarClock,
+  Lock, Building2, Home, Users, Scale, Heart, CalendarClock, ListChecks, Globe,
   List, Map as MapIcon, ChevronDown, Check,
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
@@ -387,6 +387,77 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
 
 /* ─────────────────────────────────────────────────────── */
 
+interface OptionFiltre { valeur: string; label: string; actif: boolean }
+
+/** Menu déroulant de filtre : un bouton compact, la valeur choisie en pastille,
+ *  « Tous » pour revenir en arrière. Un seul menu ouvert à la fois. */
+function MenuFiltre({
+  id, icone: Icone, libelle, choisi, options, onChoisir, ouvert, setOuvert,
+}: {
+  id: string;
+  icone: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  libelle: string;
+  choisi: string | null;
+  options: OptionFiltre[];
+  onChoisir: (valeur: string | null) => void;
+  ouvert: string | null;
+  setOuvert: (v: string | null) => void;
+}) {
+  const estOuvert = ouvert === id;
+  const actif = choisi !== null;
+  return (
+    <div className="relative inline-block">
+      <button
+        type="button"
+        onClick={() => setOuvert(estOuvert ? null : id)}
+        aria-expanded={estOuvert}
+        className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-[13px] font-semibold border transition-all ${
+          actif
+            ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-sm"
+            : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+        }`}
+      >
+        <Icone className="w-4 h-4" strokeWidth={2} />
+        <span className="max-w-[180px] truncate">{choisi ?? libelle}</span>
+        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${estOuvert ? "rotate-180" : ""}`} strokeWidth={2.5} />
+      </button>
+
+      {estOuvert && (
+        <>
+          <div className="fixed inset-0 z-30" onClick={() => setOuvert(null)} />
+          <div className="absolute z-40 top-full left-0 mt-2 w-64 max-h-[320px] overflow-y-auto bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-lg p-1">
+            <button
+              type="button"
+              onClick={() => { onChoisir(null); setOuvert(null); }}
+              className={`w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl text-[13px] text-left transition-colors ${
+                !actif ? "bg-[var(--color-tint-blue)] text-[var(--color-accent)] font-semibold" : "text-[var(--color-text-strong)] font-medium hover:bg-[var(--color-tint-blue)]"
+              }`}
+            >
+              Tous
+              {!actif && <Check className="w-4 h-4 shrink-0" strokeWidth={2.5} />}
+            </button>
+            {options.map((o) => (
+              <button
+                key={o.valeur}
+                type="button"
+                onClick={() => { onChoisir(o.actif ? null : o.valeur); setOuvert(null); }}
+                className={`w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl text-[13px] text-left transition-colors ${
+                  o.actif
+                    ? "bg-[var(--color-tint-blue)] text-[var(--color-accent)] font-semibold"
+                    : "text-[var(--color-text-strong)] font-medium hover:bg-[var(--color-tint-blue)]"
+                }`}
+              >
+                <span className="truncate">{o.label}</span>
+                {o.actif && <Check className="w-4 h-4 shrink-0" strokeWidth={2.5} />}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[] }) {
   const searchParams = useSearchParams();
   const urlVille = searchParams.get("ville") ?? "";
@@ -407,7 +478,7 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   const [specialty, setSpecialty] = useState<string>(urlSpecialite || ALL);
   const [subSpec, setSubSpec] = useState<string>(ALL);
   const [availMax, setAvailMax] = useState<number | null>(null); // null = "Tous"
-  const [availOpen, setAvailOpen] = useState(false); // menu disponibilité déplié
+  const [menuOuvert, setMenuOuvert] = useState<string | null>(null); // un seul menu de filtre ouvert
   const [view, setView] = useState<"list" | "map">("list"); // liste (défaut) ou carte
   const [displayLimit, setDisplayLimit] = useState(60);
 
@@ -641,116 +712,61 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
           </div>
         </motion.div>
 
-        {/* Filtre disponibilité (repliable) */}
+        {/* Filtres repliés en menus : cinq rangées de pastilles poussaient les
+            résultats sous la ligne de flottaison, sur ordinateur comme sur mobile. */}
         <motion.div
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.08 }}
-          className="mb-4 max-w-[860px] mx-auto"
+          className="flex flex-wrap items-center gap-2 mb-4 max-w-[860px] mx-auto"
         >
-          <div className="relative inline-block">
-            <button
-              type="button"
-              onClick={() => setAvailOpen((o) => !o)}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-[13px] font-semibold border transition-all ${
-                availMax !== null
-                  ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-sm"
-                  : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-              }`}
-            >
-              <CalendarClock className="w-4 h-4" strokeWidth={2} />
-              {availMax === null
-                ? "Disponibilité"
-                : `Dispo : ${AVAIL_TABS.find((t) => t.max === availMax)?.label}`}
-              <ChevronDown
-                className={`w-3.5 h-3.5 transition-transform ${availOpen ? "rotate-180" : ""}`}
-                strokeWidth={2.5}
-              />
-            </button>
+          <MenuFiltre
+            id="dispo"
+            icone={CalendarClock}
+            libelle="Disponibilité"
+            choisi={availMax === null ? null : `Dispo : ${AVAIL_TABS.find((t) => t.max === availMax)?.label}`}
+            options={AVAIL_TABS.map((t) => ({ valeur: String(t.max), label: t.label, actif: availMax === t.max }))}
+            onChoisir={(v) => setAvailMax(v === null ? null : Number(v))}
+            ouvert={menuOuvert}
+            setOuvert={setMenuOuvert}
+          />
 
-            {availOpen && (
-              <>
-                {/* Clic à l'extérieur pour refermer */}
-                <div className="fixed inset-0 z-30" onClick={() => setAvailOpen(false)} />
-                <div className="absolute z-40 top-full left-0 mt-2 w-56 bg-white border border-[var(--color-border-soft)] rounded-2xl shadow-lg overflow-hidden p-1">
-                  {AVAIL_TABS.map((tab) => {
-                    const on = availMax === tab.max;
-                    return (
-                      <button
-                        key={tab.label}
-                        type="button"
-                        onClick={() => { setAvailMax(tab.max); setAvailOpen(false); }}
-                        className={`w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl text-[13px] text-left transition-colors ${
-                          on
-                            ? "bg-[var(--color-tint-blue)] text-[var(--color-accent)] font-semibold"
-                            : "text-[var(--color-text-strong)] font-medium hover:bg-[var(--color-tint-blue)]"
-                        }`}
-                      >
-                        {tab.label}
-                        {on && <Check className="w-4 h-4 shrink-0" strokeWidth={2.5} />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </>
-            )}
-          </div>
+          <MenuFiltre
+            id="domaine"
+            icone={Scale}
+            libelle="Domaine"
+            choisi={specialty === ALL ? null : specialty}
+            options={SPECIALTIES.map(({ label }) => ({ valeur: label, label, actif: specialty === label }))}
+            onChoisir={(v) => setSpecialty(v ?? ALL)}
+            ouvert={menuOuvert}
+            setOuvert={setMenuOuvert}
+          />
+
+          {subSpecialties.length > 0 && (
+            <MenuFiltre
+              id="precision"
+              icone={ListChecks}
+              libelle="Précision"
+              choisi={subSpec === ALL ? null : subSpec}
+              options={subSpecialties.map((s) => ({ valeur: s, label: s, actif: subSpec === s }))}
+              onChoisir={(v) => setSubSpec(v ?? ALL)}
+              ouvert={menuOuvert}
+              setOuvert={setMenuOuvert}
+            />
+          )}
+
+          {languages.length > 0 && (
+            <MenuFiltre
+              id="langue"
+              icone={Globe}
+              libelle="Langue"
+              choisi={language === ALL ? null : language}
+              options={languages.map((l) => ({ valeur: l, label: l, actif: language === l }))}
+              onChoisir={(v) => setLanguage(v ?? ALL)}
+              ouvert={menuOuvert}
+              setOuvert={setMenuOuvert}
+            />
+          )}
         </motion.div>
-
-        {/* Filtres spécialité */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="flex flex-wrap gap-2 mb-4 max-w-[860px] mx-auto"
-        >
-          {SPECIALTIES.map(({ label, icon: Icon }) => (
-            <button
-              key={label}
-              type="button"
-              onClick={() => setSpecialty(specialty === label ? ALL : label)}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12px] font-semibold border transition-all ${
-                specialty === label
-                  ? "bg-[var(--color-accent)] text-white border-[var(--color-accent)] shadow-sm"
-                  : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-              }`}
-            >
-              <Icon className="w-3.5 h-3.5" strokeWidth={2} />
-              {label}
-            </button>
-          ))}
-        </motion.div>
-
-        {/* Filtre sous-spécialités (apparaît dès qu'un notaire en a renseigné) */}
-        {subSpecialties.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4 max-w-[860px] mx-auto">
-            {subSpecialties.map((s) => (
-              <button key={s} type="button" onClick={() => setSubSpec(s === subSpec ? ALL : s)}
-                className={`px-3 py-1.5 rounded-full text-[12px] font-semibold border transition-colors ${
-                  subSpec === s
-                    ? "bg-[var(--color-primary)] text-white border-[var(--color-primary)]"
-                    : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]"
-                }`}>
-                {s}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* Filtre langues */}
-        {languages.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4 max-w-[860px] mx-auto">
-            {[ALL, ...languages].map((l) => (
-              <button key={l} type="button" onClick={() => setLanguage(l === language ? ALL : l)}
-                className={`px-3 py-1.5 rounded-full text-[12px] font-semibold border transition-colors ${
-                  language === l && l !== ALL
-                    ? "bg-[var(--color-tint-green)] text-[var(--color-success)] border-[var(--color-success)]"
-                    : "bg-white text-[var(--color-muted)] border-[var(--color-border)] hover:border-[var(--color-success)] hover:text-[var(--color-success)]"
-                }`}>
-                {l === ALL ? "Toutes langues" : `🌍 ${l}`}
-              </button>
-            ))}
-          </div>
-        )}
-
 
         {/* ── Compteur ── */}
         {hasSearch && (

@@ -207,7 +207,7 @@ function SlotCalendar({
                       key={slot}
                       type="button"
                       onClick={() => setSelected(active ? null : key)}
-                      className={`w-full py-1.5 rounded-[8px] text-[12px] font-semibold transition-all ${
+                      className={`w-full py-2.5 rounded-[10px] text-[14px] font-semibold transition-all ${
                         active
                           ? "bg-[var(--color-primary)] text-white shadow-sm"
                           : "bg-[var(--color-accent-soft)] text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
@@ -738,8 +738,24 @@ export default function NotaireProfileClient({
   initialNotaire?: ListingNotaire;
   colleagues?: ListingNotaire[];
 }) {
-  // Présentation longue : repliée à quatre lignes, dépliable.
+  // Présentation longue : repliée à quatre lignes, dépliable. Le bouton
+  // n'apparaît que si le texte déborde réellement — la largeur dépend de
+  // l'écran, une estimation au nombre de caractères se trompait sur mobile.
   const [bioOuverte, setBioOuverte] = useState(false);
+  const [bioTronquee, setBioTronquee] = useState(false);
+  const bioRef = useRef<HTMLParagraphElement>(null);
+
+  // Le texte dépasse-t-il les quatre lignes ? Mesuré après rendu et à chaque
+  // changement de largeur (rotation du téléphone, redimensionnement).
+  useEffect(() => {
+    const mesurer = () => {
+      const el = bioRef.current;
+      if (el && !bioOuverte) setBioTronquee(el.scrollHeight > el.clientHeight + 2);
+    };
+    mesurer();
+    window.addEventListener("resize", mesurer);
+    return () => window.removeEventListener("resize", mesurer);
+  }, [bioOuverte]);
 
   // Si le serveur a déjà trouvé le notaire, on l'utilise directement
   const [notaire, setNotaire] = useState<ListingNotaire | null | undefined>(
@@ -943,7 +959,7 @@ export default function NotaireProfileClient({
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-bold text-[14px] text-[var(--color-text-strong)]">Profil non revendiqué</p>
-            <p className="text-[13px] text-[var(--color-muted)] leading-snug text-justify hyphens-auto">
+            <p className="text-[13px] text-[var(--color-muted)] leading-snug">
               Ce profil existe dans notre annuaire mais n&apos;a pas encore été activé par son titulaire.
               Les coordonnées et l&apos;agenda restent masqués tant que le notaire n&apos;a pas souscrit.
             </p>
@@ -959,7 +975,7 @@ export default function NotaireProfileClient({
       )}
 
       {/* ── Corps principal : 3 colonnes sur large ── */}
-      <div className="grid lg:grid-cols-[1fr_1fr_320px] gap-6 items-start">
+      <div className="grid lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.45fr)_300px] gap-6 items-start">
 
         {/* Colonne 1 : spécialités + langues + bio */}
         <motion.div
@@ -980,13 +996,14 @@ export default function NotaireProfileClient({
                 </span>
               </div>
               <p
-                className={`text-[15px] text-[var(--color-text-strong)] leading-relaxed text-justify hyphens-auto ${
+                ref={bioRef}
+                className={`text-[15px] text-[var(--color-text-strong)] leading-relaxed ${
                   bioOuverte ? "" : "line-clamp-4"
                 }`}
               >
                 {notaire.bio}
               </p>
-              {notaire.bio.length > 220 && (
+              {(bioTronquee || bioOuverte) && (
                 <button
                   type="button"
                   onClick={() => setBioOuverte((v) => !v)}
@@ -1007,11 +1024,11 @@ export default function NotaireProfileClient({
                 Domaines d&apos;intervention
               </span>
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap gap-2">
               {notaire.specialties.map((s) => (
                 <span
                   key={s}
-                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-[10px] text-[13px] font-semibold bg-[var(--color-accent-soft)] text-[var(--color-accent)] self-start"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-semibold bg-[var(--color-accent-soft)] text-[var(--color-accent)]"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] shrink-0" />
                   {s}
@@ -1051,12 +1068,12 @@ export default function NotaireProfileClient({
                   Langues de travail
                 </span>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-wrap gap-2">
                 {/* Toujours afficher Français en premier */}
                 {["Français", ...(notaire.languages ?? [])].map((l) => (
                   <span
                     key={l}
-                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-[10px] text-[13px] font-semibold bg-[var(--color-tint-green)] text-[var(--color-success)] self-start"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-semibold bg-[var(--color-tint-green)] text-[var(--color-success)]"
                   >
                     <Globe className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
                     {l}
@@ -1186,7 +1203,7 @@ export default function NotaireProfileClient({
               <BadgeCheck className="w-4 h-4 text-[var(--color-success)]" strokeWidth={2} />
               Notaire officiel
             </div>
-            <p className="leading-relaxed text-justify hyphens-auto">
+            <p className="leading-relaxed">
               Tous les notaires référencés sur Notaires.io exercent sous le
               contrôle du Conseil Supérieur du Notariat. Leurs tarifs sont
               réglementés par décret.

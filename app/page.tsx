@@ -13,8 +13,11 @@ export const metadata: Metadata = {
   // l'accueil (172 des 233 impressions « rdv » sur 3 mois), loin devant les
   // articles de blog. L'accueil est LA page qui porte cette intention.
   title: "RDV notaire en ligne : prendre rendez-vous avec un notaire",
+  // 173 caractères auparavant : Google tronquait la phrase en plein milieu.
+  // « gratuitement » retiré aussi — placé là, il se lisait comme un
+  // rendez-vous offert, la promesse que nous ne faisons pas.
   description:
-    "Prenez RDV avec un notaire en ligne, gratuitement : immobilier, succession, mariage, PACS, donation, société. Créneaux réels, en visio ou au cabinet, confirmation immédiate.",
+    "Prenez rendez-vous avec un notaire en ligne : immobilier, succession, mariage, donation. Créneaux réels, en visio ou au cabinet, confirmation immédiate.",
   keywords: [
     "rdv notaire",
     "rdv notaire en ligne",

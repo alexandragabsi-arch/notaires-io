@@ -88,9 +88,14 @@ export default function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="serif text-[32px] sm:text-[44px] lg:text-[54px] font-bold leading-[1.15] tracking-tight text-[var(--color-text-strong)] mb-4"
+          className="serif text-balance text-[32px] sm:text-[44px] lg:text-[54px] font-bold leading-[1.15] tracking-tight text-[var(--color-text-strong)] mb-4"
         >
-          Prenez RDV avec le bon notaire<br className="hidden sm:block" />{" "}
+          {/* « en ligne » est le mot qui revient dans toutes les requêtes où le
+              site apparaît (« rdv notaire en ligne », « prendre rdv notaire en
+              ligne »…). Le <title> le portait, pas le H1 : Google recevait un
+              signal à moitié. Le reste de la formule ne bouge pas — c'est elle
+              qui dit ce que le site fait de mieux. */}
+          Prenez RDV en ligne avec le bon notaire{" "}
           <span className="text-[var(--color-primary)]">pour votre situation</span>
         </motion.h1>
 

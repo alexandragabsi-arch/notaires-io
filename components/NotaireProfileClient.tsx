@@ -974,10 +974,10 @@ export default function NotaireProfileClient({
         </div>
       )}
 
-      {/* ── Corps principal : 3 colonnes sur large ── */}
-      <div className="grid lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.45fr)_300px] gap-6 items-start">
+      {/* ── Corps principal : contenu à gauche, encart de réservation à droite ── */}
+      <div className="grid lg:grid-cols-[minmax(0,1fr)_320px] gap-6 items-start">
 
-        {/* Colonne 1 : spécialités + langues + bio */}
+        {/* Contenu : présentation, agenda, domaines, motifs, langues */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1015,6 +1015,70 @@ export default function NotaireProfileClient({
               )}
             </div>
           )}
+
+          {/* Agenda : placé juste sous la présentation. Sur téléphone les
+              colonnes s'empilent, et il arrivait après les domaines, les
+              motifs et les langues — très loin sous la ligne de flottaison. */}
+          <motion.div
+            id="agenda"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="scroll-mt-24 bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6"
+          >
+            <div className="flex items-center gap-2 mb-5">
+              <CalendarDays className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
+              <span className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
+                Créneaux disponibles
+              </span>
+              {(() => {
+                // Nombre de créneaux réellement ouverts, plutôt qu'un « Disponible
+                // rapidement » affiché même sans agenda.
+                const ouverts = (notaire.slotMatrix ?? []).reduce((n, j) => n + (j?.length ?? 0), 0);
+                if (!ouverts) return null;
+                return (
+                  <span className="ml-auto text-[11px] text-[var(--color-success)] font-semibold bg-[var(--color-tint-green)] px-2 py-0.5 rounded-full">
+                    {ouverts} créneau{ouverts > 1 ? "x" : ""} sur 3 mois
+                  </span>
+                );
+              })()}
+            </div>
+
+            {!isClaimed ? (
+              <div className="flex flex-col items-center justify-center gap-4 py-10">
+                <div className="w-14 h-14 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center">
+                  <Lock className="w-7 h-7 text-slate-400" strokeWidth={2} />
+                </div>
+                <div className="text-center">
+                  <p className="font-bold text-[14px] text-[var(--color-text-strong)] mb-1">
+                    Agenda non disponible
+                  </p>
+                  <p className="text-[13px] text-[var(--color-muted)] max-w-[220px] leading-snug">
+                    Ce notaire n&apos;a pas encore activé son profil Notaires.io.
+                  </p>
+                </div>
+              </div>
+            ) : notaire.slotMatrix ? (
+              <SlotCalendar
+                slotMatrix={notaire.slotMatrix}
+                notaireId={notaire.id}
+                notaireNom={notaire.name || notaire.officeName || "Notaire"}
+              />
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-[14px] text-[var(--color-muted)] mb-4">
+                  Créneaux disponibles sur demande
+                </p>
+                <a
+                  href="/#hero"
+                  className="inline-flex items-center gap-2 bg-gradient-cta text-white px-5 py-2.5 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)]"
+                >
+                  Prendre rendez-vous
+                  <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
+                </a>
+              </div>
+            )}
+          </motion.div>
 
           {/* Spécialités */}
           <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
@@ -1097,69 +1161,7 @@ export default function NotaireProfileClient({
           </div>
         </motion.div>
 
-        {/* Colonne 2 : calendrier des créneaux */}
-        <motion.div
-          id="agenda"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="scroll-mt-24 bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6"
-        >
-          <div className="flex items-center gap-2 mb-5">
-            <CalendarDays className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
-            <span className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
-              Créneaux disponibles
-            </span>
-            {(() => {
-              // Nombre de créneaux réellement ouverts, plutôt qu'un « Disponible
-              // rapidement » affiché même sans agenda.
-              const ouverts = (notaire.slotMatrix ?? []).reduce((n, j) => n + (j?.length ?? 0), 0);
-              if (!ouverts) return null;
-              return (
-                <span className="ml-auto text-[11px] text-[var(--color-success)] font-semibold bg-[var(--color-tint-green)] px-2 py-0.5 rounded-full">
-                  {ouverts} créneau{ouverts > 1 ? "x" : ""} sur 3 mois
-                </span>
-              );
-            })()}
-          </div>
-
-          {!isClaimed ? (
-            <div className="flex flex-col items-center justify-center gap-4 py-10">
-              <div className="w-14 h-14 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center">
-                <Lock className="w-7 h-7 text-slate-400" strokeWidth={2} />
-              </div>
-              <div className="text-center">
-                <p className="font-bold text-[14px] text-[var(--color-text-strong)] mb-1">
-                  Agenda non disponible
-                </p>
-                <p className="text-[13px] text-[var(--color-muted)] max-w-[220px] leading-snug">
-                  Ce notaire n&apos;a pas encore activé son profil Notaires.io.
-                </p>
-              </div>
-            </div>
-          ) : notaire.slotMatrix ? (
-            <SlotCalendar
-              slotMatrix={notaire.slotMatrix}
-              notaireId={notaire.id}
-              notaireNom={notaire.name || notaire.officeName || "Notaire"}
-            />
-          ) : (
-            <div className="text-center py-8">
-              <p className="text-[14px] text-[var(--color-muted)] mb-4">
-                Créneaux disponibles sur demande
-              </p>
-              <a
-                href="/#hero"
-                className="inline-flex items-center gap-2 bg-gradient-cta text-white px-5 py-2.5 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)]"
-              >
-                Prendre rendez-vous
-                <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
-              </a>
-            </div>
-          )}
-        </motion.div>
-
-        {/* Colonne 3 (sidebar) : CTA + confiance */}
+        {/* Encart latéral : prochain créneau, confiance, coordonnées */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}

@@ -6,6 +6,7 @@ import SeoLandingPage from "@/components/SeoLandingPage";
 import { pageGeoLd } from "@/lib/seo-jsonld";
 import { CONTENUS } from "@/lib/arrondissements-contenu";
 import { getNotairesByArrondissement, getArrondissements } from "@/lib/notaires-source";
+import { idsNotairesInscrits, inscritsDabord } from "@/lib/notaires-inscrits";
 
 interface Props {
   params: Promise<{ arrondissement: string }>;
@@ -60,7 +61,13 @@ export default async function Page({ params }: Props) {
   if (!num || num < 1 || num > 20) notFound();
 
   const label = numToLabel(num);
-  const notaires = getNotairesByArrondissement("Paris", num);
+  // Les notaires réellement inscrits passent devant : ce sont les seuls chez
+  // qui le visiteur peut réserver, et Google juge la page sur ce qu'elle
+  // montre en premier. L'ordre du reste ne change pas.
+  const notaires = inscritsDabord(
+    getNotairesByArrondissement("Paris", num),
+    await idsNotairesInscrits(),
+  );
   // Texte propre à l'arrondissement : sans lui, les pages ne se distinguaient
   // que par un numéro et se concurrençaient entre elles.
   const contenu = CONTENUS["Paris"][num];

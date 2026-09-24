@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
+import { idsNotairesInscrits, inscritsDabord } from "@/lib/notaires-inscrits";
 
 const PARIS_ARRONDISSEMENTS = Array.from({ length: 20 }, (_, i) => ({
   num: i + 1,
@@ -76,12 +77,17 @@ const FAQ = [
   },
 ];
 
-export default function Page() {
+export default async function Page() {
   // Utilise les vrais notaires scrapés depuis notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Paris");
-  const notaires = scrapedNotaires.length > 0
-    ? scrapedNotaires
-    : LISTING_NOTAIRES.filter((n) => n.city === "Paris");
+  // Les notaires inscrits en tête : ce sont les seuls chez qui on peut
+  // réellement réserver. Voir lib/notaires-inscrits.ts.
+  const notaires = inscritsDabord(
+    scrapedNotaires.length > 0
+      ? scrapedNotaires
+      : LISTING_NOTAIRES.filter((n) => n.city === "Paris"),
+    await idsNotairesInscrits(),
+  );
 
   return (
     <>

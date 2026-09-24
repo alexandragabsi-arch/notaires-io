@@ -5,28 +5,11 @@ import { getVillesCouvertes } from "@/lib/villes-data";
 import { getDynamicArticles } from "@/lib/blog-supabase";
 import { BLOG_POSTS } from "@/lib/blog-posts";
 import { SLUGS_RETIRES } from "@/lib/fusions-blog";
+import { idsNotairesInscrits } from "@/lib/notaires-inscrits";
 import { estFicheTest } from "@/lib/fiches-test";
 import { getAllNotaires, redirectionFiche } from "@/lib/notaires-source";
-import { supabase } from "@/lib/supabase";
 
 const BASE = "https://notaires.io";
-
-/**
- * Fiches rattachées à un compte vérifié et encore actives (même règle que
- * ficheCompletee dans app/notaires/[id]/page.tsx).
- */
-async function idsFichesCompletees(): Promise<Set<string>> {
-  const { data, error } = await supabase
-    .from("notaire_profiles")
-    .select("id, subscription_status")
-    .eq("verifie", true);
-  if (error || !data) return new Set();
-  return new Set(
-    data
-      .filter((p: { subscription_status: string | null }) => p.subscription_status !== "expire")
-      .map((p: { id: string }) => p.id),
-  );
-}
 
 export const revalidate = 3600; // Refresh sitemap hourly so new articles appear
 
@@ -52,7 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   //
   // getAllNotaires() exclut déjà les doublons fusionnés (qui redirigent) :
   // on ne déclare que des URL qui répondent en 200.
-  const fichesCompletees = await idsFichesCompletees();
+  const fichesCompletees = await idsNotairesInscrits();
   const idsVus = new Set<string>();
   const notairePages: MetadataRoute.Sitemap = [];
   for (const n of [...LISTING_NOTAIRES, ...getAllNotaires()]) {

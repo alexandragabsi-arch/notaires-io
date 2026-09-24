@@ -470,7 +470,10 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
   const [suggestions, setSuggestions] = useState<CitySugg[]>([]);
   const [showSugg, setShowSugg] = useState(false);
   const suggTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const skipNextFetch = useRef(false);   // bloque l'autocomplete après sélection
+  // Bloque l'autocomplétion après une sélection — et au premier rendu quand la
+  // ville vient de l'URL (/annuaire?ville=Paris) : la liste des villes
+  // s'ouvrait alors toute seule par-dessus les résultats.
+  const skipNextFetch = useRef(!!urlVille);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [nameQuery, setNameQuery] = useState(urlNom);

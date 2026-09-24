@@ -5,6 +5,7 @@ import { getVillesCouvertes } from "@/lib/villes-data";
 import { getDynamicArticles } from "@/lib/blog-supabase";
 import { BLOG_POSTS } from "@/lib/blog-posts";
 import { SLUGS_RETIRES } from "@/lib/fusions-blog";
+import { estFicheTest } from "@/lib/fiches-test";
 import { getAllNotaires, redirectionFiche } from "@/lib/notaires-source";
 import { supabase } from "@/lib/supabase";
 
@@ -55,7 +56,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const idsVus = new Set<string>();
   const notairePages: MetadataRoute.Sitemap = [];
   for (const n of [...LISTING_NOTAIRES, ...getAllNotaires()]) {
-    if (idsVus.has(n.id) || redirectionFiche(n.id)) continue;
+    if (idsVus.has(n.id) || redirectionFiche(n.id) || estFicheTest(n.id)) continue;
     idsVus.add(n.id);
     notairePages.push({
       url: `${BASE}/notaires/${n.id}`,
@@ -67,7 +68,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
   // Fiches créées à l'inscription et absentes de l'annuaire importé.
   for (const id of fichesCompletees) {
-    if (idsVus.has(id)) continue;
+    if (idsVus.has(id) || estFicheTest(id)) continue;
     idsVus.add(id);
     notairePages.push({ url: `${BASE}/notaires/${id}`, changeFrequency: "weekly", priority: 0.9 });
   }

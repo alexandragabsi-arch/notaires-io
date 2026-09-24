@@ -6,6 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getAllNotaires, redirectionFiche } from "@/lib/notaires-source";
 import { permanentRedirect } from "next/navigation";
 import type { ListingNotaire } from "@/lib/notaires-listing";
+import { estFicheTest } from "@/lib/fiches-test";
 import { createClient } from "@supabase/supabase-js";
 
 // Génère statiquement les 35 notaires vedettes ; les autres sont SSR à la demande
@@ -88,6 +89,11 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
+  // Fiche de démonstration : elle doit rester consultable (revue App Store)
+  // mais jamais être indexée. Voir lib/fiches-test.ts.
+  if (estFicheTest(id)) {
+    return { title: "Profil notaire · Notaires.io", robots: { index: false, follow: false } };
+  }
   const n = findNotaire(id);
   if (!n) return { title: "Profil notaire · Notaires.io" };
 

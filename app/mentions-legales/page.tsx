@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import LegalLayout from "@/components/LegalLayout";
-import { EDITEUR, HEBERGEUR, LEGAL_UPDATED } from "@/lib/legal";
+import { EDITEUR, HEBERGEUR, BASE_DE_DONNEES, LEGAL_UPDATED } from "@/lib/legal";
 
 export const metadata: Metadata = {
   title: "Mentions légales | Notaires.io",
@@ -39,10 +39,24 @@ export default function MentionsLegalesPage() {
         {EDITEUR.societe}.
       </p>
 
-      <h2>3. Hébergeur</h2>
+      <h2>3. Hébergement et localisation des données</h2>
       <p>
-        Le site est hébergé par <strong>{HEBERGEUR.nom}</strong>,{" "}
-        {HEBERGEUR.adresse}.
+        Le site est hébergé par <strong>{HEBERGEUR.nom}</strong>, {HEBERGEUR.adresse}.
+        Les pages et les traitements du site sont exécutés depuis ses serveurs
+        de <strong>{HEBERGEUR.serveurs}</strong>.
+      </p>
+      <p>
+        La base de données, les comptes et les photos des notaires sont hébergés
+        par <strong>{BASE_DE_DONNEES.nom}</strong>, {BASE_DE_DONNEES.adresse}, sur
+        ses serveurs de <strong>{BASE_DE_DONNEES.serveurs}</strong>.
+      </p>
+      <p>
+        Ces deux prestataires sont des sociétés de droit américain : leurs serveurs
+        sont situés dans l&apos;Union européenne, leur siège ne l&apos;est pas. Les
+        transferts éventuels vers les États-Unis sont encadrés par les clauses
+        contractuelles types de la Commission européenne. Deux autres sous-traitants
+        interviennent : <strong>Stripe</strong> (paiement des abonnements) et{" "}
+        <strong>Resend</strong> (envoi des e-mails).
       </p>
 
       <h2>4. Nature du service</h2>

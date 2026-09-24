@@ -26,11 +26,23 @@ export const EDITEUR = {
   email: "contact@notaires.io",
 } as const;
 
-// Hébergeur du site (déploiement Vercel) — à confirmer.
+// Hébergement. Les notaires interrogent la localisation des données : elle est
+// donc détaillée plutôt que résumée à « Vercel, États-Unis ».
+//   - application servie depuis Paris (région cdg1, cf. vercel.json) ;
+//   - base de données, comptes et photos chez Supabase, région Stockholm ;
+// Vercel Inc. et Supabase Inc. sont des sociétés américaines : leurs serveurs
+// sont dans l'Union, pas leur siège. C'est dit tel quel.
 export const HEBERGEUR = {
   nom: "Vercel Inc.",
   adresse: "340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis",
   site: "https://vercel.com",
+  serveurs: "Paris, France (région cdg1)",
+} as const;
+
+export const BASE_DE_DONNEES = {
+  nom: "Supabase Inc.",
+  adresse: "970 Toa Payoh North, Singapour",
+  serveurs: "Stockholm, Suède (Union européenne)",
 } as const;
 
 // Date de dernière mise à jour des documents légaux.

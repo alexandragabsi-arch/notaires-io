@@ -48,6 +48,24 @@ const MOTIFS_BY_SPECIALTY: Record<string, string[]> = {
   "Droit commercial": ["Cession de fonds de commerce", "Bail commercial"],
 };
 
+/** Premier créneau réellement proposé par le notaire (l'agenda commence demain).
+ *  Sans agenda renseigné, on n'affiche rien plutôt qu'un « Disponible
+ *  rapidement » qui n'apporte aucune information. */
+function prochainCreneau(slotMatrix?: string[][]): { libelle: string; heure: string } | null {
+  const m = slotMatrix ?? [];
+  for (let i = 0; i < m.length; i++) {
+    const heure = m[i]?.[0];
+    if (!heure) continue;
+    const d = new Date();
+    d.setDate(d.getDate() + 1 + i);
+    return {
+      libelle: d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
+      heure,
+    };
+  }
+  return null;
+}
+
 function getMotifs(specialties: string[]): string[] {
   const out: string[] = [];
   for (const s of specialties) {
@@ -1053,9 +1071,17 @@ export default function NotaireProfileClient({
             <span className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
               Créneaux disponibles
             </span>
-            <span className="ml-auto text-[11px] text-[var(--color-success)] font-semibold bg-[var(--color-tint-green)] px-2 py-0.5 rounded-full">
-              Disponible rapidement
-            </span>
+            {(() => {
+              // Nombre de créneaux réellement ouverts, plutôt qu'un « Disponible
+              // rapidement » affiché même sans agenda.
+              const ouverts = (notaire.slotMatrix ?? []).reduce((n, j) => n + (j?.length ?? 0), 0);
+              if (!ouverts) return null;
+              return (
+                <span className="ml-auto text-[11px] text-[var(--color-success)] font-semibold bg-[var(--color-tint-green)] px-2 py-0.5 rounded-full">
+                  {ouverts} créneau{ouverts > 1 ? "x" : ""} sur 3 mois
+                </span>
+              );
+            })()}
           </div>
 
           {!isClaimed ? (
@@ -1104,12 +1130,21 @@ export default function NotaireProfileClient({
           {/* CTA principal (uniquement si profil activé) */}
           {isClaimed && (
             <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
-              <div className="text-center mb-5">
-                <div className="text-[13px] text-[var(--color-muted)] mb-1">Prochain créneau</div>
-                <div className="text-[20px] font-bold text-[var(--color-success)]">{notaire.next}</div>
-              </div>
+              {(() => {
+                const prochain = prochainCreneau(notaire.slotMatrix);
+                if (!prochain) return null;
+                return (
+                  <div className="text-center mb-5">
+                    <div className="text-[13px] text-[var(--color-muted)] mb-1">Prochain créneau</div>
+                    <div className="text-[20px] font-bold text-[var(--color-success)] first-letter:uppercase">
+                      {prochain.libelle}
+                    </div>
+                    <div className="text-[15px] font-semibold text-[var(--color-text-strong)]">à {prochain.heure}</div>
+                  </div>
+                );
+              })()}
               <a
-                href="/#hero"
+                href="#agenda"
                 className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 mb-3"
               >
                 Prendre rendez-vous

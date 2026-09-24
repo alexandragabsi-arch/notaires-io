@@ -385,6 +385,20 @@ export default async function BlogPostPage({
               <h2 className="text-base font-bold text-[var(--color-text-strong)] uppercase tracking-widest mb-4 text-sm">
                 Trouver un notaire près de chez vous
               </h2>
+              {/* Les 113 articles ne pointaient vers l'accueil que par le fil
+                  d'Ariane, avec l'ancre « Accueil » — un lien qui n'apprend
+                  rien. L'ancre d'un lien interne est ce qui désigne la page
+                  qui détient une intention : sur « rdv notaire », neuf pages
+                  se disputaient la place et l'accueil n'était désigné par
+                  aucune. Un lien contextuel par article, utile au lecteur qui
+                  veut réserver plutôt que continuer à lire. */}
+              <p className="text-[15px] text-[var(--color-muted)] leading-relaxed mb-5">
+                Vous savez déjà ce dont vous avez besoin ?{" "}
+                <a href="/" className="font-semibold text-[var(--color-accent)] hover:underline">
+                  Prenez rendez-vous avec un notaire en ligne
+                </a>{" "}
+                sur les disponibilités réelles de son étude, en visio ou au cabinet.
+              </p>
               <div className="flex flex-wrap gap-2.5">
                 {VILLES_BLOG.map(([label, href]) => (
                   <a

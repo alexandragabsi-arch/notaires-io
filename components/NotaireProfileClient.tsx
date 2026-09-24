@@ -738,6 +738,9 @@ export default function NotaireProfileClient({
   initialNotaire?: ListingNotaire;
   colleagues?: ListingNotaire[];
 }) {
+  // Présentation longue : repliée à quatre lignes, dépliable.
+  const [bioOuverte, setBioOuverte] = useState(false);
+
   // Si le serveur a déjà trouvé le notaire, on l'utilise directement
   const [notaire, setNotaire] = useState<ListingNotaire | null | undefined>(
     initialNotaire ?? undefined,
@@ -965,6 +968,37 @@ export default function NotaireProfileClient({
           transition={{ duration: 0.4, delay: 0.05 }}
           className="flex flex-col gap-5"
         >
+          {/* Présentation — en tête de fiche : c'est le mot du notaire, et
+              c'est ce que le visiteur lit avant de choisir. Elle était reléguée
+              sous les spécialités et les motifs, tout en bas de la page. */}
+          {notaire.bio && (
+            <div className="bg-white border-l-4 border-l-[var(--color-accent)] border-y border-r border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Sparkles className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
+                <span className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
+                  Présentation
+                </span>
+              </div>
+              <p
+                className={`text-[15px] text-[var(--color-text-strong)] leading-relaxed text-justify hyphens-auto ${
+                  bioOuverte ? "" : "line-clamp-4"
+                }`}
+              >
+                {notaire.bio}
+              </p>
+              {notaire.bio.length > 220 && (
+                <button
+                  type="button"
+                  onClick={() => setBioOuverte((v) => !v)}
+                  aria-expanded={bioOuverte}
+                  className="mt-2 text-[13px] font-semibold text-[var(--color-accent)] hover:underline"
+                >
+                  {bioOuverte ? "Réduire" : "Lire la suite"}
+                </button>
+              )}
+            </div>
+          )}
+
           {/* Spécialités */}
           <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
             <div className="flex items-center gap-2 mb-4">
@@ -1029,18 +1063,6 @@ export default function NotaireProfileClient({
                   </span>
                 ))}
               </div>
-            </div>
-          )}
-
-          {/* Bio */}
-          {notaire.bio && (
-            <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
-              <div className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-muted)] mb-3">
-                Présentation
-              </div>
-              <p className="text-[15px] text-[var(--color-muted)] leading-relaxed text-justify hyphens-auto">
-                {notaire.bio}
-              </p>
             </div>
           )}
 

@@ -458,7 +458,7 @@ function MenuFiltre({
   );
 }
 
-function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[] }) {
+function NotaireListingInner({ baseListings, sommaire }: { baseListings?: ListingNotaire[]; sommaire?: React.ReactNode }) {
   const searchParams = useSearchParams();
   const urlVille = searchParams.get("ville") ?? "";
   const urlNom = searchParams.get("nom") ?? "";
@@ -893,14 +893,19 @@ function NotaireListingInner({ baseListings }: { baseListings?: ListingNotaire[]
         )}
 
       </div>
+
+      {/* Sommaire des villes : repère quand on arrive sur l'annuaire, bruit dès
+          qu'une recherche est lancée — il s'intercalait alors entre les
+          résultats et le visiteur. */}
+      {!hasSearch && sommaire}
     </section>
   );
 }
 
-export default function NotaireListing({ baseListings }: { baseListings?: ListingNotaire[] }) {
+export default function NotaireListing({ baseListings, sommaire }: { baseListings?: ListingNotaire[]; sommaire?: React.ReactNode }) {
   return (
     <Suspense>
-      <NotaireListingInner baseListings={baseListings} />
+      <NotaireListingInner baseListings={baseListings} sommaire={sommaire} />
     </Suspense>
   );
 }

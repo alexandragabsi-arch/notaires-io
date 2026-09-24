@@ -88,45 +88,50 @@ export default function AnnuairePage() {
       />
       <Header />
       <main className="flex-1">
-        <NotaireListing baseListings={allNotaires} />
+        {/* Sommaire des villes : passé à l'annuaire, qui le masque dès qu'une
+            recherche est active (il s'intercalait entre le visiteur et ses
+            résultats). Sans cette page qui les recense, les pages de ville
+            n'étaient atteignables depuis nulle part : Google les découvrait par
+            le sitemap et les laissait « détectées, actuellement non indexées ». */}
+        <NotaireListing
+          baseListings={allNotaires}
+          sommaire={
+          
+          <section className="max-w-[1100px] mx-auto px-6 pb-16">
+            <h2 className="serif text-[26px] font-bold text-[var(--color-primary)] mb-2">
+              Trouver un notaire par ville
+            </h2>
+            <p className="text-[15px] text-[var(--color-muted)] mb-6">
+              {villes.length + 26} villes couvertes, {allNotaires.length} notaires référencés.
+            </p>
+  
+            <div className="flex flex-wrap gap-x-5 gap-y-2 mb-8">
+              {GRANDES_VILLES.map(([label, href]) => (
+                <a
+                  key={href}
+                  href={href}
+                  className="text-[15px] font-semibold text-[var(--color-accent)] hover:underline"
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+  
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              {villes.map((v) => (
+                <a
+                  key={v.slug}
+                  href={`/notaire-ville/${v.slug}`}
+                  className="text-[13px] text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors"
+                >
+                  {v.nom} <span className="opacity-60">({v.nombre})</span>
+                </a>
+              ))}
+            </div>
+          </section>
+          }
+        />
 
-        {/* Sommaire des villes.
-            Sans cette page qui les recense, les pages de ville n'étaient
-            atteignables depuis nulle part : Google les découvrait par le
-            sitemap et les laissait « détectées, actuellement non indexées ».
-            L'annuaire devient le point de passage qui leur donne du poids. */}
-        <section className="max-w-[1100px] mx-auto px-6 pb-16">
-          <h2 className="serif text-[26px] font-bold text-[var(--color-primary)] mb-2">
-            Trouver un notaire par ville
-          </h2>
-          <p className="text-[15px] text-[var(--color-muted)] mb-6">
-            {villes.length + 26} villes couvertes, {allNotaires.length} notaires référencés.
-          </p>
-
-          <div className="flex flex-wrap gap-x-5 gap-y-2 mb-8">
-            {GRANDES_VILLES.map(([label, href]) => (
-              <a
-                key={href}
-                href={href}
-                className="text-[15px] font-semibold text-[var(--color-accent)] hover:underline"
-              >
-                {label}
-              </a>
-            ))}
-          </div>
-
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            {villes.map((v) => (
-              <a
-                key={v.slug}
-                href={`/notaire-ville/${v.slug}`}
-                className="text-[13px] text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors"
-              >
-                {v.nom} <span className="opacity-60">({v.nombre})</span>
-              </a>
-            ))}
-          </div>
-        </section>
       </main>
       <Footer />
     </>

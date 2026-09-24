@@ -9,10 +9,16 @@ import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Prendre rendez-vous avec un notaire en ligne",
+  // « rdv notaire » en tête : c'est la requête sur laquelle Google associe déjà
+  // l'accueil (172 des 233 impressions « rdv » sur 3 mois), loin devant les
+  // articles de blog. L'accueil est LA page qui porte cette intention.
+  title: "RDV notaire en ligne : prendre rendez-vous avec un notaire",
   description:
-    "Trouvez le bon notaire pour votre situation en 3 questions. Achat immobilier, succession, mariage, PACS, création de société — rendez-vous en visio ou au cabinet (30 min). Tarifs réglementés.",
+    "Prenez RDV avec un notaire en ligne, gratuitement : immobilier, succession, mariage, PACS, donation, société. Créneaux réels, en visio ou au cabinet, confirmation immédiate.",
   keywords: [
+    "rdv notaire",
+    "rdv notaire en ligne",
+    "prendre rdv notaire",
     "prendre rendez-vous notaire",
     "notaire en ligne",
     "notaire immobilier",
@@ -23,9 +29,9 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io" },
   openGraph: {
-    title: "Notaires.io — Prendre rendez-vous avec un notaire en ligne",
+    title: "RDV notaire en ligne · Notaires.io",
     description:
-      "Trouvez le bon notaire pour votre situation en 3 questions. en visio ou au cabinet.",
+      "Prenez RDV avec un notaire en ligne, gratuitement, en visio ou au cabinet.",
     url: "https://notaires.io",
     type: "website",
   },
@@ -33,7 +39,23 @@ export const metadata: Metadata = {
 
 const faqParticuliers = [
   {
-    q: "Combien ça coûte ?",
+    q: "Comment prendre RDV avec un notaire en ligne ?",
+    a: "Indiquez votre ville ou le nom du notaire, choisissez le motif (achat immobilier, succession, donation, mariage, société…), puis un créneau libre dans son agenda, en visio ou au cabinet. La confirmation arrive aussitôt par e-mail : pas d'appel au standard, pas de rappel à attendre.",
+  },
+  {
+    q: "Combien coûte un rendez-vous chez le notaire ?",
+    a: "La prise de RDV sur Notaires.io est gratuite. Chez le notaire, les actes (vente, donation, contrat de mariage…) suivent un tarif réglementé fixé par l'État. Une consultation juridique détachée de tout acte peut en revanche donner lieu à des honoraires libres, convenus à l'avance avec le notaire par écrit.",
+  },
+  {
+    q: "Quel délai pour obtenir un RDV chez un notaire ?",
+    a: "Tout dépend de l'étude et de la période. En ligne, vous voyez directement les prochains créneaux libres de chaque notaire et pouvez comparer : un premier rendez-vous en visio se trouve souvent plus vite qu'au cabinet.",
+  },
+  {
+    q: "Puis-je choisir n'importe quel notaire, même loin de chez moi ?",
+    a: "Oui. Le choix du notaire est libre, et un notaire peut instrumenter partout en France, quel que soit le lieu du bien ou votre domicile. Pour une vente, acheteur et vendeur peuvent même avoir chacun le leur, sans frais supplémentaires : les honoraires sont partagés entre eux.",
+  },
+  {
+    q: "Le service Notaires.io est-il payant ?",
     a: "L'utilisation de Notaires.io est 100 % gratuite et sans engagement. Si un acte notarié est nécessaire, vous réglez ensuite les honoraires directement au notaire — comme dans n'importe quelle étude, selon le tarif réglementé.",
   },
   {
@@ -66,11 +88,11 @@ const jsonLd = {
       "@type": "WebPage",
       "@id": "https://notaires.io/#webpage",
       url: "https://notaires.io",
-      name: "Prendre rendez-vous avec un notaire en ligne — Notaires.io",
+      name: "RDV notaire en ligne : prendre rendez-vous avec un notaire — Notaires.io",
       isPartOf: { "@id": "https://notaires.io/#website" },
       about: { "@id": "https://notaires.io/#organization" },
       description:
-        "Trouvez le bon notaire pour votre situation en 3 questions. Immobilier, succession, mariage, société.",
+        "Prenez RDV avec un notaire en ligne : immobilier, succession, mariage, société. En visio ou au cabinet.",
       inLanguage: "fr-FR",
       breadcrumb: {
         "@type": "BreadcrumbList",

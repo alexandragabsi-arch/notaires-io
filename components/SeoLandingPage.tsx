@@ -27,7 +27,9 @@ const GUIDES: { href: string; label: string }[] = [
   { href: "/blog/delai-signature-acte-notarie", label: "Délai de signature d'un acte notarié" },
   { href: "/blog/delai-succession-notaire", label: "Combien de temps pour régler une succession" },
   { href: "/blog/frais-de-notaire-achat-immobilier", label: "Frais de notaire dans un achat" },
-  { href: "/blog/prendre-rdv-notaire-en-ligne", label: "Prendre rendez-vous chez le notaire en ligne" },
+  // Cette page a été fusionnée dans rdv-notaire-rapide le 2026-09-24 : le lien
+  // pointait vers une 308. Voir lib/fusions-blog.ts.
+  { href: "/blog/rdv-notaire-rapide", label: "Prendre rendez-vous chez le notaire en ligne" },
 ];
 
 /* ── Spécialités disponibles (ordre d'affichage) ── */

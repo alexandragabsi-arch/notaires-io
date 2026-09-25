@@ -29,7 +29,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!v) return {};
   const specs = v.specialites.slice(0, 3).join(", ").toLowerCase();
   return {
-    title: `Notaire à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""} — ${v.nombre} notaires · Notaires.io`,
+    // Pas de « · Notaires.io » ici : le gabarit de app/layout.tsx l'ajoute déjà
+    // (`template: "%s · Notaires.io"`). Le titre affichait la marque deux fois.
+    title: `Notaire à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""} — ${v.nombre} notaires`,
     description: `${v.nombre} notaires référencés à ${v.nom}${v.codePostal ? ` ${v.codePostal}` : ""}${specs ? ` : ${specs}` : ""}. Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`,
     alternates: { canonical: `https://notaires.io/notaire-ville/${v.slug}` },
     openGraph: {

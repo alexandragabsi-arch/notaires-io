@@ -11,7 +11,7 @@
 import { getAllNotaires } from "@/lib/notaires-source";
 
 /** En dessous de ce nombre de notaires, pas de page dédiée. */
-export const SEUIL_VILLE = 10;
+export const SEUIL_VILLE = 3;
 
 /** Villes déjà servies par une page écrite à la main, à ne pas dupliquer. */
 export const VILLES_STATIQUES = new Set([
@@ -20,6 +20,37 @@ export const VILLES_STATIQUES = new Set([
   "saint-etienne", "le-havre", "grenoble", "dijon", "angers", "nancy", "metz",
   "clermont-ferrand", "aix-en-provence", "brest", "rouen", "orleans", "perpignan",
 ]);
+
+/**
+ * Met un nom de commune en forme française.
+ *
+ * Les données importées contiennent « Fournes-en-weppes », « Saint-jean-de-luz » :
+ * le H1 et le <title> de la page affichaient la faute telle quelle, sur plus de
+ * mille communes. Les particules restent en minuscule, sauf en tête de nom.
+ */
+const PARTICULES = new Set([
+  "de", "du", "des", "le", "la", "les", "en", "sur", "sous", "lez", "les",
+  "et", "au", "aux", "d", "l", "sainte", "saint",
+]);
+
+export function nomCommune(nom: string): string {
+  const mots = (nom || "").trim().split(/([- ])/);
+  let premier = true;
+  return mots
+    .map((m) => {
+      if (m === "-" || m === " ") return m;
+      const bas = m.toLowerCase();
+      // « Saint » et « Sainte » sont des particules au milieu d'un nom composé
+      // seulement en apparence : « Saint-Jean-de-Luz » les garde capitalisés.
+      if (!premier && PARTICULES.has(bas) && bas !== "saint" && bas !== "sainte") {
+        premier = false;
+        return bas;
+      }
+      premier = false;
+      return bas.charAt(0).toUpperCase() + bas.slice(1);
+    })
+    .join("");
+}
 
 export function slugVille(nom: string): string {
   return nom
@@ -59,7 +90,7 @@ export function getVillesCouvertes(): VilleCouverte[] {
     if (!slug || VILLES_STATIQUES.has(slug)) continue;
     let entree = parVille.get(slug);
     if (!entree) {
-      entree = { nom, specs: new Map(), cps: new Map() };
+      entree = { nom: nomCommune(nom), specs: new Map(), cps: new Map() };
       parVille.set(slug, entree);
     }
     // Une commune peut avoir plusieurs codes postaux : on retient le plus fréquent.

@@ -9,6 +9,7 @@
 // saisie à la main : une ville qui perdrait ses notaires disparaîtrait d'elle-même.
 
 import { getAllNotaires } from "@/lib/notaires-source";
+import { DEPARTEMENTS } from "@/lib/departements-data";
 
 /** En dessous de ce nombre de notaires, pas de page dédiée. */
 export const SEUIL_VILLE = 3;
@@ -75,9 +76,29 @@ export interface VilleCouverte {
    * plateformes concurrentes le placent d'ailleurs dans leurs URL.
    */
   codePostal?: string;
+  /**
+   * Département de rattachement, déduit du code postal.
+   *
+   * Les 1 775 pages de ville n'étaient reliées à rien : ni à leur département,
+   * ni entre elles autrement que par huit liens. Google ne les atteignait que
+   * par le sitemap, et l'autorité des pages de département — déjà indexées —
+   * ne leur parvenait pas. NeoNotario, lui, n'a QUE des pages de département :
+   * c'est sa hiérarchie qui le fait ressortir sur « notaire <ville> » alors
+   * qu'il n'a aucune page dédiée à cette ville.
+   */
+  departement?: { slug: string; nom: string; code: string };
 }
 
 let cache: VilleCouverte[] | null = null;
+
+/** Département d'un code postal : « 06400 » → Alpes-Maritimes. */
+const PAR_CODE = new Map(DEPARTEMENTS.map((d) => [d.code, d]));
+function departementDuCp(cp?: string) {
+  if (!cp || cp.length < 2) return undefined;
+  // La Corse et l'outre-mer ont des codes à trois chiffres ; on tente les deux.
+  const d = PAR_CODE.get(cp.slice(0, 3)) ?? PAR_CODE.get(cp.slice(0, 2));
+  return d ? { slug: d.slug, nom: d.name, code: d.code } : undefined;
+}
 
 export function getVillesCouvertes(): VilleCouverte[] {
   if (cache) return cache;
@@ -111,7 +132,8 @@ export function getVillesCouvertes(): VilleCouverte[] {
         .slice(0, 4)
         .map(([k]) => k);
       const codePostal = [...cps.entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
-      return { nom, slug, nombre: total, specialites, codePostal };
+      return { nom, slug, nombre: total, specialites, codePostal,
+               departement: departementDuCp(codePostal) };
     })
     .filter((v) => v.nombre >= SEUIL_VILLE)
     .sort((a, b) => b.nombre - a.nombre);

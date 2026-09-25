@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
-import { getDepartementBySlug, getAllDepartementSlugs } from "@/lib/departements-data";
+import { getDepartementBySlug, getAllDepartementSlugs, dansLeDepartement } from "@/lib/departements-data";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getDonneesDepartement } from "@/lib/departements-villes";
 
@@ -117,7 +117,7 @@ export default async function Page({ params }: Props) {
     ...(donnees
       ? [{
           q: `Combien de notaires exercent dans le ${dep.name} ?`,
-          a: `${donnees.notaires} notaires sont référencés dans le ${dep.name} (${dep.code}) sur Notaires.io${villes.length ? `, répartis notamment entre ${villes.slice(0, 5).map(v => v.nom).join(", ")}` : ""}.${specs ? ` Les domaines les plus représentés y sont ${specs}.` : ""}`,
+          a: `${donnees.notaires} notaires sont référencés ${dansLeDepartement(dep.name)} (${dep.code}) sur Notaires.io${villes.length ? `, répartis notamment entre ${villes.slice(0, 5).map(v => v.nom).join(", ")}` : ""}.${specs ? ` Les domaines les plus représentés y sont ${specs}.` : ""}`,
         }]
       : []),
     {
@@ -162,9 +162,9 @@ export default async function Page({ params }: Props) {
       <Header />
       <main>
         <SeoLandingPage
-          h1={`Trouver un notaire dans le ${dep.name} (${dep.code})`}
+          h1={`Trouver un notaire ${dansLeDepartement(dep.name)} (${dep.code})`}
           intro={donnees
-            ? `${donnees.notaires} notaires sont référencés dans le ${dep.name} (${dep.code})${villes.length ? `, à ${dep.chefLieu} et dans ${villes.length > 1 ? `${villes.length - 1} autres communes` : "les communes environnantes"}` : ""}.${specs ? ` Les domaines les plus représentés y sont ${specs}.` : ""} Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`
+            ? `${donnees.notaires} notaires sont référencés ${dansLeDepartement(dep.name)} (${dep.code})${villes.length ? `, à ${dep.chefLieu} et dans ${villes.length > 1 ? `${villes.length - 1} autres communes` : "les communes environnantes"}` : ""}.${specs ? ` Les domaines les plus représentés y sont ${specs}.` : ""} Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`
             : `Vous recherchez un notaire dans le département du ${dep.name} ? Notaires.io met en relation avec des notaires à ${dep.chefLieu} et dans tout le ${dep.name}. Immobilier, succession, mariage, PACS, donation — prise de rendez-vous en ligne, en visio ou au cabinet.`}
           notaires={notaires}
           faq={faq}

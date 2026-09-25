@@ -6,6 +6,7 @@ import SeoLandingPage from "@/components/SeoLandingPage";
 import { pageGeoLd } from "@/lib/seo-jsonld";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { getVillesCouvertes, getVilleParSlug } from "@/lib/villes-data";
+import { duDepartement } from "@/lib/departements-data";
 
 // Pages de ville générées à partir des données réelles.
 //
@@ -116,6 +117,14 @@ export default async function Page({ params }: Props) {
           notaires={notaires}
           faq={faq}
           relatedLinks={[
+            // Le département en tête : ces pages sont déjà indexées et
+            // transmettent leur autorité à la ville, qui ne l'était pas.
+            ...(v.departement
+              ? [{
+                  href: `/notaire-departement/${v.departement.slug}`,
+                  label: `Tous les notaires ${duDepartement(v.departement.nom)}`,
+                }]
+              : []),
             { href: "/annuaire", label: "Tout l'annuaire" },
             ...voisines.map((x) => ({
               href: `/notaire-ville/${x.slug}`,

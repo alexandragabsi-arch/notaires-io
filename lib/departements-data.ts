@@ -13,6 +13,50 @@ export interface Departement {
   population: number; // Approximatif (pour trier les plus peuplés)
 }
 
+/**
+ * Article défini d'un département : « dans LE Var », « dans LES Alpes-Maritimes »,
+ * « dans LA Gironde », « dans L'Ain ».
+ *
+ * Les pages affichaient « dans le Alpes-Maritimes » et « Tous les notaires du
+ * Alpes-Maritimes ». Aucune règle ne déduit ces articles du nom : le Finistère
+ * et le Vaucluse finissent par -e mais sont masculins, la Manche et la Somme
+ * ne se devinent pas. Les exceptions sont donc listées, le reste tombe sur
+ * « le », qui est le cas majoritaire.
+ */
+const DEPT_PLURIELS = new Set([
+  "Yvelines", "Hauts-de-Seine", "Côtes-d'Armor", "Ardennes", "Vosges",
+  "Landes", "Pyrénées-Atlantiques", "Deux-Sèvres", "Hautes-Pyrénées",
+  "Pyrénées-Orientales", "Hautes-Alpes", "Alpes-Maritimes",
+  "Alpes-de-Haute-Provence", "Bouches-du-Rhône",
+]);
+
+const DEPT_FEMININS = new Set([
+  "Seine-et-Marne", "Drôme", "Loire", "Haute-Loire", "Savoie", "Haute-Savoie",
+  "Côte-d'Or", "Nièvre", "Haute-Saône", "Saône-et-Loire", "Yonne",
+  "Ille-et-Vilaine", "Corse-du-Sud", "Haute-Corse", "Marne", "Haute-Marne",
+  "Meurthe-et-Moselle", "Meuse", "Moselle", "Somme", "Manche",
+  "Seine-Maritime", "Charente", "Charente-Maritime", "Corrèze", "Creuse",
+  "Dordogne", "Gironde", "Vienne", "Haute-Vienne", "Ariège", "Haute-Garonne",
+  "Lozère", "Loire-Atlantique", "Mayenne", "Sarthe", "Vendée",
+  "Seine-Saint-Denis",
+]);
+
+/** « dans le Var », « dans les Alpes-Maritimes », « dans l'Ain »… */
+export function dansLeDepartement(nom: string): string {
+  if (DEPT_PLURIELS.has(nom)) return `dans les ${nom}`;
+  if (DEPT_FEMININS.has(nom)) return `dans la ${nom}`;
+  if (/^[AEIOUYÉÈÀÎÔ]/i.test(nom)) return `dans l'${nom}`;
+  return `dans le ${nom}`;
+}
+
+/** « du Var », « des Alpes-Maritimes », « de la Gironde », « de l'Ain ». */
+export function duDepartement(nom: string): string {
+  if (DEPT_PLURIELS.has(nom)) return `des ${nom}`;
+  if (DEPT_FEMININS.has(nom)) return `de la ${nom}`;
+  if (/^[AEIOUYÉÈÀÎÔ]/i.test(nom)) return `de l'${nom}`;
+  return `du ${nom}`;
+}
+
 export const DEPARTEMENTS: Departement[] = [
   // Île-de-France
   { slug: "seine-et-marne",      name: "Seine-et-Marne",      code: "77", chefLieu: "Melun",        region: "Île-de-France",     population: 1420000 },

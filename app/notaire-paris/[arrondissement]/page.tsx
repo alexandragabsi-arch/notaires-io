@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const label = numToLabel(num);
   const contenu = CONTENUS["Paris"][num];
   return {
-    title: `Notaire Paris ${label} arrondissement · Notaires.io`,
+    title: `Notaire Paris ${label} arrondissement`,
     description: contenu
       ? `Notaires dans le ${label} arrondissement de Paris — ${contenu.quartiers.slice(0, 3).join(", ")}. Immobilier, succession, famille, société : prise de rendez-vous en ligne.`
       : `Trouvez un notaire dans le ${label} arrondissement de Paris. Immobilier, succession, mariage, PACS — prise de rendez-vous en ligne.`,

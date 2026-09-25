@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const label = numToLabel(num);
   const contenu = CONTENUS["Lyon"][num];
   return {
-    title: `Notaire Lyon ${label} arrondissement · Notaires.io`,
+    title: `Notaire Lyon ${label} arrondissement`,
     description: contenu
       ? `Notaires dans le ${label} arrondissement de Lyon — ${contenu.quartiers.slice(0, 3).join(", ")}. Immobilier, succession, famille, société : prise de rendez-vous en ligne.`
       : `Trouvez un notaire dans le ${label} arrondissement de Lyon. Immobilier, succession, mariage, PACS — prise de rendez-vous en ligne.`,

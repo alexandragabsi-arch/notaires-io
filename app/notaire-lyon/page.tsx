@@ -12,7 +12,7 @@ const LYON_ARRONDISSEMENTS = Array.from({ length: 9 }, (_, i) => ({
 }));
 
 export const metadata: Metadata = {
-  title: "Notaire à Lyon · Notaires.io",
+  title: "Notaire à Lyon",
   description:
     "Trouvez un notaire à Lyon disponible rapidement. Mariage, PACS, immobilier, création de société — prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [

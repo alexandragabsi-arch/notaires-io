@@ -221,11 +221,24 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
             + Voir plus d&apos;horaires
           </a>
 
-          {/* Badge réservation */}
-          <div className="mt-auto pt-3 border-t border-[var(--color-border-soft)] flex items-center gap-1.5 text-[11px] text-emerald-600 font-medium">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
-            Réservation en ligne · Confirmation immédiate · 30 min · visio ou cabinet
-          </div>
+          {/* Badge réservation.
+              Il s'affichait sur TOUTES les cartes, y compris les profils non
+              revendiqués dont les créneaux sont justement marqués « indicatifs,
+              non réservables » juste au-dessus : la même carte promettait une
+              « confirmation immédiate » et prévenait qu'on ne pouvait pas
+              réserver. La fiche du notaire, elle, dit « agenda non disponible ».
+              On aligne les trois. */}
+          {notaire.claimed ? (
+            <div className="mt-auto pt-3 border-t border-[var(--color-border-soft)] flex items-center gap-1.5 text-[11px] text-emerald-600 font-medium">
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
+              Réservation en ligne · Confirmation immédiate · 30 min · visio ou cabinet
+            </div>
+          ) : (
+            <div className="mt-auto pt-3 border-t border-[var(--color-border-soft)] flex items-center gap-1.5 text-[11px] text-[var(--color-muted)] font-medium">
+              <span className="inline-block w-2 h-2 rounded-full bg-slate-300" />
+              Profil non revendiqué · agenda non disponible
+            </div>
+          )}
         </div>
 
       </div>

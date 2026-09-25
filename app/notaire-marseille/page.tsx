@@ -12,7 +12,7 @@ const MARSEILLE_ARRONDISSEMENTS = Array.from({ length: 16 }, (_, i) => ({
 }));
 
 export const metadata: Metadata = {
-  title: "Notaire à Marseille · Notaires.io",
+  title: "Notaire à Marseille",
   description:
     "Trouvez un notaire à Marseille pour votre achat immobilier, donation ou succession. Prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [

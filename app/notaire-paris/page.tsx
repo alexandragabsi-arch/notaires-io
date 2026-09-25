@@ -13,7 +13,7 @@ const PARIS_ARRONDISSEMENTS = Array.from({ length: 20 }, (_, i) => ({
 }));
 
 export const metadata: Metadata = {
-  title: "Notaire à Paris · Notaires.io",
+  title: "Notaire à Paris",
   description:
     "Trouvez un notaire à Paris disponible rapidement. Immobilier, succession, mariage, PACS, société — prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [

@@ -38,7 +38,12 @@ export default function robots(): MetadataRoute.Robots {
         disallow: "/",
       },
     ],
-    sitemap: "https://notaires.io/sitemap.xml",
+    // Deux sitemaps : le principal (~1 000 URL, explorable en entier) et celui
+    // de l'annuaire importé (~19 600 fiches). Voir app/annuaire-sitemap.xml.
+    sitemap: [
+      "https://notaires.io/sitemap.xml",
+      "https://notaires.io/annuaire-sitemap.xml",
+    ],
     // /llms.txt décrit le service aux moteurs de réponse (voir app/llms.txt).
     host: "https://notaires.io",
   };

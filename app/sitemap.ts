@@ -1,5 +1,4 @@
 import { MetadataRoute } from "next";
-import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { DEPARTEMENTS } from "@/lib/departements-data";
 import { getVillesCouvertes } from "@/lib/villes-data";
 import { getDynamicArticles } from "@/lib/blog-supabase";
@@ -7,7 +6,7 @@ import { BLOG_POSTS } from "@/lib/blog-posts";
 import { SLUGS_RETIRES } from "@/lib/fusions-blog";
 import { idsNotairesInscrits } from "@/lib/notaires-inscrits";
 import { estFicheTest } from "@/lib/fiches-test";
-import { getAllNotaires, redirectionFiche } from "@/lib/notaires-source";
+import { redirectionFiche } from "@/lib/notaires-source";
 
 const BASE = "https://notaires.io";
 
@@ -27,34 +26,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/confidentialite`,      lastModified: NOW, changeFrequency: "yearly",  priority: 0.2 },
   ];
 
-  // Toutes les fiches, pas seulement les vedettes. Seules les 41 fiches de
-  // LISTING_NOTAIRES étaient déclarées : les ~19 600 autres (dont celles des
-  // notaires inscrits) n'étaient connues de Google que par les liens internes,
-  // et 500+ restaient « détectées, non indexées ». Une recherche sur le nom
-  // d'un notaire doit pouvoir tomber sur sa fiche.
+  // Seules les fiches de notaires INSCRITS restent ici. Les ~19 600 fiches de
+  // l'annuaire importé sont déclarées dans /annuaire-sitemap.xml.
   //
-  // getAllNotaires() exclut déjà les doublons fusionnés (qui redirigent) :
-  // on ne déclare que des URL qui répondent en 200.
+  // Elles y étaient toutes, et ce sitemap atteignait 20 281 URL. Résultat
+  // mesuré le 2026-09-25 : les 285 pages de ville étaient encore « URL is
+  // unknown to Google » — jamais visitées, noyées derrière l'annuaire — alors
+  // que Google répondait à « notaire la ciotat » avec un article de blog
+  // générique, et plaçait quand même le site 2e. Un sitemap qu'un domaine de
+  // quatre mois peut explorer en entier vaut mieux qu'un sitemap exhaustif.
   const fichesCompletees = await idsNotairesInscrits();
-  const idsVus = new Set<string>();
-  const notairePages: MetadataRoute.Sitemap = [];
-  for (const n of [...LISTING_NOTAIRES, ...getAllNotaires()]) {
-    if (idsVus.has(n.id) || redirectionFiche(n.id) || estFicheTest(n.id)) continue;
-    idsVus.add(n.id);
-    notairePages.push({
-      url: `${BASE}/notaires/${n.id}`,
-      changeFrequency: "weekly",
-      // Une fiche complétée (photo, présentation, agenda réel) est celle qu'on
-      // veut voir sortir en premier.
-      priority: fichesCompletees.has(n.id) ? 0.9 : 0.6,
-    });
-  }
-  // Fiches créées à l'inscription et absentes de l'annuaire importé.
-  for (const id of fichesCompletees) {
-    if (idsVus.has(id) || estFicheTest(id)) continue;
-    idsVus.add(id);
-    notairePages.push({ url: `${BASE}/notaires/${id}`, changeFrequency: "weekly", priority: 0.9 });
-  }
+  const notairePages: MetadataRoute.Sitemap = [...fichesCompletees]
+    .filter((id) => !estFicheTest(id) && !redirectionFiche(id))
+    .map((id) => ({
+      url: `${BASE}/notaires/${id}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.9,
+    }));
 
   const seoLandingPages: MetadataRoute.Sitemap = [
     // City pages

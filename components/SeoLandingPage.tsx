@@ -12,6 +12,8 @@ interface Props {
   notaires: ListingNotaire[];
   faq: { q: string; a: string }[];
   relatedLinks: { href: string; label: string }[];
+  /** Texte du lien contextuel vers l'accueil. Voir lib/ancres-accueil.ts. */
+  ancreAccueil?: string;
 }
 
 const DAYS_VISIBLE = 5;
@@ -277,7 +279,7 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
   );
 }
 
-export default function SeoLandingPage({ h1, intro, notaires: notairesAnnuaire, faq, relatedLinks }: Props) {
+export default function SeoLandingPage({ h1, intro, notaires: notairesAnnuaire, faq, relatedLinks, ancreAccueil }: Props) {
   // Fiches complétées par les notaires (photo, présentation…) et nouvelles
   // inscriptions de la ville, fusionnées à la liste de l'annuaire.
   const notaires = useFichesCompletees(notairesAnnuaire);
@@ -398,6 +400,16 @@ export default function SeoLandingPage({ h1, intro, notaires: notairesAnnuaire, 
           <p className="text-[var(--color-muted)] text-lg leading-relaxed mb-8 max-w-[640px] mx-auto" data-speakable>
             {intro}
           </p>
+          {ancreAccueil && (
+            <p className="text-[var(--color-muted)] text-[15px] leading-relaxed mb-8 max-w-[640px] mx-auto">
+              Vous hésitez encore sur l&apos;étude à contacter ?{" "}
+              <a href="/" className="text-[var(--color-accent)] underline underline-offset-2 font-semibold">
+                {ancreAccueil}
+              </a>{" "}
+              : trois questions suffisent à vous orienter vers un notaire dont
+              votre sujet est le quotidien.
+            </p>
+          )}
           <a
             href="/#hero"
             className="inline-block bg-gradient-cta text-white font-bold px-8 py-3.5 rounded-xl shadow-[var(--shadow-cta)] hover:shadow-[var(--shadow-cta-hover)] transition-all text-[15px]"

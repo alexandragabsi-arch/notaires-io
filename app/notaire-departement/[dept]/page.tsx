@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import { ancreAccueil } from "@/lib/ancres-accueil";
 import { getDepartementBySlug, getAllDepartementSlugs, dansLeDepartement, duDepartement } from "@/lib/departements-data";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getDonneesDepartement } from "@/lib/departements-villes";
@@ -167,6 +168,7 @@ export default async function Page({ params }: Props) {
             ? `${donnees.notaires} notaires sont référencés ${dansLeDepartement(dep.name)} (${dep.code})${villes.length ? `, à ${dep.chefLieu} et dans ${villes.length > 1 ? `${villes.length - 1} autres communes` : "les communes environnantes"}` : ""}.${specs ? ` Les domaines les plus représentés y sont ${specs}.` : ""} Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`
             : `Vous recherchez un notaire ${dansLeDepartement(dep.name)} ? Notaires.io met en relation avec des notaires à ${dep.chefLieu} et dans tout ${duDepartement(dep.name)}. Immobilier, succession, mariage, PACS, donation — prise de rendez-vous en ligne, en visio ou au cabinet.`}
           notaires={notaires}
+          ancreAccueil={ancreAccueil(dep.slug)}
           faq={faq}
           relatedLinks={relatedLinks}
         />

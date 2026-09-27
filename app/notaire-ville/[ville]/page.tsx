@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import { ancreAccueil } from "@/lib/ancres-accueil";
 import { pageGeoLd } from "@/lib/seo-jsonld";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { getVillesCouvertes, getVilleParSlug } from "@/lib/villes-data";
@@ -121,6 +122,7 @@ export default async function Page({ params }: Props) {
           h1={`Prendre RDV avec un notaire à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""}`}
           intro={`${v.nombre} notaires sont référencés à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""}${specs ? `, principalement en ${specs}` : ""}. Comparez les profils et les créneaux disponibles, puis prenez rendez-vous en ligne — en visioconférence ou au cabinet.`}
           notaires={notaires}
+          ancreAccueil={ancreAccueil(v.slug)}
           faq={faq}
           relatedLinks={[
             // Le département en tête : ces pages sont déjà indexées et

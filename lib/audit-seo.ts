@@ -1,4 +1,4 @@
-import { jetonGsc, requetes, inspecter, type LigneGsc } from "@/lib/search-console";
+import { jetonGsc, requetes, inspecter, sitemaps, type LigneGsc } from "@/lib/search-console";
 
 /**
  * Les six contrôles qui ont révélé les blocages du 25 et du 27/09/2026.
@@ -178,10 +178,14 @@ export async function auditSeo(mode: "quotidien" | "hebdomadaire" = "hebdomadair
   // Un échantillon de pages de ville, tiré au hasard : sur 1 775, les
   // contrôler toutes épuiserait le quota d'inspection (2 000/jour).
   let villes: string[] = [];
+  let articles: string[] = [];
   try {
     const xml = await fetch("https://notaires.io/sitemap.xml", { cache: "no-store" }).then((r) => r.text());
-    const toutes = [...xml.matchAll(/<loc>([^<]+notaire-ville[^<]*)<\/loc>/g)].map((m) => m[1]);
-    villes = toutes.sort(() => Math.random() - 0.5).slice(0, 12);
+    const melange = (l: string[]) => l.sort(() => Math.random() - 0.5);
+    villes = melange([...xml.matchAll(/<loc>([^<]+notaire-ville[^<]*)<\/loc>/g)].map((m) => m[1])).slice(0, 12);
+    // Les articles aussi : c'est ce que surveillait le contrôle n8n, repris ici
+    // pour que tout tienne au même endroit.
+    articles = melange([...xml.matchAll(/<loc>([^<]+\/blog\/[^<]*)<\/loc>/g)].map((m) => m[1])).slice(0, 10);
   } catch {
     constats.push({ gravite: "bloquant", titre: "Sitemap illisible", detail: "https://notaires.io/sitemap.xml n'a pas répondu." });
   }
@@ -192,6 +196,23 @@ export async function auditSeo(mode: "quotidien" | "hebdomadaire" = "hebdomadair
   if (tok) {
     constats.push(...(await controlerIndexation(tok, villes)));
     if (mode === "hebdomadaire") {
+      constats.push(...(await controlerIndexation(tok, articles)));
+
+      // Un sitemap non relu depuis des semaines explique à lui seul qu'une
+      // page neuve reste invisible.
+      const limite = Date.now() - 10 * 86400000;
+      for (const sm of await sitemaps(tok)) {
+        const vieux = !sm.derniereLecture || new Date(sm.derniereLecture).getTime() < limite;
+        if (vieux || sm.erreurs) {
+          constats.push({
+            gravite: sm.erreurs ? "bloquant" : "attention",
+            titre: `Sitemap ${sm.chemin} — ${sm.derniereLecture ? `lu le ${sm.derniereLecture}` : "jamais lu"}`,
+            detail: `${sm.erreurs} erreur(s), ${sm.avertissements} avertissement(s).` +
+              (vieux ? " Google ne l'a pas relu depuis plus de dix jours." : ""),
+          });
+        }
+      }
+
       const actuel = await requetes(tok, { jours: 28, finIlYA: 2 });
       const precedent = await requetes(tok, { jours: 28, finIlYA: 30 });
       constats.push(...analyserRequetes(actuel, precedent));

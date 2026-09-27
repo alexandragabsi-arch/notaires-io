@@ -125,3 +125,30 @@ export async function inspecter(tok: string, url: string): Promise<EtatUrl> {
     return { url, etat: "injoignable", indexee: false, dernierCrawl: null };
   }
 }
+
+export interface EtatSitemap {
+  chemin: string;
+  derniereLecture: string | null;
+  erreurs: number;
+  avertissements: number;
+}
+
+/**
+ * Ce que Google dit des sitemaps : quand il les a lus, et ce qu'il y a trouvé.
+ * Un sitemap non relu depuis des semaines explique à lui seul qu'une page
+ * neuve reste invisible.
+ */
+export async function sitemaps(tok: string): Promise<EtatSitemap[]> {
+  const rep = await fetch(
+    `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SITE_GSC)}/sitemaps`,
+    { headers: { Authorization: `Bearer ${tok}` } },
+  );
+  if (!rep.ok) return [];
+  const liste = (await rep.json()).sitemap ?? [];
+  return liste.map((s: { path: string; lastDownloaded?: string; errors?: string; warnings?: string }) => ({
+    chemin: String(s.path ?? "").replace("https://notaires.io", ""),
+    derniereLecture: s.lastDownloaded ? String(s.lastDownloaded).slice(0, 10) : null,
+    erreurs: Number(s.errors ?? 0),
+    avertissements: Number(s.warnings ?? 0),
+  }));
+}

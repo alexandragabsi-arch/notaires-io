@@ -1,18 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { auditSeo, type Constat } from "@/lib/audit-seo";
-import { sendEmail, emailLayout, ADMIN_EMAIL } from "@/lib/email";
+import { emailLayout } from "@/lib/email";
 
 /**
- * Agent de surveillance du référencement — chaque lundi.
+ * Audit de référencement — les contrôles, pas la planification.
  *
- * Il rejoue automatiquement les contrôles qui, menés à la main les 25 et
- * 27/09/2026, ont révélé trois blocages invisibles depuis des mois : 285 pages
- * de ville jamais explorées, un annuaire de 12 Mo que Google renonçait à
- * traiter, et des titres qui ne portaient pas le mot-clé visé.
+ * Il rejoue ce qui, mené à la main les 25 et 27/09/2026, a révélé trois
+ * blocages invisibles depuis des mois : 285 pages de ville jamais explorées,
+ * un annuaire de 12 Mo que Google renonçait à traiter, des titres sans le
+ * mot-clé visé.
  *
- * Il ne « fait » pas le référencement : il signale ce qui empêche une page de
- * sortir, avant que des semaines soient perdues.
+ * La planification et l'envoi appartiennent à n8n, où vivent les autres
+ * agents : un seul endroit à surveiller. Cette route calcule et renvoie un
+ * message prêt à expédier ; n8n décide du rythme et l'envoie. La logique reste
+ * ici parce qu'elle lit le HTML du site, son sitemap et Search Console — ce
+ * qu'un nœud Code ferait mal.
+ *
+ *   GET /api/cron/audit-seo                     contrôles techniques
+ *   GET /api/cron/audit-seo?mode=hebdomadaire   + positions, occasions, sitemaps
+ *
+ * Réponse : { envoyer, sujet, html, bloquants, constats, resume }.
+ * `envoyer` vaut faux quand rien n'est cassé un jour ordinaire — un message
+ * quotidien qui répète « tout va bien » finit par ne plus être lu.
  */
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -61,15 +71,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "non autorisé" }, { status: 401 });
   }
 
-  // Lundi : bilan complet, envoyé même si tout va bien. Les autres jours :
-  // contrôles techniques seuls, et silence tant que rien n'est cassé — un
-  // mail quotidien qui répète « tout va bien » finit par ne plus être lu.
-  // Un seul cron, tous les jours : c'est le jour qui décide. Les paramètres de
-  // requête dans le chemin d'un cron ne sont pas documentés côté Vercel, et
-  // `?mode=` dans vercel.json aurait été un pari.
-  const hebdo =
-    req.nextUrl.searchParams.get("mode") === "hebdomadaire" ||
-    new Date().getDay() === 1; // lundi
+  const hebdo = req.nextUrl.searchParams.get("mode") === "hebdomadaire";
   const { constats, resume, gscDisponible } = await auditSeo(hebdo ? "hebdomadaire" : "quotidien");
   const bloquants = constats.filter((c) => c.gravite === "bloquant").length;
   const date = new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
@@ -82,30 +84,28 @@ export async function GET(req: NextRequest) {
     <h1 style="font-size:22px;font-weight:700;margin-bottom:4px;color:#1a1a2e">
       ${bloquants ? `${bloquants} blocage${bloquants > 1 ? "s" : ""} à lever` : "Aucun blocage détecté"}
     </h1>
-    <p style="font-size:13px;color:#54617a;margin-bottom:18px">${hebdo ? `Bilan hebdomadaire du ${date} · 28 derniers jours · ${entete}` : `Contrôle technique du ${date}`}</p>
+    <p style="font-size:13px;color:#54617a;margin-bottom:18px">
+      ${hebdo ? `Bilan hebdomadaire du ${date} · 28 derniers jours · ${entete}` : `Contrôle technique du ${date}`}
+    </p>
     ${bloc(constats, "bloquant")}
     ${bloc(constats, "attention")}
     ${hebdo ? bloc(constats, "occasion") : ""}
     <p style="font-size:12px;color:#8a94a6;margin-top:16px">
       Un « bloquant » empêche une page de sortir, quelle que soit sa qualité.
-      Une « occasion » est une requête entre la 4e et la 15e place : c'est là
+      Une « occasion » est une requête entre la 4ᵉ et la 15ᵉ place : c'est là
       que quelques places se gagnent le plus vite.
     </p>
   `);
 
-  // ?detail=1 sert à inspecter l'agent : il ne doit pas envoyer d'e-mail pour ça.
-  const inspection = req.nextUrl.searchParams.get("detail") === "1";
-  const aEnvoyer = hebdo || bloquants > 0;
-  if (!inspection && aEnvoyer) await sendEmail(
-    ADMIN_EMAIL,
-    bloquants ? `🔴 SEO : ${bloquants} blocage${bloquants > 1 ? "s" : ""} — notaires.io` : "✅ SEO : aucun blocage — notaires.io",
+  return NextResponse.json({
+    mode: hebdo ? "hebdomadaire" : "quotidien",
+    envoyer: hebdo || bloquants > 0,
+    sujet: bloquants
+      ? `🔴 SEO : ${bloquants} blocage${bloquants > 1 ? "s" : ""} — notaires.io`
+      : "✅ SEO : aucun blocage — notaires.io",
     html,
-  );
-
-  // ?detail=1 renvoie les constats eux-mêmes : indispensable pour vérifier
-  // que l'agent signale de vrais problèmes et non du bruit.
-  if (inspection) {
-    return NextResponse.json({ mode: hebdo ? "hebdomadaire" : "quotidien", bloquants, resume, constats });
-  }
-  return NextResponse.json({ mode: hebdo ? "hebdomadaire" : "quotidien", constats: constats.length, bloquants, envoye: aEnvoyer, resume });
+    bloquants,
+    resume,
+    constats,
+  });
 }

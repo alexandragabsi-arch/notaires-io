@@ -165,7 +165,13 @@ export interface Rapport {
   gscDisponible: boolean;
 }
 
-export async function auditSeo(): Promise<Rapport> {
+/**
+ * `quotidien` : contrôles techniques seuls — ils détectent des accidents, le
+ * plus souvent causés par un déploiement, et un accident se répare le jour
+ * même. `hebdomadaire` : y ajoute l'analyse des positions, qui ne bougent pas
+ * assez vite d'un jour à l'autre pour mériter un mail par jour.
+ */
+export async function auditSeo(mode: "quotidien" | "hebdomadaire" = "hebdomadaire"): Promise<Rapport> {
   const tok = await jetonGsc();
   const constats: Constat[] = [];
 
@@ -185,16 +191,18 @@ export async function auditSeo(): Promise<Rapport> {
   let resume = { impressions: 0, clics: 0, position: 0 };
   if (tok) {
     constats.push(...(await controlerIndexation(tok, villes)));
-    const actuel = await requetes(tok, { jours: 28, finIlYA: 2 });
-    const precedent = await requetes(tok, { jours: 28, finIlYA: 30 });
-    constats.push(...analyserRequetes(actuel, precedent));
+    if (mode === "hebdomadaire") {
+      const actuel = await requetes(tok, { jours: 28, finIlYA: 2 });
+      const precedent = await requetes(tok, { jours: 28, finIlYA: 30 });
+      constats.push(...analyserRequetes(actuel, precedent));
 
-    const n = actuel.length || 1;
-    resume = {
-      impressions: actuel.reduce((s, l) => s + l.impressions, 0),
-      clics: actuel.reduce((s, l) => s + l.clics, 0),
-      position: actuel.reduce((s, l) => s + l.position, 0) / n,
-    };
+      const n = actuel.length || 1;
+      resume = {
+        impressions: actuel.reduce((s, l) => s + l.impressions, 0),
+        clics: actuel.reduce((s, l) => s + l.clics, 0),
+        position: actuel.reduce((s, l) => s + l.position, 0) / n,
+      };
+    }
   } else {
     constats.push({
       gravite: "attention",

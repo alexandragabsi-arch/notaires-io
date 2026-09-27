@@ -12,9 +12,11 @@ import { workflow, node, trigger, expr } from '@n8n/workflow-sdk';
 // mal, et qui doit rester versionné avec le site qu'il surveille.
 //
 // ⚠️ Avant import : créer une credential « Header Auth » nommée
-//    « notaires.io CRON », nom `Authorization`, valeur `Bearer <CRON_SECRET>`
-//    (le CRON_SECRET des variables d'environnement Vercel), puis la
-//    sélectionner sur le nœud « Auditer le site ».
+//    « notaires.io AUDIT », nom `Authorization`, valeur `Bearer <AUDIT_SECRET>`
+//    (variable AUDIT_SECRET du projet Vercel, lisible dans le tableau de bord
+//    et dans .env.local), puis la sélectionner sur le nœud « Auditer le site ».
+//    Un jeton propre à l'audit, et non le CRON_SECRET : il n'ouvre que cette
+//    route en lecture, et il reste lisible — le CRON_SECRET est en « sensitive ».
 //
 // Une fois ce workflow actif, désactiver « 🔎 Contrôle indexation Google » :
 // l'audit couvre désormais l'indexation, l'état des sitemaps et les articles.

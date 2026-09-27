@@ -37,7 +37,7 @@ const SEUIL_POIDS_MO = 2;
  * signalé une seule fois, comme une limite de l'agent et non du site.
  */
 function urlAuditee(chemin: string): string {
-  const jeton = process.env.CRON_SECRET;
+  const jeton = process.env.AUDIT_SECRET ?? process.env.CRON_SECRET;
   const u = new URL(chemin, "https://notaires.io");
   if (jeton) u.searchParams.set("audit", jeton);
   return u.toString();
@@ -101,7 +101,7 @@ async function controlerPages(urls: string[]): Promise<Constat[]> {
       detail:
         "Vercel a renvoyé un challenge (429) à l'agent. Les contrôles de poids et de titre n'ont pas pu tourner. " +
         "Pour les rétablir : règle « Bypass firewall for machine-to-machine endpoints », ajouter une condition " +
-        "Query `audit` égal au CRON_SECRET.",
+        "Query `audit` égal à l'AUDIT_SECRET.",
     });
   }
   return out;

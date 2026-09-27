@@ -66,8 +66,15 @@ function bloc(constats: Constat[], gravite: keyof typeof COULEURS): string {
 }
 
 export async function GET(req: NextRequest) {
-  const secret = process.env.CRON_SECRET;
-  if (!secret || !bearerValide(req.headers.get("authorization"), secret)) {
+  // AUDIT_SECRET est propre à l'audit : n8n n'a besoin que de lui, et il peut
+  // être lu dans le tableau de bord Vercel, ce que CRON_SECRET — « sensitive »,
+  // donc en écriture seule — ne permet pas. CRON_SECRET reste accepté pour que
+  // l'appel vienne aussi d'un cron Vercel sans autre réglage.
+  const secrets = [process.env.AUDIT_SECRET, process.env.CRON_SECRET].filter(
+    (s): s is string => !!s,
+  );
+  const recu = req.headers.get("authorization");
+  if (!secrets.some((s) => bearerValide(recu, s))) {
     return NextResponse.json({ error: "non autorisé" }, { status: 401 });
   }
 

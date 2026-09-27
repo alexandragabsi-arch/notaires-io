@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DEPARTEMENTS } from "@/lib/departements-data";
 import Header from "@/components/Header";
 import NotaireListing from "@/components/NotaireListing";
 import Footer from "@/components/Footer";
@@ -117,6 +118,31 @@ export default function AnnuairePage() {
               ))}
             </div>
   
+            {/* Les 95 départements, entre l'annuaire et les villes.
+                Ils n'étaient liés depuis nulle part : celle des Alpes-Maritimes
+                n'avait pas été explorée depuis juin. Une page qui distribue
+                1 775 liens n'en transmet presque rien à chacun ; en passant par
+                le département, chaque ville reçoit un lien parmi une vingtaine.
+                C'est la hiérarchie qui fait la force de NeoNotario, qui n'a QUE
+                des pages de département. */}
+            <h3 className="text-[15px] font-bold text-[var(--color-text-strong)] mb-3">
+              Par département
+            </h3>
+            <div className="flex flex-wrap gap-x-4 gap-y-2 mb-8">
+              {DEPARTEMENTS.map((d) => (
+                <a
+                  key={d.slug}
+                  href={`/notaire-departement/${d.slug}`}
+                  className="text-[13px] text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors"
+                >
+                  {d.name} <span className="opacity-60">({d.code})</span>
+                </a>
+              ))}
+            </div>
+
+            <h3 className="text-[15px] font-bold text-[var(--color-text-strong)] mb-3">
+              Par ville
+            </h3>
             <div className="flex flex-wrap gap-x-4 gap-y-2">
               {villes.map((v) => (
                 <a

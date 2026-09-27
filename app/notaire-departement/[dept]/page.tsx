@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
-import { getDepartementBySlug, getAllDepartementSlugs, dansLeDepartement } from "@/lib/departements-data";
+import { getDepartementBySlug, getAllDepartementSlugs, dansLeDepartement, duDepartement } from "@/lib/departements-data";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getDonneesDepartement } from "@/lib/departements-villes";
 
@@ -21,8 +21,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!dep) return {};
 
   return {
-    title: `Notaire dans le ${dep.name} (${dep.code}) · Notaires.io`,
-    description: `Trouvez un notaire dans le département du ${dep.name}. Immobilier, succession, mariage, PACS, donation — prise de rendez-vous en ligne, en visio ou au cabinet. Notaires certifiés, tarifs réglementés.`,
+    title: `RDV notaire ${dansLeDepartement(dep.name)} (${dep.code}) : prendre rendez-vous`,
+    description: `Trouvez un notaire ${dansLeDepartement(dep.name)}. Immobilier, succession, mariage, PACS, donation — prise de rendez-vous en ligne, en visio ou au cabinet. Notaires certifiés, tarifs réglementés.`,
     keywords: [
       `notaire ${dep.name}`,
       `notaire ${dep.chefLieu}`,
@@ -34,8 +34,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ],
     alternates: { canonical: `https://notaires.io/notaire-departement/${dept}` },
     openGraph: {
-      title: `Notaire dans le ${dep.name} · Notaires.io`,
-      description: `Trouvez un notaire dans le ${dep.name}. Prise de rendez-vous en ligne, en visio ou au cabinet.`,
+      title: `RDV notaire ${dansLeDepartement(dep.name)} · Notaires.io`,
+      description: `Trouvez un notaire ${dansLeDepartement(dep.name)}. Prise de rendez-vous en ligne, en visio ou au cabinet.`,
       url: `https://notaires.io/notaire-departement/${dept}`,
       type: "website",
     },
@@ -65,14 +65,14 @@ export default async function Page({ params }: Props) {
       },
       {
         "@type": "Service",
-        name: `Notaire dans le ${dep.name}`,
+        name: `Notaire ${dansLeDepartement(dep.name)}`,
         provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
         areaServed: {
           "@type": "AdministrativeArea",
           name: dep.name,
           addressCountry: "FR",
         },
-        description: `Mise en relation avec des notaires partenaires dans le ${dep.name} pour immobilier, succession, mariage, PACS, divorce et création de société.`,
+        description: `Mise en relation avec des notaires partenaires ${dansLeDepartement(dep.name)} pour immobilier, succession, mariage, PACS, divorce et création de société.`,
         url: `https://notaires.io/notaire-departement/${dept}`,
       },
       {
@@ -80,26 +80,26 @@ export default async function Page({ params }: Props) {
         mainEntity: [
           {
             "@type": "Question",
-            name: `Combien coûte un notaire dans le ${dep.name} ?`,
+            name: `Combien coûte un notaire ${dansLeDepartement(dep.name)} ?`,
             acceptedAnswer: {
               "@type": "Answer",
-              text: `Les honoraires des notaires dans le ${dep.name} sont réglementés par l'État. Pour un achat immobilier, les frais de notaire représentent entre 7 % et 8 % du prix du bien (ancien) ou 2 % à 3 % (neuf). Ces tarifs incluent les émoluments du notaire, les droits de mutation et les débours.`,
+              text: `Les honoraires des notaires ${dansLeDepartement(dep.name)} sont réglementés par l'État. Pour un achat immobilier, les frais de notaire représentent entre 7 % et 8 % du prix du bien (ancien) ou 2 % à 3 % (neuf). Ces tarifs incluent les émoluments du notaire, les droits de mutation et les débours.`,
             },
           },
           {
             "@type": "Question",
-            name: `Peut-on consulter un notaire du ${dep.name} en visio ?`,
+            name: `Peut-on consulter un notaire ${duDepartement(dep.name)} en visio ?`,
             acceptedAnswer: {
               "@type": "Answer",
-              text: `Oui, tous les notaires partenaires de Notaires.io dans le ${dep.name} proposent des rendez-vous en visioconférence. C'est idéal pour préparer votre dossier (succession, contrat de mariage, vente immobilière) sans vous déplacer.`,
+              text: `Oui, tous les notaires partenaires de Notaires.io ${dansLeDepartement(dep.name)} proposent des rendez-vous en visioconférence. C'est idéal pour préparer votre dossier (succession, contrat de mariage, vente immobilière) sans vous déplacer.`,
             },
           },
           {
             "@type": "Question",
-            name: `Comment trouver un notaire disponible rapidement dans le ${dep.name} ?`,
+            name: `Comment trouver un notaire disponible rapidement ${dansLeDepartement(dep.name)} ?`,
             acceptedAnswer: {
               "@type": "Answer",
-              text: `Sur Notaires.io, consultez les disponibilités des notaires du ${dep.name} en temps réel et prenez rendez-vous en quelques clics. Le délai moyen pour un premier rendez-vous est de 48 à 72 heures.`,
+              text: `Sur Notaires.io, consultez les disponibilités des notaires ${duDepartement(dep.name)} en temps réel et prenez rendez-vous en quelques clics. Le délai moyen pour un premier rendez-vous est de 48 à 72 heures.`,
             },
           },
         ],
@@ -116,24 +116,24 @@ export default async function Page({ params }: Props) {
   const faq = [
     ...(donnees
       ? [{
-          q: `Combien de notaires exercent dans le ${dep.name} ?`,
+          q: `Combien de notaires exercent ${dansLeDepartement(dep.name)} ?`,
           a: `${donnees.notaires} notaires sont référencés ${dansLeDepartement(dep.name)} (${dep.code}) sur Notaires.io${villes.length ? `, répartis notamment entre ${villes.slice(0, 5).map(v => v.nom).join(", ")}` : ""}.${specs ? ` Les domaines les plus représentés y sont ${specs}.` : ""}`,
         }]
       : []),
     {
-      q: `Combien coûte un notaire dans le ${dep.name} ?`,
-      a: `Les honoraires des notaires dans le ${dep.name} sont fixés par décret et identiques sur tout le territoire français. Pour un achat immobilier, comptez 7 à 8 % du prix du bien (logement ancien) ou 2 à 3 % (neuf). Pour une succession, les émoluments dépendent de l'actif net transmis.`,
+      q: `Combien coûte un notaire ${dansLeDepartement(dep.name)} ?`,
+      a: `Les honoraires des notaires ${dansLeDepartement(dep.name)} sont fixés par décret et identiques sur tout le territoire français. Pour un achat immobilier, comptez 7 à 8 % du prix du bien (logement ancien) ou 2 à 3 % (neuf). Pour une succession, les émoluments dépendent de l'actif net transmis.`,
     },
     {
-      q: `Peut-on consulter un notaire du ${dep.name} en visioconférence ?`,
-      a: `Oui, tous nos notaires partenaires dans le ${dep.name} proposent des rendez-vous en visio. Idéal pour préparer votre succession, votre contrat de mariage ou votre projet immobilier sans vous déplacer à ${dep.chefLieu} ou dans le reste du département.`,
+      q: `Peut-on consulter un notaire ${duDepartement(dep.name)} en visioconférence ?`,
+      a: `Oui, tous nos notaires partenaires ${dansLeDepartement(dep.name)} proposent des rendez-vous en visio. Idéal pour préparer votre succession, votre contrat de mariage ou votre projet immobilier sans vous déplacer à ${dep.chefLieu} ou dans le reste du département.`,
     },
     {
-      q: `Quels actes un notaire dans le ${dep.name} peut-il réaliser ?`,
-      a: `Un notaire dans le ${dep.name} est compétent pour tous les actes notariaux : achat/vente immobilier, succession et testament, donation, contrat de mariage, PACS, divorce par consentement mutuel, création de société (SCI, SARL...) et mandat de protection future. Les actes ont force exécutoire sur tout le territoire.`,
+      q: `Quels actes un notaire ${dansLeDepartement(dep.name)} peut-il réaliser ?`,
+      a: `Un notaire ${dansLeDepartement(dep.name)} est compétent pour tous les actes notariaux : achat/vente immobilier, succession et testament, donation, contrat de mariage, PACS, divorce par consentement mutuel, création de société (SCI, SARL...) et mandat de protection future. Les actes ont force exécutoire sur tout le territoire.`,
     },
     {
-      q: `Comment prendre rendez-vous avec un notaire dans le ${dep.name} via Notaires.io ?`,
+      q: `Comment prendre rendez-vous avec un notaire ${dansLeDepartement(dep.name)} via Notaires.io ?`,
       a: `Rendez-vous sur notre annuaire, sélectionnez votre département (${dep.name} — ${dep.code}), choisissez votre notaire et réservez un créneau en ligne, en visio ou au cabinet. Vous recevez une confirmation par email avec une checklist pour préparer votre dossier.`,
     },
   ];
@@ -165,7 +165,7 @@ export default async function Page({ params }: Props) {
           h1={`Trouver un notaire ${dansLeDepartement(dep.name)} (${dep.code})`}
           intro={donnees
             ? `${donnees.notaires} notaires sont référencés ${dansLeDepartement(dep.name)} (${dep.code})${villes.length ? `, à ${dep.chefLieu} et dans ${villes.length > 1 ? `${villes.length - 1} autres communes` : "les communes environnantes"}` : ""}.${specs ? ` Les domaines les plus représentés y sont ${specs}.` : ""} Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`
-            : `Vous recherchez un notaire dans le département du ${dep.name} ? Notaires.io met en relation avec des notaires à ${dep.chefLieu} et dans tout le ${dep.name}. Immobilier, succession, mariage, PACS, donation — prise de rendez-vous en ligne, en visio ou au cabinet.`}
+            : `Vous recherchez un notaire ${dansLeDepartement(dep.name)} ? Notaires.io met en relation avec des notaires à ${dep.chefLieu} et dans tout ${duDepartement(dep.name)}. Immobilier, succession, mariage, PACS, donation — prise de rendez-vous en ligne, en visio ou au cabinet.`}
           notaires={notaires}
           faq={faq}
           relatedLinks={relatedLinks}

@@ -52,7 +52,10 @@ export default async function Page({ params }: Props) {
   const v = getVilleParSlug(ville);
   if (!v) notFound();
 
-  const notaires = getNotairesByCity(v.nom);
+  // Plafond de sûreté : une ville très dense produirait une page de plusieurs
+  // mégaoctets, que Google renonce à traiter — c'est ce qui a rendu
+  // /notaire-paris invisible pendant des mois.
+  const notaires = getNotairesByCity(v.nom, 120);
 
   // Villes voisines par volume : un maillage entre pages de même niveau, qui
   // évite que chacune reste un cul-de-sac.

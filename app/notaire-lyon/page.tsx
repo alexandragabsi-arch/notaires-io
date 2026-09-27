@@ -12,7 +12,7 @@ const LYON_ARRONDISSEMENTS = Array.from({ length: 9 }, (_, i) => ({
 }));
 
 export const metadata: Metadata = {
-  title: "Notaire à Lyon",
+  title: "RDV notaire à Lyon : prendre rendez-vous en ligne",
   description:
     "Trouvez un notaire à Lyon disponible rapidement. Mariage, PACS, immobilier, création de société — prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-lyon" },
   openGraph: {
-    title: "Notaire à Lyon · Notaires.io",
+    title: "RDV notaire à Lyon · Notaires.io",
     description:
       "Trouvez un notaire à Lyon disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-lyon",
@@ -78,7 +78,9 @@ const FAQ = [
 
 export default function Page() {
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
-  const scrapedNotaires = getNotairesByCity("Lyon");
+  // 60 fiches sur 406 : au-delà de 2 Mo de HTML, Google tronque ou renonce.
+  // Les arrondissements, liés plus bas, portent le reste.
+  const scrapedNotaires = getNotairesByCity("Lyon", 60);
   const notaires = scrapedNotaires.length > 0
     ? scrapedNotaires
     : LISTING_NOTAIRES.filter((n) => n.city === "Lyon");
@@ -99,7 +101,7 @@ export default function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Lyon"
+          h1="Prendre RDV avec un notaire à Lyon"
           intro="Vous cherchez un notaire à Lyon pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Nos notaires partenaires lyonnais sont disponibles sous 48 h, en visio ou au cabinet dans votre arrondissement."
           notaires={notaires}
           faq={FAQ}

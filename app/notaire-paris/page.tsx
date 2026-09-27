@@ -13,7 +13,7 @@ const PARIS_ARRONDISSEMENTS = Array.from({ length: 20 }, (_, i) => ({
 }));
 
 export const metadata: Metadata = {
-  title: "Notaire à Paris",
+  title: "RDV notaire à Paris : prendre rendez-vous en ligne",
   description:
     "Trouvez un notaire à Paris disponible rapidement. Immobilier, succession, mariage, PACS, société — prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-paris" },
   openGraph: {
-    title: "Notaire à Paris · Notaires.io",
+    title: "RDV notaire à Paris · Notaires.io",
     description:
       "Trouvez un notaire à Paris disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-paris",
@@ -79,7 +79,11 @@ const FAQ = [
 
 export default async function Page() {
   // Utilise les vrais notaires scrapés depuis notaires.fr, avec fallback sur les données fictives
-  const scrapedNotaires = getNotairesByCity("Paris");
+  // 60 fiches, pas 2 195 : la page en pesait 16 Mo et Google renonçait à la
+  // traiter — elle est restée « URL is unknown to Google », jamais explorée,
+  // du jour de sa mise en ligne au 27/09/2026. Les 20 arrondissements, liés
+  // plus bas, portent le reste du fonds.
+  const scrapedNotaires = getNotairesByCity("Paris", 60);
   // Les notaires inscrits en tête : ce sont les seuls chez qui on peut
   // réellement réserver. Voir lib/notaires-inscrits.ts.
   const notaires = inscritsDabord(
@@ -105,8 +109,8 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Paris"
-          intro="Besoin d'un notaire à Paris pour votre achat immobilier, votre succession ou votre mariage ? Nos notaires partenaires sont disponibles rapidement, en visio ou au cabinet. Comparez les profils et réservez en quelques clics."
+          h1="Prendre RDV avec un notaire à Paris"
+          intro="Besoin d'un notaire à Paris pour votre achat immobilier, votre succession ou votre mariage ? Nos notaires partenaires sont disponibles rapidement, en visio ou au cabinet. Voici une sélection d'études parisiennes ; retrouvez toutes les autres arrondissement par arrondissement, en bas de page."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

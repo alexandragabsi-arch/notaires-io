@@ -12,7 +12,7 @@ const MARSEILLE_ARRONDISSEMENTS = Array.from({ length: 16 }, (_, i) => ({
 }));
 
 export const metadata: Metadata = {
-  title: "Notaire à Marseille",
+  title: "RDV notaire à Marseille : prendre rendez-vous en ligne",
   description:
     "Trouvez un notaire à Marseille pour votre achat immobilier, donation ou succession. Prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-marseille" },
   openGraph: {
-    title: "Notaire à Marseille · Notaires.io",
+    title: "RDV notaire à Marseille · Notaires.io",
     description:
       "Trouvez un notaire à Marseille pour votre achat immobilier ou donation.",
     url: "https://notaires.io/notaire-marseille",
@@ -78,7 +78,9 @@ const FAQ = [
 
 export default function Page() {
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
-  const scrapedNotaires = getNotairesByCity("Marseille");
+  // 60 fiches sur 310 : au-delà de 2 Mo de HTML, Google tronque ou renonce.
+  // Les arrondissements, liés plus bas, portent le reste.
+  const scrapedNotaires = getNotairesByCity("Marseille", 60);
   const notaires = scrapedNotaires.length > 0
     ? scrapedNotaires
     : LISTING_NOTAIRES.filter((n) => n.city === "Marseille");
@@ -99,7 +101,7 @@ export default function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Marseille"
+          h1="Prendre RDV avec un notaire à Marseille"
           intro="Achat immobilier sur le littoral méditerranéen, donation à vos proches, succession : nos notaires partenaires à Marseille maîtrisent les spécificités juridiques de la région PACA. Disponibles rapidement, en visio ou au cabinet."
           notaires={notaires}
           faq={FAQ}

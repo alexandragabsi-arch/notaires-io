@@ -44,13 +44,10 @@ const GRANDES_VILLES: [string, string][] = [
 ];
 
 export default function AnnuairePage() {
-  // La page sérialise les 23 390 notaires vers le navigateur — 12 Mo.
-  // `website` et `email` n'y sont jamais affichés : c'est du poids inutile,
-  // et surtout les adresses professionnelles de 23 390 notaires étaient
-  // lisibles dans le code source par n'importe qui. Le reste du poids tient
-  // au nombre de fiches : il demande un chargement à la demande, pas un
-  // élagage.
-  const allNotaires = getAllNotaires().map(({ website, email, ...garde }) => garde);
+  // Sert uniquement au décompte et aux 30 premières fiches des données
+  // structurées : la liste complète n'est plus sérialisée vers le navigateur,
+  // elle est chargée depuis /api/annuaire après l'affichage.
+  const allNotaires = getAllNotaires();
   const villes = getVillesCouvertes();
 
   /* ── JSON-LD : CollectionPage + ItemList (30 premiers pour rester léger) ── */
@@ -101,7 +98,7 @@ export default function AnnuairePage() {
             n'étaient atteignables depuis nulle part : Google les découvrait par
             le sitemap et les laissait « détectées, actuellement non indexées ». */}
         <NotaireListing
-          baseListings={allNotaires}
+          sourceUrl="/api/annuaire"
           sommaire={
           
           <section className="max-w-[1100px] mx-auto px-6 pb-16">

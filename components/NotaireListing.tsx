@@ -458,7 +458,7 @@ function MenuFiltre({
   );
 }
 
-function NotaireListingInner({ baseListings, sommaire }: { baseListings?: ListingNotaire[]; sommaire?: React.ReactNode }) {
+function NotaireListingInner({ baseListings, sourceUrl, sommaire }: { baseListings?: ListingNotaire[]; sourceUrl?: string; sommaire?: React.ReactNode }) {
   const searchParams = useSearchParams();
   const urlVille = searchParams.get("ville") ?? "";
   const urlNom = searchParams.get("nom") ?? "";
@@ -485,7 +485,29 @@ function NotaireListingInner({ baseListings, sommaire }: { baseListings?: Listin
   const [view, setView] = useState<"list" | "map">("list"); // liste (défaut) ou carte
   const [displayLimit, setDisplayLimit] = useState(60);
 
-  const base = baseListings ?? LISTING_NOTAIRES;
+  // Fiches chargées après l'affichage quand `sourceUrl` est fourni : elles
+  // pesaient 12 Mo dans le HTML de /annuaire, que Google n'arrivait plus à
+  // traiter. En attendant, la liste de base permet déjà de chercher.
+  const [chargees, setChargees] = useState<ListingNotaire[] | null>(null);
+  useEffect(() => {
+    if (!sourceUrl || baseListings) return;
+    let actif = true;
+    // Une seule nouvelle tentative : sans les fiches, la recherche retombe sur
+    // la courte liste de secours et ne trouve presque rien. Mieux vaut réessayer
+    // que laisser l'annuaire vide.
+    const charger = (reste: number): Promise<void> =>
+      fetch(sourceUrl)
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+        .then((d) => { if (actif && Array.isArray(d)) setChargees(d); })
+        .catch(() => {
+          if (!actif || reste <= 0) return;
+          return new Promise<void>((ok) => setTimeout(() => ok(charger(reste - 1)), 1500));
+        });
+    charger(1);
+    return () => { actif = false; };
+  }, [sourceUrl, baseListings]);
+
+  const base = baseListings ?? chargees ?? LISTING_NOTAIRES;
   // Fiches complétées par les notaires : remplacent leur version d'annuaire
   // (même id, sans doublon) ; les fiches créées à l'inscription s'ajoutent.
   const all = useFichesCompletees(base, false);
@@ -902,10 +924,10 @@ function NotaireListingInner({ baseListings, sommaire }: { baseListings?: Listin
   );
 }
 
-export default function NotaireListing({ baseListings, sommaire }: { baseListings?: ListingNotaire[]; sommaire?: React.ReactNode }) {
+export default function NotaireListing({ baseListings, sourceUrl, sommaire }: { baseListings?: ListingNotaire[]; sourceUrl?: string; sommaire?: React.ReactNode }) {
   return (
     <Suspense>
-      <NotaireListingInner baseListings={baseListings} sommaire={sommaire} />
+      <NotaireListingInner baseListings={baseListings} sourceUrl={sourceUrl} sommaire={sommaire} />
     </Suspense>
   );
 }

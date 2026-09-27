@@ -32,11 +32,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     // Pas de « · Notaires.io » ici : le gabarit de app/layout.tsx l'ajoute déjà
     // (`template: "%s · Notaires.io"`). Le titre affichait la marque deux fois.
-    title: `Notaire à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""} — ${v.nombre} notaires`,
+    // « rdv notaire <ville> » est la requête réellement tapée. Le titre disait
+    // « Notaire à Cannes » : ni « RDV » ni « rendez-vous ». NeoNotario, lui,
+    // titre « Notaires à Toulon - Prenez RDV en ligne » et passe devant.
+    title: `RDV notaire à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""} : prendre rendez-vous en ligne`,
     description: `${v.nombre} notaires référencés à ${v.nom}${v.codePostal ? ` ${v.codePostal}` : ""}${specs ? ` : ${specs}` : ""}. Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`,
     alternates: { canonical: `https://notaires.io/notaire-ville/${v.slug}` },
     openGraph: {
-      title: `Notaire à ${v.nom}${v.codePostal ? ` ${v.codePostal}` : ""} · Notaires.io`,
+      title: `RDV notaire à ${v.nom}${v.codePostal ? ` ${v.codePostal}` : ""} · Notaires.io`,
       description: `${v.nombre} notaires référencés à ${v.nom}. Prise de rendez-vous en ligne.`,
       url: `https://notaires.io/notaire-ville/${v.slug}`,
       type: "website",
@@ -112,7 +115,7 @@ export default async function Page({ params }: Props) {
       <Header />
       <main>
         <SeoLandingPage
-          h1={`Trouver un notaire à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""}`}
+          h1={`Prendre RDV avec un notaire à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""}`}
           intro={`${v.nombre} notaires sont référencés à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""}${specs ? `, principalement en ${specs}` : ""}. Comparez les profils et les créneaux disponibles, puis prenez rendez-vous en ligne — en visioconférence ou au cabinet.`}
           notaires={notaires}
           faq={faq}

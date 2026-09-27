@@ -44,7 +44,13 @@ const GRANDES_VILLES: [string, string][] = [
 ];
 
 export default function AnnuairePage() {
-  const allNotaires = getAllNotaires();
+  // La page sérialise les 23 390 notaires vers le navigateur — 12 Mo.
+  // `website` et `email` n'y sont jamais affichés : c'est du poids inutile,
+  // et surtout les adresses professionnelles de 23 390 notaires étaient
+  // lisibles dans le code source par n'importe qui. Le reste du poids tient
+  // au nombre de fiches : il demande un chargement à la demande, pas un
+  // élagage.
+  const allNotaires = getAllNotaires().map(({ website, email, ...garde }) => garde);
   const villes = getVillesCouvertes();
 
   /* ── JSON-LD : CollectionPage + ItemList (30 premiers pour rester léger) ── */

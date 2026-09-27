@@ -14,6 +14,13 @@ const OG_IMAGE = { url: `${BASE}/og-image.png`, width: 1200, height: 630, alt: "
 // Allow slugs not in generateStaticParams (new articles from N8N agent)
 export const dynamicParams = true;
 
+// Les articles vivent dans Supabase, où l'agent SEO publie chaque matin et où
+// le contenu se corrige à la main. Sans revalidation, une page figée au build
+// gardait son ancienne version jusqu'au déploiement suivant — une correction
+// pouvait rester invisible plusieurs jours. Une heure suffit : le blog n'est
+// pas du temps réel.
+export const revalidate = 3600;
+
 export async function generateStaticParams() {
   const staticSlugs = BLOG_POSTS.map((post) => ({ slug: post.slug }));
   const dynamicSlugs = (await getDynamicArticleSlugs()).map((slug) => ({ slug }));

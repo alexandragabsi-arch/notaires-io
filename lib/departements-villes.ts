@@ -10,7 +10,7 @@
 // la Corse (2A/2B, codes postaux en 20) que l'on écarte faute de règle fiable.
 
 import { getAllNotaires } from "@/lib/notaires-source";
-import { slugVille, VILLES_STATIQUES } from "@/lib/villes-data";
+import { slugVille, VILLES_STATIQUES, getVillesCouvertes } from "@/lib/villes-data";
 
 export interface VilleDuDepartement {
   nom: string;
@@ -63,23 +63,38 @@ function construire(): Map<string, DonneesDepartement> {
     }
   }
 
+  // Les communes couvertes viennent de getVillesCouvertes(), qui est la source
+  // qui décide quelles pages existent. Ce bloc recopiait son seuil à la main :
+  // il était resté à 10 quand SEUIL_VILLE est passé à 3, et plafonnait à
+  // 20 communes par département. Les pages de ville étaient donc créées sans
+  // qu'aucun lien n'y mène, et Search Console les déclarait le 27/09/2026
+  // « URL is unknown to Google » — déclarées au sitemap, jamais explorées.
+  const couvertesParDept = new Map<string, VilleDuDepartement[]>();
+  for (const v of getVillesCouvertes()) {
+    const code = v.departement?.code;
+    if (!code) continue;
+    const liste = couvertesParDept.get(code) ?? [];
+    liste.push({ nom: v.nom, slug: v.slug, nombre: v.nombre, statique: false,
+                 href: `/notaire-ville/${v.slug}` });
+    couvertesParDept.set(code, liste);
+  }
+
   const sortie = new Map<string, DonneesDepartement>();
   for (const [code, d] of parDept) {
-    const villes = [...d.villes.entries()]
-      .map(([slug, { nom, n }]) => {
-        const statique = VILLES_STATIQUES.has(slug);
-        return {
-          nom,
-          slug,
-          nombre: n,
-          statique,
-          href: statique ? `/notaire-${slug}` : `/notaire-ville/${slug}`,
-        };
-      })
-      // Sous 10 notaires, la commune n'a pas de page : le lien mènerait à un 404.
-      .filter((v) => v.statique || v.nombre >= 10)
+    // Les villes à page rédigée à la main restent tirées du relevé ci-dessus :
+    // getVillesCouvertes() les écarte justement pour ne pas les dupliquer.
+    const statiques = [...d.villes.entries()]
+      .filter(([slug]) => VILLES_STATIQUES.has(slug))
+      .map(([slug, { nom, n }]) => ({
+        nom, slug, nombre: n, statique: true, href: `/notaire-${slug}`,
+      }));
+
+    const villes = [...statiques, ...(couvertesParDept.get(code) ?? [])]
       .sort((a, b) => b.nombre - a.nombre)
-      .slice(0, 20);
+      // Un plafond large : il ne retire rien aujourd'hui (le département le
+      // plus dense en compte moins), il évite seulement qu'une page devienne
+      // un mur de liens si le fonds grossit.
+      .slice(0, 150);
 
     const specialites = [...d.specs.entries()]
       .sort((a, b) => b[1] - a[1])

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { auditSeo, type Constat } from "@/lib/audit-seo";
-import { emailLayout } from "@/lib/email";
+import { emailLayout, sendEmail, ADMIN_EMAIL } from "@/lib/email";
 
 /**
  * Audit de référencement — les contrôles, pas la planification.
@@ -78,7 +78,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "non autorisé" }, { status: 401 });
   }
 
-  const hebdo = req.nextUrl.searchParams.get("mode") === "hebdomadaire";
+  // Lundi : bilan complet, positions comprises. Les autres jours : contrôles
+  // techniques seuls, et silence tant que rien n'est cassé — un message
+  // quotidien qui répète « tout va bien » finit par ne plus être lu.
+  // Le paramètre ?mode= reste accepté pour déclencher un bilan à la demande.
+  const demande = req.nextUrl.searchParams.get("mode");
+  const hebdo = demande
+    ? demande === "hebdomadaire"
+    : new Date().getDay() === 1;
   const { constats, resume, gscDisponible } = await auditSeo(hebdo ? "hebdomadaire" : "quotidien");
   const bloquants = constats.filter((c) => c.gravite === "bloquant").length;
   const date = new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
@@ -104,12 +111,22 @@ export async function GET(req: NextRequest) {
     </p>
   `);
 
+  const envoyer = hebdo || bloquants > 0;
+  const sujet = bloquants
+    ? `🔴 SEO : ${bloquants} blocage${bloquants > 1 ? "s" : ""} — notaires.io`
+    : "✅ SEO : aucun blocage — notaires.io";
+
+  // La route envoie elle-même depuis le 29/09/2026. n8n planifiait et
+  // expédiait, mais il fallait tenir un mot de passe identique des deux côtés :
+  // deux credentials du même nom ont suffi à casser les deux agents une journée
+  // entière. Vercel Cron s'authentifie seul, il n'y a plus rien à recopier.
+  const envoye = envoyer ? await sendEmail(ADMIN_EMAIL, sujet, html) : false;
+
   return NextResponse.json({
     mode: hebdo ? "hebdomadaire" : "quotidien",
-    envoyer: hebdo || bloquants > 0,
-    sujet: bloquants
-      ? `🔴 SEO : ${bloquants} blocage${bloquants > 1 ? "s" : ""} — notaires.io`
-      : "✅ SEO : aucun blocage — notaires.io",
+    envoyer,
+    envoye,
+    sujet,
     html,
     bloquants,
     resume,

@@ -99,7 +99,7 @@ export async function GET(req: NextRequest) {
       ${bloquants ? `${bloquants} blocage${bloquants > 1 ? "s" : ""} à lever` : "Aucun blocage détecté"}
     </h1>
     <p style="font-size:13px;color:#54617a;margin-bottom:18px">
-      ${hebdo ? `Bilan hebdomadaire du ${date} · 28 derniers jours · ${entete}` : `Contrôle technique du ${date}`}
+      ${hebdo ? `Bilan hebdomadaire du ${date} · 28 derniers jours · ${entete}` : `Contrôle quotidien du ${date}`}
     </p>
     ${bloc(constats, "bloquant")}
     ${bloc(constats, "attention")}
@@ -111,7 +111,10 @@ export async function GET(req: NextRequest) {
     </p>
   `);
 
-  const envoyer = hebdo || bloquants > 0;
+  // Alexandra veut le rapport tous les jours, même quand rien n'est cassé
+  // (29/09/2026) : un silence ne se distingue pas d'une panne, et elle a passé
+  // une matinée à se demander pourquoi rien n'arrivait alors que n8n dormait.
+  const envoyer = true;
   const sujet = bloquants
     ? `🔴 SEO : ${bloquants} blocage${bloquants > 1 ? "s" : ""} — notaires.io`
     : "✅ SEO : aucun blocage — notaires.io";

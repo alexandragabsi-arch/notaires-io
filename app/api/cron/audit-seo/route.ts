@@ -3,6 +3,7 @@ import crypto from "node:crypto";
 import { auditSeo, type Constat } from "@/lib/audit-seo";
 import { emailLayout, sendEmail, ADMIN_EMAIL } from "@/lib/email";
 import { occasions as calculerOccasions, type Occasion } from "@/lib/occasions";
+import { pagesASoumettre, LIEN_INSPECTION, type UrlASoumettre } from "@/lib/indexation";
 
 /**
  * Audit de référencement — les contrôles, pas la planification.
@@ -108,6 +109,12 @@ export async function GET(req: NextRequest) {
   // être appliquée telle quelle. Voir lib/occasions.ts.
   const aFaire = await calculerOccasions();
 
+  // Les pages qu'il faut pousser à la main. Google n'ouvre son API d'indexation
+  // qu'aux offres d'emploi et aux vidéos en direct, et le bouton « Demander une
+  // indexation » n'en a pas : ce bloc ne clique pas à la place d'Alexandra, il
+  // lui évite de chercher sur quoi cliquer. Voir lib/indexation.ts.
+  const aSoumettre = await pagesASoumettre();
+
   const blocAFaire = aFaire.length
     ? `
       <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px 18px;margin-bottom:14px">
@@ -130,6 +137,30 @@ export async function GET(req: NextRequest) {
       </div>`
     : "";
 
+  const blocIndexation = aSoumettre.length
+    ? `
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 18px;margin-bottom:14px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#92400e;margin-bottom:2px">
+          À soumettre à Google · ${aSoumettre.length}
+        </div>
+        <div style="font-size:12px;color:#92400e;margin-bottom:8px">
+          Ouvrir <a href="${LIEN_INSPECTION}" style="color:#92400e">l'inspection d'URL</a>,
+          coller l'adresse, cliquer « Demander une indexation ». Google en accepte
+          une dizaine par jour : elles sont classées par urgence.
+        </div>
+        ${aSoumettre
+          .map(
+            (u: UrlASoumettre) => `
+          <div style="padding:8px 0;border-bottom:1px solid #fde68a">
+            <div style="font-size:13px;font-weight:600;color:#92400e">${echapper(u.chemin)}</div>
+            <div style="font-size:12px;color:#54617a;margin-top:2px">${echapper(u.raison)}</div>
+            <div style="font-size:11px;color:#8a94a6;margin-top:2px;font-family:ui-monospace,monospace">${echapper(u.url)}</div>
+          </div>`,
+          )
+          .join("")}
+      </div>`
+    : "";
+
   const html = emailLayout(`
     <h1 style="font-size:22px;font-weight:700;margin-bottom:4px;color:#1a1a2e">
       ${bloquants ? `${bloquants} blocage${bloquants > 1 ? "s" : ""} à lever` : "Aucun blocage détecté"}
@@ -137,6 +168,7 @@ export async function GET(req: NextRequest) {
     <p style="font-size:13px;color:#54617a;margin-bottom:18px">
       ${hebdo ? `Bilan hebdomadaire du ${date} · 28 derniers jours · ${entete}` : `Contrôle quotidien du ${date}`}
     </p>
+    ${blocIndexation}
     ${blocAFaire}
     ${bloc(constats, "bloquant")}
     ${bloc(constats, "attention")}
@@ -160,7 +192,10 @@ export async function GET(req: NextRequest) {
   // expédiait, mais il fallait tenir un mot de passe identique des deux côtés :
   // deux credentials du même nom ont suffi à casser les deux agents une journée
   // entière. Vercel Cron s'authentifie seul, il n'y a plus rien à recopier.
-  const envoye = envoyer ? await sendEmail(ADMIN_EMAIL, sujet, html) : false;
+  // ?test=1 calcule tout et renvoie le message sans l'expédier : de quoi
+  // vérifier un changement de gabarit sans salir la boîte de réception.
+  const essai = req.nextUrl.searchParams.get("test") !== null;
+  const envoye = envoyer && !essai ? await sendEmail(ADMIN_EMAIL, sujet, html) : false;
 
   return NextResponse.json({
     mode: hebdo ? "hebdomadaire" : "quotidien",

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { auditSeo, type Constat } from "@/lib/audit-seo";
 import { emailLayout, sendEmail, ADMIN_EMAIL } from "@/lib/email";
+import { occasions as calculerOccasions, type Occasion } from "@/lib/occasions";
 
 /**
  * Audit de référencement — les contrôles, pas la planification.
@@ -94,6 +95,33 @@ export async function GET(req: NextRequest) {
     ? `${resume.impressions} impressions · ${resume.clics} clics · position moyenne ${resume.position.toFixed(1)}`
     : "Search Console non connecté";
 
+  // Ce qu'il y a à FAIRE, et non seulement à constater : les requêtes en
+  // 4e-15e place, diagnostiquées page par page, avec l'action formulée pour
+  // être appliquée telle quelle. Voir lib/occasions.ts.
+  const aFaire = await calculerOccasions();
+
+  const blocAFaire = aFaire.length
+    ? `
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px 18px;margin-bottom:14px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#166534;margin-bottom:6px">
+          À faire pour remonter · ${aFaire.length}
+        </div>
+        ${aFaire
+          .map(
+            (o: Occasion) => `
+          <div style="padding:10px 0;border-bottom:1px solid #bbf7d0">
+            <div style="font-size:14px;font-weight:600;color:#166534">
+              « ${o.requete} » — ${o.position.toFixed(1)}e place, ${o.impressions} impressions
+            </div>
+            <div style="font-size:13px;color:#166534;margin-top:4px"><strong>${o.action}</strong></div>
+            ${o.manques.length ? `<div style="font-size:12px;color:#54617a;margin-top:2px">Constaté : ${o.manques.join(" · ")}</div>` : ""}
+            <a href="${o.page}" style="font-size:12px;color:#2d5dbf">${o.chemin}</a>
+          </div>`,
+          )
+          .join("")}
+      </div>`
+    : "";
+
   const html = emailLayout(`
     <h1 style="font-size:22px;font-weight:700;margin-bottom:4px;color:#1a1a2e">
       ${bloquants ? `${bloquants} blocage${bloquants > 1 ? "s" : ""} à lever` : "Aucun blocage détecté"}
@@ -101,6 +129,7 @@ export async function GET(req: NextRequest) {
     <p style="font-size:13px;color:#54617a;margin-bottom:18px">
       ${hebdo ? `Bilan hebdomadaire du ${date} · 28 derniers jours · ${entete}` : `Contrôle quotidien du ${date}`}
     </p>
+    ${blocAFaire}
     ${bloc(constats, "bloquant")}
     ${bloc(constats, "attention")}
     ${hebdo ? bloc(constats, "occasion") : ""}

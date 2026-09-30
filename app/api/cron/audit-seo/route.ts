@@ -37,6 +37,14 @@ function bearerValide(header: string | null, secret: string): boolean {
   return crypto.timingSafeEqual(attendu, recu);
 }
 
+/** Rend un texte inoffensif dans du HTML : les actions parlent de balises. */
+function echapper(t: string): string {
+  return t
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 const COULEURS = {
   bloquant: { fond: "#fef2f2", bord: "#fecaca", texte: "#991b1b", label: "Bloquant" },
   attention: { fond: "#fffbeb", bord: "#fde68a", texte: "#92400e", label: "À surveiller" },
@@ -111,10 +119,10 @@ export async function GET(req: NextRequest) {
             (o: Occasion) => `
           <div style="padding:10px 0;border-bottom:1px solid #bbf7d0">
             <div style="font-size:14px;font-weight:600;color:#166534">
-              « ${o.requete} » — ${o.position.toFixed(1)}e place, ${o.impressions} impressions
+              « ${echapper(o.requete)} » — ${o.position.toFixed(1)}e place, ${o.impressions} impressions
             </div>
-            <div style="font-size:13px;color:#166534;margin-top:4px"><strong>${o.action}</strong></div>
-            ${o.manques.length ? `<div style="font-size:12px;color:#54617a;margin-top:2px">Constaté : ${o.manques.join(" · ")}</div>` : ""}
+            <div style="font-size:13px;color:#166534;margin-top:4px"><strong>${echapper(o.action)}</strong></div>
+            ${o.manques.length ? `<div style="font-size:12px;color:#54617a;margin-top:2px">Constaté : ${echapper(o.manques.join(" · "))}</div>` : ""}
             <a href="${o.page}" style="font-size:12px;color:#2d5dbf">${o.chemin}</a>
           </div>`,
           )

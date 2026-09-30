@@ -16,6 +16,7 @@ const ANCRES = [
   "Prenez rendez-vous avec un notaire en ligne",
   "Réserver un rendez-vous notaire en ligne",
   "Trouver un notaire et réserver en ligne",
+  "Prendre RDV notaire sur les disponibilités réelles",
 ] as const;
 
 /** Toujours la même ancre pour une page donnée, pour que le lien soit stable. */

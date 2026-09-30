@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ancreAccueil } from "@/lib/ancres-accueil";
 import { texteBrut } from "@/lib/texte-brut";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
@@ -401,8 +402,13 @@ export default async function BlogPostPage({
                   veut réserver plutôt que continuer à lire. */}
               <p className="text-[15px] text-[var(--color-muted)] leading-relaxed mb-5">
                 Vous savez déjà ce dont vous avez besoin ?{" "}
+                {/* Le texte du lien varie d'un article à l'autre : 113 liens
+                    au libellé identique se lisent comme une optimisation, et
+                    « prendre rdv notaire » — 8,9e place, 14 impressions au
+                    30/09/2026 — mérite de figurer parmi eux. Voir
+                    lib/ancres-accueil.ts. */}
                 <a href="/" className="font-semibold text-[var(--color-accent)] hover:underline">
-                  Prenez rendez-vous avec un notaire en ligne
+                  {ancreAccueil(slug)}
                 </a>{" "}
                 sur les disponibilités réelles de son étude, en visio ou au cabinet.
               </p>

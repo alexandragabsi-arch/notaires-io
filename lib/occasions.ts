@@ -91,8 +91,16 @@ async function diagnostiquer(chemin: string, requete: string): Promise<string[]>
 }
 
 function formulerAction(o: Omit<Occasion, "action">): string {
-  if (o.manques.some((m) => m.startsWith("le titre"))) {
+  // Un <title> tient en une soixantaine de caractères. Proposer d'y caser
+  // « combien coûte une consultation chez un notaire pour des renseignements »
+  // donnait un conseil juste sur le fond et inapplicable sur la forme — la
+  // recommandation ne vaut que pour les requêtes assez courtes pour y entrer.
+  const motsRequete = o.requete.split(/\s+/).length;
+  if (o.manques.some((m) => m.startsWith("le titre")) && motsRequete <= 5) {
     return `Reprendre le <title> de ${o.chemin} pour qu'il porte « ${o.requete} ».`;
+  }
+  if (o.manques.some((m) => m.startsWith("le titre"))) {
+    return `Consacrer à ${o.chemin} une section qui reprend la question « ${o.requete} » en titre : trop longue pour un <title>, elle a sa place en H2.`;
   }
   if (o.manques.includes("aucune section de la page n'est consacrée à cette question")) {
     return `Ajouter à ${o.chemin} une section intitulée « ${o.requete} », qui répond à la question en deux ou trois paragraphes.`;

@@ -119,7 +119,7 @@ export async function GET(req: NextRequest) {
             (o: Occasion) => `
           <div style="padding:10px 0;border-bottom:1px solid #bbf7d0">
             <div style="font-size:14px;font-weight:600;color:#166534">
-              « ${echapper(o.requete)} » — ${o.position.toFixed(1)}e place, ${o.impressions} impressions
+              « ${echapper(o.requete)} » — ${o.position.toFixed(1)}e en moyenne sur 28 jours, ${o.impressions} impressions
             </div>
             <div style="font-size:13px;color:#166534;margin-top:4px"><strong>${echapper(o.action)}</strong></div>
             ${o.manques.length ? `<div style="font-size:12px;color:#54617a;margin-top:2px">Constaté : ${echapper(o.manques.join(" · "))}</div>` : ""}

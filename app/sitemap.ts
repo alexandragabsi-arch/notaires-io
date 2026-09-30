@@ -13,7 +13,17 @@ const BASE = "https://notaires.io";
 export const revalidate = 3600; // Refresh sitemap hourly so new articles appear
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const NOW = new Date();
+  // Date de dernière modification réelle des pages structurantes.
+  //
+  // Le sitemap déclarait `new Date()` : les 94 départements et les 1 775 pages
+  // de ville se prétendaient modifiés à chaque lecture, en permanence. Google
+  // ignore un lastmod qu'il juge non fiable — au 30/09/2026 il n'avait pas relu
+  // /notaire-departement/var ni /nord depuis le 9 juin, alors que ce sont eux
+  // qui listent les communes depuis le 28/09. Les villes restaient donc
+  // « unknown to Google » faute que leur page mère soit relue.
+  //
+  // À remonter quand le contenu change réellement.
+  const NOW = new Date("2026-09-28T00:00:00Z");
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE,                            lastModified: NOW, changeFrequency: "weekly",  priority: 1.0 },
     { url: `${BASE}/annuaire`,              lastModified: NOW, changeFrequency: "daily",   priority: 0.95 },

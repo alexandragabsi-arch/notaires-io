@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
 import { ancreAccueil } from "@/lib/ancres-accueil";
+import { contenuVille } from "@/lib/contenu-ville";
 import { pageGeoLd } from "@/lib/seo-jsonld";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { getVillesCouvertes, getVilleParSlug } from "@/lib/villes-data";
@@ -142,6 +143,32 @@ export default async function Page({ params }: Props) {
             { href: "/notaire-succession", label: "Notaire succession" },
           ]}
         />
+
+        {/*
+          Le propos de la page, distinct de l'annuaire qui la précède.
+          Au 30/09/2026 Cannes affichait 28 669 signes pour trois titres : une
+          liste de 130 fiches, sans réponse à la moindre question. Ce bloc est
+          calculé depuis les données de la commune — nombre d'études,
+          spécialités dominantes, département, communes voisines — pour qu'une
+          page de trois études ne raconte pas la même chose qu'une page de
+          soixante. Voir lib/contenu-ville.ts.
+        */}
+        <section className="py-14 sm:py-16 bg-white">
+          <div className="max-w-[760px] mx-auto px-6">
+            {contenuVille(v, voisines).map((bloc) => (
+              <div key={bloc.titre} className="mb-9 last:mb-0">
+                <h2 className="text-[21px] sm:text-[24px] font-bold text-[var(--color-text-strong)] mb-3 text-balance">
+                  {bloc.titre}
+                </h2>
+                {bloc.paragraphes.map((para, i) => (
+                  <p key={i} className="text-[16px] leading-[1.75] text-[var(--color-muted)] mb-3 last:mb-0">
+                    {para}
+                  </p>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
       <Footer />
     </>

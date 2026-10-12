@@ -7,6 +7,8 @@ import { pageGeoLd } from "@/lib/seo-jsonld";
 import { CONTENUS } from "@/lib/arrondissements-contenu";
 import { getNotairesByArrondissement, getArrondissements } from "@/lib/notaires-source";
 
+const PLAFOND_LISTE = 120;
+
 interface Props {
   params: Promise<{ arrondissement: string }>;
 }
@@ -40,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const label = numToLabel(num);
   const contenu = CONTENUS["Lyon"][num];
   return {
-    title: `Notaire Lyon ${label} arrondissement`,
+    title: `RDV notaire Lyon ${label} arrondissement : rendez-vous en ligne`,
     description: contenu
       ? `Notaires dans le ${label} arrondissement de Lyon — ${contenu.quartiers.slice(0, 3).join(", ")}. Immobilier, succession, famille, société : prise de rendez-vous en ligne.`
       : `Trouvez un notaire dans le ${label} arrondissement de Lyon. Immobilier, succession, mariage, PACS — prise de rendez-vous en ligne.`,
@@ -60,7 +62,13 @@ export default async function Page({ params }: Props) {
   if (!num || num < 1 || num > 9) notFound();
 
   const label = numToLabel(num);
-  const notaires = getNotairesByArrondissement("Lyon", num);
+  const tous = getNotairesByArrondissement("Lyon", num);
+  // Plafond de sûreté, comme sur les pages de ville : le 8e listait 630
+  // notaires et pesait 5,2 Mo, le 17e 1,9 Mo, le 16e 1,7 Mo (mesuré le
+  // 12/10/2026). Au-delà de ~2 Mo Google tronque ou renonce — ces pages
+  // restaient « jamais explorées » malgré le sitemap. Le décompte affiché
+  // reste le total réel.
+  const notaires = tous.slice(0, PLAFOND_LISTE);
   // Texte propre à l'arrondissement : sans lui, les pages ne se distinguaient
   // que par un numéro et se concurrençaient entre elles.
   const contenu = CONTENUS["Lyon"][num];
@@ -82,7 +90,7 @@ export default async function Page({ params }: Props) {
     ...(contenu ? [contenu.question] : []),
     {
       q: `Combien de notaires exercent dans le ${label} arrondissement de Lyon ?`,
-      a: `Il y a ${notaires.length > 0 ? notaires.length : "plusieurs"} notaires référencés dans le ${label} arrondissement de Lyon sur Notaires.io. Vous pouvez comparer leurs disponibilités et prendre rendez-vous directement en ligne.`,
+      a: `Il y a ${tous.length > 0 ? tous.length : "plusieurs"} notaires référencés dans le ${label} arrondissement de Lyon sur Notaires.io. Vous pouvez comparer leurs disponibilités et prendre rendez-vous directement en ligne.`,
     },
     {
       q: `Puis-je consulter un notaire du ${label} arrondissement de Lyon en visio ?`,

@@ -9,6 +9,7 @@ import { pageGeoLd } from "@/lib/seo-jsonld";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { getVillesCouvertes, getVilleParSlug } from "@/lib/villes-data";
 import { duDepartement } from "@/lib/departements-data";
+import { aVille, deVille } from "@/lib/prepositions-ville";
 
 // Pages de ville générées à partir des données réelles.
 //
@@ -37,12 +38,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     // « rdv notaire <ville> » est la requête réellement tapée. Le titre disait
     // « Notaire à Cannes » : ni « RDV » ni « rendez-vous ». NeoNotario, lui,
     // titre « Notaires à Toulon - Prenez RDV en ligne » et passe devant.
-    title: `RDV notaire à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""} : prendre rendez-vous en ligne`,
-    description: `${v.nombre} notaires référencés à ${v.nom}${v.codePostal ? ` ${v.codePostal}` : ""}${specs ? ` : ${specs}` : ""}. Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`,
+    title: `RDV notaire ${aVille(v.nom)}${v.codePostal ? ` (${v.codePostal})` : ""} : prendre rendez-vous en ligne`,
+    description: `${v.nombre} notaires référencés ${aVille(v.nom)}${v.codePostal ? ` ${v.codePostal}` : ""}${specs ? ` : ${specs}` : ""}. Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`,
     alternates: { canonical: `https://notaires.io/notaire-ville/${v.slug}` },
     openGraph: {
-      title: `RDV notaire à ${v.nom}${v.codePostal ? ` ${v.codePostal}` : ""} · Notaires.io`,
-      description: `${v.nombre} notaires référencés à ${v.nom}. Prise de rendez-vous en ligne.`,
+      title: `RDV notaire ${aVille(v.nom)}${v.codePostal ? ` ${v.codePostal}` : ""} · Notaires.io`,
+      description: `${v.nombre} notaires référencés ${aVille(v.nom)}. Prise de rendez-vous en ligne.`,
       url: `https://notaires.io/notaire-ville/${v.slug}`,
       type: "website",
     },
@@ -75,21 +76,21 @@ export default async function Page({ params }: Props) {
     ...(v.codePostal
       ? [{
           q: `Quels notaires exercent dans le ${v.codePostal} ?`,
-          a: `Le code postal ${v.codePostal} correspond à ${v.nom}, où ${v.nombre} notaires sont référencés sur Notaires.io. Vous pouvez consulter leurs spécialités et réserver un créneau en ligne.`,
+          a: `Le code postal ${v.codePostal} correspond ${aVille(v.nom)}, où ${v.nombre} notaires sont référencés sur Notaires.io. Vous pouvez consulter leurs spécialités et réserver un créneau en ligne.`,
         }]
       : []),
     {
-      q: `Combien de notaires exercent à ${v.nom} ?`,
-      a: `${v.nombre} notaires sont référencés à ${v.nom} sur Notaires.io. Vous pouvez comparer leurs spécialités et leurs disponibilités, puis réserver directement en ligne.`,
+      q: `Combien de notaires exercent ${aVille(v.nom)} ?`,
+      a: `${v.nombre} notaires sont référencés ${aVille(v.nom)} sur Notaires.io. Vous pouvez comparer leurs spécialités et leurs disponibilités, puis réserver directement en ligne.`,
     },
     ...(specs
       ? [{
-          q: `Quelles spécialités sont les plus représentées à ${v.nom} ?`,
-          a: `À ${v.nom}, les notaires référencés interviennent principalement en ${specs}. Chaque fiche précise les domaines traités par l'étude.`,
+          q: `Quelles spécialités sont les plus représentées ${aVille(v.nom)} ?`,
+          a: `${aVille(v.nom, true)}, les notaires référencés interviennent principalement en ${specs}. Chaque fiche précise les domaines traités par l'étude.`,
         }]
       : []),
     {
-      q: `Puis-je consulter un notaire de ${v.nom} en visioconférence ?`,
+      q: `Puis-je consulter un notaire ${deVille(v.nom)} en visioconférence ?`,
       a: "Oui. Les notaires partenaires proposent le rendez-vous en visioconférence comme au cabinet — utile si vous habitez loin ou si vous ne pouvez pas vous déplacer.",
     },
     {
@@ -108,7 +109,7 @@ export default async function Page({ params }: Props) {
               etapes: [
                 { nom: "Accueil", url: "https://notaires.io" },
                 { nom: "Annuaire", url: "https://notaires.io/annuaire" },
-                { nom: `Notaire à ${v.nom}`, url: `https://notaires.io/notaire-ville/${v.slug}` },
+                { nom: `Notaire ${aVille(v.nom)}`, url: `https://notaires.io/notaire-ville/${v.slug}` },
               ],
               faq,
               notaires,
@@ -120,8 +121,8 @@ export default async function Page({ params }: Props) {
       <Header />
       <main>
         <SeoLandingPage
-          h1={`Prendre RDV avec un notaire à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""}`}
-          intro={`${v.nombre} notaires sont référencés à ${v.nom}${v.codePostal ? ` (${v.codePostal})` : ""}${specs ? `, principalement en ${specs}` : ""}. Comparez les profils et les créneaux disponibles, puis prenez rendez-vous en ligne — en visioconférence ou au cabinet.`}
+          h1={`Prendre RDV avec un notaire ${aVille(v.nom)}${v.codePostal ? ` (${v.codePostal})` : ""}`}
+          intro={`${v.nombre} notaires sont référencés ${aVille(v.nom)}${v.codePostal ? ` (${v.codePostal})` : ""}${specs ? `, principalement en ${specs}` : ""}. Comparez les profils et les créneaux disponibles, puis prenez rendez-vous en ligne — en visioconférence ou au cabinet.`}
           notaires={notaires}
           ancreAccueil={ancreAccueil(v.slug)}
           faq={faq}
@@ -137,7 +138,7 @@ export default async function Page({ params }: Props) {
             { href: "/annuaire", label: "Tout l'annuaire" },
             ...voisines.map((x) => ({
               href: `/notaire-ville/${x.slug}`,
-              label: `Notaire à ${x.nom}`,
+              label: `Notaire ${aVille(x.nom)}`,
             })),
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },

@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire à Nantes · Notaires.io",
+  title: "RDV notaire à Nantes : prendre rendez-vous en ligne",
   description:
     "Trouvez un notaire à Nantes pour votre succession, donation ou mariage. Prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [

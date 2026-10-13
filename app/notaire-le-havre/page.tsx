@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire au Havre · Notaires.io",
+  title: "RDV notaire au Havre : prendre rendez-vous en ligne",
   description:
     "Trouvez un notaire au Havre disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [

@@ -1,5 +1,6 @@
 import type { VilleCouverte } from "@/lib/villes-data";
 import { duDepartement, dansLeDepartement } from "@/lib/departements-data";
+import { aVille, deVille } from "@/lib/prepositions-ville";
 
 /**
  * Le texte propre à chaque commune.
@@ -41,7 +42,7 @@ export function contenuVille(v: VilleCouverte, voisines: { nom: string; slug: st
   const densite: string[] = [];
   if (v.nombre <= 3) {
     densite.push(
-      `${nombreEnLettres(v.nombre).replace(/^une$/, "Une")} étude${v.nombre > 1 ? "s sont référencées" : " est référencée"} à ${v.nom}${cp}. ` +
+      `${nombreEnLettres(v.nombre).replace(/^une$/, "Une")} étude${v.nombre > 1 ? "s sont référencées" : " est référencée"} ${aVille(v.nom)}${cp}. ` +
         `C'est peu, et cela pèse sur les délais : lorsque le seul office de la commune est pris, ` +
         `l'attente peut dépasser le mois.`,
     );
@@ -53,7 +54,7 @@ export function contenuVille(v: VilleCouverte, voisines: { nom: string; slug: st
     );
   } else if (v.nombre >= 20) {
     densite.push(
-      `${v.nombre} études sont référencées à ${v.nom}${cp}. À cette densité, la question n'est plus de trouver un notaire ` +
+      `${v.nombre} études sont référencées ${aVille(v.nom)}${cp}. À cette densité, la question n'est plus de trouver un notaire ` +
         `mais de trouver celui dont votre sujet est le quotidien — et qui a un créneau quand vous en avez besoin.`,
     );
     densite.push(
@@ -62,7 +63,7 @@ export function contenuVille(v: VilleCouverte, voisines: { nom: string; slug: st
     );
   } else {
     densite.push(
-      `${v.nombre} études sont référencées à ${v.nom}${cp}. C'est un tissu suffisant pour comparer, ` +
+      `${v.nombre} études sont référencées ${aVille(v.nom)}${cp}. C'est un tissu suffisant pour comparer, ` +
         `sans être si dense qu'on s'y perde.`,
     );
     densite.push(
@@ -72,14 +73,14 @@ export function contenuVille(v: VilleCouverte, voisines: { nom: string; slug: st
         : `Et rien n'oblige à s'y tenir : le choix du notaire est libre partout en France.`,
     );
   }
-  blocs.push({ titre: `Combien de notaires à ${v.nom} ?`, paragraphes: densite });
+  blocs.push({ titre: `Combien de notaires ${aVille(v.nom)} ?`, paragraphes: densite });
 
   /* ── Les spécialités réellement présentes, pas une liste passe-partout ── */
   if (v.specialites.length) {
     blocs.push({
-      titre: `Ce que traitent le plus les notaires de ${v.nom}`,
+      titre: `Ce que traitent le plus les notaires ${deVille(v.nom)}`,
       paragraphes: [
-        `Les domaines les plus représentés dans les études de ${v.nom} sont ${listeSpecialites(v.specialites)}. ` +
+        `Les domaines les plus représentés dans les études ${deVille(v.nom)} sont ${listeSpecialites(v.specialites)}. ` +
           `Cela ne limite en rien ce qu'un notaire peut recevoir — il est compétent pour tous les actes — ` +
           `mais un professionnel qui traite votre sujet toutes les semaines ira plus vite, et verra plus tôt ` +
           `ce qui coince.`,
@@ -101,17 +102,17 @@ export function contenuVille(v: VilleCouverte, voisines: { nom: string; slug: st
   if (voisines.length) {
     const noms = voisines.slice(0, 4).map((x) => x.nom);
     territoire.push(
-      `Si aucun créneau ne convient à ${v.nom}, les études de ${noms.slice(0, -1).join(", ")} ou ${noms[noms.length - 1]} ` +
+      `Si aucun créneau ne convient ${aVille(v.nom)}, les études ${noms.slice(0, -1).map((n) => deVille(n)).join(", ")} ou ${deVille(noms[noms.length - 1])} ` +
         `reçoivent les mêmes dossiers, aux mêmes tarifs réglementés.`,
     );
   }
   if (territoire.length) {
-    blocs.push({ titre: `Choisir un notaire à ${v.nom} ou ailleurs`, paragraphes: territoire });
+    blocs.push({ titre: `Choisir un notaire ${aVille(v.nom)} ou ailleurs`, paragraphes: territoire });
   }
 
   /* ── Le délai, question la plus posée ── */
   blocs.push({
-    titre: `Combien de temps pour un rendez-vous à ${v.nom} ?`,
+    titre: `Combien de temps pour un rendez-vous ${aVille(v.nom)} ?`,
     paragraphes: [
       `Cela dépend de l'étude et de votre sujet. Ce qui fait vraiment gagner des jours : accepter un premier ` +
         `rendez-vous en visioconférence — les créneaux à distance se libèrent plus vite — et réunir vos pièces ` +
@@ -119,7 +120,7 @@ export function contenuVille(v: VilleCouverte, voisines: { nom: string; slug: st
       dept
         ? `Un dossier qui court après une échéance — délai de dépôt d'une succession, compromis signé — mérite ` +
           `d'être dit tel quel dans la demande : l'étude arbitre alors son planning en conséquence, ` +
-          `à ${v.nom} comme partout ${dansLeDepartement(dept.nom)}.`
+          `${aVille(v.nom)} comme partout ${dansLeDepartement(dept.nom)}.`
         : `Un dossier qui court après une échéance mérite d'être dit tel quel dans la demande : l'étude arbitre ` +
           `alors son planning en conséquence.`,
     ],

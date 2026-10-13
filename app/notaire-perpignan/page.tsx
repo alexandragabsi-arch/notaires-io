@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire à Perpignan · Notaires.io",
+  title: "RDV notaire à Perpignan : prendre rendez-vous en ligne",
   description:
     "Trouvez un notaire à Perpignan disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [

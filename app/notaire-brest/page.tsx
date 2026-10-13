@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire à Brest · Notaires.io",
+  title: "RDV notaire à Brest : prendre rendez-vous en ligne",
   description:
     "Trouvez un notaire à Brest disponible rapidement. Mariage, PACS, immobilier, création de société — prise de RDV en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [

@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire à Lille · Notaires.io",
+  title: "RDV notaire à Lille : prendre rendez-vous en ligne",
   description:
     "Trouvez un notaire à Lille pour votre achat immobilier, création de société ou succession. Prise de rendez-vous en ligne. Notaires certifiés, tarifs réglementés.",
   keywords: [

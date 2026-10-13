@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire à Orléans · Notaires.io",
+  title: "RDV notaire à Orléans : prendre rendez-vous en ligne",
   description:
     "Trouvez un notaire à Orléans disponible rapidement. Mariage, PACS, immobilier, succession — prise de rendez-vous en ligne.",
   keywords: [

@@ -199,7 +199,10 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
         if (data && data.length > 0) {
           const docs: Record<string, SentDoc[]> = {};
           setRdvs(
-            data.map((row) => {
+            data
+              // Les RDV annulés (depuis le site ou l'app) ne s'affichent plus.
+              .filter((row) => row.status !== "cancelled")
+              .map((row) => {
               const { day, time } = parseSlotLabel(row.slot_label as string);
               const id = row.id as string;
               docs[id] = Array.isArray(row.notaire_documents)
@@ -212,7 +215,8 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
                 day,
                 time,
                 mode: (row.modalite as Mode) || "cabinet",
-                status: (row.status as "Confirmé" | "En attente") || "Confirmé",
+                // Statuts stockés : pending | confirmed (ancien libellé : « confirmé »).
+                status: row.status === "pending" ? "En attente" : "Confirmé",
                 slotLabel: (row.slot_label as string) || "",
                 createdAt: row.created_at ? new Date(row.created_at as string).getTime() : Date.now(),
               };

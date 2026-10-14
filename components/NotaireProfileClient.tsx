@@ -28,6 +28,7 @@ import { getStoredProfiles, getRemoteProfiles, claimProfile, getProfileByUserId,
 import { supabase } from "@/lib/supabase";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import BookingModal from "@/components/BookingModal";
+import { slotKeyDepuisJour } from "@/lib/creneau";
 
 const ALL_SPECIALTIES = [
   "Droit immobilier", "Successions", "Droit de la famille",
@@ -126,6 +127,30 @@ function SlotCalendar({
     return () => window.removeEventListener("resize", check);
   }, []);
 
+  // Créneaux déjà réservés (site ou app), relus régulièrement et au retour sur
+  // l'onglet pour qu'un RDV pris dans l'app disparaisse ici sans recharger.
+  const [pris, setPris] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    let actif = true;
+    async function charger() {
+      const { data, error } = await supabase
+        .from("notaire_booked_slots")
+        .select("slot_key")
+        .eq("notaire_id", notaireId);
+      if (!actif || error) return;
+      setPris(new Set((data ?? []).map((r) => r.slot_key as string)));
+    }
+    charger();
+    const timer = window.setInterval(charger, 60_000);
+    const auRetour = () => { if (document.visibilityState === "visible") charger(); };
+    document.addEventListener("visibilitychange", auRetour);
+    return () => {
+      actif = false;
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", auRetour);
+    };
+  }, [notaireId]);
+
   const daysPerPage = isMobile ? 4 : 7;
   const MAX_PAGES = Math.ceil(91 / daysPerPage);
   const days = getNextWorkdays(daysPerPage, pageOffset * daysPerPage);
@@ -189,9 +214,11 @@ function SlotCalendar({
         ))}
 
         {/* Créneaux */}
-        {days.map((_, i) => {
+        {days.map((day, i) => {
           const matrixIdx = pageOffset * daysPerPage + i;
-          const slots = slotMatrix?.[matrixIdx] ?? [];
+          const slots = (slotMatrix?.[matrixIdx] ?? []).filter(
+            (slot) => !pris.has(slotKeyDepuisJour(day, slot)),
+          );
           return (
             <div key={i} className="flex flex-col gap-1.5 mt-1">
               {slots.length === 0 ? (
@@ -254,13 +281,18 @@ function SlotCalendar({
         const dayLabel = day
           ? `${formatDayShort(day)} ${formatDayNum(day)} ${formatMonth(day)} · ${slotTime}`
           : slotTime;
+        if (!day) return null;
         return (
           <BookingModal
             notaireId={notaireId}
             notaireNom={notaireNom}
-            slotKey={selected}
+            slotKey={slotKeyDepuisJour(day, slotTime)}
             slotLabel={dayLabel}
             onClose={() => setBookingOpen(false)}
+            onSlotTaken={(cle) => {
+              setPris((prev) => new Set(prev).add(cle));
+              setSelected(null);
+            }}
           />
         );
       })()}

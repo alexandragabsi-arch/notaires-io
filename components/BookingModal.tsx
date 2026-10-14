@@ -96,7 +96,7 @@ function defaultRoles(dossier: string): [string, string] {
   return [roles[0], roles[1] ?? roles[0]];
 }
 
-type Step = "auth" | "dossier" | "participants" | "documents" | "confirm" | "sending" | "success";
+type Step = "auth" | "dossier" | "participants" | "documents" | "confirm" | "sending" | "success" | "error";
 
 /* ─── Documents requis par type de dossier ───────────────────────────────── */
 type DocType = { id: string; label: string; required: boolean; accept: string };
@@ -451,12 +451,15 @@ export default function BookingModal({
   slotKey,
   slotLabel,
   onClose,
+  onSlotTaken,
 }: {
   notaireId: string;
   notaireNom: string;
   slotKey: string;
   slotLabel: string;
   onClose: () => void;
+  // Appelé quand le créneau a été pris entre-temps (site ou app).
+  onSlotTaken?: (slotKey: string) => void;
 }) {
   const [step, setStep] = useState<Step>("auth");
   const [authChecking, setAuthChecking] = useState(true);
@@ -471,6 +474,7 @@ export default function BookingModal({
   const [docs, setDocs] = useState<Record<string, File>>({});
   // Champ piège anti-robot : toujours vide chez un humain.
   const [piege, setPiege] = useState("");
+  const [erreur, setErreur] = useState<{ message: string; creneauPris: boolean } | null>(null);
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   // Vérifie la session à l'ouverture : si déjà connecté, on saute l'étape connexion.
@@ -579,16 +583,35 @@ export default function BookingModal({
         }),
       });
       const json = await res.json().catch(() => null);
-      if (json?.bookingId) bookingId = json.bookingId as string;
+      if (!res.ok || !json?.bookingId) {
+        // On n'affiche plus « confirmé » si la base n'a rien enregistré : le
+        // RDV n'apparaîtrait ni chez le notaire ni dans l'app.
+        const creneauPris = res.status === 409;
+        if (creneauPris) onSlotTaken?.(slotKey);
+        setErreur({
+          message:
+            (json?.error as string) ||
+            "La réservation n'a pas pu être enregistrée. Réessayez dans un instant.",
+          creneauPris,
+        });
+        setStep("error");
+        return;
+      }
+      bookingId = json.bookingId as string;
     } catch {
-      // L'API est best-effort — on confirme quand même côté client
+      setErreur({
+        message: "Connexion impossible. Vérifiez votre réseau puis réessayez.",
+        creneauPris: false,
+      });
+      setStep("error");
+      return;
     }
 
     // Cache local immédiat (la source de vérité reste Supabase via user_id).
     const storageKey = userKey || userEmail;
     if (storageKey) {
       const entry: ClientDossier = {
-        id: bookingId || `dos-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        id: bookingId,
         notaireId,
         notaireNom,
         slotKey,
@@ -641,7 +664,7 @@ export default function BookingModal({
         <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-[var(--color-border-soft)] shrink-0">
           <div>
             <div className="text-[11px] font-bold text-[var(--color-accent)] uppercase tracking-wide mb-0.5">
-              {step === "auth" ? "Connexion" : step === "dossier" ? "Étape 1 / 4" : step === "participants" ? "Étape 2 / 4" : step === "documents" ? "Étape 3 / 4" : step === "confirm" ? "Étape 4 / 4" : "✓ Confirmé"}
+              {step === "auth" ? "Connexion" : step === "dossier" ? "Étape 1 / 4" : step === "participants" ? "Étape 2 / 4" : step === "documents" ? "Étape 3 / 4" : step === "confirm" || step === "sending" ? "Étape 4 / 4" : step === "error" ? "Non enregistré" : "✓ Confirmé"}
             </div>
             <div className="text-[16px] font-bold text-[var(--color-text-strong)]">
               {step === "auth" && "Connexion à votre espace"}
@@ -649,7 +672,9 @@ export default function BookingModal({
               {step === "participants" && "Participants au rendez-vous"}
               {step === "documents" && "Documents à fournir"}
               {step === "confirm" && "Récapitulatif"}
+              {step === "sending" && "Récapitulatif"}
               {step === "success" && "Rendez-vous confirmé !"}
+              {step === "error" && "Rendez-vous non enregistré"}
             </div>
           </div>
           <button
@@ -875,6 +900,26 @@ export default function BookingModal({
               </motion.div>
             )}
 
+            {/* ── Échec ── */}
+            {step === "error" && erreur && (
+              <motion.div key="error" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-6">
+                <h3 className="text-[18px] font-bold text-[var(--color-text-strong)] mb-2">
+                  {erreur.creneauPris ? "Créneau déjà réservé" : "Réservation non enregistrée"}
+                </h3>
+                <p className="text-[14px] text-[var(--color-muted)] mb-6">{erreur.message}</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (erreur.creneauPris) onClose();
+                    else { setErreur(null); setStep("confirm"); }
+                  }}
+                  className="inline-flex items-center gap-2 bg-[var(--color-primary)] text-white px-5 py-3 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-all"
+                >
+                  {erreur.creneauPris ? "Choisir un autre créneau" : "Réessayer"}
+                </button>
+              </motion.div>
+            )}
+
             {/* ── Succès ── */}
             {step === "success" && (
               <motion.div key="success" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-6">
@@ -915,7 +960,7 @@ export default function BookingModal({
         </div>
 
         {/* Footer actions */}
-        {step !== "success" && step !== "auth" && (
+        {step !== "success" && step !== "auth" && step !== "error" && (
           <div className="px-6 pb-6 pt-3 border-t border-[var(--color-border-soft)] shrink-0 flex gap-3">
             {step !== "dossier" && step !== "sending" && (
               <button

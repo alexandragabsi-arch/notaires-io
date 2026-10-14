@@ -62,7 +62,7 @@ export function slotKeyDepuisJour(jour: Date, heure: string): string {
 
 const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
 
-export function estSlotKeyIso(slotKey: string | null | undefined): slotKey is string {
+export function estSlotKeyIso(slotKey: string | null | undefined): boolean {
   return !!slotKey && ISO_RE.test(slotKey) && !Number.isNaN(Date.parse(slotKey));
 }
 

@@ -34,7 +34,9 @@ AS $$
 DECLARE
   -- anon / authenticated = écriture directe depuis un navigateur ou l'app ;
   -- service_role et postgres (routes serveur, migrations) ne sont pas bridés.
-  cote_client boolean := current_user IN ('anon', 'authenticated');
+  -- On lit le rôle du JWT : dans une fonction SECURITY DEFINER, current_user
+  -- vaut le propriétaire de la fonction, pas l'appelant.
+  cote_client boolean := coalesce(auth.jwt() ->> 'role', '') IN ('anon', 'authenticated');
   est_notaire boolean := false;
 BEGIN
   -- Statuts : on accepte les anciens libellés français, on stocke le format commun.

@@ -1,3 +1,4 @@
+import { estSlotKeyIso } from "@/lib/creneau";
 /**
  * visio.ts — salles de visioconférence Jitsi Meet
  * Aucune clé API requise.
@@ -43,6 +44,8 @@ function toYMD(d: Date): string {
  */
 export function parseSlotDate(slotLabel: string, createdAt?: number): Date | null {
   if (!slotLabel) return null;
+  // slot_key ISO (format commun site/app) : instant exact, rien à deviner.
+  if (estSlotKeyIso(slotLabel)) return new Date(slotLabel);
   const [datePart = "", timePart = ""] = slotLabel.split("·").map((s) => s.trim());
   const source = timePart ? datePart : slotLabel;
 

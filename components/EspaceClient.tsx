@@ -24,6 +24,7 @@ import {
   type ClientDossier,
 } from "@/lib/client-dossiers";
 import { generateRoomId, internalVisioUrl, slotDayToDate } from "@/lib/visio";
+import { estSlotKeyIso } from "@/lib/creneau";
 import AccountSettings from "@/components/AccountSettings";
 
 const DOCS_BUCKET = "booking-documents";
@@ -85,7 +86,7 @@ function parseRdvDate(slotLabel: string, createdAt: number): Date | null {
 function visioLinkFor(d: ClientDossier): string {
   // La salle dérive du seul identifiant de réservation → strictement la même
   // que celle calculée côté notaire. La date ne sert qu'à l'ouverture.
-  const rdvDate = slotDayToDate(d.slotLabel, d.createdAt);
+  const rdvDate = slotDayToDate(estSlotKeyIso(d.slotKey) ? d.slotKey : d.slotLabel, d.createdAt);
   return internalVisioUrl(generateRoomId(d.id), rdvDate);
 }
 
@@ -156,7 +157,8 @@ export default function EspaceClient() {
     const now = Date.now();
     const withDate = dossiers.map((d) => ({
       d,
-      date: parseRdvDate(d.slotLabel, d.createdAt),
+      // slot_key ISO (site et app) en priorité ; libellé pour les anciens RDV.
+      date: estSlotKeyIso(d.slotKey) ? new Date(d.slotKey) : parseRdvDate(d.slotLabel, d.createdAt),
     }));
     const upcoming = withDate
       .filter((x) => x.date !== null && x.date.getTime() >= now)

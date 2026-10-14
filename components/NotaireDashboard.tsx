@@ -21,6 +21,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { generateRoomId, internalVisioUrl, slotDayToDate, isRdvOpen } from "@/lib/visio";
+import { estSlotKeyIso, parisParts, TZ_PARIS } from "@/lib/creneau";
 
 const DOCS_BUCKET = "booking-documents";
 
@@ -46,6 +47,8 @@ interface Rdv {
   /** Libellé brut du créneau + date de réservation : nécessaires pour dater
    *  le RDV avec certitude (l'année se déduit de la date de création). */
   slotLabel: string;
+  /** slot_key ISO quand il existe : date exacte, prioritaire sur le libellé. */
+  slotKey?: string;
   createdAt: number;
 }
 
@@ -102,6 +105,28 @@ const RDVS_MOCK: Rdv[] = [
 function parseSlotLabel(slotLabel: string): { day: string; time: string } {
   const parts = slotLabel.split("·").map((s) => s.trim());
   return { day: parts[0] ?? slotLabel, time: parts[1] ?? "" };
+}
+
+// Jour et heure (Paris) depuis slot_key ISO, format commun site/app : les
+// libellés de l'app (« 28 août 2026 à 16:00 ») ne suivent pas le format du site.
+function jourHeureDepuisSlotKey(slotKey: string): { day: string; time: string } | null {
+  if (!estSlotKeyIso(slotKey)) return null;
+  const d = new Date(slotKey);
+  const p = parisParts(d);
+  const auj = parisParts(new Date());
+  const ecart = Math.round(
+    (Date.UTC(p.y, p.mo, p.day) - Date.UTC(auj.y, auj.mo, auj.day)) / 86_400_000,
+  );
+  const day =
+    ecart === 0
+      ? "Aujourd'hui"
+      : ecart === 1
+      ? "Demain"
+      : d.toLocaleDateString("fr-FR", {
+          timeZone: TZ_PARIS, weekday: "short", day: "numeric", month: "short",
+        });
+  const time = `${String(p.h).padStart(2, "0")}h${String(p.min).padStart(2, "0")}`;
+  return { day, time };
 }
 
 function Switch({ on, onClick }: { on: boolean; onClick: () => void }) {
@@ -191,7 +216,7 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
     setLoadingRdvs(true);
     supabase
       .from("bookings")
-      .select("id, client_nom, dossier, slot_label, modalite, status, notaire_documents, created_at")
+      .select("id, client_nom, dossier, slot_key, slot_label, modalite, status, notaire_documents, created_at")
       .eq("notaire_id", notaireId)
       .order("created_at", { ascending: false })
       .limit(20)
@@ -199,8 +224,13 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
         if (data && data.length > 0) {
           const docs: Record<string, SentDoc[]> = {};
           setRdvs(
-            data.map((row) => {
-              const { day, time } = parseSlotLabel(row.slot_label as string);
+            data
+              // Les RDV annulés (depuis le site ou l'app) ne s'affichent plus.
+              .filter((row) => row.status !== "cancelled")
+              .map((row) => {
+              const { day, time } =
+                jourHeureDepuisSlotKey(row.slot_key as string) ??
+                parseSlotLabel((row.slot_label as string) ?? "");
               const id = row.id as string;
               docs[id] = Array.isArray(row.notaire_documents)
                 ? (row.notaire_documents as SentDoc[])
@@ -212,8 +242,10 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
                 day,
                 time,
                 mode: (row.modalite as Mode) || "cabinet",
-                status: (row.status as "Confirmé" | "En attente") || "Confirmé",
+                // Statuts stockés : pending | confirmed (ancien libellé : « confirmé »).
+                status: row.status === "pending" ? "En attente" : "Confirmé",
                 slotLabel: (row.slot_label as string) || "",
+                slotKey: (row.slot_key as string) || undefined,
                 createdAt: row.created_at ? new Date(row.created_at as string).getTime() : Date.now(),
               };
             })
@@ -423,9 +455,9 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
                           // Salle dérivée du seul id de réservation → identique
                           // à celle du client. Le bouton n'apparaît que le jour
                           // du RDV, à partir de 30 min avant l'heure prévue.
-                          const rdvDate = slotDayToDate(r.slotLabel, r.createdAt);
+                          const rdvDate = slotDayToDate(r.slotKey || r.slotLabel, r.createdAt);
                           const roomId = generateRoomId(r.id);
-                          const ouverte = isRdvOpen(r.slotLabel, r.createdAt);
+                          const ouverte = isRdvOpen(r.slotKey || r.slotLabel, r.createdAt);
                           return ouverte ? (
                             <a
                               key="join"

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail, SITE } from "@/lib/email";
+import { parisParts, msMuralDepuisSlotKey } from "@/lib/creneau";
 
 // Cron Vercel : envoie les rappels de RDV par e-mail.
 // Déclenché toutes les heures (voir vercel.json → crons).
@@ -19,14 +20,13 @@ function getSupabase() {
   );
 }
 
-const TZ = "Europe/Paris";
-
 type Kind = "eve" | "2h";
 
 interface BookingRow {
   id: string;
   notaire_id: string | null;
   notaire_nom: string | null;
+  slot_key: string | null;
   slot_label: string | null;
   dossier: string | null;
   modalite: string | null;
@@ -48,24 +48,6 @@ function parseMonth(s: string): number {
     if (norm.includes(months[i])) return i;
   }
   return -1;
-}
-
-// Composantes "horloge murale" Paris d'un instant donné.
-function parisParts(d: Date): { y: number; mo: number; day: number; h: number; min: number } {
-  const fmt = new Intl.DateTimeFormat("fr-FR", {
-    timeZone: TZ,
-    year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", hour12: false,
-  });
-  const p: Record<string, string> = {};
-  for (const part of fmt.formatToParts(d)) p[part.type] = part.value;
-  return {
-    y: Number(p.year),
-    mo: Number(p.month) - 1,
-    day: Number(p.day),
-    h: Number(p.hour === "24" ? "0" : p.hour),
-    min: Number(p.minute),
-  };
 }
 
 // Reconstruit l'instant du RDV (en composantes Paris) depuis le slotLabel
@@ -158,9 +140,10 @@ export async function GET(req: NextRequest) {
   const { data, error } = await supabase
     .from("bookings")
     .select(
-      "id, notaire_id, notaire_nom, slot_label, dossier, modalite, client_nom, client_email, created_at, reminder_eve_sent, reminder_2h_sent",
+      "id, notaire_id, notaire_nom, slot_key, slot_label, dossier, modalite, client_nom, client_email, created_at, reminder_eve_sent, reminder_2h_sent",
     )
-    .eq("status", "confirmé")
+    // « confirmé » : lignes écrites par une ancienne version du site.
+    .in("status", ["confirmed", "confirmé"])
     .not("client_email", "is", null)
     .or("reminder_eve_sent.eq.false,reminder_2h_sent.eq.false");
 
@@ -195,7 +178,10 @@ export async function GET(req: NextRequest) {
 
   for (const b of rows) {
     if (!b.client_email) continue;
-    const rdvMs = rdvWallMs(b.slot_label ?? "", b.created_at);
+    // slot_key ISO (format commun site/app) en priorité ; le libellé ne sert
+    // plus que pour d'anciennes lignes.
+    const rdvMs =
+      msMuralDepuisSlotKey(b.slot_key ?? "") ?? rdvWallMs(b.slot_label ?? "", b.created_at);
     if (rdvMs == null || rdvMs <= nowMs) continue; // RDV passé ou illisible
 
     const pref = (b.notaire_id && prefs[b.notaire_id]) || { eve: true, h2: true };

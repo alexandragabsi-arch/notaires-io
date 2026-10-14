@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail, SITE } from "@/lib/email";
 import { limiter, ipDe, piegeDeclenche, reponsePiege } from "@/lib/rate-limit";
+import { estSlotKeyIso, isoCreneau } from "@/lib/creneau";
 
 // Client Supabase créé à la demande (pas au chargement du module) pour éviter
 // que le build n'échoue si une variable d'env manque au moment de la compilation.
@@ -65,6 +66,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Données manquantes" }, { status: 400 });
   }
 
+  // Le créneau doit être un instant ISO (format partagé avec l'app iOS) et à
+  // venir : c'est sur lui que repose l'unicité « un RDV par créneau ».
+  if (!estSlotKeyIso(slotKey) || Date.parse(slotKey) <= Date.now()) {
+    return NextResponse.json({ error: "Créneau invalide ou passé" }, { status: 400 });
+  }
+  if (modalite !== "visio" && modalite !== "cabinet") {
+    return NextResponse.json({ error: "Modalité invalide" }, { status: 400 });
+  }
+
   const client = participants[0];
   const clientNom = `${client.civilite} ${client.prenom} ${client.nom.toUpperCase()}`.trim();
 
@@ -72,18 +82,27 @@ export async function POST(req: NextRequest) {
   const { data, error } = await supabase.from("bookings").insert({
     notaire_id: notaireId,
     notaire_nom: notaireNom,
-    slot_key: slotKey,
+    slot_key: isoCreneau(new Date(slotKey)),
     slot_label: slotLabel,
     dossier,
     modalite,
+    mode: modalite,
     participants,
     documents: Array.isArray(documents) ? documents : [],
     client_nom: clientNom,
     client_email: client.email || null,
     user_id: userId || null,
-    status: "confirmé",
+    status: "confirmed",
   }).select("id").single();
 
+  // 23505 = index bookings_creneau_unique : le créneau vient d'être pris,
+  // depuis le site ou depuis l'app.
+  if (error?.code === "23505") {
+    return NextResponse.json(
+      { error: "Ce créneau vient d'être réservé. Choisissez-en un autre.", code: "slot_taken" },
+      { status: 409 },
+    );
+  }
   if (error) {
     console.error("Booking insert error:", error);
     return NextResponse.json({ error: "Erreur de réservation" }, { status: 500 });

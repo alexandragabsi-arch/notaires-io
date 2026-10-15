@@ -5,6 +5,10 @@ import SeoLandingPage from "@/components/SeoLandingPage";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { idsNotairesInscrits, inscritsDabord } from "@/lib/notaires-inscrits";
+import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
+
+// Inscrits relus toutes les 5 minutes (lib/inscrits-serveur.ts).
+export const revalidate = 300;
 
 const PARIS_ARRONDISSEMENTS = Array.from({ length: 20 }, (_, i) => ({
   num: i + 1,
@@ -86,11 +90,14 @@ export default async function Page() {
   const scrapedNotaires = getNotairesByCity("Paris", 60);
   // Les notaires inscrits en tête : ce sont les seuls chez qui on peut
   // réellement réserver. Voir lib/notaires-inscrits.ts.
-  const notaires = inscritsDabord(
-    scrapedNotaires.length > 0
-      ? scrapedNotaires
-      : LISTING_NOTAIRES.filter((n) => n.city === "Paris"),
-    await idsNotairesInscrits(),
+  const notaires = avecInscrits(
+    inscritsDabord(
+      scrapedNotaires.length > 0
+        ? scrapedNotaires
+        : LISTING_NOTAIRES.filter((n) => n.city === "Paris"),
+      await idsNotairesInscrits(),
+    ),
+    await getInscritsVille("Paris"),
   );
 
   return (

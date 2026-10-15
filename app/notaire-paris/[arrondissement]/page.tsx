@@ -7,6 +7,10 @@ import { pageGeoLd } from "@/lib/seo-jsonld";
 import { CONTENUS } from "@/lib/arrondissements-contenu";
 import { getNotairesByArrondissement, getArrondissements } from "@/lib/notaires-source";
 import { idsNotairesInscrits, inscritsDabord } from "@/lib/notaires-inscrits";
+import { avecInscrits, getInscritsArrondissement } from "@/lib/inscrits-serveur";
+
+// Inscrits relus toutes les 5 minutes (lib/inscrits-serveur.ts).
+export const revalidate = 300;
 
 const PLAFOND_LISTE = 120;
 
@@ -66,9 +70,9 @@ export default async function Page({ params }: Props) {
   // Les notaires réellement inscrits passent devant : ce sont les seuls chez
   // qui le visiteur peut réserver, et Google juge la page sur ce qu'elle
   // montre en premier. L'ordre du reste ne change pas.
-  const tous = inscritsDabord(
-    getNotairesByArrondissement("Paris", num),
-    await idsNotairesInscrits(),
+  const tous = avecInscrits(
+    inscritsDabord(getNotairesByArrondissement("Paris", num), await idsNotairesInscrits()),
+    await getInscritsArrondissement("Paris", num),
   );
   // Plafond de sûreté, comme sur les pages de ville : le 8e listait 630
   // notaires et pesait 5,2 Mo, le 17e 1,9 Mo, le 16e 1,7 Mo (mesuré le

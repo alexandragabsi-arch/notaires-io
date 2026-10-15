@@ -4,6 +4,10 @@ import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
+import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
+
+// Inscrits relus toutes les 5 minutes (lib/inscrits-serveur.ts).
+export const revalidate = 300;
 
 const MARSEILLE_ARRONDISSEMENTS = Array.from({ length: 16 }, (_, i) => ({
   num: i + 1,
@@ -76,14 +80,15 @@ const FAQ = [
   },
 ];
 
-export default function Page() {
+export default async function Page() {
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   // 60 fiches sur 310 : au-delà de 2 Mo de HTML, Google tronque ou renonce.
   // Les arrondissements, liés plus bas, portent le reste.
   const scrapedNotaires = getNotairesByCity("Marseille", 60);
-  const notaires = scrapedNotaires.length > 0
-    ? scrapedNotaires
-    : LISTING_NOTAIRES.filter((n) => n.city === "Marseille");
+  const notaires = avecInscrits(
+    scrapedNotaires.length > 0 ? scrapedNotaires : LISTING_NOTAIRES.filter((n) => n.city === "Marseille"),
+    await getInscritsVille("Marseille"),
+  );
 
   return (
     <>

@@ -4,6 +4,10 @@ import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
+import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
+
+// Inscrits relus toutes les 5 minutes (lib/inscrits-serveur.ts).
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "RDV notaire à Lille : prendre rendez-vous en ligne",
@@ -71,12 +75,13 @@ const FAQ = [
   },
 ];
 
-export default function Page() {
+export default async function Page() {
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Lille", 120);
-  const notaires = scrapedNotaires.length > 0
-    ? scrapedNotaires
-    : LISTING_NOTAIRES.filter((n) => n.city === "Lille");
+  const notaires = avecInscrits(
+    scrapedNotaires.length > 0 ? scrapedNotaires : LISTING_NOTAIRES.filter((n) => n.city === "Lille"),
+    await getInscritsVille("Lille"),
+  );
 
   return (
     <>

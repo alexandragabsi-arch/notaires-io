@@ -6,6 +6,10 @@ import SeoLandingPage from "@/components/SeoLandingPage";
 import { pageGeoLd } from "@/lib/seo-jsonld";
 import { CONTENUS } from "@/lib/arrondissements-contenu";
 import { getNotairesByArrondissement, getArrondissements } from "@/lib/notaires-source";
+import { avecInscrits, getInscritsArrondissement } from "@/lib/inscrits-serveur";
+
+// Inscrits relus toutes les 5 minutes (lib/inscrits-serveur.ts).
+export const revalidate = 300;
 
 const PLAFOND_LISTE = 120;
 
@@ -62,7 +66,11 @@ export default async function Page({ params }: Props) {
   if (!num || num < 1 || num > 9) notFound();
 
   const label = numToLabel(num);
-  const tous = getNotairesByArrondissement("Lyon", num);
+  // Inscrits de l'arrondissement en tête, y compris ceux créés à l'inscription.
+  const tous = avecInscrits(
+    getNotairesByArrondissement("Lyon", num),
+    await getInscritsArrondissement("Lyon", num),
+  );
   // Plafond de sûreté, comme sur les pages de ville : le 8e listait 630
   // notaires et pesait 5,2 Mo, le 17e 1,9 Mo, le 16e 1,7 Mo (mesuré le
   // 12/10/2026). Au-delà de ~2 Mo Google tronque ou renonce — ces pages

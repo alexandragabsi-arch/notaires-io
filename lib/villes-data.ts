@@ -104,7 +104,7 @@ let cache: VilleCouverte[] | null = null;
 
 /** Département d'un code postal : « 06400 » → Alpes-Maritimes. */
 const PAR_CODE = new Map(DEPARTEMENTS.map((d) => [d.code, d]));
-function departementDuCp(cp?: string) {
+export function departementDuCp(cp?: string) {
   if (!cp || cp.length < 2) return undefined;
   // La Corse et l'outre-mer ont des codes à trois chiffres ; on tente les deux.
   const d = PAR_CODE.get(cp.slice(0, 3)) ?? PAR_CODE.get(cp.slice(0, 2));

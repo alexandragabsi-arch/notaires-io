@@ -7,7 +7,12 @@ import { ancreAccueil } from "@/lib/ancres-accueil";
 import { contenuVille } from "@/lib/contenu-ville";
 import { pageGeoLd } from "@/lib/seo-jsonld";
 import { getNotairesByCity } from "@/lib/notaires-source";
-import { getVillesCouvertes, getVilleParSlug } from "@/lib/villes-data";
+import { avecInscrits, getInscritsVille, getVilleAvecInscrits } from "@/lib/inscrits-serveur";
+
+// Inscrits relus toutes les 5 minutes ; une ville où seul un inscrit exerce
+// est générée à la demande (dynamicParams par défaut).
+export const revalidate = 300;
+import { getVillesCouvertes } from "@/lib/villes-data";
 import { duDepartement } from "@/lib/departements-data";
 import { aVille, deVille } from "@/lib/prepositions-ville";
 
@@ -29,7 +34,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { ville } = await params;
-  const v = getVilleParSlug(ville);
+  const v = await getVilleAvecInscrits(ville);
   if (!v) return {};
   const specs = v.specialites.slice(0, 3).join(", ").toLowerCase();
   return {
@@ -52,13 +57,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: Props) {
   const { ville } = await params;
-  const v = getVilleParSlug(ville);
+  const v = await getVilleAvecInscrits(ville);
   if (!v) notFound();
 
   // Plafond de sûreté : une ville très dense produirait une page de plusieurs
   // mégaoctets, que Google renonce à traiter — c'est ce qui a rendu
   // /notaire-paris invisible pendant des mois.
-  const notaires = getNotairesByCity(v.nom, 120);
+  // Inscrits en tête, y compris ceux créés à l'inscription (absents de l'annuaire importé).
+  const notaires = avecInscrits(getNotairesByCity(v.nom, 120), await getInscritsVille(v.nom));
 
   // Villes voisines par volume : un maillage entre pages de même niveau, qui
   // évite que chacune reste un cul-de-sac.

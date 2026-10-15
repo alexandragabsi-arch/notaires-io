@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { DEPARTEMENTS } from "@/lib/departements-data";
 import { getVillesCouvertes } from "@/lib/villes-data";
+import { getVillesDInscrits } from "@/lib/inscrits-serveur";
 import { getDynamicArticles } from "@/lib/blog-supabase";
 import { BLOG_POSTS } from "@/lib/blog-posts";
 import { SLUGS_RETIRES } from "@/lib/fusions-blog";
@@ -166,5 +167,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: v.nombre >= 50 ? 0.8 : v.nombre >= 20 ? 0.75 : 0.7,
   }));
 
-  return [...staticPages, ...notairePages, ...seoLandingPages, ...blogPages, ...dynamicBlogPages, ...departementPages, ...villePages];
+  // Villes où exerce un notaire inscrit, absentes de l'annuaire importé.
+  const villesInscrits: MetadataRoute.Sitemap = (await getVillesDInscrits()).map((v) => ({
+    url: `${BASE}/notaire-ville/${v.slug}`,
+    lastModified: NOW,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...notairePages, ...seoLandingPages, ...blogPages, ...dynamicBlogPages, ...departementPages, ...villePages, ...villesInscrits];
 }

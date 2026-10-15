@@ -1,4 +1,26 @@
-import { estSlotKeyIso } from "@/lib/creneau";
+import { estSlotKeyIso, parisParts } from "@/lib/creneau";
+
+/** La salle de visio ouvre ce nombre de minutes avant l'heure du rendez-vous. */
+export const OUVERTURE_SALLE_MIN = 15;
+
+/**
+ * Salle d'un RDV dont on connaît l'instant exact (slot_key ISO) : ouverte de
+ * OUVERTURE_SALLE_MIN minutes avant jusqu'à la fin de la journée (heure de Paris).
+ * Renvoie aussi l'heure d'ouverture, pour l'afficher tant que la salle est fermée.
+ */
+export function etatSalle(debutIso: string, maintenant = Date.now()): { ouverte: boolean; ouvertureMs: number; heureOuverture: string } {
+  const debut = Date.parse(debutIso);
+  const ouvertureMs = debut - OUVERTURE_SALLE_MIN * 60_000;
+  const p = parisParts(new Date(debut));
+  // Fin de journée à Paris : minuit suivant, approché à 24 h après minuit local du RDV.
+  const finMs = debut + ((23 - p.h) * 60 + (59 - p.min)) * 60_000;
+  const o = parisParts(new Date(ouvertureMs));
+  return {
+    ouverte: maintenant >= ouvertureMs && maintenant <= finMs,
+    ouvertureMs,
+    heureOuverture: `${o.h}h${String(o.min).padStart(2, "0")}`,
+  };
+}
 /**
  * visio.ts — salles de visioconférence Jitsi Meet
  * Aucune clé API requise.
@@ -109,14 +131,14 @@ export function slotDayToDate(slotLabel: string, createdAt?: number): string {
 
 /**
  * La salle est-elle accessible ?
- * Ouverte 30 min avant l'heure prévue et jusqu'à la fin de la journée.
+ * Ouverte OUVERTURE_SALLE_MIN minutes avant l'heure prévue et jusqu'à la fin de la journée.
  * Un libellé illisible laisse l'accès ouvert : mieux vaut une salle joignable
  * qu'un notaire et son client bloqués dehors.
  */
 export function isRdvOpen(slotLabel: string, createdAt?: number): boolean {
   const d = parseSlotDate(slotLabel, createdAt);
   if (!d) return true;
-  const ouverture = d.getTime() - 30 * 60_000;
+  const ouverture = d.getTime() - OUVERTURE_SALLE_MIN * 60_000;
   const fin = new Date(d);
   fin.setHours(23, 59, 59, 999);
   const now = Date.now();
@@ -164,7 +186,12 @@ export function jitsiRoomUrl(roomId: string): string {
   return `https://meet.jit.si/${roomId}`;
 }
 
-/** URL interne de la salle : /visio/notaires-abc123?date=2026-06-07 */
-export function internalVisioUrl(roomId: string, rdvDate?: string): string {
-  return rdvDate ? `/visio/${roomId}?date=${rdvDate}` : `/visio/${roomId}`;
+/** URL interne de la salle : /visio/notaires-abc123?date=2026-06-07[&debut=2026-06-07T08:00:00Z]
+ *  `debut` (instant du RDV) permet d'ouvrir la salle OUVERTURE_SALLE_MIN minutes avant. */
+export function internalVisioUrl(roomId: string, rdvDate?: string, debutIso?: string): string {
+  const q = new URLSearchParams();
+  if (rdvDate) q.set("date", rdvDate);
+  if (debutIso) q.set("debut", debutIso);
+  const qs = q.toString();
+  return qs ? `/visio/${roomId}?${qs}` : `/visio/${roomId}`;
 }

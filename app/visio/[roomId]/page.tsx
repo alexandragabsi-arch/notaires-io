@@ -3,7 +3,7 @@
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, Suspense } from "react";
 import { Video, Loader2, ExternalLink, Mic, Camera, Lock, CalendarClock } from "lucide-react";
-import { jitsiRoomUrl, isRdvDay, formatRdvDate } from "@/lib/visio";
+import { jitsiRoomUrl, isRdvDay, formatRdvDate, etatSalle, OUVERTURE_SALLE_MIN } from "@/lib/visio";
 
 declare global {
   interface Window {
@@ -16,6 +16,11 @@ function VisioContent() {
   const { roomId } = useParams<{ roomId: string }>();
   const searchParams = useSearchParams();
   const rdvDate = searchParams.get("date") ?? "";
+  // Instant exact du RDV (lien de l'e-mail de confirmation) : la salle n'ouvre
+  // que OUVERTURE_SALLE_MIN minutes avant.
+  const debut = searchParams.get("debut") ?? "";
+  const debutValide = !!debut && !Number.isNaN(Date.parse(debut));
+  const [heureOuverture, setHeureOuverture] = useState("");
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<"checking" | "locked" | "loading" | "ready" | "error">("checking");
@@ -23,6 +28,17 @@ function VisioContent() {
 
   // 1. Vérifie d'abord si c'est bien le jour du RDV
   useEffect(() => {
+    if (debutValide) {
+      // Vérifié toutes les 20 s : la salle se débloque seule à l'heure d'ouverture.
+      const verifier = () => {
+        const e = etatSalle(debut);
+        setHeureOuverture(e.heureOuverture);
+        setStatus((s) => (e.ouverte ? (s === "locked" || s === "checking" ? "loading" : s) : "locked"));
+      };
+      verifier();
+      const t = window.setInterval(verifier, 20_000);
+      return () => window.clearInterval(t);
+    }
     if (!rdvDate) {
       // Pas de date → on laisse passer (cas dashboard notaire sans date)
       setStatus("loading");
@@ -33,7 +49,7 @@ function VisioContent() {
     } else {
       setStatus("locked");
     }
-  }, [rdvDate]);
+  }, [rdvDate, debut, debutValide]);
 
   // 2. Initialise Jitsi quand status = "loading"
   useEffect(() => {
@@ -119,7 +135,9 @@ function VisioContent() {
             <div>
               <p className="text-white font-bold text-lg mb-2">Salle non disponible</p>
               <p className="text-white/50 text-sm max-w-[360px]">
-                Cette salle de visio ne s&apos;ouvre que le jour de votre rendez-vous.
+                {debutValide && heureOuverture
+                  ? `La salle ouvre ${OUVERTURE_SALLE_MIN} minutes avant votre rendez-vous, à ${heureOuverture}. Cette page se débloquera toute seule.`
+                  : "Cette salle de visio ne s'ouvre que le jour de votre rendez-vous."}
               </p>
             </div>
             {rdvDate && (
@@ -132,7 +150,9 @@ function VisioContent() {
               </div>
             )}
             <p className="text-white/30 text-xs">
-              Revenez sur cette page le jour J pour rejoindre la visio.
+              {debutValide && isRdvDay(rdvDate)
+                ? "Gardez cette page ouverte : la visio démarrera automatiquement."
+                : "Revenez sur cette page le jour J pour rejoindre la visio."}
             </p>
           </div>
         )}

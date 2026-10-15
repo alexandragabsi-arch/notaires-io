@@ -41,6 +41,7 @@ interface BookingPayload {
   participants: Participant[];
   documents?: StoredDocument[];
   userId?: string | null;
+  smsReminder?: boolean;
 }
 
 export async function POST(req: NextRequest) {
@@ -60,7 +61,7 @@ export async function POST(req: NextRequest) {
   // Champ piège : rempli, la requête vient d'un robot de formulaire. On répond
   // comme si tout allait bien pour ne pas lui signaler qu'il est repéré.
   if (piegeDeclenche(body)) return reponsePiege("booking");
-  const { notaireId, notaireNom, slotKey, slotLabel, dossier, modalite, participants, documents, userId } = body;
+  const { notaireId, notaireNom, slotKey, slotLabel, dossier, modalite, participants, documents, userId, smsReminder } = body;
 
   if (!notaireId || !slotLabel || !participants?.length) {
     return NextResponse.json({ error: "Données manquantes" }, { status: 400 });
@@ -91,6 +92,9 @@ export async function POST(req: NextRequest) {
     documents: Array.isArray(documents) ? documents : [],
     client_nom: clientNom,
     client_email: client.email || null,
+    // Rappel SMS : envoyé par le serveur de l'app (Twilio), comme pour les RDV pris dans l'app.
+    client_phone: client.telephone?.trim() || null,
+    sms_reminder: !!smsReminder && !!client.telephone?.trim(),
     user_id: userId || null,
     status: "confirmed",
   }).select("id").single();

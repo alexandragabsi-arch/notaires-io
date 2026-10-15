@@ -474,6 +474,9 @@ export default function BookingModal({
   const [docs, setDocs] = useState<Record<string, File>>({});
   // Champ piège anti-robot : toujours vide chez un humain.
   const [piege, setPiege] = useState("");
+  // Rappel SMS la veille du RDV : envoyé par le serveur de l'app (Twilio),
+  // qui lit bookings.sms_reminder et client_phone, quelle que soit l'origine du RDV.
+  const [smsRappel, setSmsRappel] = useState(false);
   const [erreur, setErreur] = useState<{ message: string; creneauPris: boolean } | null>(null);
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
@@ -580,6 +583,7 @@ export default function BookingModal({
           participants,
           documents,
           userId: userKey || null, // rattache le RDV au compte → espace cross-appareil
+          smsReminder: smsRappel && !!participants[0]?.telephone.trim(),
         }),
       });
       const json = await res.json().catch(() => null);
@@ -896,6 +900,24 @@ export default function BookingModal({
                       {p.telephone && <div className="text-[12px] text-[var(--color-muted)]">{p.telephone}</div>}
                     </div>
                   ))}
+                  {participants[0]?.telephone.trim() ? (
+                    <label className="flex items-start gap-3 border border-[var(--color-border-soft)] rounded-2xl p-4 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={smsRappel}
+                        onChange={(e) => setSmsRappel(e.target.checked)}
+                        className="mt-0.5 w-4 h-4 accent-[var(--color-accent)]"
+                      />
+                      <span className="text-[13px] text-[var(--color-text-strong)]">
+                        Recevoir un rappel par SMS la veille du rendez-vous
+                        <span className="block text-[12px] text-[var(--color-muted)]">au {participants[0].telephone}</span>
+                      </span>
+                    </label>
+                  ) : (
+                    <p className="text-[12px] text-[var(--color-muted)] px-1">
+                      Ajoutez votre téléphone à l&apos;étape « Participants » pour recevoir un rappel par SMS.
+                    </p>
+                  )}
                 </div>
               </motion.div>
             )}

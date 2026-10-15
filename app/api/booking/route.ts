@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { sendEmail, SITE } from "@/lib/email";
+import { sendEmail } from "@/lib/email";
 import { limiter, ipDe, piegeDeclenche, reponsePiege } from "@/lib/rate-limit";
 import { estSlotKeyIso, isoCreneau } from "@/lib/creneau";
 import { emailConfirmationClient, dateLongue, echapper } from "@/lib/emails/confirmation-rdv";

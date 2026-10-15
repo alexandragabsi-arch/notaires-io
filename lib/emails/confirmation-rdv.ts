@@ -99,7 +99,7 @@ export function emailConfirmationClient(o: {
 
     <h2 style="font-size:15px;font-weight:700;margin:0 0 6px">À préparer</h2>
     <p style="font-size:14px;color:#3d4a66;margin:0 0 18px">
-      Une pièce d'identité en cours de validité, et les documents liés à votre dossier
+      Une pièce d'identité en cours de validité et les documents liés à votre dossier
       (titre de propriété, livret de famille, contrat de mariage…). Vous pouvez les déposer
       à l'avance dans votre espace : le notaire les consultera avant le rendez-vous.
     </p>

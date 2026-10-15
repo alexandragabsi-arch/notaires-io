@@ -8,6 +8,7 @@ import { permanentRedirect } from "next/navigation";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { estFicheTest } from "@/lib/fiches-test";
 import { createClient } from "@supabase/supabase-js";
+import { idDepuisSlugNom } from "@/lib/inscrits-serveur";
 
 // Génère statiquement les 35 notaires vedettes ; les autres sont SSR à la demande
 export async function generateStaticParams() {
@@ -92,10 +93,25 @@ export async function generateMetadata({
   // Fiche de démonstration : elle doit rester consultable (revue App Store)
   // mais jamais être indexée. Voir lib/fiches-test.ts.
   if (estFicheTest(id)) {
-    return { title: "Profil notaire · Notaires.io", robots: { index: false, follow: false } };
+    return { title: "Profil notaire", robots: { index: false, follow: false } };
   }
   const n = findNotaire(id);
-  if (!n) return { title: "Profil notaire · Notaires.io" };
+  if (!n) {
+    // Fiche créée à l'inscription, absente de l'annuaire importé.
+    const c = await ficheCompletee(id);
+    if (!c?.name) return { title: "Profil notaire" };
+    return {
+      title: `${c.name} — Notaire à ${c.city ?? ""}`.trim(),
+      description: `Prenez rendez-vous avec ${c.name}, notaire à ${c.city ?? ""}, en visio ou au cabinet.`,
+      alternates: { canonical: `https://notaires.io/notaires/${id}` },
+      openGraph: {
+        title: `${c.name} — Notaire à ${c.city ?? ""} · Notaires.io`,
+        url: `https://notaires.io/notaires/${id}`,
+        type: "profile",
+        ...(c.photo ? { images: [c.photo] } : {}),
+      },
+    };
+  }
 
   const location = n.area ? `${n.city} ${n.area}` : n.city;
   const specs = n.specialties.join(", ");
@@ -197,6 +213,12 @@ export default async function Page({
   const base =
     LISTING_NOTAIRES.find((n) => n.id === id) ?? all.find((n) => n.id === id); // lookup serveur (membres.json inclus)
   const completee = await ficheCompletee(id);
+  // Lien « nom-ville » partagé depuis l'app (/notaires/me-philippe-quaghebeur-paris) :
+  // redirection vers la fiche.
+  if (!base && !completee) {
+    const cibleApp = await idDepuisSlugNom(id);
+    if (cibleApp && cibleApp !== id) permanentRedirect(`/notaires/${encodeURIComponent(cibleApp)}`);
+  }
   // Fiche de l'annuaire enrichie, ou fiche créée à l'inscription (absente de l'annuaire).
   const notaire: ListingNotaire | undefined = completee
     ? ({

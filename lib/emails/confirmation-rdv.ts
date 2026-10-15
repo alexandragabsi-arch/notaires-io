@@ -66,7 +66,7 @@ export function emailConfirmationClient(o: {
   const autres = o.participants.slice(1);
   const ligne = (libelle: string, valeur: string) => `
     <tr>
-      <td style="padding:6px 0;color:#5a6a8a;font-size:14px;width:110px;vertical-align:top">${libelle}</td>
+      <td style="padding:6px 0;color:#5a6a8a;font-size:14px;width:120px;vertical-align:top">${libelle}</td>
       <td style="padding:6px 0;color:#1a1a2e;font-size:15px;vertical-align:top">${valeur}</td>
     </tr>`;
   const bouton = (href: string, texte: string, plein: boolean) =>
@@ -88,7 +88,7 @@ export function emailConfirmationClient(o: {
         ${ligne("Lieu", lieu)}
         ${ligne("Notaire", echapper(o.notaireNom))}
         ${o.dossier ? ligne("Objet", echapper(o.dossier)) : ""}
-        ${autres.length ? ligne("Avec", autres.map((p) => `${echapper(p.prenom)} ${echapper(p.nom)} (${echapper(p.role)})`).join("<br>")) : ""}
+        ${autres.length ? ligne(autres.length > 1 ? "Autres participants" : "Autre participant", autres.map((p) => `${echapper(p.prenom)} ${echapper(p.nom)} (${echapper(p.role)})`).join("<br>")) : ""}
       </table>
     </div>
 

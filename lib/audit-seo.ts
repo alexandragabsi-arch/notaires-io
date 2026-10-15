@@ -36,11 +36,14 @@ const SEUIL_POIDS_MO = 2;
  * règle de contournement puisse le reconnaître ; sans cette règle, le 429 est
  * signalé une seule fois, comme une limite de l'agent et non du site.
  */
-function urlAuditee(chemin: string): string {
-  const jeton = process.env.AUDIT_SECRET ?? process.env.CRON_SECRET;
-  const u = new URL(chemin, "https://notaires.io");
-  if (jeton) u.searchParams.set("audit", jeton);
-  return u.toString();
+export function fetchAudite(chemin: string): Promise<Response> {
+  // En-tête lu par la règle de pare-feu « Agent SEO (audit) — bypass » ;
+  // AUDIT_BYPASS_SECRET est une variable Vercel de type sensitive (15/10/2026).
+  const cle = process.env.AUDIT_BYPASS_SECRET;
+  return fetch(new URL(chemin, "https://notaires.io"), {
+    cache: "no-store",
+    headers: cle ? { "x-audit-seo": cle } : undefined,
+  });
 }
 
 /** Pages structurantes : leur santé conditionne celle de toutes les autres. */
@@ -59,7 +62,7 @@ async function controlerPages(urls: string[]): Promise<Constat[]> {
   for (const chemin of urls) {
     const url = `https://notaires.io${chemin}`;
     try {
-      const rep = await fetch(urlAuditee(chemin), { cache: "no-store" });
+      const rep = await fetchAudite(chemin);
       if (rep.status === 429 || rep.headers.get("x-vercel-mitigated") === "challenge") {
         challenges++;
         continue;
@@ -180,7 +183,7 @@ export async function auditSeo(mode: "quotidien" | "hebdomadaire" = "hebdomadair
   let villes: string[] = [];
   let articles: string[] = [];
   try {
-    const xml = await fetch("https://notaires.io/sitemap.xml", { cache: "no-store" }).then((r) => r.text());
+    const xml = await fetchAudite("/sitemap.xml").then((r) => r.text());
     const melange = (l: string[]) => l.sort(() => Math.random() - 0.5);
     villes = melange([...xml.matchAll(/<loc>([^<]+notaire-ville[^<]*)<\/loc>/g)].map((m) => m[1])).slice(0, 12);
     // Les articles aussi : c'est ce que surveillait le contrôle n8n, repris ici

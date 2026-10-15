@@ -52,19 +52,54 @@ const MOTIFS_BY_SPECIALTY: Record<string, string[]> = {
 /** Premier créneau réellement proposé par le notaire (l'agenda commence demain).
  *  Sans agenda renseigné, on n'affiche rien plutôt qu'un « Disponible
  *  rapidement » qui n'apporte aucune information. */
-function prochainCreneau(slotMatrix?: string[][]): { libelle: string; heure: string } | null {
+function prochainCreneau(
+  slotMatrix?: string[][],
+  pris: Set<string> = new Set(),
+): { libelle: string; heure: string; cle: string } | null {
   const m = slotMatrix ?? [];
   for (let i = 0; i < m.length; i++) {
-    const heure = m[i]?.[0];
-    if (!heure) continue;
     const d = new Date();
     d.setDate(d.getDate() + 1 + i);
+    // Premier créneau encore libre : un créneau réservé (site ou app) est sauté.
+    const heure = (m[i] ?? []).find((h) => !pris.has(slotKeyDepuisJour(d, h)));
+    if (!heure) continue;
     return {
       libelle: d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }),
       heure,
+      // Même clé que dans l'agenda : index du jour + heure.
+      cle: `${i}-${heure}`,
     };
   }
   return null;
+}
+
+/** Créneaux déjà réservés (site ou app), relus régulièrement et au retour sur
+ *  l'onglet pour qu'un RDV pris dans l'app disparaisse sans recharger. */
+function useCreneauxPris(notaireId?: string) {
+  const [pris, setPris] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    if (!notaireId) return;
+    let actif = true;
+    async function charger() {
+      const { data, error } = await supabase
+        .from("notaire_booked_slots")
+        .select("slot_key")
+        .eq("notaire_id", notaireId);
+      if (!actif || error) return;
+      setPris(new Set((data ?? []).map((r) => r.slot_key as string)));
+    }
+    charger();
+    const timer = window.setInterval(charger, 60_000);
+    const auRetour = () => { if (document.visibilityState === "visible") charger(); };
+    document.addEventListener("visibilitychange", auRetour);
+    return () => {
+      actif = false;
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", auRetour);
+    };
+  }, [notaireId]);
+  const ajouterPris = (cle: string) => setPris((prev) => new Set(prev).add(cle));
+  return { pris, ajouterPris };
 }
 
 function getMotifs(specialties: string[]): string[] {
@@ -109,11 +144,16 @@ function formatMonth(date: Date) {
 
 /* ── Sous-composant : grille de créneaux ────────────────────────────────── */
 function SlotCalendar({
-  slotMatrix, notaireId, notaireNom,
+  slotMatrix, notaireId, notaireNom, pris, ajouterPris, demande,
 }: {
   slotMatrix: string[][];
   notaireId: string;
   notaireNom: string;
+  pris: Set<string>;
+  ajouterPris: (cle: string) => void;
+  /** Créneau choisi ailleurs sur la page (« Prochain créneau ») : ouvre la
+   *  réservation directement dessus. `n` change à chaque clic. */
+  demande?: { cle: string; n: number };
 }) {
   const [isMobile, setIsMobile] = useState(false);
   const [pageOffset, setPageOffset] = useState(0);
@@ -127,32 +167,22 @@ function SlotCalendar({
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Créneaux déjà réservés (site ou app), relus régulièrement et au retour sur
-  // l'onglet pour qu'un RDV pris dans l'app disparaisse ici sans recharger.
-  const [pris, setPris] = useState<Set<string>>(new Set());
-  useEffect(() => {
-    let actif = true;
-    async function charger() {
-      const { data, error } = await supabase
-        .from("notaire_booked_slots")
-        .select("slot_key")
-        .eq("notaire_id", notaireId);
-      if (!actif || error) return;
-      setPris(new Set((data ?? []).map((r) => r.slot_key as string)));
-    }
-    charger();
-    const timer = window.setInterval(charger, 60_000);
-    const auRetour = () => { if (document.visibilityState === "visible") charger(); };
-    document.addEventListener("visibilitychange", auRetour);
-    return () => {
-      actif = false;
-      window.clearInterval(timer);
-      document.removeEventListener("visibilitychange", auRetour);
-    };
-  }, [notaireId]);
 
   const daysPerPage = isMobile ? 4 : 7;
   const MAX_PAGES = Math.ceil(91 / daysPerPage);
+
+  // Clic sur « Prendre rendez-vous » du bloc « Prochain créneau » : le
+  // visiteur a déjà choisi son créneau, on ouvre la réservation dessus au
+  // lieu de le renvoyer à l'agenda. Ajustement d'état pendant le rendu,
+  // déclenché une fois par clic (demande.n).
+  const [demandeTraitee, setDemandeTraitee] = useState(0);
+  if (demande && demande.n !== demandeTraitee) {
+    setDemandeTraitee(demande.n);
+    const jour = parseInt(demande.cle.split("-")[0], 10);
+    setPageOffset(Math.floor(jour / daysPerPage));
+    setSelected(demande.cle);
+    setBookingOpen(true);
+  }
   const days = getNextWorkdays(daysPerPage, pageOffset * daysPerPage);
 
   function prevPage() { setPageOffset(p => Math.max(0, p - 1)); setSelected(null); }
@@ -290,7 +320,7 @@ function SlotCalendar({
             slotLabel={dayLabel}
             onClose={() => setBookingOpen(false)}
             onSlotTaken={(cle) => {
-              setPris((prev) => new Set(prev).add(cle));
+              ajouterPris(cle);
               setSelected(null);
             }}
           />
@@ -806,6 +836,9 @@ export default function NotaireProfileClient({
     });
   }, [id, initialNotaire]);
 
+  const { pris, ajouterPris } = useCreneauxPris(notaire?.id);
+  const [demandeCreneau, setDemandeCreneau] = useState<{ cle: string; n: number }>();
+
   if (notaire === undefined) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -1100,6 +1133,9 @@ export default function NotaireProfileClient({
                 slotMatrix={notaire.slotMatrix}
                 notaireId={notaire.id}
                 notaireNom={notaire.name || notaire.officeName || "Notaire"}
+                pris={pris}
+                ajouterPris={ajouterPris}
+                demande={demandeCreneau}
               />
             ) : (
               <div className="text-center py-8">
@@ -1209,7 +1245,7 @@ export default function NotaireProfileClient({
           {isClaimed && (
             <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
               {(() => {
-                const prochain = prochainCreneau(notaire.slotMatrix);
+                const prochain = prochainCreneau(notaire.slotMatrix, pris);
                 if (!prochain) return null;
                 return (
                   <div className="text-center mb-5">
@@ -1223,6 +1259,13 @@ export default function NotaireProfileClient({
               })()}
               <a
                 href="#agenda"
+                onClick={(e) => {
+                  // Créneau affiché juste au-dessus : réservation ouverte dessus.
+                  const prochain = prochainCreneau(notaire.slotMatrix, pris);
+                  if (!prochain) return; // sans créneau, le lien mène à l'agenda
+                  e.preventDefault();
+                  setDemandeCreneau({ cle: prochain.cle, n: Date.now() });
+                }}
                 className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 mb-3"
               >
                 Prendre rendez-vous

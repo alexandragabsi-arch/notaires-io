@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { ChevronLeft, ChevronRight, MapPin, Phone, Navigation, Loader2, X } from "lucide-react";
 import type { ListingNotaire } from "@/lib/notaires-listing";
-import { useFichesCompletees, abonnesEnTete } from "@/lib/fiches-completees";
+import { useFichesCompletees, abonnesEnTete, rangAffichage } from "@/lib/fiches-completees";
 import { arrDepuisCodePostal, libelleArr } from "@/lib/arrondissements";
 
 interface Props {
@@ -322,7 +322,7 @@ export default function SeoLandingPage({ h1, intro, notaires: notairesAnnuaire, 
     })),
     [notaires, selectedSpecialty, selectedArr, selectedCity]
   ).sort((a, b) =>
-    Number(!!b.claimed) - Number(!!a.claimed) ||
+    rangAffichage(a) - rangAffichage(b) ||
     (selectedArr ? Number(b.arrondissement === selectedArr) - Number(a.arrondissement === selectedArr) : 0));
 
   /* Géolocalisation → arrondissement */

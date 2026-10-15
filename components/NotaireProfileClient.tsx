@@ -1067,7 +1067,7 @@ export default function NotaireProfileClient({
               </div>
               <p
                 ref={bioRef}
-                className={`text-[15px] text-[var(--color-text-strong)] leading-relaxed ${
+                className={`text-[15px] text-[var(--color-text-strong)] leading-relaxed text-justify hyphens-auto ${
                   bioOuverte ? "" : "line-clamp-4"
                 }`}
               >

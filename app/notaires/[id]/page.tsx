@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import NotaireProfileClient from "@/components/NotaireProfileClient";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
-import { getAllNotaires, redirectionFiche } from "@/lib/notaires-source";
+import { getAllNotaires, redirectionFiche, redirectionMasquee } from "@/lib/notaires-source";
 import { permanentRedirect } from "next/navigation";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { estFicheTest } from "@/lib/fiches-test";
@@ -189,6 +189,9 @@ export default async function Page({
   // fiche conservée, pour ne pas perdre l'URL déjà indexée.
   const cible = redirectionFiche(id);
   if (cible) permanentRedirect(`/notaires/${cible}`);
+  // Fiche absente de notaires.fr pour sa ville : redirection vers la page de la ville.
+  const ville = redirectionMasquee(id);
+  if (ville) permanentRedirect(ville);
 
   const all = getAllNotaires();
   const base =

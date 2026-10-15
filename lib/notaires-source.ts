@@ -133,13 +133,40 @@ export function redirectionFiche(id: string): string | undefined {
   return _alias?.get(id);
 }
 
+// ── Fiches masquées ─────────────────────────────────────────────────────────
+// notaires.fr fait référence. Les fiches absentes de l'annuaire officiel pour
+// leur ville (doublons que memeNotaire ne reconnaît pas, notaires partis ou
+// retraités) sont listées dans data/fiches-masquees.json : retirées de
+// l'affichage, leur URL redirige vers la page de la ville. Les lignes
+// correspondantes de notaire_profiles (lues par l'app) sont archivées dans
+// notaire_profiles_masques.
+let _masquees: Record<string, { ville: string }> | null = null;
+
+function loadMasquees(): Record<string, { ville: string }> {
+  if (_masquees) return _masquees;
+  try {
+    const raw = readFileSync(join(process.cwd(), "data", "fiches-masquees.json"), "utf-8");
+    _masquees = (JSON.parse(raw) as { fiches: Record<string, { ville: string }> }).fiches;
+  } catch {
+    _masquees = {};
+  }
+  return _masquees;
+}
+
+/** Fiche masquée : chemin de la page de sa ville (sinon undefined). */
+export function redirectionMasquee(id: string): string | undefined {
+  const m = loadMasquees()[id];
+  return m ? `/notaire-ville/${m.ville}` : undefined;
+}
+
 function loadAll(): RawNotaire[] {
   if (_cache) return _cache;
   try {
     const filePath = join(process.cwd(), "data", "notaires-membres.json");
     const raw = readFileSync(filePath, "utf-8");
+    const masquees = loadMasquees();
     const { garde, alias } = dedoublonner(JSON.parse(raw) as RawNotaire[]);
-    _cache = garde;
+    _cache = garde.filter((n) => !masquees[n.id]);
     _alias = alias;
     return _cache;
   } catch {
@@ -229,6 +256,9 @@ function officeInitials(name: string): string {
 function normalizeCity(city: string): string {
   return city
     .toLowerCase()
+    // Même règle que slugVille : « Marcq-en-Barœul » et « Marcq-en-Baroeul »
+    // désignent la même ville.
+    .replace(/œ/g, "oe").replace(/æ/g, "ae")
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9]+/g, " ")

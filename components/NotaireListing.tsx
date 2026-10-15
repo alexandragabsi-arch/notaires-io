@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import type { ListingNotaire } from "@/lib/notaires-listing";
-import { useFichesCompletees, abonnesEnTete } from "@/lib/fiches-completees";
+import { useFichesCompletees, abonnesEnTete, rangAffichage } from "@/lib/fiches-completees";
 import NotaireMap from "@/components/NotaireMap";
 
 const ALL = "Toutes";
@@ -642,7 +642,7 @@ function NotaireListingInner({ baseListings, sourceUrl, sommaire }: { baseListin
     // finissaient au-delà de la 600e place, donc invisibles — puis les notaires
     // de l'arrondissement, puis le reste.
     return [...results].sort((a, b) =>
-      Number(!!b.claimed) - Number(!!a.claimed) ||
+      rangAffichage(a) - rangAffichage(b) ||
       Number(b.arrondissement === arrFilter) - Number(a.arrondissement === arrFilter));
   }, [results, arrFilter]);
   const displayed = useMemo(() => classes.slice(0, displayLimit), [classes, displayLimit]);

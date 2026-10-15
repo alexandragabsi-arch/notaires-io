@@ -63,10 +63,25 @@ export function fusionnerFiches(
   return [...nouvelles, ...fusion];
 }
 
-/** Notaires inscrits sur la plateforme en tête, le reste dans l'ordre d'origine.
+/** Fiche de démonstration (Me Test Martin) : jamais en tête des résultats publics. */
+export function estFicheTest(n: ListingNotaire): boolean {
+  return n.id === "11111111-1111-4111-8111-111111111111" || /fiche de test/i.test(n.officeName ?? "");
+}
+
+/** Rang d'affichage : inscrits avec créneaux ouverts, autres inscrits, fiche
+ *  de test, puis le reste de l'annuaire. Plus petit = plus haut. */
+export function rangAffichage(n: ListingNotaire): number {
+  if (!n.claimed) return 3;
+  if (estFicheTest(n)) return 2;
+  const creneaux = (n.slotMatrix ?? []).some((jour) => (jour?.length ?? 0) > 0);
+  return creneaux ? 0 : 1;
+}
+
+/** Notaires inscrits sur la plateforme en tête (ceux qui ont des créneaux
+ *  d'abord), la fiche de test après eux, le reste dans l'ordre d'origine.
  *  Ce sont les seuls qui prennent réellement des rendez-vous en ligne. */
 export function abonnesEnTete(liste: ListingNotaire[]): ListingNotaire[] {
-  return [...liste].sort((a, b) => Number(!!b.claimed) - Number(!!a.claimed));
+  return [...liste].sort((a, b) => rangAffichage(a) - rangAffichage(b));
 }
 
 /** Liste de l'annuaire enrichie des fiches complétées (chargées après le rendu). */

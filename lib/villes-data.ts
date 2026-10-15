@@ -14,6 +14,14 @@ import { DEPARTEMENTS } from "@/lib/departements-data";
 /** En dessous de ce nombre de notaires, pas de page dédiée. */
 export const SEUIL_VILLE = 3;
 
+/**
+ * Villes passées sous le seuil le 15/10/2026, quand les fiches absentes de
+ * notaires.fr ont été masquées (data/fiches-masquees.json). Leurs pages étaient
+ * déjà au sitemap et suivies dans les rapports SEO : on les garde tant qu'il y
+ * reste au moins un notaire, plutôt que de les faire tomber en 404.
+ */
+const VILLES_MAINTENUES = new Set(["le-pont-de-claix", "saint-fargeau", "saint-florentin", "venissieux"]);
+
 /** Villes déjà servies par une page écrite à la main, à ne pas dupliquer. */
 export const VILLES_STATIQUES = new Set([
   "paris", "lyon", "marseille", "toulouse", "nice", "nantes", "montpellier",
@@ -55,6 +63,9 @@ export function nomCommune(nom: string): string {
 
 export function slugVille(nom: string): string {
   return nom
+    // « œ » et « æ » ne se décomposent pas en NFD : sans ce remplacement,
+    // Vandœuvre-lès-Nancy devenait « vand-uvre-les-nancy ».
+    .replace(/œ/g, "oe").replace(/Œ/g, "Oe").replace(/æ/g, "ae").replace(/Æ/g, "Ae")
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
@@ -135,7 +146,7 @@ export function getVillesCouvertes(): VilleCouverte[] {
       return { nom, slug, nombre: total, specialites, codePostal,
                departement: departementDuCp(codePostal) };
     })
-    .filter((v) => v.nombre >= SEUIL_VILLE)
+    .filter((v) => v.nombre >= SEUIL_VILLE || (v.nombre > 0 && VILLES_MAINTENUES.has(v.slug)))
     .sort((a, b) => b.nombre - a.nombre);
 
   return cache;

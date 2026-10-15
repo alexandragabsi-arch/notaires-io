@@ -16,6 +16,25 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // Villes en « œ » (15/10/2026) : slugVille perdait la lettre
+      // (« vand-uvre-les-nancy »). Les anciennes URL redirigent vers les bonnes.
+      ...Object.entries({
+        "marcq-en-bar-ul": "marcq-en-baroeul",
+        "vand-uvre-les-nancy": "vandoeuvre-les-nancy",
+        "r-schwoog": "roeschwoog",
+        "w-rth": "woerth",
+        "sch-lcher": "schoelcher",
+        "h-nheim": "hoenheim",
+        "ann-ullin": "annoeullin",
+        "mons-en-bar-ul": "mons-en-baroeul",
+        "crevec-ur-le-grand": "crevecoeur-le-grand",
+        "n-ux-les-mines": "noeux-les-mines",
+        "paimb-uf": "paimboeuf",
+      }).map(([ancien, nouveau]) => ({
+        source: `/notaire-ville/${ancien}`,
+        destination: `/notaire-ville/${nouveau}`,
+        permanent: true,
+      })),
       // Fusion par INTENTION (15/09/2026). La consolidation précédente avait
       // réglé les doublons de sujet ; restaient neuf pages qui visaient toutes
       // « rdv notaire », la requête la plus stratégique du site. Voir

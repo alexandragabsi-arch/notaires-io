@@ -14,7 +14,11 @@ import { arrDepuisAdresse } from "./arrondissements";
 // Une seule requête par visite, partagée par tous les composants de la page.
 let _promesse: Promise<ListingNotaire[]> | null = null;
 function chargerUneFois(): Promise<ListingNotaire[]> {
-  _promesse ??= getRemoteProfiles().catch(() => []);
+  // Sans la fiche de démonstration : elle reste consultable par lien direct
+  // (revue App Store) mais n'apparaît plus dans l'annuaire ni les pages villes.
+  _promesse ??= getRemoteProfiles()
+    .then((l) => l.filter((n) => !estFicheTest(n)))
+    .catch(() => []);
   return _promesse;
 }
 

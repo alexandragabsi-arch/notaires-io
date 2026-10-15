@@ -212,6 +212,20 @@ function cleVilleNom(city: string): string {
   return (city ?? "").replace(/\s+\d.*$/, "").trim();
 }
 
+/**
+ * Fiche désignée par un lien « nom-ville » (/notaires/me-philippe-quaghebeur-paris),
+ * format des liens partagés depuis l'app : inscrits d'abord, puis annuaire
+ * si un seul notaire correspond.
+ */
+export async function idDepuisSlugNom(slug: string): Promise<string | undefined> {
+  const s = slug.toLowerCase();
+  const cle = (n: ListingNotaire) => slugVille(`${n.name} ${cleVilleNom(n.city)}`);
+  const inscrit = (await getInscrits()).find((n) => cle(n) === s);
+  if (inscrit) return inscrit.id;
+  const fiches = getAllNotaires().filter((n) => cle(n) === s);
+  return fiches.length === 1 ? fiches[0].id : undefined;
+}
+
 /** Ville de l'annuaire, ou à défaut ville où exerce au moins un inscrit. */
 export async function getVilleAvecInscrits(slug: string): Promise<VilleCouverte | undefined> {
   return getVilleParSlug(slug) ?? villeDepuisInscrits(slug, await getInscrits());

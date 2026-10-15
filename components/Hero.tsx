@@ -95,7 +95,9 @@ export default function Hero() {
               ligne »…). Le <title> le portait, pas le H1 : Google recevait un
               signal à moitié. Le reste de la formule ne bouge pas — c'est elle
               qui dit ce que le site fait de mieux. */}
-          Prenez RDV en ligne avec le bon notaire{" "}
+          {/* « Prendre » plutôt que « Prenez » (15/10/2026) : c'est le verbe des
+              requêtes « prendre rdv notaire » et « prendre rdv notaire en ligne ». */}
+          Prendre RDV en ligne avec le bon notaire{" "}
           <span className="text-[var(--color-primary)]">pour votre situation</span>
         </motion.h1>
 

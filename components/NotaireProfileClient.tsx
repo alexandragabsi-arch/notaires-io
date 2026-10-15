@@ -903,8 +903,13 @@ export default function NotaireProfileClient({
           {/* Identité + coordonnées */}
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center justify-center gap-2 mb-1">
+              {/* Le métier et la ville dans le H1 : les gens cherchent
+                  « <nom> notaire », pas le nom seul. */}
               <h1 className="serif text-[28px] sm:text-[34px] font-bold text-[var(--color-text-strong)] leading-tight">
                 {notaire.name}
+                <span className="block text-[16px] sm:text-[18px] font-semibold text-[var(--color-muted)] mt-1">
+                  {notaire.isOffice ? "Étude notariale" : "Notaire"} à {notaire.city}
+                </span>
               </h1>
               {isClaimed && (notaire.isNew ? (
                 <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[12px] font-bold bg-[var(--color-tint-green)] text-[var(--color-success)]">
@@ -1060,9 +1065,9 @@ export default function NotaireProfileClient({
           >
             <div className="flex items-center gap-2 mb-5">
               <CalendarDays className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
-              <span className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
-                Créneaux disponibles
-              </span>
+              <h2 className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
+                Prendre RDV avec {notaire.name}, {notaire.isOffice ? "étude notariale" : "notaire"}
+              </h2>
               {(() => {
                 // Nombre de créneaux réellement ouverts, plutôt qu'un « Disponible
                 // rapidement » affiché même sans agenda.

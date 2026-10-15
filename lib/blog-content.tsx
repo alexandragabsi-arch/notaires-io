@@ -35,7 +35,7 @@ function InternalCTA() {
         href="/#hero"
         className="inline-block bg-gradient-cta text-white px-7 py-3 rounded-[10px] font-semibold shadow-[var(--shadow-cta)] hover:shadow-[var(--shadow-cta-hover)] transition-shadow"
       >
-        Prendre rendez-vous avec un notaire
+        Prendre RDV notaire en ligne
       </a>
     </div>
   );
@@ -4813,7 +4813,7 @@ function Article84() {
 
 {/* Réponse directe, placée sous la question exacte que posent les internautes :
     c'est le passage que les moteurs reprennent tel quel dans leurs réponses. */}
-<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Quel est le prix pour un renseignement chez un notaire ?</h2>
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Quel est le prix d'une consultation chez un notaire pour un renseignement ?</h2>
 <div className="bg-[var(--color-tint-blue)] border-l-4 border-[var(--color-accent)] rounded-xl p-5 mb-8">
 <p className="text-[var(--color-text-strong)] leading-relaxed">Un <strong>renseignement chez un notaire est gratuit</strong> : une question simple, par téléphone ou lors d'un premier échange, n'est pas facturée. Le conseil qui prépare un acte est compris dans le prix de cet acte. Seule une consultation approfondie sans acte peut être payante, à un prix que le notaire doit vous annoncer avant.</p>
 </div>
@@ -4861,14 +4861,18 @@ function Article84() {
     36 impressions — alors que l'expression « combien coûte » n'apparaissait
     nulle part dans l'article. La page traitait le sujet sans jamais le nommer
     comme le nomment les gens qui cherchent. */}
-<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Combien coûte une consultation chez un notaire ?</h2>
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Combien coûte une consultation chez un notaire pour des renseignements ?</h2>
 <p className="mb-4">La réponse dépend de ce que vous venez chercher, et il n'y a que trois cas.</p>
 <p className="mb-4"><strong>Un renseignement ne coûte rien.</strong> Poser une question au téléphone, demander si votre situation relève du notaire, savoir quelles pièces réunir : ces échanges ne se facturent pas. C'est la porte d'entrée normale de la profession, et aucune étude ne vous demandera de payer pour cela.</p>
 <p className="mb-4"><strong>Le conseil qui prépare un acte est compris dans l'acte.</strong> Pour une vente, une donation, une succession ou un contrat de mariage, les émoluments du notaire sont fixés par décret et identiques d'une étude à l'autre. Le temps passé à vous expliquer, à arbitrer entre deux montages, à vérifier une clause : tout cela est dedans. Un notaire ne peut pas vous facturer ce conseil en plus.</p>
 <p className="mb-4"><strong>Seule une consultation approfondie sans acte peut être payante.</strong> Si vous venez pour un avis écrit, une analyse patrimoniale ou une étude qui ne débouche sur aucun acte, le notaire peut demander des honoraires libres. La règle, elle, n'est pas libre : <strong>le montant doit vous être annoncé et accepté avant</strong> la prestation. Une facture qui tombe après coup, sans accord préalable, n'est pas conforme.</p>
 <p className="mb-8">Autrement dit, le cas qui inquiète — payer pour avoir simplement posé une question — n'existe pas. Et si un doute subsiste, la question « est-ce que cet échange sera facturé ? » se pose au moment de prendre rendez-vous, pas après.</p>
 
-<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Prendre rendez-vous sans frais</h2>
+{/* Titres repris le 15/10/2026 : la page sortait 7 à 10e sur « combien coûte
+    un rendez-vous chez le notaire » et « combien coûte une visite chez un
+    notaire » sans qu'aucune section ne pose ces questions. */}
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Combien coûte un rendez-vous ou une visite chez le notaire ?</h2>
+<p className="text-[var(--color-muted)] mb-4 leading-relaxed">Un rendez-vous ou une visite à l'étude pour exposer votre projet ne se paie pas en soi : ce premier échange relève du renseignement, gratuit. Ce qui se paie, c'est l'acte qui en découle, ou une consultation approfondie sans acte dont le prix vous est annoncé avant.</p>
 <p className="text-[var(--color-muted)] mb-4 leading-relaxed">Sur notaires.io, <strong className="text-[var(--color-text-strong)]">réserver un rendez-vous avec un notaire est gratuit</strong> : vous choisissez l'étude et le créneau, en visio ou au cabinet, sans frais de réservation. Si votre projet aboutit à un acte, le conseil reçu lors de ce rendez-vous est compris dans le prix de l'acte.</p>
 <p className="text-[var(--color-muted)] mb-6 leading-relaxed">Pour en savoir plus sur ce premier échange, lisez <a href="/blog/premier-rendez-vous-notaire-gratuit" className="text-[var(--color-accent)] underline">le premier rendez-vous chez le notaire est-il gratuit ?</a>. Pour le coût des actes eux-mêmes, voyez <a href="/blog/tarifs-honoraires-notaire" className="text-[var(--color-accent)] underline">tarifs et honoraires du notaire</a>.</p>
 

@@ -11,6 +11,7 @@
 import type { ListingNotaire } from "./notaires-listing";
 import { arrDepuisAdresse } from "./arrondissements";
 import { getAllNotaires } from "./notaires-source";
+import { estFicheTest } from "./fiches-test";
 import {
   getVillesCouvertes,
   getVilleParSlug,
@@ -103,7 +104,8 @@ async function lireInscrits(): Promise<ListingNotaire[]> {
     if (!res.ok) return [];
     const rows = (await res.json()) as Record<string, unknown>[];
     return rows
-      .filter((r) => r.city)
+      // Fiche de démonstration (lib/fiches-test.ts) : jamais dans les listes publiques.
+      .filter((r) => r.city && !estFicheTest(r.id as string))
       .map((r) => ({
         id: r.id as string,
         name: r.name as string,

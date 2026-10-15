@@ -29,7 +29,7 @@ function InternalCTA() {
         Besoin de l'avis d'un notaire ?
       </p>
       <p className="text-sm text-[var(--color-muted)] mb-5">
-        Le premier rendez-vous est offert. En visio ou au cabinet, en moins de 48 h.
+        Le premier rendez-vous est offert. En visio ou au cabinet, selon les créneaux de votre notaire.
       </p>
       <a
         href="/#hero"

@@ -107,7 +107,7 @@ export default async function Page() {
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Lyon"
-          intro="Vous cherchez un notaire à Lyon pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Nos notaires partenaires lyonnais sont disponibles sous 48 h, en visio ou au cabinet dans votre arrondissement."
+          intro="Vous cherchez un notaire à Lyon pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Nos notaires partenaires lyonnais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre arrondissement."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

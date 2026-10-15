@@ -99,7 +99,7 @@ export default async function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Aix-en-Provence"
-          intro="Vous cherchez un notaire à Aix-en-Provence pour votre mariage, votre PACS, un achat immobilier en Provence ou la création de votre société ? Nos notaires partenaires aixois sont disponibles sous 48 h, en visio ou au cabinet dans votre quartier."
+          intro="Vous cherchez un notaire à Aix-en-Provence pour votre mariage, votre PACS, un achat immobilier en Provence ou la création de votre société ? Nos notaires partenaires aixois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

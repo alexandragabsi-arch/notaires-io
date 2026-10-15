@@ -10,6 +10,7 @@
 
 import type { ListingNotaire } from "./notaires-listing";
 import { arrDepuisAdresse } from "./arrondissements";
+import { getAllNotaires } from "./notaires-source";
 import {
   getVillesCouvertes,
   getVilleParSlug,
@@ -30,6 +31,63 @@ const CHAMPS =
 
 /** Tous les inscrits confirmés, abonnement non expiré, plus récents d'abord. */
 export async function getInscrits(): Promise<ListingNotaire[]> {
+  const brutes = await lireInscrits();
+  // Fiche de l'annuaire correspondante (même id) : complète ce que le notaire
+  // n'a pas renseigné (fonction, étude, adresse avec code postal, agenda),
+  // comme dans l'annuaire, même quand la page de ville n'en liste qu'une partie.
+  const tous = getAllNotaires();
+  const annuaire = new Map(tous.map((n) => [n.id, n]));
+  return brutes.map((i) => {
+    const b = annuaire.get(i.id) ?? ficheDuNotaire(i, tous);
+    if (!b) return i;
+    const renseignes = Object.entries(i).filter(
+      ([, v]) => v !== undefined && v !== null && v !== "" && !(Array.isArray(v) && v.length === 0),
+    );
+    const fusion = { ...b, ...Object.fromEntries(renseignes) } as ListingNotaire;
+    const address = adresseComplete(i.address, b.address);
+    return { ...fusion, address, arrondissement: arrondissementDe(fusion.city, address) };
+  });
+}
+
+/** « Me Philippe Quaghebeur » → ["philippe", "quaghebeur"]. */
+function jetonsNom(nom: string): string[] {
+  return cleVille(nom).split(" ").filter((t) => t && t !== "me");
+}
+
+/**
+ * Même notaire, même ville : tous les mots du nom de l'inscrit figurent dans
+ * celui de la fiche (« Me Philippe Quaghebeur » ↔ « Me Philippe Emmanuel Marc
+ * Andre Quaghebeur »). Sert quand l'inscription n'a pas repris l'id de la fiche.
+ */
+function memeNotaire(inscrit: ListingNotaire, fiche: ListingNotaire): boolean {
+  if (inscrit.id === fiche.id) return true;
+  if (cleVille(inscrit.city) !== cleVille(fiche.city)) return false;
+  const a = jetonsNom(inscrit.name);
+  const b = new Set(jetonsNom(fiche.name));
+  return a.length >= 2 && a.every((t) => b.has(t));
+}
+
+/** Fiche de l'annuaire de l'inscrit, de préférence celle dont l'adresse a un code postal. */
+function ficheDuNotaire(inscrit: ListingNotaire, tous: ListingNotaire[]): ListingNotaire | undefined {
+  const candidates = tous.filter((n) => !n.claimed && memeNotaire(inscrit, n));
+  return candidates.find((n) => /\b\d{5}\b/.test(n.address ?? "")) ?? candidates[0];
+}
+
+/**
+ * Adresse saisie par le notaire, complétée du code postal et de la ville de
+ * l'annuaire quand il ne les a pas indiqués :
+ * « 123 Cours Albert Thomas » + « … 69003 LYON » → « 123 Cours Albert Thomas, 69003 Lyon ».
+ */
+function adresseComplete(saisie?: string, annuaire?: string): string | undefined {
+  if (!saisie) return annuaire;
+  if (/\b\d{5}\b/.test(saisie)) return saisie;
+  const m = (annuaire ?? "").match(/\b(\d{5})\s+(.+)$/);
+  if (!m) return saisie;
+  const ville = m[2].toLowerCase().replace(/(^|[\s-])\p{L}/gu, (c) => c.toUpperCase());
+  return `${saisie.replace(/[\s,]+$/, "")}, ${m[1]} ${ville}`;
+}
+
+async function lireInscrits(): Promise<ListingNotaire[]> {
   if (!URL || !CLE) return [];
   try {
     const q = new URLSearchParams({
@@ -120,8 +178,8 @@ export function avecInscrits(base: ListingNotaire[], inscrits: ListingNotaire[])
     );
     return { ...b, ...Object.fromEntries(renseignes) } as ListingNotaire;
   });
-  const ids = new Set(inscrits.map((i) => i.id));
-  return [...tete, ...base.filter((b) => !ids.has(b.id))];
+  // Sans doublon : ni la fiche de même id, ni la fiche non activée du même notaire.
+  return [...tete, ...base.filter((b) => !inscrits.some((i) => memeNotaire(i, b)))];
 }
 
 // ── Villes où exerce un inscrit absent de l'annuaire importé ────────────────

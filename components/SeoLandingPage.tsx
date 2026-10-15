@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { ChevronLeft, ChevronRight, MapPin, Phone, Navigation, Loader2, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Phone, Navigation, Loader2, X, BadgeCheck, Video } from "lucide-react";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { useFichesCompletees, abonnesEnTete, rangAffichage } from "@/lib/fiches-completees";
 import { arrDepuisCodePostal, libelleArr } from "@/lib/arrondissements";
@@ -83,9 +83,16 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
         <div className="lg:w-[280px] shrink-0 p-5 border-b lg:border-b-0 lg:border-r border-[var(--color-border-soft)] flex flex-col gap-3">
           {/* Avatar + nom */}
           <div className="flex items-center gap-3">
-            <div className={`w-14 h-14 rounded-full flex items-center justify-center text-[17px] font-extrabold shrink-0 ${colorMap[notaire.color]}`}>
-              {notaire.initials}
-            </div>
+            {/* Même rendu que l'annuaire : photo de la fiche activée, sinon initiales. */}
+            {notaire.photo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={notaire.photo} alt={notaire.name} loading="lazy"
+                className="w-14 h-14 rounded-full object-cover shrink-0 border-2 border-[var(--color-border-soft)]" />
+            ) : (
+              <div className={`w-14 h-14 rounded-full flex items-center justify-center text-[17px] font-extrabold shrink-0 ${colorMap[notaire.color] ?? colorMap.default}`}>
+                {notaire.initials}
+              </div>
+            )}
             <div>
               <div className="font-bold text-[var(--color-text-strong)] text-[15px] leading-snug">{notaire.name}</div>
               <div className="text-[12px] text-[var(--color-muted)]">
@@ -105,6 +112,21 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
               <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--color-accent)]" strokeWidth={2} />
               <span>{notaire.address}</span>
             </div>
+          )}
+
+          {/* Fiche activée : mêmes repères que dans l'annuaire. */}
+          {notaire.claimed && (
+            <>
+              <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-accent)]">
+                <Video className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
+                Visio &amp; cabinet disponibles
+              </div>
+              {!notaire.isNew && (
+                <div className="flex items-center gap-1 text-[12px] text-[var(--color-success)] font-semibold">
+                  <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} /> Notaire vérifié
+                </div>
+              )}
+            </>
           )}
 
           {/* Téléphone */}

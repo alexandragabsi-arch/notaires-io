@@ -136,9 +136,9 @@ export default function EspaceClient() {
         // 2) Source de vérité : Supabase (rattaché au compte → cross-appareil).
         const remote = await fetchClientDossiers(data.user.id);
         if (!active) return;
-        const merged = [...remote, ...cached].filter(
-          (d, i, arr) => arr.findIndex((x) => x.id === d.id) === i,
-        );
+        const merged = [...remote, ...cached]
+          .filter((d, i, arr) => arr.findIndex((x) => x.id === d.id) === i)
+          .filter((d) => d.statut !== "cancelled");
         merged.sort((a, b) => b.createdAt - a.createdAt);
         setDossiers(merged);
       } catch {
@@ -261,7 +261,13 @@ export default function EspaceClient() {
               ) : (
                 <div className="flex flex-col gap-4">
                   {upcoming.map(({ d }, i) => (
-                    <RdvCard key={d.id} d={d} index={i} past={false} />
+                    <RdvCard
+                      key={d.id}
+                      d={d}
+                      index={i}
+                      past={false}
+                      onAnnule={() => setDossiers((ds) => ds.filter((x) => x.id !== d.id))}
+                    />
                   ))}
                   <NewRdvCta />
                 </div>
@@ -384,7 +390,42 @@ export default function EspaceClient() {
 }
 
 /* ─── Carte d'un rendez-vous ─────────────────────────────────────────────── */
-function RdvCard({ d, index, past }: { d: ClientDossier; index: number; past: boolean }) {
+function RdvCard({
+  d, index, past, onAnnule,
+}: {
+  d: ClientDossier;
+  index: number;
+  past: boolean;
+  onAnnule?: () => void;
+}) {
+  const [annulation, setAnnulation] = useState<"idle" | "confirmer" | "envoi" | "erreur">("idle");
+  const [erreurAnnulation, setErreurAnnulation] = useState("");
+
+  async function annuler() {
+    setAnnulation("envoi");
+    try {
+      const { data } = await supabase.auth.getSession();
+      const res = await fetch("/api/rdv/annuler", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${data.session?.access_token ?? ""}`,
+        },
+        body: JSON.stringify({ id: d.id }),
+      });
+      const json = await res.json().catch(() => null);
+      if (!res.ok) {
+        setErreurAnnulation((json?.error as string) || "L'annulation n'a pas pu être enregistrée.");
+        setAnnulation("erreur");
+        return;
+      }
+      onAnnule?.();
+    } catch {
+      setErreurAnnulation("Connexion impossible. Vérifiez votre réseau puis réessayez.");
+      setAnnulation("erreur");
+    }
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -532,6 +573,52 @@ function RdvCard({ d, index, past }: { d: ClientDossier; index: number; past: bo
           </div>
         )}
       </div>
+      {/* Annulation (RDV à venir, enregistré en base) */}
+      {!past && onAnnule && /^[0-9a-f-]{36}$/i.test(d.id) && (
+        <div className="px-5 sm:px-6 py-4 border-t border-[var(--color-border-soft)]">
+          {annulation === "idle" && (
+            <button
+              type="button"
+              onClick={() => setAnnulation("confirmer")}
+              className="text-[13px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-text-strong)] underline underline-offset-2"
+            >
+              Annuler ce rendez-vous
+            </button>
+          )}
+          {(annulation === "confirmer" || annulation === "envoi") && (
+            <div className="flex flex-col gap-3">
+              <p className="text-[13px] text-[var(--color-text-strong)]">
+                Annuler le rendez-vous avec {d.notaireNom} ? Le notaire sera prévenu et le créneau libéré.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={annuler}
+                  disabled={annulation === "envoi"}
+                  className="inline-flex items-center gap-2 bg-[var(--color-text-strong)] text-white px-4 py-2 rounded-[10px] text-[13px] font-semibold disabled:opacity-60"
+                >
+                  {annulation === "envoi" ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                  Oui, annuler
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAnnulation("idle")}
+                  disabled={annulation === "envoi"}
+                  className="px-4 py-2 rounded-[10px] border border-[var(--color-border)] text-[13px] font-semibold text-[var(--color-muted)]"
+                >
+                  Garder mon rendez-vous
+                </button>
+              </div>
+            </div>
+          )}
+          {annulation === "erreur" && (
+            <p className="text-[13px] text-[var(--color-danger)]">
+              {erreurAnnulation}{" "}
+              <button type="button" onClick={() => setAnnulation("confirmer")} className="font-semibold underline">Réessayer</button>
+            </p>
+          )}
+        </div>
+      )}
     </motion.div>
   );
 }

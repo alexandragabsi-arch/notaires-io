@@ -7,6 +7,7 @@
 import { SITE } from "@/lib/email";
 import { TZ_PARIS, parisParts } from "@/lib/creneau";
 import { generateRoomId, internalVisioUrl, OUVERTURE_SALLE_MIN } from "@/lib/visio";
+import { lienGestionRdv } from "@/lib/lien-rdv";
 
 export function echapper(s: string | null | undefined): string {
   return (s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
@@ -54,7 +55,8 @@ export function emailConfirmationClient(o: {
     return `${p.y}-${String(p.mo + 1).padStart(2, "0")}-${String(p.day).padStart(2, "0")}`;
   })();
   const visio = `${SITE}${internalVisioUrl(generateRoomId(o.bookingId), dateIso, o.slotKey)}`;
-  const espace = `${SITE}/espace-client`;
+  // Lien signé : le client gère ou annule son RDV sans se connecter.
+  const espace = lienGestionRdv(o.bookingId);
   const reference = o.bookingId.slice(0, 8).toUpperCase();
   const salut = appellation(o.client.civilite, o.client.prenom, o.client.nom);
 
@@ -94,7 +96,7 @@ export function emailConfirmationClient(o: {
 
     <div style="margin-bottom:22px">
       ${o.modalite === "visio" ? bouton(visio, "Rejoindre la visio", true) : ""}
-      ${bouton(espace, "Voir mon rendez-vous", o.modalite !== "visio")}
+      ${bouton(espace, "Gérer ou annuler", o.modalite !== "visio")}
     </div>
     ${o.modalite === "visio" ? `
     <div style="border:1px solid #e0e8f5;border-radius:12px;padding:14px 16px;margin-bottom:22px">
@@ -112,7 +114,7 @@ export function emailConfirmationClient(o: {
 
     <h2 style="font-size:15px;font-weight:700;margin:0 0 6px">Un empêchement ?</h2>
     <p style="font-size:14px;color:#3d4a66;margin:0 0 24px">
-      Vous pouvez annuler depuis <a href="${espace}" style="color:#2d5dbf">votre espace</a>,
+      Vous pouvez <a href="${espace}" style="color:#2d5dbf">annuler votre rendez-vous en un clic</a>,
       ou répondre simplement à cet e-mail. Merci de prévenir au moins 24 heures à l'avance.
     </p>
 

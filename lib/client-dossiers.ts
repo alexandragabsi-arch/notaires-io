@@ -20,6 +20,8 @@ export type StoredDocument = {
 };
 
 export type ClientDossier = {
+  /** Statut en base (« cancelled » : RDV annulé, masqué de l'espace). */
+  statut?: string;
   id: string;
   notaireId: string;
   notaireNom: string;
@@ -126,15 +128,17 @@ export async function fetchClientDossiers(userId: string): Promise<ClientDossier
     const { data, error } = await supabase
       .from("bookings")
       .select(
-        "id, notaire_id, notaire_nom, slot_key, slot_label, dossier, modalite, participants, documents, notaire_documents, created_at",
+        "id, status, notaire_id, notaire_nom, slot_key, slot_label, dossier, modalite, participants, documents, notaire_documents, created_at",
       )
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
 
     if (error || !data) return getClientDossiers(userId);
 
-    const remote = (data as BookingRow[]).map(rowToDossier);
-    cacheDossiers(userId, remote);
+    // Les RDV annulés sont renvoyés avec leur statut : ils écrasent la copie
+    // du cache local lors de la fusion, puis sont masqués par l'espace.
+    const remote = (data as (BookingRow & { status?: string })[]).map((r) => ({ ...rowToDossier(r), statut: r.status }));
+    cacheDossiers(userId, remote.filter((d) => d.statut !== "cancelled"));
     return remote;
   } catch {
     return getClientDossiers(userId);

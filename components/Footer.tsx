@@ -80,8 +80,11 @@ export default function Footer() {
               Notaires<span className="text-[var(--color-accent)]">.io</span>
             </div>
             <p className="text-sm max-w-[320px] leading-relaxed">
-              La plateforme de prise de RDV intelligente pour particuliers et
-              notaires. Pensée pour faire gagner du temps aux deux côtés.
+              La plateforme pour{" "}
+              <a href="/" className="font-semibold text-[var(--color-text-strong)] hover:text-[var(--color-accent)]">
+                prendre RDV notaire en ligne
+              </a>
+              , pour particuliers et notaires. Pensée pour faire gagner du temps aux deux côtés.
             </p>
 
             <p className="text-[11px] uppercase tracking-wider font-bold text-[var(--color-text-strong)] mt-6 mb-3">

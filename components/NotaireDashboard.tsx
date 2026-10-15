@@ -454,7 +454,7 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
                       {r.mode === "visio" && (() => {
                           // Salle dérivée du seul id de réservation → identique
                           // à celle du client. Le bouton n'apparaît que le jour
-                          // du RDV, à partir de 30 min avant l'heure prévue.
+                          // du RDV, à partir de 15 min avant l'heure prévue (OUVERTURE_SALLE_MIN).
                           const rdvDate = slotDayToDate(r.slotKey || r.slotLabel, r.createdAt);
                           const roomId = generateRoomId(r.id);
                           const ouverte = isRdvOpen(r.slotKey || r.slotLabel, r.createdAt);

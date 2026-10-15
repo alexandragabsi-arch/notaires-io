@@ -6,7 +6,7 @@
 
 import { SITE } from "@/lib/email";
 import { TZ_PARIS, parisParts } from "@/lib/creneau";
-import { generateRoomId, internalVisioUrl } from "@/lib/visio";
+import { generateRoomId, internalVisioUrl, OUVERTURE_SALLE_MIN } from "@/lib/visio";
 
 export function echapper(s: string | null | undefined): string {
   return (s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
@@ -53,14 +53,14 @@ export function emailConfirmationClient(o: {
     const p = parisParts(new Date(o.slotKey));
     return `${p.y}-${String(p.mo + 1).padStart(2, "0")}-${String(p.day).padStart(2, "0")}`;
   })();
-  const visio = `${SITE}${internalVisioUrl(generateRoomId(o.bookingId), dateIso)}`;
+  const visio = `${SITE}${internalVisioUrl(generateRoomId(o.bookingId), dateIso, o.slotKey)}`;
   const espace = `${SITE}/espace-client`;
   const reference = o.bookingId.slice(0, 8).toUpperCase();
   const salut = appellation(o.client.civilite, o.client.prenom, o.client.nom);
 
   const lieu =
     o.modalite === "visio"
-      ? `En visioconférence. La salle ouvre 30 minutes avant le rendez-vous.`
+      ? `En visioconférence. La salle ouvre ${OUVERTURE_SALLE_MIN} minutes avant le rendez-vous.`
       : `Au cabinet${o.etude ? ` — ${echapper(o.etude)}` : ""}${o.adresse ? `<br>${echapper(o.adresse)}` : ""}`;
 
   const autres = o.participants.slice(1);
@@ -96,6 +96,12 @@ export function emailConfirmationClient(o: {
       ${o.modalite === "visio" ? bouton(visio, "Rejoindre la visio", true) : ""}
       ${bouton(espace, "Voir mon rendez-vous", o.modalite !== "visio")}
     </div>
+    ${o.modalite === "visio" ? `
+    <div style="border:1px solid #e0e8f5;border-radius:12px;padding:14px 16px;margin-bottom:22px">
+      <p style="font-size:14px;font-weight:700;margin:0 0 4px">Lien de la visio pour les autres participants</p>
+      <p style="font-size:13px;color:#3d4a66;margin:0 0 8px">Transmettez-leur ce lien : il ouvre la même salle, ${OUVERTURE_SALLE_MIN} minutes avant le rendez-vous.</p>
+      <a href="${visio}" style="font-size:13px;color:#2d5dbf;word-break:break-all">${visio}</a>
+    </div>` : ""}
 
     <h2 style="font-size:15px;font-weight:700;margin:0 0 6px">À préparer</h2>
     <p style="font-size:14px;color:#3d4a66;margin:0 0 18px">

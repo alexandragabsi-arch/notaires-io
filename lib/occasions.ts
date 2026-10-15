@@ -1,4 +1,5 @@
 import { jetonGsc, requetes, type LigneGsc } from "@/lib/search-console";
+import { fetchAudite } from "@/lib/audit-seo";
 
 /**
  * Les occasions de remontée, et ce qu'il faudrait faire pour chacune.
@@ -62,7 +63,7 @@ export function motsPorteurs(requete: string): string[] {
 async function diagnostiquer(chemin: string, requete: string): Promise<string[]> {
   const manques: string[] = [];
   try {
-    const rep = await fetch(`${BASE}${chemin}`, { cache: "no-store" });
+    const rep = await fetchAudite(chemin);
     if (!rep.ok) return [`la page répond ${rep.status}`];
     const html = await rep.text();
     const texte = sansAccents(html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/g, ""));

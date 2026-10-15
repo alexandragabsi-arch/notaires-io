@@ -935,7 +935,9 @@ export default function NotaireProfileClient({
 
           {/* Identité + coordonnées */}
           <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center justify-center gap-2 mb-1">
+            {/* Nom, « Notaire à … » puis badge, chacun sur sa ligne et centré :
+                sur la même ligne, le badge décalait le nom vers la gauche. */}
+            <div className="flex flex-col items-center gap-2 mb-3">
               {/* Le métier et la ville dans le H1 : les gens cherchent
                   « <nom> notaire », pas le nom seul. */}
               <h1 className="serif text-[28px] sm:text-[34px] font-bold text-[var(--color-text-strong)] leading-tight">

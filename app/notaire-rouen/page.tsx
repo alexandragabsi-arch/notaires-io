@@ -99,7 +99,7 @@ export default async function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Rouen"
-          intro="Vous cherchez un notaire à Rouen pour votre mariage, votre PACS, un achat immobilier en Normandie ou la création de votre société ? Nos notaires partenaires rouennais sont disponibles sous 48 h, en visio ou au cabinet dans votre quartier."
+          intro="Vous cherchez un notaire à Rouen pour votre mariage, votre PACS, un achat immobilier en Normandie ou la création de votre société ? Nos notaires partenaires rouennais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

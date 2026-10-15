@@ -99,7 +99,7 @@ export default async function Page() {
       <main>
         <SeoLandingPage
           h1="Trouver un notaire à Clermont-Ferrand"
-          intro="Vous cherchez un notaire à Clermont-Ferrand pour votre mariage, votre PACS, un achat immobilier en Auvergne ou la création de votre société ? Nos notaires partenaires clermontois sont disponibles sous 48 h, en visio ou au cabinet dans votre quartier."
+          intro="Vous cherchez un notaire à Clermont-Ferrand pour votre mariage, votre PACS, un achat immobilier en Auvergne ou la création de votre société ? Nos notaires partenaires clermontois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[

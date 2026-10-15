@@ -10,6 +10,7 @@
 
 import type { ListingNotaire } from "./notaires-listing";
 import { arrDepuisAdresse } from "./arrondissements";
+import { getAllNotaires } from "./notaires-source";
 import {
   getVillesCouvertes,
   getVilleParSlug,
@@ -30,6 +31,23 @@ const CHAMPS =
 
 /** Tous les inscrits confirmés, abonnement non expiré, plus récents d'abord. */
 export async function getInscrits(): Promise<ListingNotaire[]> {
+  const brutes = await lireInscrits();
+  // Fiche de l'annuaire correspondante (même id) : complète ce que le notaire
+  // n'a pas renseigné (fonction, étude, adresse avec code postal, agenda),
+  // comme dans l'annuaire, même quand la page de ville n'en liste qu'une partie.
+  const annuaire = new Map(getAllNotaires().map((n) => [n.id, n]));
+  return brutes.map((i) => {
+    const b = annuaire.get(i.id);
+    if (!b) return i;
+    const renseignes = Object.entries(i).filter(
+      ([, v]) => v !== undefined && v !== null && v !== "" && !(Array.isArray(v) && v.length === 0),
+    );
+    const fusion = { ...b, ...Object.fromEntries(renseignes) } as ListingNotaire;
+    return { ...fusion, arrondissement: arrondissementDe(fusion.city, fusion.address) };
+  });
+}
+
+async function lireInscrits(): Promise<ListingNotaire[]> {
   if (!URL || !CLE) return [];
   try {
     const q = new URLSearchParams({

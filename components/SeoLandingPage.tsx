@@ -17,6 +17,9 @@ interface Props {
 }
 
 const DAYS_VISIBLE = 5;
+// Compétences visibles avant « + N compétences » : au-delà, la carte dépasse
+// la hauteur de l'agenda.
+const COMPETENCES_VISIBLES = 4;
 
 /* ── Guides à mettre en avant sur toutes les pages géographiques ──
    Ces articles répondent aux requêtes qui rapportent le plus d'impressions au
@@ -66,6 +69,7 @@ function formatDayLabel(d: Date): { short: string; date: string } {
 
 function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays: Date[] }) {
   const [offset, setOffset] = useState(0);
+  const [competencesOuvertes, setCompetencesOuvertes] = useState(false);
   const maxOffset = workdays.length - DAYS_VISIBLE;
   const visibleDays = workdays.slice(offset, offset + DAYS_VISIBLE);
 
@@ -137,28 +141,40 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
             </div>
           )}
 
-          {/* Spécialités */}
-          <div>
-            <div className="text-[11px] font-bold text-[var(--color-text-strong)] uppercase tracking-wide mb-1.5">Domaines :</div>
-            <div className="flex flex-wrap gap-1.5">
-              {notaire.specialties.map((s) => (
-                <span key={s} className="text-[11px] px-2.5 py-1 rounded-full border border-[var(--color-border)] text-[var(--color-text-strong)]">
-                  {s}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Langues */}
-          {notaire.languages && notaire.languages.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {notaire.languages.map((l) => (
-                <span key={l} className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">
-                  🌐 {l}
-                </span>
-              ))}
-            </div>
-          )}
+          {/* Domaines + langues. Affichés en entier, ils allongeaient la
+              colonne de gauche bien au-delà de l'agenda, qui laissait un grand
+              vide à droite (/notaire-paris, 18/10/2026). Même règle que
+              l'annuaire : quatre visibles, le reste se déplie à la demande. */}
+          {(() => {
+            const domaines = notaire.specialties.map((s) => ({ cle: `d-${s}`, texte: s, style: "border border-[var(--color-border)] text-[var(--color-text-strong)]" }));
+            const langues = (notaire.languages ?? []).map((l) => ({ cle: `l-${l}`, texte: `🌐 ${l}`, style: "bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium" }));
+            const toutes = [...domaines, ...langues];
+            if (toutes.length === 0) return null;
+            const visibles = competencesOuvertes ? toutes : toutes.slice(0, COMPETENCES_VISIBLES);
+            const restantes = toutes.length - visibles.length;
+            return (
+              <div>
+                <div className="text-[11px] font-bold text-[var(--color-text-strong)] uppercase tracking-wide mb-1.5">Domaines :</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {visibles.map((c) => (
+                    <span key={c.cle} className={`text-[11px] px-2.5 py-1 rounded-full ${c.style}`}>
+                      {c.texte}
+                    </span>
+                  ))}
+                  {(restantes > 0 || competencesOuvertes) && (
+                    <button
+                      type="button"
+                      onClick={() => setCompetencesOuvertes((v) => !v)}
+                      aria-expanded={competencesOuvertes}
+                      className="text-[11px] px-2.5 py-1 rounded-full border border-dashed border-[var(--color-accent)] text-[var(--color-accent)] font-semibold hover:bg-[var(--color-accent-soft)] transition-colors"
+                    >
+                      {competencesOuvertes ? "Voir moins" : `+ ${restantes} compétence${restantes > 1 ? "s" : ""}`}
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })()}
 
           {/* CTA */}
           <a

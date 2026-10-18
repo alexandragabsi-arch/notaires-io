@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-saint-etienne" },
   openGraph: {
-    title: "Notaire à Saint-Étienne · Notaires.io",
+    title: "RDV notaire à Saint-Étienne · Notaires.io",
     description:
       "Trouvez un notaire à Saint-Étienne disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-saint-etienne",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Saint-Étienne"
+          h1="Prendre RDV avec un notaire à Saint-Étienne"
           intro="Vous cherchez un notaire à Saint-Étienne pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Nos notaires partenaires stéphanois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-lyon", label: "Notaire à Lyon" },
-            { href: "/notaire-grenoble", label: "Notaire à Grenoble" },
-            { href: "/notaire-clermont-ferrand", label: "Notaire à Clermont-Ferrand" },
+            { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
+            { href: "/notaire-grenoble", label: "RDV notaire à Grenoble" },
+            { href: "/notaire-clermont-ferrand", label: "RDV notaire à Clermont-Ferrand" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-creation-societe", label: "Notaire création de société" },

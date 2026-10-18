@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-perpignan" },
   openGraph: {
-    title: "Notaire à Perpignan · Notaires.io",
+    title: "RDV notaire à Perpignan · Notaires.io",
     description:
       "Trouvez un notaire à Perpignan disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-perpignan",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Perpignan"
+          h1="Prendre RDV avec un notaire à Perpignan"
           intro="Vous cherchez un notaire à Perpignan pour votre mariage, votre PACS, un achat immobilier en Roussillon ou la création de votre société ? Nos notaires partenaires perpignanais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-montpellier", label: "Notaire à Montpellier" },
-            { href: "/notaire-toulouse", label: "Notaire à Toulouse" },
-            { href: "/notaire-marseille", label: "Notaire à Marseille" },
+            { href: "/notaire-montpellier", label: "RDV notaire à Montpellier" },
+            { href: "/notaire-toulouse", label: "RDV notaire à Toulouse" },
+            { href: "/notaire-marseille", label: "RDV notaire à Marseille" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },

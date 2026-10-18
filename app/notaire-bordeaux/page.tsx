@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-bordeaux" },
   openGraph: {
-    title: "Notaire à Bordeaux · Notaires.io",
+    title: "RDV notaire à Bordeaux · Notaires.io",
     description:
       "Trouvez un notaire à Bordeaux disponible rapidement. Succession, famille, immobilier.",
     url: "https://notaires.io/notaire-bordeaux",
@@ -98,15 +98,15 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Bordeaux"
+          h1="Prendre RDV avec un notaire à Bordeaux"
           intro="Succession, achat immobilier dans le bordelais, mariage ou divorce : nos notaires partenaires à Bordeaux vous accompagnent à chaque étape de votre vie. Disponibles rapidement, en visio ou au cabinet."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-paris", label: "Notaire à Paris" },
-            { href: "/notaire-lyon", label: "Notaire à Lyon" },
-            { href: "/notaire-marseille", label: "Notaire à Marseille" },
-            { href: "/notaire-nantes", label: "Notaire à Nantes" },
+            { href: "/notaire-paris", label: "RDV notaire à Paris" },
+            { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
+            { href: "/notaire-marseille", label: "RDV notaire à Marseille" },
+            { href: "/notaire-nantes", label: "RDV notaire à Nantes" },
             { href: "/notaire-succession", label: "Notaire succession" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-donation", label: "Notaire donation" },

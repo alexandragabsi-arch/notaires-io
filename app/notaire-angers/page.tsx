@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-angers" },
   openGraph: {
-    title: "Notaire à Angers · Notaires.io",
+    title: "RDV notaire à Angers · Notaires.io",
     description:
       "Trouvez un notaire à Angers disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-angers",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Angers"
+          h1="Prendre RDV avec un notaire à Angers"
           intro="Vous cherchez un notaire à Angers pour votre mariage, votre PACS, un achat immobilier en Anjou ou la création de votre société ? Nos notaires partenaires angevins sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-nantes", label: "Notaire à Nantes" },
-            { href: "/notaire-rennes", label: "Notaire à Rennes" },
-            { href: "/notaire-orleans", label: "Notaire à Orléans" },
+            { href: "/notaire-nantes", label: "RDV notaire à Nantes" },
+            { href: "/notaire-rennes", label: "RDV notaire à Rennes" },
+            { href: "/notaire-orleans", label: "RDV notaire à Orléans" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },

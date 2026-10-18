@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-brest" },
   openGraph: {
-    title: "Notaire à Brest · Notaires.io",
+    title: "RDV notaire à Brest · Notaires.io",
     description:
       "Trouvez un notaire à Brest disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-brest",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Brest"
+          h1="Prendre RDV avec un notaire à Brest"
           intro="Vous cherchez un notaire à Brest pour votre mariage, votre PACS, un achat immobilier en Finistère ou la création de votre société ? Nos notaires partenaires brestois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-rennes", label: "Notaire à Rennes" },
-            { href: "/notaire-nantes", label: "Notaire à Nantes" },
-            { href: "/notaire-le-havre", label: "Notaire au Havre" },
+            { href: "/notaire-rennes", label: "RDV notaire à Rennes" },
+            { href: "/notaire-nantes", label: "RDV notaire à Nantes" },
+            { href: "/notaire-le-havre", label: "RDV notaire au Havre" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },

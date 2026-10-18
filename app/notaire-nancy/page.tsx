@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-nancy" },
   openGraph: {
-    title: "Notaire à Nancy · Notaires.io",
+    title: "RDV notaire à Nancy · Notaires.io",
     description:
       "Trouvez un notaire à Nancy disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-nancy",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Nancy"
+          h1="Prendre RDV avec un notaire à Nancy"
           intro="Vous cherchez un notaire à Nancy pour votre mariage, votre PACS, un achat immobilier en Lorraine ou la création de votre société ? Nos notaires partenaires nancéiens sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-metz", label: "Notaire à Metz" },
-            { href: "/notaire-strasbourg", label: "Notaire à Strasbourg" },
-            { href: "/notaire-reims", label: "Notaire à Reims" },
+            { href: "/notaire-metz", label: "RDV notaire à Metz" },
+            { href: "/notaire-strasbourg", label: "RDV notaire à Strasbourg" },
+            { href: "/notaire-reims", label: "RDV notaire à Reims" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-creation-societe", label: "Notaire création de société" },

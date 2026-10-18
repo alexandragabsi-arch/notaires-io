@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-reims" },
   openGraph: {
-    title: "Notaire à Reims · Notaires.io",
+    title: "RDV notaire à Reims · Notaires.io",
     description:
       "Trouvez un notaire à Reims disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-reims",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Reims"
+          h1="Prendre RDV avec un notaire à Reims"
           intro="Vous cherchez un notaire à Reims pour votre mariage, votre PACS, un achat immobilier en Champagne ou la création de votre société ? Nos notaires partenaires rémois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-paris", label: "Notaire à Paris" },
-            { href: "/notaire-metz", label: "Notaire à Metz" },
-            { href: "/notaire-nancy", label: "Notaire à Nancy" },
+            { href: "/notaire-paris", label: "RDV notaire à Paris" },
+            { href: "/notaire-metz", label: "RDV notaire à Metz" },
+            { href: "/notaire-nancy", label: "RDV notaire à Nancy" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-creation-societe", label: "Notaire création de société" },

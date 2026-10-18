@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-rennes" },
   openGraph: {
-    title: "Notaire à Rennes · Notaires.io",
+    title: "RDV notaire à Rennes · Notaires.io",
     description:
       "Trouvez un notaire à Rennes disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-rennes",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Rennes"
+          h1="Prendre RDV avec un notaire à Rennes"
           intro="Vous cherchez un notaire à Rennes pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Nos notaires partenaires rennais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-nantes", label: "Notaire à Nantes" },
-            { href: "/notaire-brest", label: "Notaire à Brest" },
-            { href: "/notaire-le-havre", label: "Notaire au Havre" },
+            { href: "/notaire-nantes", label: "RDV notaire à Nantes" },
+            { href: "/notaire-brest", label: "RDV notaire à Brest" },
+            { href: "/notaire-le-havre", label: "RDV notaire au Havre" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-creation-societe", label: "Notaire création de société" },

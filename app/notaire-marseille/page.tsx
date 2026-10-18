@@ -115,8 +115,8 @@ export default async function Page() {
               href: `/notaire-marseille/${a.slug}`,
               label: `Notaire Marseille ${a.label}`,
             })),
-            { href: "/notaire-paris", label: "Notaire à Paris" },
-            { href: "/notaire-lyon", label: "Notaire à Lyon" },
+            { href: "/notaire-paris", label: "RDV notaire à Paris" },
+            { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },
           ]}

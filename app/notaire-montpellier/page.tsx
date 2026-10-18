@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-montpellier" },
   openGraph: {
-    title: "Notaire à Montpellier · Notaires.io",
+    title: "RDV notaire à Montpellier · Notaires.io",
     description:
       "Trouvez un notaire à Montpellier disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-montpellier",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Montpellier"
+          h1="Prendre RDV avec un notaire à Montpellier"
           intro="Vous cherchez un notaire à Montpellier pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Nos notaires partenaires montpelliérains sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-toulouse", label: "Notaire à Toulouse" },
-            { href: "/notaire-marseille", label: "Notaire à Marseille" },
-            { href: "/notaire-nice", label: "Notaire à Nice" },
+            { href: "/notaire-toulouse", label: "RDV notaire à Toulouse" },
+            { href: "/notaire-marseille", label: "RDV notaire à Marseille" },
+            { href: "/notaire-nice", label: "RDV notaire à Nice" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },

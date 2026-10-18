@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-dijon" },
   openGraph: {
-    title: "Notaire à Dijon · Notaires.io",
+    title: "RDV notaire à Dijon · Notaires.io",
     description:
       "Trouvez un notaire à Dijon disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-dijon",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Dijon"
+          h1="Prendre RDV avec un notaire à Dijon"
           intro="Vous cherchez un notaire à Dijon pour votre mariage, votre PACS, un achat immobilier en Bourgogne ou la création de votre société ? Nos notaires partenaires dijonnais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-lyon", label: "Notaire à Lyon" },
-            { href: "/notaire-reims", label: "Notaire à Reims" },
-            { href: "/notaire-nancy", label: "Notaire à Nancy" },
+            { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
+            { href: "/notaire-reims", label: "RDV notaire à Reims" },
+            { href: "/notaire-nancy", label: "RDV notaire à Nancy" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },

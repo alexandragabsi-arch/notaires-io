@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-lille" },
   openGraph: {
-    title: "Notaire à Lille · Notaires.io",
+    title: "RDV notaire à Lille · Notaires.io",
     description:
       "Trouvez un notaire à Lille pour votre achat immobilier ou création de société.",
     url: "https://notaires.io/notaire-lille",
@@ -99,15 +99,15 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Lille"
+          h1="Prendre RDV avec un notaire à Lille"
           intro="Achat immobilier dans la métropole lilloise, création de votre société dans les Hauts-de-France ou règlement d'une succession : nos notaires partenaires à Lille sont disponibles rapidement, en visio ou au cabinet. Certains reçoivent également en anglais."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-paris", label: "Notaire à Paris" },
-            { href: "/notaire-lyon", label: "Notaire à Lyon" },
-            { href: "/notaire-nantes", label: "Notaire à Nantes" },
-            { href: "/notaire-bordeaux", label: "Notaire à Bordeaux" },
+            { href: "/notaire-paris", label: "RDV notaire à Paris" },
+            { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
+            { href: "/notaire-nantes", label: "RDV notaire à Nantes" },
+            { href: "/notaire-bordeaux", label: "RDV notaire à Bordeaux" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-creation-societe", label: "Notaire création de société" },
             { href: "/notaire-succession", label: "Notaire succession" },

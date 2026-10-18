@@ -115,8 +115,8 @@ export default async function Page() {
               href: `/notaire-lyon/${a.slug}`,
               label: `Notaire Lyon ${a.label}`,
             })),
-            { href: "/notaire-paris", label: "Notaire à Paris" },
-            { href: "/notaire-marseille", label: "Notaire à Marseille" },
+            { href: "/notaire-paris", label: "RDV notaire à Paris" },
+            { href: "/notaire-marseille", label: "RDV notaire à Marseille" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
           ]}

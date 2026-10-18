@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-strasbourg" },
   openGraph: {
-    title: "Notaire à Strasbourg · Notaires.io",
+    title: "RDV notaire à Strasbourg · Notaires.io",
     description:
       "Trouvez un notaire à Strasbourg disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-strasbourg",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Strasbourg"
+          h1="Prendre RDV avec un notaire à Strasbourg"
           intro="Vous cherchez un notaire à Strasbourg pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Nos notaires partenaires strasbourgeois maîtrisent le droit local alsacien et sont disponibles selon leurs créneaux, en visio ou au cabinet."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-metz", label: "Notaire à Metz" },
-            { href: "/notaire-nancy", label: "Notaire à Nancy" },
-            { href: "/notaire-reims", label: "Notaire à Reims" },
+            { href: "/notaire-metz", label: "RDV notaire à Metz" },
+            { href: "/notaire-nancy", label: "RDV notaire à Nancy" },
+            { href: "/notaire-reims", label: "RDV notaire à Reims" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-creation-societe", label: "Notaire création de société" },

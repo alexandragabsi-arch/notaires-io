@@ -17,9 +17,8 @@ interface Props {
 }
 
 const DAYS_VISIBLE = 5;
-// Compétences visibles avant « + N compétences » : au-delà, la carte dépasse
-// la hauteur de l'agenda.
-const COMPETENCES_VISIBLES = 4;
+// Compétences visibles sous l'agenda avant « + N compétences » : une ligne.
+const COMPETENCES_VISIBLES = 6;
 
 /* ── Guides à mettre en avant sur toutes les pages géographiques ──
    Ces articles répondent aux requêtes qui rapportent le plus d'impressions au
@@ -120,17 +119,17 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
 
           {/* Fiche activée : mêmes repères que dans l'annuaire. */}
           {notaire.claimed && (
-            <>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-accent)]">
                 <Video className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
-                Visio &amp; cabinet disponibles
+                Visio &amp; cabinet
               </div>
               {!notaire.isNew && (
                 <div className="flex items-center gap-1 text-[12px] text-[var(--color-success)] font-semibold">
-                  <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} /> Notaire vérifié
+                  <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} /> Vérifié
                 </div>
               )}
-            </>
+            </div>
           )}
 
           {/* Téléphone */}
@@ -140,41 +139,6 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
               <span>{notaire.phone}</span>
             </div>
           )}
-
-          {/* Domaines + langues. Affichés en entier, ils allongeaient la
-              colonne de gauche bien au-delà de l'agenda, qui laissait un grand
-              vide à droite (/notaire-paris, 18/10/2026). Même règle que
-              l'annuaire : quatre visibles, le reste se déplie à la demande. */}
-          {(() => {
-            const domaines = notaire.specialties.map((s) => ({ cle: `d-${s}`, texte: s, style: "border border-[var(--color-border)] text-[var(--color-text-strong)]" }));
-            const langues = (notaire.languages ?? []).map((l) => ({ cle: `l-${l}`, texte: `🌐 ${l}`, style: "bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium" }));
-            const toutes = [...domaines, ...langues];
-            if (toutes.length === 0) return null;
-            const visibles = competencesOuvertes ? toutes : toutes.slice(0, COMPETENCES_VISIBLES);
-            const restantes = toutes.length - visibles.length;
-            return (
-              <div>
-                <div className="text-[11px] font-bold text-[var(--color-text-strong)] uppercase tracking-wide mb-1.5">Domaines :</div>
-                <div className="flex flex-wrap gap-1.5">
-                  {visibles.map((c) => (
-                    <span key={c.cle} className={`text-[11px] px-2.5 py-1 rounded-full ${c.style}`}>
-                      {c.texte}
-                    </span>
-                  ))}
-                  {(restantes > 0 || competencesOuvertes) && (
-                    <button
-                      type="button"
-                      onClick={() => setCompetencesOuvertes((v) => !v)}
-                      aria-expanded={competencesOuvertes}
-                      className="text-[11px] px-2.5 py-1 rounded-full border border-dashed border-[var(--color-accent)] text-[var(--color-accent)] font-semibold hover:bg-[var(--color-accent-soft)] transition-colors"
-                    >
-                      {competencesOuvertes ? "Voir moins" : `+ ${restantes} compétence${restantes > 1 ? "s" : ""}`}
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })()}
 
           {/* CTA */}
           <a
@@ -260,6 +224,39 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
           >
             + Voir plus d&apos;horaires
           </a>
+
+          {/* Domaines + langues, sous l'agenda. Dans la colonne de gauche, ils
+              la rendaient deux fois plus haute que l'agenda, qui laissait un
+              grand vide à droite (/notaire-paris, 18/10/2026). Ici, sur toute
+              la largeur, ils tiennent sur une ligne ; le reste se déplie. */}
+          {(() => {
+            const domaines = notaire.specialties.map((s) => ({ cle: `d-${s}`, texte: s, style: "border border-[var(--color-border)] text-[var(--color-text-strong)]" }));
+            const langues = (notaire.languages ?? []).map((l) => ({ cle: `l-${l}`, texte: `🌐 ${l}`, style: "bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium" }));
+            const toutes = [...domaines, ...langues];
+            if (toutes.length === 0) return null;
+            const visibles = competencesOuvertes ? toutes : toutes.slice(0, COMPETENCES_VISIBLES);
+            const restantes = toutes.length - visibles.length;
+            return (
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-[11px] font-bold text-[var(--color-text-strong)] uppercase tracking-wide mr-1">Domaines :</span>
+                {visibles.map((c) => (
+                  <span key={c.cle} className={`text-[11px] px-2.5 py-1 rounded-full ${c.style}`}>
+                    {c.texte}
+                  </span>
+                ))}
+                {(restantes > 0 || competencesOuvertes) && (
+                  <button
+                    type="button"
+                    onClick={() => setCompetencesOuvertes((v) => !v)}
+                    aria-expanded={competencesOuvertes}
+                    className="text-[11px] px-2.5 py-1 rounded-full border border-dashed border-[var(--color-accent)] text-[var(--color-accent)] font-semibold hover:bg-[var(--color-accent-soft)] transition-colors"
+                  >
+                    {competencesOuvertes ? "Voir moins" : `+ ${restantes} compétence${restantes > 1 ? "s" : ""}`}
+                  </button>
+                )}
+              </div>
+            );
+          })()}
 
           {/* Badge réservation.
               Il s'affichait sur TOUTES les cartes, y compris les profils non

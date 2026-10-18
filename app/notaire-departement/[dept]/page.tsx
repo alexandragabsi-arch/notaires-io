@@ -148,9 +148,9 @@ export default async function Page({ params }: Props) {
     { href: "/notaire-mariage-pacs",  label: "Notaire mariage / PACS" },
     { href: "/notaire-donation",      label: "Notaire donation" },
     { href: "/notaire-divorce",       label: "Notaire divorce" },
-    { href: "/notaire-paris",         label: "Notaire à Paris" },
-    { href: "/notaire-lyon",          label: "Notaire à Lyon" },
-    { href: "/notaire-marseille",     label: "Notaire à Marseille" },
+    { href: "/notaire-paris",         label: "RDV notaire à Paris" },
+    { href: "/notaire-lyon",          label: "RDV notaire à Lyon" },
+    { href: "/notaire-marseille",     label: "RDV notaire à Marseille" },
     { href: "/blog",                  label: "Guides notaires" },
   ];
 

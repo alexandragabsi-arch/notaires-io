@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-toulouse" },
   openGraph: {
-    title: "Notaire à Toulouse · Notaires.io",
+    title: "RDV notaire à Toulouse · Notaires.io",
     description:
       "Trouvez un notaire à Toulouse disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-toulouse",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Toulouse"
+          h1="Prendre RDV avec un notaire à Toulouse"
           intro="Vous cherchez un notaire à Toulouse pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Nos notaires partenaires toulousains sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-bordeaux", label: "Notaire à Bordeaux" },
-            { href: "/notaire-montpellier", label: "Notaire à Montpellier" },
-            { href: "/notaire-marseille", label: "Notaire à Marseille" },
+            { href: "/notaire-bordeaux", label: "RDV notaire à Bordeaux" },
+            { href: "/notaire-montpellier", label: "RDV notaire à Montpellier" },
+            { href: "/notaire-marseille", label: "RDV notaire à Marseille" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-creation-societe", label: "Notaire création de société" },

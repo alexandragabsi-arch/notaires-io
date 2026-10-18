@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-rouen" },
   openGraph: {
-    title: "Notaire à Rouen · Notaires.io",
+    title: "RDV notaire à Rouen · Notaires.io",
     description:
       "Trouvez un notaire à Rouen disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-rouen",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Rouen"
+          h1="Prendre RDV avec un notaire à Rouen"
           intro="Vous cherchez un notaire à Rouen pour votre mariage, votre PACS, un achat immobilier en Normandie ou la création de votre société ? Nos notaires partenaires rouennais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-le-havre", label: "Notaire au Havre" },
-            { href: "/notaire-paris", label: "Notaire à Paris" },
-            { href: "/notaire-caen", label: "Notaire à Caen" },
+            { href: "/notaire-le-havre", label: "RDV notaire au Havre" },
+            { href: "/notaire-paris", label: "RDV notaire à Paris" },
+            { href: "/notaire-ville/caen", label: "RDV notaire à Caen" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },

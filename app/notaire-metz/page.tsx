@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-metz" },
   openGraph: {
-    title: "Notaire à Metz · Notaires.io",
+    title: "RDV notaire à Metz · Notaires.io",
     description:
       "Trouvez un notaire à Metz disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-metz",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Metz"
+          h1="Prendre RDV avec un notaire à Metz"
           intro="Vous cherchez un notaire à Metz pour votre mariage, votre PACS, un achat immobilier en Moselle ou la création de votre société ? Nos notaires partenaires messins maîtrisent le droit local et sont disponibles selon leurs créneaux, en visio ou au cabinet."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-nancy", label: "Notaire à Nancy" },
-            { href: "/notaire-strasbourg", label: "Notaire à Strasbourg" },
-            { href: "/notaire-reims", label: "Notaire à Reims" },
+            { href: "/notaire-nancy", label: "RDV notaire à Nancy" },
+            { href: "/notaire-strasbourg", label: "RDV notaire à Strasbourg" },
+            { href: "/notaire-reims", label: "RDV notaire à Reims" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-creation-societe", label: "Notaire création de société" },

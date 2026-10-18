@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-nice" },
   openGraph: {
-    title: "Notaire à Nice · Notaires.io",
+    title: "RDV notaire à Nice · Notaires.io",
     description:
       "Trouvez un notaire à Nice disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-nice",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Nice"
+          h1="Prendre RDV avec un notaire à Nice"
           intro="Vous cherchez un notaire à Nice pour votre mariage, votre PACS, un achat immobilier sur la Côte d'Azur ou la création de votre société ? Nos notaires partenaires niçois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-marseille", label: "Notaire à Marseille" },
-            { href: "/notaire-toulouse", label: "Notaire à Toulouse" },
-            { href: "/notaire-aix-en-provence", label: "Notaire à Aix-en-Provence" },
+            { href: "/notaire-marseille", label: "RDV notaire à Marseille" },
+            { href: "/notaire-toulouse", label: "RDV notaire à Toulouse" },
+            { href: "/notaire-aix-en-provence", label: "RDV notaire à Aix-en-Provence" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },

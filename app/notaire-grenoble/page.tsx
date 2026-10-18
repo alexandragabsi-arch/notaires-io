@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-grenoble" },
   openGraph: {
-    title: "Notaire à Grenoble · Notaires.io",
+    title: "RDV notaire à Grenoble · Notaires.io",
     description:
       "Trouvez un notaire à Grenoble disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-grenoble",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Grenoble"
+          h1="Prendre RDV avec un notaire à Grenoble"
           intro="Vous cherchez un notaire à Grenoble pour votre mariage, votre PACS, un achat immobilier en ville ou à la montagne, ou la création de votre société ? Nos notaires partenaires grenoblois sont disponibles selon leurs créneaux, en visio ou au cabinet."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-lyon", label: "Notaire à Lyon" },
-            { href: "/notaire-annecy", label: "Notaire à Annecy" },
-            { href: "/notaire-dijon", label: "Notaire à Dijon" },
+            { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
+            { href: "/notaire-ville/annecy", label: "RDV notaire à Annecy" },
+            { href: "/notaire-dijon", label: "RDV notaire à Dijon" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-creation-societe", label: "Notaire création de société" },

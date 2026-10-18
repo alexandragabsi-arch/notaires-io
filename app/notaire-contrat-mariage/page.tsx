@@ -126,9 +126,9 @@ export default function Page() {
             { href: "/notaire-divorce", label: "Notaire divorce" },
             { href: "/notaire-donation", label: "Donation entre époux" },
             { href: "/notaire-succession", label: "Notaire succession" },
-            { href: "/notaire-paris", label: "Notaire à Paris" },
-            { href: "/notaire-lyon", label: "Notaire à Lyon" },
-            { href: "/notaire-marseille", label: "Notaire à Marseille" },
+            { href: "/notaire-paris", label: "RDV notaire à Paris" },
+            { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
+            { href: "/notaire-marseille", label: "RDV notaire à Marseille" },
           ]}
         />
       </main>

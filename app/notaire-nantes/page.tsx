@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-nantes" },
   openGraph: {
-    title: "Notaire à Nantes · Notaires.io",
+    title: "RDV notaire à Nantes · Notaires.io",
     description:
       "Trouvez un notaire à Nantes pour votre succession, donation ou mariage.",
     url: "https://notaires.io/notaire-nantes",
@@ -98,15 +98,15 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Nantes"
+          h1="Prendre RDV avec un notaire à Nantes"
           intro="Vous souhaitez organiser votre succession, faire une donation à vos enfants ou préparer votre mariage à Nantes ? Nos notaires partenaires en Loire-Atlantique vous accompagnent avec pédagogie à chaque étape, en visio ou au cabinet."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-paris", label: "Notaire à Paris" },
-            { href: "/notaire-bordeaux", label: "Notaire à Bordeaux" },
-            { href: "/notaire-lille", label: "Notaire à Lille" },
-            { href: "/notaire-lyon", label: "Notaire à Lyon" },
+            { href: "/notaire-paris", label: "RDV notaire à Paris" },
+            { href: "/notaire-bordeaux", label: "RDV notaire à Bordeaux" },
+            { href: "/notaire-lille", label: "RDV notaire à Lille" },
+            { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
             { href: "/notaire-succession", label: "Notaire succession" },
             { href: "/notaire-donation", label: "Notaire donation" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },

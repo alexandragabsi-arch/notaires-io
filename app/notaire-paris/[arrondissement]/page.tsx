@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : `Trouvez un notaire dans le ${label} arrondissement de Paris. Immobilier, succession, mariage, PACS — prise de rendez-vous en ligne.`,
     alternates: { canonical: `https://notaires.io/notaire-paris/${arrondissement}` },
     openGraph: {
-      title: `Notaire Paris ${label} · Notaires.io`,
+      title: `RDV notaire Paris ${label} · Notaires.io`,
       description: `Notaires disponibles dans le ${label} arrondissement de Paris.`,
       url: `https://notaires.io/notaire-paris/${arrondissement}`,
       type: "website",
@@ -93,7 +93,7 @@ export default async function Page({ params }: Props) {
       .slice(0, 8)
       .map(a => ({
         href: `/notaire-paris/${a.slug}`,
-        label: `Notaire Paris ${a.label}`,
+        label: `RDV notaire Paris ${a.label}`,
       })),
   ];
 
@@ -135,7 +135,7 @@ export default async function Page({ params }: Props) {
       <Header />
       <main>
         <SeoLandingPage
-          h1={`Notaire à Paris — ${label} arrondissement`}
+          h1={`Prendre RDV avec un notaire à Paris — ${label} arrondissement`}
           intro={contenu
             ? `${contenu.profil} Quartiers couverts : ${contenu.quartiers.join(", ")}. Comparez les profils, les créneaux et prenez rendez-vous en ligne, en visio ou au cabinet.`
             : `Vous recherchez un notaire dans le ${label} arrondissement de Paris ? Consultez les profils disponibles, comparez les créneaux et prenez rendez-vous en ligne.`}

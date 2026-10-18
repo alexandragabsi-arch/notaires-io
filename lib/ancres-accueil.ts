@@ -17,6 +17,12 @@ const ANCRES = [
   "Réserver un rendez-vous notaire en ligne",
   "Trouver un notaire et réserver en ligne",
   "Prendre RDV notaire sur les disponibilités réelles",
+  // Formulations relevées dans la Search Console au 18/10/2026 : l'accueil
+  // plafonne en 13e position sur « rdv notaire », « prendre rdv notaire » et
+  // « notaire rdv en ligne », trois requêtes qu'aucune ancre ne reprenait.
+  "RDV notaire",
+  "Prendre RDV notaire",
+  "Notaire : RDV en ligne",
 ] as const;
 
 /** Toujours la même ancre pour une page donnée, pour que le lien soit stable. */

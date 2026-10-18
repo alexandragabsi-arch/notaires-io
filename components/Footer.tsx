@@ -173,7 +173,7 @@ export default function Footer() {
             pages leur donne le poids qui leur manquait. */}
         <div className="border-t border-[var(--color-border-soft)] pt-6 pb-6">
           <h3 className="text-[var(--color-text-strong)] text-[13px] uppercase tracking-[1.5px] font-bold mb-4">
-            Trouver un notaire près de chez vous
+            Prendre RDV avec un notaire près de chez vous
           </h3>
           <ul className="flex flex-wrap gap-x-4 gap-y-2">
             {VILLES.map(([label, href]) => (

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-clermont-ferrand" },
   openGraph: {
-    title: "Notaire à Clermont-Ferrand · Notaires.io",
+    title: "RDV notaire à Clermont-Ferrand · Notaires.io",
     description:
       "Trouvez un notaire à Clermont-Ferrand disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-clermont-ferrand",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Clermont-Ferrand"
+          h1="Prendre RDV avec un notaire à Clermont-Ferrand"
           intro="Vous cherchez un notaire à Clermont-Ferrand pour votre mariage, votre PACS, un achat immobilier en Auvergne ou la création de votre société ? Nos notaires partenaires clermontois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-lyon", label: "Notaire à Lyon" },
-            { href: "/notaire-saint-etienne", label: "Notaire à Saint-Étienne" },
-            { href: "/notaire-dijon", label: "Notaire à Dijon" },
+            { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
+            { href: "/notaire-saint-etienne", label: "RDV notaire à Saint-Étienne" },
+            { href: "/notaire-dijon", label: "RDV notaire à Dijon" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-creation-societe", label: "Notaire création de société" },

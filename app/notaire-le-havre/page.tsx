@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-le-havre" },
   openGraph: {
-    title: "Notaire au Havre · Notaires.io",
+    title: "RDV notaire au Havre · Notaires.io",
     description:
       "Trouvez un notaire au Havre disponible rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-le-havre",
@@ -98,14 +98,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire au Havre"
+          h1="Prendre RDV avec un notaire au Havre"
           intro="Vous cherchez un notaire au Havre pour votre mariage, votre PACS, un achat immobilier en Seine-Maritime ou la création de votre société ? Nos notaires partenaires havrais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-rouen", label: "Notaire à Rouen" },
-            { href: "/notaire-caen", label: "Notaire à Caen" },
-            { href: "/notaire-brest", label: "Notaire à Brest" },
+            { href: "/notaire-rouen", label: "RDV notaire à Rouen" },
+            { href: "/notaire-ville/caen", label: "RDV notaire à Caen" },
+            { href: "/notaire-brest", label: "RDV notaire à Brest" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-creation-societe", label: "Notaire création de société" },

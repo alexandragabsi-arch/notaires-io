@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io/notaire-orleans" },
   openGraph: {
-    title: "Notaire à Orléans · Notaires.io",
+    title: "RDV notaire à Orléans · Notaires.io",
     description: "Trouvez un notaire à Orléans rapidement, en visio ou au cabinet.",
     url: "https://notaires.io/notaire-orleans",
     type: "website",
@@ -87,14 +87,14 @@ export default async function Page() {
       <Header />
       <main>
         <SeoLandingPage
-          h1="Trouver un notaire à Orléans"
+          h1="Prendre RDV avec un notaire à Orléans"
           intro="Vous cherchez un notaire à Orléans pour votre mariage, un achat immobilier ou une succession ? Nos partenaires sont disponibles selon leurs créneaux, en visio ou au cabinet."
           notaires={notaires}
           faq={FAQ}
           relatedLinks={[
-            { href: "/notaire-paris", label: "Notaire à Paris" },
-            { href: "/notaire-lyon", label: "Notaire à Lyon" },
-            { href: "/notaire-bordeaux", label: "Notaire à Bordeaux" },
+            { href: "/notaire-paris", label: "RDV notaire à Paris" },
+            { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
+            { href: "/notaire-bordeaux", label: "RDV notaire à Bordeaux" },
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },
             { href: "/notaire-mariage-pacs", label: "Notaire mariage / PACS" },

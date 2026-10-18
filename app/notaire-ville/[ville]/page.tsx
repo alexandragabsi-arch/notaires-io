@@ -144,7 +144,7 @@ export default async function Page({ params }: Props) {
             { href: "/annuaire", label: "Tout l'annuaire" },
             ...voisines.map((x) => ({
               href: `/notaire-ville/${x.slug}`,
-              label: `Notaire ${aVille(x.nom)}`,
+              label: `RDV notaire ${aVille(x.nom)}`,
             })),
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },

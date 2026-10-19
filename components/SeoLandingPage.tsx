@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { ChevronLeft, ChevronRight, MapPin, Phone, Navigation, Loader2, X, BadgeCheck, Video } from "lucide-react";
+import { languesAffichees } from "@/lib/langues";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { useFichesCompletees, abonnesEnTete, rangAffichage } from "@/lib/fiches-completees";
 import { arrDepuisCodePostal, libelleArr } from "@/lib/arrondissements";
@@ -258,11 +259,11 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
 
           {/* Langues : une ligne à part sous les domaines, toujours visible.
               C'est un critère de choix à part entière (client étranger), qu'on
-              ne doit pas avoir à déplier. */}
-          {notaire.languages && notaire.languages.length > 0 && (
+              ne doit pas avoir à déplier. Le français va de soi : non affiché. */}
+          {languesAffichees(notaire.languages).length > 0 && (
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="text-[11px] font-bold text-[var(--color-text-strong)] uppercase tracking-wide mr-1">Langues :</span>
-              {notaire.languages.map((l) => (
+              {languesAffichees(notaire.languages).map((l) => (
                 <span key={l} className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">
                   🌐 {l}
                 </span>

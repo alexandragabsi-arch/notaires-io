@@ -39,6 +39,37 @@ function villeCle(city: string): string {
   return sansAccents(city).replace(/\s+\d.*$/, "").trim();
 }
 
+// Ville sans accents ni arrondissement, comme cleVille (lib/inscrits-serveur.ts),
+// recopiée ici pour ne pas charger l'annuaire complet dans le navigateur.
+function cleVille(city: string): string {
+  return (city ?? "")
+    .toLowerCase()
+    .replace(/œ/g, "oe").replace(/æ/g, "ae")
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/\s+\d.*$/, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+/**
+ * Adresse saisie par le notaire, complétée du code postal et de la ville de
+ * l'annuaire, comme adresseComplete (lib/inscrits-serveur.ts) :
+ * « 56 rue de la Paroisse » + « … 78000 VERSAILLES » → « 56 rue de la Paroisse, 78000 Versailles ».
+ */
+function adresseComplete(saisie?: string, annuaire?: string): string | undefined {
+  if (!saisie) return annuaire;
+  if (/\b\d{5}\b/.test(saisie)) return saisie;
+  const m = (annuaire ?? "").match(/\b(\d{5})\s+(.+)$/);
+  if (!m) return saisie;
+  const ville = m[2].toLowerCase().replace(/(^|[\s-])\p{L}/gu, (c) => c.toUpperCase());
+  return `${saisie.replace(/[\s,]+$/, "")}, ${m[1]} ${ville}`;
+}
+
+/** « Me Vanessa Alezan » → ["vanessa", "alezan"]. */
+function jetonsNom(nom: string): string[] {
+  return cleVille(nom).split(" ").filter((t) => t && t !== "me");
+}
+
 export function fusionnerFiches(
   base: ListingNotaire[],
   completees: ListingNotaire[],
@@ -59,12 +90,44 @@ export function fusionnerFiches(
 
   // Fiches créées à l'inscription (absentes de l'annuaire importé).
   const villes = new Set(base.map((n) => villeCle(n.city)));
-  const nouvelles = [...parId.values()]
+  const nouvelles: ListingNotaire[] = [...parId.values()]
     .filter((n) => !villesSeulement || villes.has(villeCle(n.city)))
     .map((n) => ({ ...n, arrondissement: n.arrondissement ?? arrondissement(n) }));
 
+  // Sans doublon : la fiche importée d'un notaire inscrit sous un autre id
+  // restait listée à côté de son profil activé (Me Alezan, 19/10/2026). Même
+  // règle que côté serveur (memeNotaire, lib/inscrits-serveur.ts) : même ville,
+  // tous les mots du nom de l'inscrit dans celui de la fiche. La fiche retirée
+  // complète le profil, comme côté serveur : code postal et ville de
+  // l'adresse, champs que le notaire n'a pas renseignés.
+  const inscritsParVille = new Map<string, { jetons: string[]; index: number }[]>();
+  nouvelles.forEach((n, index) => {
+    const jetons = jetonsNom(n.name);
+    if (jetons.length < 2) return;
+    const cle = cleVille(n.city);
+    inscritsParVille.set(cle, [...(inscritsParVille.get(cle) ?? []), { jetons, index }]);
+  });
+  const sansDoublon = inscritsParVille.size === 0 ? fusion : fusion.filter((b) => {
+    if (b.claimed) return true;
+    const inscrits = inscritsParVille.get(cleVille(b.city));
+    if (!inscrits) return true;
+    const nomFiche = new Set(jetonsNom(b.name));
+    const inscrit = inscrits.find(({ jetons }) => jetons.every((t) => nomFiche.has(t)));
+    if (!inscrit) return true;
+    const n = nouvelles[inscrit.index];
+    const renseignes = Object.entries(n).filter(
+      ([, v]) => v !== undefined && v !== null && v !== "" && !(Array.isArray(v) && v.length === 0),
+    );
+    nouvelles[inscrit.index] = {
+      ...b,
+      ...Object.fromEntries(renseignes),
+      address: adresseComplete(n.address, b.address),
+    } as ListingNotaire;
+    return false;
+  });
+
   // Fiches actives en tête : ce sont elles qui prennent des rendez-vous.
-  return [...nouvelles, ...fusion];
+  return [...nouvelles, ...sansDoublon];
 }
 
 /** Fiche de démonstration (Me Test Martin) : jamais en tête des résultats publics. */

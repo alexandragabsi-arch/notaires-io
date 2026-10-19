@@ -10,6 +10,7 @@ import {
   List, Map as MapIcon, ChevronDown, Check,
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
+import { languesAffichees } from "@/lib/langues";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { useFichesCompletees, abonnesEnTete, rangAffichage } from "@/lib/fiches-completees";
 import NotaireMap from "@/components/NotaireMap";
@@ -333,15 +334,14 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
               <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
             </a>
 
-            {/* Domaines + sous-spécialités + langues, sous l'agenda, comme les
+            {/* Domaines + sous-spécialités, sous l'agenda, comme les
                 pages ville : dans la colonne de gauche, même repliés à six, ils
                 la rendaient deux fois plus haute que l'agenda et laissaient un
                 grand vide à droite (/annuaire?nom=alezan, 19/10/2026). */}
             {(() => {
               const domaines = n.specialties.map((s) => ({ cle: `d-${s}`, texte: s, style: "border border-[var(--color-border)] text-[var(--color-text-strong)]" }));
               const sous = (n.subSpecialties ?? []).map((s) => ({ cle: `s-${s}`, texte: s, style: "bg-[var(--color-tint-blue)] text-[var(--color-accent)] border border-[var(--color-border-soft)]" }));
-              const langues = (n.languages ?? []).map((l) => ({ cle: `l-${l}`, texte: `🌐 ${l}`, style: "bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium" }));
-              const toutes = [...domaines, ...sous, ...langues];
+              const toutes = [...domaines, ...sous];
               if (toutes.length === 0) return null;
               const visibles = competencesOuvertes ? toutes : toutes.slice(0, 6);
               const restantes = toutes.length - visibles.length;
@@ -366,6 +366,19 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
                 </div>
               );
             })()}
+
+            {/* Langues : une ligne à part sous les domaines, toujours visible,
+                comme les pages ville. Le français va de soi : non affiché. */}
+            {languesAffichees(n.languages).length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-[11px] font-bold text-[var(--color-text-strong)] uppercase tracking-wide mr-1">Langues :</span>
+                {languesAffichees(n.languages).map((l) => (
+                  <span key={l} className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">
+                    🌐 {l}
+                  </span>
+                ))}
+              </div>
+            )}
 
             {/* Badge réservation */}
             {n.claimed ? (

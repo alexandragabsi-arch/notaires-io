@@ -10,14 +10,17 @@ import { useEffect, useMemo, useState } from "react";
 import type { ListingNotaire } from "./notaires-listing";
 import { getRemoteProfiles } from "./notaire-profiles";
 import { arrDepuisAdresse } from "./arrondissements";
+import { adresseComplete, adresseCompleteBAN } from "./adresse";
 
 // Une seule requête par visite, partagée par tous les composants de la page.
 let _promesse: Promise<ListingNotaire[]> | null = null;
 function chargerUneFois(): Promise<ListingNotaire[]> {
   // Sans la fiche de démonstration : elle reste consultable par lien direct
   // (revue App Store) mais n'apparaît plus dans l'annuaire ni les pages villes.
+  // Adresse sans code postal : complétée par la Base Adresse Nationale.
   _promesse ??= getRemoteProfiles()
     .then((l) => l.filter((n) => !estFicheTest(n)))
+    .then((l) => Promise.all(l.map(async (n) => ({ ...n, address: await adresseCompleteBAN(n.address, n.city) }))))
     .catch(() => []);
   return _promesse;
 }
@@ -51,20 +54,6 @@ function cleVille(city: string): string {
     .trim();
 }
 
-/**
- * Adresse saisie par le notaire, complétée du code postal et de la ville de
- * l'annuaire, comme adresseComplete (lib/inscrits-serveur.ts) :
- * « 56 rue de la Paroisse » + « … 78000 VERSAILLES » → « 56 rue de la Paroisse, 78000 Versailles ».
- */
-function adresseComplete(saisie?: string, annuaire?: string): string | undefined {
-  if (!saisie) return annuaire;
-  if (/\b\d{5}\b/.test(saisie)) return saisie;
-  const m = (annuaire ?? "").match(/\b(\d{5})\s+(.+)$/);
-  if (!m) return saisie;
-  const ville = m[2].toLowerCase().replace(/(^|[\s-])\p{L}/gu, (c) => c.toUpperCase());
-  return `${saisie.replace(/[\s,]+$/, "")}, ${m[1]} ${ville}`;
-}
-
 /** « Me Vanessa Alezan » → ["vanessa", "alezan"]. */
 function jetonsNom(nom: string): string[] {
   return cleVille(nom).split(" ").filter((t) => t && t !== "me");
@@ -85,7 +74,9 @@ export function fusionnerFiches(
     const renseignes = Object.entries(r).filter(
       ([, v]) => v !== undefined && v !== null && v !== "" && !(Array.isArray(v) && v.length === 0),
     );
-    return { ...b, ...Object.fromEntries(renseignes) } as ListingNotaire;
+    // L'adresse complétée (code postal, ville) ne doit pas être écrasée par
+    // la rue seule saisie par le notaire (Me Robin, /notaire-lyon, 19/10/2026).
+    return { ...b, ...Object.fromEntries(renseignes), address: adresseComplete(r.address, b.address) } as ListingNotaire;
   });
 
   // Fiches créées à l'inscription (absentes de l'annuaire importé).

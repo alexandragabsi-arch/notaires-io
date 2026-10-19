@@ -1,0 +1,57 @@
+// Adresse des notaires inscrits : code postal et ville toujours affichés.
+// Beaucoup ne saisissent que la rue (« 123 Cours Albert Thomas »). On complète
+// d'abord avec la fiche de l'annuaire du même notaire, sinon avec la Base
+// Adresse Nationale. Partagé par le serveur (lib/inscrits-serveur.ts) et le
+// navigateur (lib/fiches-completees.ts).
+
+/** L'adresse contient-elle un code postal ? */
+export function aCodePostal(adresse?: string): boolean {
+  return /\b\d{5}\b/.test(adresse ?? "");
+}
+
+/** « VERSAILLES » → « Versailles », « SAINT-ÉTIENNE » → « Saint-Étienne ». */
+function villeLisible(ville: string): string {
+  return ville.toLowerCase().replace(/(^|[\s-])\p{L}/gu, (c) => c.toUpperCase());
+}
+
+function sansAccents(s: string): string {
+  return (s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+}
+
+/**
+ * Adresse saisie par le notaire, complétée du code postal et de la ville de
+ * l'annuaire quand il ne les a pas indiqués :
+ * « 123 Cours Albert Thomas » + « … 69003 LYON » → « 123 Cours Albert Thomas, 69003 Lyon ».
+ */
+export function adresseComplete(saisie?: string, annuaire?: string): string | undefined {
+  if (!saisie) return annuaire;
+  if (aCodePostal(saisie)) return saisie;
+  const m = (annuaire ?? "").match(/\b(\d{5})\s+(.+)$/);
+  if (!m) return saisie;
+  return `${saisie.replace(/[\s,]+$/, "")}, ${m[1]} ${villeLisible(m[2])}`;
+}
+
+/**
+ * Sans fiche d'annuaire pour la compléter, code postal et ville cherchés dans
+ * la Base Adresse Nationale (api-adresse.data.gouv.fr). Retenu seulement si la
+ * commune trouvée est bien celle du notaire ; sinon l'adresse reste telle quelle.
+ */
+export async function adresseCompleteBAN(saisie: string | undefined, ville: string): Promise<string | undefined> {
+  if (!saisie || aCodePostal(saisie) || !ville) return saisie;
+  const villeBase = sansAccents(ville).replace(/\s+\d.*$/, "");
+  try {
+    const q = new URLSearchParams({ q: `${saisie} ${ville}`, limit: "1" });
+    const res = await fetch(`https://api-adresse.data.gouv.fr/search/?${q}`, {
+      // Côté serveur : une recherche par adresse et par jour suffit.
+      next: { revalidate: 86400 },
+    } as RequestInit);
+    if (!res.ok) return saisie;
+    const json = await res.json();
+    const p = json.features?.[0]?.properties;
+    if (!p?.postcode || !p?.city || (p.score ?? 0) < 0.5) return saisie;
+    if (!sansAccents(p.city).startsWith(villeBase)) return saisie;
+    return `${saisie.replace(/[\s,]+$/, "")}, ${p.postcode} ${p.city}`;
+  } catch {
+    return saisie;
+  }
+}

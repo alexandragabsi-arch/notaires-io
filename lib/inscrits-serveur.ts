@@ -10,6 +10,7 @@
 
 import type { ListingNotaire } from "./notaires-listing";
 import { arrDepuisAdresse } from "./arrondissements";
+import { adresseComplete, adresseCompleteBAN } from "./adresse";
 import { getAllNotaires } from "./notaires-source";
 import { estFicheTest } from "./fiches-test";
 import {
@@ -38,16 +39,16 @@ export async function getInscrits(): Promise<ListingNotaire[]> {
   // comme dans l'annuaire, même quand la page de ville n'en liste qu'une partie.
   const tous = getAllNotaires();
   const annuaire = new Map(tous.map((n) => [n.id, n]));
-  return brutes.map((i) => {
+  return Promise.all(brutes.map(async (i) => {
     const b = annuaire.get(i.id) ?? ficheDuNotaire(i, tous);
-    if (!b) return i;
     const renseignes = Object.entries(i).filter(
       ([, v]) => v !== undefined && v !== null && v !== "" && !(Array.isArray(v) && v.length === 0),
     );
     const fusion = { ...b, ...Object.fromEntries(renseignes) } as ListingNotaire;
-    const address = adresseComplete(i.address, b.address);
+    // Code postal et ville : de la fiche de l'annuaire, sinon de la Base Adresse Nationale.
+    const address = await adresseCompleteBAN(adresseComplete(i.address, b?.address), fusion.city);
     return { ...fusion, address, arrondissement: arrondissementDe(fusion.city, address) };
-  });
+  }));
 }
 
 /** « Me Philippe Quaghebeur » → ["philippe", "quaghebeur"]. */
@@ -72,20 +73,6 @@ function memeNotaire(inscrit: ListingNotaire, fiche: ListingNotaire): boolean {
 function ficheDuNotaire(inscrit: ListingNotaire, tous: ListingNotaire[]): ListingNotaire | undefined {
   const candidates = tous.filter((n) => !n.claimed && memeNotaire(inscrit, n));
   return candidates.find((n) => /\b\d{5}\b/.test(n.address ?? "")) ?? candidates[0];
-}
-
-/**
- * Adresse saisie par le notaire, complétée du code postal et de la ville de
- * l'annuaire quand il ne les a pas indiqués :
- * « 123 Cours Albert Thomas » + « … 69003 LYON » → « 123 Cours Albert Thomas, 69003 Lyon ».
- */
-function adresseComplete(saisie?: string, annuaire?: string): string | undefined {
-  if (!saisie) return annuaire;
-  if (/\b\d{5}\b/.test(saisie)) return saisie;
-  const m = (annuaire ?? "").match(/\b(\d{5})\s+(.+)$/);
-  if (!m) return saisie;
-  const ville = m[2].toLowerCase().replace(/(^|[\s-])\p{L}/gu, (c) => c.toUpperCase());
-  return `${saisie.replace(/[\s,]+$/, "")}, ${m[1]} ${ville}`;
 }
 
 async function lireInscrits(): Promise<ListingNotaire[]> {

@@ -240,11 +240,18 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
               )
             )}
 
-            {/* Statut RDV */}
+            {/* Statut RDV + badge vérifié sur une ligne, comme les pages ville. */}
             {n.claimed ? (
-              <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-accent)]">
-                <Video className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
-                Visio &amp; cabinet disponibles
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[var(--color-accent)]">
+                  <Video className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
+                  Visio &amp; cabinet
+                </div>
+                {!n.isNew && (
+                  <div className="flex items-center gap-1 text-[12px] text-[var(--color-success)] font-semibold">
+                    <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} /> Vérifié
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center gap-1.5 text-[12px] font-semibold text-green-500">
@@ -252,45 +259,6 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
                 Profil non revendiqué
               </div>
             )}
-
-            {/* Badge vérifié */}
-            {n.claimed && !n.isNew && (
-              <div className="flex items-center gap-1 text-[12px] text-[var(--color-success)] font-semibold">
-                <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} /> Notaire vérifié
-              </div>
-            )}
-
-            {/* Domaines + sous-spécialités + langues.
-                Un notaire complet peut cocher 30 compétences : affichées toutes,
-                elles poussaient l'agenda hors de l'écran. On en montre six, le
-                reste se déplie à la demande. */}
-            {(() => {
-              const domaines = n.specialties.map((s) => ({ cle: `d-${s}`, texte: s, style: "border border-[var(--color-border)] text-[var(--color-text-strong)]" }));
-              const sous = (n.subSpecialties ?? []).map((s) => ({ cle: `s-${s}`, texte: s, style: "bg-[var(--color-tint-blue)] text-[var(--color-accent)] border border-[var(--color-border-soft)]" }));
-              const langues = (n.languages ?? []).map((l) => ({ cle: `l-${l}`, texte: `🌐 ${l}`, style: "bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium" }));
-              const toutes = [...domaines, ...sous, ...langues];
-              const visibles = competencesOuvertes ? toutes : toutes.slice(0, 6);
-              const restantes = toutes.length - visibles.length;
-              return (
-                <div className="flex flex-wrap gap-1.5">
-                  {visibles.map((c) => (
-                    <span key={c.cle} className={`text-[11px] px-2.5 py-1 rounded-full ${c.style}`}>
-                      {c.texte}
-                    </span>
-                  ))}
-                  {(restantes > 0 || competencesOuvertes) && (
-                    <button
-                      type="button"
-                      onClick={() => setCompetencesOuvertes((v) => !v)}
-                      aria-expanded={competencesOuvertes}
-                      className="text-[11px] px-2.5 py-1 rounded-full border border-dashed border-[var(--color-accent)] text-[var(--color-accent)] font-semibold hover:bg-[var(--color-accent-soft)] transition-colors"
-                    >
-                      {competencesOuvertes ? "Voir moins" : `+ ${restantes} compétence${restantes > 1 ? "s" : ""}`}
-                    </button>
-                  )}
-                </div>
-              );
-            })()}
 
             {/* CTA */}
             <a href={`/notaires/${n.id}`}
@@ -364,6 +332,40 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
               + Voir tous les horaires
               <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
             </a>
+
+            {/* Domaines + sous-spécialités + langues, sous l'agenda, comme les
+                pages ville : dans la colonne de gauche, même repliés à six, ils
+                la rendaient deux fois plus haute que l'agenda et laissaient un
+                grand vide à droite (/annuaire?nom=alezan, 19/10/2026). */}
+            {(() => {
+              const domaines = n.specialties.map((s) => ({ cle: `d-${s}`, texte: s, style: "border border-[var(--color-border)] text-[var(--color-text-strong)]" }));
+              const sous = (n.subSpecialties ?? []).map((s) => ({ cle: `s-${s}`, texte: s, style: "bg-[var(--color-tint-blue)] text-[var(--color-accent)] border border-[var(--color-border-soft)]" }));
+              const langues = (n.languages ?? []).map((l) => ({ cle: `l-${l}`, texte: `🌐 ${l}`, style: "bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium" }));
+              const toutes = [...domaines, ...sous, ...langues];
+              if (toutes.length === 0) return null;
+              const visibles = competencesOuvertes ? toutes : toutes.slice(0, 6);
+              const restantes = toutes.length - visibles.length;
+              return (
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[11px] font-bold text-[var(--color-text-strong)] uppercase tracking-wide mr-1">Domaines :</span>
+                  {visibles.map((c) => (
+                    <span key={c.cle} className={`text-[11px] px-2.5 py-1 rounded-full ${c.style}`}>
+                      {c.texte}
+                    </span>
+                  ))}
+                  {(restantes > 0 || competencesOuvertes) && (
+                    <button
+                      type="button"
+                      onClick={() => setCompetencesOuvertes((v) => !v)}
+                      aria-expanded={competencesOuvertes}
+                      className="text-[11px] px-2.5 py-1 rounded-full border border-dashed border-[var(--color-accent)] text-[var(--color-accent)] font-semibold hover:bg-[var(--color-accent-soft)] transition-colors"
+                    >
+                      {competencesOuvertes ? "Voir moins" : `+ ${restantes} compétence${restantes > 1 ? "s" : ""}`}
+                    </button>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Badge réservation */}
             {n.claimed ? (

@@ -10,6 +10,7 @@ import {
   List, Map as MapIcon, ChevronDown, Check,
 } from "lucide-react";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
+import { languesAffichees } from "@/lib/langues";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { useFichesCompletees, abonnesEnTete, rangAffichage } from "@/lib/fiches-completees";
 import NotaireMap from "@/components/NotaireMap";
@@ -240,6 +241,12 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
               )
             )}
 
+            {/* Langues parlées : sur une ligne, plutôt que noyées dans les compétences repliées. */}
+            <div className="flex items-start gap-1.5 text-[12px] text-[var(--color-muted)]">
+              <Globe className="w-3.5 h-3.5 shrink-0 mt-0.5" strokeWidth={2} />
+              <span className="leading-snug">{languesAffichees(n.languages).join(", ")}</span>
+            </div>
+
             {/* Statut RDV + badge vérifié sur une ligne, comme les pages ville. */}
             {n.claimed ? (
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -333,15 +340,14 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
               <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
             </a>
 
-            {/* Domaines + sous-spécialités + langues, sous l'agenda, comme les
+            {/* Domaines + sous-spécialités, sous l'agenda, comme les
                 pages ville : dans la colonne de gauche, même repliés à six, ils
                 la rendaient deux fois plus haute que l'agenda et laissaient un
                 grand vide à droite (/annuaire?nom=alezan, 19/10/2026). */}
             {(() => {
               const domaines = n.specialties.map((s) => ({ cle: `d-${s}`, texte: s, style: "border border-[var(--color-border)] text-[var(--color-text-strong)]" }));
               const sous = (n.subSpecialties ?? []).map((s) => ({ cle: `s-${s}`, texte: s, style: "bg-[var(--color-tint-blue)] text-[var(--color-accent)] border border-[var(--color-border-soft)]" }));
-              const langues = (n.languages ?? []).map((l) => ({ cle: `l-${l}`, texte: `🌐 ${l}`, style: "bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium" }));
-              const toutes = [...domaines, ...sous, ...langues];
+              const toutes = [...domaines, ...sous];
               if (toutes.length === 0) return null;
               const visibles = competencesOuvertes ? toutes : toutes.slice(0, 6);
               const restantes = toutes.length - visibles.length;

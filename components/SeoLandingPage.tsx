@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { ChevronLeft, ChevronRight, MapPin, Phone, Navigation, Loader2, X, BadgeCheck, Video } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Phone, Navigation, Loader2, X, BadgeCheck, Video, Globe } from "lucide-react";
+import { languesAffichees } from "@/lib/langues";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { useFichesCompletees, abonnesEnTete, rangAffichage } from "@/lib/fiches-completees";
 import { arrDepuisCodePostal, libelleArr } from "@/lib/arrondissements";
@@ -140,6 +141,12 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
             </div>
           )}
 
+          {/* Langues parlées : sur une ligne, plutôt que noyées dans les compétences repliées. */}
+          <div className="flex items-start gap-1.5 text-[12px] text-[var(--color-muted)]">
+            <Globe className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--color-accent)]" strokeWidth={2} />
+            <span>{languesAffichees(notaire.languages).join(", ")}</span>
+          </div>
+
           {/* CTA */}
           <a
             href={`/notaires/${notaire.id}`}
@@ -225,14 +232,13 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
             + Voir plus d&apos;horaires
           </a>
 
-          {/* Domaines + langues, sous l'agenda. Dans la colonne de gauche, ils
+          {/* Domaines, sous l'agenda. Dans la colonne de gauche, ils
               la rendaient deux fois plus haute que l'agenda, qui laissait un
               grand vide à droite (/notaire-paris, 18/10/2026). Ici, sur toute
               la largeur, ils tiennent sur une ligne ; le reste se déplie. */}
           {(() => {
             const domaines = notaire.specialties.map((s) => ({ cle: `d-${s}`, texte: s, style: "border border-[var(--color-border)] text-[var(--color-text-strong)]" }));
-            const langues = (notaire.languages ?? []).map((l) => ({ cle: `l-${l}`, texte: `🌐 ${l}`, style: "bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium" }));
-            const toutes = [...domaines, ...langues];
+            const toutes = [...domaines];
             if (toutes.length === 0) return null;
             const visibles = competencesOuvertes ? toutes : toutes.slice(0, COMPETENCES_VISIBLES);
             const restantes = toutes.length - visibles.length;

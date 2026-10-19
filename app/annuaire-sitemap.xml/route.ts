@@ -2,6 +2,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getAllNotaires, redirectionFiche } from "@/lib/notaires-source";
 import { idsNotairesInscrits } from "@/lib/notaires-inscrits";
 import { estFicheTest } from "@/lib/fiches-test";
+import { getInscrits, profilActiveDe } from "@/lib/inscrits-serveur";
 
 const BASE = "https://notaires.io";
 
@@ -26,6 +27,7 @@ export const revalidate = 86400;
  */
 export async function GET() {
   const inscrits = await idsNotairesInscrits();
+  const profils = await getInscrits();
   const vus = new Set<string>();
   const urls: string[] = [];
 
@@ -33,6 +35,9 @@ export async function GET() {
     if (vus.has(n.id) || redirectionFiche(n.id) || estFicheTest(n.id)) continue;
     vus.add(n.id);
     if (inscrits.has(n.id)) continue; // déclarée dans le sitemap principal
+    // Fiche importée d'un notaire qui a activé son profil sous un autre id :
+    // elle redirige vers ce profil, Google n'a pas à la recevoir.
+    if (profilActiveDe(n, profils)) continue;
     urls.push(`${BASE}/notaires/${n.id}`);
   }
 

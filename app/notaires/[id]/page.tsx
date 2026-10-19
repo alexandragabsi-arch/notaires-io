@@ -8,7 +8,7 @@ import { permanentRedirect } from "next/navigation";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { estFicheTest } from "@/lib/fiches-test";
 import { createClient } from "@supabase/supabase-js";
-import { idDepuisSlugNom } from "@/lib/inscrits-serveur";
+import { idDepuisSlugNom, inscritDeLaFiche } from "@/lib/inscrits-serveur";
 
 // Génère statiquement les 35 notaires vedettes ; les autres sont SSR à la demande
 export async function generateStaticParams() {
@@ -218,6 +218,12 @@ export default async function Page({
   if (!base && !completee) {
     const cibleApp = await idDepuisSlugNom(id);
     if (cibleApp && cibleApp !== id) permanentRedirect(`/notaires/${encodeURIComponent(cibleApp)}`);
+  }
+  // Fiche de l'annuaire d'un notaire qui a activé son profil sous un autre id :
+  // un seul profil par notaire, la fiche importée renvoie vers le profil activé.
+  if (base && !completee) {
+    const profil = await inscritDeLaFiche(base);
+    if (profil) permanentRedirect(`/notaires/${encodeURIComponent(profil)}`);
   }
   // Fiche de l'annuaire enrichie, ou fiche créée à l'inscription (absente de l'annuaire).
   const notaire: ListingNotaire | undefined = completee

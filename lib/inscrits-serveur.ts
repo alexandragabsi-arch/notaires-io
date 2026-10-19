@@ -226,6 +226,20 @@ export async function idDepuisSlugNom(slug: string): Promise<string | undefined>
   return fiches.length === 1 ? fiches[0].id : undefined;
 }
 
+/**
+ * Profil activé du notaire d'une fiche de l'annuaire, s'il en a un sous un
+ * autre id. Sans cela, la fiche importée restait une page à part, sans photo
+ * ni agenda, en doublon du vrai profil (Me Quaghebeur, 19/10/2026).
+ */
+export async function inscritDeLaFiche(fiche: ListingNotaire): Promise<string | undefined> {
+  return profilActiveDe(fiche, await getInscrits());
+}
+
+/** Variante synchrone, pour parcourir tout l'annuaire avec une seule lecture des inscrits. */
+export function profilActiveDe(fiche: ListingNotaire, inscrits: ListingNotaire[]): string | undefined {
+  return inscrits.find((i) => i.id !== fiche.id && memeNotaire(i, fiche))?.id;
+}
+
 /** Ville de l'annuaire, ou à défaut ville où exerce au moins un inscrit. */
 export async function getVilleAvecInscrits(slug: string): Promise<VilleCouverte | undefined> {
   return getVilleParSlug(slug) ?? villeDepuisInscrits(slug, await getInscrits());

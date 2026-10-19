@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { ChevronLeft, ChevronRight, MapPin, Phone, Navigation, Loader2, X, BadgeCheck, Video, Globe } from "lucide-react";
+import { ChevronLeft, ChevronRight, MapPin, Phone, Navigation, Loader2, X, BadgeCheck, Video } from "lucide-react";
 import { languesAffichees } from "@/lib/langues";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { useFichesCompletees, abonnesEnTete, rangAffichage } from "@/lib/fiches-completees";
@@ -141,12 +141,6 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
             </div>
           )}
 
-          {/* Langues parlées : sur une ligne, plutôt que noyées dans les compétences repliées. */}
-          <div className="flex items-start gap-1.5 text-[12px] text-[var(--color-muted)]">
-            <Globe className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--color-accent)]" strokeWidth={2} />
-            <span>{languesAffichees(notaire.languages).join(", ")}</span>
-          </div>
-
           {/* CTA */}
           <a
             href={`/notaires/${notaire.id}`}
@@ -237,8 +231,7 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
               grand vide à droite (/notaire-paris, 18/10/2026). Ici, sur toute
               la largeur, ils tiennent sur une ligne ; le reste se déplie. */}
           {(() => {
-            const domaines = notaire.specialties.map((s) => ({ cle: `d-${s}`, texte: s, style: "border border-[var(--color-border)] text-[var(--color-text-strong)]" }));
-            const toutes = [...domaines];
+            const toutes = notaire.specialties.map((s) => ({ cle: `d-${s}`, texte: s, style: "border border-[var(--color-border)] text-[var(--color-text-strong)]" }));
             if (toutes.length === 0) return null;
             const visibles = competencesOuvertes ? toutes : toutes.slice(0, COMPETENCES_VISIBLES);
             const restantes = toutes.length - visibles.length;
@@ -263,6 +256,20 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
               </div>
             );
           })()}
+
+          {/* Langues : une ligne à part sous les domaines, toujours visible.
+              C'est un critère de choix à part entière (client étranger), qu'on
+              ne doit pas avoir à déplier. Le français va de soi : non affiché. */}
+          {languesAffichees(notaire.languages).length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-[11px] font-bold text-[var(--color-text-strong)] uppercase tracking-wide mr-1">Langues :</span>
+              {languesAffichees(notaire.languages).map((l) => (
+                <span key={l} className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">
+                  🌐 {l}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* Badge réservation.
               Il s'affichait sur TOUTES les cartes, y compris les profils non

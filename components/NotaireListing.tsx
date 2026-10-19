@@ -241,12 +241,6 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
               )
             )}
 
-            {/* Langues parlées : sur une ligne, plutôt que noyées dans les compétences repliées. */}
-            <div className="flex items-start gap-1.5 text-[12px] text-[var(--color-muted)]">
-              <Globe className="w-3.5 h-3.5 shrink-0 mt-0.5" strokeWidth={2} />
-              <span className="leading-snug">{languesAffichees(n.languages).join(", ")}</span>
-            </div>
-
             {/* Statut RDV + badge vérifié sur une ligne, comme les pages ville. */}
             {n.claimed ? (
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -372,6 +366,19 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
                 </div>
               );
             })()}
+
+            {/* Langues : une ligne à part sous les domaines, toujours visible,
+                comme les pages ville. Le français va de soi : non affiché. */}
+            {languesAffichees(n.languages).length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-[11px] font-bold text-[var(--color-text-strong)] uppercase tracking-wide mr-1">Langues :</span>
+                {languesAffichees(n.languages).map((l) => (
+                  <span key={l} className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">
+                    🌐 {l}
+                  </span>
+                ))}
+              </div>
+            )}
 
             {/* Badge réservation */}
             {n.claimed ? (

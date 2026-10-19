@@ -1,9 +1,9 @@
 /**
- * Langues parlées affichées sur les cartes notaire : le français toujours en
- * premier, puis celles que le notaire a renseignées. Beaucoup de profils n'en
- * indiquent aucune (Me Alezan, 19/10/2026) et la carte n'en montrait alors pas.
+ * Langues étrangères affichées sur les cartes notaire. Le français va de soi
+ * et n'est pas affiché : la ligne « Langues » n'apparaît que si le notaire
+ * parle une autre langue.
  */
 export function languesAffichees(langues?: string[]): string[] {
-  const autres = (langues ?? []).filter((l) => l && l.trim().toLowerCase() !== "français");
-  return ["Français", ...new Set(autres.map((l) => l.trim()))];
+  const autres = (langues ?? []).map((l) => l?.trim()).filter((l) => l && l.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() !== "francais");
+  return [...new Set(autres)];
 }

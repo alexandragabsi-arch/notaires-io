@@ -18,6 +18,10 @@
     {
       "path": "/api/cron/audit-legalcorners",
       "schedule": "0 7 * * *"
+    },
+    {
+      "path": "/api/cron/creneaux-app",
+      "schedule": "5 23 * * *"
     }
   ]
 }

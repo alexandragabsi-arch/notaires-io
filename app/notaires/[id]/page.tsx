@@ -9,6 +9,7 @@ import type { ListingNotaire } from "@/lib/notaires-listing";
 import { estFicheTest } from "@/lib/fiches-test";
 import { createClient } from "@supabase/supabase-js";
 import { idDepuisSlugNom, inscritDeLaFiche } from "@/lib/inscrits-serveur";
+import { lireDisponibilites } from "@/lib/disponibilites";
 
 // Génère statiquement les 35 notaires vedettes ; les autres sont SSR à la demande
 export async function generateStaticParams() {
@@ -34,7 +35,7 @@ async function ficheCompletee(id: string): Promise<Partial<ListingNotaire> | nul
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   )
     .from("notaire_profiles")
-    .select("name, city, initials, office_name, address, phone, website, role, specialties, sub_specialties, languages, bio, photo, slot_matrix, user_id, subscription_status")
+    .select("name, city, initials, office_name, address, phone, website, role, specialties, sub_specialties, languages, bio, photo, slot_matrix, disponibilites, user_id, subscription_status")
     .eq("id", id)
     .eq("verifie", true) // compte à l'e-mail confirmé uniquement
     .maybeSingle();
@@ -70,6 +71,7 @@ async function ficheCompletee(id: string): Promise<Partial<ListingNotaire> | nul
     bio: data.bio ?? undefined,
     photo: data.photo ?? undefined,
     slotMatrix: Array.isArray(data.slot_matrix) ? data.slot_matrix : undefined,
+    disponibilites: lireDisponibilites(data.disponibilites),
     claimed: true,
   };
   // On ne garde que les champs renseignés : un champ vide ne masque pas l'annuaire.

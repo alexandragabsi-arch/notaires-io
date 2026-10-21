@@ -24,6 +24,7 @@ import {
   Receipt,
   CreditCard,
   Store,
+  Clock,
 } from "lucide-react";
 import { getStoredProfiles, getProfileByUserId } from "@/lib/notaire-profiles";
 import { supabase } from "@/lib/supabase";
@@ -33,6 +34,7 @@ import AccountSettings from "@/components/AccountSettings";
 import GoogleVisibilite from "@/components/GoogleVisibilite";
 import CommandesCartes from "@/components/CommandesCartes";
 import BandeauAbonnement from "@/components/BandeauAbonnement";
+import DisponibilitesEditor from "@/components/DisponibilitesEditor";
 
 const SITE_URL =
   typeof window !== "undefined"
@@ -290,6 +292,7 @@ function ProfileHero({ profile }: { profile: ListingNotaire }) {
 /* ── Navigation rapide ──────────────────────────────────────────────────────── */
 function QuickNav({ profileId }: { profileId: string }) {
   const links = [
+    { icon: Clock, label: "Mes disponibilités", href: "#disponibilites", color: "text-[var(--color-success)]", bg: "bg-[var(--color-tint-green)]" },
     { icon: CalendarDays, label: "Mes rendez-vous", href: "#agenda", color: "text-[var(--color-success)]", bg: "bg-[var(--color-tint-green)]" },
     { icon: Receipt, label: "Mes factures", href: "#factures", color: "text-orange-500", bg: "bg-[var(--color-tint-warm)]" },
     { icon: User, label: "Mon profil public", href: `/notaires/${profileId}`, color: "text-purple-600", bg: "bg-[var(--color-tint-purple)]" },
@@ -487,6 +490,17 @@ function EspaceNotaireInner() {
           transition={{ duration: 0.4, delay: 0.1 }}
         >
           <QuickNav profileId={profile.id} />
+        </motion.div>
+
+        {/* Disponibilités : semaine type libre + congés et dates particulières */}
+        <motion.div
+          id="disponibilites"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.15 }}
+          className="scroll-mt-24"
+        >
+          <DisponibilitesEditor profile={profile} />
         </motion.div>
 
       </div>

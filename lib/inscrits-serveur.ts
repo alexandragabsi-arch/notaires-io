@@ -10,6 +10,7 @@
 
 import type { ListingNotaire } from "./notaires-listing";
 import { arrDepuisAdresse } from "./arrondissements";
+import { lireDisponibilites } from "./disponibilites";
 import { adresseComplete, adresseCompleteBAN } from "./adresse";
 import { getAllNotaires } from "./notaires-source";
 import { estFicheTest } from "./fiches-test";
@@ -29,7 +30,7 @@ const CLE = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUP
 
 // Champs publics uniquement : ni e-mail, ni données d'abonnement.
 const CHAMPS =
-  "id,name,initials,color,city,office_name,crpcen,website,address,phone,role,specialties,sub_specialties,languages,bio,photo,slot_matrix";
+  "id,name,initials,color,city,office_name,crpcen,website,address,phone,role,specialties,sub_specialties,languages,bio,photo,slot_matrix,disponibilites";
 
 /** Tous les inscrits confirmés, abonnement non expiré, plus récents d'abord. */
 export async function getInscrits(): Promise<ListingNotaire[]> {
@@ -111,6 +112,7 @@ async function lireInscrits(): Promise<ListingNotaire[]> {
         bio: (r.bio as string) || undefined,
         photo: (r.photo as string) || undefined,
         slotMatrix: (r.slot_matrix as string[][] | null) || undefined,
+        disponibilites: lireDisponibilites(r.disponibilites),
         arrondissement: arrondissementDe(r.city as string, r.address as string | undefined),
         next: "Sur demande",
         isNew: false,

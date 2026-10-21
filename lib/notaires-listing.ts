@@ -1,3 +1,4 @@
+import type { Disponibilites } from "@/lib/disponibilites";
 // Données de l'annuaire des notaires (listing public, recherche par ville/spécialité)
 // Générées automatiquement depuis data/notaires-membres.json — notaires réels
 
@@ -21,7 +22,8 @@ export interface ListingNotaire {
   subSpecialties?: string[];
   languages?: string[];
   next: string;
-  slotMatrix?: string[][];
+  slotMatrix?: string[][]; // ancienne saisie (jours numérotés), remplacée par disponibilites
+  disponibilites?: Disponibilites;
   photo?: string;
   isNew?: boolean;
   bio?: string;

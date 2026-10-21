@@ -4,6 +4,7 @@
 import type { ListingNotaire } from "./notaires-listing";
 import { supabase } from "./supabase";
 import { erreurPhoto } from "./photo-regles";
+import { lireDisponibilites, type Disponibilites } from "./disponibilites";
 
 export { erreurPhoto, PHOTO_TYPES, BIO_MAX } from "./photo-regles";
 
@@ -133,6 +134,7 @@ export async function getRemoteProfiles(): Promise<ListingNotaire[]> {
     bio: row.bio as string | undefined,
     photo: row.photo as string | undefined,
     slotMatrix: (row.slot_matrix as string[][] | null) || undefined,
+    disponibilites: lireDisponibilites(row.disponibilites),
     next: "Sur demande",
     isNew: false,
     // Fiche rattachée à un compte confirmé : notaire inscrit sur la plateforme.
@@ -184,6 +186,11 @@ async function enregistrerFiche(ligne: Record<string, unknown>, userId?: string)
   });
   const json = (await res.json().catch(() => ({}))) as { error?: string };
   if (!res.ok) throw new Error(json.error ?? "L'enregistrement de la fiche a échoué. Réessayez.");
+}
+
+/** Enregistre les disponibilités du notaire connecté (semaine type + dates modifiées). */
+export async function enregistrerDisponibilites(id: string, disponibilites: Disponibilites): Promise<void> {
+  await enregistrerFiche({ id, disponibilites });
 }
 
 // Enregistre un nouveau profil : localStorage (instantané) + Supabase (persistant).
@@ -354,6 +361,7 @@ export async function getProfileByUserId(userId: string): Promise<ListingNotaire
     bio: data.bio as string | undefined,
     photo: data.photo as string | undefined,
     slotMatrix: (data.slot_matrix as string[][] | null) || undefined,
+    disponibilites: lireDisponibilites(data.disponibilites),
     next: "Sur demande",
     isNew: false,
     claimed: true,

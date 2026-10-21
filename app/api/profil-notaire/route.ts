@@ -4,6 +4,7 @@ import { limiter, ipDe } from "@/lib/rate-limit";
 import { identifierNotaire, supabaseAdmin } from "@/lib/notaire-email-serveur";
 import { BIO_MAX } from "@/lib/photo-regles";
 import { normaliserSpecialites } from "@/lib/specialites";
+import { validerDisponibilites } from "@/lib/disponibilites";
 import { sendEmail, emailLayout, emailButton, ADMIN_EMAIL, SITE } from "@/lib/email";
 
 // Création, revendication et modification d'une fiche notaire.
@@ -151,12 +152,23 @@ export async function POST(req: NextRequest) {
     bio: texte(body.bio, BIO_MAX),
     photo: photo(body.photo),
     slot_matrix: creneaux(body.slot_matrix),
+    // Semaine type + dates modifiées ; null = le notaire efface tout.
+    disponibilites:
+      body.disponibilites === undefined
+        ? undefined
+        : body.disponibilites === null
+        ? null
+        : validerDisponibilites(body.disponibilites) ?? undefined,
   };
   // En cas de reprise, rien de ce qu'avait saisi le compte précédent ne subsiste.
   const ligne: Record<string, unknown> = reprise
-    ? { id, user_id: user.id, phone: null, address: null, website: null, email: null, bio: null, photo: null, slot_matrix: null, subscription_status: null, subscription_renewal_at: null, offre: null }
+    ? { id, user_id: user.id, phone: null, address: null, website: null, email: null, bio: null, photo: null, slot_matrix: null, disponibilites: null, subscription_status: null, subscription_renewal_at: null, offre: null }
     : { id, user_id: user.id };
   for (const [k, v] of Object.entries(champs)) if (v !== undefined) ligne[k] = v;
+
+  if (body.disponibilites != null && champs.disponibilites === undefined) {
+    return NextResponse.json({ error: "Disponibilités illisibles : vérifiez les horaires saisis." }, { status: 400 });
+  }
 
   if (!existante && (!ligne.name || !ligne.city)) {
     return NextResponse.json({ error: "Nom et ville sont requis." }, { status: 400 });

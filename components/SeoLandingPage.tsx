@@ -6,6 +6,7 @@ import { languesAffichees } from "@/lib/langues";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { useFichesCompletees, abonnesEnTete, rangAffichage } from "@/lib/fiches-completees";
 import { arrDepuisCodePostal, libelleArr } from "@/lib/arrondissements";
+import { heuresPour } from "@/lib/disponibilites";
 
 interface Props {
   h1: string;
@@ -170,7 +171,7 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
                 style={{ gridTemplateColumns: `repeat(${DAYS_VISIBLE}, minmax(62px, 1fr))` }}
               >
                 {visibleDays.map((day, di) => {
-                  const times = notaire.slotMatrix?.[offset + di] ?? [];
+                  const times = heuresPour(notaire, day, offset + di);
                   const label = formatDayLabel(day);
                   return (
                     <div key={di} className="flex flex-col gap-1.5 min-w-[62px]">

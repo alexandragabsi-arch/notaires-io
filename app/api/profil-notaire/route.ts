@@ -4,7 +4,7 @@ import { limiter, ipDe } from "@/lib/rate-limit";
 import { identifierNotaire, supabaseAdmin } from "@/lib/notaire-email-serveur";
 import { BIO_MAX } from "@/lib/photo-regles";
 import { normaliserSpecialites } from "@/lib/specialites";
-import { validerDisponibilites } from "@/lib/disponibilites";
+import { matriceAgenda, validerDisponibilites, type Disponibilites } from "@/lib/disponibilites";
 import { sendEmail, emailLayout, emailButton, ADMIN_EMAIL, SITE } from "@/lib/email";
 
 // Création, revendication et modification d'une fiche notaire.
@@ -165,6 +165,10 @@ export async function POST(req: NextRequest) {
     ? { id, user_id: user.id, phone: null, address: null, website: null, email: null, bio: null, photo: null, slot_matrix: null, disponibilites: null, subscription_status: null, subscription_renewal_at: null, offre: null }
     : { id, user_id: user.id };
   for (const [k, v] of Object.entries(champs)) if (v !== undefined) ligne[k] = v;
+  // L'app iOS lit encore `slot_matrix` (jour 0 = demain) : on la déduit des
+  // nouvelles disponibilités, et le cron creneaux-app la recalcule chaque nuit.
+  const disponibilites = champs.disponibilites as Disponibilites | null | undefined;
+  if (disponibilites) ligne.slot_matrix = matriceAgenda({ disponibilites });
 
   if (body.disponibilites != null && champs.disponibilites === undefined) {
     return NextResponse.json({ error: "Disponibilités illisibles : vérifiez les horaires saisis." }, { status: 400 });

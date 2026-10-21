@@ -66,7 +66,7 @@ function LigneJour({
         ) : (
           <>
             {plages.map((p, i) => (
-              <span key={i} className="inline-flex items-center gap-1 rounded-xl bg-[var(--color-tint-blue)] pl-2 pr-1 py-1">
+              <span key={i} className="inline-flex items-center gap-1 rounded-xl bg-white border-2 border-[var(--color-border)] pl-2 pr-1 py-1">
                 <input type="time" step={60} value={p.de} onChange={(e) => maj(i, "de", e.target.value)} aria-label="Début"
                   className="bg-transparent text-[14px] font-semibold text-[var(--color-text-strong)] focus:outline-none" />
                 <span className="text-[var(--color-muted)]">–</span>
@@ -105,7 +105,7 @@ function ApercuClient({ dispo, profileId }: { dispo: Disponibilites; profileId: 
   }, [page]);
 
   return (
-    <div className="rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-tint-blue)] p-4 sm:p-5 flex flex-col gap-4">
+    <div className="rounded-2xl border-2 border-[var(--color-border)] bg-white p-4 sm:p-5 flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="inline-flex items-center gap-2 text-[14px] font-bold text-[var(--color-text-strong)]">
           <Eye className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2.5} />
@@ -232,7 +232,7 @@ export default function DisponibilitesEditor({ profile }: { profile: ListingNota
 
   const ongletCls = (actif: boolean) =>
     `flex-1 py-2 rounded-lg text-[14px] font-semibold transition-colors ${
-      actif ? "bg-white text-[var(--color-text-strong)] shadow-sm" : "text-[var(--color-muted)] hover:text-[var(--color-text-strong)]"
+      actif ? "bg-[var(--color-accent)] text-white" : "text-[var(--color-muted)] hover:text-[var(--color-text-strong)]"
     }`;
 
   return (
@@ -267,7 +267,7 @@ export default function DisponibilitesEditor({ profile }: { profile: ListingNota
       </div>
 
       {/* Onglets */}
-      <div className="flex gap-1 p-1 rounded-xl bg-[var(--color-tint-blue)]">
+      <div className="flex gap-1 p-1 rounded-xl bg-white border-2 border-[var(--color-border)]">
         <button type="button" onClick={() => setOnglet("habituelle")} className={ongletCls(onglet === "habituelle")}>
           Ma semaine habituelle
         </button>

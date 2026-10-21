@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CalendarDays, Plus, X, Check, Loader2, ChevronLeft, ChevronRight, Repeat, CalendarOff, Eye, ExternalLink } from "lucide-react";
+import { CalendarDays, Plus, X, Check, ChevronDown, Loader2, ChevronLeft, ChevronRight, Repeat, CalendarOff, Eye, ExternalLink } from "lucide-react";
 import {
   JOURS_SEMAINE,
   DUREE_MIN,
@@ -22,6 +22,23 @@ import type { ListingNotaire } from "@/lib/notaires-listing";
 
 const DUREES = [15, 30, 45, 60, 90];
 const JOURNEE: Plage[] = [{ de: "09:00", a: "12:00" }, { de: "14:00", a: "18:00" }];
+
+// Heures proposées : tous les quarts d'heure (une heure déjà saisie hors de ce pas reste proposée).
+const HEURES = Array.from({ length: 96 }, (_, i) => `${String(Math.floor(i / 4)).padStart(2, "0")}:${String((i % 4) * 15).padStart(2, "0")}`);
+
+/** Liste déroulante d'heure, visiblement cliquable. */
+function ChoixHeure({ value, onChange, label }: { value: string; onChange: (v: string) => void; label: string }) {
+  const options = HEURES.includes(value) ? HEURES : [...HEURES, value].sort();
+  return (
+    <span className="relative inline-flex">
+      <select value={value} onChange={(e) => onChange(e.target.value)} aria-label={label}
+        className="appearance-none cursor-pointer pl-3 pr-8 py-1.5 rounded-lg bg-white border-2 border-[var(--color-border)] text-[14px] font-semibold text-[var(--color-text-strong)] hover:border-[var(--color-accent)] focus:outline-none focus:border-[var(--color-accent)] transition-colors">
+        {options.map((h) => <option key={h} value={h}>{h.replace(":", " h ")}</option>)}
+      </select>
+      <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-accent)]" strokeWidth={2.5} />
+    </span>
+  );
+}
 
 function copie(plages: Plage[]): Plage[] {
   return plages.map((p) => ({ ...p }));
@@ -73,21 +90,21 @@ function LigneJour({
         ) : (
           <>
             {plages.map((p, i) => (
-              <span key={i} className="inline-flex items-center gap-1 rounded-xl bg-white border-2 border-[var(--color-border)] pl-2 pr-1 py-1">
-                <input type="time" step={60} value={p.de} onChange={(e) => maj(i, "de", e.target.value)} aria-label="Début"
-                  className="bg-transparent text-[14px] font-semibold text-[var(--color-text-strong)] focus:outline-none" />
-                <span className="text-[var(--color-muted)]">–</span>
-                <input type="time" step={60} value={p.a} onChange={(e) => maj(i, "a", e.target.value)} aria-label="Fin"
-                  className="bg-transparent text-[14px] font-semibold text-[var(--color-text-strong)] focus:outline-none" />
+              <span key={i} className="inline-flex items-center gap-1.5">
+                <span className="text-[13px] text-[var(--color-muted)]">de</span>
+                <ChoixHeure value={p.de} onChange={(v) => maj(i, "de", v)} label="Début" />
+                <span className="text-[13px] text-[var(--color-muted)]">à</span>
+                <ChoixHeure value={p.a} onChange={(v) => maj(i, "a", v)} label="Fin" />
                 <button type="button" onClick={() => onChange(plages.filter((_, j) => j !== i))} aria-label="Retirer"
                   className="w-6 h-6 rounded-full flex items-center justify-center text-[var(--color-muted)] hover:text-[var(--color-danger)] hover:bg-white">
                   <X className="w-3.5 h-3.5" strokeWidth={2.5} />
                 </button>
               </span>
             ))}
-            <button type="button" onClick={ajouter} aria-label="Ajouter des horaires"
-              className="w-8 h-8 rounded-full border-2 border-dashed border-[var(--color-border)] flex items-center justify-center text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]">
+            <button type="button" onClick={ajouter}
+              className="inline-flex items-center gap-1 text-[13px] font-semibold text-[var(--color-accent)] hover:underline">
               <Plus className="w-4 h-4" strokeWidth={2.5} />
+              Ajouter des horaires
             </button>
           </>
         )}

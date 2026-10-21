@@ -14,6 +14,7 @@ import { languesAffichees } from "@/lib/langues";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { useFichesCompletees, abonnesEnTete, rangAffichage } from "@/lib/fiches-completees";
 import NotaireMap from "@/components/NotaireMap";
+import { heuresPour, heuresDuJour, HORIZON_JOURS } from "@/lib/disponibilites";
 
 const ALL = "Toutes";
 
@@ -145,6 +146,15 @@ function daysUntilNext(n: ListingNotaire): number | null {
         return diff === 0 ? 7 : diff; // un nom de jour = prochaine occurrence future
       }
     }
+  }
+  if (n.disponibilites) {
+    // Vraies dates : premier jour (aujourd'hui compris) avec un créneau libre.
+    const d = new Date();
+    for (let off = 0; off <= HORIZON_JOURS; off++) {
+      if (heuresDuJour(n.disponibilites, d).length) return off;
+      d.setDate(d.getDate() + 1);
+    }
+    return null;
   }
   const sm = n.slotMatrix;
   if (sm && sm.length) {
@@ -283,7 +293,7 @@ function NotaireCard({ n, i }: { n: ListingNotaire; i: number }) {
               <div className="flex-1 overflow-x-auto scrollbar-none -mx-0.5 px-0.5">
                 <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${DAYS_VISIBLE}, minmax(62px, 1fr))` }}>
                   {visibleDays.map((day, di) => {
-                    const times = n.slotMatrix?.[offset + di] ?? [];
+                    const times = heuresPour(n, day, offset + di);
                     const label = formatDayLabel(day);
                     return (
                       <div key={di} className="flex flex-col gap-1.5 min-w-[62px]">

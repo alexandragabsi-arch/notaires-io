@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   MapPin,
@@ -29,6 +30,7 @@ import { supabase } from "@/lib/supabase";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import BookingModal from "@/components/BookingModal";
 import { slotKeyDepuisJour } from "@/lib/creneau";
+import { matriceAgenda } from "@/lib/disponibilites";
 
 const ALL_SPECIALTIES = [
   "Droit immobilier", "Successions", "Droit de la famille",
@@ -111,9 +113,6 @@ function getMotifs(specialties: string[]): string[] {
   }
   return out.slice(0, 10);
 }
-
-// Créneaux proposés dans l'éditeur de disponibilités
-const SLOT_PRESETS = ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"];
 
 /* ── Jours de la semaine courts ─────────────────────────────────────────── */
 const DAY_LABELS = ["Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam.", "Dim."];
@@ -368,6 +367,8 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
   const [proprietaire, setProprietaire] = useState(false);
   useEffect(() => {
     let actif = true;
+    // « Voir ma fiche comme un client » (?apercu=1) : page telle qu'un client la voit.
+    if (new URLSearchParams(window.location.search).has("apercu")) return;
     supabase.auth.getUser().then(async ({ data }) => {
       if (!data.user) return;
       const fiche = await getProfileByUserId(data.user.id);
@@ -402,13 +403,6 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
   const [langs, setLangs] = useState<string[]>(notaire.languages ?? []);
   const [customSpec, setCustomSpec] = useState("");
 
-  // Disponibilités : matrice 91 jours (13 semaines = 3 mois)
-  const [editWeek, setEditWeek] = useState(0);
-  const [slotMatrix, setSlotMatrix] = useState<string[][]>(() => {
-    const base = notaire.slotMatrix ?? [];
-    return Array.from({ length: 91 }, (_, i) => (base[i] ? [...base[i]] : []));
-  });
-
   function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -435,17 +429,6 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
   function toggleLang(l: string) {
     setLangs(prev => prev.includes(l) ? prev.filter(x => x !== l) : [...prev, l]);
   }
-  function toggleSlot(dayIdx: number, slot: string) {
-    setSlotMatrix(prev => {
-      const next = prev.map(d => [...d]);
-      const day = next[dayIdx] ?? [];
-      next[dayIdx] = day.includes(slot)
-        ? day.filter(s => s !== slot)
-        : [...day, slot].sort();
-      return next;
-    });
-  }
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
@@ -461,7 +444,6 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
         website: website.trim() || undefined,
         specialties: specs,
         languages: langs,
-        slotMatrix,
       };
       await claimProfile(notaire.id, notaire.name, notaire.city, data);
       setDone(true);
@@ -498,7 +480,7 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
           className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl border-2 border-dashed border-[var(--color-border)] text-[14px] font-semibold text-[var(--color-muted)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
         >
           <Award className="w-4 h-4" strokeWidth={2} />
-          Modifier ma fiche (photo, présentation, site, disponibilités)
+          Modifier ma fiche (photo, présentation, site)
         </button>
       ) : (
         <motion.form
@@ -697,75 +679,18 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
             </div>
           </div>
 
-          {/* Disponibilités */}
-          <div>
-            <label className="block text-[12px] font-bold uppercase tracking-wide text-[var(--color-muted)] mb-3">
-              Disponibilités <span className="normal-case font-normal">(jusqu'à 3 mois)</span>
-            </label>
-
-            {/* Navigation semaine */}
-            <div className="flex items-center justify-between mb-3">
-              <button type="button" onClick={() => setEditWeek(w => Math.max(0, w - 1))} disabled={editWeek === 0}
-                className="flex items-center gap-1 text-[12px] font-semibold text-[var(--color-accent)] disabled:opacity-30 disabled:cursor-not-allowed hover:underline transition-opacity">
-                <ChevronLeft className="w-4 h-4" strokeWidth={2.5} />
-                Préc.
-              </button>
-              <span className="text-[12px] font-semibold text-[var(--color-muted)]">
-                Semaine {editWeek + 1} / 13
-              </span>
-              <button type="button" onClick={() => setEditWeek(w => Math.min(12, w + 1))} disabled={editWeek === 12}
-                className="flex items-center gap-1 text-[12px] font-semibold text-[var(--color-accent)] disabled:opacity-30 disabled:cursor-not-allowed hover:underline transition-opacity">
-                Suiv.
-                <ChevronRight className="w-4 h-4" strokeWidth={2.5} />
-              </button>
-            </div>
-
-            {/* Grille 7 jours × créneaux */}
-            <div className="overflow-x-auto scrollbar-none">
-              <div className="grid grid-cols-7 gap-1.5 min-w-[420px]">
-                {/* En-têtes */}
-                {getNextWorkdays(7, editWeek * 7).map((day, i) => (
-                  <div key={i} className="text-center mb-1">
-                    <div className="text-[10px] font-bold text-[var(--color-muted)] uppercase tracking-[0.5px]">
-                      {formatDayShort(day)}
-                    </div>
-                    <div className="text-[11px] font-bold text-[var(--color-text-strong)]">
-                      {formatDayNum(day)}/{formatMonth(day).replace(".", "")}
-                    </div>
-                  </div>
-                ))}
-                {/* Créneaux */}
-                {Array.from({ length: 7 }, (_, i) => {
-                  const matrixIdx = editWeek * 7 + i;
-                  const daySlots = slotMatrix[matrixIdx] ?? [];
-                  return (
-                    <div key={i} className="flex flex-col gap-1">
-                      {SLOT_PRESETS.map(slot => {
-                        const active = daySlots.includes(slot);
-                        return (
-                          <button
-                            key={slot}
-                            type="button"
-                            onClick={() => toggleSlot(matrixIdx, slot)}
-                            className={`w-full py-1 rounded-[6px] text-[10px] font-semibold transition-colors ${
-                              active
-                                ? "bg-[var(--color-accent)] text-white"
-                                : "bg-[var(--color-tint-blue)] text-[var(--color-muted)] hover:bg-[var(--color-accent-soft)] hover:text-[var(--color-accent)]"
-                            }`}
-                          >
-                            {slot}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <p className="text-[11px] text-[var(--color-muted)] mt-2">
-              Cliquez sur un créneau pour l'activer ou le désactiver.
-            </p>
-          </div>
+          {/* Disponibilités : gérées dans « Mon espace » (semaine type + dates modifiées). */}
+          <a
+            href="/espace-notaire#disponibilites"
+            className="flex items-center gap-3 p-4 rounded-2xl border-2 border-dashed border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors"
+          >
+            <CalendarDays className="w-5 h-5 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
+            <span className="flex-1 text-[13px] text-[var(--color-muted)]">
+              <span className="block font-bold text-[var(--color-text-strong)]">Mes disponibilités</span>
+              Vos jours, vos horaires et la durée de vos rendez-vous se règlent dans votre espace.
+            </span>
+            <ArrowRight className="w-4 h-4 text-[var(--color-accent)] shrink-0" strokeWidth={2.5} />
+          </a>
 
           {saveError && (
             <p className="text-[13px] text-[var(--color-danger)]">{saveError}</p>
@@ -786,6 +711,18 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
           </p>
         </motion.form>
       )}
+    </div>
+  );
+}
+
+/* ── Bandeau « aperçu client » (lien depuis Mon espace) ─────────────────── */
+function BandeauApercu() {
+  const params = useSearchParams();
+  if (!params.has("apercu")) return null;
+  return (
+    <div className="sticky top-0 z-40 bg-[var(--color-text-strong)] text-white text-[13px] px-4 py-2.5 flex items-center justify-center gap-3">
+      <span>Aperçu : votre fiche telle que la voient vos clients.</span>
+      <a href="/espace-notaire#disponibilites" className="font-semibold underline underline-offset-2">Retour à mon espace</a>
     </div>
   );
 }
@@ -837,6 +774,9 @@ export default function NotaireProfileClient({
   }, [id, initialNotaire]);
 
   const { pris, ajouterPris } = useCreneauxPris(notaire?.id);
+  // Créneaux des 3 prochains mois (jour 0 = demain), calculés à partir des
+  // disponibilités du notaire au moment de l'affichage.
+  const agenda = useMemo(() => (notaire ? matriceAgenda(notaire) : undefined), [notaire]);
   const [demandeCreneau, setDemandeCreneau] = useState<{ cle: string; n: number }>();
 
   if (notaire === undefined) {
@@ -887,6 +827,10 @@ export default function NotaireProfileClient({
       : "Notaire";
 
   return (
+    <>
+    <Suspense fallback={null}>
+      <BandeauApercu />
+    </Suspense>
     <div className="max-w-[1140px] mx-auto px-4 sm:px-6 py-5 sm:py-8">
       {/* ── Retour ── */}
       <motion.a
@@ -1106,7 +1050,7 @@ export default function NotaireProfileClient({
               {(() => {
                 // Nombre de créneaux réellement ouverts, plutôt qu'un « Disponible
                 // rapidement » affiché même sans agenda.
-                const ouverts = (notaire.slotMatrix ?? []).reduce((n, j) => n + (j?.length ?? 0), 0);
+                const ouverts = (agenda ?? []).reduce((n, j) => n + (j?.length ?? 0), 0);
                 if (!ouverts) return null;
                 return (
                   <span className="ml-auto text-[11px] text-[var(--color-success)] font-semibold bg-[var(--color-tint-green)] px-2 py-0.5 rounded-full">
@@ -1130,9 +1074,9 @@ export default function NotaireProfileClient({
                   </p>
                 </div>
               </div>
-            ) : notaire.slotMatrix ? (
+            ) : agenda ? (
               <SlotCalendar
-                slotMatrix={notaire.slotMatrix}
+                slotMatrix={agenda}
                 notaireId={notaire.id}
                 notaireNom={notaire.name || notaire.officeName || "Notaire"}
                 pris={pris}
@@ -1247,7 +1191,7 @@ export default function NotaireProfileClient({
           {isClaimed && (
             <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
               {(() => {
-                const prochain = prochainCreneau(notaire.slotMatrix, pris);
+                const prochain = prochainCreneau(agenda, pris);
                 if (!prochain) return null;
                 return (
                   <div className="text-center mb-5">
@@ -1263,7 +1207,7 @@ export default function NotaireProfileClient({
                 href="#agenda"
                 onClick={(e) => {
                   // Créneau affiché juste au-dessus : réservation ouverte dessus.
-                  const prochain = prochainCreneau(notaire.slotMatrix, pris);
+                  const prochain = prochainCreneau(agenda, pris);
                   if (!prochain) return; // sans créneau, le lien mène à l'agenda
                   e.preventDefault();
                   setDemandeCreneau({ cle: prochain.cle, n: Date.now() });
@@ -1393,5 +1337,6 @@ export default function NotaireProfileClient({
       )}
 
     </div>
+    </>
   );
 }

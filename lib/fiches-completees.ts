@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { ListingNotaire } from "./notaires-listing";
 import { getRemoteProfiles } from "./notaire-profiles";
 import { arrDepuisAdresse } from "./arrondissements";
+import { aDesCreneaux } from "./disponibilites";
 import { adresseComplete, adresseCompleteBAN } from "./adresse";
 
 // Une seule requête par visite, partagée par tous les composants de la page.
@@ -131,8 +132,7 @@ export function estFicheTest(n: ListingNotaire): boolean {
 export function rangAffichage(n: ListingNotaire): number {
   if (!n.claimed) return 3;
   if (estFicheTest(n)) return 2;
-  const creneaux = (n.slotMatrix ?? []).some((jour) => (jour?.length ?? 0) > 0);
-  return creneaux ? 0 : 1;
+  return aDesCreneaux(n) ? 0 : 1;
 }
 
 /** Notaires inscrits sur la plateforme en tête (ceux qui ont des créneaux

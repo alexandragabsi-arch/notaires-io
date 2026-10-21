@@ -3,6 +3,7 @@ import { limiter, ipDe } from "@/lib/rate-limit";
 import { readFileSync } from "fs";
 import { supabaseAdmin } from "@/lib/notaire-email-serveur";
 import { join } from "path";
+import { lireDisponibilites, matriceAgenda } from "@/lib/disponibilites";
 
 interface RawNotaire {
   id: string;
@@ -98,13 +99,18 @@ async function inscritsDeLaVille(norm: string) {
   try {
     const { data } = await supabaseAdmin()
       .from("notaire_profiles")
-      .select("id, name, initials, color, city, photo, specialties, slot_matrix, subscription_status")
+      .select("id, name, initials, color, city, photo, specialties, slot_matrix, disponibilites, subscription_status")
       .eq("verifie", true);
     return (data ?? [])
       .filter((n) => n.subscription_status !== "expire" && cityMatches(String(n.city ?? ""), norm))
       .map((n) => {
-        const prochain = (n.slot_matrix as string[][] | null)?.findIndex((j) => j?.length > 0) ?? -1;
-        const heure = prochain >= 0 ? (n.slot_matrix as string[][])[prochain][0] : null;
+        // Matrice « jour 0 = demain », calculée maintenant à partir des disponibilités.
+        const matrice = matriceAgenda({
+          disponibilites: lireDisponibilites(n.disponibilites),
+          slotMatrix: (n.slot_matrix as string[][] | null) ?? undefined,
+        });
+        const prochain = matrice?.findIndex((j) => j?.length > 0) ?? -1;
+        const heure = prochain >= 0 ? matrice![prochain][0] : null;
         return {
           id: n.id as string,
           name: n.name as string,

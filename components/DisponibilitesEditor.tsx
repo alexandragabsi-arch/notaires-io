@@ -62,7 +62,14 @@ function LigneJour({
 
       <div className="flex-1 flex flex-wrap items-center gap-x-3 gap-y-2">
         {!ouvert ? (
-          <span className="text-[14px] text-[var(--color-muted)]">Fermé</span>
+          <>
+            <span className="text-[14px] text-[var(--color-muted)]">Fermé</span>
+            <button type="button" onClick={() => onChange(copie(JOURNEE))}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 border-dashed border-[var(--color-accent)] text-[13px] font-semibold text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-colors">
+              <Plus className="w-4 h-4" strokeWidth={2.5} />
+              Ouvrir ce jour
+            </button>
+          </>
         ) : (
           <>
             {plages.map((p, i) => (

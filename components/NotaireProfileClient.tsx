@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   MapPin,
@@ -366,6 +367,8 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
   const [proprietaire, setProprietaire] = useState(false);
   useEffect(() => {
     let actif = true;
+    // « Voir ma fiche comme un client » (?apercu=1) : page telle qu'un client la voit.
+    if (new URLSearchParams(window.location.search).has("apercu")) return;
     supabase.auth.getUser().then(async ({ data }) => {
       if (!data.user) return;
       const fiche = await getProfileByUserId(data.user.id);
@@ -712,6 +715,18 @@ function ClaimSection({ notaire }: { notaire: ListingNotaire }) {
   );
 }
 
+/* ── Bandeau « aperçu client » (lien depuis Mon espace) ─────────────────── */
+function BandeauApercu() {
+  const params = useSearchParams();
+  if (!params.has("apercu")) return null;
+  return (
+    <div className="sticky top-0 z-40 bg-[var(--color-text-strong)] text-white text-[13px] px-4 py-2.5 flex items-center justify-center gap-3">
+      <span>Aperçu : votre fiche telle que la voient vos clients.</span>
+      <a href="/espace-notaire#disponibilites" className="font-semibold underline underline-offset-2">Retour à mon espace</a>
+    </div>
+  );
+}
+
 /* ── Composant principal ─────────────────────────────────────────────────── */
 export default function NotaireProfileClient({
   id,
@@ -812,6 +827,10 @@ export default function NotaireProfileClient({
       : "Notaire";
 
   return (
+    <>
+    <Suspense fallback={null}>
+      <BandeauApercu />
+    </Suspense>
     <div className="max-w-[1140px] mx-auto px-4 sm:px-6 py-5 sm:py-8">
       {/* ── Retour ── */}
       <motion.a
@@ -1318,5 +1337,6 @@ export default function NotaireProfileClient({
       )}
 
     </div>
+    </>
   );
 }

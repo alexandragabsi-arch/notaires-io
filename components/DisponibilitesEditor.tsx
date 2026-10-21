@@ -32,10 +32,10 @@ function ChoixHeure({ value, onChange, label }: { value: string; onChange: (v: s
   return (
     <span className="relative inline-flex">
       <select value={value} onChange={(e) => onChange(e.target.value)} aria-label={label}
-        className="appearance-none cursor-pointer pl-3 pr-8 py-1.5 rounded-lg bg-white border-2 border-[var(--color-border)] text-[14px] font-semibold text-[var(--color-text-strong)] hover:border-[var(--color-accent)] focus:outline-none focus:border-[var(--color-accent)] transition-colors">
+        className="appearance-none cursor-pointer pl-2 pr-6 sm:pl-2.5 sm:pr-7 py-1.5 rounded-lg bg-white border-2 border-[var(--color-border)] text-[13px] sm:text-[14px] font-semibold text-[var(--color-text-strong)] hover:border-[var(--color-accent)] focus:outline-none focus:border-[var(--color-accent)] transition-colors">
         {options.map((h) => <option key={h} value={h}>{h.replace(":", " h ")}</option>)}
       </select>
-      <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-accent)]" strokeWidth={2.5} />
+      <ChevronDown className="pointer-events-none absolute right-1.5 sm:right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-accent)]" strokeWidth={2.5} />
     </span>
   );
 }
@@ -90,8 +90,8 @@ function LigneJour({
         ) : (
           <>
             {plages.map((p, i) => (
-              <span key={i} className="inline-flex items-center gap-1.5">
-                <span className="text-[13px] text-[var(--color-muted)]">de</span>
+              <span key={i} className="inline-flex flex-wrap items-center gap-1 sm:gap-1.5">
+                <span className="hidden sm:inline text-[13px] text-[var(--color-muted)]">de</span>
                 <ChoixHeure value={p.de} onChange={(v) => maj(i, "de", v)} label="Début" />
                 <span className="text-[13px] text-[var(--color-muted)]">à</span>
                 <ChoixHeure value={p.a} onChange={(v) => maj(i, "a", v)} label="Fin" />
@@ -129,7 +129,7 @@ function ApercuClient({ dispo, profileId }: { dispo: Disponibilites; profileId: 
   }, [page]);
 
   return (
-    <div className="rounded-2xl border-2 border-[var(--color-border)] bg-white p-4 sm:p-5 flex flex-col gap-4">
+    <div className="min-w-0 rounded-2xl border-2 border-[var(--color-border)] bg-white p-3 sm:p-5 flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="inline-flex items-center gap-2 text-[14px] font-bold text-[var(--color-text-strong)]">
           <Eye className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2.5} />
@@ -156,8 +156,7 @@ function ApercuClient({ dispo, profileId }: { dispo: Disponibilites; profileId: 
         </button>
       </div>
 
-      <div className="overflow-x-auto scrollbar-none -mx-1 px-1">
-        <div className="grid grid-cols-7 gap-1.5 min-w-[490px]">
+      <div className="grid grid-cols-7 gap-1 sm:gap-1.5">
           {jours.map((d) => {
             const heures = heuresDuJour(dispo, d);
             return (
@@ -172,7 +171,7 @@ function ApercuClient({ dispo, profileId }: { dispo: Disponibilites; profileId: 
                   <div className="text-center text-[12px] text-[var(--color-muted)] py-1.5">—</div>
                 ) : (
                   heures.map((h) => (
-                    <span key={h} className="text-center py-1.5 rounded-lg bg-white text-[12px] font-semibold text-[var(--color-accent)] border border-[var(--color-border-soft)]">
+                    <span key={h} className="text-center py-1.5 rounded-lg bg-white text-[10px] sm:text-[12px] font-semibold tracking-tight text-[var(--color-accent)] border border-[var(--color-border-soft)]">
                       {h}
                     </span>
                   ))
@@ -180,7 +179,6 @@ function ApercuClient({ dispo, profileId }: { dispo: Disponibilites; profileId: 
               </div>
             );
           })}
-        </div>
       </div>
     </div>
   );
@@ -260,7 +258,7 @@ export default function DisponibilitesEditor({ profile }: { profile: ListingNota
     }`;
 
   return (
-    <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6 sm:p-8 flex flex-col gap-5">
+    <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-4 sm:p-8 flex flex-col gap-5 min-w-0">
       {/* En-tête */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-[var(--color-tint-green)] flex items-center justify-center">

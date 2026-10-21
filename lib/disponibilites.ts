@@ -157,7 +157,8 @@ export function heuresDuJour(dispo: Disponibilites, jour: Date, maintenant: numb
   if (ecart < 0 || ecart > HORIZON_JOURS) return [];
   const pas = Math.max(DUREE_MIN, dispo.duree);
   const heures: string[] = [];
-  for (const p of plagesDuJour(dispo, jour)) {
+  // Plages fusionnées : jamais deux fois la même heure, même pendant une saisie incomplète.
+  for (const p of nettoyerPlages(plagesDuJour(dispo, jour))) {
     for (let t = minutes(p.de); t + pas <= minutes(p.a); t += pas) {
       const h = enHeure(t);
       if (Date.parse(slotKeyDepuisJour(jour, h)) > maintenant) heures.push(h);

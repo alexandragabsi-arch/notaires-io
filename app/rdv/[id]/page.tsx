@@ -7,6 +7,7 @@ import { jetonValide } from "@/lib/lien-rdv";
 import { dateLongue } from "@/lib/emails/confirmation-rdv";
 import { generateRoomId, internalVisioUrl } from "@/lib/visio";
 import { parisParts } from "@/lib/creneau";
+import { adresseAffichee, adresseCompleteBAN } from "@/lib/adresse";
 
 // Page « Mon rendez-vous », ouverte depuis le lien signé de l'e-mail de
 // confirmation : détails du RDV, accès à la visio, annulation. Sans
@@ -44,7 +45,7 @@ export default async function Page({
     if (b) {
       const { data: n } = await db
         .from("notaire_profiles")
-        .select("office_name, address, phone")
+        .select("office_name, address, city, phone")
         .eq("id", b.notaire_id)
         .maybeSingle();
       const debut = b.slot_key as string | null;
@@ -59,7 +60,9 @@ export default async function Page({
         notaireNom: (b.notaire_nom as string) || "Votre notaire",
         notaireId: b.notaire_id as string,
         etude: (n?.office_name as string | null) ?? null,
-        adresse: (n?.address as string | null) ?? null,
+        adresse: n?.address
+          ? adresseAffichee(await adresseCompleteBAN(n.address as string, (n.city as string | null) ?? ""), n.city as string | null) ?? null
+          : null,
         telephone: (n?.phone as string | null) ?? null,
         dossier: (b.dossier as string | null) ?? null,
         modalite: (b.modalite === "visio" ? "visio" : "cabinet") as "visio" | "cabinet",

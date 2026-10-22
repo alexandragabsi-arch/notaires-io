@@ -4,6 +4,7 @@ import { sendEmail } from "@/lib/email";
 import { limiter, ipDe, piegeDeclenche, reponsePiege } from "@/lib/rate-limit";
 import { estSlotKeyIso, isoCreneau } from "@/lib/creneau";
 import { emailConfirmationClient, dateLongue, echapper } from "@/lib/emails/confirmation-rdv";
+import { adresseAffichee, adresseCompleteBAN } from "@/lib/adresse";
 
 // Client Supabase créé à la demande (pas au chargement du module) pour éviter
 // que le build n'échoue si une variable d'env manque au moment de la compilation.
@@ -118,7 +119,7 @@ export async function POST(req: NextRequest) {
   // ── Coordonnées du notaire (adresse du cabinet, e-mail de notification) ────
   const { data: notaireRow } = await supabase
     .from("notaire_profiles")
-    .select("email, address, office_name")
+    .select("email, address, city, office_name")
     .eq("id", notaireId)
     .maybeSingle();
 
@@ -132,7 +133,10 @@ export async function POST(req: NextRequest) {
         client,
         notaireNom,
         etude: (notaireRow?.office_name as string | null) ?? null,
-        adresse: (notaireRow?.address as string | null) ?? null,
+        // Adresse du cabinet avec code postal et ville, même si le notaire n'a saisi que la rue.
+        adresse: notaireRow?.address
+          ? adresseAffichee(await adresseCompleteBAN(notaireRow.address as string, (notaireRow.city as string | null) ?? ""), notaireRow.city as string | null) ?? null
+          : null,
         slotKey,
         modalite,
         dossier,

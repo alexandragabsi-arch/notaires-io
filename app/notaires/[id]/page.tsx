@@ -10,6 +10,7 @@ import { estFicheTest } from "@/lib/fiches-test";
 import { createClient } from "@supabase/supabase-js";
 import { idDepuisSlugNom, inscritDeLaFiche } from "@/lib/inscrits-serveur";
 import { lireDisponibilites } from "@/lib/disponibilites";
+import { adresseComplete, adresseCompleteBAN } from "@/lib/adresse";
 
 // Génère statiquement les 35 notaires vedettes ; les autres sont SSR à la demande
 export async function generateStaticParams() {
@@ -228,13 +229,20 @@ export default async function Page({
     if (profil) permanentRedirect(`/notaires/${encodeURIComponent(profil)}`);
   }
   // Fiche de l'annuaire enrichie, ou fiche créée à l'inscription (absente de l'annuaire).
-  const notaire: ListingNotaire | undefined = completee
+  const fusion: ListingNotaire | undefined = completee
     ? ({
         ...(base ?? { id, initials: "N", color: "default", next: "Sur demande", specialties: [] }),
         ...completee,
         id,
       } as ListingNotaire)
     : base;
+  // Code postal et ville toujours affichés : la rue seule saisie par le notaire
+  // (« 5 rue Legraverend ») est complétée par la fiche de l'annuaire, sinon par
+  // la Base Adresse Nationale, comme dans l'annuaire et les pages villes.
+  const notaire: ListingNotaire | undefined = fusion && {
+    ...fusion,
+    address: await adresseCompleteBAN(adresseComplete(completee?.address ?? base?.address, base?.address), fusion.city),
+  };
 
   // Autres notaires de la même étude (même officeName + même ville), hors lui-même.
   const officeKey = notaire?.officeName?.trim().toLowerCase();

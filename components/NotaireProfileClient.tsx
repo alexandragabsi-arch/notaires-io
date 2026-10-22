@@ -31,6 +31,7 @@ import type { ListingNotaire } from "@/lib/notaires-listing";
 import BookingModal from "@/components/BookingModal";
 import { slotKeyDepuisJour } from "@/lib/creneau";
 import { matriceAgenda } from "@/lib/disponibilites";
+import { adresseAffichee } from "@/lib/adresse";
 
 const ALL_SPECIALTIES = [
   "Droit immobilier", "Successions", "Droit de la famille",
@@ -1248,7 +1249,7 @@ export default function NotaireProfileClient({
                     Coordonnées
                   </div>
                   <p className="text-[13px] text-[var(--color-muted)] leading-relaxed">
-                    {notaire.address ?? `${notaire.city}${notaire.area ? ` · ${notaire.area}` : ""}`}
+                    {notaire.address ? adresseAffichee(notaire.address, notaire.city) : `${notaire.city}${notaire.area ? ` · ${notaire.area}` : ""}`}
                   </p>
                   {notaire.phone && (
                     <a

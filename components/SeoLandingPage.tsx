@@ -7,6 +7,7 @@ import type { ListingNotaire } from "@/lib/notaires-listing";
 import { useFichesCompletees, abonnesEnTete, rangAffichage } from "@/lib/fiches-completees";
 import { arrDepuisCodePostal, libelleArr } from "@/lib/arrondissements";
 import { heuresPour } from "@/lib/disponibilites";
+import { adresseAffichee } from "@/lib/adresse";
 
 interface Props {
   h1: string;
@@ -115,7 +116,7 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
           {notaire.address && (
             <div className="flex items-start gap-1.5 text-[12px] text-[var(--color-muted)]">
               <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[var(--color-accent)]" strokeWidth={2} />
-              <span>{notaire.address}</span>
+              <span>{adresseAffichee(notaire.address, notaire.city)}</span>
             </div>
           )}
 

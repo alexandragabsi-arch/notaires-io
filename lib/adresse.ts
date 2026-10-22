@@ -55,3 +55,17 @@ export async function adresseCompleteBAN(saisie: string | undefined, ville: stri
     return saisie;
   }
 }
+
+/**
+ * Adresse à afficher : jamais sans ville. Filet de sécurité quand ni
+ * l'annuaire ni la Base Adresse Nationale n'ont fourni le code postal :
+ * « 5 rue Legraverend » + « Paris 12 » → « 5 rue Legraverend, Paris 12 ».
+ */
+export function adresseAffichee(adresse?: string | null, ville?: string | null): string | undefined {
+  const a = adresse?.trim();
+  if (!a) return ville ?? undefined;
+  if (!ville || aCodePostal(a)) return a;
+  const villeBase = sansAccents(ville).replace(/\s+\d.*$/, "");
+  if (villeBase && sansAccents(a).includes(villeBase)) return a;
+  return `${a.replace(/[\s,]+$/, "")}, ${ville}`;
+}

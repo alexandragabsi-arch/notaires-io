@@ -44,6 +44,8 @@ export async function adresseCompleteBAN(saisie: string | undefined, ville: stri
     const res = await fetch(`https://api-adresse.data.gouv.fr/search/?${q}`, {
       // Côté serveur : une recherche par adresse et par jour suffit.
       next: { revalidate: 86400 },
+      // Jamais plus de 2 s : la page profil et la réservation n'attendent pas l'API.
+      signal: AbortSignal.timeout(2000),
     } as RequestInit);
     if (!res.ok) return saisie;
     const json = await res.json();
@@ -66,6 +68,7 @@ export function adresseAffichee(adresse?: string | null, ville?: string | null):
   if (!a) return ville ?? undefined;
   if (!ville || aCodePostal(a)) return a;
   const villeBase = sansAccents(ville).replace(/\s+\d.*$/, "");
-  if (villeBase && sansAccents(a).includes(villeBase)) return a;
+  // Ville déjà en fin d'adresse après une virgule (« 3 place X, Lyon ») ; « 12 rue de Lyon » ne compte pas.
+  if (villeBase && sansAccents(a).replace(/[\s,.]+$/, "").endsWith(`, ${villeBase}`)) return a;
   return `${a.replace(/[\s,]+$/, "")}, ${ville}`;
 }

@@ -178,7 +178,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Nom et ville sont requis." }, { status: 400 });
   }
 
-  const { error } = await db.from("notaire_profiles").upsert(ligne);
+  // Fiche existante : update et non upsert. Postgres vérifie les colonnes
+  // NOT NULL (name, city) avant de détecter le conflit : un upsert partiel
+  // ({ id, disponibilites }) échouait toujours (Me Nicolle, 22/10/2026).
+  const { error } = existante
+    ? await db.from("notaire_profiles").update(ligne).eq("id", id)
+    : await db.from("notaire_profiles").insert(ligne);
   if (error) {
     console.error("[profil-notaire] échec enregistrement:", error.message);
     return NextResponse.json({ error: "L'enregistrement de la fiche a échoué. Réessayez." }, { status: 500 });

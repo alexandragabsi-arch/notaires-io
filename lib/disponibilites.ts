@@ -72,7 +72,7 @@ export function indexSemaine(d: Date): number {
 export function disponibilitesParDefaut(): Disponibilites {
   const ouvre = [{ de: "09:00", a: "12:00" }, { de: "14:00", a: "18:00" }];
   return {
-    duree: 60,
+    duree: 30,
     semaine: [ouvre, ouvre, ouvre, ouvre, ouvre, [], []].map((j) => j.map((p) => ({ ...p }))),
     exceptions: {},
   };

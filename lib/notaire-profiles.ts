@@ -362,6 +362,7 @@ export async function getProfileByUserId(userId: string): Promise<ListingNotaire
     photo: data.photo as string | undefined,
     slotMatrix: (data.slot_matrix as string[][] | null) || undefined,
     disponibilites: lireDisponibilites(data.disponibilites),
+    google_place_id: data.google_place_id as string | null | undefined,
     next: "Sur demande",
     isNew: false,
     claimed: true,

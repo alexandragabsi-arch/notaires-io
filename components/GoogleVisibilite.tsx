@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import {
   Store,
   Copy,
@@ -15,6 +15,7 @@ import {
   CheckCircle2,
   XCircle,
   Loader2,
+  RefreshCw,
 } from "lucide-react";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 
@@ -55,9 +56,14 @@ interface GoogleCheckResult {
   totalRatings?: number;
   mapsUrl?: string;
   editUrl?: string;
+  saved?: boolean;
 }
 
-export default function GoogleVisibilite({ profile }: { profile: ListingNotaire }) {
+interface GoogleVisibiliteProps {
+  profile: ListingNotaire & { google_place_id?: string | null };
+}
+
+export default function GoogleVisibilite({ profile }: GoogleVisibiliteProps) {
   const [copyState, setCopyState] = useState<"idle" | "ok" | "fail">("idle");
   const urlRef = useRef<HTMLSpanElement>(null);
   const profileUrl = `${SITE_URL}/notaires/${profile.id}#agenda`;
@@ -65,20 +71,36 @@ export default function GoogleVisibilite({ profile }: { profile: ListingNotaire 
   const [copieSite, setCopieSite] = useState<"idle" | "ok" | "fail">("idle");
 
   const [googleCheck, setGoogleCheck] = useState<GoogleCheckResult | null>(null);
-  const [googleLoading, setGoogleLoading] = useState(true);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const hasCachedPlaceId = !!profile.google_place_id;
+
+  const runGoogleCheck = useCallback(
+    (force?: boolean) => {
+      if (!force && hasCachedPlaceId) return;
+      setGoogleLoading(true);
+      const params = new URLSearchParams();
+      if (profile.officeName) params.set("officeName", profile.officeName);
+      if (profile.name) params.set("name", profile.name);
+      if (profile.city) params.set("city", profile.city);
+      params.set("save", "true");
+      params.set("notaireId", profile.id);
+
+      fetch(`/api/google-business/check?${params}`)
+        .then((r) => r.json())
+        .then((data: GoogleCheckResult) => setGoogleCheck(data))
+        .catch(() => setGoogleCheck(null))
+        .finally(() => setGoogleLoading(false));
+    },
+    [profile.officeName, profile.name, profile.city, profile.id, hasCachedPlaceId],
+  );
 
   useEffect(() => {
-    const params = new URLSearchParams();
-    if (profile.officeName) params.set("officeName", profile.officeName);
-    if (profile.name) params.set("name", profile.name);
-    if (profile.city) params.set("city", profile.city);
-
-    fetch(`/api/google-business/check?${params}`)
-      .then((r) => r.json())
-      .then((data: GoogleCheckResult) => setGoogleCheck(data))
-      .catch(() => setGoogleCheck(null))
-      .finally(() => setGoogleLoading(false));
-  }, [profile.officeName, profile.name, profile.city]);
+    if (hasCachedPlaceId) {
+      setGoogleCheck({ found: true, placeId: profile.google_place_id! });
+    } else {
+      runGoogleCheck();
+    }
+  }, [hasCachedPlaceId, profile.google_place_id, runGoogleCheck]);
 
   async function copierCodeSite() {
     try {
@@ -94,6 +116,10 @@ export default function GoogleVisibilite({ profile }: { profile: ListingNotaire 
     .filter(Boolean)
     .join(" ");
   const checkUrl = `https://www.google.com/search?q=${encodeURIComponent(checkQuery)}`;
+
+  const editUrl = `https://business.google.com/search?q=${encodeURIComponent(
+    [profile.officeName || profile.name, profile.city].filter(Boolean).join(" "),
+  )}`;
 
   async function copyLink() {
     try {
@@ -112,6 +138,9 @@ export default function GoogleVisibilite({ profile }: { profile: ListingNotaire 
       setCopyState("fail");
     }
   }
+
+  const isChecking = googleLoading;
+  const isFound = googleCheck?.found;
 
   return (
     <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6 sm:p-8">
@@ -132,35 +161,45 @@ export default function GoogleVisibilite({ profile }: { profile: ListingNotaire 
 
       {/* Statut de la fiche Google */}
       <div className="mb-6">
-        {googleLoading ? (
+        {isChecking ? (
           <div className="flex items-center gap-3 bg-[var(--color-tint-blue)] rounded-2xl px-5 py-4">
             <Loader2 className="w-5 h-5 text-[var(--color-accent)] animate-spin" strokeWidth={2} />
             <span className="text-[14px] text-[var(--color-muted)]">
               Vérification de votre fiche Google Business...
             </span>
           </div>
-        ) : googleCheck?.found ? (
+        ) : isFound ? (
           <div className="bg-[var(--color-tint-green)] border border-[rgba(16,185,129,0.2)] rounded-2xl px-5 py-4">
-            <div className="flex items-center gap-2 mb-3">
-              <CheckCircle2 className="w-5 h-5 text-[var(--color-success)]" strokeWidth={2} />
-              <span className="text-[15px] font-bold text-[var(--color-success)]">
-                Fiche Google trouvée
-              </span>
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-[var(--color-success)]" strokeWidth={2} />
+                <span className="text-[15px] font-bold text-[var(--color-success)]">
+                  Fiche Google trouvée
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => runGoogleCheck(true)}
+                className="inline-flex items-center gap-1.5 text-[12px] font-semibold px-2.5 py-1.5 rounded-[8px] text-[var(--color-muted)] hover:text-[var(--color-accent)] hover:bg-white transition-colors"
+              >
+                <RefreshCw className="w-3.5 h-3.5" strokeWidth={2.5} />
+                Revérifier
+              </button>
             </div>
             <div className="flex flex-col gap-1.5 text-[13px] text-[var(--color-text-strong)]">
-              {googleCheck.name && (
+              {googleCheck?.name && (
                 <div className="flex items-center gap-2">
                   <Store className="w-3.5 h-3.5 text-[var(--color-muted)] shrink-0" strokeWidth={2} />
                   <span className="font-semibold">{googleCheck.name}</span>
                 </div>
               )}
-              {googleCheck.address && (
+              {googleCheck?.address && (
                 <div className="flex items-center gap-2">
                   <MapPin className="w-3.5 h-3.5 text-[var(--color-muted)] shrink-0" strokeWidth={2} />
                   <span>{googleCheck.address}</span>
                 </div>
               )}
-              {googleCheck.rating != null && (
+              {googleCheck?.rating != null && (
                 <div className="flex items-center gap-2">
                   <Star className="w-3.5 h-3.5 text-amber-500 shrink-0" strokeWidth={2} />
                   <span>
@@ -175,7 +214,7 @@ export default function GoogleVisibilite({ profile }: { profile: ListingNotaire 
               )}
             </div>
             <div className="flex flex-wrap gap-2 mt-3">
-              {googleCheck.mapsUrl && (
+              {googleCheck?.mapsUrl && (
                 <a
                   href={googleCheck.mapsUrl}
                   target="_blank"
@@ -187,7 +226,7 @@ export default function GoogleVisibilite({ profile }: { profile: ListingNotaire 
                 </a>
               )}
               <a
-                href={GBP_URL}
+                href={editUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-[8px] bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity"
@@ -199,11 +238,21 @@ export default function GoogleVisibilite({ profile }: { profile: ListingNotaire 
           </div>
         ) : (
           <div className="bg-[var(--color-tint-warm)] border border-[rgba(249,115,22,0.2)] rounded-2xl px-5 py-4">
-            <div className="flex items-center gap-2 mb-3">
-              <XCircle className="w-5 h-5 text-orange-500" strokeWidth={2} />
-              <span className="text-[15px] font-bold text-orange-600">
-                Aucune fiche Google trouvée
-              </span>
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <div className="flex items-center gap-2">
+                <XCircle className="w-5 h-5 text-orange-500" strokeWidth={2} />
+                <span className="text-[15px] font-bold text-orange-600">
+                  Aucune fiche Google trouvée
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => runGoogleCheck(true)}
+                className="inline-flex items-center gap-1.5 text-[12px] font-semibold px-2.5 py-1.5 rounded-[8px] text-[var(--color-muted)] hover:text-orange-600 hover:bg-white transition-colors"
+              >
+                <RefreshCw className="w-3.5 h-3.5" strokeWidth={2.5} />
+                Revérifier
+              </button>
             </div>
             <p className="text-[13px] text-[var(--color-text-strong)] leading-relaxed mb-3">
               Votre étude n'apparaît pas encore sur Google Business Profile. Créez votre fiche

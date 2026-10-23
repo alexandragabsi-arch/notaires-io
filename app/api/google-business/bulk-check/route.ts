@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/notaire-email-serveur";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 interface CheckResult {
   id: string;
@@ -17,6 +17,10 @@ interface CheckResult {
   rating?: number;
   totalRatings?: number;
   mapsUrl?: string;
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function checkPlace(
@@ -71,7 +75,23 @@ async function checkPlace(
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const secret = process.env.ADMIN_SECRET;
+  if (!secret) {
+    return NextResponse.json(
+      { error: "ADMIN_SECRET non configuré." },
+      { status: 500 },
+    );
+  }
+
+  const auth = req.headers.get("authorization");
+  if (auth !== `Bearer ${secret}`) {
+    return NextResponse.json(
+      { error: "Non autorisé." },
+      { status: 401 },
+    );
+  }
+
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
@@ -80,12 +100,17 @@ export async function GET() {
     );
   }
 
+  const { searchParams } = req.nextUrl;
+  const limit = Math.min(Math.max(parseInt(searchParams.get("limit") || "50", 10) || 50, 1), 200);
+  const offset = Math.max(parseInt(searchParams.get("offset") || "0", 10) || 0, 0);
+
   const db = supabaseAdmin();
-  const { data: notaires, error } = await db
+  const { data: notaires, error, count } = await db
     .from("notaire_profiles")
-    .select("id, name, office_name, city")
+    .select("id, name, office_name, city", { count: "exact" })
     .eq("verifie", true)
-    .or("subscription_status.is.null,subscription_status.neq.expire");
+    .or("subscription_status.is.null,subscription_status.neq.expire")
+    .range(offset, offset + limit - 1);
 
   if (error || !notaires) {
     return NextResponse.json(
@@ -98,7 +123,10 @@ export async function GET() {
   let withProfile = 0;
   let withoutProfile = 0;
 
-  for (const n of notaires) {
+  for (let i = 0; i < notaires.length; i++) {
+    const n = notaires[i];
+    if (i > 0) await sleep(200);
+
     const check = await checkPlace(
       apiKey,
       n.office_name as string | null,
@@ -129,7 +157,10 @@ export async function GET() {
   }
 
   return NextResponse.json({
-    total: notaires.length,
+    total: count ?? notaires.length,
+    limit,
+    offset,
+    returned: notaires.length,
     withProfile,
     withoutProfile,
     results,

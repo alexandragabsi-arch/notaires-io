@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { supabaseAdmin } from "@/lib/notaire-email-serveur";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -12,6 +13,7 @@ interface PlaceResult {
   totalRatings?: number;
   mapsUrl?: string;
   editUrl?: string;
+  saved?: boolean;
 }
 
 export async function GET(req: NextRequest) {
@@ -19,6 +21,8 @@ export async function GET(req: NextRequest) {
   const officeName = searchParams.get("officeName")?.trim();
   const city = searchParams.get("city")?.trim();
   const name = searchParams.get("name")?.trim();
+  const save = searchParams.get("save") === "true";
+  const notaireId = searchParams.get("notaireId")?.trim();
 
   if (!city || (!officeName && !name)) {
     return NextResponse.json(
@@ -77,15 +81,31 @@ export async function GET(req: NextRequest) {
       return NextResponse.json(result);
     }
 
+    const rawPlaceId = place.id;
+    const cleanPlaceId = rawPlaceId.replace(/^places\//, "");
+
+    let saved = false;
+    if (save && notaireId && /^[\w-]{1,120}$/.test(notaireId)) {
+      const db = supabaseAdmin();
+      const { error: dbErr } = await db
+        .from("notaire_profiles")
+        .update({ google_place_id: rawPlaceId })
+        .eq("id", notaireId);
+      saved = !dbErr;
+    }
+
     const result: PlaceResult = {
       found: true,
-      placeId: place.id,
+      placeId: rawPlaceId,
       name: place.displayName?.text,
       address: place.formattedAddress,
       rating: place.rating,
       totalRatings: place.userRatingCount,
       mapsUrl: place.googleMapsUri,
-      editUrl: `https://business.google.com/edit/l/${place.id}`,
+      editUrl: `https://business.google.com/search?q=${encodeURIComponent(
+        [officeName || name, city].filter(Boolean).join(" "),
+      )}`,
+      saved,
     };
 
     return NextResponse.json(result);

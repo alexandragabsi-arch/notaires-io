@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Store,
   Copy,
@@ -10,22 +10,19 @@ import {
   Link2,
   Info,
   ArrowRight,
+  Star,
+  MapPin,
+  CheckCircle2,
+  XCircle,
+  Loader2,
 } from "lucide-react";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 
-/**
- * URL canonique volontairement figée : c'est le lien que le notaire colle dans
- * sa fiche Google, il doit toujours pointer vers la production (jamais vers
- * localhost ou une preview Vercel).
- */
 const SITE_URL = "https://notaires.io";
 
-/** Point d'entrée officiel de la fiche d'établissement Google */
 const GBP_URL = "https://business.google.com/";
-/** Création d'une fiche pour ceux qui n'en ont pas encore */
 const GBP_CREATE_URL = "https://business.google.com/create";
 
-/* ── Les 4 étapes du tutoriel ──────────────────────────────────────────────── */
 const STEPS: { title: string; detail: string }[] = [
   {
     title: "Ouvrez votre fiche d'établissement Google",
@@ -49,17 +46,39 @@ const STEPS: { title: string; detail: string }[] = [
   },
 ];
 
+interface GoogleCheckResult {
+  found: boolean;
+  placeId?: string;
+  name?: string;
+  address?: string;
+  rating?: number;
+  totalRatings?: number;
+  mapsUrl?: string;
+  editUrl?: string;
+}
+
 export default function GoogleVisibilite({ profile }: { profile: ListingNotaire }) {
-  // "idle" | "ok" = copié | "fail" = presse-papier refusé par le navigateur
   const [copyState, setCopyState] = useState<"idle" | "ok" | "fail">("idle");
   const urlRef = useRef<HTMLSpanElement>(null);
-  // Ancre #agenda : le visiteur venu de Google atterrit directement sur le calendrier.
   const profileUrl = `${SITE_URL}/notaires/${profile.id}#agenda`;
-  // Bouton « Prendre rendez-vous » à coller sur le site de l'étude. Un lien
-  // depuis un domaine en .notaires.fr pèse lourd pour le référencement de la
-  // fiche : c'est le levier le plus accessible face aux plateformes installées.
   const codeSite = `<a href="${profileUrl}" style="display:inline-block;background:#2d5dbf;color:#fff;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:8px;font-family:sans-serif">Prendre rendez-vous en ligne</a>`;
   const [copieSite, setCopieSite] = useState<"idle" | "ok" | "fail">("idle");
+
+  const [googleCheck, setGoogleCheck] = useState<GoogleCheckResult | null>(null);
+  const [googleLoading, setGoogleLoading] = useState(true);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (profile.officeName) params.set("officeName", profile.officeName);
+    if (profile.name) params.set("name", profile.name);
+    if (profile.city) params.set("city", profile.city);
+
+    fetch(`/api/google-business/check?${params}`)
+      .then((r) => r.json())
+      .then((data: GoogleCheckResult) => setGoogleCheck(data))
+      .catch(() => setGoogleCheck(null))
+      .finally(() => setGoogleLoading(false));
+  }, [profile.officeName, profile.name, profile.city]);
 
   async function copierCodeSite() {
     try {
@@ -71,7 +90,6 @@ export default function GoogleVisibilite({ profile }: { profile: ListingNotaire 
     }
   }
 
-  // Recherche Google pré-remplie pour vérifier que la fiche existe déjà
   const checkQuery = [profile.name, profile.officeName, profile.city]
     .filter(Boolean)
     .join(" ");
@@ -83,8 +101,6 @@ export default function GoogleVisibilite({ profile }: { profile: ListingNotaire 
       setCopyState("ok");
       setTimeout(() => setCopyState("idle"), 2500);
     } catch {
-      // Presse-papier refusé (permission, contexte non sécurisé…) : on sélectionne
-      // le lien pour que le notaire puisse le copier lui-même au clavier.
       const node = urlRef.current;
       if (node) {
         const range = document.createRange();
@@ -112,6 +128,98 @@ export default function GoogleVisibilite({ profile }: { profile: ListingNotaire 
             Pour que vos clients réservent directement depuis la recherche Google
           </p>
         </div>
+      </div>
+
+      {/* Statut de la fiche Google */}
+      <div className="mb-6">
+        {googleLoading ? (
+          <div className="flex items-center gap-3 bg-[var(--color-tint-blue)] rounded-2xl px-5 py-4">
+            <Loader2 className="w-5 h-5 text-[var(--color-accent)] animate-spin" strokeWidth={2} />
+            <span className="text-[14px] text-[var(--color-muted)]">
+              Vérification de votre fiche Google Business...
+            </span>
+          </div>
+        ) : googleCheck?.found ? (
+          <div className="bg-[var(--color-tint-green)] border border-[rgba(16,185,129,0.2)] rounded-2xl px-5 py-4">
+            <div className="flex items-center gap-2 mb-3">
+              <CheckCircle2 className="w-5 h-5 text-[var(--color-success)]" strokeWidth={2} />
+              <span className="text-[15px] font-bold text-[var(--color-success)]">
+                Fiche Google trouvée
+              </span>
+            </div>
+            <div className="flex flex-col gap-1.5 text-[13px] text-[var(--color-text-strong)]">
+              {googleCheck.name && (
+                <div className="flex items-center gap-2">
+                  <Store className="w-3.5 h-3.5 text-[var(--color-muted)] shrink-0" strokeWidth={2} />
+                  <span className="font-semibold">{googleCheck.name}</span>
+                </div>
+              )}
+              {googleCheck.address && (
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-[var(--color-muted)] shrink-0" strokeWidth={2} />
+                  <span>{googleCheck.address}</span>
+                </div>
+              )}
+              {googleCheck.rating != null && (
+                <div className="flex items-center gap-2">
+                  <Star className="w-3.5 h-3.5 text-amber-500 shrink-0" strokeWidth={2} />
+                  <span>
+                    {googleCheck.rating}/5
+                    {googleCheck.totalRatings != null && (
+                      <span className="text-[var(--color-muted)]">
+                        {" "}({googleCheck.totalRatings} avis)
+                      </span>
+                    )}
+                  </span>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-2 mt-3">
+              {googleCheck.mapsUrl && (
+                <a
+                  href={googleCheck.mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-[8px] bg-white border border-[var(--color-border-soft)] text-[var(--color-text-strong)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  Voir sur Google Maps
+                </a>
+              )}
+              <a
+                href={GBP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-[8px] bg-[var(--color-accent)] text-white hover:opacity-90 transition-opacity"
+              >
+                <ExternalLink className="w-3.5 h-3.5" strokeWidth={2.5} />
+                Modifier ma fiche
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-[var(--color-tint-warm)] border border-[rgba(249,115,22,0.2)] rounded-2xl px-5 py-4">
+            <div className="flex items-center gap-2 mb-3">
+              <XCircle className="w-5 h-5 text-orange-500" strokeWidth={2} />
+              <span className="text-[15px] font-bold text-orange-600">
+                Aucune fiche Google trouvée
+              </span>
+            </div>
+            <p className="text-[13px] text-[var(--color-text-strong)] leading-relaxed mb-3">
+              Votre étude n'apparaît pas encore sur Google Business Profile. Créez votre fiche
+              gratuitement pour apparaître sur Google Maps et la recherche Google.
+            </p>
+            <a
+              href={GBP_CREATE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-gradient-cta text-white px-5 py-2.5 rounded-[10px] text-[13px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform"
+            >
+              <ExternalLink className="w-4 h-4" strokeWidth={2.5} />
+              Créer ma fiche Google Business
+            </a>
+          </div>
+        )}
       </div>
 
       {/* Aperçu du rendu sur Google */}

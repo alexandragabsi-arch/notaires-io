@@ -557,6 +557,10 @@ function Article5() {
         ))}
       </ol>
 
+      <p className="text-[var(--color-muted)] mb-4 leading-relaxed">
+        Hors de ce premier rendez-vous, un simple renseignement n'est en principe pas facturé non plus : voir notre guide sur le <a href="/blog/consultation-notaire-prix" className="text-[var(--color-accent)] underline">prix d'une consultation notaire pour un renseignement</a>.
+      </p>
+
       <h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Ce qu'on peut aborder en 30 minutes</h2>
       <p className="text-[var(--color-muted)] mb-4 leading-relaxed">
         Une consultation de 30 minutes est suffisante pour obtenir un premier cadrage de la plupart des situations notariales courantes :
@@ -4588,8 +4592,6 @@ function Article76() {
   "Pour les actes tarifés, le conseil lié à l'acte est inclus dans les émoluments.",
   "Une consultation facturée entre 150 et 300 € est raisonnable pour un bilan patrimonial d'une heure."
 ]} />
-
-<p className="text-[var(--color-muted)] mb-4 leading-relaxed">Un simple renseignement, lui, n'est en principe pas facturé : voir notre guide sur le <a href="/blog/consultation-notaire-prix" className="text-[var(--color-accent)] underline">prix d'une consultation notaire pour un renseignement</a>.</p>
 
 <h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">La réalité des pratiques des études</h2>
 <p className="text-[var(--color-muted)] mb-4 leading-relaxed">La réglementation notariale ne prévoit pas de première consultation obligatoirement gratuite. C'est une pratique commerciale adoptée par de nombreuses études pour attirer de nouveaux clients. En offrant un premier rendez-vous sans engagement, l'étude espère que vous lui confierez ensuite votre acte — dont les émoluments réglementés couvriront largement le temps offert.</p>

@@ -409,9 +409,8 @@ export default function GoogleVisibilite({ profile }: GoogleVisibiliteProps) {
       <div className="bg-[var(--color-tint-warm)] border border-[rgba(249,115,22,0.2)] rounded-xl px-4 py-3 flex items-start gap-2.5">
         <Info className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" strokeWidth={2.5} />
         <div className="text-[12px] text-[var(--color-text-strong)] leading-relaxed">
-          <span className="font-bold">Deux prérequis :</span> votre fiche
-          d&apos;établissement doit être <strong>revendiquée et vérifiée</strong> par
-          Google, et sa catégorie principale doit être <strong>« Notaire »</strong>.
+          <span className="font-bold">Prérequis :</span> votre fiche
+          d&apos;établissement doit être <strong>vérifiée par Google (par vidéo, appel téléphonique ou email)</strong>, et sa catégorie principale doit être <strong>« Notaire »</strong>.
           {" "}
           <a
             href={GBP_CREATE_URL}

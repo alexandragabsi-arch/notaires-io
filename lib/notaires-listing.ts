@@ -28,6 +28,7 @@ export interface ListingNotaire {
   isNew?: boolean;
   bio?: string;
   claimed?: boolean; // true = abonné actif ; false/undefined = profil fantôme
+  google_place_id?: string | null;
 }
 
 export const LISTING_NOTAIRES: ListingNotaire[] = [

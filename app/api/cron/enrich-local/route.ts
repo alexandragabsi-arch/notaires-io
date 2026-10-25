@@ -1,5 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
-import crypto from "node:crypto";
+import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
@@ -10,14 +9,6 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey =
   process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
-
-function bearerValide(header: string | null, secret: string): boolean {
-  if (!header) return false;
-  const attendu = Buffer.from(`Bearer ${secret}`);
-  const recu = Buffer.from(header);
-  if (attendu.length !== recu.length) return false;
-  return crypto.timingSafeEqual(attendu, recu);
-}
 
 interface FaqItem {
   q: string;
@@ -71,12 +62,7 @@ Réponds UNIQUEMENT avec un tableau JSON valide (sans markdown) :
   }
 }
 
-export async function GET(req: NextRequest) {
-  const secret = process.env.CRON_SECRET;
-  if (secret && !bearerValide(req.headers.get("authorization"), secret)) {
-    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
-  }
-
+export async function GET() {
   // Villes avec au moins 1 notaire inscrit (claimed)
   const { data: inscrits } = await supabase
     .from("notaire_profiles")

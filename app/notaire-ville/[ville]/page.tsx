@@ -9,6 +9,7 @@ import { pageGeoLd } from "@/lib/seo-jsonld";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille, getVilleAvecInscrits } from "@/lib/inscrits-serveur";
 import Breadcrumb from "@/components/Breadcrumb";
+import { getVilleSeoFaq } from "@/lib/ville-seo";
 
 // Inscrits relus toutes les 5 minutes ; une ville où seul un inscrit exerce
 // est générée à la demande (dynamicParams par défaut).
@@ -77,6 +78,8 @@ export default async function Page({ params }: Props) {
   const voisines = toutes
     .filter((_, i) => i !== position)
     .slice(Math.max(0, position - 4), Math.max(0, position - 4) + 8);
+
+  const faqSeo = await getVilleSeoFaq(v.nom);
 
   const specs = v.specialites.length
     ? v.specialites.slice(0, 3).join(", ").toLowerCase()
@@ -189,6 +192,24 @@ export default async function Page({ params }: Props) {
             ))}
           </div>
         </section>
+
+        {faqSeo.length > 0 && (
+          <section className="py-14 sm:py-16 bg-[var(--color-tint-blue)] border-t border-[var(--color-border-soft)]">
+            <div className="max-w-[760px] mx-auto px-6">
+              <h2 className="text-[21px] sm:text-[24px] font-bold text-[var(--color-text-strong)] mb-6">
+                Questions fréquentes sur les notaires {aVille(v.nom)}
+              </h2>
+              <div className="flex flex-col gap-4">
+                {faqSeo.map((f, i) => (
+                  <div key={i} className="bg-white rounded-xl p-5 border border-[var(--color-border-soft)]">
+                    <p className="font-semibold text-[var(--color-text-strong)] mb-2">{f.q}</p>
+                    <p className="text-[var(--color-muted)] text-[15px] leading-relaxed">{f.r}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
     </>

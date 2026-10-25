@@ -234,6 +234,12 @@ export async function getVilleAvecInscrits(slug: string): Promise<VilleCouverte 
   return getVilleParSlug(slug) ?? villeDepuisInscrits(slug, await getInscrits());
 }
 
+/** Slugs de toutes les villes où exerce au moins un inscrit (pour le sitemap). */
+export async function getSlugsVillesAvecInscrits(): Promise<Set<string>> {
+  const inscrits = await getInscrits();
+  return new Set(inscrits.map((n) => slugVille(cleVilleNom(n.city))).filter(Boolean));
+}
+
 /** Villes d'inscrits sans page dans l'annuaire importé (pour le sitemap). */
 export async function getVillesDInscrits(): Promise<VilleCouverte[]> {
   const connues = new Set(getVillesCouvertes().map((v) => v.slug));

@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 import { DEPARTEMENTS } from "@/lib/departements-data";
 import { getVillesCouvertes } from "@/lib/villes-data";
-import { getVillesDInscrits } from "@/lib/inscrits-serveur";
+import { getVillesDInscrits, getSlugsVillesAvecInscrits } from "@/lib/inscrits-serveur";
 import { getDynamicArticles } from "@/lib/blog-supabase";
 import { BLOG_POSTS } from "@/lib/blog-posts";
 import { SLUGS_RETIRES } from "@/lib/fusions-blog";
@@ -157,15 +157,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.75,
     }));
 
-  // Pages de ville générées depuis les données : elles n'existent que si la
-  // commune compte assez de notaires pour que la page ait du contenu.
-  const villePages: MetadataRoute.Sitemap = getVillesCouvertes().map((v) => ({
-    url: `${BASE}/notaire-ville/${v.slug}`,
-    lastModified: NOW,
-    changeFrequency: "weekly" as const,
-    // Les villes les mieux pourvues passent devant : c'est là que la demande est.
-    priority: v.nombre >= 50 ? 0.8 : v.nombre >= 20 ? 0.75 : 0.7,
-  }));
+  // Seules les villes avec au moins un notaire inscrit (claimed) restent dans
+  // le sitemap. Les 21 000 pages de ville sans abonné actif polluaient le crawl
+  // budget et restaient « unknown to Google ».
+  const slugsInscrits = await getSlugsVillesAvecInscrits();
+
+  const villePages: MetadataRoute.Sitemap = getVillesCouvertes()
+    .filter((v) => slugsInscrits.has(v.slug))
+    .map((v) => ({
+      url: `${BASE}/notaire-ville/${v.slug}`,
+      lastModified: NOW,
+      changeFrequency: "weekly" as const,
+      priority: v.nombre >= 50 ? 0.8 : v.nombre >= 20 ? 0.75 : 0.7,
+    }));
 
   // Villes où exerce un notaire inscrit, absentes de l'annuaire importé.
   const villesInscrits: MetadataRoute.Sitemap = (await getVillesDInscrits()).map((v) => ({

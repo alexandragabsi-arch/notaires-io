@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
@@ -62,7 +62,12 @@ Réponds UNIQUEMENT avec un tableau JSON valide (sans markdown) :
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const secret = request.headers.get("authorization")?.replace("Bearer ", "");
+  if (secret !== process.env.CRON_SECRET) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   // Villes avec au moins 1 notaire inscrit (claimed)
   const { data: inscrits } = await supabase
     .from("notaire_profiles")

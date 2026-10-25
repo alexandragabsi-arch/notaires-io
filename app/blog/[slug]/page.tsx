@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { BLOG_POSTS, getPostBySlug } from "@/lib/blog-posts";
 import { getPostContent } from "@/lib/blog-content";
 import { getDynamicArticleBySlug, getDynamicArticleSlugs } from "@/lib/blog-supabase";
+import { insertInternalLinks } from "@/lib/internal-links";
 
 const BASE = "https://notaires.io";
 // Image de partage social (OpenGraph / Twitter) par défaut pour les articles.
@@ -133,6 +134,7 @@ export default async function BlogPostPage({
   if (dynamic) {
     const catColor = CATEGORY_COLORS[dynamic.category] ?? "bg-gray-100 text-gray-600";
     const faq = dynamic.faq_json ?? [];
+    const contentWithLinks = await insertInternalLinks(dynamic.content_html, slug);
 
     const articleJsonLd = {
       "@context": "https://schema.org",
@@ -212,7 +214,7 @@ export default async function BlogPostPage({
 
             <div
               className="prose-article"
-              dangerouslySetInnerHTML={{ __html: dynamic.content_html }}
+              dangerouslySetInnerHTML={{ __html: contentWithLinks }}
             />
 
             {faq.length > 0 && (

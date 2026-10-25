@@ -1,0 +1,142 @@
+// Enregistrement d'un rendez-vous : partagé par le site (/api/booking) et le
+// serveur MCP (/api/mcp). Écrit la réservation, puis prévient le client et le
+// notaire par e-mail. Les contrôles d'entrée (créneau ISO à venir, modalité,
+// limites) restent à la charge de l'appelant.
+
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { sendEmail } from "@/lib/email";
+import { isoCreneau } from "@/lib/creneau";
+import { emailConfirmationClient, dateLongue, echapper } from "@/lib/emails/confirmation-rdv";
+import { adresseAffichee, adresseCompleteBAN } from "@/lib/adresse";
+
+export interface Participant {
+  civilite: string;
+  prenom: string;
+  nom: string;
+  email: string;
+  telephone: string;
+  role: string;
+  dateNaissance?: string;
+  adresse?: string;
+}
+
+export interface StoredDocument {
+  id: string;
+  label: string;
+  fileName: string;
+  path?: string;
+}
+
+export interface BookingPayload {
+  notaireId: string;
+  notaireNom: string;
+  slotKey: string;
+  slotLabel: string;
+  dossier: string;
+  modalite: "visio" | "cabinet";
+  participants: Participant[];
+  documents?: StoredDocument[];
+  userId?: string | null;
+  smsReminder?: boolean;
+}
+
+export type ResultatReservation =
+  | { ok: true; bookingId: string }
+  | { ok: false; code: "slot_taken" | "erreur"; message: string };
+
+export async function enregistrerReservation(
+  supabase: SupabaseClient,
+  { notaireId, notaireNom, slotKey, slotLabel, dossier, modalite, participants, documents, userId, smsReminder }: BookingPayload,
+): Promise<ResultatReservation> {
+  const client = participants[0];
+  const clientNom = `${client.civilite} ${client.prenom} ${client.nom.toUpperCase()}`.trim();
+
+  // ── Sauvegarde Supabase ──────────────────────────────────────────────────────
+  const { data, error } = await supabase.from("bookings").insert({
+    notaire_id: notaireId,
+    notaire_nom: notaireNom,
+    slot_key: isoCreneau(new Date(slotKey)),
+    slot_label: slotLabel,
+    dossier,
+    modalite,
+    mode: modalite,
+    participants,
+    documents: Array.isArray(documents) ? documents : [],
+    client_nom: clientNom,
+    client_email: client.email || null,
+    // Rappel SMS : envoyé par le serveur de l'app (Twilio), comme pour les RDV pris dans l'app.
+    client_phone: client.telephone?.trim() || null,
+    sms_reminder: !!smsReminder && !!client.telephone?.trim(),
+    user_id: userId || null,
+    status: "confirmed",
+  }).select("id").single();
+
+  // 23505 = index bookings_creneau_unique : le créneau vient d'être pris,
+  // depuis le site ou depuis l'app.
+  if (error?.code === "23505") {
+    return { ok: false, code: "slot_taken", message: "Ce créneau vient d'être réservé. Choisissez-en un autre." };
+  }
+  if (error) {
+    console.error("Booking insert error:", error);
+    return { ok: false, code: "erreur", message: "Erreur de réservation" };
+  }
+
+  const bookingId = data?.id as string;
+
+  // ── Coordonnées du notaire (adresse du cabinet, e-mail de notification) ────
+  const { data: notaireRow } = await supabase
+    .from("notaire_profiles")
+    .select("email, address, city, office_name")
+    .eq("id", notaireId)
+    .maybeSingle();
+
+  // ── Email client ─────────────────────────────────────────────────────────────
+  if (client.email) {
+    await sendEmail(
+      client.email,
+      `Votre rendez-vous du ${dateLongue(slotKey)} avec ${notaireNom} est confirmé`,
+      emailConfirmationClient({
+        bookingId,
+        client,
+        notaireNom,
+        etude: (notaireRow?.office_name as string | null) ?? null,
+        // Adresse du cabinet avec code postal et ville, même si le notaire n'a saisi que la rue.
+        adresse: notaireRow?.address
+          ? adresseAffichee(await adresseCompleteBAN(notaireRow.address as string, (notaireRow.city as string | null) ?? ""), notaireRow.city as string | null) ?? null
+          : null,
+        slotKey,
+        modalite,
+        dossier,
+        participants,
+      }),
+    );
+  }
+
+  const notaireEmail = (notaireRow?.email as string | null) || "contact@notaires.io";
+
+  // ── Email notification notaire ────────────────────────────────────────────────
+  const notifHtml = `
+    <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;padding:40px 24px;color:#1a1a2e">
+      <h2 style="font-size:18px;font-weight:700;margin-bottom:16px">
+        Nouvelle réservation — ${echapper(slotLabel)}
+      </h2>
+      <table style="width:100%;border-collapse:collapse;font-size:14px;text-align:left">
+        <tr><td style="padding:6px 0;color:#5a6a8a;width:140px">Notaire</td><td style="font-weight:600">${echapper(notaireNom)} (${echapper(notaireId)})</td></tr>
+        <tr><td style="padding:6px 0;color:#5a6a8a">Créneau</td><td>${echapper(slotLabel)}</td></tr>
+        <tr><td style="padding:6px 0;color:#5a6a8a">Modalité</td><td>${echapper(modalite)}</td></tr>
+        <tr><td style="padding:6px 0;color:#5a6a8a">Dossier</td><td>${echapper(dossier)}</td></tr>
+        <tr><td style="padding:6px 0;color:#5a6a8a">Client</td><td>${echapper(clientNom)}</td></tr>
+        ${client.email ? `<tr><td style="padding:6px 0;color:#5a6a8a">Email client</td><td>${echapper(client.email)}</td></tr>` : ""}
+        ${client.telephone ? `<tr><td style="padding:6px 0;color:#5a6a8a">Tél. client</td><td>${echapper(client.telephone)}</td></tr>` : ""}
+        <tr><td style="padding:6px 0;color:#5a6a8a">ID réservation</td><td><code>${bookingId}</code></td></tr>
+      </table>
+    </div>
+  `;
+  await sendEmail(
+    notaireEmail,
+    `[Notaires.io] Nouvelle réservation — ${slotLabel}`,
+    notifHtml,
+  );
+
+  return { ok: true, bookingId };
+}

@@ -26,6 +26,10 @@ export const FUSIONS_BLOG: Record<string, string> = {
 
   // Rendez-vous en visio — deux pages pour la même chose.
   "rdv-notaire-en-visio": "notaire-en-ligne-rendez-vous-visio",
+
+  // « consultation notaire prix » — deux pages pour la même requête.
+  // consultation-notaire-prix est en position 5.7, 106 clics : on le garde.
+  "prix-consultation-notaire-pour-renseignement": "consultation-notaire-prix",
 };
 
 /** Slugs qui ne doivent plus être déclarés ni liés. */

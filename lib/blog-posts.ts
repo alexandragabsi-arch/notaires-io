@@ -1216,7 +1216,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     slug: "consultation-notaire-prix",
-    title: "Combien coûte une consultation chez un notaire ? Prix et renseignement gratuit",
+    title: "Consultation notaire : gratuite ou payante ? Tarifs 2026",
     excerpt: "Un renseignement chez le notaire est gratuit, et le conseil lié à un acte est compris dans son prix. Ce qui peut être payant, ce qui ne l'est pas, et comment prendre rendez-vous sans frais.",
     date: "2025-12-28",
     updated: "2026-09-22",

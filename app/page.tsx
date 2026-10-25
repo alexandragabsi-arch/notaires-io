@@ -10,15 +10,9 @@ import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  // « rdv notaire » en tête : c'est la requête sur laquelle Google associe déjà
-  // l'accueil (172 des 233 impressions « rdv » sur 3 mois), loin devant les
-  // articles de blog. L'accueil est LA page qui porte cette intention.
-  title: "RDV notaire en ligne : prendre rendez-vous avec un notaire",
-  // 173 caractères auparavant : Google tronquait la phrase en plein milieu.
-  // « gratuitement » retiré aussi — placé là, il se lisait comme un
-  // rendez-vous offert, la promesse que nous ne faisons pas.
+  title: "RDV notaire en ligne — Prenez rendez-vous en visio ou au cabinet",
   description:
-    "Prenez rendez-vous avec un notaire en ligne : immobilier, succession, mariage, donation. Créneaux réels, en visio ou au cabinet, confirmation immédiate.",
+    "Prenez RDV avec un notaire en quelques clics : créneaux réels, confirmation immédiate. Immobilier, succession, mariage, donation — en visio ou au cabinet, sans attendre de rappel.",
   keywords: [
     "rdv notaire",
     "rdv notaire en ligne",

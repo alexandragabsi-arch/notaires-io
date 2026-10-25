@@ -89,7 +89,7 @@ export async function GET() {
   }
 
   const villesAEnrichir = [...villesSet].filter((v) => !recentes.has(v));
-  const limit = Math.min(villesAEnrichir.length, 5);
+  const limit = Math.min(villesAEnrichir.length, 30);
   const batch = villesAEnrichir.slice(0, limit);
 
   const resultats: { ville: string; ok: boolean }[] = [];

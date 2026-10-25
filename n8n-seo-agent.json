@@ -110,7 +110,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const response = $input.item.json;\nconst kw = $('🧠 Construire prompt Claude').item.json.keyword;\n\nlet rawText;\ntry {\n  rawText = response.content[0].text;\n} catch(e) {\n  throw new Error('Réponse Claude illisible: ' + JSON.stringify(response).substring(0, 200));\n}\n\nlet art;\ntry {\n  const cleaned = rawText.replace(/^```json\\s*/i, '').replace(/\\s*```$/i, '').trim();\n  art = JSON.parse(cleaned);\n} catch(e) {\n  throw new Error('JSON invalide: ' + rawText.substring(0, 400));\n}\n\nconst slug = (art.slug || '')\n  .toLowerCase()\n  .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')\n  .replace(/[^a-z0-9-]/g, '-')\n  .replace(/-+/g, '-')\n  .replace(/^-|-$/g, '');\nconst now = new Date();\nconst dateSuffix = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + '-' + String(now.getHours()).padStart(2,'0') + 'h';\nconst uniqueSlug = slug; // horodatage retire : il creait un doublon par execution\n\nconst article = {\n  slug: uniqueSlug || slug,\n  title: art.h1 || art.meta_title || kw.keyword,\n  meta_title: art.meta_title || null,\n  meta_description: art.meta_description || null,\n  excerpt: art.excerpt || null,\n  h1: art.h1 || null,\n  intro: art.intro || null,\n  content_html: art.content_html || '',\n  faq_json: art.faq || null,\n  category: art.category || kw.category || 'Guide',\n  keyword: kw.keyword,\n  keyword_type: kw.source || 'fallback',\n  reading_time: art.reading_time || 6,\n  published: true,\n};\n\nreturn [{ json: { article, keyword: kw } }];"
+        "jsCode": "const response = $input.item.json;\nconst kw = $('🧠 Construire prompt Claude').item.json.keyword;\n\nlet rawText;\ntry {\n  rawText = response.content[0].text;\n} catch(e) {\n  throw new Error('Réponse Claude illisible: ' + JSON.stringify(response).substring(0, 200));\n}\n\nlet art;\ntry {\n  const cleaned = rawText.replace(/^```json\\s*/i, '').replace(/\\s*```$/i, '').trim();\n  art = JSON.parse(cleaned);\n} catch(e) {\n  throw new Error('JSON invalide: ' + rawText.substring(0, 400));\n}\n\n// Anti-doublon : distance de Levenshtein\nfunction levenshtein(a, b) {\n  const m = a.length, n = b.length;\n  const dp = Array.from({length: m + 1}, () => Array(n + 1).fill(0));\n  for (let i = 0; i <= m; i++) dp[i][0] = i;\n  for (let j = 0; j <= n; j++) dp[0][j] = j;\n  for (let i = 1; i <= m; i++)\n    for (let j = 1; j <= n; j++)\n      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]);\n  return dp[m][n];\n}\n\nlet slug = (art.slug || '')\n  .toLowerCase()\n  .normalize('NFD').replace(/[̀-ͯ]/g, '')\n  .replace(/[^a-z0-9-]/g, '-')\n  .replace(/-+/g, '-')\n  .replace(/^-|-$/g, '');\n\n// Si un article publié existe avec le même keyword ou un slug proche (Levenshtein < 5),\n// on réutilise son slug pour que l'upsert Supabase mette à jour au lieu de créer un doublon\nconst existingArticles = $('📖 Articles existants').all().map(i => i.json);\nconst existant = existingArticles.find(e =>\n  (e.keyword && kw.keyword && e.keyword.toLowerCase() === kw.keyword.toLowerCase()) ||\n  levenshtein(e.slug || '', slug) < 5\n);\nif (existant) {\n  slug = existant.slug;\n}\n\nconst article = {\n  slug: slug,\n  title: art.h1 || art.meta_title || kw.keyword,\n  meta_title: art.meta_title || null,\n  meta_description: art.meta_description || null,\n  excerpt: art.excerpt || null,\n  h1: art.h1 || null,\n  intro: art.intro || null,\n  content_html: art.content_html || '',\n  faq_json: art.faq || null,\n  category: art.category || kw.category || 'Guide',\n  keyword: kw.keyword,\n  keyword_type: kw.source || 'fallback',\n  reading_time: art.reading_time || 6,\n  published: true,\n};\n\nreturn [{ json: { article, keyword: kw, deduplicated: !!existant } }];\n"
       },
       "id": "n6",
       "name": "🔍 Parser réponse Claude",
@@ -228,6 +228,34 @@
           "name": "Resend SMTP LegalCorners"
         }
       }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://stgbcjvklljoqlpzoagu.supabase.co/rest/v1/blog_articles?published=eq.true&select=slug,keyword",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "=__CLE_SUPABASE_RETIREE_VOIR_README__"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer __CLE_SUPABASE_RETIREE_VOIR_README__"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n11",
+      "name": "📖 Articles existants",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        368,
+        504
+      ]
     }
   ],
   "pinData": {},
@@ -237,6 +265,11 @@
         [
           {
             "node": "📊 Google Search Console — requêtes",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📖 Articles existants",
             "type": "main",
             "index": 0
           }

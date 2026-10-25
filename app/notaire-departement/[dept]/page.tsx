@@ -7,6 +7,7 @@ import { ancreAccueil } from "@/lib/ancres-accueil";
 import { getDepartementBySlug, getAllDepartementSlugs, dansLeDepartement, duDepartement } from "@/lib/departements-data";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getDonneesDepartement } from "@/lib/departements-villes";
+import Breadcrumb from "@/components/Breadcrumb";
 
 interface Props {
   params: Promise<{ dept: string }>;
@@ -161,6 +162,13 @@ export default async function Page({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Header />
+      <Breadcrumb
+        items={[
+          { href: "/", label: "Accueil" },
+          { href: "/notaire-departement", label: "Départements" },
+          { label: `${dep.name} (${dep.code})` },
+        ]}
+      />
       <main>
         <SeoLandingPage
           h1={`Prendre RDV avec un notaire ${dansLeDepartement(dep.name)} (${dep.code})`}

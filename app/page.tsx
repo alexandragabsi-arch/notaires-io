@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import SocialProof from "@/components/SocialProof";
@@ -240,6 +241,53 @@ export default function Page() {
                 lui seul.
               </p>
             </div>
+          </div>
+        </section>
+
+        <section className="py-16 sm:py-20 bg-[var(--color-tint-blue)] border-y border-[var(--color-border-soft)]">
+          <div className="max-w-[1200px] mx-auto px-6">
+            <p className="text-[12px] font-bold uppercase tracking-[1px] text-[var(--color-accent)] mb-4 text-center">
+              Partout en France
+            </p>
+            <h2 className="text-[26px] sm:text-[32px] font-bold leading-tight text-[var(--color-text-strong)] mb-8 text-center text-balance">
+              Trouvez un notaire dans votre département
+            </h2>
+            <div className="flex flex-wrap justify-center gap-2.5 mb-6">
+              {[
+                ["Paris", "paris"],
+                ["Nord", "nord"],
+                ["Bouches-du-Rhône", "bouches-du-rhone"],
+                ["Rhône", "rhone"],
+                ["Hauts-de-Seine", "hauts-de-seine"],
+                ["Seine-Saint-Denis", "seine-saint-denis"],
+                ["Gironde", "gironde"],
+                ["Haute-Garonne", "haute-garonne"],
+                ["Alpes-Maritimes", "alpes-maritimes"],
+                ["Loire-Atlantique", "loire-atlantique"],
+                ["Val-de-Marne", "val-de-marne"],
+                ["Yvelines", "yvelines"],
+                ["Seine-et-Marne", "seine-et-marne"],
+                ["Hérault", "herault"],
+                ["Essonne", "essonne"],
+                ["Bas-Rhin", "bas-rhin"],
+              ].map(([label, slug]) => (
+                <Link
+                  key={slug}
+                  href={`/notaire-departement/${slug}`}
+                  className="text-sm font-semibold text-[var(--color-primary)] bg-white border border-[var(--color-border-soft)] px-4 py-2 rounded-full hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
+            <p className="text-center">
+              <Link
+                href="/notaire-departement"
+                className="text-sm font-semibold text-[var(--color-accent)] hover:underline"
+              >
+                Tous les départements →
+              </Link>
+            </p>
           </div>
         </section>
 

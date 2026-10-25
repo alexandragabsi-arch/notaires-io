@@ -8,6 +8,7 @@ import { contenuVille } from "@/lib/contenu-ville";
 import { pageGeoLd } from "@/lib/seo-jsonld";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille, getVilleAvecInscrits } from "@/lib/inscrits-serveur";
+import Breadcrumb from "@/components/Breadcrumb";
 
 // Inscrits relus toutes les 5 minutes ; une ville où seul un inscrit exerce
 // est générée à la demande (dynamicParams par défaut).
@@ -128,6 +129,15 @@ export default async function Page({ params }: Props) {
         }}
       />
       <Header />
+      <Breadcrumb
+        items={[
+          { href: "/", label: "Accueil" },
+          ...(v.departement
+            ? [{ href: `/notaire-departement/${v.departement.slug}`, label: v.departement.nom }]
+            : []),
+          { label: `Notaire ${aVille(v.nom)}` },
+        ]}
+      />
       <main>
         <SeoLandingPage
           h1={`Prendre RDV avec un notaire ${aVille(v.nom)}${v.codePostal ? ` (${v.codePostal})` : ""}`}

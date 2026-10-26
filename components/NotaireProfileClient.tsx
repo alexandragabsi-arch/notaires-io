@@ -1005,14 +1005,17 @@ export default function NotaireProfileClient({
               </a>
             )}
 
-            {/* Langues : seulement si le notaire en a déclaré. Une rubrique
-                « Français » seul n'apprend rien à personne. */}
+            {/* Les mêmes pastilles vertes que la section du bas, remontées
+                ici — et cette section est supprimée : une ligne de texte plus
+                un nuage de pastilles, c'était deux fois la même chose. */}
             {(notaire.languages?.length ?? 0) > 0 && (
-              <div className="mt-1 flex gap-2.5 items-start">
-                <Languages className="w-[18px] h-[18px] mt-0.5 shrink-0 text-[var(--color-accent)]" strokeWidth={2} />
-                <p className="text-[15px] text-[var(--color-text-strong)]">
-                  {["Français", ...(notaire.languages ?? []).filter((l) => l.toLowerCase() !== "français")].join(" · ")}
-                </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {["Français", ...(notaire.languages ?? []).filter((l) => l.toLowerCase() !== "français")].map((l) => (
+                  <span key={l} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[13px] font-semibold bg-[var(--color-tint-green)] text-[var(--color-success)]">
+                    <Globe className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
+                    {l}
+                  </span>
+                ))}
               </div>
             )}
 
@@ -1158,72 +1161,38 @@ export default function NotaireProfileClient({
             )}
           </motion.div>
 
-          {/* Spécialités */}
+          {/* ── Domaines et motifs ──
+              Deux nuages de pastilles se suivaient : les domaines, puis les
+              motifs qui en découlent. Le lecteur voyait deux fois la même
+              chose, à deux niveaux de détail. Chaque domaine porte désormais
+              ses propres motifs : on lit ce que fait le notaire ET ce qu'on
+              peut réserver chez lui, d'un seul coup d'œil. */}
           <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-5">
               <Award className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
               <span className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
                 Domaines d&apos;intervention
               </span>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {notaire.specialties.map((s) => (
-                <span
-                  key={s}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-semibold bg-[var(--color-accent-soft)] text-[var(--color-accent)]"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] shrink-0" />
-                  {s}
-                </span>
-              ))}
+            <div className="flex flex-col gap-4">
+              {notaire.specialties.map((dom) => {
+                const motifs = MOTIFS_BY_SPECIALTY[dom] ?? [];
+                return (
+                  <div key={dom}>
+                    <p className="flex items-center gap-2 text-[14.5px] font-bold text-[var(--color-text-strong)] mb-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] shrink-0" />
+                      {dom}
+                    </p>
+                    {motifs.length > 0 && (
+                      <p className="pl-[14px] text-[13.5px] text-[var(--color-muted)] leading-relaxed">
+                        {motifs.join(" · ")}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
-
-          {/* Motifs de rendez-vous */}
-          {getMotifs(notaire.specialties).length > 0 && (
-            <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <CalendarDays className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
-                <span className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
-                  Motifs de rendez-vous
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {getMotifs(notaire.specialties).map((m) => (
-                  <span
-                    key={m}
-                    className="inline-flex items-center px-3 py-1.5 rounded-full text-[12px] font-semibold bg-[var(--color-tint-blue)] text-[var(--color-primary)] border border-[var(--color-border-soft)]"
-                  >
-                    {m}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Langues */}
-          {(notaire.languages ?? []).length > 0 && (
-            <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <Globe className="w-4 h-4 text-[var(--color-success)]" strokeWidth={2} />
-                <span className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
-                  Langues de travail
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {/* Toujours afficher Français en premier */}
-                {["Français", ...(notaire.languages ?? [])].map((l) => (
-                  <span
-                    key={l}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[13px] font-semibold bg-[var(--color-tint-green)] text-[var(--color-success)]"
-                  >
-                    <Globe className="w-3.5 h-3.5 shrink-0" strokeWidth={2.5} />
-                    {l}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Infos pratiques */}
           <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
@@ -1285,63 +1254,6 @@ export default function NotaireProfileClient({
             </p>
           </div>
 
-          {/* Localisation + contact */}
-          {(notaire.address || notaire.city || notaire.phone || notaire.website) && (
-            <div className="bg-white border border-[var(--color-border-soft)] rounded-2xl p-5">
-              {isClaimed ? (
-                <div className="flex flex-col gap-2.5">
-                  <div className="flex items-center gap-2 font-semibold text-[var(--color-text-strong)] text-[13px]">
-                    <MapPin className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
-                    Coordonnées
-                  </div>
-                  <p className="text-[13px] text-[var(--color-muted)] leading-relaxed">
-                    {notaire.address ? adresseAffichee(notaire.address, notaire.city) : `${notaire.city}${notaire.area ? ` · ${notaire.area}` : ""}`}
-                  </p>
-                  {notaire.phone && (
-                    <a
-                      href={`tel:${notaire.phone.replace(/\s/g, "")}`}
-                      className="flex items-center gap-1.5 text-[13px] text-[var(--color-accent)] font-semibold hover:underline"
-                    >
-                      <Phone className="w-3.5 h-3.5" strokeWidth={2} />
-                      {notaire.phone}
-                    </a>
-                  )}
-                  {notaire.website && (
-                    <a
-                      href={notaire.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-[13px] text-[var(--color-accent)] font-semibold hover:underline"
-                    >
-                      <Globe className="w-3.5 h-3.5" strokeWidth={2} />
-                      {notaire.website.replace(/^https?:\/\/(www\.)?/, "")}
-                      <ExternalLink className="w-2.5 h-2.5 opacity-60" strokeWidth={2} />
-                    </a>
-                  )}
-                </div>
-              ) : (
-                <BlurredSection label="Voir les coordonnées" claimId={notaire.id}>
-                  <div className="flex flex-col gap-2.5">
-                    <div className="flex items-center gap-2 font-semibold text-[var(--color-text-strong)] text-[13px]">
-                      <MapPin className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
-                      Coordonnées
-                    </div>
-                    <p className="text-[13px] text-[var(--color-muted)] leading-relaxed">
-                      {notaire.city} · Adresse masquée
-                    </p>
-                    <span className="flex items-center gap-1.5 text-[13px] text-[var(--color-accent)] font-semibold">
-                      <Phone className="w-3.5 h-3.5" strokeWidth={2} />
-                      +33 · · · · · · · · ·
-                    </span>
-                    <span className="flex items-center gap-1.5 text-[13px] text-[var(--color-accent)] font-semibold">
-                      <Globe className="w-3.5 h-3.5" strokeWidth={2} />
-                      www.etude-notariale.fr
-                    </span>
-                  </div>
-                </BlurredSection>
-              )}
-            </div>
-          )}
         </motion.div>
       </div>
 

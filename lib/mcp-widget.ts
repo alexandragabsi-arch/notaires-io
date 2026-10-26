@@ -26,19 +26,30 @@ export const WIDGET_HTML = /* html */ `<!doctype html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
+  /* Couleurs reprises telles quelles de app/globals.css : le widget doit être
+     reconnaissable comme notaires.io, pas seulement « bleu ». */
   :root {
-    --navy: #1c3a64; --bleu: #4a86e8; --bleu-doux: #eaf1fd;
-    --fond: transparent; --carte: #ffffff; --bord: #e3e8f0; --texte: #1b2433; --doux: #5d6b80;
-    --vert: #1f8a5b; --vert-doux: #e6f5ee; --ombre: 0 1px 2px rgba(16,32,64,.06), 0 4px 16px rgba(16,32,64,.06);
+    --navy: #1C4587;            /* --color-text-strong */
+    --bleu: #4980E6;            /* --color-accent */
+    --bleu-doux: #eef4ff;       /* --color-accent-soft */
+    --degrade-cta: linear-gradient(135deg, #509BF8 0%, #4980E6 100%);
+    --ombre-cta: 0 4px 14px rgba(73, 128, 230, .28);
+    --fond: transparent; --carte: #ffffff;
+    --bord: #e8edf5;            /* --color-border-soft */
+    --texte: #0f172a; --doux: #64748b;  /* --color-muted */
+    --vert: #047857; --vert-doux: #ecfdf5;  /* --color-tint-green */
+    --ombre: 0 4px 24px rgba(15, 23, 42, .06);  /* --shadow-card */
   }
   [data-theme="dark"] {
-    --navy: #cfe0ff; --bleu: #7aa7f0; --bleu-doux: #1d2a40;
+    --navy: #c9ddff; --bleu: #7FA9F0; --bleu-doux: #1b2b45;
+    --degrade-cta: linear-gradient(135deg, #5f9df9 0%, #4980E6 100%);
+    --ombre-cta: none;
     --fond: transparent; --carte: #1b2230; --bord: #2c3546; --texte: #e8edf5; --doux: #9aa7bb;
     --vert: #5fd0a0; --vert-doux: #17322a; --ombre: none;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; background: var(--fond); color: var(--texte);
-    font: 14px/1.45 "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif; }
+    font: 14px/1.45 "DM Sans", Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
   .app { padding: 4px 2px 8px; }
   .entete { display: flex; align-items: center; gap: 10px; margin: 0 2px 12px; }
   .logo { width: 30px; height: 30px; border-radius: 8px; background: #fff; border: 1px solid var(--bord);
@@ -67,7 +78,9 @@ export const WIDGET_HTML = /* html */ `<!doctype html>
   button { font: inherit; cursor: pointer; border-radius: 9px; padding: 7px 12px; border: 1px solid var(--bord);
     background: transparent; color: var(--texte); font-size: 13px; font-weight: 500; }
   button:hover { border-color: var(--bleu); }
-  button.primaire { background: var(--bleu); border-color: var(--bleu); color: #fff; }
+  /* Le bouton d'action reprend le dégradé des CTA du site (.bg-gradient-cta). */
+  button.primaire { background: var(--degrade-cta); border-color: transparent; color: #fff;
+    box-shadow: var(--ombre-cta); }
   button.primaire:hover { filter: brightness(1.06); }
   [data-theme="dark"] button.primaire, [data-theme="dark"] .heure[aria-pressed="true"] { color: #0d1726; }
   button:disabled { opacity: .55; cursor: default; }
@@ -107,7 +120,7 @@ const icone = {
   tel: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>',
   langue: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
 };
-const logo = '<div class="logo" aria-hidden="true"><svg width="22" height="16" viewBox="0 0 44 32"><text x="0" y="25" font-family="Playfair Display, Georgia, serif" font-weight="700" font-size="28" fill="#1c3a64">N</text><text x="21" y="25" font-family="Playfair Display, Georgia, serif" font-weight="700" font-size="15" fill="#4a86e8">.io</text></svg></div>';
+const logo = '<div class="logo" aria-hidden="true"><svg width="22" height="16" viewBox="0 0 44 32"><text x="0" y="25" font-family="Playfair Display, Georgia, serif" font-weight="700" font-size="28" fill="#1C4587">N</text><text x="21" y="25" font-family="Playfair Display, Georgia, serif" font-weight="700" font-size="15" fill="#4980E6">.io</text></svg></div>';
 const entete = (sous) => '<div class="entete">' + logo + '<div><div class="marque">notaires<span>.io</span></div>' + (sous ? '<div class="sous">' + esc(sous) + '</div>' : '') + '</div></div>';
 
 function carte(n, large) {

@@ -32,6 +32,7 @@ import BookingModal from "@/components/BookingModal";
 import { slotKeyDepuisJour } from "@/lib/creneau";
 import { matriceAgenda } from "@/lib/disponibilites";
 import { adresseAffichee } from "@/lib/adresse";
+import { filAriane } from "@/lib/fil-ariane";
 
 const ALL_SPECIALTIES = [
   "Droit immobilier", "Successions", "Droit de la famille",
@@ -833,17 +834,31 @@ export default function NotaireProfileClient({
       <BandeauApercu />
     </Suspense>
     <div className="max-w-[1140px] mx-auto px-4 sm:px-6 py-5 sm:py-8">
-      {/* ── Retour ── */}
-      <motion.a
-        href="/annuaire"
+      {/* ── Fil d'Ariane ──
+          Remplace la flèche « Annuaire », qui ne menait qu'à une impasse.
+          Chaque maillon est une page existante : département, ville,
+          arrondissement. Sur mobile, les niveaux intermédiaires se replient
+          pour ne pas occuper deux lignes. */}
+      <motion.nav
+        aria-label="Fil d'Ariane"
         initial={{ opacity: 0, x: -8 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3 }}
-        className="inline-flex items-center gap-2 text-[14px] font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] mb-4 transition-colors"
+        className="mb-4"
       >
-        <ArrowLeft className="w-4 h-4" strokeWidth={2.5} />
-        Annuaire
-      </motion.a>
+        <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13.5px] text-[var(--color-muted)]">
+          {filAriane({ name: notaire.name, id: notaire.id, city: notaire.city, address: notaire.address }).map((m, i, tous) => (
+            <li key={`${m.nom}-${i}`} className={`flex items-center gap-1.5 ${i > 1 && i < tous.length - 1 ? "hidden sm:flex" : ""}`}>
+              {i > 0 && <ChevronRight className="w-3.5 h-3.5 shrink-0 text-[var(--color-border)]" strokeWidth={2.5} />}
+              {m.href ? (
+                <a href={m.href} className="font-medium hover:text-[var(--color-primary)] transition-colors">{m.nom}</a>
+              ) : (
+                <span className="font-semibold text-[var(--color-text-strong)] truncate max-w-[200px] sm:max-w-none" aria-current="page">{m.nom}</span>
+              )}
+            </li>
+          ))}
+        </ol>
+      </motion.nav>
 
       {/* ── Bannière identité (pleine largeur) ── */}
       <motion.div

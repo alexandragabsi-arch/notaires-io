@@ -47,6 +47,7 @@ export async function POST(req: NextRequest) {
 
   const r = await enregistrerReservation(supabase, {
     notaireId, notaireNom, slotKey, slotLabel, dossier, modalite, participants, documents, userId, smsReminder,
+    source: "site",
   });
   if (!r.ok) {
     return NextResponse.json(

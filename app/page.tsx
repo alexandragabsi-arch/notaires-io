@@ -10,7 +10,10 @@ import FAQ from "@/components/FAQ";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "RDV notaire en ligne — Prenez rendez-vous en visio ou au cabinet",
+  // « prendre rdv notaire » et « rdv notaire en ligne » : les deux requêtes sur
+  // lesquelles Google associe l'accueil. Le titre du 25/10 avait retiré
+  // « prendre » (Search Console, 26/10 : « prendre rdv notaire » 11,7e).
+  title: "Prendre RDV notaire en ligne : en visio ou au cabinet",
   description:
     "Prenez RDV avec un notaire en quelques clics : créneaux réels, confirmation immédiate. Immobilier, succession, mariage, donation — en visio ou au cabinet, sans attendre de rappel.",
   keywords: [

@@ -37,7 +37,6 @@ import { filAriane } from "@/lib/fil-ariane";
 import CarteNotaire from "@/components/CarteNotaire";
 import { useCoordonnees } from "@/lib/use-coordonnees";
 import TransportsProches from "@/components/TransportsProches";
-import { SOUS_SPECIALITES } from "@/lib/sous-specialites";
 
 const ALL_SPECIALTIES = [
   "Droit immobilier", "Successions", "Droit de la famille",
@@ -1177,7 +1176,7 @@ export default function NotaireProfileClient({
             </div>
             <div className="flex flex-col gap-4">
               {notaire.specialties.map((dom) => {
-                const motifs = SOUS_SPECIALITES[dom] ?? [];
+                const motifs = MOTIFS_BY_SPECIALTY[dom] ?? [];
                 return (
                   <div key={dom}>
                     <p className="flex items-center gap-2 text-[14.5px] font-bold text-[var(--color-text-strong)] mb-1">

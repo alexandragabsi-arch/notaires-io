@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
       b.client_email,
       `Votre rendez-vous${quand ? ` du ${quand}` : ""} est annulé`,
       `<div style="font-family:Inter,Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px 24px;color:#1a1a2e;line-height:1.5">
-        <img src="${SITE}/logo-notaires-io.png" alt="Notaires.io" style="height:30px;margin-bottom:28px" />
+        <img src="${SITE}/images/logo-carre-notaires-io.png" alt="Notaires.io" width="30" height="30" style="width:30px;height:30px;margin-bottom:28px;display:block;border:0" />
         <h1 style="font-size:20px;font-weight:700;margin:0 0 12px">Votre rendez-vous est annulé.</h1>
         <p style="font-size:15px;margin:0 0 20px">Le rendez-vous${quand ? ` du ${quand}` : ""} avec ${notaire} est annulé. Le notaire a été prévenu.</p>
         <a href="${SITE}/annuaire" style="display:inline-block;padding:12px 22px;border-radius:10px;background:#2d5dbf;color:#fff;font-weight:600;text-decoration:none">Prendre un nouveau rendez-vous</a>

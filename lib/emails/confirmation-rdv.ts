@@ -78,7 +78,10 @@ export function emailConfirmationClient(o: {
 
   return `
   <div style="font-family:Inter,Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px 24px;color:#1a1a2e;line-height:1.5">
-    <img src="${SITE}/logo-notaires-io.png" alt="Notaires.io" style="height:30px;margin-bottom:28px" />
+    <!-- Chemin réel du fichier : /logo-notaires-io.png n'a jamais existé, tous
+         les e-mails partaient avec un logo cassé. Largeur explicite : plusieurs
+         clients de messagerie n'appliquent pas le ratio à partir de la hauteur. -->
+    <img src="${SITE}/images/logo-carre-notaires-io.png" alt="Notaires.io" width="30" height="30" style="width:30px;height:30px;margin-bottom:28px;display:block;border:0" />
     <p style="font-size:16px;margin:0 0 6px">Bonjour${salut ? ` ${echapper(salut)}` : ""},</p>
     <h1 style="font-size:21px;font-weight:700;margin:0 0 20px;color:#1a1a2e">
       Votre rendez-vous avec ${echapper(o.notaireNom)} est confirmé.

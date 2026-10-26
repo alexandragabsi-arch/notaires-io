@@ -43,6 +43,9 @@ const cle = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCas
 
 const urlFiche = (id: string) => `${SITE}/notaires/${id}`;
 
+/** Agenda en ligne : nouvelles disponibilités, ou ancienne matrice non vide. */
+const aUnAgenda = (n: ListingNotaire) => !!n.disponibilites || !!n.slotMatrix?.some((j) => j.length);
+
 /** Libellé « Mer. 11 juin · 10h00 », comme sur le site. */
 function libelleCreneau(slotKey: string): string {
   const d = new Date(slotKey);
@@ -101,11 +104,20 @@ async function ficheDemo(id: string): Promise<ListingNotaire | undefined> {
 
 /** Créneaux libres d'un inscrit (ISO), du jour donné sur `jours` jours. */
 async function creneauxLibres(n: ListingNotaire, debut: Date, jours: number): Promise<string[]> {
-  if (!n.disponibilites) return [];
+  if (!aUnAgenda(n)) return [];
   const candidats: string[] = [];
   const d = new Date(debut);
+  // Ancienne saisie (slot_matrix) : jour 0 = demain, comme l'agenda de la fiche (heuresPour).
+  const demain = aujourdhuiParis();
+  demain.setDate(demain.getDate() + 1);
   for (let i = 0; i < jours; i++) {
-    for (const h of heuresDuJour(n.disponibilites, d)) candidats.push(slotKeyDepuisJour(d, h));
+    const heures = n.disponibilites
+      ? heuresDuJour(n.disponibilites, d)
+      : (n.slotMatrix?.[Math.round((d.getTime() - demain.getTime()) / 86_400_000)] ?? []);
+    for (const h of heures) {
+      const k = slotKeyDepuisJour(d, h);
+      if (Date.parse(k) > Date.now()) candidats.push(k);
+    }
     d.setDate(d.getDate() + 1);
   }
   if (!candidats.length) return [];
@@ -144,7 +156,7 @@ const handler = createMcpHandler(
           const base = arrondissement ? getNotairesByArrondissement(ville, arrondissement) : getNotairesByCity(ville);
           let inscrits = await getInscritsVille(ville);
           if (arrondissement) inscrits = inscrits.filter((n) => n.arrondissement === arrondissement);
-          const idsInscrits = new Set(inscrits.filter((n) => n.disponibilites).map((n) => n.id));
+          const idsInscrits = new Set(inscrits.filter(aUnAgenda).map((n) => n.id));
           let liste = avecInscrits(base, inscrits);
           if (domaine) {
             const voulus = new Set(normaliserSpecialites([domaine]).map(cle));
@@ -187,7 +199,7 @@ const handler = createMcpHandler(
           const inscrit = await inscritParId(id);
           const fiche = inscrit ?? getAllNotaires().find((n) => n.id === id);
           if (!fiche) return erreur("Notaire introuvable. Relancer rechercher_notaires pour obtenir un id valide.");
-          const reservable = !!inscrit?.disponibilites; // agenda au nouveau format, seul réservable en ligne
+          const reservable = !!inscrit && aUnAgenda(inscrit);
           return texte([resume(fiche, reservable), fiche.bio ? `\nPrésentation : ${fiche.bio}` : ""].join("\n"));
         } catch (e) {
           return erreur(`Fiche indisponible : ${msg(e)}`);
@@ -230,7 +242,7 @@ const handler = createMcpHandler(
       async ({ id, a_partir_du, jours }) => {
         try {
           const n = await inscritParId(id);
-          if (!n || !n.disponibilites) {
+          if (!n || !aUnAgenda(n)) {
             return erreur("Ce notaire ne propose pas de rendez-vous en ligne sur notaires.io. Donner ses coordonnées (fiche_notaire) pour contacter l'étude.");
           }
           const auj = aujourdhuiParis();
@@ -289,7 +301,7 @@ const handler = createMcpHandler(
           if (!lim.autorise) return erreur("Trop de réservations pour cette adresse e-mail en une heure. Réessayer plus tard.");
           if (!estSlotKeyIso(creneau)) return erreur("Créneau invalide : reprendre l'identifiant ISO donné par creneaux_disponibles.");
           const n = await inscritParId(notaire_id);
-          if (!n || !n.disponibilites) return erreur("Ce notaire ne prend pas de rendez-vous en ligne.");
+          if (!n || !aUnAgenda(n)) return erreur("Ce notaire ne prend pas de rendez-vous en ligne.");
           const slot = isoCreneau(new Date(creneau));
           const auj = aujourdhuiParis();
           const libres = await creneauxLibres(n, auj, HORIZON_JOURS + 1);

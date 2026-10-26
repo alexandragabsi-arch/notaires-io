@@ -19,7 +19,8 @@ import { getNotairesByCity, getNotairesByArrondissement, getAllNotaires } from "
 import { getInscrits, getInscritsVille, avecInscrits } from "@/lib/inscrits-serveur";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { normaliserSpecialites } from "@/lib/specialites";
-import { heuresDuJour, aujourdhuiParis, jourDeCle, cleJour, HORIZON_JOURS } from "@/lib/disponibilites";
+import { heuresDuJour, aujourdhuiParis, jourDeCle, cleJour, HORIZON_JOURS, lireDisponibilites, disponibilitesParDefaut } from "@/lib/disponibilites";
+import { estFicheTest } from "@/lib/fiches-test";
 import { slotKeyDepuisJour, estSlotKeyIso, isoCreneau } from "@/lib/creneau";
 import { DOSSIERS, ROLES_BY_DOSSIER, DOCS_BY_DOSSIER, DOCS_COMMUNS } from "@/lib/dossiers-rdv";
 import { enregistrerReservation } from "@/lib/reservation";
@@ -65,7 +66,37 @@ function resume(n: ListingNotaire, reservable: boolean): string {
 }
 
 async function inscritParId(id: string): Promise<ListingNotaire | undefined> {
+  if (estFicheTest(id)) return ficheDemo(id);
   return (await getInscrits()).find((n) => n.id === id);
+}
+
+/**
+ * Fiche de démonstration (lib/fiches-test.ts) : absente des recherches, mais
+ * consultable et réservable par son id, pour les tests et la revue des
+ * annuaires de connecteurs, sans déranger un vrai notaire.
+ */
+async function ficheDemo(id: string): Promise<ListingNotaire | undefined> {
+  const { data: r } = await db()
+    .from("notaire_profiles")
+    .select("id, name, city, office_name, address, specialties, languages, bio, disponibilites")
+    .eq("id", id)
+    .maybeSingle();
+  if (!r) return undefined;
+  return {
+    id: r.id as string,
+    name: r.name as string,
+    initials: "T",
+    color: "default",
+    city: r.city as string,
+    officeName: (r.office_name as string) || undefined,
+    address: (r.address as string) || undefined,
+    specialties: (r.specialties as string[]) || [],
+    languages: (r.languages as string[] | null) || undefined,
+    bio: (r.bio as string) || undefined,
+    disponibilites: lireDisponibilites(r.disponibilites) ?? disponibilitesParDefaut(),
+    next: "Sur demande",
+    claimed: true,
+  };
 }
 
 /** Créneaux libres d'un inscrit (ISO), du jour donné sur `jours` jours. */

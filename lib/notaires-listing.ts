@@ -24,6 +24,8 @@ export interface ListingNotaire {
   next: string;
   slotMatrix?: string[][]; // ancienne saisie (jours numérotés), remplacée par disponibilites
   disponibilites?: Disponibilites;
+  /** Arrêts à 400 m, depuis notaire_profiles.transports. */
+  transports?: { mode: string; noms: string[] }[] | null;
   photo?: string;
   isNew?: boolean;
   bio?: string;

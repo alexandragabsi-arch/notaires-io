@@ -7,6 +7,7 @@ import {
   MapPin,
   BadgeCheck,
   Globe,
+  Languages,
   ExternalLink,
   ArrowRight,
   ArrowLeft,
@@ -33,6 +34,9 @@ import { slotKeyDepuisJour } from "@/lib/creneau";
 import { matriceAgenda } from "@/lib/disponibilites";
 import { adresseAffichee } from "@/lib/adresse";
 import { filAriane } from "@/lib/fil-ariane";
+import CarteNotaire from "@/components/CarteNotaire";
+import { useCoordonnees } from "@/lib/use-coordonnees";
+import TransportsProches from "@/components/TransportsProches";
 
 const ALL_SPECIALTIES = [
   "Droit immobilier", "Successions", "Droit de la famille",
@@ -779,6 +783,8 @@ export default function NotaireProfileClient({
   // Créneaux des 3 prochains mois (jour 0 = demain), calculés à partir des
   // disponibilités du notaire au moment de l'affichage.
   const agenda = useMemo(() => (notaire ? matriceAgenda(notaire) : undefined), [notaire]);
+  // Un seul géocodage pour le plan et les transports.
+  const point = useCoordonnees(notaire?.address ? `${notaire.address}, ${notaire.city}` : undefined);
   const [demandeCreneau, setDemandeCreneau] = useState<{ cle: string; n: number }>();
 
   if (notaire === undefined) {
@@ -998,24 +1004,24 @@ export default function NotaireProfileClient({
                 <ExternalLink className="w-3 h-3 opacity-60" strokeWidth={2} />
               </a>
             )}
+
+            {/* Langues : seulement si le notaire en a déclaré. Une rubrique
+                « Français » seul n'apprend rien à personne. */}
+            {(notaire.languages?.length ?? 0) > 0 && (
+              <div className="mt-1 flex gap-2.5 items-start">
+                <Languages className="w-[18px] h-[18px] mt-0.5 shrink-0 text-[var(--color-accent)]" strokeWidth={2} />
+                <p className="text-[15px] text-[var(--color-text-strong)]">
+                  {["Français", ...(notaire.languages ?? []).filter((l) => l.toLowerCase() !== "français")].join(" · ")}
+                </p>
+              </div>
+            )}
+
+            <TransportsProches arrets={notaire.transports} />
           </div>
 
-          {/* Lien vers une carte plutôt qu'une carte intégrée : pas de clé
-              d'API, pas de quota, et l'itinéraire s'ouvre dans l'application
-              de cartes du visiteur, celle qu'il utilise déjà. */}
+          {/* Plan du quartier : cadre OpenStreetMap, sans clé ni quota. */}
           {notaire.address && (
-            <a
-              href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(`${notaire.address}, ${notaire.city}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative rounded-xl border border-[var(--color-border-soft)] bg-[var(--color-tint-blue)] h-[150px] flex items-center justify-center group overflow-hidden"
-              aria-label={`Voir ${notaire.name} sur une carte`}
-            >
-              <span className="inline-flex items-center gap-2 bg-gradient-cta text-white px-4 py-2.5 rounded-lg text-[14px] font-semibold shadow-[var(--shadow-cta)] group-hover:-translate-y-0.5 transition-transform">
-                <MapPin className="w-4 h-4" strokeWidth={2.5} />
-                Voir sur la carte
-              </span>
-            </a>
+            <CarteNotaire adresse={`${notaire.address}, ${notaire.city}`} nom={notaire.name} pos={point} />
           )}
         </motion.div>
       )}
@@ -1243,31 +1249,19 @@ export default function NotaireProfileClient({
           {/* CTA principal (uniquement si profil activé) */}
           {isClaimed && (
             <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
-              {(() => {
-                const prochain = prochainCreneau(agenda, pris);
-                if (!prochain) return null;
-                return (
-                  <div className="text-center mb-5">
-                    <div className="text-[13px] text-[var(--color-muted)] mb-1">Prochain créneau</div>
-                    <div className="text-[20px] font-bold text-[var(--color-success)] first-letter:uppercase">
-                      {prochain.libelle}
-                    </div>
-                    <div className="text-[15px] font-semibold text-[var(--color-text-strong)]">à {prochain.heure}</div>
-                  </div>
-                );
-              })()}
+              {/* Le prochain créneau est annoncé dans le bandeau, en haut de
+                  page : le répéter ici, à quelques centimètres, faisait
+                  redite. Ce bouton mène à l'agenda complet, qui est autre
+                  chose — on y choisit son jour et son heure. */}
               <a
                 href="#agenda"
                 onClick={(e) => {
-                  // Créneau affiché juste au-dessus : réservation ouverte dessus.
-                  const prochain = prochainCreneau(agenda, pris);
-                  if (!prochain) return; // sans créneau, le lien mène à l'agenda
                   e.preventDefault();
-                  setDemandeCreneau({ cle: prochain.cle, n: Date.now() });
+                  document.getElementById("agenda")?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }}
                 className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 mb-3"
               >
-                Prendre rendez-vous
+                Voir tous les créneaux
                 <ArrowRight className="w-[17px] h-[17px]" strokeWidth={2.5} />
               </a>
               <p className="text-[12px] text-[var(--color-muted)] text-center leading-relaxed">

@@ -39,8 +39,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const v = await getVilleAvecInscrits(ville);
   if (!v) return {};
   const specs = v.specialites.slice(0, 3).join(", ").toLowerCase();
-  const inscrits = await getInscritsVille(v.nom);
-  const hasInscrits = inscrits.length > 0;
   return {
     // Pas de « · Notaires.io » ici : le gabarit de app/layout.tsx l'ajoute déjà
     // (`template: "%s · Notaires.io"`). Le titre affichait la marque deux fois.
@@ -50,7 +48,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `RDV notaire ${aVille(v.nom)}${v.codePostal ? ` (${v.codePostal})` : ""} : prendre rendez-vous en ligne`,
     description: `${v.nombre} notaires référencés ${aVille(v.nom)}${v.codePostal ? ` ${v.codePostal}` : ""}${specs ? ` : ${specs}` : ""}. Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`,
     alternates: { canonical: `https://notaires.io/notaire-ville/${v.slug}` },
-    ...(!hasInscrits && { robots: { index: false, follow: true } }),
     openGraph: {
       title: `RDV notaire ${aVille(v.nom)}${v.codePostal ? ` ${v.codePostal}` : ""} · Notaires.io`,
       description: `${v.nombre} notaires référencés ${aVille(v.nom)}. Prise de rendez-vous en ligne.`,

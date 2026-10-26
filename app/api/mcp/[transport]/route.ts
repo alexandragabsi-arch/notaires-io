@@ -383,6 +383,7 @@ const handler = createMcpHandler(
             documents: [],
             userId: null,
             smsReminder: !!rappel_sms,
+            source: "mcp",
           });
           if (!r.ok) {
             return erreur(r.code === "slot_taken" ? "Ce créneau vient d'être réservé par quelqu'un d'autre. Proposer un autre horaire." : `Réservation impossible : ${r.message}`);

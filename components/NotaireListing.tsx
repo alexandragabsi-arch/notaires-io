@@ -486,6 +486,7 @@ function MenuFiltre({
 
 function NotaireListingInner({ baseListings, sourceUrl, sommaire }: { baseListings?: ListingNotaire[]; sourceUrl?: string; sommaire?: React.ReactNode }) {
   const searchParams = useSearchParams();
+  const sectionRef = useRef<HTMLElement>(null);
   const urlVille = searchParams.get("ville") ?? "";
   const urlNom = searchParams.get("nom") ?? "";
   const urlSpecialite = searchParams.get("specialite") ?? "";
@@ -673,6 +674,25 @@ function NotaireListingInner({ baseListings, sourceUrl, sommaire }: { baseListin
   }, [results, arrFilter]);
   const displayed = useMemo(() => classes.slice(0, displayLimit), [classes, displayLimit]);
 
+  // Arrivée depuis le parcours (/annuaire?ville=…&specialite=…) : les fiches se
+  // chargent APRÈS le premier rendu. La page est courte à l'arrivée, le
+  // navigateur s'y positionne, puis la liste s'insère et pousse le contenu vers
+  // le bas — le visiteur se retrouvait au milieu des résultats, parfois sur une
+  // carte tronquée. On le ramène en haut de la section une seule fois, quand
+  // les résultats sont effectivement là.
+  const recadre = useRef(false);
+  useEffect(() => {
+    if (recadre.current || !urlVille || results.length === 0) return;
+    recadre.current = true;
+    // Deux trames : laisse React peindre la liste avant de mesurer sa position.
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() =>
+        sectionRef.current?.scrollIntoView({ behavior: "auto", block: "start" }),
+      ),
+    );
+  }, [urlVille, results.length]);
+
+
   /** Vrai dès qu'un critère de recherche/filtre est actif */
   const hasSearch =
     city !== ALL ||
@@ -683,7 +703,7 @@ function NotaireListingInner({ baseListings, sourceUrl, sommaire }: { baseListin
     availMax !== null;
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-white">
+    <section ref={sectionRef} className="py-12 sm:py-16 lg:py-20 bg-white scroll-mt-20">
       <div className="max-w-[1100px] mx-auto px-6">
 
         {/* En-tête */}

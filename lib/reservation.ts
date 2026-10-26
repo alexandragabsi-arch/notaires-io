@@ -38,6 +38,8 @@ export interface BookingPayload {
   documents?: StoredDocument[];
   userId?: string | null;
   smsReminder?: boolean;
+  /** Canal de la réservation. Omis : « inconnu », comme les écritures directes de l'app. */
+  source?: "site" | "mcp" | "app";
 }
 
 export type ResultatReservation =
@@ -46,7 +48,7 @@ export type ResultatReservation =
 
 export async function enregistrerReservation(
   supabase: SupabaseClient,
-  { notaireId, notaireNom, slotKey, slotLabel, dossier, modalite, participants, documents, userId, smsReminder }: BookingPayload,
+  { notaireId, notaireNom, slotKey, slotLabel, dossier, modalite, participants, documents, userId, smsReminder, source }: BookingPayload,
 ): Promise<ResultatReservation> {
   const client = participants[0];
   const clientNom = `${client.civilite} ${client.prenom} ${client.nom.toUpperCase()}`.trim();
@@ -68,6 +70,7 @@ export async function enregistrerReservation(
     client_phone: client.telephone?.trim() || null,
     sms_reminder: !!smsReminder && !!client.telephone?.trim(),
     user_id: userId || null,
+    source: source ?? "inconnu",
     status: "confirmed",
   }).select("id").single();
 

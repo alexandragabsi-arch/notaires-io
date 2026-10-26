@@ -7,6 +7,7 @@ import {
   MapPin,
   BadgeCheck,
   Globe,
+  Languages,
   ExternalLink,
   ArrowRight,
   ArrowLeft,
@@ -34,6 +35,8 @@ import { matriceAgenda } from "@/lib/disponibilites";
 import { adresseAffichee } from "@/lib/adresse";
 import { filAriane } from "@/lib/fil-ariane";
 import CarteNotaire from "@/components/CarteNotaire";
+import { useCoordonnees } from "@/lib/use-coordonnees";
+import TransportsProches from "@/components/TransportsProches";
 
 const ALL_SPECIALTIES = [
   "Droit immobilier", "Successions", "Droit de la famille",
@@ -780,6 +783,8 @@ export default function NotaireProfileClient({
   // Créneaux des 3 prochains mois (jour 0 = demain), calculés à partir des
   // disponibilités du notaire au moment de l'affichage.
   const agenda = useMemo(() => (notaire ? matriceAgenda(notaire) : undefined), [notaire]);
+  // Un seul géocodage pour le plan et les transports.
+  const point = useCoordonnees(notaire?.address ? `${notaire.address}, ${notaire.city}` : undefined);
   const [demandeCreneau, setDemandeCreneau] = useState<{ cle: string; n: number }>();
 
   if (notaire === undefined) {
@@ -999,11 +1004,24 @@ export default function NotaireProfileClient({
                 <ExternalLink className="w-3 h-3 opacity-60" strokeWidth={2} />
               </a>
             )}
+
+            {/* Langues : seulement si le notaire en a déclaré. Une rubrique
+                « Français » seul n'apprend rien à personne. */}
+            {(notaire.languages?.length ?? 0) > 0 && (
+              <div className="mt-1 flex gap-2.5 items-start">
+                <Languages className="w-[18px] h-[18px] mt-0.5 shrink-0 text-[var(--color-accent)]" strokeWidth={2} />
+                <p className="text-[15px] text-[var(--color-text-strong)]">
+                  {["Français", ...(notaire.languages ?? []).filter((l) => l.toLowerCase() !== "français")].join(" · ")}
+                </p>
+              </div>
+            )}
+
+            <TransportsProches arrets={notaire.transports} />
           </div>
 
           {/* Plan du quartier : cadre OpenStreetMap, sans clé ni quota. */}
           {notaire.address && (
-            <CarteNotaire adresse={`${notaire.address}, ${notaire.city}`} nom={notaire.name} />
+            <CarteNotaire adresse={`${notaire.address}, ${notaire.city}`} nom={notaire.name} pos={point} />
           )}
         </motion.div>
       )}

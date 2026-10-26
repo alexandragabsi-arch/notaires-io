@@ -11,46 +11,11 @@
 // composant retombe alors sur le bouton seul : mieux vaut un lien qui marche
 // qu'un cadre vide.
 
-import { useEffect, useState } from "react";
 import { MapPin } from "lucide-react";
+import type { Point } from "@/lib/use-coordonnees";
 
-/** Mémoire de session : une même adresse n'est géocodée qu'une fois. */
-const cache = new Map<string, [number, number] | null>();
+export default function CarteNotaire({ adresse, nom, pos }: { adresse: string; nom: string; pos: Point | null }) {
 
-async function coordonnees(adresse: string): Promise<[number, number] | null> {
-  const cle = adresse.trim().toLowerCase();
-  if (!cle) return null;
-  if (cache.has(cle)) return cache.get(cle)!;
-  try {
-    const r = await fetch(
-      `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(adresse)}&limit=1`,
-      { signal: AbortSignal.timeout(8000) },
-    );
-    const j = await r.json();
-    const f = j.features?.[0];
-    // L'API renvoie [longitude, latitude] — l'ordre inverse de l'usage courant.
-    const c = f ? ([f.geometry.coordinates[1], f.geometry.coordinates[0]] as [number, number]) : null;
-    cache.set(cle, c);
-    return c;
-  } catch {
-    cache.set(cle, null);
-    return null;
-  }
-}
-
-export default function CarteNotaire({ adresse, nom }: { adresse: string; nom: string }) {
-  const [pos, setPos] = useState<[number, number] | null>(null);
-  const [fini, setFini] = useState(false);
-
-  useEffect(() => {
-    let actif = true;
-    coordonnees(adresse).then((c) => {
-      if (!actif) return;
-      setPos(c);
-      setFini(true);
-    });
-    return () => { actif = false; };
-  }, [adresse]);
 
   const lien = `https://www.openstreetmap.org/${pos ? `?mlat=${pos[0]}&mlon=${pos[1]}#map=17/${pos[0]}/${pos[1]}` : `search?query=${encodeURIComponent(adresse)}`}`;
 
@@ -70,13 +35,6 @@ export default function CarteNotaire({ adresse, nom }: { adresse: string; nom: s
         />
       )}
 
-      {/* Tant que le géocodage n'a pas répondu, le cadre reste neutre : pas de
-          tournoiement ni de texte qui disparaîtrait une seconde plus tard. */}
-      {!pos && fini && (
-        <div className="absolute inset-0 grid place-items-center text-[13px] text-[var(--color-muted)] px-4 text-center">
-          Adresse non localisée
-        </div>
-      )}
 
       <a
         href={lien}

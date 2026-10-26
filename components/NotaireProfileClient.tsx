@@ -33,6 +33,7 @@ import { slotKeyDepuisJour } from "@/lib/creneau";
 import { matriceAgenda } from "@/lib/disponibilites";
 import { adresseAffichee } from "@/lib/adresse";
 import { filAriane } from "@/lib/fil-ariane";
+import CarteNotaire from "@/components/CarteNotaire";
 
 const ALL_SPECIALTIES = [
   "Droit immobilier", "Successions", "Droit de la famille",
@@ -1000,22 +1001,9 @@ export default function NotaireProfileClient({
             )}
           </div>
 
-          {/* Lien vers une carte plutôt qu'une carte intégrée : pas de clé
-              d'API, pas de quota, et l'itinéraire s'ouvre dans l'application
-              de cartes du visiteur, celle qu'il utilise déjà. */}
+          {/* Plan du quartier : cadre OpenStreetMap, sans clé ni quota. */}
           {notaire.address && (
-            <a
-              href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(`${notaire.address}, ${notaire.city}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative rounded-xl border border-[var(--color-border-soft)] bg-[var(--color-tint-blue)] h-[150px] flex items-center justify-center group overflow-hidden"
-              aria-label={`Voir ${notaire.name} sur une carte`}
-            >
-              <span className="inline-flex items-center gap-2 bg-gradient-cta text-white px-4 py-2.5 rounded-lg text-[14px] font-semibold shadow-[var(--shadow-cta)] group-hover:-translate-y-0.5 transition-transform">
-                <MapPin className="w-4 h-4" strokeWidth={2.5} />
-                Voir sur la carte
-              </span>
-            </a>
+            <CarteNotaire adresse={`${notaire.address}, ${notaire.city}`} nom={notaire.name} />
           )}
         </motion.div>
       )}

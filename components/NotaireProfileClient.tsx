@@ -860,128 +860,165 @@ export default function NotaireProfileClient({
         </ol>
       </motion.nav>
 
-      {/* ── Bannière identité (pleine largeur) ── */}
+      {/* ── Bandeau identité ──
+          Il mesurait 577 px : plus d'un demi-écran avant la moindre
+          information utile. Ramené à une bande d'environ 140 px, d'un bord à
+          l'autre, qui porte l'essentiel — qui, où, et quand le voir. */}
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] overflow-hidden mb-6"
+        transition={{ duration: 0.35 }}
+        className="bg-gradient-banner rounded-2xl px-5 sm:px-7 py-5 sm:py-6 mb-6"
       >
-        {/* Bandeau coloré : la photo du notaire ressort dessus (mobile + desktop) */}
-        <div className="h-24 sm:h-28 bg-gradient-banner" />
-        <div className="flex flex-col items-center text-center gap-4 px-6 sm:px-8 pb-6 sm:pb-8 -mt-14 sm:-mt-16">
-          {/* Avatar rond + badge de statut en incrustation */}
-          <div className="relative shrink-0">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+          {/* Portrait */}
+          <div className="relative shrink-0 self-start sm:self-auto">
             {notaire.photo ? (
-              <div className="w-28 h-28 rounded-full overflow-hidden bg-[var(--color-tint-blue)] ring-4 ring-white shadow-[var(--shadow-card)]">
+              <div className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-full overflow-hidden bg-white ring-2 ring-white/60">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={notaire.photo} alt={`Photo de ${notaire.name}`} loading="lazy" className="w-full h-full object-cover" />
               </div>
             ) : (
-              <div className={`w-28 h-28 rounded-full text-white flex items-center justify-center font-bold text-[30px] ring-4 ring-white shadow-[var(--shadow-card)] ${avatarGradient}`}>
+              <div className="w-[72px] h-[72px] sm:w-[88px] sm:h-[88px] rounded-full bg-white flex items-center justify-center serif font-bold text-[26px] sm:text-[32px] text-[var(--color-text-strong)] ring-2 ring-white/60">
                 {notaire.initials}
               </div>
             )}
-            {isClaimed ? (
-              <span className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[var(--color-accent)] border-[3px] border-white flex items-center justify-center text-white" title="Profil vérifié">
-                <BadgeCheck className="w-4 h-4" strokeWidth={2.5} />
-              </span>
-            ) : (
-              <span className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-slate-300 border-[3px] border-white flex items-center justify-center text-white" title="Profil non revendiqué">
-                <Lock className="w-3.5 h-3.5" strokeWidth={2.5} />
+            {!isClaimed && (
+              <span className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-slate-400 border-2 border-white flex items-center justify-center text-white" title="Profil non revendiqué">
+                <Lock className="w-3 h-3" strokeWidth={2.5} />
               </span>
             )}
           </div>
 
-          {/* Identité + coordonnées */}
+          {/* Identité */}
           <div className="flex-1 min-w-0">
-            {/* Nom, « Notaire à … » puis badge, chacun sur sa ligne et centré :
-                sur la même ligne, le badge décalait le nom vers la gauche. */}
-            <div className="flex flex-col items-center gap-2 mb-3">
-              {/* Le métier et la ville dans le H1 : les gens cherchent
-                  « <nom> notaire », pas le nom seul. */}
-              <h1 className="serif text-[28px] sm:text-[34px] font-bold text-[var(--color-text-strong)] leading-tight">
-                {notaire.name}
-                <span className="block text-[16px] sm:text-[18px] font-semibold text-[var(--color-muted)] mt-1">
-                  {notaire.isOffice ? "Étude notariale" : "Notaire"} à {notaire.city}
-                </span>
-              </h1>
-              {isClaimed && (notaire.isNew ? (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[12px] font-bold bg-[var(--color-tint-green)] text-[var(--color-success)]">
-                  <Sparkles className="w-3.5 h-3.5" strokeWidth={2.5} />
-                  Nouveau
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[12px] font-bold bg-[var(--color-tint-green)] text-[var(--color-success)]">
-                  <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2} />
-                  Vérifié
-                </span>
-              ))}
-            </div>
-
-            {/* Rôle + étude */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-3">
-              <span className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-[var(--color-accent)]">
-                <Award className="w-4 h-4" strokeWidth={2} />
-                {roleLabel}
-              </span>
-              {notaire.officeName && (
-                <span className="inline-flex items-center gap-1.5 text-[14px] text-[var(--color-muted)]">
-                  <Building2 className="w-4 h-4 shrink-0" strokeWidth={2} />
-                  {notaire.officeName}
+            <h1 className="serif text-[24px] sm:text-[30px] font-bold text-white leading-tight pb-2 border-b border-white/30">
+              {notaire.name}
+              <span className="font-semibold">, {notaire.isOffice ? "étude notariale" : "notaire"} à {notaire.city}</span>
+            </h1>
+            <p className="mt-2 text-[14.5px] text-white/90">
+              {roleLabel}{notaire.officeName ? ` · ${notaire.officeName}` : ""}
+            </p>
+            <div className="mt-2.5 flex flex-wrap items-center gap-2">
+              {isClaimed && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[12.5px] font-semibold bg-white/20 text-white">
+                  <BadgeCheck className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  {notaire.isNew ? "Nouveau" : "Vérifié"}
                 </span>
               )}
-            </div>
-
-            {/* CTA principal */}
-            <div className="mt-5">
-              {isClaimed ? (
-                <a
-                  href="#agenda"
-                  className="inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-8 py-3.5 rounded-full text-[15px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform"
-                >
-                  <CalendarDays className="w-4 h-4" strokeWidth={2.5} />
-                  Prendre rendez-vous
-                </a>
-              ) : (
-                <a
-                  href={`/annuaire?ville=${encodeURIComponent(notaire.city)}`}
-                  className="inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-7 py-3.5 rounded-full text-[15px] font-semibold shadow-[var(--shadow-cta)] hover:-translate-y-0.5 transition-transform"
-                >
-                  Voir les notaires disponibles à {notaire.city}
-                  <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
-                </a>
+              {isClaimed && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12.5px] font-semibold bg-white/20 text-white">
+                  <Video className="w-3.5 h-3.5" strokeWidth={2.5} />
+                  Visio &amp; cabinet
+                </span>
               )}
             </div>
           </div>
 
-          {/* Accepte les RDV (uniquement si profil activé) */}
-          {isClaimed && (
-            <div className="shrink-0 flex flex-col items-center gap-2 rounded-2xl px-5 py-4 bg-[var(--color-tint-blue)]">
-              <div className="text-[11px] font-bold uppercase tracking-[0.8px] text-[var(--color-muted)] mb-1">
-                Accepte les RDVs
-              </div>
-              <div className="flex gap-3">
-                <div className="flex flex-col items-center gap-1">
-                  <div className="w-9 h-9 rounded-xl bg-white border border-[var(--color-border-soft)] flex items-center justify-center text-[var(--color-accent)]">
-                    <Video className="w-5 h-5" strokeWidth={2} />
-                  </div>
-                  <span className="text-[10px] text-[var(--color-muted)] font-semibold">Visio</span>
+          {/* Prochain créneau : l'argument qui fait venir, là où le regard
+              arrive en premier. Le même lien que le bouton de l'agenda. */}
+          {isClaimed ? (
+            (() => {
+              // Même source que le bloc latéral : prochainCreneau() saute les
+              // créneaux déjà pris, sur le site comme dans l'app.
+              const prochain = prochainCreneau(agenda, pris);
+              return (
+                <div className="shrink-0 rounded-xl bg-white/15 px-4 py-3.5 sm:text-right">
+                  <p className="text-[11.5px] font-semibold uppercase tracking-[0.6px] text-white/85">
+                    {prochain ? "Prochain rendez-vous" : "Rendez-vous"}
+                  </p>
+                  <p className="serif text-[18px] font-bold text-white mt-0.5 whitespace-nowrap first-letter:uppercase">
+                    {prochain ? `${prochain.libelle} · ${prochain.heure}` : "Sur demande"}
+                  </p>
+                  <a
+                    href="#agenda"
+                    onClick={(e) => {
+                      // Ouvre la réservation sur le créneau annoncé, comme le
+                      // bouton du bloc latéral. Sans créneau, on descend à l'agenda.
+                      if (!prochain) return;
+                      e.preventDefault();
+                      setDemandeCreneau({ cle: prochain.cle, n: Date.now() });
+                    }}
+                    className="mt-2 inline-flex items-center gap-1.5 bg-white text-[var(--color-text-strong)] px-3.5 py-2 rounded-lg text-[13.5px] font-semibold hover:opacity-90 transition-opacity"
+                  >
+                    <CalendarDays className="w-3.5 h-3.5" strokeWidth={2.5} />
+                    {prochain ? "Réserver ce créneau" : "Voir les créneaux"}
+                  </a>
                 </div>
-                <div className="flex flex-col items-center gap-1">
-                  <div className="w-9 h-9 rounded-xl bg-white border border-[var(--color-border-soft)] flex items-center justify-center text-[var(--color-accent)]">
-                    <PhoneCall className="w-5 h-5" strokeWidth={2} />
-                  </div>
-                  <span className="text-[10px] text-[var(--color-muted)] font-semibold">Cabinet</span>
-                </div>
-              </div>
-              <div className="mt-1 text-[11px] text-[var(--color-success)] font-semibold">
-                Rendez-vous confirmé
-              </div>
-            </div>
+              );
+            })()
+          ) : (
+            <a
+              href={`/annuaire?ville=${encodeURIComponent(notaire.city)}`}
+              className="shrink-0 inline-flex items-center justify-center gap-2 bg-white text-[var(--color-text-strong)] px-5 py-3 rounded-lg text-[14px] font-semibold hover:opacity-90 transition-opacity"
+            >
+              Voir les notaires à {notaire.city}
+              <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
+            </a>
           )}
         </div>
       </motion.div>
+
+      {/* ── Coordonnées et plan ──
+          Elles vivaient en bas de la colonne de droite, après la présentation,
+          l'agenda, les domaines et les langues. C'est pourtant la première
+          chose que cherche quelqu'un qui veut venir ou appeler. */}
+      {isClaimed && (notaire.address || notaire.phone || notaire.website) && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, delay: 0.05 }}
+          className="bg-white border border-[var(--color-border-soft)] rounded-2xl p-5 sm:p-6 mb-6 grid gap-5 sm:grid-cols-[1fr_280px] sm:items-start"
+        >
+          <div className="flex flex-col gap-3">
+            {notaire.address && (
+              <div className="flex gap-2.5 items-start text-[15px] text-[var(--color-text-strong)]">
+                <MapPin className="w-[18px] h-[18px] mt-0.5 shrink-0 text-[var(--color-accent)]" strokeWidth={2} />
+                <span>{adresseAffichee(notaire.address, notaire.city)}</span>
+              </div>
+            )}
+            {notaire.phone && (
+              <a
+                href={`tel:${notaire.phone.replace(/\s/g, "")}`}
+                className="flex gap-2.5 items-center text-[15px] text-[var(--color-text-strong)] hover:text-[var(--color-accent)] transition-colors"
+              >
+                <Phone className="w-[18px] h-[18px] shrink-0 text-[var(--color-accent)]" strokeWidth={2} />
+                {notaire.phone}
+              </a>
+            )}
+            {notaire.website && (
+              <a
+                href={notaire.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex gap-2.5 items-center text-[15px] text-[var(--color-text-strong)] hover:text-[var(--color-accent)] transition-colors"
+              >
+                <Globe className="w-[18px] h-[18px] shrink-0 text-[var(--color-accent)]" strokeWidth={2} />
+                {notaire.website.replace(/^https?:\/\/(www\.)?/, "")}
+                <ExternalLink className="w-3 h-3 opacity-60" strokeWidth={2} />
+              </a>
+            )}
+          </div>
+
+          {/* Lien vers une carte plutôt qu'une carte intégrée : pas de clé
+              d'API, pas de quota, et l'itinéraire s'ouvre dans l'application
+              de cartes du visiteur, celle qu'il utilise déjà. */}
+          {notaire.address && (
+            <a
+              href={`https://www.openstreetmap.org/search?query=${encodeURIComponent(`${notaire.address}, ${notaire.city}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative rounded-xl border border-[var(--color-border-soft)] bg-[var(--color-tint-blue)] h-[150px] flex items-center justify-center group overflow-hidden"
+              aria-label={`Voir ${notaire.name} sur une carte`}
+            >
+              <span className="inline-flex items-center gap-2 bg-gradient-cta text-white px-4 py-2.5 rounded-lg text-[14px] font-semibold shadow-[var(--shadow-cta)] group-hover:-translate-y-0.5 transition-transform">
+                <MapPin className="w-4 h-4" strokeWidth={2.5} />
+                Voir sur la carte
+              </span>
+            </a>
+          )}
+        </motion.div>
+      )}
 
       {/* ── Bannière profil non revendiqué (sous le hero) ── */}
       {!isClaimed && (

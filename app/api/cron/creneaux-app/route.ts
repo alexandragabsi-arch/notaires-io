@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { supabaseAdmin } from "@/lib/notaire-email-serveur";
-import { lireDisponibilites, matriceAgenda } from "@/lib/disponibilites";
+import { lireDisponibilites, matriceAgenda, depuisMatrice, aujourdhuiParis } from "@/lib/disponibilites";
 
 // Cron quotidien (peu après minuit à Paris) — créneaux lus par l'app iOS.
 //
@@ -28,6 +28,28 @@ export async function GET(req: NextRequest) {
   }
 
   const db = supabaseAdmin();
+
+  // Fiches encore à l'ancienne saisie : passage au format daté (semaine type),
+  // pour que leurs créneaux cessent de se décaler d'un jour chaque nuit.
+  // L'app ne peut pas écrire `slot_matrix` (écritures réservées aux routes
+  // serveur depuis le 22/09/2026) : rien n'est écrasé de son côté.
+  const { data: anciennes } = await db
+    .from("notaire_profiles")
+    .select("id, slot_matrix")
+    .is("disponibilites", null)
+    .not("slot_matrix", "is", null);
+  const demain = aujourdhuiParis();
+  demain.setDate(demain.getDate() + 1);
+  let converties = 0;
+  for (const n of anciennes ?? []) {
+    if (!Array.isArray(n.slot_matrix)) continue;
+    const disponibilites = depuisMatrice(n.slot_matrix as string[][], demain);
+    if (!disponibilites) continue;
+    const { error: e } = await db.from("notaire_profiles").update({ disponibilites }).eq("id", n.id);
+    if (e) console.error(`[creneaux-app] conversion ${n.id}:`, e.message);
+    else converties++;
+  }
+
   const { data, error } = await db
     .from("notaire_profiles")
     .select("id, disponibilites")
@@ -48,5 +70,5 @@ export async function GET(req: NextRequest) {
     if (e) console.error(`[creneaux-app] ${n.id}:`, e.message);
     else maj++;
   }
-  return NextResponse.json({ ok: true, notaires: maj });
+  return NextResponse.json({ ok: true, notaires: maj, converties });
 }

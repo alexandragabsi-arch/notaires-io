@@ -208,3 +208,30 @@ export function aDesCreneaux(n: AvecDisponibilites): boolean {
 export function lireDisponibilites(v: unknown): Disponibilites | undefined {
   return validerDisponibilites(v) ?? undefined;
 }
+
+/**
+ * Conversion d'une ancienne `slot_matrix` (jour 0 = demain) en semaine type.
+ * Chaque jour de la semaine reprend les heures du premier jour de la matrice
+ * qui tombe ce jour-là, tel que la fiche l'affiche au moment de la conversion.
+ * La durée est le plus petit écart entre deux heures (30 min à défaut) : chaque
+ * heure d'origine reste un créneau, rien n'est ajouté entre elles.
+ */
+export function depuisMatrice(matrice: string[][], demain: Date): Disponibilites | null {
+  const norm = (h: string) => h.trim().replace("h", ":").padStart(5, "0");
+  const jours = matrice.map((j) => [...new Set((j ?? []).map(norm).filter((h) => HEURE_RE.test(h)))].sort());
+  if (!jours.some((j) => j.length)) return null;
+  let ecart = Infinity;
+  for (const j of jours) for (let i = 1; i < j.length; i++) ecart = Math.min(ecart, minutes(j[i]) - minutes(j[i - 1]));
+  const duree = Math.max(DUREE_MIN, Math.min(120, Number.isFinite(ecart) ? ecart : 30));
+  const semaine: Plage[][] = Array.from({ length: 7 }, () => []);
+  const vu = new Set<number>();
+  jours.forEach((heures, i) => {
+    const d = new Date(demain);
+    d.setDate(d.getDate() + i);
+    const k = indexSemaine(d);
+    if (vu.has(k)) return;
+    vu.add(k);
+    semaine[k] = nettoyerPlages(heures.map((h) => ({ de: h, a: enHeure(minutes(h) + duree) })));
+  });
+  return validerDisponibilites({ duree, semaine, exceptions: {} });
+}

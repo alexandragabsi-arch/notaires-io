@@ -31,7 +31,7 @@ import { supabase } from "@/lib/supabase";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import BookingModal from "@/components/BookingModal";
 import { slotKeyDepuisJour } from "@/lib/creneau";
-import { matriceAgenda } from "@/lib/disponibilites";
+import { matriceAgenda, aDesCreneaux } from "@/lib/disponibilites";
 import { adresseAffichee } from "@/lib/adresse";
 import { filAriane } from "@/lib/fil-ariane";
 import CarteNotaire from "@/components/CarteNotaire";
@@ -1146,17 +1146,30 @@ export default function NotaireProfileClient({
                 demande={demandeCreneau}
               />
             ) : (
+              /* Sans agenda en ligne, on n'invite pas à réserver : le bouton
+                 renvoyait vers la page d'accueil, ce qui ne menait nulle part.
+                 On donne le téléphone de l'étude, qui est l'action utile. */
               <div className="text-center py-8">
                 <p className="text-[14px] text-[var(--color-muted)] mb-4">
-                  Créneaux disponibles sur demande
+                  {notaire.name} ne propose pas encore d&apos;agenda en ligne.
                 </p>
-                <a
-                  href="/#hero"
-                  className="inline-flex items-center gap-2 bg-gradient-cta text-white px-5 py-2.5 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)]"
-                >
-                  Prendre rendez-vous
-                  <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
-                </a>
+                {notaire.phone ? (
+                  <a
+                    href={`tel:${notaire.phone.replace(/\s/g, "")}`}
+                    className="inline-flex items-center gap-2 bg-gradient-cta text-white px-5 py-2.5 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)]"
+                  >
+                    <Phone className="w-4 h-4" strokeWidth={2.5} />
+                    Appeler l&apos;étude — {notaire.phone}
+                  </a>
+                ) : (
+                  <a
+                    href={`/annuaire?ville=${encodeURIComponent(notaire.city)}`}
+                    className="inline-flex items-center gap-2 bg-gradient-cta text-white px-5 py-2.5 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)]"
+                  >
+                    Voir les notaires réservables à {notaire.city}
+                    <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
+                  </a>
+                )}
               </div>
             )}
           </motion.div>
@@ -1222,22 +1235,36 @@ export default function NotaireProfileClient({
                   page : le répéter ici, à quelques centimètres, faisait
                   redite. Ce bouton mène à l'agenda complet, qui est autre
                   chose — on y choisit son jour et son heure. */}
-              <a
-                href="#agenda"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("agenda")?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
-                className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 mb-3"
-              >
-                Voir tous les créneaux
-                <ArrowRight className="w-[17px] h-[17px]" strokeWidth={2.5} />
-              </a>
-              <p className="text-[12px] text-[var(--color-muted)] text-center leading-relaxed">
-                Réservation en ligne · Confirmation immédiate
-                <br />
-                visio ou cabinet
-              </p>
+              {aDesCreneaux(notaire) ? (
+                <>
+                  <a
+                    href="#agenda"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.getElementById("agenda")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }}
+                    className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 mb-3"
+                  >
+                    Voir tous les créneaux
+                    <ArrowRight className="w-[17px] h-[17px]" strokeWidth={2.5} />
+                  </a>
+                  <p className="text-[12px] text-[var(--color-muted)] text-center leading-relaxed">
+                    Réservation en ligne · Confirmation immédiate
+                    <br />
+                    visio ou cabinet
+                  </p>
+                </>
+              ) : notaire.phone ? (
+                /* Pas d'agenda : ce bouton faisait défiler vers une section
+                   vide. Le téléphone est la seule action qui aboutit. */
+                <a
+                  href={`tel:${notaire.phone.replace(/\s/g, "")}`}
+                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 mb-3"
+                >
+                  <Phone className="w-[17px] h-[17px]" strokeWidth={2.5} />
+                  Appeler l&apos;étude
+                </a>
+              ) : null}
             </div>
           )}
 

@@ -85,7 +85,7 @@ function reminderHtml(kind: Kind, b: BookingRow): string {
   const modalite = b.modalite === "visio" ? "📹 En visioconférence" : "🏛 Au cabinet";
   return `
     <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;padding:40px 24px;color:#1a1a2e">
-      <img src="${SITE}/logo-notaires-io.png" alt="Notaires.io" style="height:32px;margin-bottom:32px" />
+      <img src="${SITE}/images/logo-carre-notaires-io.png" alt="Notaires.io" width="32" height="32" style="width:32px;height:32px;margin-bottom:28px;display:block;border:0" />
       <h1 style="font-size:22px;font-weight:700;margin-bottom:8px;color:#1a1a2e">
         Rappel : votre rendez-vous ${when} ⏰
       </h1>

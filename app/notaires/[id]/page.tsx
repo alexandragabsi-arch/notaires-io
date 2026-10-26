@@ -11,6 +11,7 @@ import { createClient } from "@supabase/supabase-js";
 import { idDepuisSlugNom, inscritDeLaFiche } from "@/lib/inscrits-serveur";
 import { lireDisponibilites } from "@/lib/disponibilites";
 import { adresseComplete, adresseCompleteBAN } from "@/lib/adresse";
+import { filArianeJsonLd } from "@/lib/fil-ariane";
 
 // Génère statiquement les 35 notaires vedettes ; les autres sont SSR à la demande
 export async function generateStaticParams() {
@@ -186,14 +187,10 @@ function buildJsonLd(id: string) {
         },
         isPartOf: { "@id": "https://notaires.io/#organization" },
       },
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-          { "@type": "ListItem", position: 2, name: "Annuaire", item: "https://notaires.io/annuaire" },
-          { "@type": "ListItem", position: 3, name: n.name, item: `https://notaires.io/notaires/${n.id}` },
-        ],
-      },
+      // Accueil › Annuaire › Département › Ville › Arrondissement › Notaire.
+      // Les trois niveaux intermédiaires ont chacun leur page : c'est par là
+      // que les moteurs atteignent les pages de ville depuis les fiches.
+      filArianeJsonLd(n),
     ],
   };
 }

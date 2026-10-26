@@ -26,6 +26,7 @@ import { DOSSIERS, ROLES_BY_DOSSIER, DOCS_BY_DOSSIER, DOCS_COMMUNS } from "@/lib
 import { enregistrerReservation } from "@/lib/reservation";
 import { limiter } from "@/lib/rate-limit";
 import { SITE } from "@/lib/email";
+import { WIDGET_URI, WIDGET_MIME, WIDGET_CSP, WIDGET_HTML, widgetMeta } from "@/lib/mcp-widget";
 
 export const maxDuration = 60;
 
@@ -37,6 +38,8 @@ function db() {
 }
 
 const texte = (t: string) => ({ content: [{ type: "text" as const, text: t }] });
+/** Texte pour l'assistant + données pour le widget (MCP App). */
+const avecVue = (t: string, vue: Record<string, unknown>) => ({ content: [{ type: "text" as const, text: t }], structuredContent: vue });
 const erreur = (t: string) => ({ content: [{ type: "text" as const, text: t }], isError: true });
 const msg = (e: unknown) => (e instanceof Error ? e.message : "erreur inconnue");
 const cle = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
@@ -66,6 +69,24 @@ function resume(n: ListingNotaire, reservable: boolean): string {
     `  Fiche : ${urlFiche(n.id)}`,
   ];
   return lignes.filter(Boolean).join("\n");
+}
+
+/** Notaire tel qu'affiché par le widget. */
+function pourWidget(n: ListingNotaire, reservable: boolean, avecBio = false) {
+  return {
+    id: n.id,
+    nom: n.name,
+    initiales: n.initials || n.name.replace(/^(Me|Maître)\s+/i, "").split(/\s+/).map((m) => m[0]).slice(0, 2).join("").toUpperCase(),
+    etude: n.officeName && n.officeName !== n.name ? n.officeName.replace(/^(.+?)\s*\(\1\)$/, "$1") : undefined,
+    adresse: n.address,
+    ville: n.city,
+    domaines: n.specialties ?? [],
+    langues: n.languages ?? [],
+    telephone: n.phone,
+    reservable,
+    url: urlFiche(n.id),
+    ...(avecBio && n.bio ? { bio: n.bio } : {}),
+  };
 }
 
 async function inscritParId(id: string): Promise<ListingNotaire | undefined> {
@@ -134,6 +155,16 @@ async function creneauxLibres(n: ListingNotaire, debut: Date, jours: number): Pr
 
 const handler = createMcpHandler(
   (server) => {
+    // ─── Interface (MCP App) ────────────────────────────────────────────────
+    server.registerResource(
+      "Annuaire notaires.io",
+      WIDGET_URI,
+      { mimeType: WIDGET_MIME, description: "Fiches notaires et agenda de réservation notaires.io" },
+      async () => ({
+        contents: [{ uri: WIDGET_URI, mimeType: WIDGET_MIME, text: WIDGET_HTML, _meta: { ui: { csp: WIDGET_CSP, prefersBorder: false } } }],
+      }),
+    );
+
     // ─── Recherche ──────────────────────────────────────────────────────────
     server.registerTool(
       "rechercher_notaires",
@@ -150,6 +181,7 @@ const handler = createMcpHandler(
           limite: z.number().int().min(1).max(30).optional().describe("Nombre de résultats (défaut 10)"),
         },
         annotations: { title: "Rechercher un notaire", readOnlyHint: true, openWorldHint: false },
+        _meta: widgetMeta,
       },
       async ({ ville, arrondissement, domaine, langue, rdv_en_ligne, limite }) => {
         try {
@@ -173,12 +205,19 @@ const handler = createMcpHandler(
           }
           const n = limite ?? 10;
           const extrait = liste.slice(0, n);
-          return texte([
+          const lieu = `${ville}${arrondissement ? ` ${arrondissement}e` : ""}${domaine ? ` · ${domaine}` : ""}`;
+          return avecVue([
             `${liste.length} notaire(s) à ${ville}${arrondissement ? ` (${arrondissement}e)` : ""}${domaine ? `, domaine « ${domaine} »` : ""} — ${extrait.length} affiché(s) :`,
             "",
             ...extrait.map((x) => resume(x, idsInscrits.has(x.id))),
             liste.length > n ? `\n… et ${liste.length - n} autre(s) : ${SITE}/annuaire` : "",
-          ].join("\n"));
+          ].join("\n"), {
+            vue: "recherche",
+            lieu,
+            total: liste.length,
+            annuaire: `${SITE}/annuaire`,
+            notaires: extrait.map((x) => pourWidget(x, idsInscrits.has(x.id))),
+          });
         } catch (e) {
           return erreur(`Recherche indisponible : ${msg(e)}`);
         }
@@ -193,6 +232,7 @@ const handler = createMcpHandler(
         description: "Détail d'un notaire à partir de son id (obtenu avec rechercher_notaires) : étude, adresse, domaines, langues, présentation, prise de rendez-vous en ligne.",
         inputSchema: { id: z.string().min(3).max(200) },
         annotations: { title: "Fiche d'un notaire", readOnlyHint: true, openWorldHint: false },
+        _meta: widgetMeta,
       },
       async ({ id }) => {
         try {
@@ -200,7 +240,10 @@ const handler = createMcpHandler(
           const fiche = inscrit ?? getAllNotaires().find((n) => n.id === id);
           if (!fiche) return erreur("Notaire introuvable. Relancer rechercher_notaires pour obtenir un id valide.");
           const reservable = !!inscrit && aUnAgenda(inscrit);
-          return texte([resume(fiche, reservable), fiche.bio ? `\nPrésentation : ${fiche.bio}` : ""].join("\n"));
+          return avecVue([resume(fiche, reservable), fiche.bio ? `\nPrésentation : ${fiche.bio}` : ""].join("\n"), {
+            vue: "fiche",
+            notaire: pourWidget(fiche, reservable, true),
+          });
         } catch (e) {
           return erreur(`Fiche indisponible : ${msg(e)}`);
         }
@@ -238,6 +281,7 @@ const handler = createMcpHandler(
           jours: z.number().int().min(1).max(21).optional().describe("Nombre de jours à couvrir (défaut 7)"),
         },
         annotations: { title: "Créneaux disponibles d'un notaire", readOnlyHint: true, openWorldHint: false },
+        _meta: widgetMeta,
       },
       async ({ id, a_partir_du, jours }) => {
         try {
@@ -249,19 +293,37 @@ const handler = createMcpHandler(
           const debut = a_partir_du ? jourDeCle(a_partir_du) : auj;
           const ecart = Math.round((debut.getTime() - auj.getTime()) / 86_400_000);
           if (ecart > HORIZON_JOURS) return erreur(`Réservation possible jusqu'à ${HORIZON_JOURS} jours à l'avance.`);
-          const libres = await creneauxLibres(n, ecart < 0 ? auj : debut, jours ?? 7);
-          if (!libres.length) return texte(`Aucun créneau libre chez ${n.name} sur cette période. Essayer une autre date (a_partir_du) ou une période plus longue.`);
+          const depart = ecart < 0 ? auj : debut;
+          const nbJours = jours ?? 7;
+          const libres = await creneauxLibres(n, depart, nbJours);
+          const fin = new Date(depart);
+          fin.setDate(fin.getDate() + nbJours);
+          const ecartFin = Math.round((fin.getTime() - auj.getTime()) / 86_400_000);
+          const suivant = ecartFin <= HORIZON_JOURS ? cleJour(fin) : undefined;
+          if (!libres.length) {
+            return avecVue(`Aucun créneau libre chez ${n.name} sur cette période. Essayer une autre date (a_partir_du) ou une période plus longue.`, {
+              vue: "creneaux", notaire: pourWidget(n, true), jours: [], suivant,
+            });
+          }
           const parJour = new Map<string, string[]>();
           for (const c of libres) {
             const j = cleJour(new Date(new Date(c).toLocaleString("en-US", { timeZone: "Europe/Paris" })));
             parJour.set(j, [...(parJour.get(j) ?? []), c]);
           }
-          return texte([
+          return avecVue([
             `Créneaux libres chez ${n.name} (heure de Paris) :`,
             ...[...parJour.values()].map((cs) => `${libelleCreneau(cs[0]).split(" · ")[0]} : ${cs.map((c) => `${libelleCreneau(c).split(" · ")[1]} [${c}]`).join(", ")}`),
             "",
             "Rendez-vous au cabinet ou en visio. Pour réserver : reserver_rendez_vous avec l'identifiant entre crochets, après accord de l'utilisateur.",
-          ].join("\n"));
+          ].join("\n"), {
+            vue: "creneaux",
+            notaire: pourWidget(n, true),
+            suivant,
+            jours: [...parJour.values()].map((cs) => ({
+              libelle: libelleCreneau(cs[0]).split(" · ")[0],
+              creneaux: cs.map((c) => ({ iso: c, heure: libelleCreneau(c).split(" · ")[1] })),
+            })),
+          });
         } catch (e) {
           return erreur(`Agenda indisponible : ${msg(e)}`);
         }
@@ -338,7 +400,7 @@ const handler = createMcpHandler(
     );
   },
   {
-    serverInfo: { name: "notaires-io", version: "0.1.0" },
+    serverInfo: { name: "notaires-io", version: "0.2.0" },
     instructions:
       "notaires.io est l'annuaire des notaires de France avec prise de rendez-vous en ligne. Parcours : rechercher_notaires (ville, domaine) → fiche_notaire → creneaux_disponibles → récapitulatif validé par l'utilisateur → reserver_rendez_vous. Présenter les notaires sans classement ni recommandation personnelle ; ne pas donner de conseil juridique (renvoyer vers le notaire) ; ne jamais demander de pièce d'identité ni de document.",
   },

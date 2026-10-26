@@ -9,8 +9,33 @@
 //   Accueil › Annuaire › Maine-et-Loire › Angers › Me Sissoko
 //   Accueil › Annuaire › Paris › Paris › 12e › Me Cohen Obadia
 
-import { slugVille, departementDuCp } from "@/lib/villes-data";
+// On n'importe PAS villes-data : il tire notaires-source, qui lit le disque
+// (`fs`). Ce fichier est utilisé par un composant client — l'importer ferait
+// entrer `fs` dans le bundle du navigateur et casserait la compilation.
+// departements-data et arrondissements sont, eux, des modules purs.
+import { DEPARTEMENTS } from "@/lib/departements-data";
 import { arrDepuisAdresse, libelleArr, slugArr } from "@/lib/arrondissements";
+
+/** Copie locale de slugVille : fonction pure, pas de dépendance au disque. */
+function slugVille(nom: string): string {
+  return nom
+    .replace(/œ/g, "oe").replace(/Œ/g, "Oe").replace(/æ/g, "ae").replace(/Æ/g, "Ae")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/['’]/g, "-")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+const PAR_CODE = new Map(DEPARTEMENTS.map((d) => [d.code, d]));
+
+/** Département d'un code postal. La Corse et l'outre-mer ont trois chiffres. */
+function departementDuCp(cp?: string) {
+  if (!cp || cp.length < 2) return undefined;
+  const d = PAR_CODE.get(cp.slice(0, 3)) ?? PAR_CODE.get(cp.slice(0, 2));
+  return d ? { slug: d.slug, nom: d.name, code: d.code } : undefined;
+}
 
 export const SITE = "https://notaires.io";
 

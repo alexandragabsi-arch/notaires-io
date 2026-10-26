@@ -113,7 +113,7 @@ const handler = createMcpHandler(
           const base = arrondissement ? getNotairesByArrondissement(ville, arrondissement) : getNotairesByCity(ville);
           let inscrits = await getInscritsVille(ville);
           if (arrondissement) inscrits = inscrits.filter((n) => n.arrondissement === arrondissement);
-          const idsInscrits = new Set(inscrits.filter((n) => n.disponibilites || n.slotMatrix).map((n) => n.id));
+          const idsInscrits = new Set(inscrits.filter((n) => n.disponibilites).map((n) => n.id));
           let liste = avecInscrits(base, inscrits);
           if (domaine) {
             const voulus = new Set(normaliserSpecialites([domaine]).map(cle));
@@ -156,7 +156,7 @@ const handler = createMcpHandler(
           const inscrit = await inscritParId(id);
           const fiche = inscrit ?? getAllNotaires().find((n) => n.id === id);
           if (!fiche) return erreur("Notaire introuvable. Relancer rechercher_notaires pour obtenir un id valide.");
-          const reservable = !!(inscrit && (inscrit.disponibilites || inscrit.slotMatrix));
+          const reservable = !!inscrit?.disponibilites; // agenda au nouveau format, seul réservable en ligne
           return texte([resume(fiche, reservable), fiche.bio ? `\nPrésentation : ${fiche.bio}` : ""].join("\n"));
         } catch (e) {
           return erreur(`Fiche indisponible : ${msg(e)}`);

@@ -35,6 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/cgu`,                  lastModified: NOW, changeFrequency: "yearly",  priority: 0.2 },
     { url: `${BASE}/cgv`,                  lastModified: NOW, changeFrequency: "yearly",  priority: 0.2 },
     { url: `${BASE}/confidentialite`,      lastModified: NOW, changeFrequency: "yearly",  priority: 0.2 },
+    { url: `${BASE}/claude`,               lastModified: NOW, changeFrequency: "monthly", priority: 0.4 },
   ];
 
   // Seules les fiches de notaires INSCRITS restent ici. Les ~19 600 fiches de

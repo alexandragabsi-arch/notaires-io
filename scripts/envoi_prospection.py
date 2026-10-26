@@ -32,7 +32,13 @@ MAX_PAR_JOUR = int(os.environ.get("MAX_PAR_JOUR", "12"))
 DELAI_MIN = int(os.environ.get("DELAI_MIN", "120"))   # 2 min
 DELAI_MAX = int(os.environ.get("DELAI_MAX", "360"))   # 6 min
 
-GABARIT = RACINE / "emails" / "prospection-2mois.html"
+# Gabarit et vivier surchargeables : la même mécanique d'envoi (jeton de
+# désabonnement, en-têtes List-Unsubscribe, journal anti-doublon) sert
+# plusieurs campagnes. Par défaut, la campagne notaires d'origine.
+GABARIT = pathlib.Path(os.environ.get("GABARIT") or (RACINE / "emails" / "prospection-2mois.html"))
+# VIVIER : un CSV à colonne « email ». Renseigné, il REMPLACE les fichiers
+# enriched*.csv — on ne veut jamais mélanger deux campagnes dans un lot.
+VIVIER = os.environ.get("VIVIER")
 
 
 def jeton(email: str) -> str:
@@ -104,6 +110,21 @@ def destinataires():
       - notaires-emails.csv: adresses d'étude, colonne « email_etude »
     """
     lignes = {}
+
+    if VIVIER:
+        chemin = pathlib.Path(VIVIER)
+        if not chemin.is_absolute():
+            chemin = RACINE / chemin
+        for r in csv.DictReader(open(chemin, encoding="utf-8-sig")):
+            e = (r.get("email") or "").strip().lower()
+            if ADRESSE.fullmatch(e):
+                lignes.setdefault(e, r)
+        # Même ordre figé que le vivier notaires : les lots successifs ne se
+        # recouvrent jamais, quel que soit le jour d'envoi.
+        tout = sorted(lignes.items())
+        random.Random(42).shuffle(tout)
+        return tout
+
     for f in sorted(glob.glob(str(RACINE / "scripts" / "enriched*.csv"))):
         for r in csv.DictReader(open(f)):
             e = (r.get("email") or "").strip().lower()
@@ -195,7 +216,7 @@ def version_texte(html: str) -> str:
     return re.sub(r"\n{3,}", "\n\n", t).strip()
 
 
-def envoyer_smtp(dest, nom):
+def envoyer_smtp(dest, nom, zone=""):
     """Envoi direct par le serveur de messagerie Hostinger, sous l'adresse
     contact@notaires.io. L'expéditeur et le serveur sont alors parfaitement
     alignés sur notaires.io, là où Resend passe par send.notaires.io.
@@ -219,7 +240,7 @@ def envoyer_smtp(dest, nom):
     msg = EmailMessage()
     msg["From"] = EXPEDITEUR
     msg["To"] = dest
-    msg["Subject"] = OBJET
+    msg["Subject"] = OBJET.replace("{ZONE}", zone or "votre secteur")
     msg["Reply-To"] = "contact@notaires.io"
     # RFC 8058 : l'URL https AVANT le mailto, et l'en-tête -Post, sinon le
     # client de messagerie n'affiche pas le bouton « Se désabonner » natif.
@@ -249,14 +270,14 @@ def envoyer_smtp(dest, nom):
     return "smtp"
 
 
-def envoyer(cle, dest, nom):
+def envoyer(cle, dest, nom, zone=""):
     civ = civilite(nom)
     lien = f"{SITE}/api/desabonnement?t={jeton(dest)}"
     html = (GABARIT.read_text(encoding="utf-8")
             .replace("{CIVILITE}", civ)
             .replace("{UNSUB}", lien))
     corps = {
-        "from": EXPEDITEUR, "to": [dest], "subject": OBJET,
+        "from": EXPEDITEUR, "to": [dest], "subject": OBJET.replace("{ZONE}", zone or "votre secteur"),
         "html": html, "text": version_texte(html),
         "reply_to": ["contact@notaires.io"],
         "headers": {
@@ -300,7 +321,15 @@ def envoyer(cle, dest, nom):
 # réunies : le domaine est retiré de la DBL, les destinataires ont donné leur
 # accord, et la cadence reste basse. Le retirer sans cela relisterait le domaine
 # en quelques jours.
-CAMPAGNE_SUSPENDUE = True
+# Levé le 26/10/2026, sur décision d'Alexandra, après vérification :
+#   dig +short A notaires.io.dbl.spamhaus.org        → vide
+#   dig +short A send.notaires.io.dbl.spamhaus.org   → vide
+# Le domaine est sorti de la DBL. La cadence reste celle d'origine (12/jour,
+# 2 à 6 min d'intervalle) : c'est elle qui protège la réputation, et c'est à
+# ce prix que la levée tient. Les destinataires sont des agences immobilières
+# contactées à froid — la condition « accord préalable » n'est donc pas
+# remplie, ce qui a été signalé et assumé.
+CAMPAGNE_SUSPENDUE = False
 
 
 def main():
@@ -373,7 +402,8 @@ def main():
         echecs = 0
         for i, (e, r) in enumerate(lot, 1):
             try:
-                ident = envoyer_smtp(e, r["nom"]) if par_smtp else envoyer(cle, e, r["nom"])
+                ident = (envoyer_smtp(e, r.get("nom", ""), r.get("zone", "")) if par_smtp
+                         else envoyer(cle, e, r.get("nom", ""), r.get("zone", "")))
                 statut = "envoye"
             except Exception as err:
                 ident, statut = "", f"erreur: {err}"

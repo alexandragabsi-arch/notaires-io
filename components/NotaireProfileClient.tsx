@@ -1243,31 +1243,19 @@ export default function NotaireProfileClient({
           {/* CTA principal (uniquement si profil activé) */}
           {isClaimed && (
             <div className="bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
-              {(() => {
-                const prochain = prochainCreneau(agenda, pris);
-                if (!prochain) return null;
-                return (
-                  <div className="text-center mb-5">
-                    <div className="text-[13px] text-[var(--color-muted)] mb-1">Prochain créneau</div>
-                    <div className="text-[20px] font-bold text-[var(--color-success)] first-letter:uppercase">
-                      {prochain.libelle}
-                    </div>
-                    <div className="text-[15px] font-semibold text-[var(--color-text-strong)]">à {prochain.heure}</div>
-                  </div>
-                );
-              })()}
+              {/* Le prochain créneau est annoncé dans le bandeau, en haut de
+                  page : le répéter ici, à quelques centimètres, faisait
+                  redite. Ce bouton mène à l'agenda complet, qui est autre
+                  chose — on y choisit son jour et son heure. */}
               <a
                 href="#agenda"
                 onClick={(e) => {
-                  // Créneau affiché juste au-dessus : réservation ouverte dessus.
-                  const prochain = prochainCreneau(agenda, pris);
-                  if (!prochain) return; // sans créneau, le lien mène à l'agenda
                   e.preventDefault();
-                  setDemandeCreneau({ cle: prochain.cle, n: Date.now() });
+                  document.getElementById("agenda")?.scrollIntoView({ behavior: "smooth", block: "start" });
                 }}
                 className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3.5 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 mb-3"
               >
-                Prendre rendez-vous
+                Voir tous les créneaux
                 <ArrowRight className="w-[17px] h-[17px]" strokeWidth={2.5} />
               </a>
               <p className="text-[12px] text-[var(--color-muted)] text-center leading-relaxed">

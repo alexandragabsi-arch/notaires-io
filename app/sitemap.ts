@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 import { DEPARTEMENTS } from "@/lib/departements-data";
 import { getVillesCouvertes } from "@/lib/villes-data";
-import { getVillesDInscrits, getSlugsVillesAvecInscrits } from "@/lib/inscrits-serveur";
+import { getVillesDInscrits } from "@/lib/inscrits-serveur";
 import { getDynamicArticles } from "@/lib/blog-supabase";
 import { BLOG_POSTS } from "@/lib/blog-posts";
 import { SLUGS_RETIRES } from "@/lib/fusions-blog";
@@ -158,13 +158,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.75,
     }));
 
-  // Seules les villes avec au moins un notaire inscrit (claimed) restent dans
-  // le sitemap. Les 21 000 pages de ville sans abonné actif polluaient le crawl
-  // budget et restaient « unknown to Google ».
-  const slugsInscrits = await getSlugsVillesAvecInscrits();
-
+  // Toutes les pages de ville restent au sitemap : elles rankent aussi sans
+  // notaire abonné (Cajarc, Fresnoy-le-Grand… en 11e place au 26/10/2026).
   const villePages: MetadataRoute.Sitemap = getVillesCouvertes()
-    .filter((v) => slugsInscrits.has(v.slug))
     .map((v) => ({
       url: `${BASE}/notaire-ville/${v.slug}`,
       lastModified: NOW,

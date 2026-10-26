@@ -123,6 +123,34 @@ async function ficheDemo(id: string): Promise<ListingNotaire | undefined> {
   };
 }
 
+/**
+ * Le notaire a-t-il VRAIMENT un agenda, lu en base à l'instant présent ?
+ *
+ * `aUnAgenda(n)` juge l'objet reconstitué en mémoire. Or, le 26 octobre, la
+ * production a proposé des créneaux chez deux notaires dont la base ne contient
+ * ni `disponibilites` ni `slot_matrix` — Me Baudoncq et Me Cohen Obadia, chez
+ * qui un vrai client a réservé. L'écart entre l'objet et la base n'a pas été
+ * expliqué : cache, fusion de fiches ou valeur par défaut injectée en amont.
+ *
+ * Ce contrôle ne fait donc confiance à rien de ce qui précède. Il relit la
+ * ligne, sans cache, juste avant d'écrire. Un créneau fantôme peut encore
+ * s'afficher ; il ne peut plus être réservé — et c'est là qu'est le dégât :
+ * un client qui se présente chez un notaire qui ne l'attend pas.
+ */
+async function agendaConfirmeEnBase(id: string): Promise<boolean> {
+  const { data, error } = await db()
+    .from("notaire_profiles")
+    .select("disponibilites, slot_matrix")
+    .eq("id", id)
+    .maybeSingle();
+  // En cas d'erreur de lecture on refuse : mieux vaut un rendez-vous manqué
+  // qu'un rendez-vous fantôme.
+  if (error || !data) return false;
+  if (lireDisponibilites(data.disponibilites)) return true;
+  const m = data.slot_matrix as string[][] | null;
+  return !!m?.some((j) => (j?.length ?? 0) > 0);
+}
+
 /** Créneaux libres d'un inscrit (ISO), du jour donné sur `jours` jours. */
 async function creneauxLibres(n: ListingNotaire, debut: Date, jours: number): Promise<string[]> {
   if (!aUnAgenda(n)) return [];
@@ -364,6 +392,10 @@ const handler = createMcpHandler(
           if (!estSlotKeyIso(creneau)) return erreur("Créneau invalide : reprendre l'identifiant ISO donné par creneaux_disponibles.");
           const n = await inscritParId(notaire_id);
           if (!n || !aUnAgenda(n)) return erreur("Ce notaire ne prend pas de rendez-vous en ligne.");
+          // Dernier rempart : la base, relue à l'instant, fait seule autorité.
+          if (!(await agendaConfirmeEnBase(n.id))) {
+            return erreur(`${n.name} n'a pas encore ouvert son agenda en ligne. Donner ses coordonnées (fiche_notaire) pour que le client contacte directement l'étude.`);
+          }
           const slot = isoCreneau(new Date(creneau));
           const auj = aujourdhuiParis();
           const libres = await creneauxLibres(n, auj, HORIZON_JOURS + 1);

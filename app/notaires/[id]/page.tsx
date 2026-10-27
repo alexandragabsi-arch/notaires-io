@@ -143,28 +143,41 @@ export async function generateMetadata({
   };
 }
 
-function buildJsonLd(id: string) {
-  const n = findNotaire(id);
-  if (!n) return null;
+/**
+ * Données structurées de la fiche, construites sur la version affichée
+ * (annuaire + profil complété) : les fiches créées à l'inscription, absentes
+ * de l'annuaire importé, n'en avaient pas.
+ */
+function buildJsonLd(n: ListingNotaire, point: [number, number] | null) {
   const location = n.area ? `${n.city} ${n.area}` : n.city;
+  // « 105 AV DOCTEUR CASTERA 40700 HAGETMAU » ou « 5 rue X, 75008 Paris » :
+  // la rue est ce qui précède le code postal.
+  const cp = n.address?.match(/\b\d{5}\b/);
+  const rue = cp ? n.address!.slice(0, cp.index).replace(/[\s,]+$/, "") : undefined;
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": ["LegalService", "LocalBusiness"],
+        "@type": "Notary",
         "@id": `https://notaires.io/notaires/${n.id}`,
         name: n.name,
         description: n.bio ?? `Notaire à ${location} — spécialités : ${n.specialties.join(", ")}.`,
         url: `https://notaires.io/notaires/${n.id}`,
+        ...(n.photo ? { image: n.photo } : {}),
+        // Téléphone seulement là où la fiche l'affiche (profil complété).
+        ...(n.claimed && n.phone ? { telephone: n.phone } : {}),
         address: {
           "@type": "PostalAddress",
+          ...(rue ? { streetAddress: rue } : {}),
+          ...(cp ? { postalCode: cp[0] } : {}),
           addressLocality: n.city,
-          addressRegion: n.area ?? "",
+          ...(n.area ? { addressRegion: n.area } : {}),
           addressCountry: "FR",
         },
+        // Même position que le plan de la page (Base Adresse Nationale).
+        ...(point ? { geo: { "@type": "GeoCoordinates", latitude: point[0], longitude: point[1] } } : {}),
         priceRange: "Tarifs réglementés",
         currenciesAccepted: "EUR",
-        openingHours: "Mo-Fr 09:00-18:00",
         knowsAbout: n.specialties,
         availableLanguage: n.languages ?? ["Français"],
         // Bouton « Réserver » façon Doctolib : Google lit cette action pour proposer
@@ -261,7 +274,7 @@ export default async function Page({
           .slice(0, 6)
       : [];
 
-  const jsonLd = buildJsonLd(id);
+  const jsonLd = notaire ? buildJsonLd(notaire, point) : null;
 
   return (
     <>

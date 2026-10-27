@@ -484,13 +484,19 @@ function MenuFiltre({
   );
 }
 
-function NotaireListingInner({ baseListings, sourceUrl, sommaire }: { baseListings?: ListingNotaire[]; sourceUrl?: string; sommaire?: React.ReactNode }) {
-  const searchParams = useSearchParams();
+type ListingProps = { baseListings?: ListingNotaire[]; sourceUrl?: string; sommaire?: React.ReactNode };
+
+/** Lit les filtres dans l'URL ; seul ce composant suspend le rendu serveur. */
+function NotaireListingUrl(props: ListingProps) {
+  return <NotaireListingInner {...props} searchParams={useSearchParams()} />;
+}
+
+function NotaireListingInner({ baseListings, sourceUrl, sommaire, searchParams }: ListingProps & { searchParams: URLSearchParams | null }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const urlVille = searchParams.get("ville") ?? "";
-  const urlNom = searchParams.get("nom") ?? "";
-  const urlSpecialite = searchParams.get("specialite") ?? "";
-  const urlArr = searchParams.get("arr") ? parseInt(searchParams.get("arr")!, 10) : null;
+  const urlVille = searchParams?.get("ville") ?? "";
+  const urlNom = searchParams?.get("nom") ?? "";
+  const urlSpecialite = searchParams?.get("specialite") ?? "";
+  const urlArr = searchParams?.get("arr") ? parseInt(searchParams.get("arr")!, 10) : null;
 
   const [cityInput, setCityInput] = useState(urlVille);
   const [city, setCity] = useState<string>(extractBaseCity(urlVille) || ALL);
@@ -970,10 +976,16 @@ function NotaireListingInner({ baseListings, sourceUrl, sommaire }: { baseListin
   );
 }
 
-export default function NotaireListing({ baseListings, sourceUrl, sommaire }: { baseListings?: ListingNotaire[]; sourceUrl?: string; sommaire?: React.ReactNode }) {
+export default function NotaireListing(props: ListingProps) {
+  // useSearchParams() suspend le rendu serveur jusqu'au navigateur. Le
+  // <Suspense> n'avait pas de fallback : le HTML de /annuaire ne contenait
+  // rien — ni titre, ni recherche, ni le sommaire des 1 775 villes et
+  // 95 départements, seul point d'entrée vers les pages de ville (constaté en
+  // prod le 27/10/2026). Le fallback rend la même vue, sans filtre d'URL : le
+  // serveur envoie la page complète, le navigateur applique ensuite les filtres.
   return (
-    <Suspense>
-      <NotaireListingInner baseListings={baseListings} sourceUrl={sourceUrl} sommaire={sommaire} />
+    <Suspense fallback={<NotaireListingInner {...props} searchParams={null} />}>
+      <NotaireListingUrl {...props} />
     </Suspense>
   );
 }

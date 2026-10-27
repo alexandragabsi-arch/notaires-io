@@ -75,7 +75,9 @@ export const metadata: Metadata = {
     description: "Trouvez le notaire qu'il vous faut en 3 questions.",
     images: [`${BASE}/og-image.png`],
   },
-  alternates: { canonical: BASE },
+  // Pas de canonical ici : défini dans le layout racine, il était hérité par
+  // toute page qui n'en déclarait pas (fiche inconnue, /visio, /notaires/cartes)
+  // et les désignait comme copies de l'accueil. Chaque page déclare le sien.
   verification: {
     // Preuve de propriété pour la Search Console : Next.js en fait une balise
     // <meta name="google-site-verification"> dans le <head> de chaque page.

@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description:
     "Accédez à votre espace Notaires.io. Connexion pour les particuliers et pour les notaires.",
   alternates: { canonical: "/connexion" },
+  // Page de service, sans intérêt dans les résultats de recherche.
+  robots: { index: false, follow: true },
 };
 
 export default function ConnexionPage() {

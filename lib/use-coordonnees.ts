@@ -34,14 +34,17 @@ export async function geocoder(adresse: string): Promise<Point | null> {
   }
 }
 
-/** `null` tant que la réponse n'est pas là ou si l'adresse est introuvable. */
-export function useCoordonnees(adresse: string | undefined): Point | null {
-  const [p, setP] = useState<Point | null>(null);
+/**
+ * `null` tant que la réponse n'est pas là ou si l'adresse est introuvable.
+ * `initial` : position déjà calculée par le serveur, utilisée telle quelle.
+ */
+export function useCoordonnees(adresse: string | undefined, initial?: Point | null): Point | null {
+  const [p, setP] = useState<Point | null>(initial ?? null);
   useEffect(() => {
-    if (!adresse) return;
+    if (!adresse || initial) return;
     let actif = true;
     geocoder(adresse).then((c) => { if (actif) setP(c); });
     return () => { actif = false; };
-  }, [adresse]);
+  }, [adresse, initial]);
   return p;
 }

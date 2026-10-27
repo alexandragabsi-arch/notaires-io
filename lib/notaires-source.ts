@@ -414,6 +414,54 @@ export function getNotairesByCity(city: string, limit = Infinity): ListingNotair
   return slice.map(toListing);
 }
 
+/**
+ * Code département d'une adresse, d'après son code postal. La Corse (20xxx)
+ * n'a pas de règle fiable entre 2A et 2B : on la laisse de côté, comme
+ * lib/departements-villes.ts.
+ */
+export function codeDepartementAdresse(adresse?: string | null): string | undefined {
+  const cp = (adresse ?? "").match(/\b(\d{5})\b/)?.[1];
+  if (!cp || cp.startsWith("20")) return undefined;
+  return cp.slice(0, 2);
+}
+
+/**
+ * Notaires d'un département, répartis entre ses communes.
+ *
+ * Les pages département filtraient les 35 fiches vedettes sur le chef-lieu et
+ * affichaient presque toutes « Bientôt disponible », alors que l'intro
+ * annonçait des centaines de notaires. On prend la commune la plus dense
+ * d'abord, puis un notaire par commune à tour de rôle : la liste couvre tout le
+ * département au lieu de n'aligner que le chef-lieu.
+ */
+// 60 par défaut : la page sert de carrefour vers les communes, qui listent
+// chacune leurs notaires ; au-delà, le HTML enfle sans lien nouveau.
+export function getNotairesByDepartement(code: string, limit = 60): ListingNotaire[] {
+  const parVille = new Map<string, RawNotaire[]>();
+  for (const n of loadAll()) {
+    if (codeDepartementAdresse(n.address) !== code) continue;
+    const cle = normalizeCity(n.city || "");
+    if (!cle) continue;
+    const liste = parVille.get(cle) ?? [];
+    liste.push(n);
+    parVille.set(cle, liste);
+  }
+  const villes = [...parVille.values()].sort((a, b) => b.length - a.length);
+  const choisis: RawNotaire[] = [];
+  for (let rang = 0; choisis.length < limit; rang++) {
+    let ajout = false;
+    for (const v of villes) {
+      if (rang < v.length) {
+        choisis.push(v[rang]);
+        ajout = true;
+        if (choisis.length >= limit) break;
+      }
+    }
+    if (!ajout) break;
+  }
+  return choisis.map(toListing);
+}
+
 function formatPhone(phone: string): string {
   // "+33184799451" → "01 84 79 94 51"
   if (phone.startsWith("+33")) {

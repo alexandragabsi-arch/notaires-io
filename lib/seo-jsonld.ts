@@ -55,10 +55,10 @@ export function faqLd(faq: { q: string; a: string }[]) {
  * Limitée aux 25 premiers : au-delà, le poids du balisage dépasse son intérêt
  * et Google ne retient de toute façon que les premiers éléments.
  */
-export function notairesLd(notaires: ListingNotaire[], ville: string) {
+export function notairesLd(notaires: ListingNotaire[], ville: string, titre = `Notaires à ${ville}`) {
   return {
     "@type": "ItemList",
-    name: `Notaires à ${ville}`,
+    name: titre,
     numberOfItems: notaires.length,
     itemListElement: notaires.slice(0, 25).map((n, i) => ({
       "@type": "ListItem",
@@ -91,13 +91,15 @@ export function pageGeoLd(opts: {
   faq: { q: string; a: string }[];
   notaires: ListingNotaire[];
   ville: string;
+  /** Nom de la liste, « Notaires à {ville} » par défaut (pages département). */
+  titreListe?: string;
 }) {
   return {
     "@context": "https://schema.org",
     "@graph": [
       breadcrumbLd(opts.etapes),
       faqLd(opts.faq),
-      notairesLd(opts.notaires, opts.ville),
+      notairesLd(opts.notaires, opts.ville, opts.titreListe),
     ],
   };
 }

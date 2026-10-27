@@ -10,7 +10,7 @@ import { estFicheTest } from "@/lib/fiches-test";
 import { createClient } from "@supabase/supabase-js";
 import { idDepuisSlugNom, inscritDeLaFiche } from "@/lib/inscrits-serveur";
 import { lireDisponibilites } from "@/lib/disponibilites";
-import { adresseComplete, adresseCompleteBAN } from "@/lib/adresse";
+import { adresseComplete, adresseCompleteBAN, coordonneesBAN } from "@/lib/adresse";
 import { filArianeJsonLd } from "@/lib/fil-ariane";
 
 // Génère statiquement les 35 notaires vedettes ; les autres sont SSR à la demande
@@ -243,6 +243,9 @@ export default async function Page({
     ...fusion,
     address: await adresseCompleteBAN(adresseComplete(completee?.address ?? base?.address, base?.address), fusion.city),
   };
+  // Position du cabinet calculée ici : le plan s'affiche avec la page, sans
+  // attendre que le navigateur la demande. Même requête que côté client.
+  const point = notaire?.address ? await coordonneesBAN(`${notaire.address}, ${notaire.city}`) : null;
 
   // Autres notaires de la même étude (même officeName + même ville), hors lui-même.
   const officeKey = notaire?.officeName?.trim().toLowerCase();
@@ -271,7 +274,7 @@ export default async function Page({
       <Header />
       <main className="min-h-screen bg-white">
         {/* On passe le notaire en prop pour éviter le lookup côté client (membres.json = server only) */}
-        <NotaireProfileClient id={id} initialNotaire={notaire} colleagues={colleagues} />
+        <NotaireProfileClient id={id} initialNotaire={notaire} initialPoint={point} colleagues={colleagues} />
       </main>
       <Footer />
     </>

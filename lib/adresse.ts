@@ -59,6 +59,28 @@ export async function adresseCompleteBAN(saisie: string | undefined, ville: stri
 }
 
 /**
+ * Coordonnées [latitude, longitude] d'une adresse, d'après la Base Adresse
+ * Nationale. Appelé par le serveur pour que le plan de la fiche soit dans la
+ * page dès le premier affichage, au lieu d'attendre un géocodage du navigateur.
+ */
+export async function coordonneesBAN(adresse: string | undefined): Promise<[number, number] | null> {
+  if (!adresse?.trim()) return null;
+  try {
+    const q = new URLSearchParams({ q: adresse, limit: "1" });
+    const res = await fetch(`https://api-adresse.data.gouv.fr/search/?${q}`, {
+      next: { revalidate: 86400 },
+      signal: AbortSignal.timeout(2000),
+    } as RequestInit);
+    if (!res.ok) return null;
+    const c = (await res.json()).features?.[0]?.geometry?.coordinates;
+    // L'API renvoie [longitude, latitude].
+    return Array.isArray(c) && c.length === 2 ? [c[1], c[0]] : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Adresse à afficher : jamais sans ville. Filet de sécurité quand ni
  * l'annuaire ni la Base Adresse Nationale n'ont fourni le code postal :
  * « 5 rue Legraverend » + « Paris 12 » → « 5 rue Legraverend, Paris 12 ».

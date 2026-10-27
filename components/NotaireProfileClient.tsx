@@ -35,7 +35,7 @@ import { matriceAgenda } from "@/lib/disponibilites";
 import { adresseAffichee } from "@/lib/adresse";
 import { filAriane } from "@/lib/fil-ariane";
 import CarteNotaire from "@/components/CarteNotaire";
-import { useCoordonnees } from "@/lib/use-coordonnees";
+import { useCoordonnees, type Point } from "@/lib/use-coordonnees";
 import TransportsProches from "@/components/TransportsProches";
 
 const ALL_SPECIALTIES = [
@@ -737,10 +737,13 @@ function BandeauApercu() {
 export default function NotaireProfileClient({
   id,
   initialNotaire,
+  initialPoint,
   colleagues = [],
 }: {
   id: string;
   initialNotaire?: ListingNotaire;
+  /** Position du cabinet calculée par le serveur : le plan s'affiche sans attendre. */
+  initialPoint?: Point | null;
   colleagues?: ListingNotaire[];
 }) {
   // Présentation longue : repliée à quatre lignes, dépliable. Le bouton
@@ -784,7 +787,7 @@ export default function NotaireProfileClient({
   // disponibilités du notaire au moment de l'affichage.
   const agenda = useMemo(() => (notaire ? matriceAgenda(notaire) : undefined), [notaire]);
   // Un seul géocodage pour le plan et les transports.
-  const point = useCoordonnees(notaire?.address ? `${notaire.address}, ${notaire.city}` : undefined);
+  const point = useCoordonnees(notaire?.address ? `${notaire.address}, ${notaire.city}` : undefined, initialPoint);
   const [demandeCreneau, setDemandeCreneau] = useState<{ cle: string; n: number }>();
 
   if (notaire === undefined) {

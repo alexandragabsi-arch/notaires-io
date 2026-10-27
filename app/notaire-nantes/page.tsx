@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -33,28 +35,6 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Nantes", item: "https://notaires.io/notaire-nantes" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Nantes",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Nantes", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Nantes pour succession, donation, mariage et famille.",
-      url: "https://notaires.io/notaire-nantes",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Comment fonctionne une donation entre vifs chez un notaire à Nantes ?",
@@ -75,6 +55,9 @@ const FAQ = [
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Nantes", "nantes");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Nantes", 120);
   const notaires = avecInscrits(
@@ -86,23 +69,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Nantes"
-          intro="Vous souhaitez organiser votre succession, faire une donation à vos enfants ou préparer votre mariage à Nantes ? Nos notaires partenaires en Loire-Atlantique vous accompagnent avec pédagogie à chaque étape, en visio ou au cabinet."
+          intro={introNombre(ville) + "Vous souhaitez organiser votre succession, faire une donation à vos enfants ou préparer votre mariage à Nantes ? Les notaires en Loire-Atlantique vous accompagnent avec pédagogie à chaque étape, en visio ou au cabinet."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-paris", label: "RDV notaire à Paris" },
             { href: "/notaire-bordeaux", label: "RDV notaire à Bordeaux" },
             { href: "/notaire-lille", label: "RDV notaire à Lille" },

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -33,32 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Perpignan", item: "https://notaires.io/notaire-perpignan" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Perpignan",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Perpignan", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Perpignan pour mariage, PACS, immobilier, création de société et succession.",
-      url: "https://notaires.io/notaire-perpignan",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Quels quartiers et communes de la Perpignan Méditerranée Métropole couvrent vos notaires ?",
-    a: "Nos notaires partenaires à Perpignan couvrent tous les secteurs : Centre historique (Castillet, Loge de Mer), Saint-Jacques, Moulin-à-Vent, Mas Balande, Saint-Mathieu, ainsi que les communes de la métropole : Canet-en-Roussillon, Saint-Estève, Cabestany, Rivesaltes, Pia et Le Barcarès. La visioconférence est disponible pour les clients de la Cerdagne ou de l'Albères.",
+    a: "Les notaires à Perpignan couvrent tous les secteurs : Centre historique (Castillet, Loge de Mer), Saint-Jacques, Moulin-à-Vent, Mas Balande, Saint-Mathieu, ainsi que les communes de la métropole : Canet-en-Roussillon, Saint-Estève, Cabestany, Rivesaltes, Pia et Le Barcarès. La visioconférence est disponible pour les clients de la Cerdagne ou de l'Albères.",
   },
   {
     q: "Quels actes notariés sont fréquents pour l'immobilier côtier en Roussillon ?",
@@ -70,11 +50,14 @@ const FAQ = [
   },
   {
     q: "Peut-on signer un acte notarié à distance depuis Perpignan ?",
-    a: "Oui. La signature électronique à distance (AAED) est disponible à Perpignan. Très pratique pour les Français résidant en Espagne qui souhaitent acquérir un bien en Roussillon, ou pour les acheteurs d'une résidence secondaire depuis Paris ou Lyon, vous pouvez signer votre acte par visioconférence. Votre notaire partenaire vous précisera les actes compatibles.",
+    a: "Oui. La signature électronique à distance (AAED) est disponible à Perpignan. Très pratique pour les Français résidant en Espagne qui souhaitent acquérir un bien en Roussillon, ou pour les acheteurs d'une résidence secondaire depuis Paris ou Lyon, vous pouvez signer votre acte par visioconférence. Votre notaire vous précisera les actes compatibles.",
   },
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Perpignan", "perpignan");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Perpignan", 120);
   const notaires = avecInscrits(
@@ -86,23 +69,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Perpignan"
-          intro="Vous cherchez un notaire à Perpignan pour votre mariage, votre PACS, un achat immobilier en Roussillon ou la création de votre société ? Nos notaires partenaires perpignanais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
+          intro={introNombre(ville) + "Vous cherchez un notaire à Perpignan pour votre mariage, votre PACS, un achat immobilier en Roussillon ou la création de votre société ? Les notaires perpignanais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-montpellier", label: "RDV notaire à Montpellier" },
             { href: "/notaire-toulouse", label: "RDV notaire à Toulouse" },
             { href: "/notaire-marseille", label: "RDV notaire à Marseille" },

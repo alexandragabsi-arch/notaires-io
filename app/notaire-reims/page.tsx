@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -33,32 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Reims", item: "https://notaires.io/notaire-reims" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Reims",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Reims", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Reims pour mariage, PACS, immobilier, création de société et succession.",
-      url: "https://notaires.io/notaire-reims",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Quels quartiers et communes de la grande agglomération rémoise couvrent vos notaires ?",
-    a: "Nos notaires partenaires à Reims interviennent dans tous les quartiers : Centre-ville, Clairmarais, Europe, Croix-Rouge, Murigny, Wilson, Orgeval, ainsi que dans les communes de la Communauté Urbaine du Grand Reims : Épernay, Cormontreuil, Tinqueux, Bezannes et Fismes. La visioconférence est disponible pour les clients de la Montagne de Reims ou de la Vallée de la Marne.",
+    a: "Les notaires à Reims interviennent dans tous les quartiers : Centre-ville, Clairmarais, Europe, Croix-Rouge, Murigny, Wilson, Orgeval, ainsi que dans les communes de la Communauté Urbaine du Grand Reims : Épernay, Cormontreuil, Tinqueux, Bezannes et Fismes. La visioconférence est disponible pour les clients de la Montagne de Reims ou de la Vallée de la Marne.",
   },
   {
     q: "Quels actes notariés sont courants pour les maisons de Champagne à Reims ?",
@@ -70,11 +50,14 @@ const FAQ = [
   },
   {
     q: "Peut-on signer un acte notarié à distance depuis Reims ?",
-    a: "Oui. La signature électronique à distance (AAED) est disponible à Reims. Très pratique pour les viticulteurs en pleine saison ou les cadres navettant sur Paris (45 min en TGV), vous pouvez signer votre acte par visioconférence depuis votre domicile ou votre bureau. Votre notaire partenaire vous précisera les actes éligibles à ce dispositif.",
+    a: "Oui. La signature électronique à distance (AAED) est disponible à Reims. Très pratique pour les viticulteurs en pleine saison ou les cadres navettant sur Paris (45 min en TGV), vous pouvez signer votre acte par visioconférence depuis votre domicile ou votre bureau. Votre notaire vous précisera les actes éligibles à ce dispositif.",
   },
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Reims", "reims");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Reims", 120);
   const notaires = avecInscrits(
@@ -86,23 +69,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Reims"
-          intro="Vous cherchez un notaire à Reims pour votre mariage, votre PACS, un achat immobilier en Champagne ou la création de votre société ? Nos notaires partenaires rémois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
+          intro={introNombre(ville) + "Vous cherchez un notaire à Reims pour votre mariage, votre PACS, un achat immobilier en Champagne ou la création de votre société ? Les notaires rémois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-paris", label: "RDV notaire à Paris" },
             { href: "/notaire-metz", label: "RDV notaire à Metz" },
             { href: "/notaire-nancy", label: "RDV notaire à Nancy" },

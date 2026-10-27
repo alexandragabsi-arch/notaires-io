@@ -16,6 +16,16 @@ const cp = (n: ListingNotaire) => (n.address ?? "").match(/\b(\d{5})\b/)?.[1];
 const cleVille = (c?: string | null) =>
   (c ?? "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 
+/** « 148 rue de grenelle » : numéro et voie, sans code postal ni raison sociale. */
+function rue(n: ListingNotaire): string | undefined {
+  const a = cleVille(n.address).replace(/[^a-z0-9 ]/g, " ");
+  const m = a.match(/\b(\d+)\s*(?:bis|ter|b)?\s+((?:rue|avenue|av|boulevard|bd|place|quai|cours|chemin|allee|route|impasse|square|passage)\b[a-z ]*?)\s*(?:\d{5}|$)/);
+  return m ? `${m[1]} ${m[2].replace(/\s+/g, " ").trim()}` : undefined;
+}
+
+/** « Me Fanny Belguerras » → ["fanny", "belguerras"]. */
+const jetonsNom = (nom?: string | null) => cleVille(nom).split(/[^a-z]+/).filter((t) => t && t !== "me");
+
 /** Les `nombre` fiches qui suivent `id` dans la liste triée, en boucle. */
 function anneau(zone: ListingNotaire[], id: string, nombre: number): ListingNotaire[] {
   const tri = [...zone].sort((a, b) => a.id.localeCompare(b.id));
@@ -40,7 +50,15 @@ export function notairesProches(
   exclus: Set<string>,
   nombre = 8,
 ): ListingNotaire[] {
-  const candidats = tous.filter((n) => !exclus.has(n.id) && n.id !== notaire.id);
+  // Ni la fiche elle-même sous un autre id (doublon de l'annuaire), ni les
+  // notaires de la même étude : ce ne sont pas des « notaires à proximité ».
+  const ici = rue(notaire);
+  const nom = jetonsNom(notaire.name);
+  const candidats = tous.filter((n) =>
+    !exclus.has(n.id) && n.id !== notaire.id &&
+    !(ici && rue(n) === ici) &&
+    !(nom.length >= 2 && cleVille(n.city) === cleVille(notaire.city) && nom.every((t) => jetonsNom(n.name).includes(t))),
+  );
   const ville = cleVille(notaire.city);
   const arr = arrDepuisAdresse(notaire.address);
   const dep = cp(notaire)?.slice(0, 2);

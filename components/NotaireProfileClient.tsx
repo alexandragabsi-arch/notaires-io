@@ -733,18 +733,55 @@ function BandeauApercu() {
   );
 }
 
+/** Bloc de liens vers d'autres fiches (collègues d'étude, notaires proches). */
+function GroupeNotaires({ titre, icone: Icone, notaires }: { titre: string; icone: typeof MapPin; notaires: ListingNotaire[] }) {
+  if (notaires.length === 0) return null;
+  return (
+    <div className="mt-8 bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
+      <div className="flex items-center gap-2 mb-5">
+        <Icone className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
+        <h2 className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
+          {titre}
+        </h2>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {notaires.map((c) => (
+          <a
+            key={c.id}
+            href={`/notaires/${c.id}`}
+            className="flex items-center gap-3 rounded-2xl border border-[var(--color-border-soft)] p-3 hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)] transition-colors"
+          >
+            <span className="w-11 h-11 rounded-full shrink-0 flex items-center justify-center text-white font-bold text-[15px] bg-gradient-cta">
+              {c.initials}
+            </span>
+            <span className="min-w-0">
+              <span className="block text-[14px] font-semibold text-[var(--color-text-strong)] truncate">
+                {c.name}
+              </span>
+              <span className="block text-[12px] text-[var(--color-muted)] truncate">{c.city}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ── Composant principal ─────────────────────────────────────────────────── */
 export default function NotaireProfileClient({
   id,
   initialNotaire,
   initialPoint,
   colleagues = [],
+  proches = [],
 }: {
   id: string;
   initialNotaire?: ListingNotaire;
   /** Position du cabinet calculée par le serveur : le plan s'affiche sans attendre. */
   initialPoint?: Point | null;
   colleagues?: ListingNotaire[];
+  /** Notaires de l'arrondissement, de la ville ou du département (lib/notaires-proches.ts). */
+  proches?: ListingNotaire[];
 }) {
   // Présentation longue : repliée à quatre lignes, dépliable. Le bouton
   // n'apparaît que si le texte déborde réellement — la largeur dépend de
@@ -1267,36 +1304,10 @@ export default function NotaireProfileClient({
         </div>
       )}
 
-      {/* Autres notaires de l'étude */}
-      {colleagues.length > 0 && (
-        <div className="mt-8 bg-white border border-[var(--color-border-soft)] rounded-3xl shadow-[var(--shadow-card)] p-6">
-          <div className="flex items-center gap-2 mb-5">
-            <Building2 className="w-4 h-4 text-[var(--color-accent)]" strokeWidth={2} />
-            <span className="text-[12px] font-bold tracking-[0.8px] uppercase text-[var(--color-text-strong)]">
-              Autres notaires de l&apos;étude
-            </span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {colleagues.map((c) => (
-              <a
-                key={c.id}
-                href={`/notaires/${c.id}`}
-                className="flex items-center gap-3 rounded-2xl border border-[var(--color-border-soft)] p-3 hover:border-[var(--color-primary)] hover:bg-[var(--color-tint-blue)] transition-colors"
-              >
-                <span className="w-11 h-11 rounded-full shrink-0 flex items-center justify-center text-white font-bold text-[15px] bg-gradient-cta">
-                  {c.initials}
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-[14px] font-semibold text-[var(--color-text-strong)] truncate">
-                    {c.name}
-                  </span>
-                  <span className="block text-[12px] text-[var(--color-muted)] truncate">{c.city}</span>
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Autres notaires de l'étude, puis notaires proches : des liens vers des
+          fiches que rien d'autre ne reliait. */}
+      <GroupeNotaires titre="Autres notaires de l’étude" icone={Building2} notaires={colleagues} />
+      <GroupeNotaires titre="Autres notaires à proximité" icone={MapPin} notaires={proches} />
 
     </div>
     </>

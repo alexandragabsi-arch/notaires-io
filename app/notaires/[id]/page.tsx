@@ -12,6 +12,7 @@ import { idDepuisSlugNom, inscritDeLaFiche } from "@/lib/inscrits-serveur";
 import { lireDisponibilites } from "@/lib/disponibilites";
 import { adresseComplete, adresseCompleteBAN, coordonneesBAN } from "@/lib/adresse";
 import { filArianeJsonLd } from "@/lib/fil-ariane";
+import { notairesProches } from "@/lib/notaires-proches";
 
 // Génère statiquement les 35 notaires vedettes ; les autres sont SSR à la demande
 export async function generateStaticParams() {
@@ -278,6 +279,11 @@ export default async function Page({
           .slice(0, 6)
       : [];
 
+  // Notaires du même arrondissement, de la même ville ou du département.
+  const proches = notaire
+    ? notairesProches(notaire, all, new Set([notaire.id, ...colleagues.map((c) => c.id)]))
+    : [];
+
   const jsonLd = notaire ? buildJsonLd(notaire, point) : null;
 
   return (
@@ -291,7 +297,7 @@ export default async function Page({
       <Header />
       <main className="min-h-screen bg-white">
         {/* On passe le notaire en prop pour éviter le lookup côté client (membres.json = server only) */}
-        <NotaireProfileClient id={id} initialNotaire={notaire} initialPoint={point} colleagues={colleagues} />
+        <NotaireProfileClient id={id} initialNotaire={notaire} initialPoint={point} colleagues={colleagues} proches={proches} />
       </main>
       <Footer />
     </>

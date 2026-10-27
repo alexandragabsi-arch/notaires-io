@@ -4,7 +4,7 @@ import LoginPanel from "@/components/LoginPanel";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Connexion — Notaires.io",
+  title: "Connexion",
   description:
     "Accédez à votre espace Notaires.io. Connexion pour les particuliers et pour les notaires.",
   alternates: { canonical: "/connexion" },

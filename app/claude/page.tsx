@@ -3,7 +3,7 @@ import LegalLayout from "@/components/LegalLayout";
 import { EDITEUR } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Notaires.io pour Claude — connecteur MCP | Notaires.io",
+  title: "Connecteur MCP Notaires.io pour Claude",
   description:
     "Trouvez un notaire et prenez rendez-vous en conversant avec Claude : le connecteur Notaires.io cherche dans l'annuaire, affiche les créneaux libres et réserve le rendez-vous.",
   alternates: { canonical: "/claude" },

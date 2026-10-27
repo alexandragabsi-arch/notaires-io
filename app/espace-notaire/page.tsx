@@ -4,7 +4,7 @@ import EspaceNotaire from "@/components/EspaceNotaire";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Mon espace — Notaires.io",
+  title: "Mon espace",
   description: "Accédez à votre QR code, votre lien de prise de RDV et gérez votre profil.",
   robots: { index: false, follow: false },
 };

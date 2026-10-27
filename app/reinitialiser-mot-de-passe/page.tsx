@@ -4,7 +4,7 @@ import LoginPanel from "@/components/LoginPanel";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Réinitialiser mon mot de passe — Notaires.io",
+  title: "Réinitialiser mon mot de passe",
   description:
     "Choisissez un nouveau mot de passe pour votre compte Notaires.io.",
   // Page privée : on n'arrive ici que depuis le lien reçu par e-mail.

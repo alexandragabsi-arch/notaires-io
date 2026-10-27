@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty, getNotairesMixed } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire mariage et PACS · Notaires.io",
+  title: "Notaire mariage et PACS : RDV en ligne",
   description:
     "Trouvez un notaire pour votre contrat de mariage, votre PACS ou votre convention de PACS. Conseils sur le régime matrimonial, rédaction de l'acte, enregistrement.",
   keywords: [

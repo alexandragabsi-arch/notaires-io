@@ -4,7 +4,7 @@ import EspaceClient from "@/components/EspaceClient";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Mon espace — Notaires.io",
+  title: "Mon espace",
   description: "Retrouvez vos rendez-vous, vos dossiers et les pièces transmises à votre notaire.",
   robots: { index: false, follow: false },
 };

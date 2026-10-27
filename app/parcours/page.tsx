@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import ParcoursFlow from "@/components/ParcoursFlow";
 
 export const metadata: Metadata = {
-  title: "Évaluez votre situation — Trouvez le bon notaire | Notaires.io",
+  title: "Évaluez votre situation — Trouvez le bon notaire",
   description:
     "Succession, donation, achat, vente, mariage, PACS : répondez à quelques questions ciblées et découvrez les notaires compétents près de chez vous. Gratuit et sans engagement.",
   keywords: [

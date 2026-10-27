@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire création de société · Notaires.io",
+  title: "Notaire création de société : RDV en ligne",
   description:
     "Trouvez un notaire spécialisé en droit des sociétés pour créer votre SCI, SAS, SARL ou holding. Statuts sécurisés, apports immobiliers, pactes d'associés.",
   keywords: [

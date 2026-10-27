@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty, getNotairesMixed } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire donation · Notaires.io",
+  title: "Notaire donation : RDV en ligne, en visio ou au cabinet",
   description:
     "Trouvez un notaire spécialisé en donation pour transmettre votre patrimoine à vos enfants ou proches. Donation simple, donation-partage, usufruit, abattements fiscaux.",
   keywords: [

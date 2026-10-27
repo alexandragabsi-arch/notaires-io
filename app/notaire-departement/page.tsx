@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import { DEPARTEMENTS } from "@/lib/departements-data";
 
 export const metadata: Metadata = {
-  title: "Notaire par département — tous les départements de France · Notaires.io",
+  title: "Notaire par département — tous les départements de France",
   description: "Trouvez un notaire dans votre département. Notaires.io couvre les 95 départements métropolitains — prise de rendez-vous en ligne, en visio ou au cabinet.",
   alternates: { canonical: "https://notaires.io/notaire-departement" },
 };

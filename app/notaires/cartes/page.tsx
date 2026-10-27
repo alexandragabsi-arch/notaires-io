@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import CardDesigner from "@/components/CardDesigner";
 
 export const metadata: Metadata = {
-  title: "Commander mes cartes de visite · Notaires.io",
+  title: "Commander mes cartes de visite",
   description:
     "Cartes de visite professionnelles avec QR code intégré — Standard 350 g ou Premium 600 g soft-touch. Devis en temps réel, livraison incluse dès 250 exemplaires.",
   // Outil de commande réservé aux notaires inscrits : hors de l'index.

@@ -20,7 +20,7 @@ function estPasse(debut: string | null): boolean {
 }
 
 export const metadata: Metadata = {
-  title: "Mon rendez-vous — Notaires.io",
+  title: "Mon rendez-vous",
   robots: { index: false, follow: false },
 };
 

@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty, getNotairesMixed } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Contrat de mariage — Notaire en ligne · Notaires.io",
+  title: "Contrat de mariage chez le notaire : RDV en ligne",
   description:
     "Besoin d'un notaire pour votre contrat de mariage ? Séparation de biens, communauté réduite aux acquêts, régime de participation — nos notaires vous conseillent et rédigent votre contrat. Prise de RDV en ligne en visio ou au cabinet.",
   keywords: [

@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire immobilier · Notaires.io",
+  title: "Notaire immobilier : RDV en ligne pour un achat ou une vente",
   description:
     "Trouvez un notaire spécialisé en immobilier pour votre achat, vente, investissement locatif ou SCI. Prise de rendez-vous en ligne. Tarifs réglementés, acte authentique garanti.",
   keywords: [

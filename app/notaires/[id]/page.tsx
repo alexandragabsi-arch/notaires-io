@@ -8,7 +8,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { estFicheTest } from "@/lib/fiches-test";
 import { createClient } from "@supabase/supabase-js";
-import { idDepuisSlugNom, inscritDeLaFiche } from "@/lib/inscrits-serveur";
+import { getInscrits, idDepuisSlugNom, inscritDeLaFiche, profilActiveDe } from "@/lib/inscrits-serveur";
 import { lireDisponibilites } from "@/lib/disponibilites";
 import { adresseComplete, adresseCompleteBAN, coordonneesBAN } from "@/lib/adresse";
 import { filArianeJsonLd } from "@/lib/fil-ariane";
@@ -282,8 +282,15 @@ export default async function Page({
   // Notaires du même arrondissement, de la même ville ou du département.
   // Pas sur la fiche d'un notaire inscrit : c'est la page d'un client, on n'y
   // affiche que ses associés, pas les études voisines.
+  // Les doublons d'un notaire inscrit (fiche importée qui redirige vers son
+  // profil) sont écartés, comme dans le sitemap de l'annuaire.
+  const profils = notaire && !notaire.claimed ? await getInscrits() : [];
   const proches = notaire && !notaire.claimed
-    ? notairesProches(notaire, all, new Set([notaire.id, ...colleagues.map((c) => c.id)]))
+    ? notairesProches(
+        notaire,
+        all.filter((n) => !profilActiveDe(n, profils)),
+        new Set([notaire.id, ...colleagues.map((c) => c.id)]),
+      )
     : [];
 
   const jsonLd = notaire ? buildJsonLd(notaire, point) : null;

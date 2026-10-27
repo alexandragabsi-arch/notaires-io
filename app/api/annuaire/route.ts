@@ -1,4 +1,5 @@
 import { getAllNotaires } from "@/lib/notaires-source";
+import { getInscrits, profilActiveDe } from "@/lib/inscrits-serveur";
 
 export const revalidate = 86400;
 
@@ -18,7 +19,13 @@ export const revalidate = 86400;
  * personnelles de 23 390 notaires.
  */
 export async function GET() {
-  const notaires = getAllNotaires().map(({ website, email, ...garde }) => garde);
+  // Fiche importée d'un notaire qui a activé son profil sous un autre id : elle
+  // redirige vers ce profil, et la recherche affichait le notaire deux fois
+  // (Me Belguerras, 27/10/2026). Même règle que /annuaire-sitemap.xml.
+  const profils = await getInscrits();
+  const notaires = getAllNotaires()
+    .filter((n) => !profilActiveDe(n, profils))
+    .map(({ website, email, ...garde }) => garde);
 
   return new Response(JSON.stringify(notaires), {
     headers: {

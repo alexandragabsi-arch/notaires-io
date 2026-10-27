@@ -3,10 +3,12 @@ import crypto from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail, SITE } from "@/lib/email";
 import { parisParts, msMuralDepuisSlotKey } from "@/lib/creneau";
+import { emailRappelNotaire, sujetRappelNotaire } from "@/lib/emails/rappel-notaire";
 
 // Cron Vercel : envoie les rappels de RDV par e-mail.
 // Déclenché toutes les heures (voir vercel.json → crons).
 // Deux rappels par réservation : la veille à 18h (heure de Paris) et 2h avant.
+// Le rappel de 2h avant part aussi au notaire, avec le lien de la visio.
 // L'anti-doublon repose sur les colonnes bookings.reminder_eve_sent / _2h_sent.
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -32,6 +34,7 @@ interface BookingRow {
   modalite: string | null;
   client_nom: string | null;
   client_email: string | null;
+  client_phone: string | null;
   created_at: string;
   reminder_eve_sent: boolean;
   reminder_2h_sent: boolean;
@@ -140,7 +143,7 @@ export async function GET(req: NextRequest) {
   const { data, error } = await supabase
     .from("bookings")
     .select(
-      "id, notaire_id, notaire_nom, slot_key, slot_label, dossier, modalite, client_nom, client_email, created_at, reminder_eve_sent, reminder_2h_sent",
+      "id, notaire_id, notaire_nom, slot_key, slot_label, dossier, modalite, client_nom, client_email, client_phone, created_at, reminder_eve_sent, reminder_2h_sent",
     )
     // « confirmé » : lignes écrites par une ancienne version du site.
     .in("status", ["confirmed", "confirmé"])
@@ -156,16 +159,19 @@ export async function GET(req: NextRequest) {
   // Préférences de rappel par notaire (interrupteurs du dashboard).
   const notaireIds = [...new Set(rows.map((r) => r.notaire_id).filter(Boolean))] as string[];
   const prefs: Record<string, { eve: boolean; h2: boolean }> = {};
+  // E-mail du notaire, pour son propre rappel de 2h avant.
+  const emailsNotaires: Record<string, string> = {};
   if (notaireIds.length) {
     const { data: profs } = await supabase
       .from("notaire_profiles")
-      .select("id, remind_eve, remind_2h")
+      .select("id, remind_eve, remind_2h, email")
       .in("id", notaireIds);
     for (const p of profs ?? []) {
       prefs[p.id as string] = {
         eve: p.remind_eve !== false,
         h2: p.remind_2h !== false,
       };
+      if (p.email) emailsNotaires[p.id as string] = p.email as string;
     }
   }
 
@@ -175,6 +181,7 @@ export async function GET(req: NextRequest) {
 
   let sentEve = 0;
   let sent2h = 0;
+  let sent2hNotaire = 0;
 
   for (const b of rows) {
     if (!b.client_email) continue;
@@ -220,6 +227,12 @@ export async function GET(req: NextRequest) {
       if (ok) {
         await supabase.from("bookings").update({ reminder_2h_sent: true }).eq("id", b.id);
         sent2h++;
+        // Même rappel côté notaire, porté par le même drapeau : il part une
+        // seule fois, en même temps que celui du client.
+        const emailNotaire = b.notaire_id ? emailsNotaires[b.notaire_id] : undefined;
+        if (emailNotaire && (await sendEmail(emailNotaire, sujetRappelNotaire(b), emailRappelNotaire(b)))) {
+          sent2hNotaire++;
+        }
       }
     }
   }
@@ -229,6 +242,7 @@ export async function GET(req: NextRequest) {
     scanned: rows.length,
     sentEve,
     sent2h,
+    sent2hNotaire,
     ranAt: new Date(now).toISOString(),
   });
 }

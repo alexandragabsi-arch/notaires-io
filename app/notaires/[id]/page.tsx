@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import NotaireProfileClient from "@/components/NotaireProfileClient";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getAllNotaires, redirectionFiche, redirectionMasquee } from "@/lib/notaires-source";
-import { permanentRedirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { ListingNotaire } from "@/lib/notaires-listing";
 import { estFicheTest } from "@/lib/fiches-test";
 import { createClient } from "@supabase/supabase-js";
@@ -221,6 +221,10 @@ export default async function Page({
   if (!base && !completee) {
     const cibleApp = await idDepuisSlugNom(id);
     if (cibleApp && cibleApp !== id) permanentRedirect(`/notaires/${encodeURIComponent(cibleApp)}`);
+    // Ni dans l'annuaire, ni complétée, ni lien de l'app : vraie 404. La page
+    // répondait 200 avec un spinner puis « Profil introuvable » côté client —
+    // un soft 404 que Google indexait avec le titre « Profil notaire ».
+    notFound();
   }
   // Fiche de l'annuaire d'un notaire qui a activé son profil sous un autre id :
   // un seul profil par notaire, la fiche importée renvoie vers le profil activé.

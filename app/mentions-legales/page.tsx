@@ -3,7 +3,7 @@ import LegalLayout from "@/components/LegalLayout";
 import { EDITEUR, HEBERGEUR, BASE_DE_DONNEES, LEGAL_UPDATED } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Mentions légales | Notaires.io",
+  title: "Mentions légales",
   description:
     "Mentions légales du site Notaires.io : éditeur, directeur de la publication, hébergeur et propriété intellectuelle.",
   alternates: { canonical: "/mentions-legales" },

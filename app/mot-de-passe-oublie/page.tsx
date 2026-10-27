@@ -5,7 +5,7 @@ import ForgotPassword from "@/components/ForgotPassword";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Mot de passe oublié — Notaires.io",
+  title: "Mot de passe oublié",
   robots: { index: false, follow: false },
 };
 

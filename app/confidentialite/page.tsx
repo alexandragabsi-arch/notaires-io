@@ -3,7 +3,7 @@ import LegalLayout from "@/components/LegalLayout";
 import { EDITEUR, HEBERGEUR, LEGAL_UPDATED } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Politique de confidentialité (RGPD) | Notaires.io",
+  title: "Politique de confidentialité (RGPD)",
   description:
     "Comment Notaires.io collecte, utilise et protège vos données personnelles, conformément au RGPD. Vos droits et nos engagements.",
   alternates: { canonical: "/confidentialite" },

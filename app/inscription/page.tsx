@@ -5,7 +5,7 @@ import NotaireSignup from "@/components/NotaireSignup";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Référencer mon étude — Inscription notaire | Notaires.io",
+  title: "Référencer mon étude — Inscription notaire",
   description:
     "Créez votre profil notaire en quelques minutes : compte, étude, spécialités et photo. Référencez votre étude sur Notaires.io.",
   alternates: { canonical: "/inscription" },

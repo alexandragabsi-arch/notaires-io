@@ -3,7 +3,7 @@ import LegalLayout from "@/components/LegalLayout";
 import { EDITEUR, LEGAL_UPDATED } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Conditions générales d'utilisation | Notaires.io",
+  title: "Conditions générales d'utilisation",
   description:
     "Conditions générales d'utilisation du site Notaires.io : objet du service, rôle de la plateforme, obligations et responsabilités.",
   alternates: { canonical: "/cgu" },

@@ -10,7 +10,7 @@ import { texteBrut } from "@/lib/texte-brut";
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Conseils notariaux — Guides pratiques · Notaires.io",
+  title: "Conseils notariaux — Guides pratiques",
   description:
     "Guides pratiques sur l'immobilier, la succession, le mariage, le divorce et la création de société. Toutes vos questions notariales en clair.",
   alternates: { canonical: "https://notaires.io/blog" },

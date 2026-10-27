@@ -13,7 +13,7 @@ import Footer from "@/components/Footer";
 import { EDITEUR } from "@/lib/legal";
 
 export const metadata: Metadata = {
-  title: "Aide & support | Notaires.io",
+  title: "Aide & support",
   description:
     "Centre d’aide Notaires.io : poser une question, contacter le support, gérer son compte, son abonnement notaire ou ses données personnelles.",
   alternates: { canonical: "/support" },

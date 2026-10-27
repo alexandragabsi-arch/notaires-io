@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty, getNotairesMixed } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire divorce · Notaires.io",
+  title: "Notaire divorce : RDV en ligne pour le partage des biens",
   description:
     "Trouvez un notaire pour votre divorce par consentement mutuel, la liquidation de votre régime matrimonial ou la vente de votre bien commun. Accompagnement bienveillant.",
   keywords: [

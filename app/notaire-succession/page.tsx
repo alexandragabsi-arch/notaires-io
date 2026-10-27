@@ -6,7 +6,7 @@ import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesBySpecialty } from "@/lib/notaires-source";
 
 export const metadata: Metadata = {
-  title: "Notaire succession · Notaires.io",
+  title: "Notaire succession : RDV en ligne, en visio ou au cabinet",
   description:
     "Trouvez un notaire spécialisé en succession pour régler un héritage, organiser un partage ou rédiger un testament. Prise de rendez-vous en ligne. Accompagnement humain garanti.",
   keywords: [

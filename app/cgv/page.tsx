@@ -12,7 +12,7 @@ import { EDITEUR, LEGAL_UPDATED } from "@/lib/legal";
 // 2 mois via subscription_data[trial_end], TVA via Stripe Tax).
 
 export const metadata: Metadata = {
-  title: "Conditions générales de vente | Notaires.io",
+  title: "Conditions générales de vente",
   description:
     "Conditions générales de vente de l’abonnement Notaires.io destiné aux notaires : prix, durée, facturation, résiliation.",
   alternates: { canonical: "/cgv" },

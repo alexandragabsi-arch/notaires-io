@@ -5,13 +5,18 @@ import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
 import { ancreAccueil } from "@/lib/ancres-accueil";
 import { getDepartementBySlug, getAllDepartementSlugs, dansLeDepartement, duDepartement } from "@/lib/departements-data";
-import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
+import { getNotairesByDepartement, codeDepartementAdresse } from "@/lib/notaires-source";
+import { avecInscrits, getInscrits } from "@/lib/inscrits-serveur";
+import { pageGeoLd } from "@/lib/seo-jsonld";
 import { getDonneesDepartement } from "@/lib/departements-villes";
 import Breadcrumb from "@/components/Breadcrumb";
 
 interface Props {
   params: Promise<{ dept: string }>;
 }
+
+// Inscrits relus toutes les 5 minutes, comme les pages de ville.
+export const revalidate = 300;
 
 export async function generateStaticParams() {
   return getAllDepartementSlugs().map((slug) => ({ dept: slug }));
@@ -49,65 +54,11 @@ export default async function Page({ params }: Props) {
   const dep = getDepartementBySlug(dept);
   if (!dep) notFound();
 
-  // Filtrer les notaires par département (via leur ville = chef-lieu ou région)
-  const notaires = LISTING_NOTAIRES.filter(
-    (n) => n.city === dep.chefLieu || n.city?.toLowerCase().includes(dep.chefLieu.toLowerCase())
-  );
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Accueil",                item: "https://notaires.io" },
-          { "@type": "ListItem", position: 2, name: "Notaires par département", item: "https://notaires.io/notaire-departement" },
-          { "@type": "ListItem", position: 3, name: `Notaire ${dep.name}`,    item: `https://notaires.io/notaire-departement/${dept}` },
-        ],
-      },
-      {
-        "@type": "Service",
-        name: `Notaire ${dansLeDepartement(dep.name)}`,
-        provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-        areaServed: {
-          "@type": "AdministrativeArea",
-          name: dep.name,
-          addressCountry: "FR",
-        },
-        description: `Mise en relation avec des notaires partenaires ${dansLeDepartement(dep.name)} pour immobilier, succession, mariage, PACS, divorce et création de société.`,
-        url: `https://notaires.io/notaire-departement/${dept}`,
-      },
-      {
-        "@type": "FAQPage",
-        mainEntity: [
-          {
-            "@type": "Question",
-            name: `Combien coûte un notaire ${dansLeDepartement(dep.name)} ?`,
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: `Les honoraires des notaires ${dansLeDepartement(dep.name)} sont réglementés par l'État. Pour un achat immobilier, les frais de notaire représentent entre 7 % et 8 % du prix du bien (ancien) ou 2 % à 3 % (neuf). Ces tarifs incluent les émoluments du notaire, les droits de mutation et les débours.`,
-            },
-          },
-          {
-            "@type": "Question",
-            name: `Peut-on consulter un notaire ${duDepartement(dep.name)} en visio ?`,
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: `Oui, tous les notaires partenaires de Notaires.io ${dansLeDepartement(dep.name)} proposent des rendez-vous en visioconférence. C'est idéal pour préparer votre dossier (succession, contrat de mariage, vente immobilière) sans vous déplacer.`,
-            },
-          },
-          {
-            "@type": "Question",
-            name: `Comment trouver un notaire disponible rapidement ${dansLeDepartement(dep.name)} ?`,
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: `Sur Notaires.io, consultez les disponibilités des notaires ${duDepartement(dep.name)} en temps réel et prenez rendez-vous en quelques clics. Le délai moyen pour un premier rendez-vous est de 48 à 72 heures.`,
-            },
-          },
-        ],
-      },
-    ],
-  };
+  // Notaires du département, inscrits en tête. La page filtrait les 35 fiches
+  // vedettes sur le chef-lieu : « Bientôt disponible » presque partout, alors
+  // que l'intro annonçait des centaines de notaires référencés.
+  const inscrits = (await getInscrits()).filter((n) => codeDepartementAdresse(n.address) === dep.code);
+  const notaires = avecInscrits(getNotairesByDepartement(dep.code), inscrits);
 
   // Chiffres et communes du département : sans eux, les 95 pages ne se
   // distinguaient que par un nom, ce qu'un moteur traite comme du doublon.
@@ -128,7 +79,7 @@ export default async function Page({ params }: Props) {
     },
     {
       q: `Peut-on consulter un notaire ${duDepartement(dep.name)} en visioconférence ?`,
-      a: `Oui, tous nos notaires partenaires ${dansLeDepartement(dep.name)} proposent des rendez-vous en visio. Idéal pour préparer votre succession, votre contrat de mariage ou votre projet immobilier sans vous déplacer à ${dep.chefLieu} ou dans le reste du département.`,
+      a: `Oui, lorsque le notaire le propose : les notaires inscrits sur Notaires.io ouvrent leurs créneaux en visio comme au cabinet. C'est utile pour préparer une succession, un contrat de mariage ou un projet immobilier sans vous déplacer à ${dep.chefLieu} ou ailleurs dans le département.`,
     },
     {
       q: `Quels actes un notaire ${dansLeDepartement(dep.name)} peut-il réaliser ?`,
@@ -136,7 +87,7 @@ export default async function Page({ params }: Props) {
     },
     {
       q: `Comment prendre rendez-vous avec un notaire ${dansLeDepartement(dep.name)} via Notaires.io ?`,
-      a: `Rendez-vous sur notre annuaire, sélectionnez votre département (${dep.name} — ${dep.code}), choisissez votre notaire et réservez un créneau en ligne, en visio ou au cabinet. Vous recevez une confirmation par email avec une checklist pour préparer votre dossier.`,
+      a: `Choisissez un notaire dans la liste de cette page ou par commune, ouvrez sa fiche et réservez un créneau en ligne, en visio ou au cabinet, lorsque le notaire a ouvert son agenda. Sinon, la fiche donne les coordonnées de l'étude.`,
     },
   ];
 
@@ -154,6 +105,21 @@ export default async function Page({ params }: Props) {
     { href: "/notaire-marseille",     label: "RDV notaire à Marseille" },
     { href: "/blog",                  label: "Guides notaires" },
   ];
+
+  // Données structurées tirées de la FAQ et de la liste affichées : le
+  // FAQPage écrit à la main posait d'autres questions que la page, avec des
+  // affirmations (« délai moyen de 48 à 72 heures ») absentes du texte visible.
+  const jsonLd = pageGeoLd({
+    etapes: [
+      { nom: "Accueil", url: "https://notaires.io" },
+      { nom: "Départements", url: "https://notaires.io/notaire-departement" },
+      { nom: `${dep.name} (${dep.code})`, url: `https://notaires.io/notaire-departement/${dept}` },
+    ],
+    faq,
+    notaires,
+    ville: dep.chefLieu,
+    titreListe: `Notaires ${dansLeDepartement(dep.name)}`,
+  });
 
   return (
     <>

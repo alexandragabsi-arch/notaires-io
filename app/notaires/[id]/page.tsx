@@ -280,7 +280,9 @@ export default async function Page({
       : [];
 
   // Notaires du même arrondissement, de la même ville ou du département.
-  const proches = notaire
+  // Pas sur la fiche d'un notaire inscrit : c'est la page d'un client, on n'y
+  // affiche que ses associés, pas les études voisines.
+  const proches = notaire && !notaire.claimed
     ? notairesProches(notaire, all, new Set([notaire.id, ...colleagues.map((c) => c.id)]))
     : [];
 

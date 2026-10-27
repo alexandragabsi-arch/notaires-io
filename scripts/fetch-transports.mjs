@@ -14,9 +14,12 @@
  *   node scripts/fetch-transports.mjs            # simulation
  *   node scripts/fetch-transports.mjs --go       # écrit en base
  *   node scripts/fetch-transports.mjs --go --tous  # recalcule aussi les fiches déjà faites
+ *
+ * Le calcul des arrêts vit dans lib/transports-osm.ts, partagé avec le cron
+ * /api/cron/transports qui traite chaque heure les nouvelles fiches vérifiées.
  */
-
 import { readFileSync } from "fs";
+import { geocoder, arretsAutour } from "../lib/transports-osm.ts";
 
 const RACINE = new URL("..", import.meta.url).pathname;
 const env = Object.fromEntries(
@@ -38,15 +41,7 @@ if (!URL_SB || !CLE) {
 
 const GO = process.argv.includes("--go");
 const TOUS = process.argv.includes("--tous");
-const UA = "notaires-io-transports/1.0 (contact@notaires.io)";
-const RAYON = 400; // mètres : ce qu'on accepte de marcher pour un rendez-vous
 const PAUSE = 5000;
-
-const MIROIRS = [
-  "https://overpass-api.de/api/interpreter",
-  "https://overpass.kumi.systems/api/interpreter",
-  "https://overpass.private.coffee/api/interpreter",
-];
 
 const dors = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -57,54 +52,6 @@ async function sb(chemin, options = {}) {
   });
   if (!r.ok) throw new Error(`Supabase ${r.status} ${await r.text()}`);
   return r.status === 204 ? null : r.json();
-}
-
-async function geocoder(adresse) {
-  const r = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(adresse)}&limit=1`, {
-    headers: { "User-Agent": UA },
-    signal: AbortSignal.timeout(12000),
-  });
-  const f = (await r.json()).features?.[0];
-  return f ? [f.geometry.coordinates[1], f.geometry.coordinates[0]] : null;
-}
-
-async function arrets(lat, lon) {
-  const q = `[out:json][timeout:40];(`
-    + `node(around:${RAYON},${lat},${lon})["railway"="subway_entrance"];`
-    + `node(around:${RAYON},${lat},${lon})["railway"="tram_stop"];`
-    + `node(around:${RAYON},${lat},${lon})["railway"="station"];`
-    + `node(around:${RAYON},${lat},${lon})["highway"="bus_stop"];`
-    + `);out tags;`;
-
-  for (const base of MIROIRS) {
-    try {
-      const r = await fetch(`${base}?data=${encodeURIComponent(q)}`, {
-        headers: { "User-Agent": UA },
-        signal: AbortSignal.timeout(60000),
-      });
-      if (!r.ok) { await dors(3000); continue; }
-      const els = (await r.json()).elements ?? [];
-
-      const par = new Map();
-      for (const e of els) {
-        const t = e.tags ?? {};
-        const nom = (t.name || t.ref || "").trim();
-        if (!nom) continue;
-        const mode =
-          t.railway === "subway_entrance" ? "Métro"
-          : t.railway === "tram_stop" ? "Tram"
-          : t.railway === "station" ? "Gare"
-          : "Bus";
-        if (!par.has(mode)) par.set(mode, new Set());
-        par.get(mode).add(nom);
-      }
-      // Métro et tram d'abord : ce sont eux qui orientent un visiteur.
-      return ["Métro", "Tram", "Gare", "Bus"]
-        .filter((m) => par.has(m))
-        .map((m) => ({ mode: m, noms: [...par.get(m)].sort().slice(0, 4) }));
-    } catch { /* instance muette : on essaie la suivante */ }
-  }
-  return null; // aucune instance n'a répondu : on ne conclut rien
 }
 
 const champs = "id,name,city,address,transports";
@@ -122,7 +69,7 @@ for (const n of fiches) {
   const p = await geocoder(adresse);
   if (!p) { console.log("adresse non localisée"); echecs++; await dors(1200); continue; }
 
-  const a = await arrets(p[0], p[1]);
+  const a = await arretsAutour(p[0], p[1]);
   if (a === null) { console.log("Overpass injoignable — fiche laissée telle quelle"); echecs++; await dors(PAUSE); continue; }
 
   const resume = a.length

@@ -227,7 +227,9 @@ const handler = createMcpHandler(
             const l = cle(langue);
             liste = liste.filter((n) => (n.languages ?? []).some((x) => cle(x).startsWith(l.slice(0, 4))));
           }
-          if (rdv_en_ligne) liste = liste.filter((n) => idsInscrits.has(n.id));
+          // Les inscrits seuls ; les autres uniquement s'il n'y a aucun inscrit dans la ville.
+          const seulementInscrits = liste.filter((n) => idsInscrits.has(n.id));
+          if (seulementInscrits.length || rdv_en_ligne) liste = seulementInscrits;
           if (!liste.length) {
             return texte(`Aucun notaire trouvé à ${ville}${domaine ? ` pour « ${domaine} »` : ""}. Vérifier l'orthographe de la ville, élargir les filtres, ou consulter ${SITE}/annuaire.`);
           }

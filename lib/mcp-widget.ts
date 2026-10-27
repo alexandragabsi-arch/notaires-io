@@ -166,7 +166,7 @@ function rendre() {
   const d = donnees;
   let html = "";
   if (d.vue === "recherche") {
-    html = entete(d.total + " notaire" + (d.total > 1 ? "s" : "") + " · " + d.lieu) +
+    html = entete("") +
       '<div class="grille">' + d.notaires.map((n) => carte(n, false)).join("") + '</div>' +
       (d.total > d.notaires.length ? '<div class="plus">… et ' + (d.total - d.notaires.length) + ' autre(s) sur <a href="#" data-action="lien" data-url="' + esc(d.annuaire) + '">l\\'annuaire notaires.io</a>.</div>' : '') +
       '<div class="note">Résultats sans classement. notaires.io ne donne pas de conseil juridique.</div>';

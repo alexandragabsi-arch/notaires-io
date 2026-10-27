@@ -15,6 +15,7 @@
 // departements-data et arrondissements sont, eux, des modules purs.
 import { DEPARTEMENTS } from "@/lib/departements-data";
 import { arrDepuisAdresse, libelleArr, slugArr } from "@/lib/arrondissements";
+import { cheminVille } from "@/lib/villes-statiques";
 
 /** Copie locale de slugVille : fonction pure, pas de dépendance au disque. */
 function slugVille(nom: string): string {
@@ -72,7 +73,9 @@ export function filAriane(n: { name: string; id: string; city?: string | null; a
     // « Paris 12e Arrondissement » dans les données d'annuaire : la page de
     // ville s'appelle « paris », l'arrondissement a la sienne juste après.
     const base = ville.replace(/\s*\d+\s*(e|è)(me)?\s*Arrondissement.*/i, "").trim();
-    maillons.push({ nom: base, href: `/notaire-ville/${slugVille(base)}` });
+    // Paris, Lyon, Marseille… ont leur page en /notaire-{ville} : le lien en
+    // /notaire-ville/{ville} tombait en 404 sur des milliers de fiches.
+    maillons.push({ nom: base, href: cheminVille(slugVille(base)) });
 
     const racine = PAGES_ARR[slugVille(base)];
     const arr = racine ? arrDepuisAdresse(n.address) : null;

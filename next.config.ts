@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import { FUSIONS_BLOG } from "./lib/fusions-blog";
+import { VILLES_STATIQUES } from "./lib/villes-statiques";
 
 const nextConfig: NextConfig = {
   async headers() {
@@ -16,6 +17,14 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // Les 26 grandes villes ont leur page en /notaire-{ville}. Le fil d'Ariane
+      // des fiches pointait vers /notaire-ville/{ville}, en 404 : on renvoie
+      // ces URL, déjà découvertes par Google, vers la bonne page.
+      ...[...VILLES_STATIQUES].map((slug) => ({
+        source: `/notaire-ville/${slug}`,
+        destination: `/notaire-${slug}`,
+        permanent: true,
+      })),
       // Villes en « œ » (15/10/2026) : slugVille perdait la lettre
       // (« vand-uvre-les-nancy »). Les anciennes URL redirigent vers les bonnes.
       ...Object.entries({

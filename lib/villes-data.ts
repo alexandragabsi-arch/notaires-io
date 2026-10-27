@@ -10,6 +10,7 @@
 
 import { getAllNotaires } from "@/lib/notaires-source";
 import { DEPARTEMENTS } from "@/lib/departements-data";
+import { VILLES_STATIQUES } from "@/lib/villes-statiques";
 
 /** En dessous de ce nombre de notaires, pas de page dédiée. */
 export const SEUIL_VILLE = 3;
@@ -22,13 +23,8 @@ export const SEUIL_VILLE = 3;
  */
 const VILLES_MAINTENUES = new Set(["le-pont-de-claix", "saint-fargeau", "saint-florentin", "venissieux"]);
 
-/** Villes déjà servies par une page écrite à la main, à ne pas dupliquer. */
-export const VILLES_STATIQUES = new Set([
-  "paris", "lyon", "marseille", "toulouse", "nice", "nantes", "montpellier",
-  "strasbourg", "bordeaux", "lille", "rennes", "reims", "toulon",
-  "saint-etienne", "le-havre", "grenoble", "dijon", "angers", "nancy", "metz",
-  "clermont-ferrand", "aix-en-provence", "brest", "rouen", "orleans", "perpignan",
-]);
+/** Villes déjà servies par une page écrite à la main (voir villes-statiques). */
+export { VILLES_STATIQUES };
 
 /**
  * Met un nom de commune en forme française.

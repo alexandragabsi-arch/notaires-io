@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   title: "Commander mes cartes de visite · Notaires.io",
   description:
     "Cartes de visite professionnelles avec QR code intégré — Standard 350 g ou Premium 600 g soft-touch. Devis en temps réel, livraison incluse dès 250 exemplaires.",
+  // Outil de commande réservé aux notaires inscrits : hors de l'index.
+  robots: { index: false, follow: true },
 };
 
 export default function Page() {

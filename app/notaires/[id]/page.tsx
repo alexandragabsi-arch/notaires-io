@@ -37,7 +37,7 @@ async function ficheCompletee(id: string): Promise<Partial<ListingNotaire> | nul
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   )
     .from("notaire_profiles")
-    .select("name, city, initials, office_name, address, phone, website, role, specialties, sub_specialties, languages, bio, photo, slot_matrix, disponibilites, user_id, subscription_status")
+    .select("name, city, initials, office_name, address, phone, website, role, specialties, sub_specialties, languages, bio, photo, slot_matrix, disponibilites, transports, user_id, subscription_status")
     .eq("id", id)
     .eq("verifie", true) // compte à l'e-mail confirmé uniquement
     .maybeSingle();
@@ -74,6 +74,9 @@ async function ficheCompletee(id: string): Promise<Partial<ListingNotaire> | nul
     photo: data.photo ?? undefined,
     slotMatrix: Array.isArray(data.slot_matrix) ? data.slot_matrix : undefined,
     disponibilites: lireDisponibilites(data.disponibilites),
+    // Rempli par le cron /api/cron/transports ; sans cette lecture, la rubrique
+    // « Transports à proximité » restait vide sur toutes les fiches.
+    transports: Array.isArray(data.transports) && data.transports.length ? data.transports : undefined,
     claimed: true,
   };
   // On ne garde que les champs renseignés : un champ vide ne masque pas l'annuaire.

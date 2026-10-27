@@ -15,6 +15,7 @@ import { getVilleSeoFaq } from "@/lib/ville-seo";
 // est générée à la demande (dynamicParams par défaut).
 export const revalidate = 300;
 import { getVillesCouvertes } from "@/lib/villes-data";
+import { villesVoisines } from "@/lib/villes-voisines";
 import { duDepartement } from "@/lib/departements-data";
 import { aVille, deVille } from "@/lib/prepositions-ville";
 
@@ -68,13 +69,15 @@ export default async function Page({ params }: Props) {
   // Inscrits en tête, y compris ceux créés à l'inscription (absents de l'annuaire importé).
   const notaires = avecInscrits(getNotairesByCity(v.nom, 120), await getInscritsVille(v.nom));
 
-  // Villes voisines par volume : un maillage entre pages de même niveau, qui
-  // évite que chacune reste un cul-de-sac.
+  // Villes voisines par distance réelle (lib/villes-voisines.ts). Elles étaient
+  // prises par rang de volume, n'importe où en France. Rang conservé en
+  // secours pour une commune absente du fichier de coordonnées.
   const toutes = getVillesCouvertes();
   const position = toutes.findIndex((x) => x.slug === v.slug);
-  const voisines = toutes
+  const voisines = villesVoisines(v) ?? toutes
     .filter((_, i) => i !== position)
-    .slice(Math.max(0, position - 4), Math.max(0, position - 4) + 8);
+    .slice(Math.max(0, position - 4), Math.max(0, position - 4) + 8)
+    .map((x) => ({ nom: x.nom, slug: x.slug, href: `/notaire-ville/${x.slug}`, km: undefined }));
 
   const faqSeo = await getVilleSeoFaq(v.nom);
 
@@ -156,8 +159,8 @@ export default async function Page({ params }: Props) {
               : []),
             { href: "/annuaire", label: "Tout l'annuaire" },
             ...voisines.map((x) => ({
-              href: `/notaire-ville/${x.slug}`,
-              label: `RDV notaire ${aVille(x.nom)}`,
+              href: x.href,
+              label: `RDV notaire ${aVille(x.nom)}${x.km !== undefined ? ` (${x.km} km)` : ""}`,
             })),
             { href: "/notaire-immobilier", label: "Notaire immobilier" },
             { href: "/notaire-succession", label: "Notaire succession" },

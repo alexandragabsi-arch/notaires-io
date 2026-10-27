@@ -63,7 +63,9 @@ const triLignes = (a: string, b: string) => a.localeCompare(b, "fr", { numeric: 
 function refAffichable(mode: string, ref: string): boolean {
   if (!ref) return false;
   if (mode === "Gare") return /^[A-Z]{1,2}$/.test(ref); // RER A, Transilien R…
-  return ref.length <= 6;
+  // 38, C23, PL1, E21, T3, B… mais pas les codes internes à 4 chiffres
+  // (« 6201 » à Versailles) ni les libellés comme « NUIT ».
+  return /^[A-Z]{0,3}\d{1,3}[A-Z]?$/i.test(ref) || /^[A-Z]{1,2}$/.test(ref);
 }
 
 /** Clé de fusion : « Paris Gare de Lyon », « Paris-Gare de Lyon » et « Gare de Lyon » sont la même gare. */
@@ -77,7 +79,8 @@ function libelle(nom: string, refs: Set<string>): string {
   const jour = lignes.filter((l) => !/^N\d/i.test(l));
   if (jour.length) lignes = jour;
   if (!lignes.length) return nom;
-  return `${nom} (${lignes.length > 1 ? "lignes" : "ligne"} ${lignes.join(", ")})`;
+  const liste = lignes.length > 5 ? `${lignes.slice(0, 5).join(", ")}…` : lignes.join(", ");
+  return `${nom} (${lignes.length > 1 ? "lignes" : "ligne"} ${liste})`;
 }
 
 /**

@@ -160,7 +160,9 @@ function daysUntilNext(n: ListingNotaire): number | null {
   const sm = n.slotMatrix;
   if (sm && sm.length) {
     for (let off = 0; off < sm.length; off++) {
-      if ((sm[off]?.length ?? 0) > 0) return calendarDaysFromToday(workdayDate(off));
+      // Heures déjà passées exclues : sinon le filtre « Aujourd'hui » gardait
+      // un notaire dont le dernier créneau du jour était à 9h.
+      if (heuresPour(n, workdayDate(off), off).length > 0) return calendarDaysFromToday(workdayDate(off));
     }
   }
   return null;

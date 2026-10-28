@@ -9,6 +9,7 @@ const dmSans = DM_Sans({
 });
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
+import AppBanner from "@/components/AppBanner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -169,6 +170,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-white text-[#1C4587]">
         {children}
+        <AppBanner />
         <Analytics />
       </body>
     </html>

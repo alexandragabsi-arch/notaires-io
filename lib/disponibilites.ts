@@ -174,9 +174,19 @@ export interface AvecDisponibilites {
 }
 
 /** Heures d'un jour pour l'affichage. `indexAncien` sert aux fiches encore sur l'ancienne matrice. */
-export function heuresPour(n: AvecDisponibilites, jour: Date, indexAncien: number): string[] {
-  if (n.disponibilites) return heuresDuJour(n.disponibilites, jour);
-  return n.slotMatrix?.[indexAncien] ?? [];
+export function heuresPour(
+  n: AvecDisponibilites,
+  jour: Date,
+  indexAncien: number,
+  maintenant: number = Date.now(),
+): string[] {
+  if (n.disponibilites) return heuresDuJour(n.disponibilites, jour, maintenant);
+  // Ancienne matrice : mêmes règles que heuresDuJour pour les heures déjà
+  // passées. Un « 09:00 » du jour restait proposé jusqu'au soir (27/10/2026).
+  return (n.slotMatrix?.[indexAncien] ?? []).filter((h) => {
+    const t = Date.parse(slotKeyDepuisJour(jour, h.trim().replace("h", ":").padStart(5, "0")));
+    return Number.isNaN(t) || t > maintenant;
+  });
 }
 
 /** Matrice « jour 0 = demain » calculée maintenant, au format attendu par l'agenda de la fiche. */

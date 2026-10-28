@@ -51,51 +51,32 @@ export default function AppBanner() {
 
   if (!show) return null;
 
+  // Couleurs et polices de la charte (app/globals.css) : jetons --color-*,
+  // dégradé bg-gradient-cta des boutons, DM Sans (font-sans) et Playfair (serif).
   return (
     <div
       role="region"
       aria-label="Application Notaires.io"
-      style={{
-        position: "fixed",
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: 40,
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        padding: "8px 12px calc(8px + env(safe-area-inset-bottom))",
-        background: "#fff",
-        borderTop: "1px solid #e5e9f2",
-        boxShadow: "0 -4px 16px rgba(28,69,135,.08)",
-        fontFamily: "var(--font-dm-sans), sans-serif",
-      }}
+      className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-2.5 bg-white border-t border-[var(--color-border-soft)] shadow-[var(--shadow-card)] font-sans"
+      // Seule valeur restée en style : la marge de la barre d'accueil de l'iPhone.
+      style={{ padding: "8px 12px calc(8px + env(safe-area-inset-bottom))" }}
     >
       <button
         onClick={close}
         aria-label="Fermer"
-        style={{ border: 0, background: "none", color: "#8a96ad", fontSize: 20, padding: 4, lineHeight: 1 }}
+        className="p-1 text-[20px] leading-none text-[var(--color-muted)] hover:text-[var(--color-text-strong)] transition-colors"
       >
         ×
       </button>
-      <img src="/icon.svg" alt="" width={36} height={36} style={{ borderRadius: 8 }} />
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontFamily: "var(--font-playfair), serif", fontWeight: 700, color: "#1C4587", fontSize: 15 }}>
-          Notaires.io
-        </div>
-        <div style={{ fontSize: 12, color: "#5b6b8a" }}>Disponible sur iPhone</div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/icon.svg" alt="" width={36} height={36} className="rounded-lg" />
+      <div className="flex-1 min-w-0">
+        <div className="serif text-[15px] font-bold text-[var(--color-text-strong)]">Notaires.io</div>
+        <div className="text-[12px] text-[var(--color-muted)]">Disponible sur iPhone</div>
       </div>
       <a
         href={APP_STORE_URL}
-        style={{
-          padding: "8px 18px",
-          borderRadius: 999,
-          background: "linear-gradient(90deg,#509BF8,#4980E6)",
-          color: "#fff",
-          fontWeight: 600,
-          fontSize: 14,
-          textDecoration: "none",
-        }}
+        className="px-[18px] py-2 rounded-full bg-gradient-cta text-white text-[14px] font-semibold shadow-[var(--shadow-cta)] no-underline"
       >
         Ouvrir
       </a>

@@ -124,6 +124,30 @@ function VisioContent() {
         )}
       </header>
 
+      {/* Hôte : meet.jit.si n'ouvre une réunion qu'une fois qu'un participant
+          s'est connecté (Google, GitHub ou Facebook) via « Je suis l'hôte ».
+          Sans lui, notaire et client restaient tous deux en salle d'attente
+          (constaté le 28/10/2026). Le premier arrivé — notaire ou client —
+          ouvre la salle dans Jitsi même, où la connexion fonctionne. */}
+      {status !== "locked" && (
+        <div className="shrink-0 flex flex-col sm:flex-row sm:items-center gap-3 px-6 py-3 bg-[var(--color-accent)]/15 border-b border-white/10">
+          <p className="flex-1 text-[13px] leading-snug text-white/85">
+            <strong className="text-white">Vous êtes le premier arrivé, notaire ou client ?</strong>{" "}
+            Si la salle indique qu&apos;aucun modérateur n&apos;est arrivé, ouvrez-la dans Jitsi, cliquez sur
+            « Je suis l&apos;hôte » et connectez-vous avec un compte Google. L&apos;autre participant entrera ensuite automatiquement.
+          </p>
+          <a
+            href={jitsiUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 shrink-0 bg-white text-[#0f172a] font-semibold px-4 py-2.5 rounded-xl text-sm hover:bg-white/90 transition-colors"
+          >
+            <ExternalLink className="w-4 h-4" />
+            Ouvrir la salle comme hôte
+          </a>
+        </div>
+      )}
+
       <div className="relative flex-1" style={{ minHeight: "calc(100vh - 64px)" }}>
 
         {/* ── Salle verrouillée ── */}

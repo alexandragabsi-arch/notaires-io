@@ -71068,46 +71068,6 @@
     "claimed": false
   },
   {
-    "id": "wintzer-wehekind-jean-eudes-paul-903904449",
-    "name": "Me Jean-Eudes Paul Wintzer-Wehekind",
-    "initials": "JW",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "NOTAIRES PARIS SENTIER MONTORGUEIL (N.P.S.M.)",
-    "address": "97 RUE REAUMUR 75002 PARIS",
-    "phone": "",
-    "website": "",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [
-      [],
-      [
-        "09:30"
-      ],
-      [],
-      [
-        "10:00",
-        "14:00",
-        "16:00"
-      ],
-      [
-        "09:00"
-      ],
-      [],
-      [
-        "11:00",
-        "14:00",
-        "15:30"
-      ]
-    ],
-    "role": "associé",
-    "source": "api-entreprises",
-    "claimed": false
-  },
-  {
     "id": "cassaignau-celine-benedicte-marie-942804147",
     "name": "Me Céline Bénédicte Marie Cassaignau",
     "initials": "CC",
@@ -344530,26 +344490,6 @@
     "address": "11, Rue Marsollier 75002 PARIS",
     "phone": "0183976256",
     "website": "https://www.notaires.fr/fr/office/selas-alkern-notaires",
-    "specialties": [
-      "Droit immobilier",
-      "Successions"
-    ],
-    "slotMatrix": [],
-    "role": "associé",
-    "source": "notaires.fr",
-    "claimed": false
-  },
-  {
-    "id": "jean-eudes-wintzer-wehekind-75002-843x5k",
-    "name": "Me Jean-Eudes Wintzer-Wehekind",
-    "initials": "JW",
-    "color": "default",
-    "city": "Paris",
-    "citySlug": "paris",
-    "officeName": "Notaires Paris Sentier  Montorgueil, SELARL",
-    "address": "97 rue Réaumur 75002 PARIS",
-    "phone": "0186906142",
-    "website": "https://www.notaires.fr/fr/office/notaires-paris-sentier-montorgueil-selarl",
     "specialties": [
       "Droit immobilier",
       "Successions"

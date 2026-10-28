@@ -172,7 +172,9 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
                 style={{ gridTemplateColumns: `repeat(${DAYS_VISIBLE}, minmax(62px, 1fr))` }}
               >
                 {visibleDays.map((day, di) => {
-                  const times = heuresPour(notaire, day, offset + di);
+                  // Créneaux réels uniquement : ceux d'un notaire inscrit. Les fiches non
+                    // revendiquées affichaient des heures générées, prises pour de vraies disponibilités.
+                    const times = notaire.claimed ? heuresPour(notaire, day, offset + di) : [];
                   const label = formatDayLabel(day);
                   return (
                     <div key={di} className="flex flex-col gap-1.5 min-w-[62px]">
@@ -192,18 +194,7 @@ function NotaireCard({ notaire, workdays }: { notaire: ListingNotaire; workdays:
                             {t}
                           </a>
                         ))
-                      ) : (
-                        // Profil non revendiqué : créneaux indicatifs, non réservables.
-                        times.slice(0, 3).map((t) => (
-                          <div
-                            key={t}
-                            title="Profil non revendiqué — créneaux indicatifs, non réservables"
-                            className="block text-center text-[12px] font-semibold text-[var(--color-muted)] bg-slate-50 border border-dashed border-[var(--color-border)] rounded-lg py-2 cursor-not-allowed select-none"
-                          >
-                            {t}
-                          </div>
-                        ))
-                      )}
+                      ) : null}
                     </div>
                   );
                 })}

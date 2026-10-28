@@ -266,36 +266,6 @@ function normalizeCity(city: string): string {
 }
 
 /**
- * Génère la matrice de créneaux de façon déterministe selon l'id
- * (les créneaux ne changent pas d'un rechargement à l'autre)
- */
-function deterministicSlots(id: string): string[][] {
-  // Hash simple sur l'id pour varier les créneaux
-  let h = 0;
-  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) & 0xffffffff;
-  h = Math.abs(h);
-
-  const allSlots = [
-    ["09:00", "10:00", "14:30"],
-    ["09:30", "11:00"],
-    [],
-    ["10:00", "14:00", "16:00"],
-    ["09:00", "10:30", "15:00"],
-    [],
-    ["11:00", "14:00", "15:30"],
-  ];
-
-  // Rotation déterministe selon le hash
-  return allSlots.map((day, i) => {
-    const r = (h + i) % 7;
-    if (r === 0 || r === 5) return [];
-    if (r === 1 || r === 4) return day.slice(0, 1);
-    if (r === 2) return day.slice(0, 2);
-    return day.slice(0, 3);
-  });
-}
-
-/**
  * Certaines fiches issues de l'API officielle ont opté pour la non-diffusion :
  * le nom et l'adresse valent littéralement « [non-Diffusible] » / « [NON-DIFFUSIBLE] ».
  * On les détecte pour les nettoyer à l'affichage.
@@ -345,8 +315,9 @@ function toListing(n: RawNotaire): ListingNotaire {
     role: nameMasked ? undefined : n.role,
     isOffice: nameMasked,
     specialties: withFamilyLaw(n.specialties?.length ? n.specialties : ["Droit immobilier", "Successions"]),
-    next: "Disponible rapidement",
-    slotMatrix: deterministicSlots(n.id),
+    // Pas de créneaux inventés : seule la fiche d'un notaire inscrit a un agenda.
+    next: "Sur demande",
+    slotMatrix: [],
     bio: undefined,
   };
 }
@@ -393,8 +364,8 @@ function officeToListing(o: RawOffice): ListingNotaire {
     arrondissement: arrFromAddress(o.address),
     isOffice: masked ? true : !individual,
     specialties: withFamilyLaw(["Droit immobilier", "Successions"]),
-    next: "Disponible rapidement",
-    slotMatrix: deterministicSlots(o.id),
+    next: "Sur demande",
+    slotMatrix: [],
   };
 }
 

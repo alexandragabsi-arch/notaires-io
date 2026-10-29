@@ -11,6 +11,7 @@ import {
   economieTotale,
   formatEuros,
   formatPourcent,
+  sommeAVerser,
   type Garantie,
   type TypeBien,
 } from "@/lib/frais-notaire";
@@ -32,6 +33,9 @@ export default function SimulateurFraisNotaire() {
   const [fraisAgence, setFraisAgence] = useState(0);
   const [pret, setPret] = useState(0);
   const [garantie, setGarantie] = useState<Garantie>("caution");
+  const [taxeFonciere, setTaxeFonciere] = useState(0);
+  const [dateSignature, setDateSignature] = useState("");
+  const [depotGarantie, setDepotGarantie] = useState(0);
   const [detailOuvert, setDetailOuvert] = useState(false);
 
   const dep = DEPARTEMENTS_FRAIS.find((d) => d.code === codeDepartement)!;
@@ -44,6 +48,9 @@ export default function SimulateurFraisNotaire() {
   const economieAppliquee = economieTotale(entree);
   const mobilierTropEleve = prix > 0 && mobilier > prix * 0.1;
   const g = GARANTIES[garantie];
+  const versement = sommeAVerser(entree, { pret, garantie, taxeFonciere, dateSignature, depotGarantie });
+  const fourchette = (min: number, max: number) =>
+    min === max ? formatEuros(min) : `${formatEuros(min)} à ${formatEuros(max)}`;
 
   const champ =
     "w-full rounded-xl border border-[var(--color-border)] bg-white px-4 py-3 text-[15px] text-[var(--color-text-strong)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]";
@@ -238,6 +245,55 @@ export default function SimulateurFraisNotaire() {
             </div>
             <p className="mt-1 text-[12px] text-[var(--color-muted)]">Pour estimer les frais de garantie du prêt, facturés en plus.</p>
           </div>
+
+          <fieldset className="rounded-xl border border-[var(--color-border-soft)] p-4 space-y-4">
+            <legend className="px-1 text-[13px] font-bold text-[var(--color-text-strong)]">
+              Pour la somme à verser au notaire <span className="font-normal text-[var(--color-muted)]">(facultatif)</span>
+            </legend>
+            <div className="grid sm:grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="sim-tf" className={libelle}>Taxe foncière annuelle</label>
+                <div className="relative">
+                  <input
+                    id="sim-tf"
+                    inputMode="numeric"
+                    autoComplete="off"
+                    className={`${champ} pr-10`}
+                    value={formatSaisie(taxeFonciere)}
+                    onChange={(e) => setTaxeFonciere(lireMontant(e.target.value))}
+                    placeholder="0"
+                  />
+                  <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">€</span>
+                </div>
+              </div>
+              <div>
+                <label htmlFor="sim-date" className={libelle}>Date de signature prévue</label>
+                <input
+                  id="sim-date"
+                  type="date"
+                  className={champ}
+                  value={dateSignature}
+                  onChange={(e) => setDateSignature(e.target.value)}
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="sim-depot" className={libelle}>Dépôt de garantie versé au compromis</label>
+              <div className="relative">
+                <input
+                  id="sim-depot"
+                  inputMode="numeric"
+                  autoComplete="off"
+                  className={`${champ} pr-10`}
+                  value={formatSaisie(depotGarantie)}
+                  onChange={(e) => setDepotGarantie(lireMontant(e.target.value))}
+                  placeholder="0"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">€</span>
+              </div>
+              <p className="mt-1 text-[12px] text-[var(--color-muted)]">En général 5 à 10 % du prix, déjà entre les mains du notaire.</p>
+            </div>
+          </fieldset>
         </form>
 
         {/* ── Résultat ── */}
@@ -297,6 +353,47 @@ export default function SimulateurFraisNotaire() {
                 <span className="font-semibold tabular-nums whitespace-nowrap text-[var(--color-text-strong)]">
                   {formatEuros((pret * g.min) / 100)} à {formatEuros((pret * g.max) / 100)}
                 </span>
+              </p>
+            </div>
+          )}
+
+          {prix > 0 && (
+            <div className="mt-5 rounded-xl border-2 border-[var(--color-primary)] p-4 text-[13px]">
+              <p className="text-[13px] font-bold tracking-[1.5px] uppercase text-[var(--color-accent)]">Somme à verser au notaire</p>
+              <p className="mt-1 serif font-extrabold text-[28px] leading-tight tracking-tight tabular-nums text-[var(--color-text-strong)]">
+                {fourchette(versement.totalMin, versement.totalMax)}
+              </p>
+              <ul className="mt-3 space-y-2">
+                {versement.lignes.map((l) => (
+                  <li key={l.libelle} className="flex items-start justify-between gap-4">
+                    <span>
+                      <span className="block font-semibold text-[var(--color-text-strong)]">{l.libelle}</span>
+                      <span className="block text-[12px] text-[var(--color-muted)]">{l.detail}</span>
+                    </span>
+                    <span className="font-semibold tabular-nums whitespace-nowrap text-[var(--color-text-strong)]">
+                      {l.min < 0 ? `− ${formatEuros(-l.min)}` : fourchette(l.min, l.max)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              {pret > 0 && (
+                <p className="mt-3 border-t border-[var(--color-border-soft)] pt-3 flex items-start justify-between gap-4">
+                  <span>
+                    <span className="block font-semibold text-[var(--color-text-strong)]">Apport à prévoir</span>
+                    <span className="block text-[12px] text-[var(--color-muted)]">
+                      Une fois les {formatEuros(pret)} du prêt versés par la banque au notaire
+                      {depotGarantie > 0 && `, en plus des ${formatEuros(depotGarantie)} déjà versés au compromis`}
+                      {garantie === "caution" && " (la caution se règle à part, via la banque)"}.
+                    </span>
+                  </span>
+                  <span className="font-bold tabular-nums whitespace-nowrap text-[var(--color-text-strong)]">
+                    {fourchette(versement.apportMin, versement.apportMax)}
+                  </span>
+                </p>
+              )}
+              <p className="mt-3 text-[12px] text-[var(--color-muted)]">
+                Le notaire appelle souvent une provision un peu supérieure et rembourse le trop-perçu après le décompte définitif.
+                {taxeFonciere > 0 && !dateSignature && " Indiquez la date de signature pour calculer le prorata de taxe foncière."}
               </p>
             </div>
           )}

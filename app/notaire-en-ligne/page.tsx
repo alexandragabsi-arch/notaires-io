@@ -118,7 +118,7 @@ export default function Page() {
                 <li key={titre} className="rounded-2xl border border-[var(--color-border-soft)] bg-white p-5 shadow-[var(--shadow-card)]">
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-primary)] text-[14px] font-bold text-white">{i + 1}</span>
                   <p className="mt-3 serif font-bold text-[18px] text-[var(--color-text-strong)]">{titre}</p>
-                  <p className="mt-1 text-[14px] leading-relaxed text-[var(--color-muted)]">{texte}</p>
+                  <p className="mt-1 text-[14px] leading-relaxed text-justify hyphens-auto text-[var(--color-muted)]">{texte}</p>
                 </li>
               ))}
             </ol>
@@ -126,7 +126,7 @@ export default function Page() {
             <h2 className="serif font-bold tracking-tight text-[28px] sm:text-[32px] leading-[1.15] text-[var(--color-text-strong)] mt-16 mb-4">
               Ce qu&apos;un notaire peut faire à <span className="serif-accent">distance</span>
             </h2>
-            <ul className="space-y-3 text-[16px] leading-relaxed text-[var(--color-muted)] list-disc pl-5">
+            <ul className="space-y-3 text-[16px] leading-relaxed text-justify hyphens-auto text-[var(--color-muted)] list-disc pl-5">
               <li><strong className="text-[var(--color-text-strong)]">Vous conseiller</strong> : premier rendez-vous, explication des démarches, des délais et des frais.</li>
               <li><strong className="text-[var(--color-text-strong)]">Préparer l&apos;acte</strong> : collecte des pièces par voie électronique, projet d&apos;acte relu avec vous.</li>
               <li><strong className="text-[var(--color-text-strong)]">Recevoir votre procuration à distance</strong> : procuration authentique électronique par visioconférence, pour signer sans vous déplacer.</li>

@@ -120,7 +120,7 @@ export default function Page() {
             <h1 className="serif font-extrabold text-3xl sm:text-4xl md:text-5xl leading-tight tracking-tight mb-5 text-[var(--color-text-strong)]">
               La visibilité en ligne d&apos;une étude : être <span className="serif-accent">trouvé</span>, être choisi
             </h1>
-            <p className="text-[var(--color-muted)] text-lg leading-relaxed max-w-[640px] mx-auto">
+            <p className="text-[var(--color-muted)] text-lg leading-relaxed text-justify hyphens-auto max-w-[640px] mx-auto [text-align-last:center]">
               Vos futurs clients cherchent un notaire sur Google, sur une carte ou auprès d&apos;un assistant IA. Voici les leviers
               concrets pour apparaître au bon moment, et transformer une recherche en rendez-vous.
             </p>
@@ -150,7 +150,7 @@ export default function Page() {
               <li key={l.titre} className="rounded-2xl border border-[var(--color-border-soft)] bg-white p-6 shadow-[var(--shadow-card)]">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-primary)] text-[14px] font-bold text-white">{i + 1}</span>
                 <h3 className="mt-3 serif font-bold text-[19px] text-[var(--color-text-strong)]">{l.titre}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-muted)]">{l.texte}</p>
+                <p className="mt-2 text-[15px] leading-relaxed text-justify hyphens-auto text-[var(--color-muted)]">{l.texte}</p>
               </li>
             ))}
           </ol>
@@ -161,7 +161,7 @@ export default function Page() {
             <p className="serif font-bold text-[26px] leading-snug tracking-tight text-[var(--color-text-strong)]">
               Votre étude en ligne en quelques <span className="serif-accent">minutes</span>
             </p>
-            <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-muted)] max-w-[560px] mx-auto">
+            <p className="mt-2 text-[15px] leading-relaxed text-justify hyphens-auto text-[var(--color-muted)] max-w-[560px] mx-auto [text-align-last:center]">
               Fiche, horaires, visio, lien pour Google et QR code : tout se règle depuis votre espace notaire.
               {` ${offre.libelle} : ${offre.mois} mois offerts, sans carte bancaire.`}
             </p>

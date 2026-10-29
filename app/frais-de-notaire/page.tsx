@@ -134,7 +134,7 @@ const jsonLd = {
 };
 
 const h2 = "serif font-bold tracking-tight text-[28px] sm:text-[32px] leading-[1.15] text-[var(--color-text-strong)] mt-16 mb-4";
-const p = "text-[16px] leading-relaxed text-[var(--color-muted)] mb-4";
+const p = "text-[16px] leading-relaxed text-justify hyphens-auto text-[var(--color-muted)] mb-4";
 const th = "text-left font-semibold px-4 py-3 text-[var(--color-text-strong)]";
 const td = "px-4 py-3 tabular-nums";
 
@@ -152,7 +152,7 @@ export default function Page() {
             <h1 className="serif font-extrabold text-3xl sm:text-4xl md:text-5xl leading-tight tracking-tight mb-5 text-[var(--color-text-strong)]">
               Frais de notaire 2026 : <span className="serif-accent">simulateur</span> et calcul exact
             </h1>
-            <p className="text-[var(--color-muted)] text-lg leading-relaxed max-w-[640px] mx-auto">
+            <p className="text-[var(--color-muted)] text-lg leading-relaxed text-justify hyphens-auto max-w-[640px] mx-auto [text-align-last:center]">
               Les « frais de notaire » sont pour l&apos;essentiel des impôts : environ 7,5 à 8 % du prix dans l&apos;ancien,
               2 à 3 % dans le neuf. Calculez les vôtres, département par département, ligne par ligne.
             </p>
@@ -312,12 +312,12 @@ export default function Page() {
               </tbody>
             </table>
           </div>
-          <p className="text-[13px] text-[var(--color-muted)] mb-4">
+          <p className="text-[13px] text-[var(--color-muted)] text-justify hyphens-auto mb-4">
             Formalités et débours estimés à {formatEuros(FORFAIT_FORMALITES_TTC)}, sans remise sur les émoluments ni mobilier déduit.
           </p>
 
           <h2 className={h2}>Comment réduire légalement ses frais de notaire</h2>
-          <ul className="space-y-3 mb-4 text-[16px] leading-relaxed text-[var(--color-muted)] list-disc pl-5">
+          <ul className="space-y-3 mb-4 text-[16px] leading-relaxed text-justify hyphens-auto text-[var(--color-muted)] list-disc pl-5">
             <li>
               <strong className="text-[var(--color-text-strong)]">Déduire le mobilier.</strong> Les meubles vendus avec le bien
               (cuisine équipée, électroménager, mobilier) ne supportent pas les droits de mutation. Ils doivent figurer sur une
@@ -391,7 +391,7 @@ export default function Page() {
               </tbody>
             </table>
           </div>
-          <p className="text-[13px] text-[var(--color-muted)] -mt-3 mb-6">
+          <p className="text-[13px] text-[var(--color-muted)] text-justify hyphens-auto -mt-3 mb-6">
             Abattements par donateur ou défunt et par bénéficiaire (CGI, art. 779, 788, 790 B à 790 F). Une personne handicapée
             bénéficie de 159 325 € en plus. Les abattements se reconstituent tous les 15 ans.
           </p>
@@ -474,7 +474,7 @@ export default function Page() {
             <p className="serif font-bold text-[26px] leading-snug tracking-tight text-[var(--color-text-strong)]">
               Vous préparez un <span className="serif-accent">achat</span> ?
             </p>
-            <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-muted)] max-w-[560px] mx-auto">
+            <p className="mt-2 text-[15px] leading-relaxed text-justify hyphens-auto text-[var(--color-muted)] max-w-[560px] mx-auto [text-align-last:center]">
               Un notaire spécialisé en immobilier relit le compromis, vérifie votre statut de primo-accédant et chiffre vos frais
               sur votre dossier réel. Rendez-vous en visio ou au cabinet.
             </p>
@@ -519,7 +519,7 @@ export default function Page() {
               </a>
             </li>
           </ul>
-          <p className="text-[13px] text-[var(--color-muted)]">
+          <p className="text-[13px] text-[var(--color-muted)] text-justify hyphens-auto">
             Simulation indicative, à jour du barème au {DATE_BAREME}. Seul le décompte établi par votre notaire fait foi.
           </p>
         </article>

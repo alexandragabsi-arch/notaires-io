@@ -8,6 +8,7 @@ import { useFichesCompletees, abonnesEnTete, rangAffichage } from "@/lib/fiches-
 import { arrDepuisCodePostal, libelleArr } from "@/lib/arrondissements";
 import { heuresPour } from "@/lib/disponibilites";
 import { adresseAffichee } from "@/lib/adresse";
+import type { ProchainCreneau } from "@/lib/prochain-creneau";
 
 interface Props {
   h1: string;
@@ -17,6 +18,8 @@ interface Props {
   relatedLinks: { href: string; label: string }[];
   /** Texte du lien contextuel vers l'accueil. Voir lib/ancres-accueil.ts. */
   ancreAccueil?: string;
+  /** Premier créneau libre parmi les notaires de la page (lib/prochain-creneau.ts). */
+  prochainCreneau?: ProchainCreneau | null;
 }
 
 const DAYS_VISIBLE = 5;
@@ -321,7 +324,7 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
   );
 }
 
-export default function SeoLandingPage({ h1, intro, notaires: notairesAnnuaire, faq, relatedLinks, ancreAccueil }: Props) {
+export default function SeoLandingPage({ h1, intro, notaires: notairesAnnuaire, faq, relatedLinks, ancreAccueil, prochainCreneau }: Props) {
   // Fiches complétées par les notaires (photo, présentation…) et nouvelles
   // inscriptions de la ville, fusionnées à la liste de l'annuaire.
   const notaires = useFichesCompletees(notairesAnnuaire);
@@ -442,6 +445,25 @@ export default function SeoLandingPage({ h1, intro, notaires: notairesAnnuaire, 
           <p className="text-[var(--color-muted)] text-lg leading-relaxed mb-8 max-w-[640px] mx-auto" data-speakable>
             {intro}
           </p>
+          {/* Le créneau le plus proche, visible sans défiler : c'est ce que cherche
+              quelqu'un qui tape « notaire + ville ». */}
+          {prochainCreneau && (
+            <div className="mb-8 mx-auto max-w-[560px] rounded-2xl border border-[var(--color-border-soft)] bg-white p-5 shadow-[var(--shadow-card)] flex flex-col sm:flex-row sm:items-center gap-4 text-left">
+              <div className="flex-1">
+                <p className="text-[12px] font-bold tracking-[1.5px] uppercase text-[var(--color-success)]">Prochain rendez-vous disponible</p>
+                <p className="serif text-[20px] font-bold text-[var(--color-text-strong)] mt-1 first-letter:uppercase">
+                  {prochainCreneau.jour} à {prochainCreneau.heure.replace(":", "h")}
+                </p>
+                <p className="text-[14px] text-[var(--color-muted)]">avec {prochainCreneau.notaire.name}</p>
+              </div>
+              <a
+                href={`/notaires/${prochainCreneau.notaire.id}#agenda`}
+                className="shrink-0 text-center rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] px-5 py-3 text-[15px] font-bold text-white transition-colors"
+              >
+                Réserver ce créneau
+              </a>
+            </div>
+          )}
           {ancreAccueil && (
             <p className="text-[var(--color-muted)] text-[15px] leading-relaxed mb-8 max-w-[640px] mx-auto">
               Vous hésitez encore sur l&apos;étude à contacter ?{" "}

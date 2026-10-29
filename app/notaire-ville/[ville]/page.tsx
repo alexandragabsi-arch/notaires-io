@@ -10,6 +10,7 @@ import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille, getVilleAvecInscrits } from "@/lib/inscrits-serveur";
 import Breadcrumb from "@/components/Breadcrumb";
 import { getVilleSeoFaq } from "@/lib/ville-seo";
+import { prochainCreneau } from "@/lib/prochain-creneau";
 
 // Inscrits relus toutes les 5 minutes ; une ville où seul un inscrit exerce
 // est générée à la demande (dynamicParams par défaut).
@@ -35,19 +36,48 @@ export async function generateStaticParams() {
   return getVillesCouvertes().map((v) => ({ ville: v.slug }));
 }
 
+/**
+ * Noms lisibles pour la description : l'annuaire importé contient aussi bien
+ * « Me Renaud Roger Crebassa » que « CREBASSA, notaire associé » pour la même
+ * personne. On garde le texte avant la virgule, en casse normale, préfixé de
+ * « Me », et un seul nom par patronyme.
+ */
+function nomsCourts(noms: string[]): string[] {
+  const vus = new Set<string>();
+  const out: string[] = [];
+  for (const brut of noms) {
+    let nom = brut.split(",")[0].trim();
+    if (nom === nom.toUpperCase()) nom = nom.toLowerCase().replace(/(^|[\s-])\p{L}/gu, (c) => c.toUpperCase());
+    if (!/^Me\s/i.test(nom)) nom = `Me ${nom}`;
+    const patronyme = nom.split(/\s+/).pop()!.toLowerCase();
+    if (vus.has(patronyme)) continue;
+    vus.add(patronyme);
+    out.push(nom);
+  }
+  return out;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { ville } = await params;
   const v = await getVilleAvecInscrits(ville);
   if (!v) return {};
   const specs = v.specialites.slice(0, 3).join(", ").toLowerCase();
+  const cp = v.codePostal ? ` (${v.codePostal})` : "";
+  // Petite commune : on nomme les études, c'est ce que cherche la personne
+  // qui tape « notaire soual » (Search Console, 29/10/2026 : 435 requêtes
+  // « notaire + ville », 10e place en moyenne, presque aucun clic).
+  const etudes = v.nombre <= 3 ? nomsCourts(getNotairesByCity(v.nom, 3).map((n) => n.name)) : [];
+  const description = etudes.length
+    ? `${etudes.join(", ")} : adresse, téléphone, spécialités et prise de rendez-vous en ligne ${aVille(v.nom)}${v.codePostal ? ` ${v.codePostal}` : ""}.`
+    : `${v.nombre} notaires ${aVille(v.nom)}${v.codePostal ? ` ${v.codePostal}` : ""}${specs ? ` (${specs})` : ""} : adresses, téléphones, et rendez-vous en ligne en visio ou au cabinet.`;
   return {
-    // Pas de « · Notaires.io » ici : le gabarit de app/layout.tsx l'ajoute déjà
-    // (`template: "%s · Notaires.io"`). Le titre affichait la marque deux fois.
-    // « rdv notaire <ville> » est la requête réellement tapée. Le titre disait
-    // « Notaire à Cannes » : ni « RDV » ni « rendez-vous ». NeoNotario, lui,
-    // titre « Notaires à Toulon - Prenez RDV en ligne » et passe devant.
-    title: `RDV notaire ${aVille(v.nom)}${v.codePostal ? ` (${v.codePostal})` : ""} : prendre rendez-vous en ligne`,
-    description: `${v.nombre} notaires référencés ${aVille(v.nom)}${v.codePostal ? ` ${v.codePostal}` : ""}${specs ? ` : ${specs}` : ""}. Comparez les disponibilités et prenez rendez-vous en ligne, en visio ou au cabinet.`,
+    // « notaire <ville> » est la requête la plus tapée, puis « rdv notaire
+    // <ville> » : le titre commence par la première et contient la seconde.
+    // NeoNotario titre « Notaires à Toulon - Prenez RDV en ligne ».
+    // Titre absolu, sans le suffixe « · Notaires.io » du gabarit : l'ancien
+    // titre dépassait 80 caractères et Google le coupait avant « en ligne ».
+    title: { absolute: `Notaire ${aVille(v.nom)}${cp} : RDV en ligne, adresse, téléphone` },
+    description,
     alternates: { canonical: `https://notaires.io/notaire-ville/${v.slug}` },
     openGraph: {
       title: `RDV notaire ${aVille(v.nom)}${v.codePostal ? ` ${v.codePostal}` : ""} · Notaires.io`,
@@ -143,7 +173,8 @@ export default async function Page({ params }: Props) {
       />
       <main>
         <SeoLandingPage
-          h1={`Prendre RDV avec un notaire ${aVille(v.nom)}${v.codePostal ? ` (${v.codePostal})` : ""}`}
+          h1={`Notaire ${aVille(v.nom)}${v.codePostal ? ` (${v.codePostal})` : ""} : prendre rendez-vous`}
+          prochainCreneau={await prochainCreneau(notaires)}
           intro={`${v.nombre} notaires sont référencés ${aVille(v.nom)}${v.codePostal ? ` (${v.codePostal})` : ""}${specs ? `, principalement en ${specs}` : ""}. Comparez les profils et les créneaux disponibles, puis prenez rendez-vous en ligne — en visioconférence ou au cabinet.`}
           notaires={notaires}
           ancreAccueil={ancreAccueil(v.slug)}

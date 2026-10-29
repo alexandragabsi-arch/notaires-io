@@ -393,8 +393,18 @@ export function tauxGlobalAncien(tauxDepartement: number): number {
   return tauxDepartement + TAXE_COMMUNALE + tauxDepartement * FRAIS_ASSIETTE;
 }
 
+/**
+ * fr-FR sépare les milliers par une espace fine insécable (U+202F). Dans la
+ * police des titres, avec l'interlettrage serré, elle disparaissait : le
+ * total s'affichait « 20120 € ». On la remplace par une espace insécable
+ * ordinaire, visible dans toutes les polices et qui ne coupe pas le nombre.
+ */
+const espacesVisibles = (s: string) => s.replace(/\u202F/g, "\u00A0");
+
 export const formatEuros = (n: number, decimales = 0) =>
-  n.toLocaleString("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: decimales, minimumFractionDigits: decimales });
+  espacesVisibles(
+    n.toLocaleString("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: decimales, minimumFractionDigits: decimales }),
+  );
 
 export const formatPourcent = (n: number, decimales = 2) =>
-  `${n.toLocaleString("fr-FR", { maximumFractionDigits: decimales, minimumFractionDigits: decimales })} %`;
+  `${espacesVisibles(n.toLocaleString("fr-FR", { maximumFractionDigits: decimales, minimumFractionDigits: decimales }))}\u00A0%`;

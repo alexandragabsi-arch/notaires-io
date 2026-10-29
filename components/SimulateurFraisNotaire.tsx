@@ -47,6 +47,9 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
   const [dateSignature, setDateSignature] = useState("");
   const [depotGarantie, setDepotGarantie] = useState(0);
   const [detailOuvert, setDetailOuvert] = useState(false);
+  // Le calcul s'affiche dès l'arrivée avec un cas type : tant que le visiteur
+  // n'a rien saisi, on dit que c'est un exemple et non son estimation.
+  const [saisiParVisiteur, setSaisiParVisiteur] = useState(false);
 
   const dep = DEPARTEMENTS_FRAIS.find((d) => d.code === codeDepartement)!;
   // La majoration à 5 % ne concerne que l'ancien et les départements qui l'ont votée.
@@ -108,7 +111,11 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
       ) : (
       <div className="grid lg:grid-cols-[1fr_1.05fr]">
         {/* ── Saisie ── */}
-        <form className="p-6 sm:p-8 space-y-5" onSubmit={(e) => e.preventDefault()}>
+        <form
+          className="p-6 sm:p-8 space-y-5"
+          onSubmit={(e) => e.preventDefault()}
+          onChange={() => setSaisiParVisiteur(true)}
+        >
 
           <div>
             <label htmlFor="sim-prix" className={libelle}>Prix d&apos;achat du bien</label>
@@ -331,7 +338,18 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
 
         {/* ── Résultat ── */}
         <div className="bg-white border-t lg:border-t-0 lg:border-l border-[var(--color-border-soft)] p-6 sm:p-8 flex flex-col" aria-live="polite">
-          <p className="text-[13px] font-bold tracking-[1.5px] uppercase text-[var(--color-accent)]">Frais de notaire estimés</p>
+          <p className="text-[13px] font-bold tracking-[1.5px] uppercase text-[var(--color-accent)]">
+            {saisiParVisiteur ? "Frais de notaire estimés" : "Exemple de frais de notaire"}
+          </p>
+          {!saisiParVisiteur && (
+            <p className="mt-1 text-[13px] text-[var(--color-muted)]">
+              Pour un bien {type === "ancien" ? "ancien" : "neuf"} à {formatEuros(prix)} ({dep.nom}).{" "}
+              <a href="#sim-prix" className="font-semibold text-[var(--color-primary)] underline underline-offset-2">
+                Indiquez votre prix
+              </a>{" "}
+              pour votre estimation.
+            </p>
+          )}
           <p className="mt-1 serif font-extrabold text-[42px] leading-tight tracking-tight text-[var(--color-text-strong)] tabular-nums">{formatEuros(r.total)}</p>
           <p className="text-[14px] text-[var(--color-muted)]">
             soit <strong className="text-[var(--color-text-strong)]">{formatPourcent(r.pourcentage, 1)}</strong> du prix d&apos;achat

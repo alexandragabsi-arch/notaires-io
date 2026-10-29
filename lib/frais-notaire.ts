@@ -281,15 +281,10 @@ export function economies(e: Entree, primoPossible: boolean): Economie[] {
       explication: "Commission à votre charge, mentionnée comme telle dans le compromis.",
     });
   }
-  const remise = calculerFrais(e).remiseMaxTTC;
-  if (remise > 0) {
-    liste.push({
-      levier: "Remise sur les émoluments",
-      montant: remise,
-      appliquee: false,
-      explication: "Jusqu'à 20 % de la part calculée au-delà de 100 000 €, si le notaire la pratique.",
-    });
-  }
+  // La remise facultative sur les émoluments n'est volontairement pas présentée
+  // comme un levier : c'est une décision du notaire, à ne pas mettre en avant
+  // auprès des clients (demande d'Alexandra, 29/10/2026). Une seule mention
+  // neutre figure dans le texte de la page.
   return liste;
 }
 

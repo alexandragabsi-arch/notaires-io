@@ -77,7 +77,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Les frais de notaire sont-ils négociables ?",
-    a: "Les droits de mutation sont des impôts et ne se négocient pas. Les émoluments du notaire sont fixés par l'État et identiques dans toutes les études. Seule exception : le notaire peut accorder une remise de 20 % au plus sur la part de ses émoluments calculée au-delà de 100 000 € de prix. Vous pouvez en revanche réduire légalement l'assiette des droits en déduisant le mobilier vendu avec le bien et en sortant les frais d'agence à votre charge.",
+    a: "Les droits de mutation sont des impôts et ne se négocient pas. Les émoluments du notaire sont fixés par l'État et identiques dans toutes les études. Vous pouvez en revanche réduire légalement l'assiette des droits en déduisant le mobilier vendu avec le bien et en sortant les frais d'agence à votre charge.",
   },
   {
     q: "Quand faut-il payer les frais de notaire ?",
@@ -216,8 +216,8 @@ export default function Page() {
           </div>
           <p className={p}>
             S&apos;y ajoute la TVA à 20 %. Pour 250 000 €, les émoluments s&apos;élèvent à {formatEuros(EX_250.ancien.emolumentsHT)} HT.
-            Le notaire peut accorder une remise de 20 % au plus sur la part calculée au-delà de 100 000 € (article R444-10 du Code
-            de commerce), à condition de l&apos;appliquer de la même façon à tous ses clients.
+            Le tarif prévoit par ailleurs une remise facultative, laissée à l&apos;appréciation du notaire, pour les montants
+            supérieurs à 100 000 €.
           </p>
 
           <h3 className="serif font-bold text-[21px] text-[var(--color-text-strong)] mt-10 mb-2">La contribution de sécurité immobilière et les débours</h3>
@@ -313,7 +313,7 @@ export default function Page() {
             </table>
           </div>
           <p className="text-[13px] text-[var(--color-muted)] text-justify hyphens-auto mb-4">
-            Formalités et débours estimés à {formatEuros(FORFAIT_FORMALITES_TTC)}, sans remise sur les émoluments ni mobilier déduit.
+            Formalités et débours estimés à {formatEuros(FORFAIT_FORMALITES_TTC)}, sans mobilier déduit.
           </p>
 
           <h2 className={h2}>Comment réduire légalement ses frais de notaire</h2>
@@ -333,10 +333,6 @@ export default function Page() {
               <strong className="text-[var(--color-text-strong)]">Vérifier le statut de primo-accédant.</strong> S&apos;il
               s&apos;applique, il évite la hausse de 0,5 point dans la plupart des départements.
             </li>
-            <li>
-              <strong className="text-[var(--color-text-strong)]">Demander la remise sur les émoluments.</strong> Possible
-              au-delà de 100 000 €, dans la limite de 20 % de la part concernée.
-            </li>
           </ul>
           <p className={p}>
             Exemple : un appartement ancien à Paris affiché 260 000 €, dont 10 000 € de frais d&apos;agence à la charge de
@@ -354,7 +350,7 @@ export default function Page() {
                   </tr>
                 ))}
                 <tr className="font-semibold text-[var(--color-text-strong)]">
-                  <td className="px-4 py-3">Économie réelle des trois déductions cumulées (hors remise)</td>
+                  <td className="px-4 py-3">Économie réelle des trois déductions cumulées</td>
                   <td className={`${td} text-right text-[var(--color-success)]`}>− {formatEuros(EXEMPLE_TOTAL)}</td>
                 </tr>
               </tbody>

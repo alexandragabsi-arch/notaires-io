@@ -62,6 +62,7 @@ const VILLES: [string, string][] = [
    d'impressions (acte de vente, compromis, succession…). */
 const SPECIALITES: [string, string][] = [
   ["Notaire immobilier", "/notaire-immobilier"],
+  ["Frais de notaire", "/frais-de-notaire"],
   ["Succession", "/notaire-succession"],
   ["Donation", "/notaire-donation"],
   ["Divorce", "/notaire-divorce"],

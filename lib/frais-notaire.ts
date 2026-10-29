@@ -303,6 +303,96 @@ export function economieTotale(e: Entree): number {
   return arrondi(brut - calculerFrais(e).total);
 }
 
+export interface EntreeVersement {
+  /** Montant emprunté (0 sans prêt). */
+  pret: number;
+  garantie: Garantie;
+  /** Taxe foncière annuelle du bien (0 si inconnue). */
+  taxeFonciere: number;
+  /** Date prévue de signature de l'acte (AAAA-MM-JJ). */
+  dateSignature: string;
+  /** Dépôt de garantie déjà versé au compromis, déduit du solde. */
+  depotGarantie: number;
+}
+
+export interface LigneVersement {
+  libelle: string;
+  detail: string;
+  min: number;
+  max: number;
+}
+
+export interface Versement {
+  lignes: LigneVersement[];
+  totalMin: number;
+  totalMax: number;
+  /** Apport à prévoir, une fois le prêt versé par la banque au notaire. */
+  apportMin: number;
+  apportMax: number;
+  joursProrata: number;
+}
+
+/** Nombre de jours de l'année à la charge de l'acheteur, jour de la signature compris. */
+export function joursRestants(dateSignature: string): { jours: number; joursAnnee: number } {
+  const d = new Date(`${dateSignature}T00:00:00Z`);
+  if (Number.isNaN(d.getTime())) return { jours: 0, joursAnnee: 365 };
+  const annee = d.getUTCFullYear();
+  const fin = Date.UTC(annee, 11, 31);
+  const joursAnnee = (Date.UTC(annee + 1, 0, 1) - Date.UTC(annee, 0, 1)) / 86_400_000;
+  return { jours: Math.round((fin - d.getTime()) / 86_400_000) + 1, joursAnnee };
+}
+
+/**
+ * Somme à réunir chez le notaire le jour de la signature : prix, frais de
+ * notaire, frais d'agence à la charge de l'acheteur (compris dans le prix
+ * saisi), acte d'hypothèque le cas échéant, prorata de taxe foncière, moins le
+ * dépôt de garantie déjà versé. La caution d'un organisme (Crédit Logement…)
+ * est réglée via la banque : elle n'entre pas dans ce virement.
+ */
+export function sommeAVerser(e: Entree, v: EntreeVersement): Versement {
+  const frais = calculerFrais(e);
+  const fraisAgence = Math.max(0, e.fraisAgence ?? 0);
+  const lignes: LigneVersement[] = [];
+  const fixe = (libelle: string, detail: string, montant: number) =>
+    lignes.push({ libelle, detail, min: arrondi(montant), max: arrondi(montant) });
+
+  fixe("Prix du bien", "Payé au vendeur par l'intermédiaire du notaire", e.prix - fraisAgence);
+  if (fraisAgence > 0) fixe("Frais d'agence à votre charge", "Souvent réglés à l'agence par le notaire", fraisAgence);
+  fixe("Frais de notaire", "Droits, émoluments, contribution de sécurité immobilière, formalités", frais.total);
+
+  if (v.pret > 0 && v.garantie === "hypotheque") {
+    const g = GARANTIES.hypotheque;
+    lignes.push({
+      libelle: "Acte d'hypothèque du prêt (estimation)",
+      detail: `Reçu par le notaire, ${g.min} à ${g.max} % du montant emprunté`,
+      min: arrondi((v.pret * g.min) / 100),
+      max: arrondi((v.pret * g.max) / 100),
+    });
+  }
+
+  const { jours, joursAnnee } = joursRestants(v.dateSignature);
+  if (v.taxeFonciere > 0 && jours > 0) {
+    fixe(
+      "Prorata de taxe foncière",
+      `${jours} jours sur ${joursAnnee}, remboursés au vendeur qui a payé l'année`,
+      (v.taxeFonciere * jours) / joursAnnee,
+    );
+  }
+
+  if (v.depotGarantie > 0) fixe("Dépôt de garantie déjà versé", "Versé au compromis, déduit du solde", -v.depotGarantie);
+
+  const totalMin = arrondi(lignes.reduce((s, l) => s + l.min, 0));
+  const totalMax = arrondi(lignes.reduce((s, l) => s + l.max, 0));
+  return {
+    lignes,
+    totalMin,
+    totalMax,
+    apportMin: arrondi(Math.max(0, totalMin - v.pret)),
+    apportMax: arrondi(Math.max(0, totalMax - v.pret)),
+    joursProrata: jours,
+  };
+}
+
 /** Taux global des droits de mutation dans l'ancien, pour un taux départemental. */
 export function tauxGlobalAncien(tauxDepartement: number): number {
   return tauxDepartement + TAXE_COMMUNALE + tauxDepartement * FRAIS_ASSIETTE;

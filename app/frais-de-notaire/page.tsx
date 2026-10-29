@@ -216,8 +216,7 @@ export default function Page() {
           </div>
           <p className={p}>
             S&apos;y ajoute la TVA à 20 %. Pour 250 000 €, les émoluments s&apos;élèvent à {formatEuros(EX_250.ancien.emolumentsHT)} HT.
-            Le tarif prévoit par ailleurs une remise facultative, laissée à l&apos;appréciation du notaire, sur la part du prix
-            au-delà de 100 000 €.
+            Une remise est possible.
           </p>
 
           <h3 className="serif font-bold text-[21px] text-[var(--color-text-strong)] mt-10 mb-2">La contribution de sécurité immobilière et les débours</h3>

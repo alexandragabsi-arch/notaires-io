@@ -37,6 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/confidentialite`,      lastModified: NOW, changeFrequency: "yearly",  priority: 0.2 },
     { url: `${BASE}/frais-de-notaire`,     lastModified: new Date("2026-10-29T00:00:00Z"), changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE}/compromis-acte-de-vente`, lastModified: new Date("2026-10-29T00:00:00Z"), changeFrequency: "monthly", priority: 0.85 },
+    { url: `${BASE}/notaire-en-ligne`,     lastModified: new Date("2026-10-29T00:00:00Z"), changeFrequency: "weekly",  priority: 0.9 },
     { url: `${BASE}/claude`,               lastModified: NOW, changeFrequency: "monthly", priority: 0.4 },
   ];
 

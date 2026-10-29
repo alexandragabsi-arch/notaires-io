@@ -36,6 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/cgv`,                  lastModified: NOW, changeFrequency: "yearly",  priority: 0.2 },
     { url: `${BASE}/confidentialite`,      lastModified: NOW, changeFrequency: "yearly",  priority: 0.2 },
     { url: `${BASE}/frais-de-notaire`,     lastModified: new Date("2026-10-29T00:00:00Z"), changeFrequency: "monthly", priority: 0.9 },
+    { url: `${BASE}/compromis-acte-de-vente`, lastModified: new Date("2026-10-29T00:00:00Z"), changeFrequency: "monthly", priority: 0.85 },
     { url: `${BASE}/claude`,               lastModified: NOW, changeFrequency: "monthly", priority: 0.4 },
   ];
 

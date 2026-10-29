@@ -45,6 +45,15 @@ export const FUSIONS_VERS_PAGE: Record<string, string> = {
   "frais-de-notaire-achat-immobilier": "/frais-de-notaire",
   "frais-de-notaire-vente-immobiliere": "/frais-de-notaire",
   "frais-notaire-maison-ancienne": "/frais-de-notaire",
+
+  // « compromis / acte de vente / délai de signature » (29/10/2026) : quatre
+  // articles sur le même parcours. « signature notaire délai » (383
+  // impressions) et « compromis de vente notaire » (188) restaient vers la
+  // 27ᵉ place sans un clic. Ils convergent vers /compromis-acte-de-vente.
+  "compromis-acte-de-vente-difference": "/compromis-acte-de-vente",
+  "delai-signature-acte-notarie": "/compromis-acte-de-vente",
+  "acte-de-vente-notaire-immobilier": "/compromis-acte-de-vente",
+  "compromis-de-vente-notaire": "/compromis-acte-de-vente",
 };
 
 /** Slugs qui ne doivent plus être déclarés ni liés. */

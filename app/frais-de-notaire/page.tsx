@@ -530,8 +530,7 @@ export default function Page() {
           <ul className="flex flex-wrap gap-2 text-[14px]">
             {[
               ["/notaire-immobilier", "Notaire immobilier"],
-              ["/blog/compromis-acte-de-vente-difference", "Compromis et acte de vente"],
-              ["/blog/delai-signature-acte-notarie", "Délai de signature chez le notaire"],
+              ["/compromis-acte-de-vente", "Du compromis à l'acte de vente"],
               ["/blog/frais-notaire-neuf-vefa", "Frais de notaire dans le neuf (VEFA)"],
               ["/blog/frais-de-notaire-succession", "Frais de notaire d'une succession"],
               ["/notaire-paris", "Notaire à Paris"],

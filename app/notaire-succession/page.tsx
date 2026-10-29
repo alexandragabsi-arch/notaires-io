@@ -58,7 +58,7 @@ const FAQ = [
   },
   {
     q: "Combien coûte le règlement d'une succession chez un notaire ?",
-    a: "Les émoluments du notaire pour une succession sont réglementés par décret. Ils sont calculés sur la valeur des biens transmis selon un barème dégressif : 1,935 % jusqu'à 6 500 €, 1,064 % de 6 500 € à 17 000 €, 0,709 % de 17 000 € à 60 000 €, puis 0,532 % au-delà. À ces émoluments s'ajoutent les droits de succession (calculés sur la part reçue par chaque héritier, avec des abattements selon le lien de parenté) et les débours (frais de formalités). Pour une succession simple sans bien immobilier, le coût total peut rester modéré.",
+    a: "Les émoluments du notaire pour une succession sont fixés par l'État. L'attestation immobilière, qui transfère les biens immobiliers aux héritiers, est calculée sur leur valeur selon un barème dégressif : 1,935 % jusqu'à 6 500 €, 1,064 % de 6 500 € à 17 000 €, 0,726 % de 17 000 € à 30 000 €, puis 0,532 % au-delà (hors TVA). La déclaration de succession suit un barème proche (1,548 %, 0,851 %, 0,580 % puis 0,426 %) sur l'actif brut, et l'acte de notoriété coûte 56,60 € HT. S'y ajoutent les droits de succession (calculés sur la part reçue par chaque héritier, avec des abattements selon le lien de parenté), une taxe fixe de 125 € et les débours. Notre simulateur de frais de notaire chiffre le tout en quelques secondes.",
   },
   {
     q: "Puis-je renoncer à une succession chargée de dettes ?",

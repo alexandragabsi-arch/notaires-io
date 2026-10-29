@@ -64,6 +64,7 @@ const SPECIALITES: [string, string][] = [
   ["Notaire immobilier", "/notaire-immobilier"],
   ["Frais de notaire", "/frais-de-notaire"],
   ["Compromis et acte de vente", "/compromis-acte-de-vente"],
+  ["Notaire en ligne", "/notaire-en-ligne"],
   ["Succession", "/notaire-succession"],
   ["Donation", "/notaire-donation"],
   ["Divorce", "/notaire-divorce"],

@@ -1,13 +1,17 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Calculator, ChevronDown, Info } from "lucide-react";
+import { useState } from "react";
+import { Calculator, Check, ChevronDown, Info, PiggyBank } from "lucide-react";
 import {
   DEPARTEMENTS_FRAIS,
-  FORFAIT_FORMALITES_TTC,
+  FORMALITES,
+  GARANTIES,
   calculerFrais,
+  economies,
+  economieTotale,
   formatEuros,
   formatPourcent,
+  type Garantie,
   type TypeBien,
 } from "@/lib/frais-notaire";
 
@@ -25,16 +29,21 @@ export default function SimulateurFraisNotaire() {
   const [codeDepartement, setCodeDepartement] = useState("75");
   const [primoAccedant, setPrimoAccedant] = useState(false);
   const [mobilier, setMobilier] = useState(0);
+  const [fraisAgence, setFraisAgence] = useState(0);
+  const [pret, setPret] = useState(0);
+  const [garantie, setGarantie] = useState<Garantie>("caution");
   const [detailOuvert, setDetailOuvert] = useState(false);
 
   const dep = DEPARTEMENTS_FRAIS.find((d) => d.code === codeDepartement)!;
   // La majoration à 5 % ne concerne que l'ancien et les départements qui l'ont votée.
   const primoUtile = type === "ancien" && dep.taux > dep.tauxPrimo;
-  const r = useMemo(
-    () => calculerFrais({ prix, type, codeDepartement, primoAccedant: primoAccedant && primoUtile, mobilier }),
-    [prix, type, codeDepartement, primoAccedant, primoUtile, mobilier],
-  );
+  const entree = { prix, type, codeDepartement, primoAccedant: primoAccedant && primoUtile, mobilier, fraisAgence };
+  // Calcul instantané : pas besoin de mémoïser.
+  const r = calculerFrais(entree);
+  const leviers = economies(entree, primoUtile);
+  const economieAppliquee = economieTotale(entree);
   const mobilierTropEleve = prix > 0 && mobilier > prix * 0.1;
+  const g = GARANTIES[garantie];
 
   const champ =
     "w-full rounded-xl border border-[var(--color-border)] bg-white px-4 py-3 text-[15px] text-[var(--color-text-strong)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]";
@@ -44,19 +53,19 @@ export default function SimulateurFraisNotaire() {
     ["Droits de mutation (impôts)", r.droitsMutation, `${formatPourcent(r.tauxDroits)} de ${formatEuros(r.assiette)}`],
     ["Émoluments du notaire (TTC)", r.emolumentsTTC, "Barème fixé par l'État, identique chez tous les notaires"],
     ["Contribution de sécurité immobilière", r.csi, "0,10 % du prix, 15 € minimum"],
-    ["Formalités et débours (estimation)", r.formalites, "Cadastre, hypothèques, urbanisme, syndic…"],
+    ...FORMALITES.map((f) => [`${f.libelle.replace(" (TTC)", "")} (estimation)`, f.montant, f.detail] as [string, number, string]),
   ];
 
   return (
     <section
       id="simulateur"
       aria-labelledby="simulateur-titre"
-      className="rounded-2xl border border-[var(--color-border-soft)] bg-white shadow-[var(--shadow-strong)] overflow-hidden"
+      className="rounded-2xl border border-[var(--color-border-soft)] bg-white shadow-[var(--shadow-card)] overflow-hidden"
     >
       <div className="grid lg:grid-cols-[1fr_1.05fr]">
         {/* ── Saisie ── */}
         <form className="p-6 sm:p-8 space-y-5" onSubmit={(e) => e.preventDefault()}>
-          <h2 id="simulateur-titre" className="flex items-center gap-2 font-serif text-[22px] text-[var(--color-text-strong)]">
+          <h2 id="simulateur-titre" className="flex items-center gap-2 serif font-bold tracking-tight text-[22px] text-[var(--color-text-strong)]">
             <Calculator className="w-5 h-5 text-[var(--color-primary)]" aria-hidden />
             Simulateur de frais de notaire
           </h2>
@@ -75,7 +84,7 @@ export default function SimulateurFraisNotaire() {
               />
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">€</span>
             </div>
-            <p className="mt-1 text-[12px] text-[var(--color-muted)]">Prix net vendeur, sans les frais d&apos;agence s&apos;ils sont à votre charge.</p>
+            <p className="mt-1 text-[12px] text-[var(--color-muted)]">Prix affiché, frais d&apos;agence compris s&apos;ils sont à votre charge.</p>
           </div>
 
           <fieldset>
@@ -178,14 +187,71 @@ export default function SimulateurFraisNotaire() {
                 : "Cuisine équipée, électroménager, meubles : listés et estimés à leur valeur réelle, ils sortent du calcul des droits."}
             </p>
           </div>
+
+          <div>
+            <label htmlFor="sim-agence" className={libelle}>
+              Frais d&apos;agence à votre charge <span className="font-normal text-[var(--color-muted)]">(facultatif)</span>
+            </label>
+            <div className="relative">
+              <input
+                id="sim-agence"
+                inputMode="numeric"
+                autoComplete="off"
+                className={`${champ} pr-10`}
+                value={formatSaisie(fraisAgence)}
+                onChange={(e) => setFraisAgence(lireMontant(e.target.value))}
+                placeholder="0"
+              />
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">€</span>
+            </div>
+            <p className="mt-1 text-[12px] text-[var(--color-muted)]">
+              Compris dans le prix ci-dessus et mentionnés à votre charge dans le compromis : ils ne supportent pas les droits.
+            </p>
+          </div>
+
+          <div>
+            <label htmlFor="sim-pret" className={libelle}>
+              Montant emprunté <span className="font-normal text-[var(--color-muted)]">(facultatif)</span>
+            </label>
+            <div className="grid grid-cols-[1fr_auto] gap-2">
+              <div className="relative">
+                <input
+                  id="sim-pret"
+                  inputMode="numeric"
+                  autoComplete="off"
+                  className={`${champ} pr-10`}
+                  value={formatSaisie(pret)}
+                  onChange={(e) => setPret(lireMontant(e.target.value))}
+                  placeholder="0"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">€</span>
+              </div>
+              <select
+                aria-label="Garantie du prêt"
+                className={champ}
+                value={garantie}
+                onChange={(e) => setGarantie(e.target.value as Garantie)}
+              >
+                <option value="caution">Caution</option>
+                <option value="hypotheque">Hypothèque</option>
+              </select>
+            </div>
+            <p className="mt-1 text-[12px] text-[var(--color-muted)]">Pour estimer les frais de garantie du prêt, facturés en plus.</p>
+          </div>
         </form>
 
         {/* ── Résultat ── */}
-        <div className="bg-[var(--color-tint-blue)] p-6 sm:p-8 flex flex-col" aria-live="polite">
-          <p className="text-[13px] font-semibold uppercase tracking-wide text-[var(--color-muted)]">Frais de notaire estimés</p>
-          <p className="mt-1 font-serif text-[40px] leading-tight text-[var(--color-text-strong)] tabular-nums">{formatEuros(r.total)}</p>
+        <div className="bg-white border-t lg:border-t-0 lg:border-l border-[var(--color-border-soft)] p-6 sm:p-8 flex flex-col" aria-live="polite">
+          <p className="text-[13px] font-bold tracking-[1.5px] uppercase text-[var(--color-accent)]">Frais de notaire estimés</p>
+          <p className="mt-1 serif font-extrabold text-[42px] leading-tight tracking-tight text-[var(--color-text-strong)] tabular-nums">{formatEuros(r.total)}</p>
           <p className="text-[14px] text-[var(--color-muted)]">
             soit <strong className="text-[var(--color-text-strong)]">{formatPourcent(r.pourcentage, 1)}</strong> du prix d&apos;achat
+            {economieAppliquee > 0 && (
+              <>
+                {" · "}
+                <span className="font-semibold text-[var(--color-success)]">{formatEuros(economieAppliquee)} économisés</span>
+              </>
+            )}
           </p>
 
           <dl className="mt-6 space-y-3 text-[14px]">
@@ -200,13 +266,46 @@ export default function SimulateurFraisNotaire() {
             ))}
           </dl>
 
-          <div className="mt-4 rounded-xl bg-white p-4 text-[13px] text-[var(--color-text-strong)] flex gap-3">
+          <div className="mt-5">
+            <p className="flex items-center gap-2 text-[14px] font-bold text-[var(--color-text-strong)]">
+              <PiggyBank className="w-4 h-4 text-[var(--color-success)]" aria-hidden />
+              Ce qui réduit votre note
+            </p>
+            <ul className="mt-2 space-y-2 text-[13px]">
+              {leviers.map((l) => (
+                <li key={l.levier} className="flex items-start justify-between gap-4">
+                  <span>
+                    <span className="flex items-center gap-1.5 font-semibold text-[var(--color-text-strong)]">
+                      {l.appliquee && <Check className="w-3.5 h-3.5 text-[var(--color-success)]" aria-label="Déjà déduit" />}
+                      {l.levier}
+                    </span>
+                    <span className="block text-[12px] text-[var(--color-muted)]">{l.explication}</span>
+                  </span>
+                  <span className={`font-semibold tabular-nums whitespace-nowrap ${l.appliquee ? "text-[var(--color-success)]" : "text-[var(--color-muted)]"}`}>
+                    {l.appliquee ? "− " : "jusqu'à − "}{formatEuros(l.montant)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {pret > 0 && (
+            <div className="mt-5 rounded-xl border border-[var(--color-border-soft)] p-4 text-[13px]">
+              <p className="font-bold text-[var(--color-text-strong)]">Hors frais de notaire : garantie du prêt</p>
+              <p className="mt-1 flex items-start justify-between gap-4">
+                <span className="text-[var(--color-muted)]">{g.libelle}, {formatPourcent(g.min, 0)} à {formatPourcent(g.max, 1)} du montant emprunté. {g.note}</span>
+                <span className="font-semibold tabular-nums whitespace-nowrap text-[var(--color-text-strong)]">
+                  {formatEuros((pret * g.min) / 100)} à {formatEuros((pret * g.max) / 100)}
+                </span>
+              </p>
+            </div>
+          )}
+
+          <div className="mt-4 rounded-xl bg-[var(--color-accent-soft)] p-4 text-[13px] text-[var(--color-text-strong)] flex gap-3">
             <Info className="w-4 h-4 mt-0.5 shrink-0 text-[var(--color-primary)]" aria-hidden />
             <p>
-              Le notaire ne garde que <strong>{formatEuros(r.partNotaire)} HT</strong> de ses émoluments, soit environ{" "}
+              Le notaire ne garde que <strong>{formatEuros(r.partNotaire)} HT</strong> d&apos;émoluments, soit environ{" "}
               {formatPourcent(r.total > 0 ? (r.partNotaire / r.total) * 100 : 0, 0)} de la somme : l&apos;essentiel est reversé à l&apos;État et aux collectivités.
-              {r.remiseMaxTTC > 0 &&
-                ` Il peut accorder une remise de 20 % au plus sur la part de ses émoluments calculée au-delà de 100 000 €, soit jusqu'à ${formatEuros(r.remiseMaxTTC)} ici.`}
             </p>
           </div>
 
@@ -253,7 +352,8 @@ export default function SimulateurFraisNotaire() {
                 </tbody>
               </table>
               <p className="text-[12px] text-[var(--color-muted)]">
-                Formalités et débours : forfait indicatif de {formatEuros(FORFAIT_FORMALITES_TTC)}, le montant exact dépend du dossier.
+                Assiette des droits : {formatEuros(r.assiette)} (prix moins mobilier et frais d&apos;agence à votre charge).
+                Formalités et débours : ordres de grandeur, le montant exact dépend du dossier.
                 Taux départementaux : barème officiel de la DGFiP au 1er juin 2026.
               </p>
             </div>
@@ -261,7 +361,7 @@ export default function SimulateurFraisNotaire() {
 
           <a
             href="/notaire-immobilier"
-            className="mt-6 flex w-full items-center justify-center rounded-xl bg-[image:var(--gradient-cta)] px-5 py-3.5 text-[15px] font-semibold text-white shadow-[var(--shadow-cta)] hover:shadow-[var(--shadow-cta-hover)] transition-shadow"
+            className="mt-6 flex w-full items-center justify-center rounded-xl bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] px-5 py-3.5 text-[15px] font-bold text-white shadow-[var(--shadow-cta)] hover:shadow-[var(--shadow-cta-hover)] transition-shadow"
           >
             Prendre rendez-vous avec un notaire immobilier
           </a>

@@ -88,13 +88,36 @@ const TRANCHES_EMOLUMENTS: { jusqua: number; taux: number }[] = [
 const TVA = 0.2;
 
 /**
- * Émoluments de formalités et débours (cadastre, état hypothécaire, pièces
- * d'urbanisme, syndic…). Ils ne dépendent pas du prix et varient selon le
- * dossier : on retient un ordre de grandeur, affiché comme tel.
+ * Émoluments de formalités et débours. Ils ne dépendent pas du prix et varient
+ * selon le dossier : on retient un ordre de grandeur, affiché comme tel.
  */
-export const FORFAIT_FORMALITES_TTC = 1_200;
+export const FORMALITES = [
+  { libelle: "Émoluments de formalités et diligences (TTC)", detail: "Demandes d'état hypothécaire, d'urbanisme, purge du droit de préemption, publication", montant: 900 },
+  { libelle: "Débours", detail: "Sommes avancées pour vous : cadastre, service de publicité foncière, certificats, copies", montant: 300 },
+] as const;
+export const FORFAIT_FORMALITES_TTC = FORMALITES.reduce((s, f) => s + f.montant, 0);
 
 export type TypeBien = "ancien" | "neuf";
+export type Garantie = "caution" | "hypotheque";
+
+/**
+ * Frais de garantie du prêt, facturés à part (organisme de caution ou acte
+ * d'hypothèque chez le notaire). Fourchettes d'usage en % du montant emprunté.
+ */
+export const GARANTIES: Record<Garantie, { libelle: string; min: number; max: number; note: string }> = {
+  caution: {
+    libelle: "Caution (Crédit Logement…)",
+    min: 1,
+    max: 1.5,
+    note: "Une partie est en général restituée à la fin du prêt.",
+  },
+  hypotheque: {
+    libelle: "Hypothèque ou privilège de prêteur de deniers",
+    min: 1,
+    max: 2,
+    note: "Acte reçu par le notaire ; la mainlevée en fin de prêt est souvent gratuite si le prêt va à son terme.",
+  },
+};
 
 export interface Entree {
   prix: number;
@@ -103,6 +126,8 @@ export interface Entree {
   primoAccedant: boolean;
   /** Valeur du mobilier vendu avec le bien, déduite de l'assiette. */
   mobilier: number;
+  /** Frais d'agence compris dans le prix et à la charge de l'acheteur. */
+  fraisAgence?: number;
 }
 
 export interface LigneEmolument {
@@ -163,7 +188,9 @@ export function emoluments(assiette: number): { ht: number; detail: LigneEmolume
 }
 
 export function calculerFrais(e: Entree): Resultat {
-  const assiette = Math.max(0, e.prix - Math.max(0, e.mobilier));
+  // Ni le mobilier ni la commission d'agence à la charge de l'acheteur ne
+  // supportent les droits : ils sortent de l'assiette.
+  const assiette = Math.max(0, e.prix - Math.max(0, e.mobilier) - Math.max(0, e.fraisAgence ?? 0));
   const dep = DEPARTEMENTS_FRAIS.find((d) => d.code === e.codeDepartement) ?? DEPARTEMENTS_FRAIS[0];
 
   let tauxDepartement: number;
@@ -212,6 +239,68 @@ export function calculerFrais(e: Entree): Resultat {
     pourcentage: e.prix > 0 ? (total / e.prix) * 100 : 0,
     partNotaire: arrondi(ht),
   };
+}
+
+export interface Economie {
+  levier: string;
+  montant: number;
+  /** true si la déduction est déjà prise en compte dans le résultat. */
+  appliquee: boolean;
+  explication: string;
+}
+
+/**
+ * Ce qui réduit légalement la note, chiffré levier par levier par rapport au
+ * même achat sans aucune déduction.
+ */
+export function economies(e: Entree, primoPossible: boolean): Economie[] {
+  const brut = calculerFrais({ ...e, mobilier: 0, fraisAgence: 0, primoAccedant: false }).total;
+  const seul = (patch: Partial<Entree>) => brut - calculerFrais({ ...e, mobilier: 0, fraisAgence: 0, primoAccedant: false, ...patch }).total;
+  const liste: Economie[] = [];
+
+  if (primoPossible) {
+    liste.push({
+      levier: "Statut de primo-accédant",
+      montant: arrondi(seul({ primoAccedant: true })),
+      appliquee: e.primoAccedant,
+      explication: "Taux départemental maintenu à 4,50 % au lieu de 5 % pour votre résidence principale.",
+    });
+  }
+  const mobilier = e.mobilier > 0 ? e.mobilier : Math.round(e.prix * 0.03);
+  liste.push({
+    levier: e.mobilier > 0 ? "Mobilier déduit" : "Mobilier déduit (exemple à 3 % du prix)",
+    montant: arrondi(seul({ mobilier })),
+    appliquee: e.mobilier > 0,
+    explication: "Cuisine équipée, électroménager, meubles : listés à leur valeur réelle dans l'acte.",
+  });
+  if ((e.fraisAgence ?? 0) > 0) {
+    liste.push({
+      levier: "Frais d'agence sortis du prix",
+      montant: arrondi(seul({ fraisAgence: e.fraisAgence })),
+      appliquee: true,
+      explication: "Commission à votre charge, mentionnée comme telle dans le compromis.",
+    });
+  }
+  const remise = calculerFrais(e).remiseMaxTTC;
+  if (remise > 0) {
+    liste.push({
+      levier: "Remise sur les émoluments",
+      montant: remise,
+      appliquee: false,
+      explication: "Jusqu'à 20 % de la part calculée au-delà de 100 000 €, si le notaire la pratique.",
+    });
+  }
+  return liste;
+}
+
+/**
+ * Économie réelle de toutes les déductions appliquées ensemble. Les leviers se
+ * recoupent (le taux primo s'applique à une assiette déjà réduite) : on ne les
+ * additionne pas, on compare au même achat sans aucune déduction.
+ */
+export function economieTotale(e: Entree): number {
+  const brut = calculerFrais({ ...e, mobilier: 0, fraisAgence: 0, primoAccedant: false }).total;
+  return arrondi(brut - calculerFrais(e).total);
 }
 
 /** Taux global des droits de mutation dans l'ancien, pour un taux départemental. */

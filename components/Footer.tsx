@@ -133,6 +133,7 @@ export default function Footer() {
               h: "Notaires",
               links: [
                 ["Référencer mon étude", "/inscription"],
+                ["Gagner en visibilité en ligne", "/visibilite-notaire"],
                 ["Activer mon profil", "/inscription"],
                 ["Se connecter", "/connexion"],
                 ["Espace notaire", "/espace-notaire"],

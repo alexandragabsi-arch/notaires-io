@@ -34,7 +34,7 @@ const REPONSES: { q: string; a: string; url: string }[] = [
   {
     q: "Combien de temps s'écoule entre le compromis et l'acte de vente ?",
     a: "Il faut compter deux à trois mois en moyenne : purge du droit de préemption, obtention du prêt, réunion des pièces d'urbanisme et des diagnostics. Le délai peut être plus court en l'absence de financement bancaire.",
-    url: "https://notaires.io/blog/compromis-acte-de-vente-difference",
+    url: "https://notaires.io/compromis-acte-de-vente",
   },
   {
     q: "Le premier rendez-vous chez un notaire est-il payant ?",

@@ -30,8 +30,8 @@ const COMPETENCES_VISIBLES = 6;
    classés. Les 500 pages géographiques et les 91 articles s'ignoraient : les
    relier fait circuler l'autorité entre les deux, dans les deux sens. */
 const GUIDES: { href: string; label: string }[] = [
-  { href: "/blog/compromis-acte-de-vente-difference", label: "Compromis et acte de vente : les différences" },
-  { href: "/blog/delai-signature-acte-notarie", label: "Délai de signature d'un acte notarié" },
+  // Deux articles fusionnés dans /compromis-acte-de-vente le 29/10/2026.
+  { href: "/compromis-acte-de-vente", label: "Du compromis à l'acte de vente : étapes et délais" },
   { href: "/blog/delai-succession-notaire", label: "Combien de temps pour régler une succession" },
   // Article fusionné dans /frais-de-notaire le 29/10/2026 (lib/fusions-blog.ts).
   { href: "/frais-de-notaire", label: "Simulateur de frais de notaire" },

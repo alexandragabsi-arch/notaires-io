@@ -10,6 +10,12 @@ export interface BlogPost {
   keywords: string[];
   canonicalUrl: string;
   faqs?: { question: string; answer: string }[];
+  /**
+   * Titre et description affichés dans les résultats Google, quand ils doivent
+   * différer du H1 et de l'extrait (titre trop long, extrait peu incitatif).
+   */
+  metaTitle?: string;
+  metaDescription?: string;
 }
 
 const BASE = "https://notaires.io";
@@ -1219,6 +1225,12 @@ export const BLOG_POSTS: BlogPost[] = [
     // « prix consultation notaire pour renseignement » : première requête de la page
     // (Search Console, 26/10). Le titre doit en porter les mots, H1 compris.
     title: "Prix d'une consultation notaire pour un renseignement : gratuit ou payant ?",
+    // Position 5,9 sur 90 jours (6 717 impressions) mais 1,8 % de clics : le
+    // titre complet dépassait 90 caractères avec « · Notaires.io » et Google le
+    // coupait. Titre court qui donne la réponse, description qui la détaille.
+    metaTitle: "Prix d'une consultation notaire : souvent gratuit",
+    metaDescription:
+      "Un renseignement chez le notaire est gratuit et le conseil d'un acte est inclus dans son prix. Les seuls cas payants, et comment avoir un RDV sans frais.",
     excerpt: "Un renseignement chez le notaire est gratuit, et le conseil lié à un acte est compris dans son prix. Ce qui peut être payant, ce qui ne l'est pas, et comment prendre rendez-vous sans frais.",
     date: "2025-12-28",
     updated: "2026-09-22",

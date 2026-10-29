@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { FUSIONS_BLOG } from "./lib/fusions-blog";
+import { FUSIONS_BLOG, FUSIONS_VERS_PAGE } from "./lib/fusions-blog";
 import { VILLES_STATIQUES } from "./lib/villes-statiques";
 
 const nextConfig: NextConfig = {
@@ -53,6 +53,17 @@ const nextConfig: NextConfig = {
         destination: `/blog/${nouveau}`,
         permanent: true,
       })),
+      // Articles fusionnés dans une page hors du blog (lib/fusions-blog.ts).
+      // Les versions horodatées sont envoyées directement à la page, sans
+      // passer par la règle générique plus bas : une seule redirection.
+      ...Object.entries(FUSIONS_VERS_PAGE).flatMap(([ancien, page]) => [
+        { source: `/blog/${ancien}`, destination: page, permanent: true },
+        {
+          source: `/blog/${ancien}-:date(\\d{4}-\\d{2}-\\d{2}-\\d{2}h)`,
+          destination: page,
+          permanent: true,
+        },
+      ]),
       {
         source: "/blog/prendre-rendez-vous-notaire-en-ligne",
         destination: "/blog/rdv-notaire-rapide",

@@ -32,5 +32,20 @@ export const FUSIONS_BLOG: Record<string, string> = {
   "prix-consultation-notaire-pour-renseignement": "consultation-notaire-prix",
 };
 
+/**
+ * Articles fusionnés dans une page hors du blog.
+ *
+ * « frais de notaire » (29/10/2026) : quatre articles visaient la même
+ * recherche et plafonnaient entre la 33ᵉ et la 52ᵉ place sur 90 jours
+ * (« frais de notaire achat maison » : 141 impressions, position 44,5).
+ * Ils convergent vers /frais-de-notaire, qui porte le simulateur.
+ */
+export const FUSIONS_VERS_PAGE: Record<string, string> = {
+  "frais-de-notaire-achat-maison": "/frais-de-notaire",
+  "frais-de-notaire-achat-immobilier": "/frais-de-notaire",
+  "frais-de-notaire-vente-immobiliere": "/frais-de-notaire",
+  "frais-notaire-maison-ancienne": "/frais-de-notaire",
+};
+
 /** Slugs qui ne doivent plus être déclarés ni liés. */
-export const SLUGS_RETIRES = new Set(Object.keys(FUSIONS_BLOG));
+export const SLUGS_RETIRES = new Set([...Object.keys(FUSIONS_BLOG), ...Object.keys(FUSIONS_VERS_PAGE)]);

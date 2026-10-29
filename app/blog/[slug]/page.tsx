@@ -68,14 +68,16 @@ export async function generateMetadata({
 
   const post = getPostBySlug(slug);
   if (!post) return {};
+  const metaTitle = post.metaTitle ?? post.title;
+  const metaDescription = post.metaDescription ?? post.excerpt;
   return {
-    title: post.title,
-    description: post.excerpt,
+    title: metaTitle,
+    description: metaDescription,
     keywords: post.keywords,
     alternates: { canonical: post.canonicalUrl },
     openGraph: {
-      title: `${post.title} · Notaires.io`,
-      description: post.excerpt,
+      title: `${metaTitle} · Notaires.io`,
+      description: metaDescription,
       url: post.canonicalUrl,
       siteName: "Notaires.io",
       locale: "fr_FR",
@@ -85,8 +87,8 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${post.title} · Notaires.io`,
-      description: post.excerpt,
+      title: `${metaTitle} · Notaires.io`,
+      description: metaDescription,
       images: [OG_IMAGE.url],
     },
   };

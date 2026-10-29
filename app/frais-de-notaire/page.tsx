@@ -20,7 +20,7 @@ const URL_PAGE = "https://notaires.io/frais-de-notaire";
 export const metadata: Metadata = {
   title: "Frais de notaire 2026 : simulateur et calcul exact par département",
   description:
-    "Calculez vos frais de notaire 2026 : droits de mutation de votre département (barème DGFiP au 1er juin 2026), émoluments, primo-accédant à 4,50 %, neuf ou ancien. Détail ligne par ligne, gratuit.",
+    "Calculez vos frais de notaire 2026 pour un achat (barème DGFiP par département, primo-accédant, neuf ou ancien), une donation, une succession ou un partage après divorce. Détail ligne par ligne, gratuit.",
   keywords: [
     "frais de notaire",
     "simulateur frais de notaire",
@@ -31,6 +31,10 @@ export const metadata: Metadata = {
     "frais de notaire neuf",
     "droits de mutation 2026",
     "frais de notaire primo-accédant",
+    "frais de notaire donation",
+    "frais de notaire succession",
+    "droit de partage divorce",
+    "simulateur droits de succession",
   ],
   alternates: { canonical: URL_PAGE },
   openGraph: {
@@ -78,6 +82,18 @@ const FAQ_ITEMS = [
   {
     q: "Quand faut-il payer les frais de notaire ?",
     a: "Le notaire demande une provision au plus tard le jour de la signature de l'acte de vente, en même temps que le prix. Il règle ensuite les impôts et les formalités pour votre compte. Quelques mois après, il établit un décompte définitif et vous rembourse le trop-perçu éventuel.",
+  },
+  {
+    q: "Combien coûte une donation de maison à un enfant ?",
+    a: "Chaque parent peut donner 100 000 € à chaque enfant sans droits, tous les 15 ans. Au-delà, le barème va de 5 % à 45 %, avec 20 % sur l'essentiel des montants courants. S'ajoutent la taxe de publicité foncière (0,60 % plus frais d'assiette), la contribution de sécurité immobilière (0,10 %) et les émoluments du notaire. Donner la nue-propriété en gardant l'usufruit réduit la valeur taxée selon l'âge du donateur.",
+  },
+  {
+    q: "Quels frais pour une succession avec une maison ?",
+    a: "Les droits de succession dépendent du lien de parenté : chaque enfant bénéficie d'un abattement de 100 000 €, et le conjoint ou partenaire de PACS est exonéré. Le notaire facture l'acte de notoriété, l'attestation immobilière et la déclaration de succession selon des barèmes réglementés, auxquels s'ajoutent une taxe fixe de 125 € et la contribution de sécurité immobilière.",
+  },
+  {
+    q: "Quel est le droit de partage après un divorce ?",
+    a: "Depuis le 1er janvier 2022, le partage des biens après un divorce, une séparation de corps ou la rupture d'un PACS est taxé à 1,10 % de l'actif net partagé, c'est-à-dire après déduction des dettes comme le prêt restant dû. Dans les autres cas, le droit de partage est de 2,50 %.",
   },
   {
     q: "Les frais de notaire peuvent-ils être financés par le prêt immobilier ?",
@@ -353,6 +369,84 @@ export default function Page() {
             somme.
           </p>
 
+          <h2 className={h2}>Donation, succession, partage : d&apos;autres règles</h2>
+          <p className={p}>
+            Quand un bien est transmis par donation ou par succession, ce ne sont plus des droits de mutation « à titre onéreux »
+            qui s&apos;appliquent, mais des droits de donation ou de succession, calculés sur la part de chacun après un abattement
+            qui dépend du lien de parenté. Le simulateur ci-dessus traite aussi ces cas : choisissez l&apos;onglet correspondant.
+          </p>
+          <div className="overflow-x-auto rounded-xl border border-[var(--color-border-soft)] mb-6">
+            <table className="w-full text-[14px]">
+              <thead className="border-b border-[var(--color-border-soft)]">
+                <tr><th className={th}>Lien avec le bénéficiaire</th><th className={`${th} text-right`}>Donation</th><th className={`${th} text-right`}>Succession</th></tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--color-border-soft)]">
+                <tr><td className="px-4 py-3">Enfant, parent</td><td className={`${td} text-right`}>100 000 €</td><td className={`${td} text-right`}>100 000 €</td></tr>
+                <tr><td className="px-4 py-3">Époux, partenaire de PACS</td><td className={`${td} text-right`}>80 724 €</td><td className={`${td} text-right`}>Exonéré</td></tr>
+                <tr><td className="px-4 py-3">Petit-enfant</td><td className={`${td} text-right`}>31 865 €</td><td className={`${td} text-right`}>Celui du parent, par représentation</td></tr>
+                <tr><td className="px-4 py-3">Arrière-petit-enfant</td><td className={`${td} text-right`}>5 310 €</td><td className={`${td} text-right`}>Celui du parent, par représentation</td></tr>
+                <tr><td className="px-4 py-3">Frère, sœur</td><td className={`${td} text-right`}>15 932 €</td><td className={`${td} text-right`}>15 932 € (exonéré sous conditions)</td></tr>
+                <tr><td className="px-4 py-3">Neveu, nièce</td><td className={`${td} text-right`}>7 967 €</td><td className={`${td} text-right`}>7 967 €</td></tr>
+                <tr><td className="px-4 py-3">Autre personne</td><td className={`${td} text-right`}>Aucun</td><td className={`${td} text-right`}>1 594 €</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-[13px] text-[var(--color-muted)] -mt-3 mb-6">
+            Abattements par donateur ou défunt et par bénéficiaire (CGI, art. 779, 788, 790 B à 790 F). Une personne handicapée
+            bénéficie de 159 325 € en plus. Les abattements se reconstituent tous les 15 ans.
+          </p>
+
+          <h3 className="serif font-bold text-[21px] text-[var(--color-text-strong)] mt-10 mb-2">Droits en ligne directe (enfants, parents)</h3>
+          <div className="overflow-x-auto rounded-xl border border-[var(--color-border-soft)] mb-4">
+            <table className="w-full text-[14px]">
+              <thead className="border-b border-[var(--color-border-soft)]">
+                <tr><th className={th}>Part taxable, après abattement</th><th className={`${th} text-right`}>Taux</th></tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--color-border-soft)]">
+                {[
+                  ["Jusqu'à 8 072 €", "5 %"],
+                  ["De 8 072 € à 12 109 €", "10 %"],
+                  ["De 12 109 € à 15 932 €", "15 %"],
+                  ["De 15 932 € à 552 324 €", "20 %"],
+                  ["De 552 324 € à 902 838 €", "30 %"],
+                  ["De 902 838 € à 1 805 677 €", "40 %"],
+                  ["Au-delà de 1 805 677 €", "45 %"],
+                ].map(([tranche, taux]) => (
+                  <tr key={tranche}><td className="px-4 py-3">{tranche}</td><td className={`${td} text-right`}>{taux}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className={p}>
+            Entre frères et sœurs, le taux est de 35 % jusqu&apos;à 24 430 € puis 45 %. Il est de 55 % pour les neveux, nièces et
+            cousins, et de 60 % entre personnes sans lien de parenté.
+          </p>
+
+          <h3 className="serif font-bold text-[21px] text-[var(--color-text-strong)] mt-10 mb-2">Donation d&apos;un bien immobilier</h3>
+          <p className={p}>
+            Aux droits de donation s&apos;ajoutent une taxe de publicité foncière de 0,60 % (plus 2,37 % de frais d&apos;assiette), la
+            contribution de sécurité immobilière de 0,10 % et les émoluments du notaire : 4,837 % jusqu&apos;à 6 500 €, 1,995 %
+            jusqu&apos;à 17 000 €, 1,330 % jusqu&apos;à 60 000 € et 0,998 % au-delà, hors TVA. Donner la seule nue-propriété en gardant
+            l&apos;usufruit réduit fortement la valeur taxée : à 65 ans, elle ne représente que 60 % de la valeur du bien.
+          </p>
+
+          <h3 className="serif font-bold text-[21px] text-[var(--color-text-strong)] mt-10 mb-2">Succession comportant un bien immobilier</h3>
+          <p className={p}>
+            Le notaire établit l&apos;acte de notoriété (56,60 € HT), l&apos;attestation immobilière qui transfère le bien aux héritiers
+            et, le plus souvent, la déclaration de succession, à déposer dans les 6 mois du décès. Ses émoluments suivent des barèmes
+            propres (1,935 % puis 1,064 %, 0,726 % et 0,532 % au-delà de 30 000 € pour l&apos;attestation). S&apos;y ajoutent une taxe
+            fixe de 125 € et la contribution de sécurité immobilière. Le conjoint survivant et le partenaire de PACS ne paient aucun
+            droit de succession.
+          </p>
+
+          <h3 className="serif font-bold text-[21px] text-[var(--color-text-strong)] mt-10 mb-2">Partage après un divorce</h3>
+          <p className={p}>
+            Le partage des biens communs ou indivis supporte un droit de partage de 1,10 % de l&apos;actif net (après déduction du
+            prêt restant dû) lorsqu&apos;il fait suite à un divorce, une séparation de corps ou la rupture d&apos;un PACS. Dans les autres
+            cas, notamment entre héritiers, le taux est de 2,50 %. S&apos;y ajoutent les émoluments du notaire, calculés sur la valeur
+            brute des biens, et la contribution de sécurité immobilière.
+          </p>
+
           <h2 className={h2}>Les autres frais facturés lors d&apos;un achat</h2>
           <p className={p}>
             Le décompte du notaire et votre plan de financement comportent souvent d&apos;autres lignes, qui ne sont pas des
@@ -407,6 +501,21 @@ export default function Page() {
             <li>
               <a className="text-[var(--color-primary)] hover:underline" href="https://www.notaires.fr/fr/profession-notaire/le-tarif-du-notaire-emoluments-et-honoraires" rel="noopener" target="_blank">
                 Notaires de France : le tarif du notaire, émoluments et honoraires
+              </a>
+            </li>
+            <li>
+              <a className="text-[var(--color-primary)] hover:underline" href="https://www.service-public.gouv.fr/particuliers/vosdroits/F14203" rel="noopener" target="_blank">
+                service-public.gouv.fr : droits de donation
+              </a>
+            </li>
+            <li>
+              <a className="text-[var(--color-primary)] hover:underline" href="https://www.service-public.gouv.fr/particuliers/vosdroits/F14198" rel="noopener" target="_blank">
+                service-public.gouv.fr : droits de succession
+              </a>
+            </li>
+            <li>
+              <a className="text-[var(--color-primary)] hover:underline" href="https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006069577/LEGISCTA000006179723/" rel="noopener" target="_blank">
+                Légifrance : droit de partage (art. 746 du CGI)
               </a>
             </li>
           </ul>

@@ -15,6 +15,7 @@ import {
   type Garantie,
   type TypeBien,
 } from "@/lib/frais-notaire";
+import SimulateurAutresActes, { type ActeGratuit } from "@/components/SimulateurAutresActes";
 
 /** Lit un montant saisi librement (« 250 000 », « 250000 € »). */
 function lireMontant(saisie: string): number {
@@ -24,7 +25,16 @@ function lireMontant(saisie: string): number {
 
 const formatSaisie = (n: number) => (n > 0 ? n.toLocaleString("fr-FR") : "");
 
-export default function SimulateurFraisNotaire() {
+const ACTES: [Acte, string][] = [
+  ["achat", "Achat"],
+  ["donation", "Donation"],
+  ["succession", "Succession"],
+  ["partage", "Partage, divorce"],
+];
+type Acte = "achat" | ActeGratuit;
+
+export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acteInitial?: Acte }) {
+  const [acte, setActe] = useState<Acte>(acteInitial);
   const [prix, setPrix] = useState(250_000);
   const [type, setType] = useState<TypeBien>("ancien");
   const [codeDepartement, setCodeDepartement] = useState("75");
@@ -69,13 +79,36 @@ export default function SimulateurFraisNotaire() {
       aria-labelledby="simulateur-titre"
       className="rounded-2xl border border-[var(--color-border-soft)] bg-white shadow-[var(--shadow-card)] overflow-hidden"
     >
+      <div className="px-6 sm:px-8 pt-6 sm:pt-8 pb-4 border-b border-[var(--color-border-soft)]">
+        <h2 id="simulateur-titre" className="flex items-center gap-2 serif font-bold tracking-tight text-[22px] text-[var(--color-text-strong)]">
+          <Calculator className="w-5 h-5 text-[var(--color-primary)]" aria-hidden />
+          Simulateur de frais de notaire
+        </h2>
+        <div role="tablist" aria-label="Type d'acte" className="mt-4 flex flex-wrap gap-2">
+          {ACTES.map(([valeur, titre]) => (
+            <button
+              key={valeur}
+              type="button"
+              role="tab"
+              aria-selected={acte === valeur}
+              onClick={() => setActe(valeur)}
+              className={`rounded-full px-4 py-2 text-[14px] font-semibold transition-colors ${
+                acte === valeur
+                  ? "bg-[var(--color-primary)] text-white"
+                  : "border border-[var(--color-border)] text-[var(--color-text-strong)] hover:border-[var(--color-primary)]"
+              }`}
+            >
+              {titre}
+            </button>
+          ))}
+        </div>
+      </div>
+      {acte !== "achat" ? (
+        <SimulateurAutresActes acte={acte} />
+      ) : (
       <div className="grid lg:grid-cols-[1fr_1.05fr]">
         {/* ── Saisie ── */}
         <form className="p-6 sm:p-8 space-y-5" onSubmit={(e) => e.preventDefault()}>
-          <h2 id="simulateur-titre" className="flex items-center gap-2 serif font-bold tracking-tight text-[22px] text-[var(--color-text-strong)]">
-            <Calculator className="w-5 h-5 text-[var(--color-primary)]" aria-hidden />
-            Simulateur de frais de notaire
-          </h2>
 
           <div>
             <label htmlFor="sim-prix" className={libelle}>Prix d&apos;achat du bien</label>
@@ -464,6 +497,7 @@ export default function SimulateurFraisNotaire() {
           </a>
         </div>
       </div>
+      )}
     </section>
   );
 }

@@ -124,7 +124,7 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
               />
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">€</span>
             </div>
-            <p className="mt-1 text-[12px] text-[var(--color-muted)]">Prix affiché, frais d&apos;agence compris s&apos;ils sont à votre charge.</p>
+            <p className="mt-1 text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">Prix affiché, frais d&apos;agence compris s&apos;ils sont à votre charge.</p>
           </div>
 
           <fieldset>
@@ -151,7 +151,7 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
                     className="sr-only"
                   />
                   <span className="block text-[14px] font-semibold text-[var(--color-text-strong)]">{titre}</span>
-                  <span className="block text-[12px] text-[var(--color-muted)]">{aide}</span>
+                  <span className="block text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">{aide}</span>
                 </label>
               ))}
             </div>
@@ -172,7 +172,7 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
               ))}
             </select>
             {type === "ancien" && (
-              <p className="mt-1 text-[12px] text-[var(--color-muted)]">
+              <p className="mt-1 text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">
                 Taux départemental : {formatPourcent(dep.taux)}
                 {dep.taux < 5 && " (ce département n'a pas voté la hausse à 5 %)"}
               </p>
@@ -195,7 +195,7 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
               <span className="block text-[14px] font-semibold text-[var(--color-text-strong)]">
                 Primo-accédant, pour ma résidence principale
               </span>
-              <span className="block text-[12px] text-[var(--color-muted)]">
+              <span className="block text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">
                 {primoUtile
                   ? "Pas propriétaire de votre résidence principale ces 2 dernières années : vous restez à 4,50 % au lieu de 5 %."
                   : type === "neuf"
@@ -244,7 +244,7 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
               />
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">€</span>
             </div>
-            <p className="mt-1 text-[12px] text-[var(--color-muted)]">
+            <p className="mt-1 text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">
               Compris dans le prix ci-dessus et mentionnés à votre charge dans le compromis : ils ne supportent pas les droits.
             </p>
           </div>
@@ -276,7 +276,7 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
                 <option value="hypotheque">Hypothèque</option>
               </select>
             </div>
-            <p className="mt-1 text-[12px] text-[var(--color-muted)]">Pour estimer les frais de garantie du prêt, facturés en plus.</p>
+            <p className="mt-1 text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">Pour estimer les frais de garantie du prêt, facturés en plus.</p>
           </div>
 
           <fieldset className="rounded-xl border border-[var(--color-border-soft)] p-4 space-y-4">
@@ -324,7 +324,7 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">€</span>
               </div>
-              <p className="mt-1 text-[12px] text-[var(--color-muted)]">En général 5 à 10 % du prix, déjà entre les mains du notaire.</p>
+              <p className="mt-1 text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">En général 5 à 10 % du prix, déjà entre les mains du notaire.</p>
             </div>
           </fieldset>
         </form>
@@ -348,7 +348,7 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
               <div key={titre} className="flex items-start justify-between gap-4 border-b border-[var(--color-border-soft)] pb-3">
                 <div>
                   <dt className="font-semibold text-[var(--color-text-strong)]">{titre}</dt>
-                  <dd className="text-[12px] text-[var(--color-muted)]">{aide}</dd>
+                  <dd className="text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">{aide}</dd>
                 </div>
                 <dd className="font-semibold tabular-nums text-[var(--color-text-strong)] whitespace-nowrap">{formatEuros(montant)}</dd>
               </div>
@@ -368,7 +368,7 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
                       {l.appliquee && <Check className="w-3.5 h-3.5 text-[var(--color-success)]" aria-label="Déjà déduit" />}
                       {l.levier}
                     </span>
-                    <span className="block text-[12px] text-[var(--color-muted)]">{l.explication}</span>
+                    <span className="block text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">{l.explication}</span>
                   </span>
                   <span className={`font-semibold tabular-nums whitespace-nowrap ${l.appliquee ? "text-[var(--color-success)]" : "text-[var(--color-muted)]"}`}>
                     {l.appliquee ? "− " : "jusqu'à − "}{formatEuros(l.montant)}
@@ -401,7 +401,7 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
                   <li key={l.libelle} className="flex items-start justify-between gap-4">
                     <span>
                       <span className="block font-semibold text-[var(--color-text-strong)]">{l.libelle}</span>
-                      <span className="block text-[12px] text-[var(--color-muted)]">{l.detail}</span>
+                      <span className="block text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">{l.detail}</span>
                     </span>
                     <span className="font-semibold tabular-nums whitespace-nowrap text-[var(--color-text-strong)]">
                       {l.min < 0 ? `− ${formatEuros(-l.min)}` : fourchette(l.min, l.max)}
@@ -413,7 +413,7 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
                 <p className="mt-3 border-t border-[var(--color-border-soft)] pt-3 flex items-start justify-between gap-4">
                   <span>
                     <span className="block font-semibold text-[var(--color-text-strong)]">Apport à prévoir</span>
-                    <span className="block text-[12px] text-[var(--color-muted)]">
+                    <span className="block text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">
                       Une fois les {formatEuros(pret)} du prêt versés par la banque au notaire
                       {depotGarantie > 0 && `, en plus des ${formatEuros(depotGarantie)} déjà versés au compromis`}
                       {garantie === "caution" && " (la caution se règle à part, via la banque)"}.
@@ -424,14 +424,14 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
                   </span>
                 </p>
               )}
-              <p className="mt-3 text-[12px] text-[var(--color-muted)]">
+              <p className="mt-3 text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">
                 Le notaire appelle souvent une provision un peu supérieure et rembourse le trop-perçu après le décompte définitif.
                 {taxeFonciere > 0 && !dateSignature && " Indiquez la date de signature pour calculer le prorata de taxe foncière."}
               </p>
             </div>
           )}
 
-          <div className="mt-4 rounded-xl bg-[var(--color-accent-soft)] p-4 text-[13px] text-[var(--color-text-strong)] flex gap-3">
+          <div className="mt-4 rounded-xl bg-[var(--color-accent-soft)] p-4 text-[13px] text-[var(--color-text-strong)] flex gap-3 text-justify hyphens-auto">
             <Info className="w-4 h-4 mt-0.5 shrink-0 text-[var(--color-primary)]" aria-hidden />
             <p>
               Le notaire ne garde que <strong>{formatEuros(r.partNotaire)} HT</strong> d&apos;émoluments, soit environ{" "}
@@ -481,7 +481,7 @@ export default function SimulateurFraisNotaire({ acteInitial = "achat" }: { acte
                   <tr><td>TVA 20 %</td><td className="text-right">{formatEuros(r.tvaEmoluments, 2)}</td></tr>
                 </tbody>
               </table>
-              <p className="text-[12px] text-[var(--color-muted)]">
+              <p className="text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">
                 Assiette des droits : {formatEuros(r.assiette)} (prix moins mobilier et frais d&apos;agence à votre charge).
                 Formalités et débours : ordres de grandeur, le montant exact dépend du dossier.
                 Taux départementaux : barème officiel de la DGFiP au 1er juin 2026.

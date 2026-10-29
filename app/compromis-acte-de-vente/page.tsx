@@ -121,7 +121,7 @@ const jsonLd = {
 };
 
 const h2 = "serif font-bold tracking-tight text-[28px] sm:text-[32px] leading-[1.15] text-[var(--color-text-strong)] mt-16 mb-4";
-const p = "text-[16px] leading-relaxed text-[var(--color-muted)] mb-4";
+const p = "text-[16px] leading-relaxed text-justify hyphens-auto text-[var(--color-muted)] mb-4";
 const th = "text-left font-semibold px-4 py-3 text-[var(--color-text-strong)]";
 
 export default function Page() {
@@ -136,7 +136,7 @@ export default function Page() {
             <h1 className="serif font-extrabold text-3xl sm:text-4xl md:text-5xl leading-tight tracking-tight mb-5 text-[var(--color-text-strong)]">
               Du compromis à l&apos;<span className="serif-accent">acte de vente</span> : étapes et délais
             </h1>
-            <p className="text-[var(--color-muted)] text-lg leading-relaxed max-w-[640px] mx-auto">
+            <p className="text-[var(--color-muted)] text-lg leading-relaxed text-justify hyphens-auto max-w-[640px] mx-auto [text-align-last:center]">
               Environ 3 mois séparent le compromis de la signature chez le notaire. Voici ce qui se passe pendant ce temps,
               étape par étape, avec les délais fixés par la loi.
             </p>
@@ -153,7 +153,7 @@ export default function Page() {
                 </span>
                 <p className="text-[12px] font-bold tracking-[1.2px] uppercase text-[var(--color-accent)]">{e.delai}</p>
                 <h3 className="serif font-bold text-[20px] text-[var(--color-text-strong)] mt-1">{e.titre}</h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-muted)]">{e.texte}</p>
+                <p className="mt-2 text-[15px] leading-relaxed text-justify hyphens-auto text-[var(--color-muted)]">{e.texte}</p>
               </li>
             ))}
           </ol>
@@ -204,7 +204,7 @@ export default function Page() {
             <p className="serif font-bold text-[26px] leading-snug tracking-tight text-[var(--color-text-strong)]">
               Un compromis à <span className="serif-accent">relire</span> ?
             </p>
-            <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-muted)] max-w-[560px] mx-auto">
+            <p className="mt-2 text-[15px] leading-relaxed text-justify hyphens-auto text-[var(--color-muted)] max-w-[560px] mx-auto [text-align-last:center]">
               Un notaire spécialisé en immobilier relit votre avant-contrat, vérifie les conditions suspensives et fixe la date de
               signature. Rendez-vous en visio ou au cabinet.
             </p>

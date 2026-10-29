@@ -41,7 +41,7 @@ function ChampMontant({ id, label, aide, valeur, onChange }: { id: string; label
         />
         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-muted)]">€</span>
       </div>
-      {aide && <p className="mt-1 text-[12px] text-[var(--color-muted)]">{aide}</p>}
+      {aide && <p className="mt-1 text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">{aide}</p>}
     </div>
   );
 }
@@ -73,13 +73,13 @@ function Resultat({ titre, r, entete }: { titre: string; r: ResultatActe; entete
           <div key={l.libelle} className="flex items-start justify-between gap-4 border-b border-[var(--color-border-soft)] pb-3">
             <div>
               <dt className="font-semibold text-[var(--color-text-strong)]">{l.libelle}</dt>
-              <dd className="text-[12px] text-[var(--color-muted)]">{l.detail}</dd>
+              <dd className="text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">{l.detail}</dd>
             </div>
             <dd className="font-semibold tabular-nums text-[var(--color-text-strong)] whitespace-nowrap">{formatEuros(l.montant)}</dd>
           </div>
         ))}
       </dl>
-      <div className="mt-4 rounded-xl bg-[var(--color-accent-soft)] p-4 text-[13px] text-[var(--color-text-strong)] flex gap-3">
+      <div className="mt-4 rounded-xl bg-[var(--color-accent-soft)] p-4 text-[13px] text-[var(--color-text-strong)] flex gap-3 text-justify hyphens-auto">
         <Info className="w-4 h-4 mt-0.5 shrink-0 text-[var(--color-primary)]" aria-hidden />
         <ul className="space-y-1.5">
           <li>Le notaire garde <strong>{formatEuros(r.partNotaireHT)} HT</strong> d&apos;émoluments ; le reste est reversé à l&apos;État.</li>
@@ -113,14 +113,14 @@ function Donation() {
           <input type="checkbox" className="mt-1 h-4 w-4 accent-[var(--color-primary)]" checked={nuePropriete} onChange={(e) => setNuePropriete(e.target.checked)} />
           <span>
             <span className="block text-[14px] font-semibold text-[var(--color-text-strong)]">Je garde l&apos;usufruit (donation de la nue-propriété)</span>
-            <span className="block text-[12px] text-[var(--color-muted)]">Vous continuez d&apos;habiter le bien ou d&apos;en percevoir les loyers ; les droits portent sur la seule nue-propriété.</span>
+            <span className="block text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">Vous continuez d&apos;habiter le bien ou d&apos;en percevoir les loyers ; les droits portent sur la seule nue-propriété.</span>
           </span>
         </label>
         {nuePropriete && (
           <div>
             <label htmlFor="don-age" className={libelle}>Âge du donateur</label>
             <input id="don-age" type="number" min={18} max={110} className={champ} value={age} onChange={(e) => setAge(Number(e.target.value) || 0)} />
-            <p className="mt-1 text-[12px] text-[var(--color-muted)]">Nue-propriété : {partNuePropriete(age)} % de la valeur du bien (art. 669 du CGI).</p>
+            <p className="mt-1 text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">Nue-propriété : {partNuePropriete(age)} % de la valeur du bien (art. 669 du CGI).</p>
           </div>
         )}
         <ChampMontant id="don-deja" label="Déjà donné à cette personne depuis moins de 15 ans" aide="Ces donations consomment l'abattement." valeur={dejaUtilise} onChange={setDejaUtilise} />
@@ -133,7 +133,7 @@ function Donation() {
         titre="Coût total de la donation"
         r={r}
         entete={
-          <p className="mt-2 text-[13px] text-[var(--color-muted)]">
+          <p className="mt-2 text-[13px] text-[var(--color-muted)] text-justify hyphens-auto">
             Valeur taxable {formatEuros(r.valeurTaxable)} · abattement {formatEuros(r.droits.abattement)} · part taxable {formatEuros(r.droits.baseTaxable)}
           </p>
         }
@@ -167,7 +167,7 @@ function Succession() {
         titre="Coût total de la succession"
         r={r}
         entete={
-          <p className="mt-2 text-[13px] text-[var(--color-muted)]">
+          <p className="mt-2 text-[13px] text-[var(--color-muted)] text-justify hyphens-auto">
             Part de chaque héritier {formatEuros(r.partNette)} · abattement {formatEuros(r.droitsParHeritier.abattement)} · droits par héritier {formatEuros(r.droitsParHeritier.droits)}
           </p>
         }
@@ -200,7 +200,7 @@ function Partage() {
               >
                 <input type="radio" name="partage-situation" className="sr-only" checked={divorce === valeur} onChange={() => setDivorce(valeur)} />
                 <span className="block text-[14px] font-semibold text-[var(--color-text-strong)]">{titre}</span>
-                <span className="block text-[12px] text-[var(--color-muted)]">{aide}</span>
+                <span className="block text-[12px] text-[var(--color-muted)] text-justify hyphens-auto">{aide}</span>
               </label>
             ))}
           </div>
@@ -212,7 +212,7 @@ function Partage() {
       <Resultat
         titre="Coût total du partage"
         r={r}
-        entete={<p className="mt-2 text-[13px] text-[var(--color-muted)]">Actif net partagé {formatEuros(r.actifNet)} · droit de partage {r.tauxPartage.toLocaleString("fr-FR")} %</p>}
+        entete={<p className="mt-2 text-[13px] text-[var(--color-muted)] text-justify hyphens-auto">Actif net partagé {formatEuros(r.actifNet)} · droit de partage {r.tauxPartage.toLocaleString("fr-FR")} %</p>}
       />
     </>
   );

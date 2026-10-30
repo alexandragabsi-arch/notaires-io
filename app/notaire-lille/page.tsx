@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -34,28 +36,6 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Lille", item: "https://notaires.io/notaire-lille" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Lille",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Lille", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Lille pour immobilier, société, succession et famille.",
-      url: "https://notaires.io/notaire-lille",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Quelles sont les particularités de l'immobilier à Lille pour un notaire ?",
@@ -63,11 +43,11 @@ const FAQ = [
   },
   {
     q: "Mon entreprise dans les Hauts-de-France a-t-elle besoin d'un notaire pour ses statuts ?",
-    a: "Le notaire n'est pas systématiquement obligatoire pour créer une société commerciale (SARL, SAS), mais il est indispensable dès que la constitution implique un apport immobilier ou une SCI. Pour un entrepreneur dans le Nord, un notaire apporte également une valeur ajoutée précieuse sur la rédaction de baux commerciaux, la cession de fonds de commerce, ou les pactes d'associés. Nos notaires partenaires à Lille accompagnent régulièrement des start-ups et PME de la métropole.",
+    a: "Le notaire n'est pas systématiquement obligatoire pour créer une société commerciale (SARL, SAS), mais il est indispensable dès que la constitution implique un apport immobilier ou une SCI. Pour un entrepreneur dans le Nord, un notaire apporte également une valeur ajoutée précieuse sur la rédaction de baux commerciaux, la cession de fonds de commerce, ou les pactes d'associés. Les notaires à Lille accompagnent régulièrement des start-ups et PME de la métropole.",
   },
   {
     q: "Comment procéder à un achat immobilier transfrontalier entre Lille et la Belgique ?",
-    a: "Pour un bien situé en Belgique, c'est un notaire belge qui est compétent. En revanche, si vous résidez à Lille et achetez un bien belge, votre notaire lillois peut vous conseiller sur les implications fiscales françaises (déclaration des avoirs à l'étranger, ISF/IFI, succession future). Pour un bien situé dans le Nord de la France, nos notaires partenaires à Lille gèrent l'ensemble de la procédure, y compris les spécificités du règlement de copropriété.",
+    a: "Pour un bien situé en Belgique, c'est un notaire belge qui est compétent. En revanche, si vous résidez à Lille et achetez un bien belge, votre notaire lillois peut vous conseiller sur les implications fiscales françaises (déclaration des avoirs à l'étranger, ISF/IFI, succession future). Pour un bien situé dans le Nord de la France, les notaires à Lille gèrent l'ensemble de la procédure, y compris les spécificités du règlement de copropriété.",
   },
   {
     q: "Quel délai pour ouvrir une succession avec des biens dans le Nord ?",
@@ -76,6 +56,9 @@ const FAQ = [
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Lille", "lille");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Lille", 120);
   const notaires = avecInscrits(
@@ -87,23 +70,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Lille"
-          intro="Achat immobilier dans la métropole lilloise, création de votre société dans les Hauts-de-France ou règlement d'une succession : nos notaires partenaires à Lille sont disponibles rapidement, en visio ou au cabinet. Certains reçoivent également en anglais."
+          intro={introNombre(ville) + "Achat immobilier dans la métropole lilloise, création de votre société dans les Hauts-de-France ou règlement d'une succession : les notaires à Lille sont disponibles rapidement, en visio ou au cabinet. Certains reçoivent également en anglais."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-paris", label: "RDV notaire à Paris" },
             { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
             { href: "/notaire-nantes", label: "RDV notaire à Nantes" },

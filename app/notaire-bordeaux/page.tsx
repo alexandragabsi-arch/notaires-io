@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -33,28 +35,6 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Bordeaux", item: "https://notaires.io/notaire-bordeaux" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Bordeaux",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Bordeaux", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Bordeaux pour succession, famille, immobilier et divorce.",
-      url: "https://notaires.io/notaire-bordeaux",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Comment régler une succession complexe à Bordeaux ?",
@@ -66,7 +46,7 @@ const FAQ = [
   },
   {
     q: "Le marché immobilier bordelais est-il impacté par les délais notariaux ?",
-    a: "Bordeaux connaît un marché immobilier tendu qui a parfois allongé les délais de traitement dans les études notariales locales. Avec Notaires.io, vous accédez à des notaires partenaires qui ont organisé leur étude pour réduire ces délais. La signature du compromis peut intervenir dès que vous avez trouvé votre bien, et l'acte authentique suit généralement 2 à 3 mois après.",
+    a: "Bordeaux connaît un marché immobilier tendu qui a parfois allongé les délais de traitement dans les études notariales locales. Avec Notaires.io, vous accédez à des notaires qui ont organisé leur étude pour réduire ces délais. La signature du compromis peut intervenir dès que vous avez trouvé votre bien, et l'acte authentique suit généralement 2 à 3 mois après.",
   },
   {
     q: "Peut-on faire un testament chez un notaire à Bordeaux ?",
@@ -75,6 +55,9 @@ const FAQ = [
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Bordeaux", "bordeaux");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Bordeaux", 120);
   const notaires = avecInscrits(
@@ -86,23 +69,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Bordeaux"
-          intro="Succession, achat immobilier dans le bordelais, mariage ou divorce : nos notaires partenaires à Bordeaux vous accompagnent à chaque étape de votre vie. Disponibles rapidement, en visio ou au cabinet."
+          intro={introNombre(ville) + "Succession, achat immobilier dans le bordelais, mariage ou divorce : les notaires à Bordeaux vous accompagnent à chaque étape de votre vie. Disponibles rapidement, en visio ou au cabinet."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-paris", label: "RDV notaire à Paris" },
             { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
             { href: "/notaire-marseille", label: "RDV notaire à Marseille" },

@@ -8,6 +8,7 @@ import { BLOG_POSTS, getPostBySlug } from "@/lib/blog-posts";
 import { getPostContent } from "@/lib/blog-content";
 import { getDynamicArticleBySlug, getDynamicArticleSlugs } from "@/lib/blog-supabase";
 import { insertInternalLinks } from "@/lib/internal-links";
+import EncartSimulateurFrais, { parleDesFraisDeNotaire } from "@/components/EncartSimulateurFrais";
 
 const BASE = "https://notaires.io";
 // Image de partage social (OpenGraph / Twitter) par défaut pour les articles.
@@ -214,6 +215,8 @@ export default async function BlogPostPage({
               </p>
             )}
 
+            {parleDesFraisDeNotaire(slug, dynamic.keyword, dynamic.title) && <EncartSimulateurFrais />}
+
             <div
               className="prose-article"
               dangerouslySetInnerHTML={{ __html: contentWithLinks }}
@@ -345,6 +348,8 @@ export default async function BlogPostPage({
               </>
             )}
           </div>
+
+          {parleDesFraisDeNotaire(slug, post.title, ...post.keywords) && <EncartSimulateurFrais />}
 
           <div className="prose-article">
             {content}

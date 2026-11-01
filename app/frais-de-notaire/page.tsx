@@ -18,7 +18,10 @@ import {
 const URL_PAGE = "https://notaires.io/frais-de-notaire";
 
 export const metadata: Metadata = {
-  title: "Frais de notaire 2026 : simulateur et calcul exact par département",
+  // « Calcul » en tête : sur « calcul frais de notaire », la page n'a eu que
+  // 4 impressions en 28 jours (Search Console, octobre 2026) alors que c'est
+  // elle qui y répond. Google lit d'abord le début du titre.
+  title: "Calcul des frais de notaire 2026 : simulateur gratuit par département",
   description:
     "Calculez vos frais de notaire 2026 pour un achat (barème DGFiP par département, primo-accédant, neuf ou ancien), une donation, une succession ou un partage après divorce. Détail ligne par ligne, gratuit.",
   keywords: [
@@ -150,7 +153,7 @@ export default function Page() {
               Barème officiel au {DATE_BAREME}
             </div>
             <h1 className="serif font-extrabold text-3xl sm:text-4xl md:text-5xl leading-tight tracking-tight mb-5 text-[var(--color-text-strong)]">
-              Frais de notaire 2026 : <span className="serif-accent">simulateur</span> et calcul exact
+              Calcul des frais de notaire 2026 : <span className="serif-accent">simulateur</span> gratuit
             </h1>
             <p className="text-[var(--color-muted)] text-lg leading-relaxed text-justify hyphens-auto max-w-[640px] mx-auto [text-align-last:center]">
               Les « frais de notaire » sont pour l&apos;essentiel des impôts : environ 7,5 à 8 % du prix dans l&apos;ancien,

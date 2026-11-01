@@ -1,4 +1,31 @@
 import { supabase } from "./supabase";
+import { FUSIONS_BLOG, FUSIONS_VERS_PAGE } from "./fusions-blog";
+
+/**
+ * Pages piliers, liées avant tout article. Les articles se liaient seulement
+ * entre eux : sur « frais de notaire », sept pages se renvoyaient la balle et
+ * aucune ne pointait vers le simulateur, qui est pourtant la réponse à
+ * « calcul frais de notaire ». Les ancres vont de la plus précise à la plus
+ * générale : la première trouvée dans l'article est utilisée.
+ */
+const PAGES_PILIERS: { href: string; ancres: string[] }[] = [
+  {
+    href: "/frais-de-notaire",
+    ancres: [
+      "calcul des frais de notaire",
+      "calculer les frais de notaire",
+      "calculer vos frais de notaire",
+      "simulateur de frais de notaire",
+      "frais de notaire",
+    ],
+  },
+];
+
+/** Adresse finale d'un article : un article fusionné renvoie vers sa page de destination. */
+function hrefArticle(slug: string): string {
+  if (FUSIONS_VERS_PAGE[slug]) return FUSIONS_VERS_PAGE[slug];
+  return `/blog/${FUSIONS_BLOG[slug] ?? slug}`;
+}
 
 interface ArticleLink {
   slug: string;
@@ -49,31 +76,50 @@ export async function insertInternalLinks(
 
   let inserted = 0;
   const maxLinks = 5;
-  const usedSlugs = new Set<string>();
+  // Un lien par adresse : deux articles fusionnés dans la même page ne la lient pas deux fois.
+  const usedHrefs = new Set<string>();
   let result = html;
 
-  for (const c of candidates) {
-    if (inserted >= maxLinks) break;
-    if (usedSlugs.has(c.slug)) continue;
-
-    const pattern = new RegExp(
-      `(?<![<\/a-zA-Z"=])\\b(${escapeRegex(c.anchor)})\\b(?![^<]*<\\/a>)(?![^<]*>)`,
-      "i",
-    );
-    const match = result.match(pattern);
-    if (match && match.index !== undefined) {
-      const before = result.slice(0, match.index);
-      const after = result.slice(match.index + match[0].length);
-      if (!isInsideTag(before)) {
-        const link = `<a href="/blog/${c.slug}">${match[0]}</a>`;
-        result = before + link + after;
-        usedSlugs.add(c.slug);
+  for (const pilier of PAGES_PILIERS) {
+    for (const ancre of pilier.ancres) {
+      const lie = lierAncre(result, ancre, pilier.href);
+      if (lie) {
+        result = lie;
+        usedHrefs.add(pilier.href);
         inserted++;
+        break;
       }
     }
   }
 
+  for (const c of candidates) {
+    if (inserted >= maxLinks) break;
+    const href = hrefArticle(c.slug);
+    if (usedHrefs.has(href) || href === `/blog/${currentSlug}`) continue;
+
+    const lie = lierAncre(result, c.anchor, href);
+    if (lie) {
+      result = lie;
+      usedHrefs.add(href);
+      inserted++;
+    }
+  }
+
   return result;
+}
+
+/** Lie la première occurrence libre de l'ancre ; null si elle n'apparaît pas hors d'un lien. */
+function lierAncre(html: string, ancre: string, href: string): string | null {
+  const pattern = new RegExp(
+    `(?<![<\/a-zA-Z"=])\\b(${escapeRegex(ancre)})\\b(?![^<]*<\\/a>)(?![^<]*>)`,
+    "i",
+  );
+  const match = html.match(pattern);
+  if (!match || match.index === undefined) return null;
+  const before = html.slice(0, match.index);
+  if (isInsideTag(before)) return null;
+  const after = html.slice(match.index + match[0].length);
+  return `${before}<a href="${href}">${match[0]}</a>${after}`;
 }
 
 function isInsideTag(textBefore: string): boolean {

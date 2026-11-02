@@ -1,5 +1,6 @@
 import { jetonGsc, requetes, type LigneGsc } from "@/lib/search-console";
 import { fetchAudite } from "@/lib/audit-seo";
+import { estPageRetiree } from "@/lib/fusions-blog";
 
 /**
  * Les occasions de remontée, et ce qu'il faudrait faire pour chacune.
@@ -120,6 +121,7 @@ export async function occasions(): Promise<Occasion[]> {
   const lignes = await requetes(tok, { jours: 28, finIlYA: 2 });
   const meilleure = new Map<string, LigneGsc>();
   for (const l of lignes) {
+    if (estPageRetiree(l.page)) continue;
     const garde = meilleure.get(l.requete);
     if (!garde || l.impressions > garde.impressions) meilleure.set(l.requete, l);
   }

@@ -1,4 +1,5 @@
 import { jetonGsc, requetes, inspecter, sitemaps, type LigneGsc } from "@/lib/search-console";
+import { estPageRetiree } from "@/lib/fusions-blog";
 
 /**
  * Les six contrôles qui ont révélé les blocages du 25 et du 27/09/2026.
@@ -130,9 +131,10 @@ async function controlerIndexation(tok: string, echantillon: string[]): Promise<
 /** 2, 5, 6 : pertinence, occasions, régressions. */
 function analyserRequetes(actuel: LigneGsc[], precedent: LigneGsc[]): Constat[] {
   const out: Constat[] = [];
+  const pagesEnLigne = actuel.filter((l) => !estPageRetiree(l.page));
 
   // 5. Occasions : 4e à 15e place avec de la demande.
-  const occasions = actuel
+  const occasions = pagesEnLigne
     .filter((l) => l.position > 3.5 && l.position <= 15 && l.impressions >= 5)
     .sort((a, b) => b.impressions - a.impressions)
     .slice(0, 8);
@@ -147,7 +149,7 @@ function analyserRequetes(actuel: LigneGsc[], precedent: LigneGsc[]): Constat[] 
 
   // 6. Régressions : au moins 5 places perdues, sur des requêtes qui comptent.
   const avant = new Map(precedent.map((l) => [`${l.requete}|${l.page}`, l]));
-  for (const l of actuel) {
+  for (const l of pagesEnLigne) {
     const a = avant.get(`${l.requete}|${l.page}`);
     if (a && l.position - a.position >= 5 && a.impressions >= 5) {
       out.push({

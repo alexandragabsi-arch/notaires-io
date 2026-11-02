@@ -58,3 +58,17 @@ export const FUSIONS_VERS_PAGE: Record<string, string> = {
 
 /** Slugs qui ne doivent plus être déclarés ni liés. */
 export const SLUGS_RETIRES = new Set([...Object.keys(FUSIONS_BLOG), ...Object.keys(FUSIONS_VERS_PAGE)]);
+
+/**
+ * Vrai si cette adresse ne répond plus elle-même : article fusionné ou version
+ * horodatée, toutes deux redirigées par `next.config.ts`.
+ *
+ * Search Console garde ces adresses 28 jours après leur fusion. Sans ce filtre,
+ * le bilan demandait de retoucher des pages qui n'existent plus, et les bilans
+ * successifs se contredisaient sur la page à travailler.
+ */
+export function estPageRetiree(url: string): boolean {
+  const slug = url.match(/\/blog\/([^/?#]+)\/?(?:[?#].*)?$/)?.[1];
+  if (!slug) return false;
+  return SLUGS_RETIRES.has(slug) || /-\d{4}-\d{2}-\d{2}-\d{2}h$/.test(slug);
+}

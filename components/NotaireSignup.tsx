@@ -13,6 +13,7 @@ import type { ListingNotaire } from "@/lib/notaires-listing";
 import type { FicheTrouvee } from "@/lib/fiches-recherche";
 import ChampPiege from "@/components/ChampPiege";
 import { CHAMP_PIEGE } from "@/lib/rate-limit";
+import type { EvenementInscription } from "@/lib/suivi-inscription";
 import {
   User,
   Mail,
@@ -44,6 +45,9 @@ const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://notaires.io";
 
 const STEPS = ["Votre compte", "Votre étude", "Votre profil", "Récapitulatif", "Paiement"];
+
+// Événement de suivi émis à l'arrivée sur chaque étape (index de STEPS).
+const EVENEMENTS_ETAPES: EvenementInscription[] = ["vue", "etape_etude", "etape_profil", "etape_recap", "etape_activation"];
 
 const SPECIALTIES = [
   "Immobilier",
@@ -137,6 +141,35 @@ export default function NotaireSignup() {
   const emailError = email.trim().length > 0 && !emailValid;
   const crpcenValid = isValidCrpcen(crpcen);
 
+  // Suivi de l'entonnoir : chaque événement part une seule fois par visite, sans
+  // aucune donnée saisie. keepalive : la requête survit à la redirection finale.
+  const suiviRef = useRef<{ sessionId: string; envoyes: Set<EvenementInscription> } | null>(null);
+  function suivre(evenement: EvenementInscription) {
+    suiviRef.current ??= { sessionId: crypto.randomUUID(), envoyes: new Set() };
+    const { sessionId, envoyes } = suiviRef.current;
+    if (envoyes.has(evenement)) return;
+    envoyes.add(evenement);
+    fetch("/api/suivi-inscription", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sessionId, evenement, parcours: claimId ? "activation" : "standard" }),
+      keepalive: true,
+    }).catch(() => {});
+  }
+  useEffect(() => {
+    suivre(EVENEMENTS_ETAPES[step]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- suivre est sans état React
+  }, [step]);
+  useEffect(() => {
+    if (payError) suivre("erreur");
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- suivre est sans état React
+  }, [payError]);
+  // En quittant un champ, pour ne pas compter une adresse en cours de frappe.
+  function suivreSortieChamp() {
+    if (emailError) suivre("email_refuse");
+    if (crpcen.length > 0 && !crpcenValid) suivre("crpcen_refuse");
+  }
+
   // Recherche de la fiche existante dès que nom + ville sont saisis (après une
   // courte pause de frappe). Pas en mode « Activer mon profil » : la fiche est connue.
   useEffect(() => {
@@ -203,6 +236,7 @@ export default function NotaireSignup() {
   const isLast = step === STEPS.length - 1;
 
   async function goToPayment() {
+    suivre("envoi");
     setPaying(true);
     setPayError("");
     try {
@@ -310,6 +344,7 @@ export default function NotaireSignup() {
         });
       }
       setSavedProfile(profile);
+      suivre("profil_cree");
 
       // 2a. Offre sans carte (lien LinkedIn…) : ni Stripe ni carte.
       if (offre) {
@@ -322,6 +357,7 @@ export default function NotaireSignup() {
         });
         const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
         if (data.ok) {
+          suivre("termine");
           window.location.assign("/espace-notaire?bienvenue=1");
         } else {
           setPayError(data.error ?? "L'offre n'a pas pu être activée. Réessayez.");
@@ -346,6 +382,7 @@ export default function NotaireSignup() {
         const data = (await res.json()) as { ok?: boolean; error?: string };
 
         if (data.ok) {
+          suivre("termine");
           window.location.assign("/espace-notaire?bienvenue=1");
         } else {
           // Le profil est déjà créé : on laisse l'utilisateur corriger son code
@@ -374,6 +411,7 @@ export default function NotaireSignup() {
       const data = (await res.json()) as { url?: string; error?: string };
 
       if (data.url) {
+        suivre("termine");
         window.location.assign(data.url);
       } else {
         setPayError(data.error ?? "Erreur lors de la création du paiement. Veuillez réessayer.");
@@ -394,7 +432,7 @@ export default function NotaireSignup() {
     const claimName = claimedNotaire?.name;
 
     return (
-      <section className="py-12 sm:py-20 bg-white">
+      <section className="py-12 sm:py-20 bg-white" onFocusCapture={() => suivre("saisie")} onBlurCapture={suivreSortieChamp}>
         <div className="max-w-[560px] mx-auto px-6">
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="text-center mb-8">
             <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-[13px] font-semibold mb-4">
@@ -526,7 +564,7 @@ export default function NotaireSignup() {
   }
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-white">
+    <section className="py-12 sm:py-16 lg:py-20 bg-white" onFocusCapture={() => suivre("saisie")} onBlurCapture={suivreSortieChamp}>
       <div className="max-w-[1100px] mx-auto px-6">
         <ChampPiege value={piege} onChange={setPiege} />
 

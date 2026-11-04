@@ -1228,7 +1228,9 @@ export const BLOG_POSTS: BlogPost[] = [
     // Position 5,9 sur 90 jours (6 717 impressions) mais 1,8 % de clics : le
     // titre complet dépassait 90 caractères avec « · Notaires.io » et Google le
     // coupait. Titre court qui donne la réponse, description qui la détaille.
-    metaTitle: "Prix d'une consultation notaire : souvent gratuit",
+    // « renseignement » ajouté au 04/11/2026 : la requête plafonne en 7e position
+    // et le titre ne portait pas ce mot. Seul « · Notaires.io » peut être coupé.
+    metaTitle: "Prix consultation notaire pour renseignement : gratuit",
     metaDescription:
       "Un renseignement chez le notaire est gratuit et le conseil d'un acte est inclus dans son prix. Les seuls cas payants, et comment avoir un RDV sans frais.",
     excerpt: "Un renseignement chez le notaire est gratuit, et le conseil lié à un acte est compris dans son prix. Ce qui peut être payant, ce qui ne l'est pas, et comment prendre rendez-vous sans frais.",

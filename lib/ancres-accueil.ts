@@ -23,6 +23,10 @@ const ANCRES = [
   "RDV notaire",
   "Prendre RDV notaire",
   "Notaire : RDV en ligne",
+  // « rdv notaire en ligne » : 8e position au 04/11/2026, sans ancre à cette
+  // formulation exacte. « prendre RDV notaire en ligne » figure déjà en dur sur
+  // les pages de ville et de service : inutile de le répéter ici.
+  "RDV notaire en ligne",
 ] as const;
 
 /** Toujours la même ancre pour une page donnée, pour que le lien soit stable. */

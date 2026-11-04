@@ -1,13 +1,20 @@
 // Enregistrement d'un rendez-vous : partagé par le site (/api/booking) et le
-// serveur MCP (/api/mcp). Écrit la réservation, puis prévient le client et le
-// notaire par e-mail. Les contrôles d'entrée (créneau ISO à venir, modalité,
+// serveur MCP (/api/mcp). Écrit la réservation, puis prévient le client, le
+// notaire et les autres participants par e-mail. Les contrôles d'entrée (créneau ISO à venir, modalité,
 // limites) restent à la charge de l'appelant.
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { sendEmail } from "@/lib/email";
+import { emailDuNotaire } from "@/lib/email-notaire";
 import { isoCreneau } from "@/lib/creneau";
 import { emailConfirmationClient, dateLongue, echapper } from "@/lib/emails/confirmation-rdv";
 import { adresseAffichee, adresseCompleteBAN } from "@/lib/adresse";
+import {
+  emailConfirmationParticipant,
+  envoyerAuxParticipants,
+  participantsAPrevenir,
+  sujetConfirmationParticipant,
+} from "@/lib/emails/rdv-participant";
 
 export interface Participant {
   civilite: string;
@@ -89,9 +96,15 @@ export async function enregistrerReservation(
   // ── Coordonnées du notaire (adresse du cabinet, e-mail de notification) ────
   const { data: notaireRow } = await supabase
     .from("notaire_profiles")
-    .select("email, address, city, office_name")
+    .select("address, city, office_name")
     .eq("id", notaireId)
     .maybeSingle();
+
+  const etude = (notaireRow?.office_name as string | null) ?? null;
+  // Adresse du cabinet avec code postal et ville, même si le notaire n'a saisi que la rue.
+  const adresse = notaireRow?.address
+    ? adresseAffichee(await adresseCompleteBAN(notaireRow.address as string, (notaireRow.city as string | null) ?? ""), notaireRow.city as string | null) ?? null
+    : null;
 
   // ── Email client ─────────────────────────────────────────────────────────────
   if (client.email) {
@@ -102,11 +115,8 @@ export async function enregistrerReservation(
         bookingId,
         client,
         notaireNom,
-        etude: (notaireRow?.office_name as string | null) ?? null,
-        // Adresse du cabinet avec code postal et ville, même si le notaire n'a saisi que la rue.
-        adresse: notaireRow?.address
-          ? adresseAffichee(await adresseCompleteBAN(notaireRow.address as string, (notaireRow.city as string | null) ?? ""), notaireRow.city as string | null) ?? null
-          : null,
+        etude,
+        adresse,
         slotKey,
         modalite,
         dossier,
@@ -115,7 +125,7 @@ export async function enregistrerReservation(
     );
   }
 
-  const notaireEmail = (notaireRow?.email as string | null) || "contact@notaires.io";
+  const notaireEmail = (await emailDuNotaire(supabase, notaireId)) || "contact@notaires.io";
 
   // ── Email notification notaire ────────────────────────────────────────────────
   const notifHtml = `
@@ -139,6 +149,14 @@ export async function enregistrerReservation(
     notaireEmail,
     `[Notaires.io] Nouvelle réservation — ${slotLabel}`,
     notifHtml,
+  );
+
+  // ── Emails des autres participants ───────────────────────────────────────────
+  const rdv = { bookingId, slotKey, modalite, notaireNom, dossier, clientNom, etude, adresse };
+  await envoyerAuxParticipants(
+    participantsAPrevenir(participants, client.email),
+    sujetConfirmationParticipant(rdv),
+    (p) => emailConfirmationParticipant(p, rdv),
   );
 
   return { ok: true, bookingId };

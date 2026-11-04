@@ -17,7 +17,6 @@ export const metadata: Metadata = {
   keywords: [
     "notaire en ligne",
     "notaire en visio",
-    "rendez-vous notaire en ligne",
     "consultation notaire à distance",
     "signature acte notarié à distance",
     "procuration notariée à distance",

@@ -27,6 +27,14 @@ export async function POST(req: NextRequest) {
   const piece = pieces.find((p) => p.path === path);
   if (!piece) return NextResponse.json({ error: "Pièce introuvable." }, { status: 404 });
 
+  // La liste de pièces est écrite par le navigateur à la réservation : on n'y fait pas
+  // confiance seule, le chemin doit rester dans le dossier de ce RDV ou de son client.
+  const dansCeRdv = path.startsWith(`notaire/${bookingId}/`);
+  const dansLeCompte = !!b?.user_id && path.startsWith(`${b.user_id}/`);
+  if (path.includes("..") || (!dansCeRdv && !dansLeCompte)) {
+    return NextResponse.json({ error: "Accès refusé." }, { status: 403 });
+  }
+
   const { data, error } = await db.storage
     .from("booking-documents")
     .createSignedUrl(path, 60, { download: piece.fileName ?? true });

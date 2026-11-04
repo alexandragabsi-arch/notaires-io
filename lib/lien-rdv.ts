@@ -32,8 +32,9 @@ export function lienGestionRdv(bookingId: string): string {
 
 // Lien de dépôt de pièces, pour les autres participants. Sa signature est distincte
 // de celle du lien de gestion : il ne permet ni de voir le détail, ni d'annuler.
+// Clé : la clé serveur Supabase, toujours présente là où ce lien est utilisé.
 function jetonDepot(bookingId: string): string | null {
-  const k = cle();
+  const k = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!k) return null;
   return crypto.createHmac("sha256", k).update(`depot:${bookingId}`).digest("base64url").slice(0, 24);
 }

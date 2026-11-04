@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
   const { data: u } = await db.auth.getUser(bearer);
   if (!u.user) return NextResponse.json({ error: "Connexion requise." }, { status: 401 });
 
-  const { data: b } = await db.from("bookings").select("notaire_id, documents").eq("id", bookingId).maybeSingle();
+  const { data: b } = await db.from("bookings").select("notaire_id, user_id, documents").eq("id", bookingId).maybeSingle();
   const { data: fiche } = b
     ? await db.from("notaire_profiles").select("user_id").eq("id", b.notaire_id).maybeSingle()
     : { data: null };

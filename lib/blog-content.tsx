@@ -4824,7 +4824,7 @@ function Article84() {
 <p className="text-[var(--color-text-strong)] leading-relaxed">Un <strong>renseignement chez un notaire est gratuit</strong> : une question simple, par téléphone ou lors d'un premier échange, n'est pas facturée. Le conseil qui prépare un acte est compris dans le prix de cet acte. Seule une consultation approfondie sans acte peut être payante, à un prix que le notaire doit vous annoncer avant.</p>
 </div>
 
-<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Combien coûte une consultation chez un notaire ? Gratuit ou payant, les trois cas</h2>
+<h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Gratuit ou payant : les trois cas</h2>
 <div className="overflow-x-auto mb-6">
 <table className="w-full text-sm border-collapse">
 <thead>

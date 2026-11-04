@@ -1,3 +1,4 @@
+import { emailDuNotaire } from "@/lib/email-notaire";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
@@ -164,15 +165,20 @@ export async function GET(req: NextRequest) {
   if (notaireIds.length) {
     const { data: profs } = await supabase
       .from("notaire_profiles")
-      .select("id, remind_eve, remind_2h, email")
+      .select("id, remind_eve, remind_2h")
       .in("id", notaireIds);
     for (const p of profs ?? []) {
       prefs[p.id as string] = {
         eve: p.remind_eve !== false,
         h2: p.remind_2h !== false,
       };
-      if (p.email) emailsNotaires[p.id as string] = p.email as string;
     }
+    await Promise.all(
+      notaireIds.map(async (id) => {
+        const email = await emailDuNotaire(supabase, id);
+        if (email) emailsNotaires[id] = email;
+      }),
+    );
   }
 
   const now = Date.now();

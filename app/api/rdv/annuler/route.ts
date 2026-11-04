@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { emailDuNotaire } from "@/lib/email-notaire";
 import { sendEmail, SITE } from "@/lib/email";
 import { limiter, ipDe } from "@/lib/rate-limit";
 import { jetonValide } from "@/lib/lien-rdv";
@@ -77,9 +78,8 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { data: n } = await db.from("notaire_profiles").select("email").eq("id", b.notaire_id).maybeSingle();
   await sendEmail(
-    (n?.email as string | null) || "contact@notaires.io",
+    (await emailDuNotaire(db, b.notaire_id)) || "contact@notaires.io",
     `[Notaires.io] Rendez-vous annulé${quand ? ` — ${quand}` : ""}`,
     `<div style="font-family:Inter,Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px 24px;color:#1a1a2e">
       <h2 style="font-size:18px;margin:0 0 12px">Rendez-vous annulé par le client</h2>

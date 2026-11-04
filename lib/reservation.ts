@@ -5,6 +5,7 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { sendEmail } from "@/lib/email";
+import { emailDuNotaire } from "@/lib/email-notaire";
 import { isoCreneau } from "@/lib/creneau";
 import { emailConfirmationClient, dateLongue, echapper } from "@/lib/emails/confirmation-rdv";
 import { adresseAffichee, adresseCompleteBAN } from "@/lib/adresse";
@@ -89,7 +90,7 @@ export async function enregistrerReservation(
   // ── Coordonnées du notaire (adresse du cabinet, e-mail de notification) ────
   const { data: notaireRow } = await supabase
     .from("notaire_profiles")
-    .select("email, address, city, office_name")
+    .select("address, city, office_name")
     .eq("id", notaireId)
     .maybeSingle();
 
@@ -115,7 +116,7 @@ export async function enregistrerReservation(
     );
   }
 
-  const notaireEmail = (notaireRow?.email as string | null) || "contact@notaires.io";
+  const notaireEmail = (await emailDuNotaire(supabase, notaireId)) || "contact@notaires.io";
 
   // ── Email notification notaire ────────────────────────────────────────────────
   const notifHtml = `

@@ -5,12 +5,18 @@ import { sendEmail, SITE } from "@/lib/email";
 import { limiter, ipDe } from "@/lib/rate-limit";
 import { jetonValide } from "@/lib/lien-rdv";
 import { dateLongue, echapper } from "@/lib/emails/confirmation-rdv";
+import {
+  emailAnnulationParticipant,
+  envoyerAuxParticipants,
+  participantsAPrevenir,
+  sujetAnnulationParticipant,
+} from "@/lib/emails/rdv-participant";
 
 // Annulation d'un rendez-vous par le client, depuis :
 //   - le lien signé de l'e-mail de confirmation (/rdv/<id>?t=…) : { id, t } ;
 //   - son espace client connecté : { id } + en-tête Authorization: Bearer <jeton Supabase>.
 // Le RDV passe en « cancelled » (le créneau redevient libre, sur le site comme
-// dans l'app) ; le client et le notaire sont prévenus par e-mail.
+// dans l'app) ; le client, le notaire et les autres participants sont prévenus par e-mail.
 
 function admin() {
   return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
@@ -30,7 +36,7 @@ export async function POST(req: NextRequest) {
   const db = admin();
   const { data: b } = await db
     .from("bookings")
-    .select("id, status, slot_key, notaire_id, notaire_nom, client_nom, client_email, user_id, dossier, modalite")
+    .select("id, status, slot_key, notaire_id, notaire_nom, client_nom, client_email, user_id, dossier, modalite, participants")
     .eq("id", id)
     .maybeSingle();
   if (!b) return NextResponse.json({ error: "Rendez-vous introuvable." }, { status: 404 });
@@ -89,6 +95,22 @@ export async function POST(req: NextRequest) {
       <p style="margin:12px 0 0;color:#5a6a8a">Le créneau est de nouveau disponible à la réservation.</p>
     </div>`,
   );
+
+  if (b.slot_key) {
+    const rdv = {
+      bookingId: b.id as string,
+      slotKey: b.slot_key as string,
+      modalite: b.modalite as string | null,
+      notaireNom: (b.notaire_nom as string | null) || "votre notaire",
+      dossier: b.dossier as string | null,
+      clientNom: b.client_nom as string | null,
+    };
+    await envoyerAuxParticipants(
+      participantsAPrevenir(b.participants, b.client_email),
+      sujetAnnulationParticipant(rdv),
+      (p) => emailAnnulationParticipant(p, rdv),
+    );
+  }
 
   return NextResponse.json({ success: true });
 }

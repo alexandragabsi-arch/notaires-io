@@ -5,11 +5,18 @@ import { createClient } from "@supabase/supabase-js";
 import { sendEmail, SITE } from "@/lib/email";
 import { parisParts, msMuralDepuisSlotKey } from "@/lib/creneau";
 import { emailRappelNotaire, sujetRappelNotaire } from "@/lib/emails/rappel-notaire";
+import {
+  emailRappelParticipant,
+  envoyerAuxParticipants,
+  participantsAPrevenir,
+  sujetRappelParticipant,
+} from "@/lib/emails/rdv-participant";
 
 // Cron Vercel : envoie les rappels de RDV par e-mail.
 // Déclenché toutes les heures (voir vercel.json → crons).
 // Deux rappels par réservation : la veille à 18h (heure de Paris) et 2h avant.
 // Le rappel de 2h avant part aussi au notaire, avec le lien de la visio.
+// Les autres participants reçoivent les deux rappels, en même temps que le client.
 // L'anti-doublon repose sur les colonnes bookings.reminder_eve_sent / _2h_sent.
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -36,6 +43,7 @@ interface BookingRow {
   client_nom: string | null;
   client_email: string | null;
   client_phone: string | null;
+  participants: unknown;
   created_at: string;
   reminder_eve_sent: boolean;
   reminder_2h_sent: boolean;
@@ -114,6 +122,25 @@ function reminderHtml(kind: Kind, b: BookingRow): string {
   `;
 }
 
+// Rappel aux autres participants. Il ne part qu'après celui du client et porte le
+// même drapeau anti-doublon. Sans date ISO (anciennes lignes), pas de rappel.
+async function rappelerParticipants(b: BookingRow, kind: Kind): Promise<number> {
+  if (!b.slot_key || !Number.isFinite(Date.parse(b.slot_key))) return 0;
+  const rdv = {
+    bookingId: b.id,
+    slotKey: b.slot_key,
+    modalite: b.modalite,
+    notaireNom: b.notaire_nom || "votre notaire",
+    dossier: b.dossier,
+    clientNom: b.client_nom,
+  };
+  return envoyerAuxParticipants(
+    participantsAPrevenir(b.participants, b.client_email),
+    sujetRappelParticipant(rdv, kind === "eve" ? "demain" : "dans 2h"),
+    (p) => emailRappelParticipant(p, rdv, kind === "eve" ? "demain" : "dans 2 heures"),
+  );
+}
+
 // Comparaison à temps constant, comme pour la signature du webhook Stripe :
 // une comparaison naïve laisse fuir la longueur du préfixe correct.
 function bearerValide(header: string | null, secret: string): boolean {
@@ -144,7 +171,7 @@ export async function GET(req: NextRequest) {
   const { data, error } = await supabase
     .from("bookings")
     .select(
-      "id, notaire_id, notaire_nom, slot_key, slot_label, dossier, modalite, client_nom, client_email, client_phone, created_at, reminder_eve_sent, reminder_2h_sent",
+      "id, notaire_id, notaire_nom, slot_key, slot_label, dossier, modalite, client_nom, client_email, client_phone, participants, created_at, reminder_eve_sent, reminder_2h_sent",
     )
     // « confirmé » : lignes écrites par une ancienne version du site.
     .in("status", ["confirmed", "confirmé"])
@@ -188,6 +215,7 @@ export async function GET(req: NextRequest) {
   let sentEve = 0;
   let sent2h = 0;
   let sent2hNotaire = 0;
+  let sentParticipants = 0;
 
   for (const b of rows) {
     if (!b.client_email) continue;
@@ -220,6 +248,7 @@ export async function GET(req: NextRequest) {
       if (ok) {
         await supabase.from("bookings").update({ reminder_eve_sent: true }).eq("id", b.id);
         sentEve++;
+        sentParticipants += await rappelerParticipants(b, "eve");
       }
     }
 
@@ -239,6 +268,7 @@ export async function GET(req: NextRequest) {
         if (emailNotaire && (await sendEmail(emailNotaire, sujetRappelNotaire(b), emailRappelNotaire(b)))) {
           sent2hNotaire++;
         }
+        sentParticipants += await rappelerParticipants(b, "2h");
       }
     }
   }
@@ -249,6 +279,7 @@ export async function GET(req: NextRequest) {
     sentEve,
     sent2h,
     sent2hNotaire,
+    sentParticipants,
     ranAt: new Date(now).toISOString(),
   });
 }

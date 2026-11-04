@@ -36,6 +36,14 @@ interface SentDoc {
   sentAt: number;
 }
 
+// Pièce reçue du client ou d'un participant. Sans chemin : déposée sans compte, non stockée.
+interface PieceRecue {
+  id: string;
+  label: string;
+  fileName: string;
+  path?: string;
+}
+
 interface Rdv {
   id: string;
   client: string;
@@ -154,6 +162,8 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
   const [remind2h, setRemind2h] = useState(true);
   const [rdvs, setRdvs] = useState<Rdv[]>(RDVS_MOCK);
   const [loadingRdvs, setLoadingRdvs] = useState(false);
+  // Pièces reçues du client et des participants, par RDV (source = bookings.documents).
+  const [piecesRecuesParRdv, setPiecesRecuesParRdv] = useState<Record<string, PieceRecue[]>>({});
   // Pièces transmises au client, par RDV (source = bookings.notaire_documents).
   const [docsByRdv, setDocsByRdv] = useState<Record<string, SentDoc[]>>({});
   const [uploading, setUploading] = useState<Record<string, boolean>>({});
@@ -216,13 +226,14 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
     setLoadingRdvs(true);
     supabase
       .from("bookings")
-      .select("id, client_nom, dossier, slot_key, slot_label, modalite, status, notaire_documents, created_at")
+      .select("id, client_nom, dossier, slot_key, slot_label, modalite, status, documents, notaire_documents, created_at")
       .eq("notaire_id", notaireId)
       .order("created_at", { ascending: false })
       .limit(20)
       .then(({ data }) => {
         if (data && data.length > 0) {
           const docs: Record<string, SentDoc[]> = {};
+          const recues: Record<string, PieceRecue[]> = {};
           setRdvs(
             data
               // Les RDV annulés (depuis le site ou l'app) ne s'affichent plus.
@@ -232,6 +243,7 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
                 jourHeureDepuisSlotKey(row.slot_key as string) ??
                 parseSlotLabel((row.slot_label as string) ?? "");
               const id = row.id as string;
+              recues[id] = Array.isArray(row.documents) ? (row.documents as PieceRecue[]) : [];
               docs[id] = Array.isArray(row.notaire_documents)
                 ? (row.notaire_documents as SentDoc[])
                 : [];
@@ -251,6 +263,7 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
             })
           );
           setDocsByRdv(docs);
+          setPiecesRecuesParRdv(recues);
         } else if (data) {
           setRdvs([]);
         }
@@ -312,6 +325,25 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
       return;
     }
     window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+  }
+
+  // Passe par le serveur : les pièces du client sont fermées au notaire côté stockage.
+  async function telechargerPieceRecue(rdvId: string, piece: PieceRecue) {
+    const { data: session } = await supabase.auth.getSession();
+    const res = await fetch("/api/notaire/piece", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.session?.access_token ?? ""}`,
+      },
+      body: JSON.stringify({ bookingId: rdvId, path: piece.path }),
+    });
+    const json = await res.json().catch(() => null);
+    if (!res.ok || !json?.url) {
+      alert("Téléchargement indisponible.");
+      return;
+    }
+    window.open(json.url as string, "_blank", "noopener,noreferrer");
   }
 
   async function handleDelete(rdvId: string, doc: SentDoc) {
@@ -553,6 +585,37 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
                                 >
                                   <Trash2 className="w-4 h-4" strokeWidth={2} />
                                 </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {(piecesRecuesParRdv[r.id]?.length ?? 0) > 0 && (
+                          <div className="flex flex-col gap-1.5 mt-3">
+                            <p className="text-[12px] font-semibold text-[var(--color-muted)]">
+                              Pièces reçues du client et des participants
+                            </p>
+                            {piecesRecuesParRdv[r.id]!.map((piece) => (
+                              <div
+                                key={piece.id}
+                                className="flex items-center gap-2 text-[13px] text-[var(--color-text-strong)] bg-[var(--color-tint-blue)] rounded-[10px] px-3 py-2"
+                              >
+                                <FileText className="w-4 h-4 text-[var(--color-accent)] shrink-0" strokeWidth={2} />
+                                <span className="font-medium truncate flex-1" title={piece.label}>
+                                  {piece.label} : {piece.fileName}
+                                </span>
+                                {piece.path ? (
+                                  <button
+                                    type="button"
+                                    onClick={() => telechargerPieceRecue(r.id, piece)}
+                                    aria-label={`Télécharger ${piece.fileName}`}
+                                    className="shrink-0 text-[var(--color-muted)] hover:text-[var(--color-accent)] transition-colors"
+                                    title="Télécharger"
+                                  >
+                                    <Download className="w-4 h-4" strokeWidth={2.5} />
+                                  </button>
+                                ) : (
+                                  <span className="shrink-0 text-[11px] text-[var(--color-muted)]">Non stockée</span>
+                                )}
                               </div>
                             ))}
                           </div>

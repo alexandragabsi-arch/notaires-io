@@ -8,6 +8,7 @@
 import { emailButton, emailLayout, sendEmail } from "@/lib/email";
 import { dateLongue, echapper } from "@/lib/emails/confirmation-rdv";
 import { lienVisio } from "@/lib/emails/rappel-notaire";
+import { lienDepotPieces } from "@/lib/lien-rdv";
 import { OUVERTURE_SALLE_MIN } from "@/lib/visio";
 
 export interface ParticipantAPrevenir {
@@ -89,6 +90,13 @@ function accesVisio(r: Rdv): string {
     ${paragraphe(`La salle ouvre ${OUVERTURE_SALLE_MIN} minutes avant le rendez-vous.`)}`;
 }
 
+function depotPieces(r: Rdv): string {
+  const lien = lienDepotPieces(r.bookingId);
+  if (!lien) return "";
+  return `${paragraphe("Pour préparer le dossier, déposez vos documents ici, sans créer de compte : ils sont rattachés au rendez-vous et transmis au notaire.")}
+    <div style="margin:0 0 24px">${emailButton(lien, "Déposer mes documents")}</div>`;
+}
+
 const organisateur = (r: Rdv) => (r.clientNom ? echapper(r.clientNom) : "La personne qui a pris le rendez-vous");
 
 export function sujetConfirmationParticipant(r: Pick<Rdv, "slotKey" | "notaireNom">): string {
@@ -102,6 +110,7 @@ export function emailConfirmationParticipant(p: ParticipantAPrevenir, r: Rdv): s
     ${paragraphe(`${organisateur(r)} a pris rendez-vous avec ${echapper(r.notaireNom)} et vous a indiqué comme participant.`)}
     ${recapitulatif(r)}
     ${accesVisio(r)}
+    ${depotPieces(r)}
     ${paragraphe("Pensez à vous munir d'une pièce d'identité en cours de validité.")}
     ${paragraphe(`En cas d'empêchement, prévenez ${r.clientNom ? echapper(r.clientNom) : "la personne qui a pris le rendez-vous"} : c'est à elle de le déplacer ou de l'annuler. Si vous n'êtes pas concerné par ce rendez-vous, ignorez ce message.`)}
   `);
@@ -117,6 +126,7 @@ export function emailRappelParticipant(p: ParticipantAPrevenir, r: Rdv, quand: "
     ${salutation(p)}
     ${recapitulatif(r)}
     ${accesVisio(r)}
+    ${depotPieces(r)}
     ${paragraphe("Pensez à vous munir d'une pièce d'identité en cours de validité.")}
   `);
 }

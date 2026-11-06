@@ -5,6 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 import { sendEmail, SITE } from "@/lib/email";
 import { parisParts, msMuralDepuisSlotKey } from "@/lib/creneau";
 import { emailRappelNotaire, sujetRappelNotaire } from "@/lib/emails/rappel-notaire";
+import { emailFinVisio, sujetFinVisio } from "@/lib/emails/fin-visio";
 import {
   emailRappelParticipant,
   envoyerAuxParticipants,
@@ -151,6 +152,58 @@ function bearerValide(header: string | null, secret: string): boolean {
   return crypto.timingSafeEqual(attendu, recu);
 }
 
+// Une heure après le début d'une visio, le notaire, le client et les autres
+// participants reçoivent « comment s'est-elle passée ? ». On ne remonte pas au-delà
+// de 24 h pour ne jamais envoyer un message tardif ; bookings.feedback_sent
+// empêche le doublon.
+const DELAI_FIN_VISIO_MS = 60 * 60 * 1000;
+const FENETRE_FIN_VISIO_MS = 24 * 60 * 60 * 1000;
+
+async function mailsFinVisio(supabase: ReturnType<typeof getSupabase>): Promise<number> {
+  const maintenant = Date.now();
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("id, notaire_id, notaire_nom, slot_key, dossier, client_nom, client_email, participants")
+    .in("status", ["confirmed", "confirmé"])
+    .eq("modalite", "visio")
+    .eq("feedback_sent", false)
+    .gte("slot_key", new Date(maintenant - FENETRE_FIN_VISIO_MS).toISOString())
+    .lte("slot_key", new Date(maintenant - DELAI_FIN_VISIO_MS).toISOString());
+  if (error) {
+    console.error(`[fin-visio] lecture impossible : ${error.message}`);
+    return 0;
+  }
+  let envoyes = 0;
+  for (const b of data ?? []) {
+    if (!b.slot_key || !Number.isFinite(Date.parse(b.slot_key))) continue;
+    // Marqué avant l'envoi : mieux vaut un mail manquant qu'un mail en double.
+    const { data: pris } = await supabase
+      .from("bookings")
+      .update({ feedback_sent: true })
+      .eq("id", b.id)
+      .eq("feedback_sent", false)
+      .select("id");
+    if (!pris?.length) continue;
+    const rdv = {
+      bookingId: b.id as string,
+      slotKey: b.slot_key as string,
+      notaireNom: (b.notaire_nom as string | null) || "votre notaire",
+      clientNom: b.client_nom as string | null,
+      dossier: b.dossier as string | null,
+    };
+    const sujet = sujetFinVisio(rdv);
+    const emailNotaire = b.notaire_id ? await emailDuNotaire(supabase, b.notaire_id as string) : null;
+    if (emailNotaire && (await sendEmail(emailNotaire, sujet, emailFinVisio("notaire", rdv)))) envoyes++;
+    if (b.client_email && (await sendEmail(b.client_email as string, sujet, emailFinVisio("client", rdv)))) envoyes++;
+    envoyes += await envoyerAuxParticipants(
+      participantsAPrevenir(b.participants, b.client_email as string | null),
+      sujet,
+      (p) => emailFinVisio("participant", rdv, p),
+    );
+  }
+  return envoyes;
+}
+
 export async function GET(req: NextRequest) {
   const supabase = getSupabase();
   // Authentification du cron : Vercel envoie « Authorization: Bearer $CRON_SECRET ».
@@ -167,6 +220,8 @@ export async function GET(req: NextRequest) {
   if (!bearerValide(req.headers.get("authorization"), secret)) {
     return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
+
+  const finVisio = await mailsFinVisio(supabase);
 
   const { data, error } = await supabase
     .from("bookings")
@@ -280,6 +335,7 @@ export async function GET(req: NextRequest) {
     sent2h,
     sent2hNotaire,
     sentParticipants,
+    finVisio,
     ranAt: new Date(now).toISOString(),
   });
 }

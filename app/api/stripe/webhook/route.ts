@@ -247,6 +247,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true, handled: "subscription" });
   }
 
+  // Le compte Stripe est partagé avec LegalCorners : un paiement ponctuel qui n'est
+  // pas une commande de cartes notaires.io ne nous concerne pas. Aucun mail, aucune commande.
+  if (s.mode === "payment" && meta.type !== "cartes") {
+    return NextResponse.json({ received: true, ignored: "paiement hors commande de cartes" });
+  }
+
   if (s.mode === "payment") {
     // ── Commande de cartes physiques ────────────────────────────────────────
     // Le paiement est confirmé : on fabrique le PDF et on passe commande chez

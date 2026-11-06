@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -33,32 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Clermont-Ferrand", item: "https://notaires.io/notaire-clermont-ferrand" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Clermont-Ferrand",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Clermont-Ferrand", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Clermont-Ferrand pour mariage, PACS, immobilier, création de société et succession.",
-      url: "https://notaires.io/notaire-clermont-ferrand",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Quels quartiers et communes de Clermont Auvergne Métropole couvrent vos notaires ?",
-    a: "Nos notaires partenaires à Clermont-Ferrand interviennent dans tous les secteurs : Jaude (centre-ville), Montferrand (cité médiévale), La Pardieu, Les Salins, La Gauthière, Chamalières, ainsi que dans les communes de la métropole : Cournon-d'Auvergne, Riom, Issoire, Thiers, Vichy et Royat. La visioconférence est disponible pour les clients du Massif Central ou de l'Allier.",
+    a: "Les notaires à Clermont-Ferrand interviennent dans tous les secteurs : Jaude (centre-ville), Montferrand (cité médiévale), La Pardieu, Les Salins, La Gauthière, Chamalières, ainsi que dans les communes de la métropole : Cournon-d'Auvergne, Riom, Issoire, Thiers, Vichy et Royat. La visioconférence est disponible pour les clients du Massif Central ou de l'Allier.",
   },
   {
     q: "Quels actes notariés sont fréquents pour l'immobilier à Clermont-Ferrand ?",
@@ -70,11 +50,14 @@ const FAQ = [
   },
   {
     q: "Peut-on signer un acte notarié à distance depuis Clermont-Ferrand ?",
-    a: "Oui. La signature électronique à distance (AAED) est disponible à Clermont-Ferrand. Que vous soyez dirigeant en déplacement à Paris ou en voyage d'affaires, vous pouvez signer votre acte par visioconférence depuis n'importe quel endroit. Votre notaire partenaire vous confirmera l'éligibilité de l'acte et les modalités pratiques.",
+    a: "Oui. La signature électronique à distance (AAED) est disponible à Clermont-Ferrand. Que vous soyez dirigeant en déplacement à Paris ou en voyage d'affaires, vous pouvez signer votre acte par visioconférence depuis n'importe quel endroit. Votre notaire vous confirmera l'éligibilité de l'acte et les modalités pratiques.",
   },
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Clermont-Ferrand", "clermont-ferrand");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Clermont-Ferrand", 120);
   const notaires = avecInscrits(
@@ -86,23 +69,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Clermont-Ferrand"
-          intro="Vous cherchez un notaire à Clermont-Ferrand pour votre mariage, votre PACS, un achat immobilier en Auvergne ou la création de votre société ? Nos notaires partenaires clermontois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
+          intro={introNombre(ville) + "Vous cherchez un notaire à Clermont-Ferrand pour votre mariage, votre PACS, un achat immobilier en Auvergne ou la création de votre société ? Les notaires clermontois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
             { href: "/notaire-saint-etienne", label: "RDV notaire à Saint-Étienne" },
             { href: "/notaire-dijon", label: "RDV notaire à Dijon" },

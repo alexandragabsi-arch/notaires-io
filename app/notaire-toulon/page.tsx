@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -33,32 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Toulon", item: "https://notaires.io/notaire-toulon" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Toulon",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Toulon", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Toulon pour mariage, PACS, immobilier, création de société et succession.",
-      url: "https://notaires.io/notaire-toulon",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Quels quartiers et communes de Toulon Provence Méditerranée couvrent vos notaires ?",
-    a: "Nos notaires partenaires à Toulon couvrent tous les secteurs : Centre-ville, Le Mourillon, Cap Brun, Pont-du-Las, La Seyne-sur-Mer, ainsi que les communes de la métropole TPM : La Garde, La Valette-du-Var, Six-Fours-les-Plages, Hyères et Ollioules. La visioconférence permet également de servir les clients des îles (Porquerolles, île du Levant) ou du Haut-Var.",
+    a: "Les notaires à Toulon couvrent tous les secteurs : Centre-ville, Le Mourillon, Cap Brun, Pont-du-Las, La Seyne-sur-Mer, ainsi que les communes de la métropole TPM : La Garde, La Valette-du-Var, Six-Fours-les-Plages, Hyères et Ollioules. La visioconférence permet également de servir les clients des îles (Porquerolles, île du Levant) ou du Haut-Var.",
   },
   {
     q: "Quels actes notariés sont les plus demandés pour l'immobilier à Toulon ?",
@@ -70,11 +50,14 @@ const FAQ = [
   },
   {
     q: "Peut-on signer un acte notarié à distance depuis Toulon ?",
-    a: "Oui. La signature électronique à distance (AAED) est disponible depuis Toulon. Que vous soyez en déplacement militaire, en mission à l'étranger ou simplement à bord, vous pouvez signer votre acte notarié par visioconférence sécurisée. Votre notaire partenaire vous confirmera l'éligibilité de l'acte envisagé à ce dispositif.",
+    a: "Oui. La signature électronique à distance (AAED) est disponible depuis Toulon. Que vous soyez en déplacement militaire, en mission à l'étranger ou simplement à bord, vous pouvez signer votre acte notarié par visioconférence sécurisée. Votre notaire vous confirmera l'éligibilité de l'acte envisagé à ce dispositif.",
   },
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Toulon", "toulon");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Toulon", 120);
   const notaires = avecInscrits(
@@ -86,23 +69,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Toulon"
-          intro="Vous cherchez un notaire à Toulon pour votre mariage, votre PACS, un achat immobilier dans le Var ou la création de votre société ? Nos notaires partenaires toulonnais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
+          intro={introNombre(ville) + "Vous cherchez un notaire à Toulon pour votre mariage, votre PACS, un achat immobilier dans le Var ou la création de votre société ? Les notaires toulonnais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-marseille", label: "RDV notaire à Marseille" },
             { href: "/notaire-nice", label: "RDV notaire à Nice" },
             { href: "/notaire-aix-en-provence", label: "RDV notaire à Aix-en-Provence" },

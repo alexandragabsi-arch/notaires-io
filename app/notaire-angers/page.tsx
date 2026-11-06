@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -33,32 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Angers", item: "https://notaires.io/notaire-angers" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Angers",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Angers", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Angers pour mariage, PACS, immobilier, création de société et succession.",
-      url: "https://notaires.io/notaire-angers",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Quels quartiers et communes d'Angers Loire Métropole couvrent vos notaires ?",
-    a: "Nos notaires partenaires à Angers interviennent dans tous les quartiers : Centre-ville, La Doutre, Belle-Beille, Verneau, Justices, Monplaisir, Saint-Serge, ainsi que dans les communes de la métropole : Saint-Barthélemy-d'Anjou, Les Ponts-de-Cé, Trélazé, Avrillé et Mûrs-Erigné. La visioconférence est disponible pour les clients du Saumurois ou du Segréen.",
+    a: "Les notaires à Angers interviennent dans tous les quartiers : Centre-ville, La Doutre, Belle-Beille, Verneau, Justices, Monplaisir, Saint-Serge, ainsi que dans les communes de la métropole : Saint-Barthélemy-d'Anjou, Les Ponts-de-Cé, Trélazé, Avrillé et Mûrs-Erigné. La visioconférence est disponible pour les clients du Saumurois ou du Segréen.",
   },
   {
     q: "Quels actes notariés sont les plus fréquents pour l'immobilier à Angers ?",
@@ -70,11 +50,14 @@ const FAQ = [
   },
   {
     q: "Peut-on signer un acte notarié à distance depuis Angers ?",
-    a: "Oui. La signature électronique à distance (AAED) est disponible à Angers. Que vous soyez en déplacement à Paris ou à Nantes pour le travail, vous pouvez signer votre acte par visioconférence depuis n'importe quel endroit. Votre notaire partenaire vous précisera quels actes sont éligibles à ce dispositif.",
+    a: "Oui. La signature électronique à distance (AAED) est disponible à Angers. Que vous soyez en déplacement à Paris ou à Nantes pour le travail, vous pouvez signer votre acte par visioconférence depuis n'importe quel endroit. Votre notaire vous précisera quels actes sont éligibles à ce dispositif.",
   },
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Angers", "angers");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Angers", 120);
   const notaires = avecInscrits(
@@ -86,23 +69,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Angers"
-          intro="Vous cherchez un notaire à Angers pour votre mariage, votre PACS, un achat immobilier en Anjou ou la création de votre société ? Nos notaires partenaires angevins sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
+          intro={introNombre(ville) + "Vous cherchez un notaire à Angers pour votre mariage, votre PACS, un achat immobilier en Anjou ou la création de votre société ? Les notaires angevins sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-nantes", label: "RDV notaire à Nantes" },
             { href: "/notaire-rennes", label: "RDV notaire à Rennes" },
             { href: "/notaire-orleans", label: "RDV notaire à Orléans" },

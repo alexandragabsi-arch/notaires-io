@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -33,32 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Brest", item: "https://notaires.io/notaire-brest" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Brest",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Brest", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Brest pour mariage, PACS, immobilier, création de société et succession.",
-      url: "https://notaires.io/notaire-brest",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Quels quartiers et communes de Brest Métropole couvrent vos notaires ?",
-    a: "Nos notaires partenaires à Brest interviennent dans tous les quartiers : Saint-Marc, Lambézellec, Bellevue, Pontanézen, Saint-Pierre, Recouvrance, ainsi que dans les communes de la métropole : Guipavas, Le Relecq-Kerhuon, Plougastel-Daoulas, Plouzané, Guilers et Bohars. La visioconférence est disponible pour les clients du Pays de Brest ou du Léon.",
+    a: "Les notaires à Brest interviennent dans tous les quartiers : Saint-Marc, Lambézellec, Bellevue, Pontanézen, Saint-Pierre, Recouvrance, ainsi que dans les communes de la métropole : Guipavas, Le Relecq-Kerhuon, Plougastel-Daoulas, Plouzané, Guilers et Bohars. La visioconférence est disponible pour les clients du Pays de Brest ou du Léon.",
   },
   {
     q: "Quels actes notariés sont fréquents pour l'immobilier à Brest ?",
@@ -70,11 +50,14 @@ const FAQ = [
   },
   {
     q: "Peut-on signer un acte notarié à distance depuis Brest ?",
-    a: "Oui. La signature électronique à distance (AAED) est disponible à Brest. C'est particulièrement utile pour les marins en navigation, les militaires en mission ou les Bretons expatriés souhaitant investir dans leur région. Votre notaire partenaire vous précisera quels actes sont éligibles et organisera la session de signature par visioconférence sécurisée.",
+    a: "Oui. La signature électronique à distance (AAED) est disponible à Brest. C'est particulièrement utile pour les marins en navigation, les militaires en mission ou les Bretons expatriés souhaitant investir dans leur région. Votre notaire vous précisera quels actes sont éligibles et organisera la session de signature par visioconférence sécurisée.",
   },
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Brest", "brest");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Brest", 120);
   const notaires = avecInscrits(
@@ -86,23 +69,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Brest"
-          intro="Vous cherchez un notaire à Brest pour votre mariage, votre PACS, un achat immobilier en Finistère ou la création de votre société ? Nos notaires partenaires brestois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
+          intro={introNombre(ville) + "Vous cherchez un notaire à Brest pour votre mariage, votre PACS, un achat immobilier en Finistère ou la création de votre société ? Les notaires brestois sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-rennes", label: "RDV notaire à Rennes" },
             { href: "/notaire-nantes", label: "RDV notaire à Nantes" },
             { href: "/notaire-le-havre", label: "RDV notaire au Havre" },

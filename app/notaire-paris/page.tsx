@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { idsNotairesInscrits, inscritsDabord } from "@/lib/notaires-inscrits";
@@ -40,28 +42,6 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Paris", item: "https://notaires.io/notaire-paris" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Paris",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Paris", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Paris pour immobilier, succession, mariage, PACS, divorce et création de société.",
-      url: "https://notaires.io/notaire-paris",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Combien coûte un notaire à Paris pour un achat immobilier ?",
@@ -77,11 +57,14 @@ const FAQ = [
   },
   {
     q: "Comment prendre rendez-vous avec un notaire à Paris via Notaires.io ?",
-    a: "C'est simple : choisissez votre notaire dans notre annuaire, sélectionnez un créneau disponible et confirmez votre rendez-vous en ligne. En visio ou au cabinet selon votre préférence. Vous recevrez une confirmation par email et pourrez préparer votre dossier grâce à notre checklist personnalisée.",
+    a: "C'est simple : choisissez votre notaire dans notre annuaire, sélectionnez un créneau disponible et confirmez votre rendez-vous en ligne. En visio ou au cabinet selon votre préférence. Vous recevrez une confirmation par email.",
   },
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Paris", "paris");
+  const faq = [questionNombre(ville), ...FAQ];
   // Utilise les vrais notaires scrapés depuis notaires.fr, avec fallback sur les données fictives
   // 60 fiches, pas 2 195 : la page en pesait 16 Mo et Google renonçait à la
   // traiter — elle est restée « URL is unknown to Google », jamais explorée,
@@ -104,23 +87,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Paris"
-          intro="Besoin d'un notaire à Paris pour votre achat immobilier, votre succession ou votre mariage ? Nos notaires partenaires sont disponibles rapidement, en visio ou au cabinet. Voici une sélection d'études parisiennes ; retrouvez toutes les autres arrondissement par arrondissement, en bas de page."
+          intro={introNombre(ville) + "Besoin d'un notaire à Paris pour votre achat immobilier, votre succession ou votre mariage ? Les notaires sont disponibles rapidement, en visio ou au cabinet. Voici une sélection d'études parisiennes ; retrouvez toutes les autres arrondissement par arrondissement, en bas de page."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             ...PARIS_ARRONDISSEMENTS.map(a => ({
               href: `/notaire-paris/${a.slug}`,
               label: `Notaire Paris ${a.label}`,

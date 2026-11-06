@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -33,32 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Rennes", item: "https://notaires.io/notaire-rennes" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Rennes",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Rennes", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Rennes pour mariage, PACS, immobilier, création de société et succession.",
-      url: "https://notaires.io/notaire-rennes",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Quels quartiers et communes de Rennes Métropole sont couverts par vos notaires ?",
-    a: "Nos notaires partenaires à Rennes interviennent dans tous les quartiers : Centre historique, Thabor, Beaulieu, Villejean, Cleunay, Maurepas, ainsi que dans les communes de Rennes Métropole : Cesson-Sévigné, Saint-Grégoire, Bruz, Betton, Chantepie et Pacé. La visioconférence est disponible pour les clients du bassin de Rennes plus éloignés.",
+    a: "Les notaires à Rennes interviennent dans tous les quartiers : Centre historique, Thabor, Beaulieu, Villejean, Cleunay, Maurepas, ainsi que dans les communes de Rennes Métropole : Cesson-Sévigné, Saint-Grégoire, Bruz, Betton, Chantepie et Pacé. La visioconférence est disponible pour les clients du bassin de Rennes plus éloignés.",
   },
   {
     q: "Quels actes notariés sont les plus demandés pour l'immobilier à Rennes ?",
@@ -70,11 +50,14 @@ const FAQ = [
   },
   {
     q: "Peut-on signer un acte notarié à distance depuis Rennes ?",
-    a: "Oui. La signature électronique à distance (AAED) est disponible à Rennes. Que vous soyez cadre en déplacement fréquent à Paris ou télétravailleur installé en Ille-et-Vilaine, vous pouvez signer votre acte par visioconférence. Certains actes restent soumis à présence physique ; votre notaire partenaire vous en informera au préalable.",
+    a: "Oui. La signature électronique à distance (AAED) est disponible à Rennes. Que vous soyez cadre en déplacement fréquent à Paris ou télétravailleur installé en Ille-et-Vilaine, vous pouvez signer votre acte par visioconférence. Certains actes restent soumis à présence physique ; votre notaire vous en informera au préalable.",
   },
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Rennes", "rennes");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Rennes", 120);
   const notaires = avecInscrits(
@@ -86,23 +69,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Rennes"
-          intro="Vous cherchez un notaire à Rennes pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Nos notaires partenaires rennais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
+          intro={introNombre(ville) + "Vous cherchez un notaire à Rennes pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Les notaires rennais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-nantes", label: "RDV notaire à Nantes" },
             { href: "/notaire-brest", label: "RDV notaire à Brest" },
             { href: "/notaire-le-havre", label: "RDV notaire au Havre" },

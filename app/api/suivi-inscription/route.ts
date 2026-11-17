@@ -46,5 +46,15 @@ export async function POST(req: NextRequest) {
   );
   if (error) console.error("[suivi-inscription]", error.message);
 
+  // Inscription allée au bout : plus de relance pour cette visite.
+  if (evenement === "profil_cree" || evenement === "termine") {
+    const { error: errFin } = await supabaseAdmin()
+      .from("inscriptions_commencees")
+      .update({ termine_at: new Date().toISOString() })
+      .eq("session_id", sessionId)
+      .is("termine_at", null);
+    if (errFin) console.error("[suivi-inscription] fin:", errFin.message);
+  }
+
   return new NextResponse(null, { status: 204 });
 }

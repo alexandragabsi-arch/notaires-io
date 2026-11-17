@@ -164,8 +164,37 @@ export default function NotaireSignup() {
     if (payError) suivre("erreur");
     // eslint-disable-next-line react-hooks/exhaustive-deps -- suivre est sans état React
   }, [payError]);
+  // Inscription commencée : dès qu'une adresse @notaires.fr valide est saisie,
+  // on enregistre les champs d'identité (jamais le mot de passe) pour prévenir
+  // l'équipe et relancer le notaire s'il ne va pas au bout. Envoi seulement
+  // quand une valeur a changé depuis le dernier envoi.
+  const dernierEnvoiRef = useRef("");
+  function enregistrerSaisie() {
+    if (!emailValid) return;
+    suiviRef.current ??= { sessionId: crypto.randomUUID(), envoyes: new Set() };
+    const donnees = {
+      sessionId: suiviRef.current.sessionId,
+      email: email.trim(),
+      prenom,
+      nom,
+      ville,
+      crpcen,
+      ficheId: claimId ?? undefined,
+      parcours: claimId ? "activation" : "standard",
+    };
+    const cle = JSON.stringify(donnees);
+    if (cle === dernierEnvoiRef.current) return;
+    dernierEnvoiRef.current = cle;
+    fetch("/api/inscription-commencee", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: cle,
+      keepalive: true,
+    }).catch(() => {});
+  }
   // En quittant un champ, pour ne pas compter une adresse en cours de frappe.
   function suivreSortieChamp() {
+    enregistrerSaisie();
     if (emailError) suivre("email_refuse");
     if (crpcen.length > 0 && !crpcenValid) suivre("crpcen_refuse");
   }
@@ -479,7 +508,7 @@ export default function NotaireSignup() {
                         </p>
                       ) : (
                         <p className="text-[12px] text-[var(--color-muted)] mt-1.5 leading-snug">
-                          Réservé aux notaires : adresse officielle <strong>@notaires.fr</strong> requise.
+                          Réservé aux notaires : adresse officielle <strong>@notaires.fr</strong> requise. Si vous n’allez pas au bout, nous pourrons vous envoyer un rappel à cette adresse.
                         </p>
                       )}
                     </Field>
@@ -724,7 +753,9 @@ export default function NotaireSignup() {
                         ) : (
                           <p className="text-[12px] text-[var(--color-muted)] mt-1.5 leading-snug">
                             Réservé aux notaires : adresse officielle{" "}
-                            <strong>@notaires.fr</strong> requise.
+                            <strong>@notaires.fr</strong> requise. Si vous n’allez
+                            pas au bout, nous pourrons vous envoyer un rappel à
+                            cette adresse.
                           </p>
                         )}
                       </Field>

@@ -19,6 +19,7 @@ import {
   Loader2,
   Receipt,
   ExternalLink,
+  Phone,
 } from "lucide-react";
 import { generateRoomId, internalVisioUrl, slotDayToDate, isRdvOpen } from "@/lib/visio";
 import { estSlotKeyIso, parisParts, TZ_PARIS } from "@/lib/creneau";
@@ -47,6 +48,9 @@ interface PieceRecue {
 interface Rdv {
   id: string;
   client: string;
+  /** Coordonnées du client (bookings.client_email / client_phone). */
+  clientEmail?: string;
+  clientPhone?: string;
   motif: string;
   day: string;
   time: string;
@@ -226,7 +230,7 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
     setLoadingRdvs(true);
     supabase
       .from("bookings")
-      .select("id, client_nom, dossier, slot_key, slot_label, modalite, status, documents, notaire_documents, created_at")
+      .select("id, client_nom, client_email, client_phone, dossier, slot_key, slot_label, modalite, status, documents, notaire_documents, created_at")
       .eq("notaire_id", notaireId)
       .order("created_at", { ascending: false })
       .limit(20)
@@ -250,6 +254,8 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
               return {
                 id,
                 client: (row.client_nom as string) || "Client",
+                clientEmail: (row.client_email as string) || undefined,
+                clientPhone: (row.client_phone as string) || undefined,
                 motif: row.dossier as string,
                 day,
                 time,
@@ -460,6 +466,28 @@ export default function NotaireDashboard({ notaireId }: { notaireId?: string } =
                           <div className="text-[13px] text-[var(--color-muted)] truncate">
                             {r.motif}
                           </div>
+                          {(r.clientEmail || r.clientPhone) && (
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1 text-[13px]">
+                              {r.clientPhone && (
+                                <a
+                                  href={`tel:${r.clientPhone.replace(/\s/g, "")}`}
+                                  className="inline-flex items-center gap-1 text-[var(--color-primary)] hover:underline"
+                                >
+                                  <Phone className="w-3.5 h-3.5" strokeWidth={2} />
+                                  {r.clientPhone}
+                                </a>
+                              )}
+                              {r.clientEmail && (
+                                <a
+                                  href={`mailto:${r.clientEmail}`}
+                                  className="inline-flex items-center gap-1 text-[var(--color-primary)] hover:underline break-all"
+                                >
+                                  <Mail className="w-3.5 h-3.5" strokeWidth={2} />
+                                  {r.clientEmail}
+                                </a>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="text-right shrink-0">

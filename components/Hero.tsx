@@ -97,7 +97,10 @@ export default function Hero() {
               qui dit ce que le site fait de mieux. */}
           {/* « Prendre » plutôt que « Prenez » (15/10/2026) : c'est le verbe des
               requêtes « prendre rdv notaire » et « prendre rdv notaire en ligne ». */}
-          Prendre RDV en ligne avec le bon notaire{" "}
+          {/* « rendez-vous » (19/11/2026) : « rendez vous notaire » n'apparaissait
+              ni dans le titre ni dans le H1, et quatre articles de blog
+              prenaient la place de l'accueil sur cette requête. */}
+          Prendre rendez-vous en ligne avec le bon notaire{" "}
           <span className="text-[var(--color-primary)]">pour votre situation</span>
         </motion.h1>
 
@@ -107,7 +110,7 @@ export default function Hero() {
           transition={{ duration: 0.4, delay: 0.1 }}
           className="text-[16px] sm:text-[18px] text-[var(--color-muted)] mb-3 max-w-[560px] mx-auto"
         >
-          Immobilier, succession, famille, société — en visio ou au cabinet.
+          Rendez-vous notaire gratuit, en visio ou au cabinet : immobilier, succession, famille, société.
         </motion.p>
 
         <motion.p

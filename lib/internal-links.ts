@@ -8,7 +8,26 @@ import { FUSIONS_BLOG, FUSIONS_VERS_PAGE } from "./fusions-blog";
  * « calcul frais de notaire ». Les ancres vont de la plus précise à la plus
  * générale : la première trouvée dans l'article est utilisée.
  */
-const PAGES_PILIERS: { href: string; ancres: string[] }[] = [
+const PAGES_PILIERS: { href: string; ancres: string[]; slugs?: string[] }[] = [
+  {
+    // « rendez vous notaire » (19/11/2026) : quatre articles se partageaient la
+    // requête avec l'accueil, qui n'en recevait aucun lien interne. Réservé à
+    // ces articles : lier l'accueil depuis tout le blog diluerait l'ancre.
+    href: "/",
+    slugs: [
+      "rdv-notaire-rapide",
+      "notaire-disponible-rapidement",
+      "notaire-en-ligne-rendez-vous-visio",
+    ],
+    ancres: [
+      "prendre rendez-vous avec un notaire",
+      "rendez-vous notaire en ligne",
+      "rendez-vous avec un notaire",
+      "rendez-vous notaire",
+      "rendez-vous chez le notaire",
+      "rdv notaire",
+    ],
+  },
   {
     href: "/frais-de-notaire",
     ancres: [
@@ -81,6 +100,7 @@ export async function insertInternalLinks(
   let result = html;
 
   for (const pilier of PAGES_PILIERS) {
+    if (pilier.slugs && !pilier.slugs.includes(currentSlug)) continue;
     for (const ancre of pilier.ancres) {
       const lie = lierAncre(result, ancre, pilier.href);
       if (lie) {

@@ -13,9 +13,13 @@ export const metadata: Metadata = {
   // « prendre rdv notaire » et « rdv notaire en ligne » : les deux requêtes sur
   // lesquelles Google associe l'accueil. Le titre du 25/10 avait retiré
   // « prendre » (Search Console, 26/10 : « prendre rdv notaire » 11,7e).
-  title: "Prendre RDV notaire en ligne : en visio ou au cabinet",
+  // 19/11/2026 : « rendez vous notaire » (78 impressions, 11,4e) était absent
+  // du titre et du H1, et quatre articles de blog s'en partageaient ~190
+  // impressions sans un clic. Le titre porte maintenant « rendez-vous notaire »,
+  // « notaire en ligne » et « prendre RDV notaire ».
+  title: "Rendez-vous notaire en ligne : prendre RDV notaire en visio",
   description:
-    "Prenez RDV avec un notaire en quelques clics : créneaux réels, confirmation immédiate. Immobilier, succession, mariage, donation — en visio ou au cabinet, sans attendre de rappel.",
+    "Prenez rendez-vous avec un notaire en quelques clics : créneaux réels, confirmation immédiate. Immobilier, succession, mariage, donation — en visio ou au cabinet, sans attendre de rappel.",
   keywords: [
     "rdv notaire",
     "rdv notaire en ligne",
@@ -30,7 +34,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io" },
   openGraph: {
-    title: "RDV notaire en ligne · Notaires.io",
+    title: "Rendez-vous notaire en ligne · Notaires.io",
     description:
       "Prenez RDV avec un notaire en ligne, gratuitement, en visio ou au cabinet.",
     url: "https://notaires.io",
@@ -40,7 +44,7 @@ export const metadata: Metadata = {
 
 const faqParticuliers = [
   {
-    q: "Comment prendre RDV avec un notaire en ligne ?",
+    q: "Comment prendre rendez-vous (RDV) avec un notaire en ligne ?",
     a: "Indiquez votre ville ou le nom du notaire, choisissez le motif (achat immobilier, succession, donation, mariage, société…), puis un créneau libre dans son agenda, en visio ou au cabinet. La confirmation arrive aussitôt par e-mail : pas d'appel au standard, pas de rappel à attendre.",
   },
   {
@@ -76,7 +80,7 @@ const faqParticuliers = [
     a: "Oui. Vous pouvez gérer votre rendez-vous depuis votre confirmation. En cas d'imprévu, prévenez simplement le plus tôt possible.",
   },
   {
-    q: "Comment prendre RDV avec un notaire en ligne ?",
+    q: "Comment prendre rendez-vous (RDV) avec un notaire en ligne ?",
     a: "Vous décrivez votre situation en quelques questions, vous comparez les créneaux réellement disponibles des notaires compétents sur votre sujet, puis vous réservez. La confirmation arrive par e-mail, avec le lien de visioconférence ou l'adresse de l'étude. Vous n'attendez aucun rappel : le créneau est bloqué dans l'agenda au moment où vous le choisissez.",
   },
   {

@@ -560,6 +560,9 @@ function Article5() {
       <p className="text-[var(--color-muted)] mb-4 leading-relaxed">
         Hors de ce premier rendez-vous, un simple renseignement n'est en principe pas facturé non plus : voir notre guide sur le <a href="/blog/consultation-notaire-prix" className="text-[var(--color-accent)] underline">prix d'une consultation notaire pour un renseignement</a>.
       </p>
+      <p className="text-[var(--color-muted)] mb-4 leading-relaxed">
+        Pour réserver, <a href="/" className="text-[var(--color-accent)] underline">prenez rendez-vous avec un notaire en ligne</a> : vous voyez directement les créneaux libres de chaque étude.
+      </p>
 
       <h2 className="text-2xl font-bold text-[var(--color-primary)] mt-10 mb-4">Ce qu'on peut aborder en 30 minutes</h2>
       <p className="text-[var(--color-muted)] mb-4 leading-relaxed">

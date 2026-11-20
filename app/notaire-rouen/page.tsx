@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -33,32 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Rouen", item: "https://notaires.io/notaire-rouen" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Rouen",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Rouen", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Rouen pour mariage, PACS, immobilier, création de société et succession.",
-      url: "https://notaires.io/notaire-rouen",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Quels quartiers et communes de la Métropole Rouen Normandie couvrent vos notaires ?",
-    a: "Nos notaires partenaires à Rouen couvrent tous les quartiers : Vieux-Rouen (rive droite), Rive Gauche, Saint-Sever, La Chapelle-du-Mont-de-France, Mont-Saint-Aignan, Bois-Guillaume, ainsi que les communes de la métropole : Sotteville-lès-Rouen, Saint-Étienne-du-Rouvray, Déville-lès-Rouen, Bihorel et Maromme. La visioconférence est disponible pour les clients du Pays de Bray ou du Pays de Caux.",
+    a: "Les notaires à Rouen couvrent tous les quartiers : Vieux-Rouen (rive droite), Rive Gauche, Saint-Sever, La Chapelle-du-Mont-de-France, Mont-Saint-Aignan, Bois-Guillaume, ainsi que les communes de la métropole : Sotteville-lès-Rouen, Saint-Étienne-du-Rouvray, Déville-lès-Rouen, Bihorel et Maromme. La visioconférence est disponible pour les clients du Pays de Bray ou du Pays de Caux.",
   },
   {
     q: "Quels actes notariés sont fréquents pour l'immobilier à Rouen ?",
@@ -70,11 +50,14 @@ const FAQ = [
   },
   {
     q: "Peut-on signer un acte notarié à distance depuis Rouen ?",
-    a: "Oui. La signature électronique à distance (AAED) est disponible à Rouen. Particulièrement appréciée des cadres navettant régulièrement sur Paris, vous pouvez signer votre acte par visioconférence depuis votre domicile à Rouen ou depuis votre bureau à Paris. Votre notaire partenaire vous précisera les actes compatibles avec ce dispositif.",
+    a: "Oui. La signature électronique à distance (AAED) est disponible à Rouen. Particulièrement appréciée des cadres navettant régulièrement sur Paris, vous pouvez signer votre acte par visioconférence depuis votre domicile à Rouen ou depuis votre bureau à Paris. Votre notaire vous précisera les actes compatibles avec ce dispositif.",
   },
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Rouen", "rouen");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Rouen", 120);
   const notaires = avecInscrits(
@@ -86,23 +69,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Rouen"
-          intro="Vous cherchez un notaire à Rouen pour votre mariage, votre PACS, un achat immobilier en Normandie ou la création de votre société ? Nos notaires partenaires rouennais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
+          intro={introNombre(ville) + "Vous cherchez un notaire à Rouen pour votre mariage, votre PACS, un achat immobilier en Normandie ou la création de votre société ? Les notaires rouennais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-le-havre", label: "RDV notaire au Havre" },
             { href: "/notaire-paris", label: "RDV notaire à Paris" },
             { href: "/notaire-ville/caen", label: "RDV notaire à Caen" },

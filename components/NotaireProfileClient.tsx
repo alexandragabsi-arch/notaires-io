@@ -1075,18 +1075,36 @@ export default function NotaireProfileClient({
           <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shrink-0">
             <Lock className="w-5 h-5 text-slate-400" strokeWidth={2} />
           </div>
+          {/* La bannière s'adresse d'abord au particulier, qui forme presque
+              tout le public des fiches : l'ancien bouton « C'est vous ? »
+              l'envoyait vers l'inscription des notaires, qu'il quittait sans
+              rien saisir. Il est orienté vers les notaires inscrits de la
+              ville ; le titulaire garde un lien discret pour activer sa fiche
+              (nofollow : les robots ne doivent pas suivre ce lien). */}
           <div className="flex-1 min-w-0">
-            <p className="font-bold text-[14px] text-[var(--color-text-strong)]">Profil non revendiqué</p>
-            <p className="text-[13px] text-[var(--color-muted)] leading-snug">
-              Ce profil existe dans notre annuaire mais n&apos;a pas encore été activé par son titulaire.
-              Les coordonnées et l&apos;agenda restent masqués tant que le notaire n&apos;a pas souscrit.
+            <p className="font-bold text-[14px] text-[var(--color-text-strong)]">
+              Ce notaire ne prend pas encore de rendez-vous sur Notaires.io
+            </p>
+            <p className="text-[13px] text-[var(--color-muted)] leading-snug text-justify">
+              Ses coordonnées et son agenda ne sont pas encore disponibles. D&apos;autres notaires
+              à {notaire.city} vous reçoivent dès maintenant, en visio ou à leur étude.
+            </p>
+            <p className="mt-1.5 text-[12.5px] text-[var(--color-muted)]">
+              Vous êtes {notaire.name || "le titulaire de cette fiche"} ?{" "}
+              <a
+                href={`/inscription?claim=${notaire.id}`}
+                rel="nofollow"
+                className="font-semibold text-[var(--color-accent)] underline underline-offset-2 hover:no-underline"
+              >
+                Activez votre profil
+              </a>
             </p>
           </div>
           <a
-            href={`/inscription?claim=${notaire.id}`}
+            href={`/annuaire?ville=${encodeURIComponent(notaire.city)}`}
             className="shrink-0 inline-flex items-center gap-1.5 bg-[var(--color-accent)] hover:bg-[#1e4aa8] text-white px-4 py-2.5 rounded-[10px] text-[13px] font-bold transition-colors"
           >
-            C&apos;est vous ?
+            Voir les notaires disponibles
             <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
           </a>
         </div>
@@ -1175,6 +1193,15 @@ export default function NotaireProfileClient({
                     Ce notaire n&apos;a pas encore activé son profil Notaires.io.
                   </p>
                 </div>
+                {/* Sans issue, le particulier repartait : on lui montre les
+                    notaires de la même ville qui ont un agenda en ligne. */}
+                <a
+                  href={`/annuaire?ville=${encodeURIComponent(notaire.city)}`}
+                  className="inline-flex items-center gap-2 bg-gradient-cta text-white px-5 py-2.5 rounded-[10px] text-[14px] font-semibold shadow-[var(--shadow-cta)]"
+                >
+                  Prendre rendez-vous avec un notaire à {notaire.city}
+                  <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
+                </a>
               </div>
             ) : agenda ? (
               <SlotCalendar

@@ -1,12 +1,17 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
+  // Les liens « Activez votre profil » des ~19 600 fiches mènent tous à
+  // /inscription?claim=… : les robots les suivaient et faisaient 85 % des
+  // visites de l'inscription, ce qui rendait le suivi illisible. La page
+  // /inscription elle-même reste explorable.
+  const prive = ["/api/", "/connexion", "/espace-notaire", "/espace-client", "/inscription?claim="];
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/connexion", "/espace-notaire", "/espace-client"],
+        disallow: prive,
       },
       {
         // Robots des moteurs de réponse (ChatGPT, Perplexity, Claude, Google AI).
@@ -28,7 +33,7 @@ export default function robots(): MetadataRoute.Robots {
           "Google-Extended",
         ],
         allow: "/",
-        disallow: ["/api/", "/connexion", "/espace-notaire", "/espace-client"],
+        disallow: prive,
       },
       {
         // En revanche, les aspirateurs qui servent uniquement à constituer des

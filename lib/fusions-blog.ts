@@ -19,6 +19,10 @@ export const FUSIONS_BLOG: Record<string, string> = {
   "rdv-notaire-urgent-rapide": "rdv-notaire-rapide",
   // Requête transactionnelle, et titre encore daté de 2025.
   "prendre-rdv-notaire-en-ligne": "rdv-notaire-rapide",
+  // 19/11/2026 : H1 « Prendre RDV avec un notaire en ligne et obtenir un
+  // rendez-vous rapidement » — la promesse de l'accueil, et le sujet de
+  // rdv-notaire-rapide. 48 impressions sur « rendez vous notaire », 0 clic.
+  "notaire-disponible-rapidement": "rdv-notaire-rapide",
 
   // « premier rendez-vous gratuit » — la page conservée traite la question
   // sous l'angle « mythe ou réalité », sans promettre la gratuité.

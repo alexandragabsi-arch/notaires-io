@@ -97,7 +97,12 @@ export default function Hero() {
               qui dit ce que le site fait de mieux. */}
           {/* « Prendre » plutôt que « Prenez » (15/10/2026) : c'est le verbe des
               requêtes « prendre rdv notaire » et « prendre rdv notaire en ligne ». */}
-          Prendre RDV en ligne avec le bon notaire{" "}
+          {/* « rendez-vous » en toutes lettres (19/11/2026) : sur « rendez vous
+              notaire », l'accueil (76 impressions) était concurrencé par quatre
+              articles (~190 impressions, aucun clic) qui portaient le mot dans
+              leur H1, quand l'accueil ne l'avait ni dans le H1 ni dans le
+              <title>. « RDV » reste dans le <title>. */}
+          Prendre rendez-vous en ligne avec le bon notaire{" "}
           <span className="text-[var(--color-primary)]">pour votre situation</span>
         </motion.h1>
 

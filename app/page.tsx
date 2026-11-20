@@ -13,7 +13,9 @@ export const metadata: Metadata = {
   // « prendre rdv notaire » et « rdv notaire en ligne » : les deux requêtes sur
   // lesquelles Google associe l'accueil. Le titre du 25/10 avait retiré
   // « prendre » (Search Console, 26/10 : « prendre rdv notaire » 11,7e).
-  title: "Prendre RDV notaire en ligne : en visio ou au cabinet",
+  // 19/11 : « rendez-vous » ajouté en tête — « rendez vous notaire » partait
+  // vers quatre articles de blog faute de figurer ici ou dans le H1.
+  title: "Rendez-vous notaire en ligne : prendre RDV en visio ou au cabinet",
   description:
     "Prenez RDV avec un notaire en quelques clics : créneaux réels, confirmation immédiate. Immobilier, succession, mariage, donation — en visio ou au cabinet, sans attendre de rappel.",
   keywords: [
@@ -30,7 +32,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "https://notaires.io" },
   openGraph: {
-    title: "RDV notaire en ligne · Notaires.io",
+    title: "Rendez-vous notaire en ligne · Notaires.io",
     description:
       "Prenez RDV avec un notaire en ligne, gratuitement, en visio ou au cabinet.",
     url: "https://notaires.io",

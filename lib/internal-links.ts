@@ -8,7 +8,20 @@ import { FUSIONS_BLOG, FUSIONS_VERS_PAGE } from "./fusions-blog";
  * « calcul frais de notaire ». Les ancres vont de la plus précise à la plus
  * générale : la première trouvée dans l'article est utilisée.
  */
-const PAGES_PILIERS: { href: string; ancres: string[] }[] = [
+const PAGES_PILIERS: { href: string; ancres: string[]; sauf?: string[] }[] = [
+  {
+    // « rdv notaire », « prendre rdv notaire », « rdv notaire en ligne » :
+    // l'accueil domine (377 impressions, 14 clics sur 28 jours au 20/11/2026)
+    // mais cinq articles se positionnaient aussi. Ils lui renvoient désormais
+    // leur autorité sur ces mots.
+    href: "/",
+    ancres: [
+      "prendre rendez-vous avec un notaire",
+      "prendre rdv avec un notaire",
+      "rdv notaire en ligne",
+      "prendre rdv notaire",
+    ],
+  },
   {
     href: "/frais-de-notaire",
     ancres: [
@@ -18,6 +31,16 @@ const PAGES_PILIERS: { href: string; ancres: string[] }[] = [
       "simulateur de frais de notaire",
       "frais de notaire",
     ],
+  },
+  {
+    // « notaire en ligne » (20/11/2026, 28 jours) : l'accueil et quatre
+    // articles passaient devant /notaire-en-ligne, 5ᵉ avec 86 impressions.
+    // 20 articles emploient l'expression, aucun ne liait la page dédiée.
+    // « rdv notaire en ligne » reste à l'accueil : on ne lie pas l'expression
+    // quand elle termine une demande de rendez-vous.
+    href: "/notaire-en-ligne",
+    ancres: ["consulter un notaire en ligne", "notaire en ligne"],
+    sauf: ["rdv ", "rendez-vous ", "rendez-vous avec un ", "rdv avec un "],
   },
 ];
 
@@ -81,8 +104,13 @@ export async function insertInternalLinks(
   let result = html;
 
   for (const pilier of PAGES_PILIERS) {
+    // Déjà lié à la main dans l'article : un second lien n'apporte rien.
+    if (result.includes(`href="${pilier.href}"`)) {
+      usedHrefs.add(pilier.href);
+      continue;
+    }
     for (const ancre of pilier.ancres) {
-      const lie = lierAncre(result, ancre, pilier.href);
+      const lie = lierAncre(result, ancre, pilier.href, pilier.sauf);
       if (lie) {
         result = lie;
         usedHrefs.add(pilier.href);
@@ -109,9 +137,12 @@ export async function insertInternalLinks(
 }
 
 /** Lie la première occurrence libre de l'ancre ; null si elle n'apparaît pas hors d'un lien. */
-function lierAncre(html: string, ancre: string, href: string): string | null {
+function lierAncre(html: string, ancre: string, href: string, sauf: string[] = []): string | null {
+  // `sauf` : mots qui, juste avant l'ancre, en changent le sens (« rdv notaire
+  // en ligne » vise l'accueil, pas la page « notaire en ligne »).
+  const exclusions = sauf.map((s) => `(?<!${escapeRegex(s)})`).join("");
   const pattern = new RegExp(
-    `(?<![<\/a-zA-Z"=])\\b(${escapeRegex(ancre)})\\b(?![^<]*<\\/a>)(?![^<]*>)`,
+    `(?<![<\/a-zA-Z"=])${exclusions}\\b(${escapeRegex(ancre)})\\b(?![^<]*<\\/a>)(?![^<]*>)`,
     "i",
   );
   const match = html.match(pattern);

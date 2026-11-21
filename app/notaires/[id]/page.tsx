@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import NotaireProfileClient from "@/components/NotaireProfileClient";
@@ -26,14 +27,18 @@ export const dynamicParams = true;
 // redéploiement (voir aussi revalidatePath dans /api/profil-notaire).
 export const revalidate = 300;
 
+// Une fiche se génère en quelques secondes : au-delà, mieux vaut échouer vite
+// (et laisser Next resservir la version en cache) que bloquer 300 s.
+export const maxDuration = 30;
+
 /**
  * Version complétée par le notaire (table notaire_profiles, même id que la
  * fiche de l'annuaire) : photo, présentation, site, agenda… Elle prend le pas
  * sur les données importées. Seules les fiches rattachées à un compte, et dont
  * l'abonnement ou la période offerte n'a pas expiré, comptent.
  */
-async function ficheCompletee(id: string): Promise<Partial<ListingNotaire> | null> {
-  const { data } = await createClient(
+const ficheCompletee = cache(async (id: string): Promise<Partial<ListingNotaire> | null> => {
+  const { data, error } = await createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   )
@@ -41,7 +46,14 @@ async function ficheCompletee(id: string): Promise<Partial<ListingNotaire> | nul
     .select("name, city, initials, office_name, address, phone, website, role, specialties, sub_specialties, languages, bio, photo, slot_matrix, disponibilites, transports, user_id, subscription_status")
     .eq("id", id)
     .eq("verifie", true) // compte à l'e-mail confirmé uniquement
+    // Sans limite, une réponse Supabase qui n'arrive pas bloquait la page
+    // jusqu'à l'arrêt Vercel à 300 s (4 cas entre le 9 et le 16/11/2026).
+    .abortSignal(AbortSignal.timeout(5000))
     .maybeSingle();
+  // Échec (délai dépassé, réseau) : on lève l'erreur plutôt que de rendre la
+  // fiche sans profil complété. Next garde alors la dernière version générée
+  // au lieu de mettre en cache, 5 min, une fiche sans photo ni agenda.
+  if (error) throw new Error(`notaire_profiles (${id}) : ${error.message}`);
   // Période offerte terminée sans carte (ou abonnement résilié) : on revient à
   // la fiche d'annuaire de base. Les données restent en base pour la réactivation.
   if (!data) return null;
@@ -82,7 +94,7 @@ async function ficheCompletee(id: string): Promise<Partial<ListingNotaire> | nul
   };
   // On ne garde que les champs renseignés : un champ vide ne masque pas l'annuaire.
   return Object.fromEntries(Object.entries(champs).filter(([, v]) => v !== undefined)) as Partial<ListingNotaire>;
-}
+});
 
 /** Cherche un notaire dans LISTING_NOTAIRES puis dans getAllNotaires() */
 function findNotaire(id: string): ListingNotaire | undefined {

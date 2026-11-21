@@ -88,6 +88,9 @@ async function lireInscrits(): Promise<ListingNotaire[]> {
     const res = await fetch(`${URL}/rest/v1/notaire_profiles?${q}`, {
       headers: { apikey: CLE, Authorization: `Bearer ${CLE}` },
       next: { revalidate: REVALIDATE_INSCRITS, tags: ["inscrits"] },
+      // Sans limite, un Supabase qui ne répond pas bloquait toutes les pages
+      // qui lisent les inscrits jusqu'à l'arrêt Vercel (300 s).
+      signal: AbortSignal.timeout(5000),
     });
     if (!res.ok) return [];
     const rows = (await res.json()) as Record<string, unknown>[];

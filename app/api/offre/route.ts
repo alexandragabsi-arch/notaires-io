@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   const code = offreValide(body.offre);
   if (!code) {
     return NextResponse.json(
-      { error: "Cette offre n'est plus disponible. Vous pouvez vous inscrire avec les 2 mois offerts habituels (carte demandée, aucun débit avant 2 mois)." },
+      { error: "Cette offre n'est plus disponible. Vous pouvez vous inscrire avec le mois offert habituel (carte demandée, aucun débit avant 1 mois)." },
       { status: 410 },
     );
   }

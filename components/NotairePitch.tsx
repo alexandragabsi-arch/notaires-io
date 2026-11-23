@@ -501,10 +501,10 @@ export default function NotairePitch() {
             <div className="mt-5 pt-4 border-t border-[var(--color-border-soft)] text-[12px] text-[var(--color-muted)] leading-relaxed">
               <p className="mb-1">
                 <strong className="text-[var(--color-text-strong)]">Abonnement mensuel</strong> —
-                2 mois offerts, <strong className="text-[var(--color-text-strong)]">sans carte bancaire</strong> à
+                1 mois offert, <strong className="text-[var(--color-text-strong)]">sans carte bancaire</strong> à
                 l&apos;inscription. Pour continuer ensuite : 119 € HT/mois par notaire — 99 € HT/mois
                 pour les notaires installés depuis moins de trois ans, en ajoutant votre carte
-                depuis votre espace notaire ; le premier prélèvement a lieu à la fin des 2 mois.
+                depuis votre espace notaire ; le premier prélèvement a lieu à la fin du mois offert.
                 Sans carte, l&apos;accès s&apos;arrête à cette date et rien n&apos;est prélevé.
                 Une fois la carte enregistrée, reconduction automatique chaque mois, résiliable à
                 tout moment depuis votre espace ; la résiliation prend effet à la fin de la période
@@ -522,7 +522,7 @@ export default function NotairePitch() {
             </div>
 
             <p className="text-center text-[12px] text-[var(--color-muted)] mt-3">
-              Aucun débit pendant 2 mois · Aucun engagement · Résiliable à tout moment
+              Aucun débit pendant 1 mois · Aucun engagement · Résiliable à tout moment
             </p>
           </motion.div>
         </div>

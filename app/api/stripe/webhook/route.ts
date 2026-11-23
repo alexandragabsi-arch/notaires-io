@@ -180,7 +180,7 @@ export async function POST(req: NextRequest) {
     if (email) {
       await sendEmail(
         email,
-        "Bienvenue sur Notaires.io — vos 2 mois offerts commencent ✓",
+        "Bienvenue sur Notaires.io — votre mois offert commence ✓",
         emailLayout(`
           <h1 style="font-size:22px;font-weight:700;margin-bottom:8px;color:#1a1a2e">
             Bienvenue sur Notaires.io 🎉
@@ -192,7 +192,7 @@ export async function POST(req: NextRequest) {
           </p>
           <div style="background:#f8f9fa;border-radius:12px;padding:20px;margin-bottom:24px">
             <div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:4px">
-              Vos 2 premiers mois sont offerts
+              Votre premier mois est offert
             </div>
             <div style="font-size:14px;color:#5a6a8a">
               Aucun prélèvement n'a été effectué.${
@@ -231,7 +231,7 @@ export async function POST(req: NextRequest) {
     }
     await sendEmail(
       ADMIN_EMAIL,
-      `[Notaires.io] Nouvel abonnement notaire — 2 mois offerts`,
+      `[Notaires.io] Nouvel abonnement notaire — 1 mois offert`,
       emailLayout(`
         <h2 style="font-size:18px;font-weight:700;margin-bottom:16px">Nouvel abonnement</h2>
         <table style="width:100%;border-collapse:collapse;font-size:14px;text-align:left">
@@ -239,7 +239,7 @@ export async function POST(req: NextRequest) {
           <tr><td style="padding:6px 0;color:#5a6a8a">Étude</td><td>${meta.etude || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">CRPCEN</td><td>${meta.crpcen || "—"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">Email</td><td>${email || "—"}</td></tr>
-          <tr><td style="padding:6px 0;color:#5a6a8a">Offre</td><td>2 mois offerts, puis ${meta.formule === "jeune-pro" ? "99 € HT/mois (jeune notaire — <strong>justificatif à demander</strong>)" : "119 € HT/mois"}</td></tr>
+          <tr><td style="padding:6px 0;color:#5a6a8a">Offre</td><td>1 mois offert, puis ${meta.formule === "jeune-pro" ? "99 € HT/mois (jeune notaire — <strong>justificatif à demander</strong>)" : "119 € HT/mois"}</td></tr>
           <tr><td style="padding:6px 0;color:#5a6a8a">1er prélèvement</td><td>${finEssai || "—"}</td></tr>
         </table>
       `),

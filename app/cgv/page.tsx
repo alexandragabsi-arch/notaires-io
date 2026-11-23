@@ -9,7 +9,7 @@ import { EDITEUR, LEGAL_UPDATED } from "@/lib/legal";
 // alors qu’elle n’existait pas : le notaire acceptait des conditions
 // pointant vers un lien mort. Les montants ci-dessous sont repris à
 // l’identique de la session Checkout (119 € HT/mois, période d’essai de
-// 2 mois via subscription_data[trial_end], TVA via Stripe Tax).
+// 1 mois via subscription_data[trial_end], TVA via Stripe Tax).
 
 export const metadata: Metadata = {
   title: "Conditions générales de vente",
@@ -86,8 +86,8 @@ export default function CgvPage() {
           préjudice de la régularisation des mois déjà facturés.
         </li>
         <li>
-          Offre de lancement : <strong>les deux premiers mois d’abonnement sont
-          offerts</strong>. Aucune somme n’est prélevée pendant cette période ;
+          Offre de lancement : <strong>le premier mois d’abonnement est
+          offert</strong>. Aucune somme n’est prélevée pendant cette période ;
           le tarif de 119 € HT par mois s’applique ensuite.
         </li>
         <li>
@@ -113,7 +113,7 @@ export default function CgvPage() {
         En validant sa souscription, l’abonné enregistre un moyen de paiement et
         autorise le <strong>prélèvement mensuel automatique</strong> sur
         celui-ci. Au titre de l’offre de lancement,{" "}
-        <strong>aucune somme n’est prélevée pendant les deux premiers mois</strong> :
+        <strong>aucune somme n’est prélevée pendant le premier mois</strong> :
         le premier prélèvement intervient au terme de cette période, puis à
         chaque date anniversaire mensuelle. L’abonné peut résilier avant ce
         terme sans qu’aucun montant ne soit dû. Les factures sont mises à

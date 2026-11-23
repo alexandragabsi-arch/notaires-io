@@ -81,7 +81,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Combien coûte le référencement sur Notaires.io ?",
-    a: `${offre.libelle} : ${offre.mois} mois offerts, sans carte bancaire, pour toute inscription jusqu'au ${dateFr(offre.finValidite)}. Les formules vous sont ensuite présentées lors d'une démo en visio de 20 minutes, sans engagement.`,
+    a: `${offre.libelle} : ${offre.mois} mois offert${offre.mois > 1 ? "s" : ""}, sans carte bancaire, pour toute inscription jusqu'au ${dateFr(offre.finValidite)}. Les formules vous sont ensuite présentées lors d'une démo en visio de 20 minutes, sans engagement.`,
   },
   {
     q: "Dois-je changer d'outil d'agenda ?",
@@ -133,7 +133,7 @@ export default function Page() {
               </Link>
             </div>
             <p className="mt-4 text-[13px] text-[var(--color-muted)]">
-              {offre.mois} mois offerts, sans carte bancaire, jusqu&apos;au {dateFr(offre.finValidite)}.
+              {offre.mois} mois offert{offre.mois > 1 ? "s" : ""}, sans carte bancaire, jusqu&apos;au {dateFr(offre.finValidite)}.
             </p>
           </div>
         </section>
@@ -163,7 +163,7 @@ export default function Page() {
             </p>
             <p className="mt-2 text-[15px] leading-relaxed text-justify hyphens-auto text-[var(--color-muted)] max-w-[560px] mx-auto [text-align-last:center]">
               Fiche, horaires, visio, lien pour Google et QR code : tout se règle depuis votre espace notaire.
-              {` ${offre.libelle} : ${offre.mois} mois offerts, sans carte bancaire.`}
+              {` ${offre.libelle} : ${offre.mois} mois offert${offre.mois > 1 ? "s" : ""}, sans carte bancaire.`}
             </p>
             <a
               href="/inscription"

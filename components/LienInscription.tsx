@@ -32,7 +32,7 @@ function Bandeau() {
   return (
     <div className="mb-3">
       <span className="inline-flex items-center gap-2 bg-[var(--color-tint-green)] text-[var(--color-success)] px-4 py-2 rounded-full text-[13px] font-bold">
-        🎁 {OFFRES[offre].libelle} — 2 mois offerts, sans carte bancaire
+        🎁 {OFFRES[offre].libelle} — 1 mois offert, sans carte bancaire
       </span>
     </div>
   );

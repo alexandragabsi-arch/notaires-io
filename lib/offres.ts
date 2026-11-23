@@ -4,9 +4,9 @@
 // serveur revérifie toujours la validité.
 
 export const OFFRES = {
-  // Offre par défaut : 2 mois offerts sans carte pour tout notaire qui s'inscrit.
+  // Offre par défaut : 1 mois offert sans carte pour tout notaire qui s'inscrit.
   lancement: {
-    mois: 2,
+    mois: 1,
     finValidite: "2026-12-31T23:59:59+01:00",
     libelle: "Offre de lancement",
   },

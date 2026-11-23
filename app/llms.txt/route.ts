@@ -74,7 +74,7 @@ https://notaires.io/llms-full.txt
 
 ## Tarifs de l'abonnement notaire
 
-Deux mois offerts, puis 119 € HT par mois et par notaire, sans engagement.
+Un mois offert, puis 119 € HT par mois et par notaire, sans engagement.
 99 € HT par mois pour les notaires installés depuis moins de trois ans.
 Ces montants concernent l'abonnement des professionnels à la plateforme, et
 non le coût des actes, qui reste réglementé.

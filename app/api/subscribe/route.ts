@@ -6,7 +6,7 @@ import { estEssaiSansCarte, dateFr } from "@/lib/offres";
 /**
  * POST /api/subscribe
  * Crée une session Stripe Checkout en mode "subscription" avec :
- *   - Période d'essai : 2 mois offerts (aucun débit)
+ *   - Période d'essai : 1 mois offert (aucun débit)
  *   - Puis 119 € HT/mois (99 € pour la formule « jeune notaire »),
  *     prélevé automatiquement
  *
@@ -48,15 +48,15 @@ const FORMULES = {
 type Formule = keyof typeof FORMULES;
 
 /**
- * Fin de la période d'essai : 2 mois calendaires à compter d'aujourd'hui.
- * On n'utilise pas trial_period_days (60 jours ne font pas 2 mois selon les
- * mois traversés) — un notaire inscrit le 15 mars est débité le 15 mai.
+ * Fin de la période d'essai : 1 mois calendaire à compter d'aujourd'hui.
+ * On n'utilise pas trial_period_days (30 jours ne font pas 1 mois selon les
+ * mois traversés) — un notaire inscrit le 15 mars est débité le 15 avril.
  */
 function finEssaiUnix(): number {
   const d = new Date();
   const jour = d.getDate();
-  d.setMonth(d.getMonth() + 2);
-  // Débordement (31 décembre + 2 mois → 3 mars) : on recale sur le dernier
+  d.setMonth(d.getMonth() + 1);
+  // Débordement (31 janvier + 1 mois → 3 mars) : on recale sur le dernier
   // jour du mois visé.
   if (d.getDate() !== jour) d.setDate(0);
   return Math.floor(d.getTime() / 1000);

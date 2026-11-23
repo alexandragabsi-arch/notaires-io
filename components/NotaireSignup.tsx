@@ -537,7 +537,7 @@ export default function NotaireSignup() {
                         <span className="text-[13px] text-[var(--color-muted)] ml-1">offerts</span>
                       </div>
                       <p className="text-[13px] text-[var(--color-muted)]">puis <strong className="text-[var(--color-text-strong)]">{jeunePro ? "99" : "119"} € HT/mois</strong> · résiliable à tout moment</p>
-                      <p className="text-[12px] text-[var(--color-muted)] mt-1.5">{offre ? "Aucune carte demandée. Rappel par e-mail 7 jours avant la fin." : "Carte enregistrée maintenant, aucun débit avant 2 mois."}</p>
+                      <p className="text-[12px] text-[var(--color-muted)] mt-1.5">{offre ? "Aucune carte demandée. Rappel par e-mail 7 jours avant la fin." : "Carte enregistrée maintenant, aucun débit avant 1 mois."}</p>
                     </div>
                     <label className="flex items-start gap-2.5 cursor-pointer bg-white border border-[var(--color-border-soft)] rounded-xl px-4 py-3">
                       <input
@@ -561,7 +561,7 @@ export default function NotaireSignup() {
                     </ul>
                     {payError && <p className="text-[13px] text-red-600 bg-red-50 rounded-xl px-4 py-3 border border-red-200">{payError}</p>}
                     <button type="button" onClick={goToPayment} disabled={paying} className="w-full inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-4 rounded-[12px] text-[16px] font-semibold shadow-[var(--shadow-cta)] transition-transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed">
-                      {paying ? <><Loader2 className="w-5 h-5 animate-spin" strokeWidth={2.5} />Redirection…</> : <>{offre ? <Gift className="w-5 h-5" strokeWidth={2.5} /> : <CreditCard className="w-5 h-5" strokeWidth={2.5} />}{offre ? "Activer mes 2 mois offerts — sans carte" : "Activer mes 2 mois offerts"}</>}
+                      {paying ? <><Loader2 className="w-5 h-5 animate-spin" strokeWidth={2.5} />Redirection…</> : <>{offre ? <Gift className="w-5 h-5" strokeWidth={2.5} /> : <CreditCard className="w-5 h-5" strokeWidth={2.5} />}{offre ? "Activer mon mois offert — sans carte" : "Activer mon mois offert"}</>}
                     </button>
                     <div className="flex items-center justify-center gap-2 text-[12px] text-[var(--color-muted)]">
                       <ShieldCheck className="w-4 h-4 shrink-0" strokeWidth={2} />{offre ? "Aucune carte bancaire demandée" : <>Carte sécurisée par Stripe · Aucun débit aujourd&apos;hui</>}
@@ -611,8 +611,8 @@ export default function NotaireSignup() {
               la première chose qu'il lit. */}
           <div className="inline-flex items-center gap-2 bg-[var(--color-tint-green)] text-[var(--color-success)] px-4 py-2 rounded-full text-[13px] font-bold mb-4">
             {offre
-              ? <>🎁 {OFFRES[offre].libelle} — 2 mois offerts, sans carte bancaire</>
-              : <>🎁 2 mois offerts — aucun débit aujourd&apos;hui</>}
+              ? <>🎁 {OFFRES[offre].libelle} — 1 mois offert, sans carte bancaire</>
+              : <>🎁 1 mois offert — aucun débit aujourd&apos;hui</>}
           </div>
           <h1 className="serif text-[28px] sm:text-[36px] lg:text-[42px] font-bold text-[var(--color-text-strong)] tracking-tight mb-2">
             Créez votre profil notaire
@@ -623,21 +623,21 @@ export default function NotaireSignup() {
           </p>
           {offre ? (
             <p className="text-[14px] text-[var(--color-text-strong)] max-w-[560px] mx-auto">
-              Aucune carte demandée. À la fin des deux mois, vous choisissez : ajouter
+              Aucune carte demandée. À la fin du mois offert, vous choisissez : ajouter
               votre carte pour continuer (119 € HT/mois, sans engagement), ou arrêter —
               votre fiche reste alors dans l&apos;annuaire.
             </p>
           ) : (
             <p className="text-[14px] text-[var(--color-text-strong)] max-w-[560px] mx-auto">
-              Vos deux premiers mois sont offerts, puis 119 € HT/mois sans engagement.
+              Votre premier mois est offert, puis 119 € HT/mois sans engagement.
               La carte est enregistrée à la dernière étape mais n&apos;est débitée
-              qu&apos;à l&apos;issue des deux mois — vous pouvez arrêter avant, sans rien payer.
+              qu&apos;à l&apos;issue du premier mois — vous pouvez arrêter avant, sans rien payer.
             </p>
           )}
           {offreExpiree && (
             <p className="text-[13px] text-[var(--color-muted)] max-w-[560px] mx-auto mt-3 bg-[var(--color-accent-soft)] rounded-xl px-4 py-2.5">
               {OFFRES[offreConnue(offreParam)!].libelle} a pris fin le {offreFin}.
-              Vous bénéficiez de l&apos;offre de lancement : 2 mois offerts, sans carte.
+              Vous bénéficiez de l&apos;offre de lancement : 1 mois offert, sans carte.
             </p>
           )}
         </motion.div>
@@ -1136,7 +1136,7 @@ export default function NotaireSignup() {
                         <p className="text-[12px] text-[var(--color-muted)] mt-1.5">
                           {offre
                             ? "Aucune carte demandée. Rappel par e-mail 7 jours avant la fin."
-                            : "Carte enregistrée maintenant, aucun débit avant 2 mois."}
+                            : "Carte enregistrée maintenant, aucun débit avant 1 mois."}
                         </p>
                       </div>
 
@@ -1216,7 +1216,7 @@ export default function NotaireSignup() {
                         ) : (
                           <>
                             {offre ? <Gift className="w-5 h-5" strokeWidth={2.5} /> : <CreditCard className="w-5 h-5" strokeWidth={2.5} />}
-                            {offre ? "Activer mes 2 mois offerts — sans carte" : "Activer mes 2 mois offerts"}
+                            {offre ? "Activer mon mois offert — sans carte" : "Activer mon mois offert"}
                           </>
                         )}
                       </button>

@@ -90,7 +90,7 @@ export default function DemandeRappel({
             Ce notaire ne prend pas encore de rendez-vous en ligne
           </p>
           <p className="text-[13px] text-[var(--color-muted)] leading-snug text-justify">
-            Laissez-nous vos coordonnées : un notaire vous recontacte au sujet de votre projet.
+            Laissez-nous vos coordonnées : nous transmettons votre demande à {notaire.name}.
           </p>
         </div>
       </div>
@@ -99,7 +99,7 @@ export default function DemandeRappel({
         {/* ── Formulaire ── */}
         <div>
           <h2 id="demande-rappel-titre" className="serif text-[21px] sm:text-[23px] font-bold text-[var(--color-text-strong)] mb-4">
-            Être recontacté par un notaire
+            Être recontacté par {notaire.name}
           </h2>
 
           {etat === "envoye" ? (
@@ -108,7 +108,7 @@ export default function DemandeRappel({
               <div>
                 <p className="font-bold text-[14.5px] text-[var(--color-text-strong)]">Demande bien reçue</p>
                 <p className="text-[13.5px] text-[var(--color-muted)] leading-relaxed text-justify">
-                  Merci {champs.prenom}. Votre demande a été transmise : un notaire vous recontactera
+                  Merci {champs.prenom}. Votre demande a été transmise : vous serez recontacté par {notaire.name} ou, à défaut, par un autre notaire,
                   par e-mail{champs.telephone ? " ou par téléphone" : ""} dans les meilleurs délais.
                 </p>
               </div>
@@ -162,7 +162,7 @@ export default function DemandeRappel({
                   className="mt-0.5 w-4 h-4 shrink-0 accent-[var(--color-accent)]"
                 />
                 <span>
-                  J&apos;accepte que Notaires.io transmette ma demande à un notaire pour être recontacté.{" "}
+                  J&apos;accepte que Notaires.io transmette ma demande à {notaire.name} ou, à défaut, à un autre notaire, pour être recontacté.{" "}
                   <a href="/confidentialite" target="_blank" className="font-semibold text-[var(--color-accent)] underline underline-offset-2 hover:no-underline">
                     Politique de confidentialité
                   </a>
@@ -178,7 +178,7 @@ export default function DemandeRappel({
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-cta text-white px-6 py-3 rounded-[10px] text-[15px] font-semibold shadow-[var(--shadow-cta)] disabled:opacity-60 transition-transform hover:-translate-y-0.5"
                 >
                   <PhoneCall className="w-4 h-4" strokeWidth={2.5} />
-                  {etat === "envoi" ? "Envoi…" : "Être recontacté"}
+                  {etat === "envoi" ? "Envoi…" : "Être recontacté par ce notaire"}
                 </button>
               </div>
             </form>

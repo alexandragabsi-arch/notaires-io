@@ -60,3 +60,6 @@ scripts/desabonnements.txt
 scripts/generic_batch*.json
 scripts/appels-paris.csv
 scripts/appels-mobiles-idf.csv
+
+# Exports de leads visiteurs (données personnelles)
+leads-par-notaire-*.csv

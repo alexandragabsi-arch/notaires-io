@@ -13,6 +13,31 @@ import { lireDisponibilites } from "@/lib/disponibilites";
 import { adresseComplete, adresseCompleteBAN, coordonneesBAN } from "@/lib/adresse";
 import { filArianeJsonLd } from "@/lib/fil-ariane";
 import { notairesProches } from "@/lib/notaires-proches";
+import { departementDuCp } from "@/lib/villes-data";
+
+/** Ville comparée sans accents ni casse. */
+const cleVille = (c?: string | null) =>
+  (c ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+/** Code du département d'une fiche, d'après le code postal de son adresse. */
+const departementDe = (n: ListingNotaire) => departementDuCp(n.address?.match(/\b(\d{5})\b/)?.[1])?.code;
+
+/**
+ * Notaires inscrits proposés sur une fiche non inscrite : même ville d'abord,
+ * puis même département, puis les autres (tous reçoivent en visio).
+ */
+function inscritsAProposer(notaire: ListingNotaire, inscrits: ListingNotaire[], nombre = 3): ListingNotaire[] {
+  const ville = cleVille(notaire.city);
+  const dep = departementDe(notaire);
+  const rang = (i: ListingNotaire) =>
+    cleVille(i.city) === ville ? 0 : dep && departementDe(i) === dep ? 1 : 2;
+  return inscrits
+    .filter((i) => i.id !== notaire.id)
+    .map((i, ordre) => ({ i, r: rang(i), ordre }))
+    .sort((a, b) => a.r - b.r || a.ordre - b.ordre)
+    .slice(0, nombre)
+    .map((x) => x.i);
+}
 
 // Génère statiquement les 35 notaires vedettes ; les autres sont SSR à la demande
 export async function generateStaticParams() {
@@ -293,6 +318,9 @@ export default async function Page({
       )
     : [];
 
+  // Fiche non inscrite : réservation impossible, on propose des inscrits.
+  const inscritsDisponibles = notaire && !notaire.claimed ? inscritsAProposer(notaire, profils) : [];
+
   const jsonLd = notaire ? buildJsonLd(notaire, point) : null;
 
   return (
@@ -306,7 +334,7 @@ export default async function Page({
       <Header />
       <main className="min-h-screen bg-white">
         {/* On passe le notaire en prop pour éviter le lookup côté client (membres.json = server only) */}
-        <NotaireProfileClient id={id} initialNotaire={notaire} initialPoint={point} colleagues={colleagues} proches={proches} />
+        <NotaireProfileClient id={id} initialNotaire={notaire} initialPoint={point} colleagues={colleagues} proches={proches} inscritsDisponibles={inscritsDisponibles} />
       </main>
       <Footer />
     </>

@@ -37,6 +37,7 @@ import { filAriane } from "@/lib/fil-ariane";
 import CarteNotaire from "@/components/CarteNotaire";
 import { useCoordonnees, type Point } from "@/lib/use-coordonnees";
 import TransportsProches from "@/components/TransportsProches";
+import DemandeRappel from "@/components/DemandeRappel";
 
 const ALL_SPECIALTIES = [
   "Droit immobilier", "Successions", "Droit de la famille",
@@ -774,6 +775,7 @@ export default function NotaireProfileClient({
   initialPoint,
   colleagues = [],
   proches = [],
+  inscritsDisponibles = [],
 }: {
   id: string;
   initialNotaire?: ListingNotaire;
@@ -782,6 +784,8 @@ export default function NotaireProfileClient({
   colleagues?: ListingNotaire[];
   /** Notaires de l'arrondissement, de la ville ou du département (lib/notaires-proches.ts). */
   proches?: ListingNotaire[];
+  /** Fiche non inscrite : 2 à 3 notaires inscrits proposés pour réserver tout de suite. */
+  inscritsDisponibles?: ListingNotaire[];
 }) {
   // Présentation longue : repliée à quatre lignes, dépliable. Le bouton
   // n'apparaît que si le texte déborde réellement — la largeur dépend de
@@ -1069,46 +1073,11 @@ export default function NotaireProfileClient({
         </motion.div>
       )}
 
-      {/* ── Bannière profil non revendiqué (sous le hero) ── */}
-      {!isClaimed && (
-        <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-tint-blue)] px-5 py-4">
-          <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shrink-0">
-            <Lock className="w-5 h-5 text-slate-400" strokeWidth={2} />
-          </div>
-          {/* La bannière s'adresse d'abord au particulier, qui forme presque
-              tout le public des fiches : l'ancien bouton « C'est vous ? »
-              l'envoyait vers l'inscription des notaires, qu'il quittait sans
-              rien saisir. Il est orienté vers les notaires inscrits de la
-              ville ; le titulaire garde un lien discret pour activer sa fiche
-              (nofollow : les robots ne doivent pas suivre ce lien). */}
-          <div className="flex-1 min-w-0">
-            <p className="font-bold text-[14px] text-[var(--color-text-strong)]">
-              Ce notaire ne prend pas encore de rendez-vous sur Notaires.io
-            </p>
-            <p className="text-[13px] text-[var(--color-muted)] leading-snug text-justify">
-              Ses coordonnées et son agenda ne sont pas encore disponibles. D&apos;autres notaires
-              à {notaire.city} vous reçoivent dès maintenant, en visio ou à leur étude.
-            </p>
-            <p className="mt-1.5 text-[12.5px] text-[var(--color-muted)]">
-              Vous êtes {notaire.name || "le titulaire de cette fiche"} ?{" "}
-              <a
-                href={`/inscription?claim=${notaire.id}`}
-                rel="nofollow"
-                className="font-semibold text-[var(--color-accent)] underline underline-offset-2 hover:no-underline"
-              >
-                Activez votre profil
-              </a>
-            </p>
-          </div>
-          <a
-            href={`/annuaire?ville=${encodeURIComponent(notaire.city)}`}
-            className="shrink-0 inline-flex items-center gap-1.5 bg-[var(--color-accent)] hover:bg-[#1e4aa8] text-white px-4 py-2.5 rounded-[10px] text-[13px] font-bold transition-colors"
-          >
-            Voir les notaires disponibles
-            <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
-          </a>
-        </div>
-      )}
+      {/* ── Fiche non inscrite : demande de rappel (leads_visiteurs) et
+          notaires inscrits chez qui réserver tout de suite. Remplace
+          l'ancienne bannière, qui ne proposait qu'un lien vers l'annuaire :
+          les visiteurs repartaient sans laisser de trace. ── */}
+      {!isClaimed && <DemandeRappel notaire={notaire} suggestions={inscritsDisponibles} />}
 
       {/* ── Corps principal : contenu à gauche, encart de réservation à droite ── */}
       <div className="grid lg:grid-cols-[minmax(0,1fr)_320px] gap-6 items-start">

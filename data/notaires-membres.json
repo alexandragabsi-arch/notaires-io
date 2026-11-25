@@ -293537,6 +293537,45 @@
     "claimed": false
   },
   {
+    "id": "garcia-christian-bernard-313370538",
+    "name": "Me Christian Bernard Garcia",
+    "initials": "CG",
+    "color": "green",
+    "city": "Negrepelisse",
+    "citySlug": "negrepelisse",
+    "officeName": "CHRISTIAN GARCIA",
+    "address": "38 RUE MARCELIN VIGUIE 82800 NEGREPELISSE",
+    "phone": "",
+    "website": "",
+    "specialties": [
+      "Droit immobilier",
+      "Successions"
+    ],
+    "slotMatrix": [
+      [
+        "09:00",
+        "10:00",
+        "14:30"
+      ],
+      [],
+      [],
+      [
+        "10:00",
+        "14:00"
+      ],
+      [
+        "09:00",
+        "10:30",
+        "15:00"
+      ],
+      [],
+      []
+    ],
+    "role": "associé",
+    "source": "api-entreprises",
+    "claimed": false
+  },
+  {
     "id": "nicastro-tangredi-nicastro-liliane-445295397",
     "name": "Me Liliane Nicastro tangredi",
     "initials": "LT",

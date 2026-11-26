@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -33,32 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Dijon", item: "https://notaires.io/notaire-dijon" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Dijon",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Dijon", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Dijon pour mariage, PACS, immobilier, création de société et succession.",
-      url: "https://notaires.io/notaire-dijon",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Quels quartiers et communes de Dijon Métropole couvrent vos notaires ?",
-    a: "Nos notaires partenaires interviennent dans tous les quartiers dijonnais : Centre historique, Montchapet, Fontaine-d'Ouche, Bourroches, Grésilles, Les Valendons, ainsi que dans les communes de Dijon Métropole : Chenôve, Longvic, Quetigny, Talant, Saint-Apollinaire et Chevigny-Saint-Sauveur. La visioconférence est disponible pour les clients de la Côte viticole ou du Pays de l'Auxois.",
+    a: "Les notaires interviennent dans tous les quartiers dijonnais : Centre historique, Montchapet, Fontaine-d'Ouche, Bourroches, Grésilles, Les Valendons, ainsi que dans les communes de Dijon Métropole : Chenôve, Longvic, Quetigny, Talant, Saint-Apollinaire et Chevigny-Saint-Sauveur. La visioconférence est disponible pour les clients de la Côte viticole ou du Pays de l'Auxois.",
   },
   {
     q: "Quels actes notariés sont fréquents pour les domaines viticoles en Côte-d'Or ?",
@@ -70,11 +50,14 @@ const FAQ = [
   },
   {
     q: "Peut-on signer un acte notarié à distance depuis Dijon ?",
-    a: "Oui. La signature électronique à distance (AAED) est disponible à Dijon. Que vous soyez en déplacement professionnel ou viticulteur difficile à joindre en période de vendanges, vous pouvez signer votre acte par visioconférence. Votre notaire partenaire vous confirmera l'éligibilité de l'acte envisagé.",
+    a: "Oui. La signature électronique à distance (AAED) est disponible à Dijon. Que vous soyez en déplacement professionnel ou viticulteur difficile à joindre en période de vendanges, vous pouvez signer votre acte par visioconférence. Votre notaire vous confirmera l'éligibilité de l'acte envisagé.",
   },
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Dijon", "dijon");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Dijon", 120);
   const notaires = avecInscrits(
@@ -86,23 +69,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Dijon"
-          intro="Vous cherchez un notaire à Dijon pour votre mariage, votre PACS, un achat immobilier en Bourgogne ou la création de votre société ? Nos notaires partenaires dijonnais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
+          intro={introNombre(ville) + "Vous cherchez un notaire à Dijon pour votre mariage, votre PACS, un achat immobilier en Bourgogne ou la création de votre société ? Les notaires dijonnais sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-lyon", label: "RDV notaire à Lyon" },
             { href: "/notaire-reims", label: "RDV notaire à Reims" },
             { href: "/notaire-nancy", label: "RDV notaire à Nancy" },

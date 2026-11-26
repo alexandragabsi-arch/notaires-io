@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -33,32 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Montpellier", item: "https://notaires.io/notaire-montpellier" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Montpellier",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Montpellier", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Montpellier pour mariage, PACS, immobilier, création de société et succession.",
-      url: "https://notaires.io/notaire-montpellier",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Quels quartiers et communes de Montpellier Méditerranée Métropole couvrent vos notaires ?",
-    a: "Nos notaires partenaires interviennent dans tous les secteurs de Montpellier : Écusson (centre historique), Antigone, Port-Marianne, Les Arceaux, Mosson, Hôpitaux-Facultés, ainsi que dans les communes de la métropole : Castelnau-le-Lez, Lattes, Pérols, Juvignac, Grabels et Clapiers. Des rendez-vous en visioconférence sont proposés pour les clients plus éloignés.",
+    a: "Les notaires interviennent dans tous les secteurs de Montpellier : Écusson (centre historique), Antigone, Port-Marianne, Les Arceaux, Mosson, Hôpitaux-Facultés, ainsi que dans les communes de la métropole : Castelnau-le-Lez, Lattes, Pérols, Juvignac, Grabels et Clapiers. Des rendez-vous en visioconférence sont proposés pour les clients plus éloignés.",
   },
   {
     q: "Quels actes notariés sont les plus demandés pour l'immobilier à Montpellier ?",
@@ -70,11 +50,14 @@ const FAQ = [
   },
   {
     q: "Peut-on signer un acte notarié à distance depuis Montpellier ?",
-    a: "Oui. La signature électronique à distance (AAED) est pleinement disponible à Montpellier. Que vous soyez chercheur au CHU de Montpellier, étudiant en déplacement ou résident secondaire à Sète, vous pouvez signer votre acte par visioconférence. Votre notaire partenaire vous précisera les modalités selon la nature de l'acte envisagé.",
+    a: "Oui. La signature électronique à distance (AAED) est pleinement disponible à Montpellier. Que vous soyez chercheur au CHU de Montpellier, étudiant en déplacement ou résident secondaire à Sète, vous pouvez signer votre acte par visioconférence. Votre notaire vous précisera les modalités selon la nature de l'acte envisagé.",
   },
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Montpellier", "montpellier");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   const scrapedNotaires = getNotairesByCity("Montpellier", 120);
   const notaires = avecInscrits(
@@ -86,23 +69,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Montpellier"
-          intro="Vous cherchez un notaire à Montpellier pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Nos notaires partenaires montpelliérains sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."
+          intro={introNombre(ville) + "Vous cherchez un notaire à Montpellier pour votre mariage, votre PACS, un achat immobilier ou la création de votre société ? Les notaires montpelliérains sont disponibles selon leurs créneaux, en visio ou au cabinet dans votre quartier."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             { href: "/notaire-toulouse", label: "RDV notaire à Toulouse" },
             { href: "/notaire-marseille", label: "RDV notaire à Marseille" },
             { href: "/notaire-nice", label: "RDV notaire à Nice" },

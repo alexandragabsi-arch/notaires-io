@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SeoLandingPage from "@/components/SeoLandingPage";
+import Breadcrumb from "@/components/Breadcrumb";
+import { grandeVille, filGrandeVille, liensGrandeVille, questionNombre, introNombre, jsonLdGrandeVille } from "@/lib/grandes-villes";
 import { LISTING_NOTAIRES } from "@/lib/notaires-listing";
 import { getNotairesByCity } from "@/lib/notaires-source";
 import { avecInscrits, getInscritsVille } from "@/lib/inscrits-serveur";
@@ -39,28 +41,6 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Accueil", item: "https://notaires.io" },
-        { "@type": "ListItem", position: 2, name: "Notaire à Marseille", item: "https://notaires.io/notaire-marseille" },
-      ],
-    },
-    {
-      "@type": "Service",
-      name: "Notaire à Marseille",
-      provider: { "@type": "Organization", name: "Notaires.io", url: "https://notaires.io" },
-      areaServed: { "@type": "City", name: "Marseille", addressCountry: "FR" },
-      description:
-        "Mise en relation avec des notaires partenaires à Marseille pour immobilier, donation et succession.",
-      url: "https://notaires.io/notaire-marseille",
-    },
-  ],
-};
-
 const FAQ = [
   {
     q: "Quelles spécificités pour un achat immobilier en bord de mer à Marseille ?",
@@ -76,11 +56,14 @@ const FAQ = [
   },
   {
     q: "Peut-on organiser une donation-partage à Marseille entre enfants de plusieurs unions ?",
-    a: "Oui, la donation-partage transgénérationnelle est possible depuis 2006. Elle permet d'organiser la transmission entre les descendants de plusieurs degrés (enfants et petits-enfants) ou entre enfants de différentes unions (famille recomposée). C'est un acte notarié complexe mais très sécurisant, qui gèle les valeurs au jour de la donation et évite les conflits au moment de la succession. Nos notaires partenaires à Marseille sont spécialisés dans ce type de montage.",
+    a: "Oui, la donation-partage transgénérationnelle est possible depuis 2006. Elle permet d'organiser la transmission entre les descendants de plusieurs degrés (enfants et petits-enfants) ou entre enfants de différentes unions (famille recomposée). C'est un acte notarié complexe mais très sécurisant, qui gèle les valeurs au jour de la donation et évite les conflits au moment de la succession. Les notaires à Marseille sont spécialisés dans ce type de montage.",
   },
 ];
 
 export default async function Page() {
+  // Département, communes voisines et nombre réel de notaires (lib/grandes-villes.ts).
+  const ville = grandeVille("Marseille", "marseille");
+  const faq = [questionNombre(ville), ...FAQ];
   // Vrais notaires de notaires.fr, avec fallback sur les données fictives
   // 60 fiches sur 310 : au-delà de 2 Mo de HTML, Google tronque ou renonce.
   // Les arrondissements, liés plus bas, portent le reste.
@@ -94,23 +77,19 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          ...jsonLd,
-          "@graph": [
-            ...jsonLd["@graph"],
-            // Questions/réponses éligibles aux résultats enrichis.
-            { "@type": "FAQPage", mainEntity: FAQ.map(f => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
-          ],
-        }) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGrandeVille(ville, faq, notaires)) }}
       />
       <Header />
+      <Breadcrumb items={filGrandeVille(ville)} />
       <main>
         <SeoLandingPage
           h1="Prendre RDV avec un notaire à Marseille"
-          intro="Achat immobilier sur le littoral méditerranéen, donation à vos proches, succession : nos notaires partenaires à Marseille maîtrisent les spécificités juridiques de la région PACA. Disponibles rapidement, en visio ou au cabinet."
+          intro={introNombre(ville) + "Achat immobilier sur le littoral méditerranéen, donation à vos proches, succession : les notaires à Marseille maîtrisent les spécificités juridiques de la région PACA. Disponibles rapidement, en visio ou au cabinet."}
           notaires={notaires}
-          faq={FAQ}
+          faq={faq}
           relatedLinks={[
+            // Département et communes voisines d'abord : le maillage qui manquait.
+            ...liensGrandeVille(ville),
             ...MARSEILLE_ARRONDISSEMENTS.map(a => ({
               href: `/notaire-marseille/${a.slug}`,
               label: `Notaire Marseille ${a.label}`,
